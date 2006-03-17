@@ -13,26 +13,35 @@
 </head>
 <body>
 	<p>
-		Sub-Etha is a sophisticated mailing list manager, similar in many respects
-		to the popular Mailman package.  Sub-Etha's features include:
+		SubEtha is a sophisticated mailing list manager, similar in many respects
+		to the popular Mailman package.  SubEtha's features include:
 	</p>
 	
 	<ul>
-		<li>A user-friendly web interface</li>
+		<li>Very easy installation on Windows and Unix platforms</li>
+		<li>A user-friendly web interface for all configuration management</li>
 		<li>Virtual domains (ie list@foo.com and list@bar.com are separate lists)</li>
 		<li>Intelligent VERP bounce processing</li>
-		<li>Users can have multiple email addresses</li>
+		<li>Message processing 'mailets' which allow administrators to write
+			plugins which can modify the message stream to allow features 
+			we plan to offer, such as stripping of MIME attachments, spam detection  
+			and insertion of advertising.</li>
+		<li>Users can have multiple email addresses on a single list delivered 
+			to a preferred address</li>
 		<li>Users can self-moderate messages sent from unsubscribed addresses</li>
-		<li>Searchable, threaded archives</li>
+		<li>Searchable, threaded archives implemented with a UI that is similar
+			to forum software with access control based viewing and posting</li>
 		<li>Clusterable for nearly unlimited scalability</li>
-		<li>Easy integration with any MTA</li>
+		<li>Easy integration with any mail transport agent (MTA)</li>
 		<li>EJB and SOAP interfaces for automation</li>
 	</ul>
 	
 	<p>
-		Sub-Etha is a three-tiered J2EE application using EJB3 and JMS.  It is designed
+		SubEtha is a three-tiered J2EE application using EJB3 and JMS.  It is designed
 		to deploy on JBoss and relies on numerous other open source projects including
-		Hibernate, Tagonist, and Lucene.
+		<a href="http://hibernate.org">Hibernate</a>, 
+		<a href="http://tagonist.tigris.org">Tagonist</a>, and 
+		<a href="http://lucene.apache.org/">Lucene</a>.
 	</p>
 	
 	<p>
@@ -48,8 +57,12 @@
 	<p>
 		There will be two distributions.  The first, for advanced administrators, is an
 		EAR file which can be deployed into any JBoss instance.  The second, for novices,
-		is a "just-unzip-and-run" package containing standalone JBoss with Sub-Etha 
+		is a "just-unzip-and-run" package containing standalone JBoss with SubEtha 
 		preconfgured and all unnecessary services removed.
+	</p>
+
+	<p>Where did the name come from? Please see 
+		<a href="http://en.wikipedia.org/wiki/Sub-Etha">this Wikipedia entry</a>.
 	</p>
 </body>
 </html>

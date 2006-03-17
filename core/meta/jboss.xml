@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	$Id: jboss.xml 86 2006-02-22 03:36:01Z jeff $
+	$URL: https://svn.infohazard.org/blorn/trunk/core/meta/jboss.xml $
+-->
+
+<jboss>
+	<security-domain>java:/jaas/subetha</security-domain>
+</jboss> 

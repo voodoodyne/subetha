@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<!--
+	$Id: build.xml 104 2006-02-26 01:24:30Z jeff $
+	$URL: https://svn.infohazard.org/blorn/trunk/entity/build.xml $
+
+	Build file for the entities.  Builds an ejb-jar (with interfaces).
+	Not an entry point; imported by the top-level buildfile.
+-->
+
+<project name="entity" default="" basedir=".">
+	
+	<property name="build.entity.classes.dir" location="${build.dir}/entity-classes"/>
+	<property name="build.entity.ejb.file" location="${build.dir}/entity.jar"/>
+	
+	<dirname property="entity.basedir" file="${ant.file.entity}"/>
+	<property name="entity.javasrc.dir" location="${entity.basedir}/src"/>
+	<property name="entity.meta.dir" location="${entity.basedir}/meta"/>
+	
+	<path id="entity.classpath">
+		<path refid="master.classpath"/>
+	</path>
+	
+	<target name="entity-classes" depends="common-jar">
+		<mkdir dir="${build.entity.classes.dir}"/>
+		
+		<javac 
+			srcdir="${entity.javasrc.dir}"
+			destdir="${build.entity.classes.dir}" 
+			includeAntRuntime="false"
+			debug="${build.debug}" 
+			deprecation="${build.deprecation}">
+			
+			<classpath refid="entity.classpath"/>
+		</javac>
+	</target>
+	
+	<target name="entity-ejb-jar" depends="entity-classes">
+		<jar jarfile="${build.entity.ejb.file}">
+			<metainf dir="${entity.meta.dir}">
+				<include name="persistence.xml"/>
+			</metainf>
+			
+			<fileset dir="${build.entity.classes.dir}"/>
+		</jar>
+	</target>
+	
+</project>
+

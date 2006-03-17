@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jboss-app
+    PUBLIC "-//JBoss//DTD J2EE Application 1.4//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-app_4_0.dtd">
+
+<!--
+	$Id: jboss-app.xml 86 2006-02-22 03:36:01Z jeff $
+	$URL: https://svn.infohazard.org/blorn/trunk/app/meta/jboss-app.xml $
+-->
+
+<jboss-app>
+	<module>
+		<service>core.sar</service>
+	</module>
+</jboss-app>

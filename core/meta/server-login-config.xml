@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<!DOCTYPE policy PUBLIC
+	"-//JBoss//DTD JBOSS Security Config 3.0//EN"
+	"http://www.jboss.org/j2ee/dtd/security_config.dtd">
+
+<!--
+	This file is what instructs JBoss to perform authentication and
+	authorization checking against the SubEthaLoginModule.
+-->
+
+<policy>
+	<application-policy name="subetha">
+		<authentication>
+			<login-module code="org.subethamail.core.jaas.SubEthaLoginModule" flag="required">
+				<module-option name="unauthenticatedIdentity">-1</module-option>
+			</login-module>
+		</authentication>
+	</application-policy>
+</policy>

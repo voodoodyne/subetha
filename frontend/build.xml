@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<!--
+	$Id: build.xml 86 2006-02-22 03:36:01Z jeff $
+	$URL: https://svn.infohazard.org/blorn/trunk/web/build.xml $
+
+	Build file for the frontend web application.  Not an
+	entry point; imported by the top-level buildfile.
+-->
+
+<project name="frontend" default="frontend-war" basedir=".">
+
+	<property name="build.frontend.classes.dir" location="${build.dir}/frontend-classes" />
+	<property name="build.frontend.war.file" location="${build.dir}/frontend.war" />
+
+	<dirname property="frontend.basedir" file="${ant.file.frontend}"/>
+	<property name="frontend.javasrc.dir" location="${frontend.basedir}/src" />
+	<property name="frontend.meta.dir" location="${frontend.basedir}/meta" />
+	<property name="frontend.lib.dir" location="${frontend.basedir}/lib" />
+	<property name="frontend.content.dir" location="${frontend.basedir}/content" />
+		
+	<path id="frontend.classpath">
+		<path refid="master.classpath" />
+		
+		<pathelement location="${build.core.ejbclient.file}" />
+		
+		<fileset dir="${frontend.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		
+		<fileset dir="${jboss.dir}">
+			<include name="server/default/lib/javax.servlet.jar"/>
+			<include name="server/default/lib/javax.servlet.jsp.jar"/>
+		</fileset>
+	</path>
+
+ 	<target name="frontend-classes" depends="core-ejbclient-jar, common-jar">
+		<mkdir dir="${build.frontend.classes.dir}" />
+		
+		<javac srcdir="${frontend.javasrc.dir}"
+				destdir="${build.frontend.classes.dir}"
+				includeAntRuntime="false"
+				debug="${build.debug}"
+				deprecation="${build.deprecation}">
+			<classpath refid="frontend.classpath" />
+		</javac>
+	</target>
+
+	<target name="frontend-war" depends="frontend-classes">
+		<war destfile="${build.frontend.war.file}" webxml="${frontend.meta.dir}/web.xml">
+			<webinf dir="${web.meta.dir}">
+				<exclude name="web.xml" />
+			</webinf>
+			
+			<fileset dir="${frontend.content.dir}" />
+			
+			<classes dir="${build.frontend.classes.dir}" />
+
+			<lib dir="${frontend.lib.dir}">
+				<exclude name="buildonly/**"/>
+			</lib>
+		</war>
+	</target>
+</project>
+

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	$Id: web.xml 86 2006-02-22 03:36:01Z jeff $
+	$URL: https://svn.infohazard.org/blorn/trunk/frontend/meta/web.xml $
+-->
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	version="2.4">
+	
+	<display-name>SubEtha Frontend</display-name>
+	
+	<filter>
+		<filter-name>SecurityAssociationFilter</filter-name>
+		<filter-class>
+			org.subethamail.web.security.SecurityAssociationFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>SecurityAssociationFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+</web-app>

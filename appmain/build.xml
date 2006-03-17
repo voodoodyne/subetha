@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!--
+	$Id: build.xml 86 2006-02-22 03:36:01Z jeff $
+	$URL: https://svn.infohazard.org/blorn/trunk/app/build.xml $
+
+	Build file for the main application ear.  Not an
+	entry point; imported by the top-level buildfile.
+-->
+
+<project name="appmain" default="appmain-ear" basedir=".">
+
+	<dirname property="appmain.basedir" file="${ant.file.appmain}"/>
+	<property name="appmain.meta.dir" location="${appmain.basedir}/meta" />
+
+	<property name="build.appmain.ear.file" location="${build.dir}/${name}.ear" />
+	
+	<target name="appmain-ear" depends="core-all, frontend-war, entity-ejb-jar">
+		<ear destfile="${build.appmain.ear.file}" appxml="${appmain.meta.dir}/application.xml">
+			<metainf dir="${appmain.meta.dir}">
+				<include name="jboss-app.xml" />
+			</metainf>
+			
+			<fileset file="${build.entity.ejb.file}" />
+			<fileset file="${build.core.ejb.file}" />
+			<fileset file="${build.core.sar.file}" />
+			<fileset file="${build.frontend.war.file}" />
+		</ear>
+	</target>
+</project>
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	$Id: web.xml,v 1.2 2004/01/19 05:11:32 jeff Exp $
+	$URL: /cvsroot/Similarity4/meta/main/web.xml,v $
+-->
+
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+		version="2.0">
+
+	<description>
+		Tools for making development of the frontend JSPs easier.
+	</description>
+	
+	<tlib-version>1.0</tlib-version>
+	
+	<short-name>web</short-name>
+	
+	<uri>http://www.subethamail.org/web</uri>
+</taglib>

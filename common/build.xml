@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<!--
+	$Id: build.xml,v 1.9 2004/03/10 05:57:18 jeff Exp $
+	$URL: /cvsroot/Similarity4/build.xml,v $
+
+	Build file for simple utilities jar shared by all components.
+-->
+
+<project name="common" default="common-jar" basedir=".">
+
+	<property name="build.common.classes.dir" location="${build.dir}/common-classes" />
+	<property name="build.common.jar.file" location="${build.dir}/${name}-common.jar" />
+
+	<dirname property="common.basedir" file="${ant.file.common}"/>
+	<property name="common.javasrc.dir" location="${common.basedir}/src" />
+	<property name="common.lib.dir" location="${common.basedir}/lib" />
+		
+	<path id="common.classpath">
+		<path refid="base.classpath" />
+
+		<fileset dir="${common.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+ 	<target name="common-classes" depends="">
+		<mkdir dir="${build.common.classes.dir}" />
+		<javac srcdir="${common.javasrc.dir}"
+				destdir="${build.common.classes.dir}"
+				includeAntRuntime="false"
+				debug="${build.debug}"
+				deprecation="${build.deprecation}">
+			<classpath refid="common.classpath" />
+		</javac>
+	</target>
+
+	<target name="common-jar" depends="common-classes">
+		<jar jarfile="${build.common.jar.file}">
+			<fileset dir="${build.common.classes.dir}"/>
+		</jar>
+	</target>
+</project>
+

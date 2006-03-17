@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+
+<!--
+	$Id: build.xml 99 2006-02-25 00:55:38Z jeff $
+	$URL: https://svn.infohazard.org/blorn/trunk/core/build.xml $
+
+	Build file for the core components.  Builds an ejb-jar
+	and a sar file.  Not an entry point; imported by the
+	top-level buildfile.
+-->
+
+<project name="core" default="" basedir=".">
+	
+	<property name="build.core.classes.dir" location="${build.dir}/core-classes" />
+	<property name="build.core.classes.i.dir" location="${build.dir}/core-i-classes" />
+	<property name="build.core.ejbclient.file" location="${build.dir}/core-client.jar" />
+	<property name="build.core.ejb.file" location="${build.dir}/core.jar" />
+	<property name="build.core.sar.file" location="${build.dir}/core.sar" />
+	
+	<dirname property="core.basedir" file="${ant.file.core}"/>
+	<property name="core.javasrc.dir" location="${core.basedir}/src" />
+	<property name="core.meta.dir" location="${core.basedir}/meta" />
+	<property name="core.lib.dir" location="${core.basedir}/lib" />
+
+	<!-- used to build the core interfaces -->
+	<path id="core.i.classpath">
+		<path refid="master.classpath" />
+	</path>
+
+	<!-- used to build the core implementation -->
+	<path id="core.classpath">
+		<path refid="core.i.classpath" />
+		<pathelement location="${build.core.ejbclient.file}" />
+		<pathelement location="${build.entity.ejb.file}"/>
+		<fileset dir="${core.lib.dir}"/>
+	</path>
+
+ 	<target name="core-classes" depends="core-ejbclient-jar, entity-ejb-jar">
+		<mkdir dir="${build.core.classes.dir}" />
+ 		
+		<javac srcdir="${core.javasrc.dir}"
+				destdir="${build.core.classes.dir}"
+				includeAntRuntime="false"
+				debug="${build.debug}"
+				deprecation="${build.deprecation}">
+			
+			<classpath refid="core.classpath" />
+			
+			<exclude name="**/i/**"/>
+		</javac>
+	</target>
+
+ 	<target name="core-classes-i" depends="common-jar">
+		<mkdir dir="${build.core.classes.i.dir}" />
+ 		
+		<javac srcdir="${core.javasrc.dir}"
+				destdir="${build.core.classes.i.dir}"
+				includeAntRuntime="false"
+				debug="${build.debug}"
+				deprecation="${build.deprecation}">
+			
+			<classpath refid="core.i.classpath" />
+
+			<include name="**/i/**" />
+		</javac>
+	</target>
+
+	<target name="core-ejbclient-jar" depends="core-classes-i">
+		<jar jarfile="${build.core.ejbclient.file}">
+			<fileset dir="${build.core.classes.i.dir}"/>
+		</jar>
+	</target>
+
+	<target name="core-ejb-jar" depends="core-classes">
+		<jar jarfile="${build.core.ejb.file}">
+			<fileset dir="${build.core.classes.dir}"/>
+		</jar>
+	</target>
+
+	<target name="core-sar" depends="core-ejbclient-jar, common-jar">
+		<jar destfile="${build.core.sar.file}">
+			<metainf dir="${core.meta.dir}">
+				<include name="jboss-service.xml"/>
+				<include name="server-login-config.xml"/>
+			</metainf>
+			
+			<fileset dir="${core.lib.dir}"/>
+			
+			<fileset file="${build.core.ejbclient.file}"/>
+			<fileset file="${build.common.jar.file}"/>
+		</jar>
+	</target>
+					
+	<target name="core-all" depends="core-ejb-jar, core-sar"/>
+	
+</project>
+

@@ -5,28 +5,14 @@
 
 package org.subethamail.entity.dao;
 
-import java.util.List;
-
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.common.NotFoundException;
-
-import com.kink.entity.Account;
-import com.kink.entity.Department;
-import com.kink.entity.Employee;
-import com.kink.entity.LineItem;
-import com.kink.entity.PaymentMethod;
-import com.kink.entity.PurchaseOrder;
-import com.kink.entity.Vendor;
-import com.kink.entity.WorkOrder;
 
 /**
  * @see DAO

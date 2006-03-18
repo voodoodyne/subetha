@@ -5,20 +5,7 @@
 
 package org.subethamail.entity.dao;
 
-import java.util.List;
-
 import javax.persistence.LockModeType;
-
-import org.subethamail.common.NotFoundException;
-
-import com.kink.entity.Account;
-import com.kink.entity.Department;
-import com.kink.entity.Employee;
-import com.kink.entity.LineItem;
-import com.kink.entity.PaymentMethod;
-import com.kink.entity.PurchaseOrder;
-import com.kink.entity.Vendor;
-import com.kink.entity.WorkOrder;
 
 /**
  * DAO interface to all persisted objects.  Use this EJB instead

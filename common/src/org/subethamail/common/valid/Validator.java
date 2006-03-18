@@ -19,49 +19,89 @@ public class Validator
 	/** */
 	private static Log log = LogFactory.getLog(Validator.class);
 
-	// Employee
-	public static final int MAX_EMPLOYEE_LAST_NAME = 255;
-	public static final int MAX_EMPLOYEE_FIRST_NAME = 255;
-	public static final int MAX_EMPLOYEE_DISPLAY_NAME = 50;
-	public static final int MAX_EMPLOYEE_LOGIN = 100;
-	public static final int MAX_EMPLOYEE_PASSWORD = 100;
+	// Person
+	public static final int MAX_PERSON_PASSWORD = 80;
+	public static final int MAX_PERSON_NAME = 80;
 	
-	// PurchaseOrder
-	public static final int MAX_PURCHASE_ORDER_DESCRIPTION = 4000;
+	// EmailAddress
+	public static final int MAX_EMAIL_ADDRESS_EMAIL = 200;
 	
-	// LineItem
-	public static final int MAX_LINE_ITEM_NAME = 255;
+	// MailingList
+	public static final int MAX_LIST_ADDRESS = 200;
 	
-	// Account
-	public static final int MAX_ACCOUNT_NAME = 255;
-	public static final int MAX_ACCOUNT_DEPARTMENT = 255;
-	
-	// WorkOrder
-	public static final int MAX_WORK_ORDER_NAME = 255;
-	
-	// PaymentMethod
-	public static final int MAX_PAYMENT_METHOD_NAME = 255;
-	
-	// Department
-	public static final int MAX_DEPARTMENT_NAME = 255;
-	
-	// Vendor
-	public static final int MAX_VENDOR_NAME = 255;
-	public static final int MAX_VENDOR_PHONE = 20;
-	public static final int MAX_VENDOR_FAX = 30;
-	public static final int MAX_VENDOR_CONTACT = 30;
-	
-	// Address
-	public static final int MAX_ADDRESS_LINE = 255;
-	public static final int MAX_ADDRESS_CITY = 255;
-	public static final int MAX_ADDRESS_STATE = 155;
-	public static final int MAX_ADDRESS_ZIP = 100;
-	public static final int MAX_ADDRESS_COUNTRY = 200;
-	
-	// VendorAddress
-	public static final int MAX_VENDOR_ADDRESS_LINE = 255;
-	public static final int MAX_VENDOR_ADDRESS_CITY = 30;
-	public static final int MAX_VENDOR_ADDRESS_STATE = 30;
+	/**
+	 * Normalizes an email address to a canonical form - the domain
+	 * name is lowercased but the user part is left case sensitive.
+	 * It's just a good idea to always work with addresses this way.
+	 */
+	public static String normalizeEmail(String email)
+	{
+		int atIndex = email.indexOf('@');
+		
+		StringBuffer buf = new StringBuffer(email.length());
+		buf.append(email, 0, atIndex + 1);
+		
+		for (int i=atIndex+1; i<email.length(); i++)
+			buf.append(Character.toLowerCase(email.charAt(i)));
+		
+		return buf.toString();
+	}
+
+	/**
+	 * This method does its best to identify invalid internet email addresses.
+	 * It just checks syntax structure and can be useful to catch really
+	 * blatant typos or garbage data.
+	 *
+	 * @return whether or not the specified email address is valid.
+	 */
+	public static boolean validEmail(String email)
+	{
+		if (email == null)
+			return false;
+		
+		if (email.length() > MAX_EMAIL_ADDRESS_EMAIL){
+			if (log.isDebugEnabled()) log.debug("Email too long: " + email);
+			return false;
+		}
+		
+		int indexOfAt = email.indexOf('@');
+
+		if (indexOfAt < 1){	// must have @ and must not be 1st char
+			if (log.isDebugEnabled()) log.debug("@ is first char: " + email);
+			return false;
+		}
+
+		String site = email.substring(indexOfAt + 1);
+
+		if (site.indexOf('@') >= 0){
+			if (log.isDebugEnabled()) log.debug("@ missing: " + email);
+			return false;
+		}
+		
+		if (site.indexOf('.') < 0){
+			if (log.isDebugEnabled()) log.debug(". missing: " + email);
+			return false;
+		}
+		
+		if (site.startsWith(".") || site.endsWith(".")){
+			if (log.isDebugEnabled()) log.debug("cannot start or end with '.': " + email);
+			return false;
+		}
+		
+		// smallest site name could be "a.bb"
+		if (site.length() < 4){
+			if (log.isDebugEnabled()) log.debug("site too short: " + email);
+			return false;
+		}
+		
+		// Make sure we don't have a one-letter TLD
+		if (site.charAt(site.length() - 2) == '.'){
+			if (log.isDebugEnabled()) log.debug("TLD too short:" + email);
+			return false;
+		}
+		
+		return true;
+	}
 }
 
 

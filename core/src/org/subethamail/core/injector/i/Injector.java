@@ -29,6 +29,6 @@ public interface Injector
 	 * 
 	 * TODO:  consider an exception instead of silently dropping irrelevant mail?
 	 */
-	public void inject(String mail);
+	public void inject(byte[] mail);
 }
 

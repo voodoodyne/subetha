@@ -31,7 +31,7 @@ public class InjectorEJB implements Injector, InjectorRemote
 	/**
 	 * @see Injector#inject(String)
 	 */
-	public void inject(String mail)
+	public void inject(byte[] mail)
 	{
 	}
 }

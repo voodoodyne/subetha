@@ -48,7 +48,7 @@
 
 	<target name="frontend-war" depends="frontend-classes">
 		<war destfile="${build.frontend.war.file}" webxml="${frontend.meta.dir}/web.xml">
-			<webinf dir="${web.meta.dir}">
+			<webinf dir="${frontend.meta.dir}">
 				<exclude name="web.xml" />
 			</webinf>
 			

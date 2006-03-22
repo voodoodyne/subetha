@@ -62,6 +62,9 @@
 	<target name="rtest-jar" depends="rtest-classes">
 		<jar jarfile="${build.rtest.jar.file}">
 			<fileset dir="${build.rtest.classes.dir}"/>
+			<fileset dir="${rtest.javasrc.dir}">
+				<include name="**/*.msg"/>
+			</fileset>
 		</jar>
 	</target>
 

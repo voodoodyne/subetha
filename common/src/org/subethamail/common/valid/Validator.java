@@ -29,6 +29,12 @@ public class Validator
 	// MailingList
 	public static final int MAX_LIST_ADDRESS = 200;
 	
+	// Mail
+	public static final int MAX_MAIL_CONTENT = 1024 * 1024;	// 1M enough?
+	public static final int MAX_MAIL_MESSAGE_ID = 256;
+	public static final int MAX_MAIL_SUBJECT = 4096;
+	public static final int MAX_MAIL_FROM = 4096;
+	
 	/**
 	 * Normalizes an email address to a canonical form - the domain
 	 * name is lowercased but the user part is left case sensitive.

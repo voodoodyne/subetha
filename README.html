@@ -16,11 +16,17 @@
 				a file called user.properties and edit ${jboss.dir}.
 			</li>
 			<li>
-				Unfortunately JavaMail is not installed with the ejb3 option.  You need
-				two files in ${jboss.dir}/server/default/lib - mail.jar, activation.jar.
-				In addition, you will need ${jboss.dir}/server/default/deploy/mail-service.xml.
-				For the moment, I suggest creating a second scratch jboss install somewhere
-				with the "all" configuration and copy over these files manually.
+				Unfortunately there is a little trick to getting JavaMail installed.  It
+				was not installed when you selected "ejb3" but would have been if you had
+				selected "all".  However, "all" would not have installed the ejb3 components (grr).
+				Hopefully this will get cleaned up when 4.0.4 is actually released.  In the
+				mean time, create a second install of JBoss somewhere, choose the "all" option,
+				and then copy the following files from the "all" install to your "ejb3" install:
+				<ul>
+					<li>${jboss.dir}/server/default/lib/mail.jar</li>
+					<li>${jboss.dir}/server/default/lib/activation.jar</li>
+					<li>${jboss.dir}/server/default/deploy/mail-service.xml</li>
+				</ul>
 			</li>
 			<li>
 				Edit ${jboss.dir}/server/default/deploy/mail-service.xml and make
@@ -28,8 +34,10 @@
 				are unimportant.
 			</li>
 			<li>
-				Download MySQL JDBC driver.  Copy to ${jboss.dir}/server/default/lib.
-				The file should be mysql-connector-java-X.X.XX-bin.jar.
+				Download MySQL JDBC driver from <a href="http://dev.mysql.com/downloads/">here</a>.
+				Copy to ${jboss.dir}/server/default/lib.  The file should be mysql-connector-java-X.X.XX-bin.jar.
+				You can use a different RDBMS but you'll need to use a different -ds.xml file
+				than the one described below.
 			</li>
 			<li>
 				Create the data source by creating ${jboss.dir}/server/default/deploy/subetha-ds.xml.

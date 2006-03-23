@@ -42,7 +42,7 @@ public class TextTool
 					
 				case '&': buf.append("&amp;"); break;
 					
-				case '\n': buf.append("<br/>"); break;
+				case '\n': buf.append("<br />"); break;
 					
 				default: buf.append(c);
 			}

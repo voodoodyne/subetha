@@ -13,6 +13,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
@@ -30,6 +33,16 @@ import org.subethamail.common.valid.Validator;
  * 
  * @author Jeff Schnitzer
  */
+@NamedQueries({
+	@NamedQuery(
+		name="EmailByAddress", 
+		query="from EmailAddress ea where ea.address = :address",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
+	)
+})
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class EmailAddress implements Serializable, Comparable
@@ -42,8 +55,8 @@ public class EmailAddress implements Serializable, Comparable
 	@GeneratedValue
 	Long id;
 	
-	@Column(nullable=false, length=Validator.MAX_EMAIL_ADDRESS_EMAIL)
-	String email;
+	@Column(nullable=false, length=Validator.MAX_EMAIL_ADDRESS)
+	String address;
 	
 	@ManyToOne
 	@JoinColumn(name="ownerId", nullable=false)
@@ -55,36 +68,36 @@ public class EmailAddress implements Serializable, Comparable
 	
 	/**
 	 */
-	public EmailAddress(Person owner, String email)
+	public EmailAddress(Person owner, String address)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new EmailAddress");
 		
 		// These are validated normally.
 		this.setOwner(owner);
-		this.setEmail(email);
+		this.setAddress(address);
 	}
 	
 	/** */
 	public Long getId()		{ return this.id; }
 
 	/** */
-	public String getEmail() { return this.email; }
+	public String getAddress() { return this.address; }
 	
 	/**
 	 * Always normalizes the email address.
 	 */
-	public void setEmail(String value)
+	public void setAddress(String value)
 	{
 		if (!Validator.validEmail(value))
-			throw new IllegalArgumentException("Invalid email address");
+			throw new IllegalArgumentException("Invalid address");
 		
 		value = Validator.normalizeEmail(value);
 
 		if (log.isDebugEnabled())
-			log.debug("Setting email address to " + value);
+			log.debug("Setting address to " + value);
 		
-		this.email = value;
+		this.address = value;
 	}
 	
 	/** */
@@ -112,7 +125,7 @@ public class EmailAddress implements Serializable, Comparable
 	{
 		EmailAddress other = (EmailAddress)arg0;
 
-		return this.email.compareTo(other.getEmail());
+		return this.address.compareTo(other.getAddress());
 	}
 }
 

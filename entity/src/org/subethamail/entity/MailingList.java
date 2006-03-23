@@ -16,6 +16,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
@@ -29,6 +32,16 @@ import org.subethamail.common.valid.Validator;
  * 
  * @author Jeff Schnitzer
  */
+@NamedQueries({
+	@NamedQuery(
+		name="MailingListByAddress", 
+		query="from MailingList l where l.address = :address",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
+	)
+})
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class MailingList implements Serializable, Comparable
@@ -43,7 +56,7 @@ public class MailingList implements Serializable, Comparable
 	
 	/** TODO:  this should be stored as separate components */
 	@Column(nullable=false, length=Validator.MAX_LIST_ADDRESS)
-	String emailAddress;
+	String address;
 	
 	/** */
 	@Column(nullable=false)
@@ -100,7 +113,7 @@ public class MailingList implements Serializable, Comparable
 			log.debug("Creating new mailing list");
 		
 		// These are validated normally.
-		this.setEmailAddress(emailAddress);
+		this.setAddress(emailAddress);
 	}
 	
 	/** */
@@ -108,11 +121,11 @@ public class MailingList implements Serializable, Comparable
 
 	/**
 	 */
-	public String getEmailAddress() { return this.emailAddress; }
+	public String getAddress() { return this.address; }
 	
 	/**
 	 */
-	public void setEmailAddress(String value)
+	public void setAddress(String value)
 	{
 		if (value == null || value.length() > Validator.MAX_LIST_ADDRESS)
 			throw new IllegalArgumentException("Invalid list address");
@@ -120,13 +133,13 @@ public class MailingList implements Serializable, Comparable
 		if (log.isDebugEnabled())
 			log.debug("Setting address of " + this + " to " + value);
 		
-		this.emailAddress = value;
+		this.address = value;
 	}
 
 	/** */
 	public String toString()
 	{
-		return this.getClass() + " {id=" + this.id + ", emailAddress=" + this.emailAddress + "}";
+		return this.getClass() + " {id=" + this.id + ", address=" + this.address + "}";
 	}
 
 	/**
@@ -136,7 +149,7 @@ public class MailingList implements Serializable, Comparable
 	{
 		MailingList other = (MailingList)arg0;
 
-		return this.emailAddress.compareTo(other.getEmailAddress());
+		return this.address.compareTo(other.getAddress());
 	}
 }
 

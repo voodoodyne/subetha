@@ -25,43 +25,9 @@ public class MailUtils
 	/** */
 	private static Log log = LogFactory.getLog(MailUtils.class);
 	
-	/** */
-	public static final String HDR_MESSAGE_ID = "Message-ID";	
-	public static final String HDR_FROM = "From";	
-	
 	/**
-	 * @return the Message-ID header from a msg, or null if no message-id header present
-	 */
-	public static String getMessageId(Message msg) throws MessagingException
-	{
-		String[] ids = msg.getHeader(HDR_MESSAGE_ID);
-		
-		if (ids == null || ids.length == 0)
-			return null;
-		
-		// This is possible but shouldn't happen
-		if (ids.length > 1)
-		{
-			if (log.isWarnEnabled())
-			{
-				log.warn("Got message with multiple message ids:");
-				for (String id: ids)
-					log.warn(id);
-			}
-		}
-		
-		// Just return the first one
-		return ids[0]; 
-	}
-	
-	/**
-	 * There may be 0 or more From headers in a mail message.  The return value
-	 * will either be null or a combination of them like this:
-	 * 
-	 * bob@dobbs.com <Bob Dobbs>, foo@bar.com <Foo Bar>, blah@blah.com
-	 * 
-	 * @return a user-presentable version of the From field(s) of the message,
-	 *  or null if there were no From headers.
+	 * @return a rfc222-compliant comma-separated list of addresses, or
+	 *  null if no from field was available.
 	 */
 	public static String getFrom(Message msg) throws MessagingException
 	{

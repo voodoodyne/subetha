@@ -15,17 +15,19 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Jeff Schnitzer
  */
-public class SampleMessages
+public class Samples
 {
 	/** */
-	private static Log log = LogFactory.getLog(SampleMessages.class);
+	private static Log log = LogFactory.getLog(Samples.class);
 
 	/**
-	 * Gets a simple message with no attachments
+	 * Gets a message.
+	 * 
+	 * @param file is the filename without path of the entire message.
 	 */
-	public static byte[] getPlainMessage() throws IOException
+	public static byte[] getMessage(String file) throws IOException
 	{
-		InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("org/subethamail/rtest/msg/plain.msg");
+		InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("org/subethamail/rtest/msg/" + file);
 		if (inStream == null)
 			throw new IllegalStateException("Couldn't find resource");
 		

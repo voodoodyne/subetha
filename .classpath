@@ -21,9 +21,9 @@
 	<classpathentry kind="var" path="JBOSS_HOME/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="rtest/lib/junit.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/commons-beanutils.jar"/>
-	<classpathentry kind="lib" path="frontend/lib/commons-fileupload-1.0.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/jstl.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/standard.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/tagonist.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/activation.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

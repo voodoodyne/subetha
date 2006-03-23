@@ -7,6 +7,11 @@ package org.subethamail.entity.dao;
 
 import javax.persistence.LockModeType;
 
+import org.subethamail.common.NotFoundException;
+import org.subethamail.entity.EmailAddress;
+import org.subethamail.entity.Mail;
+import org.subethamail.entity.MailingList;
+
 /**
  * DAO interface to all persisted objects.  Use this EJB instead
  * of directly manipulating the EntityManager from other EJBs.
@@ -39,5 +44,22 @@ public interface DAO
 	 * Lock an entity.
 	 */
 	public void lock(Object obj, LockModeType lockMode);
+
+	/**
+	 * Finds a mailing list with the specified address.
+	 * 
+	 * @return a readonly MailingList entity
+	 */
+	public MailingList findMailingListByAddress(String address) throws NotFoundException;
+
+	/**
+	 * Finds an email address with the specified address.
+	 */
+	public EmailAddress findEmailAddressByAddress(String address) throws NotFoundException;
+
+	/**
+	 * Tries to find a mail entity which has the specified message id.
+	 */
+	public Mail findMailByMessageId(String msgId) throws NotFoundException;
 
 }

@@ -24,7 +24,7 @@ public class Validator
 	public static final int MAX_PERSON_NAME = 80;
 	
 	// EmailAddress
-	public static final int MAX_EMAIL_ADDRESS_EMAIL = 200;
+	public static final int MAX_EMAIL_ADDRESS = 200;
 	
 	// MailingList
 	public static final int MAX_LIST_ADDRESS = 200;
@@ -65,7 +65,7 @@ public class Validator
 		if (email == null)
 			return false;
 		
-		if (email.length() > MAX_EMAIL_ADDRESS_EMAIL){
+		if (email.length() > MAX_EMAIL_ADDRESS){
 			if (log.isDebugEnabled()) log.debug("Email too long: " + email);
 			return false;
 		}

@@ -16,7 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
-import org.subethamail.rtest.util.SampleMessages;
+import org.subethamail.rtest.util.Samples;
 
 /**
  * @author Jeff Schnitzer
@@ -45,9 +45,9 @@ public class InjectorTest extends TestCase
 	/** */
 	public void testTrivialInjection() throws Exception
 	{
-		byte[] msg = SampleMessages.getPlainMessage();
+		byte[] msg = Samples.getMessage("plain.msg");
 		
-		this.injector.inject(msg);
+		this.injector.inject("blah@foo.bar", msg);
 	}
 	
 	/** */

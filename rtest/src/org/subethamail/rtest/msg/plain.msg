@@ -1,6 +1,3 @@
-Return-Path: <lhoriman@gmail.com>
-X-Original-To: jeff@infohazard.org
-Delivered-To: jeff@infohazard.org
 Received: from zproxy.gmail.com (zproxy.gmail.com [64.233.162.198])
 	by wasabi.infohazard.org (Postfix) with ESMTP id BF2D5179852C
 	for <jeff@infohazard.org>; Tue, 21 Mar 2006 20:26:12 -0800 (PST)

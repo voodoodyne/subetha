@@ -23,8 +23,9 @@ import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
-import org.subethamail.entity.Mail.ModerationState;
+import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.dao.DAO;
+import org.subethamail.pluginapi.HoldException;
 import org.subethamail.pluginapi.IgnoreException;
 
 /**
@@ -78,14 +79,14 @@ public class InjectorEJB implements Injector, InjectorRemote
 		// Parse up the message
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
 		
-		// Start with a moderationstate of FREE
-		ModerationState modState = null;
+		// If it stays null, no moderation required
+		HoldType hold = null;
+		String holdMsg = null;
 		
 		// Run it through the plugin stack
 		try
 		{
-			if (this.pluginRunner.onInject(msg, toList))
-				modState = ModerationState.ADMIN;
+			this.pluginRunner.onInject(msg, toList);
 		}
 		catch (IgnoreException ex)
 		{
@@ -93,6 +94,14 @@ public class InjectorEJB implements Injector, InjectorRemote
 				log.debug("Plugin ignoring message", ex);
 			
 			return;
+		}
+		catch (HoldException ex)
+		{
+			if (log.isDebugEnabled())
+				log.debug("Plugin holding message", ex);
+			
+			hold = HoldType.MODERATOR;
+			holdMsg = ex.getMessage();
 		}
 		
 		// Figure out who sent it, if we know
@@ -108,29 +117,25 @@ public class InjectorEJB implements Injector, InjectorRemote
 			log.debug("Message parent is: " + parent);
 		
 		// Find out if the message should be held for moderation
-		if (modState == null)
+		if (hold == null)
 		{
-			if (author == null)
-				modState = ModerationState.SELF;
-			else
-			{
-				// TODO:  if author is not subscribed, it should also be self
-			}
+			if (author == null || !author.isSubscribed(toList))
+				hold = HoldType.SELF;
 		}
 		
 		if (log.isDebugEnabled())
-			log.debug("Moderate this message:  " + modState);
+			log.debug("Moderate this message:  " + hold);
 
 		// Create a mail object
-		Mail mail = new Mail(msg, toList, parent, modState);
+		Mail mail = new Mail(msg, toList, parent, hold);
 		
 		// Create associated entity
 		this.dao.persist(mail);
 
-		if (mail.getModerationState() != null)
+		if (mail.getHold() != null)
 		{
 			// Send instructions so that user can self-moderate
-			// Or send a message saying "you must wait for admin approval"
+			// Or send a message saying "you must wait for admin approval", use holdMsg if available
 		}
 		else
 		{

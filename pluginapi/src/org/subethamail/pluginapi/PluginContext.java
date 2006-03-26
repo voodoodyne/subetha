@@ -37,12 +37,4 @@ public interface PluginContext
 	 *  class of the actual enum type you want. 
 	 */
 	public <T extends Enum<T>> T getParamEnum(String name, Class<T> enumType);
-	
-	/**
-	 * Called when a plugin wants a message to be held for moderation
-	 * by a list administrator or list moderator.  This is only available
-	 * during the injection phase; calling it during outbound delivery
-	 * will do nothing.
-	 */
-	public void holdForModeration();
 }

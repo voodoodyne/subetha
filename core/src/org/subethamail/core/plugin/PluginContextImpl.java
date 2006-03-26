@@ -21,7 +21,6 @@ class PluginContextImpl implements PluginContext
 	/** */
 	EnabledPlugin enPlugin;
 	PluginFactory factory;
-	boolean held;
 	
 	/** 
 	 */
@@ -30,16 +29,6 @@ class PluginContextImpl implements PluginContext
 		this.enPlugin = enPlugin;
 		this.factory = fact;
 	}
-	
-	/**
-	 * Allows the PluginRunner to determine if a plugin wants the message
-	 * to be held for moderation.
-	 */
-	boolean isHeld()
-	{
-		return this.held;
-	}
-	
 	
 	/**
 	 * @see PluginContext#getListAddress()
@@ -106,13 +95,5 @@ class PluginContextImpl implements PluginContext
 		String value = this.getParamString(name);
 		
 		return Enum.valueOf(enumType, value);
-	}
-
-	/**
-	 * @see PluginContext#holdForModeration()
-	 */
-	public void holdForModeration()
-	{
-		this.held = true;
 	}
 }

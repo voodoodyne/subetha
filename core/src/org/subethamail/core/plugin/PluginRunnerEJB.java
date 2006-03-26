@@ -19,6 +19,7 @@ import org.subethamail.pluginapi.IgnoreException;
 import org.subethamail.pluginapi.Plugin;
 import org.subethamail.pluginapi.PluginContext;
 import org.subethamail.pluginapi.PluginFactory;
+import org.subethamail.pluginapi.HoldException;
 
 /**
  * @author Jeff Schnitzer
@@ -37,11 +38,11 @@ public class PluginRunnerEJB implements PluginRunner
 	/**
 	 * @see PluginRunner#onInject(MimeMessage, MailingList)
 	 */
-	public boolean onInject(MimeMessage msg, MailingList list) throws IgnoreException, MessagingException
+	public void onInject(MimeMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException
 	{
 		// TODO:  factor in global plugins
 		
-		boolean hold = false;
+		HoldException holdException = null;
 		
 		for (EnabledPlugin enPlugin: list.getEnabledPlugins())
 		{
@@ -53,17 +54,24 @@ public class PluginRunnerEJB implements PluginRunner
 			}
 			else
 			{
-				PluginContextImpl ctx = new PluginContextImpl(enPlugin, fact);
+				PluginContext ctx = new PluginContextImpl(enPlugin, fact);
 				Plugin plugin = fact.getPlugin(ctx);
 				
-				plugin.onInject(msg);
-				
-				if (ctx.isHeld())
-					hold = true;
+				try
+				{
+					plugin.onInject(msg);
+				}
+				catch (HoldException ex)
+				{
+					// We only track the first one
+					if (holdException == null)
+						holdException = ex;
+				}
 			}
 		}
 		
-		return hold;
+		if (holdException != null)
+			throw holdException;
 	}
 
 	/**

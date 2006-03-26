@@ -12,6 +12,7 @@ import javax.mail.internet.MimeMessage;
 import org.subethamail.entity.MailingList;
 import org.subethamail.pluginapi.IgnoreException;
 import org.subethamail.pluginapi.Plugin;
+import org.subethamail.pluginapi.HoldException;
 
 /**
  * Interface for running plugins on a mime message.
@@ -28,11 +29,9 @@ public interface PluginRunner
 	 * Runs the message through all the plugins associated with
 	 * the list.
 	 * 
-	 * @return true if the message should be held for administrative moderation
-	 * 
 	 * @see Plugin#onInject(MimeMessage)
 	 */
-	public boolean onInject(MimeMessage msg, MailingList list) throws IgnoreException, MessagingException;
+	public void onInject(MimeMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException;
 	
 	/**
 	 * Runs the message through all the plugins associated with

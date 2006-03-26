@@ -141,6 +141,15 @@ public class Person implements Serializable, Comparable
 		this.emailAddresses = value;
 	}
 	
+	/**
+	 * @return true if this person is subscribed to the list
+	 */
+	public boolean isSubscribed(MailingList list)
+	{
+		// TODO
+		return true;
+	}
+	
 	/** */
 	public String toString()
 	{

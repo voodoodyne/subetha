@@ -66,10 +66,10 @@ public class Mail implements Serializable, Comparable
 	/**
 	 * Possible moderation states 
 	 */
-	public enum ModerationState
+	public enum HoldType
 	{
-		SELF,	// Waiting for moderation, self-approval is ok
-		ADMIN	// Waiting for a list moderator to approve
+		SELF,		// Hold for self-approval
+		MODERATOR	// Hold for list moderator to approve
 	}
 	
 	/** */
@@ -124,16 +124,17 @@ public class Mail implements Serializable, Comparable
 	 */
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=true)
-	@Index(name="moderationIndex")
-	ModerationState modState;
+	@Index(name="holdIndex")
+	HoldType hold;
 	
 	/**
 	 */
 	public Mail() {}
 	
 	/**
+	 * @param holdFor can be null which means none required
 	 */
-	public Mail(SubEthaMessage msg, MailingList list, Mail parent, ModerationState modState) throws MessagingException
+	public Mail(SubEthaMessage msg, MailingList list, Mail parent, HoldType holdFor) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mail");
@@ -141,7 +142,7 @@ public class Mail implements Serializable, Comparable
 		this.dateCreated = new Date();
 		this.mailingList = list;
 		this.parent = parent;
-		this.modState = modState;
+		this.hold = holdFor;
 		
 		byte[] raw;
 		try
@@ -267,14 +268,14 @@ public class Mail implements Serializable, Comparable
 	
 	/**
 	 */
-	public ModerationState getModerationState() { return this.modState; }
+	public HoldType getHold() { return this.hold; }
 	
 	/**
 	 * Releases a moderation hold
 	 */
 	public void release()
 	{
-		this.modState = ModerationState.FREE;
+		this.hold = null;
 	}
 
 	/** */

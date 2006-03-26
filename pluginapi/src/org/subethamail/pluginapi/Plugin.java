@@ -20,11 +20,16 @@ public interface Plugin
 	 * after it has been decoded by JavaMail but before any further processing
 	 * has been done.
 	 * 
-	 * @throws IgnoreException if the message should be silently dropped.
+	 * @throws IgnoreException if the message should be silently dropped.  This will
+	 *  halt execution of the plugin stack.
+	 * @throws HoldException if the message should be held for
+	 *  administrative (not self) moderation.  The message string is significant.
+	 *  Note that this will not halt execution of the plugin stack.
 	 * @throws MessagingException if there was an error processing the message,
-	 *  or if for any reason message receipt should be aborted.
+	 *  or if for any reason message receipt should be aborted.  Halts execution
+	 *  of the plugin stack.
 	 */
-	public void onInject(MimeMessage msg) throws IgnoreException, MessagingException;
+	public void onInject(MimeMessage msg) throws IgnoreException, HoldException, MessagingException;
 	
 	/**
 	 * Allows plugin to manipulate the message as it is being sent outbound.  This
@@ -32,7 +37,8 @@ public interface Plugin
 	 * outbound message.  Any attachments in the message will references be of type
 	 * x-subetha/attachment-ref. 
 	 *  
-	 * @throws IgnoreException if the message should not be sent.
+	 * @throws IgnoreException if the message should not be sent.  Halts execution
+	 *  of the plugin stack.
 	 */
 	public void onSendBeforeAttaching(MimeMessage msg) throws IgnoreException;
 	
@@ -41,7 +47,8 @@ public interface Plugin
 	 * is the last hook prior to a message being sent, after attachment references
 	 * have been replaced with the genuine contents.
 	 *  
-	 * @throws IgnoreException if the message should not be sent.
+	 * @throws IgnoreException if the message should not be sent.  Halts execution
+	 *  of the plugin stack.
 	 */
 	public void onSendAfterAttaching(MimeMessage msg) throws IgnoreException;
 }

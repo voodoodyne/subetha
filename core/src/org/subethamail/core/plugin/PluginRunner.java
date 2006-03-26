@@ -6,10 +6,10 @@
 package org.subethamail.core.plugin;
 
 import javax.ejb.Local;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.subethamail.entity.MailingList;
-import org.subethamail.pluginapi.BounceException;
 import org.subethamail.pluginapi.IgnoreException;
 import org.subethamail.pluginapi.Plugin;
 
@@ -28,9 +28,11 @@ public interface PluginRunner
 	 * Runs the message through all the plugins associated with
 	 * the list.
 	 * 
+	 * @return true if the message should be held for administrative moderation
+	 * 
 	 * @see Plugin#onInject(MimeMessage)
 	 */
-	public void onInject(MimeMessage msg, MailingList list) throws BounceException, IgnoreException;
+	public boolean onInject(MimeMessage msg, MailingList list) throws IgnoreException, MessagingException;
 	
 	/**
 	 * Runs the message through all the plugins associated with
@@ -38,7 +40,7 @@ public interface PluginRunner
 	 * 
 	 * @see Plugin#onSendBeforeAttaching(MimeMessage)
 	 */
-	public void onSendBeforeAttaching(MimeMessage msg) throws IgnoreException;
+	public void onSendBeforeAttaching(MimeMessage msg, MailingList list) throws IgnoreException;
 	
 	/**
 	 * Runs the message through all the plugins associated with
@@ -46,6 +48,6 @@ public interface PluginRunner
 	 * 
 	 * @see Plugin#onSendAfterAttaching(MimeMessage)
 	 */
-	public void onSendAfterAttaching(MimeMessage msg) throws IgnoreException;
+	public void onSendAfterAttaching(MimeMessage msg, MailingList list) throws IgnoreException;
 }
 

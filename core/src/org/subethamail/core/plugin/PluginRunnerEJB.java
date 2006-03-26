@@ -7,6 +7,7 @@ package org.subethamail.core.plugin;
 
 import javax.annotation.EJB;
 import javax.ejb.Stateless;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
@@ -14,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import org.subethamail.entity.EnabledPlugin;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.dao.DAO;
-import org.subethamail.pluginapi.BounceException;
 import org.subethamail.pluginapi.IgnoreException;
 import org.subethamail.pluginapi.Plugin;
 import org.subethamail.pluginapi.PluginContext;
@@ -37,9 +37,11 @@ public class PluginRunnerEJB implements PluginRunner
 	/**
 	 * @see PluginRunner#onInject(MimeMessage, MailingList)
 	 */
-	public void onInject(MimeMessage msg, MailingList list) throws BounceException, IgnoreException
+	public boolean onInject(MimeMessage msg, MailingList list) throws IgnoreException, MessagingException
 	{
 		// TODO:  factor in global plugins
+		
+		boolean hold = false;
 		
 		for (EnabledPlugin enPlugin: list.getEnabledPlugins())
 		{
@@ -51,18 +53,23 @@ public class PluginRunnerEJB implements PluginRunner
 			}
 			else
 			{
-				PluginContext ctx = new PluginContextImpl(enPlugin, fact);
+				PluginContextImpl ctx = new PluginContextImpl(enPlugin, fact);
 				Plugin plugin = fact.getPlugin(ctx);
 				
 				plugin.onInject(msg);
+				
+				if (ctx.isHeld())
+					hold = true;
 			}
 		}
+		
+		return hold;
 	}
 
 	/**
 	 * @see PluginRunner#onSendBeforeAttaching(MimeMessage)
 	 */
-	public void onSendBeforeAttaching(MimeMessage msg) throws IgnoreException
+	public void onSendBeforeAttaching(MimeMessage msg, MailingList list) throws IgnoreException
 	{
 		//TODO
 	}
@@ -70,7 +77,7 @@ public class PluginRunnerEJB implements PluginRunner
 	/**
 	 * @see PluginRunner#onSendAfterAttaching(MimeMessage)
 	 */
-	public void onSendAfterAttaching(MimeMessage msg) throws IgnoreException
+	public void onSendAfterAttaching(MimeMessage msg, MailingList list) throws IgnoreException
 	{
 		//TODO
 	}

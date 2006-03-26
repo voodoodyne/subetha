@@ -23,8 +23,8 @@ import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.Mail.ModerationState;
 import org.subethamail.entity.dao.DAO;
-import org.subethamail.pluginapi.BounceException;
 import org.subethamail.pluginapi.IgnoreException;
 
 /**
@@ -78,19 +78,21 @@ public class InjectorEJB implements Injector, InjectorRemote
 		// Parse up the message
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
 		
+		// Start with a moderationstate of FREE
+		ModerationState modState = null;
+		
 		// Run it through the plugin stack
 		try
 		{
-			this.pluginRunner.onInject(msg, toList);
-		}
-		catch (BounceException ex)
-		{
-			// TODO
+			if (this.pluginRunner.onInject(msg, toList))
+				modState = ModerationState.ADMIN;
 		}
 		catch (IgnoreException ex)
 		{
 			if (log.isDebugEnabled())
 				log.debug("Plugin ignoring message", ex);
+			
+			return;
 		}
 		
 		// Figure out who sent it, if we know
@@ -106,20 +108,29 @@ public class InjectorEJB implements Injector, InjectorRemote
 			log.debug("Message parent is: " + parent);
 		
 		// Find out if the message should be held for moderation
-		boolean holdForModeration = (author == null) /* TODO: || author is not subscribed */ ;
-
+		if (modState == null)
+		{
+			if (author == null)
+				modState = ModerationState.SELF;
+			else
+			{
+				// TODO:  if author is not subscribed, it should also be self
+			}
+		}
+		
 		if (log.isDebugEnabled())
-			log.debug("Hold for moderation? " + holdForModeration);
+			log.debug("Moderate this message:  " + modState);
 
 		// Create a mail object
-		Mail mail = new Mail(msg, toList, parent, holdForModeration);
+		Mail mail = new Mail(msg, toList, parent, modState);
 		
 		// Create associated entity
 		this.dao.persist(mail);
 
-		if (mail.isHeld())
+		if (mail.getModerationState() != null)
 		{
 			// Send instructions so that user can self-moderate
+			// Or send a message saying "you must wait for admin approval"
 		}
 		else
 		{

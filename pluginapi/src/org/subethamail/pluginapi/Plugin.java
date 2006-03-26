@@ -5,6 +5,7 @@
 
 package org.subethamail.pluginapi;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 /**
@@ -19,10 +20,11 @@ public interface Plugin
 	 * after it has been decoded by JavaMail but before any further processing
 	 * has been done.
 	 * 
-	 * @throws BounceException if the message should be bounced back to its sender.
 	 * @throws IgnoreException if the message should be silently dropped.
+	 * @throws MessagingException if there was an error processing the message,
+	 *  or if for any reason message receipt should be aborted.
 	 */
-	public void onInject(MimeMessage msg) throws BounceException, IgnoreException;
+	public void onInject(MimeMessage msg) throws IgnoreException, MessagingException;
 	
 	/**
 	 * Allows plugin to manipulate the message as it is being sent outbound.  This

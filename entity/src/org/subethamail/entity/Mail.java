@@ -18,6 +18,8 @@ import javax.mail.internet.InternetAddress;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -60,6 +62,15 @@ public class Mail implements Serializable, Comparable
 {
 	/** */
 	@Transient private static Log log = LogFactory.getLog(Mail.class);
+	
+	/**
+	 * Possible moderation states 
+	 */
+	public enum ModerationState
+	{
+		SELF,	// Waiting for moderation, self-approval is ok
+		ADMIN	// Waiting for a list moderator to approve
+	}
 	
 	/** */
 	@Id
@@ -109,12 +120,12 @@ public class Mail implements Serializable, Comparable
 	SortedSet<Mail> replies;
 	
 	/** 
-	 * Is it held for moderation?
-	 * This would ideally be a partial index on the 'true' value. 
+	 * Is it held for moderation?  If null, no need for moderation.
 	 */
-	@Column(nullable=false)
-	@Index(name="mailHeldIndex")
-	boolean held;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable=true)
+	@Index(name="moderationIndex")
+	ModerationState modState;
 	
 	/**
 	 */
@@ -122,7 +133,7 @@ public class Mail implements Serializable, Comparable
 	
 	/**
 	 */
-	public Mail(SubEthaMessage msg, MailingList list, Mail parent, boolean hold) throws MessagingException
+	public Mail(SubEthaMessage msg, MailingList list, Mail parent, ModerationState modState) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mail");
@@ -130,7 +141,7 @@ public class Mail implements Serializable, Comparable
 		this.dateCreated = new Date();
 		this.mailingList = list;
 		this.parent = parent;
-		this.held = hold;
+		this.modState = modState;
 		
 		byte[] raw;
 		try
@@ -254,15 +265,16 @@ public class Mail implements Serializable, Comparable
 	/** Note no setter; this is the date the mail came into the system */
 	public Date getDateCreated() { return this.dateCreated; }
 	
-	/** @return true if this is held for moderation */
-	public boolean isHeld() { return this.held; }
+	/**
+	 */
+	public ModerationState getModerationState() { return this.modState; }
 	
 	/**
 	 * Releases a moderation hold
 	 */
 	public void release()
 	{
-		this.held = false;
+		this.modState = ModerationState.FREE;
 	}
 
 	/** */

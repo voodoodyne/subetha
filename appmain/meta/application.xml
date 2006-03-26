@@ -22,6 +22,10 @@
 	</module>
 
 	<module>
+		<ejb>plugin.jar</ejb>
+	</module>
+
+	<module>
 		<web>
 			<web-uri>frontend.war</web-uri>
 			<context-root></context-root>

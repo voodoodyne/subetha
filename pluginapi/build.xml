@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<!--
+	$Id: build.xml 99 2006-02-25 00:55:38Z jeff $
+	$URL: https://svn.infohazard.org/blorn/trunk/plugin/build.xml $
+
+	Build file for the plugin api.  Builds a jar file.
+	
+	Not an entry point; imported by the top-level buildfile.
+-->
+
+<project name="pluginapi" default="" basedir=".">
+	
+	<property name="build.pluginapi.classes.dir" location="${build.dir}/pluginapi-classes" />
+	<property name="build.pluginapi.jar.file" location="${build.dir}/${name}-plugin-api.jar" />
+	
+	<dirname property="pluginapi.basedir" file="${ant.file.pluginapi}"/>
+	<property name="pluginapi.javasrc.dir" location="${pluginapi.basedir}/src" />
+	<property name="pluginapi.meta.dir" location="${pluginapi.basedir}/meta" />
+	<property name="pluginapi.lib.dir" location="${pluginapi.basedir}/lib" />
+
+	<!-- used to build the plugin interfaces -->
+	<path id="pluginapi.classpath">
+		<path refid="master.classpath" />
+	</path>
+
+ 	<target name="pluginapi-classes" depends="">
+		<mkdir dir="${build.pluginapi.classes.dir}" />
+ 		
+		<javac srcdir="${pluginapi.javasrc.dir}"
+				destdir="${build.pluginapi.classes.dir}"
+				includeAntRuntime="false"
+				debug="${build.debug}"
+				deprecation="${build.deprecation}">
+			
+			<classpath refid="pluginapi.classpath" />
+		</javac>
+	</target>
+
+	<target name="pluginapi-jar" depends="pluginapi-classes">
+		<jar jarfile="${build.pluginapi.jar.file}">
+			<fileset dir="${build.pluginapi.classes.dir}"/>
+		</jar>
+	</target>
+</project>
+

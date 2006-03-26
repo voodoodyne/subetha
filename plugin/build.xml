@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+
+<!--
+	$Id: build.xml 99 2006-02-25 00:55:38Z jeff $
+	$URL: https://svn.infohazard.org/blorn/trunk/plugin/build.xml $
+
+	Build file for the stock plugins included with SubEtha.
+	Builds a sar file.
+	
+	Not an entry point; imported by the top-level buildfile.
+-->
+
+<project name="plugin" default="" basedir=".">
+	
+	<property name="build.plugin.classes.dir" location="${build.dir}/plugin-classes" />
+	<!-- Temporarily we are building a JAR file instead -->
+	<property name="build.plugin.sar.file" location="${build.dir}/plugin.jar" />
+	
+	<dirname property="plugin.basedir" file="${ant.file.plugin}"/>
+	<property name="plugin.javasrc.dir" location="${plugin.basedir}/src" />
+	<property name="plugin.meta.dir" location="${plugin.basedir}/meta" />
+	<property name="plugin.lib.dir" location="${plugin.basedir}/lib" />
+
+	<!-- used to build the plugin interfaces -->
+	<path id="plugin.classpath">
+		<path refid="master.classpath" />
+		<pathelement location="${build.pluginapi.jar.file}"/>
+	</path>
+
+ 	<target name="plugin-classes" depends="pluginapi-jar">
+		<mkdir dir="${build.plugin.classes.dir}" />
+ 		
+		<javac srcdir="${plugin.javasrc.dir}"
+				destdir="${build.plugin.classes.dir}"
+				includeAntRuntime="false"
+				debug="${build.debug}"
+				deprecation="${build.deprecation}">
+			
+			<classpath refid="plugin.classpath" />
+		</javac>
+	</target>
+
+	<!-- temporarily we are building a jar file instead -->
+	<target name="plugin-sar" depends="plugin-classes">
+		<jar jarfile="${build.plugin.sar.file}">
+			<!--
+			<metainf dir="${plugin.meta.dir}">
+				<include name="jboss-service.xml"/>
+			</metainf>
+			-->
+			
+			<fileset dir="${build.plugin.classes.dir}"/>
+			
+			<!--
+			<fileset dir="${plugin.lib.dir}"/>
+			-->
+		</jar>
+	</target>
+</project>
+

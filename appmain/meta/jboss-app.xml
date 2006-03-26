@@ -13,4 +13,9 @@
 	<module>
 		<service>core.sar</service>
 	</module>
+	<!--
+	<module>
+		<service>plugin.sar</service>
+	</module>
+	-->
 </jboss-app>

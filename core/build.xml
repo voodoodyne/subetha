@@ -32,10 +32,11 @@
 		<path refid="core.i.classpath" />
 		<pathelement location="${build.core.ejbclient.file}" />
 		<pathelement location="${build.entity.ejb.file}"/>
+		<pathelement location="${build.pluginapi.jar.file}"/>
 		<fileset dir="${core.lib.dir}"/>
 	</path>
 
- 	<target name="core-classes" depends="core-ejbclient-jar, entity-ejb-jar">
+ 	<target name="core-classes" depends="core-ejbclient-jar, entity-ejb-jar, pluginapi-jar">
 		<mkdir dir="${build.core.classes.dir}" />
  		
 		<javac srcdir="${core.javasrc.dir}"
@@ -87,6 +88,7 @@
 			<fileset dir="${core.lib.dir}"/>
 			
 			<fileset file="${build.core.ejbclient.file}"/>
+			<fileset file="${build.pluginapi.jar.file}"/>
 			<fileset file="${build.common.jar.file}"/>
 		</jar>
 	</target>

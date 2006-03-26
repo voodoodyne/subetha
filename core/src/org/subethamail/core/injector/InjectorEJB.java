@@ -18,11 +18,14 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
+import org.subethamail.core.plugin.PluginRunner;
 import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.dao.DAO;
+import org.subethamail.pluginapi.BounceException;
+import org.subethamail.pluginapi.IgnoreException;
 
 /**
  * @author Jeff Schnitzer
@@ -38,6 +41,7 @@ public class InjectorEJB implements Injector, InjectorRemote
 	/** */
 	@EJB DAO dao;
 	@EJB Queuer queuer;
+	@EJB PluginRunner pluginRunner;
 	
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
@@ -74,7 +78,20 @@ public class InjectorEJB implements Injector, InjectorRemote
 		// Parse up the message
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
 		
-		// Run it through a filtering stack at this stage?
+		// Run it through the plugin stack
+		try
+		{
+			this.pluginRunner.onInject(msg, toList);
+		}
+		catch (BounceException ex)
+		{
+			// TODO
+		}
+		catch (IgnoreException ex)
+		{
+			if (log.isDebugEnabled())
+				log.debug("Plugin ignoring message", ex);
+		}
 		
 		// Figure out who sent it, if we know
 		Person author = this.findPersonFrom(msg);
@@ -166,7 +183,7 @@ public class InjectorEJB implements Injector, InjectorRemote
 		
 		return null;
 	}
-
+	
 	/**
 	 * @see Injector#log(byte[])
 	 */

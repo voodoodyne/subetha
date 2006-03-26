@@ -24,10 +24,17 @@ public class Validator
 	public static final int MAX_PERSON_NAME = 80;
 	
 	// EmailAddress
-	public static final int MAX_EMAIL_ADDRESS = 200;
+	public static final int MAX_EMAIL_ADDRESS = 256;
 	
 	// MailingList
-	public static final int MAX_LIST_ADDRESS = 200;
+	public static final int MAX_LIST_ADDRESS = 256;
+	public static final int MAX_LIST_URL = 256;
+	
+	// EnabledPlugin
+	public static final int MAX_PLUGIN_CLASSNAME = 256;
+	
+	// PluginParam
+	public static final int MAX_PLUGIN_PARAM_NAME = 256;
 	
 	// Mail
 	public static final int MAX_MAIL_CONTENT = 1024 * 1024;	// 1M enough?

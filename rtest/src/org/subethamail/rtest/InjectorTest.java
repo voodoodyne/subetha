@@ -47,7 +47,7 @@ public class InjectorTest extends TestCase
 	{
 		byte[] msg = Samples.getMessage("plain.msg");
 		
-		this.injector.inject("blah@foo.bar", msg);
+		this.injector.inject("blah@infohazard.org", msg);
 	}
 	
 	/** */

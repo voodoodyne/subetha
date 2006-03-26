@@ -80,7 +80,7 @@ public class Mail implements Serializable, Comparable
 	String subject;
 	
 	/** rfc222-style comma-separated address list */
-	@Column(nullable=true, length=Validator.MAX_MAIL_FROM)
+	@Column(name="fromField", nullable=true, length=Validator.MAX_MAIL_FROM)
 	String from;
 	
 	/** normalized box@domain.tld */

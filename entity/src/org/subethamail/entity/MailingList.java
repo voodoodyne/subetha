@@ -18,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 
@@ -70,6 +71,10 @@ public class MailingList implements Serializable, Comparable
 	
 	@Column(nullable=false)
 	String subjectPrefix;
+	
+	/** */
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="mailingList")
+	Set<EnabledPlugin> enabledPlugins;
 	
 	/** */
 	@ManyToMany(cascade=CascadeType.MERGE)
@@ -135,6 +140,28 @@ public class MailingList implements Serializable, Comparable
 		
 		this.address = value;
 	}
+	
+	/**
+	 */
+	public String getURL() { return this.url; }
+	
+	/**
+	 */
+	public void setURL(String value)
+	{
+		if (value == null || value.length() > Validator.MAX_LIST_URL)
+			throw new IllegalArgumentException("Invalid url");
+
+		if (log.isDebugEnabled())
+			log.debug("Setting url of " + this + " to " + value);
+		
+		this.url = value;
+	}
+	
+	/** 
+	 * @return all plugins enabled on this list
+	 */
+	public Set<EnabledPlugin> getEnabledPlugins() { return this.enabledPlugins; }
 
 	/** */
 	public String toString()

@@ -15,7 +15,7 @@ package org.subethamail.pluginapi;
 public interface PluginContext
 {
 	/** */
-	public String getListName();
+	public String getListAddress();
 	
 	/** */
 	public String getListURL();
@@ -32,6 +32,9 @@ public interface PluginContext
 	/** */
 	public String getParamString(String name);
 	
-	/** You must cast it to the actual enum subclass */
-	public Enum getParamEnum(String name);
+	/**
+	 * @return the value of the enum.  You have to pass in the
+	 *  class of the actual enum type you want. 
+	 */
+	public <T extends Enum<T>> T getParamEnum(String name, Class<T> enumType);
 }

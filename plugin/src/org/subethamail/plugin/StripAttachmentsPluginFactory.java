@@ -5,12 +5,13 @@
 
 package org.subethamail.plugin;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
-import org.subethamail.pluginapi.BounceException;
+import org.subethamail.pluginapi.HoldException;
 import org.subethamail.pluginapi.IgnoreException;
 import org.subethamail.pluginapi.ParameterDef;
 import org.subethamail.pluginapi.Plugin;
@@ -77,7 +78,7 @@ public class StripAttachmentsPluginFactory extends AbstractPluginFactory impleme
 		 * @see Plugin#onInject(javax.mail.internet.MimeMessage)
 		 */
 		@Override
-		public void onInject(MimeMessage msg) throws BounceException, IgnoreException
+		public void onInject(MimeMessage msg) throws IgnoreException, HoldException, MessagingException
 		{
 			// TODO:  implement this.
 			log.debug("onInject()");

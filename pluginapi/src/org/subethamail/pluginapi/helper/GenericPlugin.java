@@ -5,9 +5,10 @@
 
 package org.subethamail.pluginapi.helper;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.subethamail.pluginapi.BounceException;
+import org.subethamail.pluginapi.HoldException;
 import org.subethamail.pluginapi.IgnoreException;
 import org.subethamail.pluginapi.Plugin;
 import org.subethamail.pluginapi.PluginContext;
@@ -33,7 +34,7 @@ public class GenericPlugin implements Plugin
 	/**
 	 * @see Plugin#onInject(MimeMessage)
 	 */
-	public void onInject(MimeMessage msg) throws BounceException, IgnoreException
+	public void onInject(MimeMessage msg) throws IgnoreException, HoldException, MessagingException
 	{
 	}
 	

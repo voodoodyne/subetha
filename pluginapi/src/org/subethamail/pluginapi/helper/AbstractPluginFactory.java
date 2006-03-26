@@ -30,4 +30,12 @@ abstract public class AbstractPluginFactory implements PluginFactory, AbstractPl
 	{
 		this.registry.register(this);
 	}
+	
+	/**
+	 * @see AbstractPluginFactoryManagement#stop()
+	 */
+	public void stop()
+	{
+		this.registry.deregister(this);
+	}
 }

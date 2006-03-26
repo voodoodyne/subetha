@@ -22,4 +22,12 @@ public interface PluginRegistration
 	 * when the application deploys, using a JBoss service start() method.
 	 */
 	public void register(PluginFactory factory);
+	
+	/**
+	 * Deregister a plugin factory.  Factories should remove themselves
+	 * when they undeploy, using a JBoss service stop() method.  If you
+	 * don't plan on doing a lot of hot deployment or redeployment of
+	 * plugins, this is not a critical method.
+	 */
+	public void deregister(PluginFactory factory);
 }

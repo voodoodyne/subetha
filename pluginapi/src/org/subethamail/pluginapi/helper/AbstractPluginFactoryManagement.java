@@ -20,4 +20,9 @@ public interface AbstractPluginFactoryManagement
 	 * Called upon deployment.  Registers the factory with the PluginRegistry.
 	 */
 	public void start() throws Exception;
+	
+	/**
+	 * Called when undeploying.  Deregisters the factory with the PluginRegistry.
+	 */
+	public void stop();
 }

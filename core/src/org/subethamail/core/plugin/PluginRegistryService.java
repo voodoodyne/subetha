@@ -6,8 +6,8 @@
 package org.subethamail.core.plugin;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,27 +23,37 @@ import org.subethamail.pluginapi.PluginRegistration;
  * @author Jeff Schnitzer
  */
 @Service(objectName="subetha:service=PluginRegistry")
-public class PluginRegistryService implements PluginRegistration, PluginRegistry, PluginRegistryServiceManagement
+public class PluginRegistryService implements PluginRegistration, PluginRegistry
 {
 	/** */
 	private static Log log = LogFactory.getLog(PluginRegistryService.class);
 	
 	/**
-	 * This shouldn't need to be synchronized because writes are done
-	 * in a single thread at application deployment.  Reads are multithreaded
-	 * but nobody should be registering at that point.
+	 * We do have to be a bit careful with synchronization since someone
+	 * might hot-deploy some plugins into a running appserver.
 	 */
-	Map<String, PluginFactory> factories = new HashMap<String, PluginFactory>();
+	Map<String, PluginFactory> factories = new ConcurrentHashMap<String, PluginFactory>();
 
 	/**
 	 * @see PluginRegistration#register(PluginFactory)
 	 */
-	public void register(PluginFactory factory)
+	public synchronized void register(PluginFactory factory)
 	{
 		if (log.isInfoEnabled())
 			log.info("Registering " + factory.getClass().getName());
 			
 		this.factories.put(factory.getClass().getName(), factory);
+	}
+
+	/**
+	 * @see PluginRegistration#deregister(PluginFactory)
+	 */
+	public synchronized void deregister(PluginFactory factory)
+	{
+		if (log.isInfoEnabled())
+			log.info("De-registering " + factory.getClass().getName());
+			
+		this.factories.remove(factory.getClass().getName());
 	}
 
 	/**
@@ -60,13 +70,5 @@ public class PluginRegistryService implements PluginRegistration, PluginRegistry
 	public PluginFactory getFactory(String className)
 	{
 		return this.factories.get(className);
-	}
-
-	/**
-	 * 
-	 */
-	public void create() throws Exception
-	{
-		log.debug("####### creating service");
 	}
 }

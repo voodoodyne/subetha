@@ -69,9 +69,6 @@ public class MailingList implements Serializable, Comparable
 	@Column(nullable=false)
 	String description;
 	
-	@Column(nullable=false)
-	String subjectPrefix;
-	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="mailingList")
 	Set<EnabledPlugin> enabledPlugins;

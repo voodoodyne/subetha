@@ -10,9 +10,9 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.subethamail.entity.MailingList;
+import org.subethamail.pluginapi.HoldException;
 import org.subethamail.pluginapi.IgnoreException;
 import org.subethamail.pluginapi.Plugin;
-import org.subethamail.pluginapi.HoldException;
 
 /**
  * Interface for running plugins on a mime message.

@@ -15,11 +15,11 @@ import org.apache.commons.logging.LogFactory;
 import org.subethamail.entity.EnabledPlugin;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.dao.DAO;
+import org.subethamail.pluginapi.HoldException;
 import org.subethamail.pluginapi.IgnoreException;
 import org.subethamail.pluginapi.Plugin;
 import org.subethamail.pluginapi.PluginContext;
 import org.subethamail.pluginapi.PluginFactory;
-import org.subethamail.pluginapi.HoldException;
 
 /**
  * @author Jeff Schnitzer

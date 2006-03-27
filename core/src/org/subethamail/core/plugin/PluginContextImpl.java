@@ -43,7 +43,7 @@ class PluginContextImpl implements PluginContext
 	 */
 	public String getListURL()
 	{
-		return this.enPlugin.getMailingList().getURL();
+		return this.enPlugin.getMailingList().getUrl();
 	}
 
 	/**

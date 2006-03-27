@@ -30,11 +30,17 @@ public class Validator
 	public static final int MAX_LIST_ADDRESS = 256;
 	public static final int MAX_LIST_URL = 256;
 	
+	// Role
+	public static final int MAX_ROLE_NAME = 50;
+	
 	// EnabledPlugin
 	public static final int MAX_PLUGIN_CLASSNAME = 256;
 	
 	// PluginParam
 	public static final int MAX_PLUGIN_PARAM_NAME = 256;
+	
+	// Subscription
+	public static final int MAX_SUBSCRIPTION_NOTE = 4096;
 	
 	// Mail
 	public static final int MAX_MAIL_CONTENT = 1024 * 1024;	// 1M enough?

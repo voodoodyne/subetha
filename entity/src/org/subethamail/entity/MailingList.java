@@ -14,11 +14,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 
@@ -69,39 +68,25 @@ public class MailingList implements Serializable, Comparable
 	@Column(nullable=false)
 	String description;
 	
+	/** The default role for new subscribers */
+	@OneToOne
+	@JoinColumn(name="defaultRoleId", nullable=false)
+	Role defaultRole;
+	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="mailingList")
+	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	Set<Subscription> subscriptions;
+	
+	/** */
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="mailingList")
+	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	Set<EnabledPlugin> enabledPlugins;
 	
 	/** */
-	@ManyToMany(cascade=CascadeType.MERGE)
-	@JoinTable(
-		name="listAdministrators",
-		joinColumns={@JoinColumn(name="listId")},
-		inverseJoinColumns={@JoinColumn(name="personId")}
-	)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="mailingList")
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	Set<Person> administrators;
-	
-	/** */
-	@ManyToMany(cascade=CascadeType.MERGE)
-	@JoinTable(
-		name="listModerators",
-		joinColumns={@JoinColumn(name="listId")},
-		inverseJoinColumns={@JoinColumn(name="personId")}
-	)
-	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	Set<Person> moderators;
-	
-	/** */
-	@ManyToMany(cascade=CascadeType.MERGE)
-	@JoinTable(
-		name="listMembers",
-		joinColumns={@JoinColumn(name="listId")},
-		inverseJoinColumns={@JoinColumn(name="personId")}
-	)
-	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	Set<Person> members;
+	Set<Role> roles;
 	
 	/**
 	 */
@@ -140,11 +125,11 @@ public class MailingList implements Serializable, Comparable
 	
 	/**
 	 */
-	public String getURL() { return this.url; }
+	public String getUrl() { return this.url; }
 	
 	/**
 	 */
-	public void setURL(String value)
+	public void setUrl(String value)
 	{
 		if (value == null || value.length() > Validator.MAX_LIST_URL)
 			throw new IllegalArgumentException("Invalid url");
@@ -156,9 +141,27 @@ public class MailingList implements Serializable, Comparable
 	}
 	
 	/** 
+	 * @return all the subscriptions associated with this list
+	 */
+	public Set<Subscription> getSubscriptions() { return this.subscriptions; }
+	
+	/** 
 	 * @return all plugins enabled on this list
 	 */
 	public Set<EnabledPlugin> getEnabledPlugins() { return this.enabledPlugins; }
+
+	/** 
+	 * @return all roles available for this list
+	 */
+	public Set<Role> getRoles() { return this.roles; }
+	
+	/**
+	 * @return true if role is valid for this list
+	 */
+	public boolean isValidRole(Role role)
+	{
+		return (role == null || this.roles.contains(role));
+	}
 
 	/** */
 	public String toString()

@@ -9,13 +9,9 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
@@ -31,18 +27,13 @@ import org.subethamail.common.valid.Validator;
  * 
  * @see Validator#normalizeEmail(String)
  * 
+ * Note that this entity uses a natural key - the email address
+ * itself.  This enables efficient 2nd-level cache lookups.
+ * One consequence is that you never change email addresses;
+ * you add new ones and delete old ones. 
+ * 
  * @author Jeff Schnitzer
  */
-@NamedQueries({
-	@NamedQuery(
-		name="EmailByAddress", 
-		query="from EmailAddress ea where ea.address = :address",
-		hints={
-			@QueryHint(name="org.hibernate.readOnly", value="true"),
-			@QueryHint(name="org.hibernate.cacheable", value="true")
-		}
-	)
-})
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class EmailAddress implements Serializable, Comparable
@@ -52,15 +43,12 @@ public class EmailAddress implements Serializable, Comparable
 	
 	/** */
 	@Id
-	@GeneratedValue
-	Long id;
-	
 	@Column(nullable=false, length=Validator.MAX_EMAIL_ADDRESS)
-	String address;
+	String id;
 	
 	@ManyToOne
-	@JoinColumn(name="ownerId", nullable=false)
-	Person owner;
+	@JoinColumn(name="personId", nullable=false)
+	Person person;
 	
 	/**
 	 */
@@ -68,26 +56,23 @@ public class EmailAddress implements Serializable, Comparable
 	
 	/**
 	 */
-	public EmailAddress(Person owner, String address)
+	public EmailAddress(Person person, String address)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new EmailAddress");
 		
-		// These are validated normally.
-		this.setOwner(owner);
-		this.setAddress(address);
+		this.setId(address);
+		this.setPerson(person);
 	}
 	
 	/** */
-	public Long getId()		{ return this.id; }
-
-	/** */
-	public String getAddress() { return this.address; }
+	public String getId() { return this.id; }
 	
 	/**
-	 * Always normalizes the email address.
+	 * Always normalizes the email address.  Note that this
+	 * is not public - only settible when creating the object.
 	 */
-	public void setAddress(String value)
+	private void setId(String value)
 	{
 		if (!Validator.validEmail(value))
 			throw new IllegalArgumentException("Invalid address");
@@ -97,19 +82,19 @@ public class EmailAddress implements Serializable, Comparable
 		if (log.isDebugEnabled())
 			log.debug("Setting address to " + value);
 		
-		this.address = value;
+		this.id = value;
 	}
 	
 	/** */
-	public Person getOwner() { return this.owner; }
+	public Person getPerson() { return this.person; }
 	
 	/** */
-	public void setOwner(Person value)
+	public void setPerson(Person value)
 	{
 		if (value == null)
-			throw new IllegalArgumentException("Owner cannot be null");
+			throw new IllegalArgumentException("Cannot be null");
 		
-		this.owner = value;
+		this.person = value;
 	}
 
 	/** */
@@ -125,7 +110,7 @@ public class EmailAddress implements Serializable, Comparable
 	{
 		EmailAddress other = (EmailAddress)arg0;
 
-		return this.address.compareTo(other.getAddress());
+		return this.id.compareTo(other.getId());
 	}
 }
 

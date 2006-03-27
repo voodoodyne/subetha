@@ -21,6 +21,8 @@ import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 
+import com.blorn.entity.Person;
+
 /**
  * @see DAO
  * 
@@ -96,28 +98,22 @@ public class DAOEJB implements DAO
 	}
 
 	/**
-	 * @see DAO#findEmailAddressByAddress(String)
+	 * @see DAO#findEmailAddress(String)
 	 */
-	public EmailAddress findEmailAddressByAddress(String address) throws NotFoundException
+	public EmailAddress findEmailAddress(String address) throws NotFoundException
 	{
 		if (log.isDebugEnabled())
-			log.debug("Finding EmailAddress with address " + address);
+			log.debug("Finding EmailAddress with id " + address);
 		
 		// Normalize out any weird casing in the domain part
 		address = Validator.normalizeEmail(address);
 		
-		Query q = this.em.createNamedQuery("EmailByAddress");
-		q.setParameter("address", address);
+		EmailAddress e = this.em.find(EmailAddress.class, address);
 		
-		try
-		{
-			return (EmailAddress)q.getSingleResult();
-		}
-		catch (NoResultException ex)
-		{
-			log.debug("Not found");
-			throw new NotFoundException(ex);
-		}
+		if (e == null)
+			throw new NotFoundException("No email " + address);
+		else
+			return e;
 	}
 
 	/**

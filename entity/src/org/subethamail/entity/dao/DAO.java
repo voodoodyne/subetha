@@ -46,16 +46,16 @@ public interface DAO
 	public void lock(Object obj, LockModeType lockMode);
 
 	/**
+	 * Finds an email address with the specified address.
+	 */
+	public EmailAddress findEmailAddress(String address) throws NotFoundException;
+
+	/**
 	 * Finds a mailing list with the specified address.
 	 * 
 	 * @return a readonly MailingList entity
 	 */
 	public MailingList findMailingListByAddress(String address) throws NotFoundException;
-
-	/**
-	 * Finds an email address with the specified address.
-	 */
-	public EmailAddress findEmailAddressByAddress(String address) throws NotFoundException;
 
 	/**
 	 * Tries to find a mail entity which has the specified message id.

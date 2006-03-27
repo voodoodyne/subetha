@@ -156,7 +156,7 @@ public class InjectorEJB implements Injector, InjectorRemote
 			{
 				try
 				{
-					return this.dao.findEmailAddressByAddress(fromAddy.getAddress()).getOwner();
+					return this.dao.findEmailAddress(fromAddy.getAddress()).getPerson();
 				}
 				catch (NotFoundException ex) {}
 			}

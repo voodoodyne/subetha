@@ -46,9 +46,9 @@ public class Person implements Serializable, Comparable
 	String name;
 	
 	@Column(nullable=false)
-	boolean admin;
+	boolean siteAdmin;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="owner")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	Set<EmailAddress> emailAddresses;
 	
@@ -70,6 +70,14 @@ public class Person implements Serializable, Comparable
 	
 	/** */
 	public Long getId()		{ return this.id; }
+	
+	/**
+	 * TODO:  consider minimal two-way encryption so that pws are not easily readable in db
+	 */
+	public String getPassword()
+	{
+		return this.password;
+	}
 
 	/**
 	 * Note that the password is stored in cleartext so that
@@ -120,7 +128,7 @@ public class Person implements Serializable, Comparable
 	/** */
 	public boolean isAdmin()
 	{
-		return this.admin;
+		return this.siteAdmin;
 	}
 
 	/** */
@@ -129,7 +137,7 @@ public class Person implements Serializable, Comparable
 		if (log.isDebugEnabled())
 			log.debug("Setting admin flag of " + this + " to " + value);
 		
-		this.admin = value;
+		this.siteAdmin = value;
 	}
 	
 	/** */

@@ -5,15 +5,8 @@
 
 package org.subethamail.core.acct.i;
 
-import java.util.Collection;
-import java.util.List;
-
 import javax.ejb.Local;
 import javax.mail.MessagingException;
-
-import com.blorn.common.NotFoundException;
-import com.blorn.core.blog.i.BlogEntryData;
-import com.blorn.core.recep.i.BadTokenException;
 
 
 /**

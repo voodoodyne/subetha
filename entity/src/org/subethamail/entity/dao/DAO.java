@@ -62,4 +62,9 @@ public interface DAO
 	 */
 	public Mail findMailByMessageId(String msgId) throws NotFoundException;
 
+	/**
+	 * @return the mailing list with the specified id
+	 */
+	public MailingList findMailingList(Long id) throws NotFoundException;
+
 }

@@ -21,8 +21,6 @@ import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 
-import com.blorn.entity.Person;
-
 /**
  * @see DAO
  * 
@@ -136,6 +134,22 @@ public class DAOEJB implements DAO
 			log.debug("Not found");
 			throw new NotFoundException(ex);
 		}
+	}
+
+	/**
+	 * @see DAO#findMailingList(Long)
+	 */
+	public MailingList findMailingList(Long id) throws NotFoundException
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding MailingList with id " + id);
+		
+		MailingList m = this.em.find(MailingList.class, id);
+		
+		if (m == null)
+			throw new NotFoundException("No mailing list " + id);
+		else
+			return m;
 	}
 
 }

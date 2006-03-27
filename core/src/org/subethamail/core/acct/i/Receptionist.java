@@ -33,7 +33,7 @@ public interface Receptionist
 	 * This process has all the benefits of email verification without any
 	 * database overhead.
 	 */
-	public void requestSubscription(String email, Long listId, String name) throws MessagingException;
+	public void requestSubscription(String email, Long listId, String name) throws NotFoundException, MessagingException;
 	
 	/**
 	 * Performs the execution of the subscribe.  There are two cases:

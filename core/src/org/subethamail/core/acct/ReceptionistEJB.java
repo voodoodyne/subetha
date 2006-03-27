@@ -23,6 +23,7 @@ import org.subethamail.core.acct.i.ReceptionistRemote;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.util.CipherUtil;
 import org.subethamail.entity.EmailAddress;
+import org.subethamail.entity.MailingList;
 import org.subethamail.entity.dao.DAO;
 
 /**
@@ -79,12 +80,13 @@ public class ReceptionistEJB implements Receptionist, ReceptionistRemote
 	 * The token emailed is encrypted "email:listId:name", where
 	 * all the elements have been URLEncoded first.
 	 */
-	public void requestSubscription(String email, Long listId, String name) throws MessagingException
+	public void requestSubscription(String email, Long listId, String name) throws NotFoundException, MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Requesting to subscribe " + email + " to list " + listId);
 		
-		// First check for duplicate name.  
+		MailingList mailingList = this.dao.findMailingList(listId);
+		
 		List<String> plainList = new ArrayList<String>();
 		plainList.add(SUBSCRIBE_TOKEN_PREFIX);
 		plainList.add(email);
@@ -95,7 +97,7 @@ public class ReceptionistEJB implements Receptionist, ReceptionistRemote
 		{
 			String cipherText = CipherUtil.encryptList(plainList, SUBSCRIBE_TOKEN_KEY);
 			
-			this.postOffice.sendSubscribeToken(cipherText, email);
+			this.postOffice.sendSubscribeToken(mailingList, email, cipherText);
 		}
 		catch (GeneralSecurityException ex) { throw new RuntimeException(ex); }	// should be impossible
 	}
@@ -147,7 +149,8 @@ public class ReceptionistEJB implements Receptionist, ReceptionistRemote
 	{
 		EmailAddress addy = this.dao.findEmailAddress(email);
 		
-		this.postOffice.sendPassword(addy.getPerson().getPassword(), addy.getId());
+		// TODO
+		this.postOffice.sendPassword(null, null);
 	}
 	
 	/**

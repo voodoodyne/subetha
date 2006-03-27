@@ -26,8 +26,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(discriminatorType=DiscriminatorType.STRING)
-@DiscriminatorValue("java.lang.Boolean")
+@DiscriminatorColumn(discriminatorType=DiscriminatorType.CHAR)
+@DiscriminatorValue("B")
 @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PluginParamBoolean extends PluginParam
 {

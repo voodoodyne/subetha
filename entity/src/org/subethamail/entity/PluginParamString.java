@@ -26,8 +26,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(discriminatorType=DiscriminatorType.STRING)
-@DiscriminatorValue("java.lang.String")
+@DiscriminatorColumn(discriminatorType=DiscriminatorType.CHAR)
+@DiscriminatorValue("S")
 @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PluginParamString extends PluginParam
 {

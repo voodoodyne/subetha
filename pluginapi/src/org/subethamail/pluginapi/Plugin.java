@@ -16,6 +16,11 @@ import javax.mail.internet.MimeMessage;
 public interface Plugin
 {
 	/**
+	 * Gets the list of parameters that this plugin supports.
+	 */
+	public ParameterDef[] getParameterDefs();
+	
+	/**
 	 * Allows plugin to manipulate the message upon injection, immediately
 	 * after it has been decoded by JavaMail but before any further processing
 	 * has been done.
@@ -29,7 +34,7 @@ public interface Plugin
 	 *  or if for any reason message receipt should be aborted.  Halts execution
 	 *  of the plugin stack.
 	 */
-	public void onInject(MimeMessage msg) throws IgnoreException, HoldException, MessagingException;
+	public void onInject(MimeMessage msg, PluginContext ctx) throws IgnoreException, HoldException, MessagingException;
 	
 	/**
 	 * Allows plugin to manipulate the message as it is being sent outbound.  This
@@ -40,7 +45,7 @@ public interface Plugin
 	 * @throws IgnoreException if the message should not be sent.  Halts execution
 	 *  of the plugin stack.
 	 */
-	public void onSendBeforeAttaching(MimeMessage msg) throws IgnoreException;
+	public void onSendBeforeAttaching(MimeMessage msg, PluginContext ctx) throws IgnoreException;
 	
 	/**
 	 * Allows plugin to manipulate the message as it is being sent outbound.  This
@@ -50,5 +55,5 @@ public interface Plugin
 	 * @throws IgnoreException if the message should not be sent.  Halts execution
 	 *  of the plugin stack.
 	 */
-	public void onSendAfterAttaching(MimeMessage msg) throws IgnoreException;
+	public void onSendAfterAttaching(MimeMessage msg, PluginContext ctx) throws IgnoreException;
 }

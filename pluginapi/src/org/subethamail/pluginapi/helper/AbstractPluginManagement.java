@@ -14,7 +14,7 @@ import org.jboss.annotation.ejb.Management;
  * @author Jeff Schnitzer
  */
 @Management
-public interface AbstractPluginFactoryManagement
+public interface AbstractPluginManagement
 {
 	/**
 	 * Called upon deployment.  Registers the factory with the PluginRegistry.

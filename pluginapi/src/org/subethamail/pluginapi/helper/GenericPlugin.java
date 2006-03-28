@@ -10,45 +10,45 @@ import javax.mail.internet.MimeMessage;
 
 import org.subethamail.pluginapi.HoldException;
 import org.subethamail.pluginapi.IgnoreException;
+import org.subethamail.pluginapi.ParameterDef;
 import org.subethamail.pluginapi.Plugin;
 import org.subethamail.pluginapi.PluginContext;
 
 /**
- * Trivial plugin implementation that does nothing.  Override
- * the methods that you want to change.   
+ * Trivial plugin implementation that has no parameters and does
+ * nothing.  Override the methods that you want to change.   
  * 
  * @author Jeff Schnitzer
  */
-public class GenericPlugin implements Plugin
+public class GenericPlugin extends AbstractPlugin
 {
-	/** */
-	protected PluginContext ctx;
-	
 	/**
+	 * @see Plugin#getParameterDefs()
 	 */
-	public GenericPlugin(PluginContext ctx)
+	public ParameterDef[] getParameterDefs()
 	{
-		this.ctx = ctx;
+		final ParameterDef[] defs = new ParameterDef[0];
+		return defs;
 	}
 	
 	/**
-	 * @see Plugin#onInject(MimeMessage)
+	 * @see Plugin#onInject(MimeMessage, PluginContext)
 	 */
-	public void onInject(MimeMessage msg) throws IgnoreException, HoldException, MessagingException
-	{
-	}
-	
-	/**
-	 * @see Plugin#onSendBeforeAttaching(MimeMessage)
-	 */
-	public void onSendBeforeAttaching(MimeMessage msg) throws IgnoreException
+	public void onInject(MimeMessage msg, PluginContext ctx) throws IgnoreException, HoldException, MessagingException
 	{
 	}
 	
 	/**
-	 * @see Plugin#onSendAfterAttaching(MimeMessage)
+	 * @see Plugin#onSendBeforeAttaching(MimeMessage, PluginContext)
 	 */
-	public void onSendAfterAttaching(MimeMessage msg) throws IgnoreException
+	public void onSendBeforeAttaching(MimeMessage msg, PluginContext ctx) throws IgnoreException
+	{
+	}
+	
+	/**
+	 * @see Plugin#onSendAfterAttaching(MimeMessage, PluginContext)
+	 */
+	public void onSendAfterAttaching(MimeMessage msg, PluginContext ctx) throws IgnoreException
 	{
 	}
 }

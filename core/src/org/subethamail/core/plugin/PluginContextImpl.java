@@ -8,7 +8,6 @@ package org.subethamail.core.plugin;
 import org.subethamail.entity.EnabledPlugin;
 import org.subethamail.entity.PluginParam;
 import org.subethamail.pluginapi.PluginContext;
-import org.subethamail.pluginapi.PluginFactory;
 
 
 /**

@@ -16,9 +16,7 @@ import org.subethamail.pluginapi.IgnoreException;
 import org.subethamail.pluginapi.ParameterDef;
 import org.subethamail.pluginapi.Plugin;
 import org.subethamail.pluginapi.PluginContext;
-import org.subethamail.pluginapi.PluginFactory;
-import org.subethamail.pluginapi.helper.AbstractPluginFactory;
-import org.subethamail.pluginapi.helper.AbstractPluginFactoryManagement;
+import org.subethamail.pluginapi.helper.AbstractPluginManagement;
 import org.subethamail.pluginapi.helper.GenericPlugin;
 import org.subethamail.pluginapi.helper.ParameterDefImpl;
 
@@ -30,12 +28,12 @@ import org.subethamail.pluginapi.helper.ParameterDefImpl;
  * 
  * @author Jeff Schnitzer
  */
-@Service(objectName="subetha:service=StripAttachmentsPluginFactory")
+@Service(objectName="subetha:service=StripAttachmentsPlugin")
 // TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
-public class StripAttachmentsPluginFactory extends AbstractPluginFactory implements PluginFactory, AbstractPluginFactoryManagement
+public class StripAttachmentsPlugin extends GenericPlugin implements AbstractPluginManagement
 {
 	/** */
-	private static Log log = LogFactory.getLog(StripAttachmentsPluginFactory.class);
+	private static Log log = LogFactory.getLog(StripAttachmentsPlugin.class);
 	
 	/** */
 	static ParameterDef[] PARAM_DEFS = new ParameterDef[] {
@@ -56,32 +54,12 @@ public class StripAttachmentsPluginFactory extends AbstractPluginFactory impleme
 	}
 
 	/**
-	 * @see PluginFactory#getPlugin(PluginContext)
+	 * @see Plugin#onInject(MimeMessage, PluginContext)
 	 */
-	public Plugin getPlugin(PluginContext ctx)
+	@Override
+	public void onInject(MimeMessage msg, PluginContext ctx) throws IgnoreException, HoldException, MessagingException
 	{
-		return new StripAttachmentsPlugin(ctx);
-	}
-	
-	/**
-	 * 
-	 */
-	class StripAttachmentsPlugin extends GenericPlugin
-	{
-		/** */
-		public StripAttachmentsPlugin(PluginContext ctx)
-		{
-			super(ctx);
-		}
-
-		/* (non-Javadoc)
-		 * @see Plugin#onInject(javax.mail.internet.MimeMessage)
-		 */
-		@Override
-		public void onInject(MimeMessage msg) throws IgnoreException, HoldException, MessagingException
-		{
-			// TODO:  implement this.
-			log.debug("onInject()");
-		}
+		// TODO:  implement this.
+		log.debug("onInject()");
 	}
 }

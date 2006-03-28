@@ -19,7 +19,6 @@ import org.subethamail.pluginapi.HoldException;
 import org.subethamail.pluginapi.IgnoreException;
 import org.subethamail.pluginapi.Plugin;
 import org.subethamail.pluginapi.PluginContext;
-import org.subethamail.pluginapi.PluginFactory;
 
 /**
  * @author Jeff Schnitzer
@@ -46,8 +45,8 @@ public class PluginRunnerEJB implements PluginRunner
 		
 		for (EnabledPlugin enPlugin: list.getEnabledPlugins())
 		{
-			PluginFactory fact = this.registry.getFactory(enPlugin.getClassName());
-			if (fact == null)
+			Plugin plugin = this.registry.getPlugin(enPlugin.getClassName());
+			if (plugin == null)
 			{
 				// Log and ignore
 				this.logUnregisteredPluginError(enPlugin, list);
@@ -55,11 +54,10 @@ public class PluginRunnerEJB implements PluginRunner
 			else
 			{
 				PluginContext ctx = new PluginContextImpl(enPlugin, fact);
-				Plugin plugin = fact.getPlugin(ctx);
 				
 				try
 				{
-					plugin.onInject(msg);
+					plugin.onInject(msg, ctx);
 				}
 				catch (HoldException ex)
 				{

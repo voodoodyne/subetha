@@ -7,16 +7,16 @@ package org.subethamail.pluginapi.helper;
 
 import javax.annotation.EJB;
 
-import org.subethamail.pluginapi.PluginFactory;
+import org.subethamail.pluginapi.Plugin;
 import org.subethamail.pluginapi.PluginRegistration;
 
 /**
- * Base implementation of a plugin factory that registers itself upon deployment.
- * Extend this class to automatically have your plugin factory register itself. 
+ * Base implementation of a plugin that registers itself upon deployment.
+ * Extend this class to automatically have your plugin register itself. 
  * 
  * @author Jeff Schnitzer
  */
-abstract public class AbstractPluginFactory implements PluginFactory, AbstractPluginFactoryManagement
+abstract public class AbstractPlugin implements Plugin, AbstractPluginManagement
 {
 	/**
 	 * This will automatically be injected by JBoss.
@@ -24,7 +24,7 @@ abstract public class AbstractPluginFactory implements PluginFactory, AbstractPl
 	@EJB PluginRegistration registry;
 
 	/**
-	 * @see AbstractPluginFactoryManagement#start()
+	 * @see AbstractPluginManagement#start()
 	 */
 	public void start() throws Exception
 	{
@@ -32,7 +32,7 @@ abstract public class AbstractPluginFactory implements PluginFactory, AbstractPl
 	}
 	
 	/**
-	 * @see AbstractPluginFactoryManagement#stop()
+	 * @see AbstractPluginManagement#stop()
 	 */
 	public void stop()
 	{

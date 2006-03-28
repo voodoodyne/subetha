@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
-import org.subethamail.pluginapi.PluginFactory;
+import org.subethamail.pluginapi.Plugin;
 import org.subethamail.pluginapi.PluginRegistration;
 
 
@@ -32,43 +32,43 @@ public class PluginRegistryService implements PluginRegistration, PluginRegistry
 	 * We do have to be a bit careful with synchronization since someone
 	 * might hot-deploy some plugins into a running appserver.
 	 */
-	Map<String, PluginFactory> factories = new ConcurrentHashMap<String, PluginFactory>();
+	Map<String, Plugin> plugins = new ConcurrentHashMap<String, Plugin>();
 
 	/**
-	 * @see PluginRegistration#register(PluginFactory)
+	 * @see PluginRegistration#register(Plugin)
 	 */
-	public synchronized void register(PluginFactory factory)
+	public synchronized void register(Plugin plugin)
 	{
 		if (log.isInfoEnabled())
-			log.info("Registering " + factory.getClass().getName());
+			log.info("Registering " + plugin.getClass().getName());
 			
-		this.factories.put(factory.getClass().getName(), factory);
+		this.plugins.put(plugin.getClass().getName(), plugin);
 	}
 
 	/**
-	 * @see PluginRegistration#deregister(PluginFactory)
+	 * @see PluginRegistration#deregister(Plugin)
 	 */
-	public synchronized void deregister(PluginFactory factory)
+	public synchronized void deregister(Plugin plugin)
 	{
 		if (log.isInfoEnabled())
-			log.info("De-registering " + factory.getClass().getName());
+			log.info("De-registering " + plugin.getClass().getName());
 			
-		this.factories.remove(factory.getClass().getName());
+		this.plugins.remove(plugin.getClass().getName());
 	}
 
 	/**
-	 * @see PluginRegistry#getFactories()
+	 * @see PluginRegistry#getPlugins()
 	 */
-	public Collection<PluginFactory> getFactories()
+	public Collection<Plugin> getPlugins()
 	{
-		return this.factories.values();
+		return this.plugins.values();
 	}
 
 	/**
-	 * @see PluginRegistry#getFactory(String)
+	 * @see PluginRegistry#getPlugins(String)
 	 */
-	public PluginFactory getFactory(String className)
+	public Plugin getPlugin(String className)
 	{
-		return this.factories.get(className);
+		return this.plugins.get(className);
 	}
 }

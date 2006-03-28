@@ -9,10 +9,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
@@ -24,66 +21,48 @@ import org.hibernate.annotations.Type;
 import org.subethamail.common.valid.Validator;
 
 /**
- * One parameter key and value for an enabled plugin.  This is actually
- * a base class for an inheritance hierarchy, one for every type of
- * value we allow.
+ * Contains a sitewide config parameter, key and value.
  * 
  * @author Jeff Schnitzer
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class PluginParam implements Serializable, Comparable
+public class Config implements Serializable, Comparable
 {
 	/** */
-	@Transient private static Log log = LogFactory.getLog(PluginParam.class);
+	@Transient private static Log log = LogFactory.getLog(Config.class);
 	
 	/** */
 	@Id
-	@GeneratedValue
-	Long id;
+	@Column(nullable=false, length=Validator.MAX_CONFIG_ID)
+	String id;
 	
-	/** */
-	@ManyToOne
-	@JoinColumn(name="pluginId", nullable=false)
-	EnabledPlugin plugin;
-	
-	/** */
-	@Column(nullable=false, length=Validator.MAX_PLUGIN_PARAM_NAME)
-	String name;
-
 	/** */
 	@Type(type="anyImmutable")
 	@Columns(columns={
 		@Column(name="type"),
-		@Column(name="value", length=Validator.MAX_PLUGIN_PARAM_VALUE)
+		@Column(name="value", length=Validator.MAX_CONFIG_VALUE)
 	})
 	Object value;
 	
 	/**
 	 */
-	public PluginParam() {}
+	public Config() {}
 	
 	/**
 	 */
-	public PluginParam(EnabledPlugin plugin, String name, Object value)
+	public Config(String id, Object value)
 	{
 		if (log.isDebugEnabled())
-			log.debug("Creating new PluginParam");
+			log.debug("Creating new Config");
 		
-		this.plugin = plugin;
-		this.name = name;
+		this.id = id;
+		this.value = value;
 	}
 	
 	/** */
-	public Long getId()		{ return this.id; }
+	public String getId()		{ return this.id; }
 
-	/** */
-	public EnabledPlugin getPlugin()		{ return this.plugin; }
-
-	/**
-	 */
-	public String getName() { return this.name; }
-	
 	/**
 	 * @return the value object in its native type 
 	 */
@@ -97,17 +76,17 @@ public class PluginParam implements Serializable, Comparable
 	/** */
 	public String toString()
 	{
-		return this.getClass() + " {id=" + this.id + ", name=" + this.name + "}";
+		return this.getClass() + " {id=" + this.id + "}";
 	}
 	
 	/**
-	 * Natural sort order is based on name
+	 * Natural sort order is based on id
 	 */
 	public int compareTo(Object arg0)
 	{
-		PluginParam other = (PluginParam)arg0;
+		Config other = (Config)arg0;
 
-		return this.name.compareTo(other.getName());
+		return this.id.compareTo(other.getId());
 	}
 }
 

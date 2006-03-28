@@ -19,6 +19,10 @@ public class Validator
 	/** */
 	private static Log log = LogFactory.getLog(Validator.class);
 
+	// Config
+	public static final int MAX_CONFIG_ID = 80;
+	public static final int MAX_CONFIG_VALUE = 4096;
+	
 	// Person
 	public static final int MAX_PERSON_PASSWORD = 80;
 	public static final int MAX_PERSON_NAME = 80;
@@ -38,6 +42,7 @@ public class Validator
 	
 	// PluginParam
 	public static final int MAX_PLUGIN_PARAM_NAME = 256;
+	public static final int MAX_PLUGIN_PARAM_VALUE = 4096;
 	
 	// Subscription
 	public static final int MAX_SUBSCRIPTION_NOTE = 4096;

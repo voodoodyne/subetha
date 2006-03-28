@@ -41,10 +41,9 @@
 
 	<security-role>
 		<description>
-			The god role is the only security context which can access
-			the entity beans and internal session beans.
+			This role can perform site administrative functions.
 		</description>
-		<role-name>god</role-name>
+		<role-name>siteAdmin</role-name>
 	</security-role>
 
 </application>

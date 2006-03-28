@@ -12,30 +12,30 @@ import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.entity.EnabledPlugin;
+import org.subethamail.core.plugin.i.Filter;
+import org.subethamail.core.plugin.i.FilterContext;
+import org.subethamail.core.plugin.i.HoldException;
+import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.dao.DAO;
-import org.subethamail.pluginapi.HoldException;
-import org.subethamail.pluginapi.IgnoreException;
-import org.subethamail.pluginapi.Plugin;
-import org.subethamail.pluginapi.PluginContext;
 
 /**
  * @author Jeff Schnitzer
  */
-@Stateless(name="PluginRunner")
+@Stateless(name="FilterRunner")
 //@SecurityDomain("subetha")
-public class PluginRunnerEJB implements PluginRunner
+public class FilterRunnerEJB implements FilterRunner
 {
 	/** */
-	private static Log log = LogFactory.getLog(PluginRunnerEJB.class);
+	private static Log log = LogFactory.getLog(FilterRunnerEJB.class);
 
 	/** */
 	@EJB DAO dao;
 	@EJB PluginRegistry registry;
 
 	/**
-	 * @see PluginRunner#onInject(MimeMessage, MailingList)
+	 * @see FilterRunner#onInject(MimeMessage, MailingList)
 	 */
 	public void onInject(MimeMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException
 	{
@@ -43,21 +43,21 @@ public class PluginRunnerEJB implements PluginRunner
 		
 		HoldException holdException = null;
 		
-		for (EnabledPlugin enPlugin: list.getEnabledPlugins())
+		for (EnabledFilter enabled: list.getEnabledFilters())
 		{
-			Plugin plugin = this.registry.getPlugin(enPlugin.getClassName());
-			if (plugin == null)
+			Filter filter = this.registry.getFilter(enabled.getClassName());
+			if (filter == null)
 			{
 				// Log and ignore
-				this.logUnregisteredPluginError(enPlugin, list);
+				this.logUnregisteredFilterError(enabled, list);
 			}
 			else
 			{
-				PluginContext ctx = new PluginContextImpl(enPlugin, fact);
+				FilterContext ctx = new FilterContextImpl(enabled, filter);
 				
 				try
 				{
-					plugin.onInject(msg, ctx);
+					filter.onInject(msg, ctx);
 				}
 				catch (HoldException ex)
 				{
@@ -73,7 +73,7 @@ public class PluginRunnerEJB implements PluginRunner
 	}
 
 	/**
-	 * @see PluginRunner#onSendBeforeAttaching(MimeMessage)
+	 * @see FilterRunner#onSendBeforeAttaching(MimeMessage)
 	 */
 	public void onSendBeforeAttaching(MimeMessage msg, MailingList list) throws IgnoreException
 	{
@@ -81,7 +81,7 @@ public class PluginRunnerEJB implements PluginRunner
 	}
 
 	/**
-	 * @see PluginRunner#onSendAfterAttaching(MimeMessage)
+	 * @see FilterRunner#onSendAfterAttaching(MimeMessage)
 	 */
 	public void onSendAfterAttaching(MimeMessage msg, MailingList list) throws IgnoreException
 	{
@@ -93,10 +93,10 @@ public class PluginRunnerEJB implements PluginRunner
 	 * enabled on a list but is not (or no longer) registered.  It's not
 	 * a fatal error; we can just continue and ignore the plugin.
 	 */
-	protected void logUnregisteredPluginError(EnabledPlugin enPlugin, MailingList list)
+	protected void logUnregisteredFilterError(EnabledFilter enPlugin, MailingList list)
 	{
 		if (log.isErrorEnabled())
-			log.error("Unregistered plugin '" + enPlugin.getClassName() + 
+			log.error("Unregistered filter '" + enPlugin.getClassName() + 
 				"' is enabled on list '" + list.getAddress() + "'");
 	}
 }

@@ -81,7 +81,7 @@ public class MailingList implements Serializable, Comparable
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="mailingList")
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	Set<EnabledPlugin> enabledPlugins;
+	Set<EnabledFilter> enabledPlugins;
 	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="mailingList")
@@ -148,7 +148,7 @@ public class MailingList implements Serializable, Comparable
 	/** 
 	 * @return all plugins enabled on this list
 	 */
-	public Set<EnabledPlugin> getEnabledPlugins() { return this.enabledPlugins; }
+	public Set<EnabledFilter> getEnabledFilters() { return this.enabledPlugins; }
 
 	/** 
 	 * @return all roles available for this list

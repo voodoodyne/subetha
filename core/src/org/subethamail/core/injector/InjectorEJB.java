@@ -18,15 +18,15 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
-import org.subethamail.core.plugin.PluginRunner;
+import org.subethamail.core.plugin.FilterRunner;
+import org.subethamail.core.plugin.i.HoldException;
+import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.dao.DAO;
-import org.subethamail.pluginapi.HoldException;
-import org.subethamail.pluginapi.IgnoreException;
 
 /**
  * @author Jeff Schnitzer
@@ -42,7 +42,7 @@ public class InjectorEJB implements Injector, InjectorRemote
 	/** */
 	@EJB DAO dao;
 	@EJB Queuer queuer;
-	@EJB PluginRunner pluginRunner;
+	@EJB FilterRunner pluginRunner;
 	
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;

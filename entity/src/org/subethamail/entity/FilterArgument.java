@@ -24,18 +24,16 @@ import org.hibernate.annotations.Type;
 import org.subethamail.common.valid.Validator;
 
 /**
- * One parameter key and value for an enabled plugin.  This is actually
- * a base class for an inheritance hierarchy, one for every type of
- * value we allow.
+ * One parameter key and argument value for an enabled filter.
  * 
  * @author Jeff Schnitzer
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class PluginParam implements Serializable, Comparable
+public class FilterArgument implements Serializable, Comparable
 {
 	/** */
-	@Transient private static Log log = LogFactory.getLog(PluginParam.class);
+	@Transient private static Log log = LogFactory.getLog(FilterArgument.class);
 	
 	/** */
 	@Id
@@ -44,33 +42,33 @@ public class PluginParam implements Serializable, Comparable
 	
 	/** */
 	@ManyToOne
-	@JoinColumn(name="pluginId", nullable=false)
-	EnabledPlugin plugin;
+	@JoinColumn(name="filterId", nullable=false)
+	EnabledFilter filter;
 	
 	/** */
-	@Column(nullable=false, length=Validator.MAX_PLUGIN_PARAM_NAME)
+	@Column(nullable=false, length=Validator.MAX_FILTER_ARGUMENT_NAME)
 	String name;
 
 	/** */
 	@Type(type="anyImmutable")
 	@Columns(columns={
 		@Column(name="type"),
-		@Column(name="value", length=Validator.MAX_PLUGIN_PARAM_VALUE)
+		@Column(name="value", length=Validator.MAX_FILTER_ARGUMENT_VALUE)
 	})
 	Object value;
 	
 	/**
 	 */
-	public PluginParam() {}
+	public FilterArgument() {}
 	
 	/**
 	 */
-	public PluginParam(EnabledPlugin plugin, String name, Object value)
+	public FilterArgument(EnabledFilter filter, String name, Object value)
 	{
 		if (log.isDebugEnabled())
-			log.debug("Creating new PluginParam");
+			log.debug("Creating new FilterArgument");
 		
-		this.plugin = plugin;
+		this.filter = filter;
 		this.name = name;
 	}
 	
@@ -78,7 +76,7 @@ public class PluginParam implements Serializable, Comparable
 	public Long getId()		{ return this.id; }
 
 	/** */
-	public EnabledPlugin getPlugin()		{ return this.plugin; }
+	public EnabledFilter getFilter()		{ return this.filter; }
 
 	/**
 	 */
@@ -105,7 +103,7 @@ public class PluginParam implements Serializable, Comparable
 	 */
 	public int compareTo(Object arg0)
 	{
-		PluginParam other = (PluginParam)arg0;
+		FilterArgument other = (FilterArgument)arg0;
 
 		return this.name.compareTo(other.getName());
 	}

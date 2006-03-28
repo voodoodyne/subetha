@@ -3,25 +3,26 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/util/Transmute.java $
  */
 
-package org.subethamail.pluginapi;
+package org.subethamail.core.plugin.i;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 /**
- * Interface that plugins must implement. 
+ * Interface that mail filters must implement.  Mail filters get
+ * several opportunities to modify a piece of inbound or outbound mail. 
  * 
  * @author Jeff Schnitzer
  */
-public interface Plugin
+public interface Filter
 {
 	/**
-	 * Gets the list of parameters that this plugin supports.
+	 * Gets the list of parameters that this filter supports.
 	 */
-	public ParameterDef[] getParameterDefs();
+	public FilterParameter[] getParameters();
 	
 	/**
-	 * Allows plugin to manipulate the message upon injection, immediately
+	 * Allows filter to manipulate the message upon injection, immediately
 	 * after it has been decoded by JavaMail but before any further processing
 	 * has been done.
 	 * 
@@ -29,31 +30,31 @@ public interface Plugin
 	 *  halt execution of the plugin stack.
 	 * @throws HoldException if the message should be held for
 	 *  administrative (not self) moderation.  The message string is significant.
-	 *  Note that this will not halt execution of the plugin stack.
+	 *  Note that this will not halt execution of the filter stack.
 	 * @throws MessagingException if there was an error processing the message,
 	 *  or if for any reason message receipt should be aborted.  Halts execution
-	 *  of the plugin stack.
+	 *  of the filter stack.
 	 */
-	public void onInject(MimeMessage msg, PluginContext ctx) throws IgnoreException, HoldException, MessagingException;
+	public void onInject(MimeMessage msg, FilterContext ctx) throws IgnoreException, HoldException, MessagingException;
 	
 	/**
-	 * Allows plugin to manipulate the message as it is being sent outbound.  This
+	 * Allows filter to manipulate the message as it is being sent outbound.  This
 	 * is called prior to sending, but before attachments are reconstituted in the
 	 * outbound message.  Any attachments in the message will references be of type
 	 * x-subetha/attachment-ref. 
 	 *  
 	 * @throws IgnoreException if the message should not be sent.  Halts execution
-	 *  of the plugin stack.
+	 *  of the filter stack.
 	 */
-	public void onSendBeforeAttaching(MimeMessage msg, PluginContext ctx) throws IgnoreException;
+	public void onSendBeforeAttaching(MimeMessage msg, FilterContext ctx) throws IgnoreException;
 	
 	/**
-	 * Allows plugin to manipulate the message as it is being sent outbound.  This
+	 * Allows filter to manipulate the message as it is being sent outbound.  This
 	 * is the last hook prior to a message being sent, after attachment references
 	 * have been replaced with the genuine contents.
 	 *  
 	 * @throws IgnoreException if the message should not be sent.  Halts execution
-	 *  of the plugin stack.
+	 *  of the filter stack.
 	 */
-	public void onSendAfterAttaching(MimeMessage msg, PluginContext ctx) throws IgnoreException;
+	public void onSendAfterAttaching(MimeMessage msg, FilterContext ctx) throws IgnoreException;
 }

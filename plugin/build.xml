@@ -24,10 +24,10 @@
 	<!-- used to build the plugin interfaces -->
 	<path id="plugin.classpath">
 		<path refid="master.classpath" />
-		<pathelement location="${build.pluginapi.jar.file}"/>
+		<pathelement location="${build.core.ejbclient.file}" />
 	</path>
 
- 	<target name="plugin-classes" depends="pluginapi-jar">
+ 	<target name="plugin-classes" depends="core-ejbclient-jar">
 		<mkdir dir="${build.plugin.classes.dir}" />
  		
 		<javac srcdir="${plugin.javasrc.dir}"

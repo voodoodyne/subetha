@@ -26,17 +26,17 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.subethamail.common.valid.Validator;
 
 /**
- * When a plugin is added to a mailing list, one of these entities is
- * created.  It identifies the plugin and stores all the plugin parameters.
+ * When a filter is added to a mailing list, one of these entities is
+ * created.  It identifies the filter and stores all the filter arguments.
  * 
  * @author Jeff Schnitzer
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class EnabledPlugin implements Serializable, Comparable
+public class EnabledFilter implements Serializable, Comparable
 {
 	/** */
-	@Transient private static Log log = LogFactory.getLog(EnabledPlugin.class);
+	@Transient private static Log log = LogFactory.getLog(EnabledFilter.class);
 	
 	/** */
 	@Id
@@ -44,7 +44,7 @@ public class EnabledPlugin implements Serializable, Comparable
 	Long id;
 	
 	/** */
-	@Column(nullable=false, length=Validator.MAX_PLUGIN_CLASSNAME)
+	@Column(nullable=false, length=Validator.MAX_FILTER_CLASSNAME)
 	String className;
 	
 	/** If this is null, the plugin is enabled globally */
@@ -53,20 +53,20 @@ public class EnabledPlugin implements Serializable, Comparable
 	MailingList mailingList;
 	
 	/** */
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="plugin")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="filter")
 	@MapKey(name="name")
-	Map<String, PluginParam> params;
+	Map<String, FilterArgument> arguments;
 	
 	/**
 	 */
-	public EnabledPlugin() {}
+	public EnabledFilter() {}
 	
 	/**
 	 */
-	public EnabledPlugin(String className)
+	public EnabledFilter(String className)
 	{
 		if (log.isDebugEnabled())
-			log.debug("Creating new EnabledPlugin");
+			log.debug("Creating new EnabledFilter");
 		
 		this.className = className;
 	}
@@ -80,8 +80,8 @@ public class EnabledPlugin implements Serializable, Comparable
 	/** */
 	public MailingList getMailingList() { return this.mailingList; }
 	
-	/** @return a Map of param name to PluginParam-derived object */
-	public Map<String, PluginParam> getParams() { return this.params; }
+	/** */
+	public Map<String, FilterArgument> getArguments() { return this.arguments; }
 	
 	/** */
 	public String toString()
@@ -94,7 +94,7 @@ public class EnabledPlugin implements Serializable, Comparable
 	 */
 	public int compareTo(Object arg0)
 	{
-		EnabledPlugin other = (EnabledPlugin)arg0;
+		EnabledFilter other = (EnabledFilter)arg0;
 
 		return this.id.compareTo(other.getId());
 	}

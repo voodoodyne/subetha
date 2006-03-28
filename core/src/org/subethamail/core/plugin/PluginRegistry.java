@@ -9,7 +9,8 @@ import java.util.Collection;
 
 import javax.ejb.Local;
 
-import org.subethamail.pluginapi.Plugin;
+import org.subethamail.core.plugin.i.Blueprint;
+import org.subethamail.core.plugin.i.Filter;
 
 /**
  * Internal local interface allows the core application to query
@@ -21,13 +22,24 @@ import org.subethamail.pluginapi.Plugin;
 public interface PluginRegistry
 {
 	/**
-	 * @return all registered plugin factories.
+	 * @return all registered filters.
 	 */
-	public Collection<Plugin> getPlugins();
+	public Collection<Filter> getFilters();
 	
 	/**
-	 * @return the plugin with the specified class name, or null
-	 *  if no plugin was registered with that name.
+	 * @return the filter with the specified class name, or null
+	 *  if no filter was registered with that name.
 	 */
-	public Plugin getPlugin(String className);
+	public Filter getFilter(String className);
+
+	/**
+	 * @return all registered blueuprints.
+	 */
+	public Collection<Blueprint> getBlueprints();
+	
+	/**
+	 * @return the blueprint with the specified class name, or null
+	 *  if no blueprint was registered with that name.
+	 */
+	public Blueprint getBlueprint(String className);
 }

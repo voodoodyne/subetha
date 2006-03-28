@@ -49,10 +49,9 @@
 	</path>
 	
 	<!-- Now the rest of the imports -->
-	<import file="pluginapi/build.xml"/>	
-	<import file="plugin/build.xml"/>	
 	<import file="entity/build.xml"/>
 	<import file="core/build.xml"/>
+	<import file="plugin/build.xml"/>	
 	<import file="frontend/build.xml"/>
 	<import file="rtest/build.xml"/>
 	<import file="appmain/build.xml"/>	
@@ -79,10 +78,9 @@
 			version="true"
 		>
 			<fileset dir="${common.javasrc.dir}"/>
-			<fileset dir="${pluginapi.javasrc.dir}"/>
-			<fileset dir="${plugin.javasrc.dir}"/>
 			<fileset dir="${entity.javasrc.dir}"/>
 			<fileset dir="${core.javasrc.dir}"/>
+			<fileset dir="${plugin.javasrc.dir}"/>
 			<fileset dir="${frontend.javasrc.dir}"/>
 			<fileset dir="${rtest.javasrc.dir}"/>
 		</javadoc>

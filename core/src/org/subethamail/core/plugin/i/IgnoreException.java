@@ -3,7 +3,7 @@
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/ejb/NameAlreadyTakenException.java,v $
  */
 
-package org.subethamail.pluginapi;
+package org.subethamail.core.plugin.i;
 
 /**
  * Exception indicates that a message should be silently dropped.

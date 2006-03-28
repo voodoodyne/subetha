@@ -5,8 +5,14 @@
 
 package org.subethamail.core.util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.core.listwiz.i.BlueprintData;
+import org.subethamail.core.plugin.i.Blueprint;
 
 
 
@@ -20,5 +26,28 @@ public class Transmute
 {
 	/** */
 	private static Log log = LogFactory.getLog(Transmute.class);
+	
+	/** */
+	public static List<BlueprintData> blueprints(Collection<Blueprint> rawColl)
+	{
+		List<BlueprintData> result = new ArrayList<BlueprintData>(rawColl.size());
+		
+		for (Blueprint raw: rawColl)
+			result.add(blueprint(raw));
+		
+		return result;
+	}
+	
+	/** */
+	public static BlueprintData blueprint(Blueprint raw)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+			
+		return new BlueprintData(
+				raw.getClass().getName(),
+				raw.getName(),
+				raw.getDescription());
+	}
 	
 }

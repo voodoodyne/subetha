@@ -3,19 +3,19 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/util/Transmute.java $
  */
 
-package org.subethamail.pluginapi;
+package org.subethamail.core.plugin.i;
 
 
 /**
- * The definition of one parameter to a plugin.
+ * The definition of one parameter to a filter.
  * 
  * @author Jeff Schnitzer
  */
-public interface ParameterDef
+public interface FilterParameter
 {
 	/**
 	 * The short name of this parameter, eg "Max Size in K". This
-	 * must be unique among parameters for a particular plugin.
+	 * must be unique among parameters for a particular filter.
 	 */
 	public String getName();
 	
@@ -25,14 +25,15 @@ public interface ParameterDef
 	public String getDescription();
 	
 	/**
-	 * The type of this parameter.  Currently, only the following types
-	 * are allowed:
+	 * <p>The type of this parameter.  You can have any java basic
+	 * Object type (ie java.lang.Boolean, not boolean), Strings,
+	 * and Enums.  You can also have more complicated classes
+	 * as long as they follow the constraints of
+	 * @see org.subethamail.entity.type.AnyImmutableType</p>
 	 * 
-	 * java.lang.Boolean (not the primitive)
-	 * java.lang.Long (not the primitive)
-	 * java.lang.Double (not the primitive)
-	 * java.lang.String
-	 * any subclass of java.lang.Enum
+	 * <p>A quick recap:  the object must be immutable, must
+	 * implement toString(), must have a static valueOf(String)
+	 * method, and must be Serializable.</p>
 	 */
 	public Class getType();
 	

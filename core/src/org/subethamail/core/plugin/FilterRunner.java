@@ -9,43 +9,40 @@ import javax.ejb.Local;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.subethamail.core.plugin.i.Filter;
+import org.subethamail.core.plugin.i.HoldException;
+import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.entity.MailingList;
-import org.subethamail.pluginapi.HoldException;
-import org.subethamail.pluginapi.IgnoreException;
-import org.subethamail.pluginapi.Plugin;
 
 /**
- * Interface for running plugins on a mime message.
+ * Interface for running filters on a mime message.
  *
  * @author Jeff Schnitzer
  */
 @Local
-public interface PluginRunner
+public interface FilterRunner
 {
 	/** */
-	public static final String JNDI_NAME = "PluginRunner/local";
+	public static final String JNDI_NAME = "FilterRunner/local";
 
 	/**
-	 * Runs the message through all the plugins associated with
-	 * the list.
+	 * Runs the message through all the filters associated with the list.
 	 * 
-	 * @see Plugin#onInject(MimeMessage)
+	 * @see Filter#onInject(MimeMessage)
 	 */
 	public void onInject(MimeMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException;
 	
 	/**
-	 * Runs the message through all the plugins associated with
-	 * the list.
+	 * Runs the message through all the filters associated with the list.
 	 * 
-	 * @see Plugin#onSendBeforeAttaching(MimeMessage)
+	 * @see Filter#onSendBeforeAttaching(MimeMessage)
 	 */
 	public void onSendBeforeAttaching(MimeMessage msg, MailingList list) throws IgnoreException;
 	
 	/**
-	 * Runs the message through all the plugins associated with
-	 * the list.
+	 * Runs the message through all the filters associated with the list.
 	 * 
-	 * @see Plugin#onSendAfterAttaching(MimeMessage)
+	 * @see Filter#onSendAfterAttaching(MimeMessage)
 	 */
 	public void onSendAfterAttaching(MimeMessage msg, MailingList list) throws IgnoreException;
 }

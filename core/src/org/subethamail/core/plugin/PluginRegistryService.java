@@ -12,13 +12,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
-import org.subethamail.pluginapi.Plugin;
-import org.subethamail.pluginapi.PluginRegistration;
+import org.subethamail.core.plugin.i.Blueprint;
+import org.subethamail.core.plugin.i.Filter;
+import org.subethamail.core.plugin.i.PluginRegistration;
 
 
 /**
  * Tracks all available plugins.  Plugins register themselves with
- * this service upon deployment.
+ * this service upon deployment.  Note that this object needs to be
+ * thread-safe because plugins can be registered and deregistered
+ * into a running environment.
  * 
  * @author Jeff Schnitzer
  */
@@ -29,46 +32,88 @@ public class PluginRegistryService implements PluginRegistration, PluginRegistry
 	private static Log log = LogFactory.getLog(PluginRegistryService.class);
 	
 	/**
-	 * We do have to be a bit careful with synchronization since someone
-	 * might hot-deploy some plugins into a running appserver.
+	 * Key is filter classname.
 	 */
-	Map<String, Plugin> plugins = new ConcurrentHashMap<String, Plugin>();
+	Map<String, Filter> filters = new ConcurrentHashMap<String, Filter>();
 
 	/**
-	 * @see PluginRegistration#register(Plugin)
+	 * Key is blueprint classname.
 	 */
-	public synchronized void register(Plugin plugin)
+	Map<String, Blueprint> blueprints = new ConcurrentHashMap<String, Blueprint>();
+
+	/**
+	 * @see PluginRegistration#register(Filter)
+	 */
+	public synchronized void register(Filter filter)
 	{
 		if (log.isInfoEnabled())
-			log.info("Registering " + plugin.getClass().getName());
+			log.info("Registering " + filter.getClass().getName());
 			
-		this.plugins.put(plugin.getClass().getName(), plugin);
+		this.filters.put(filter.getClass().getName(), filter);
 	}
 
 	/**
-	 * @see PluginRegistration#deregister(Plugin)
+	 * @see PluginRegistration#deregister(Filter)
 	 */
-	public synchronized void deregister(Plugin plugin)
+	public synchronized void deregister(Filter filter)
 	{
 		if (log.isInfoEnabled())
-			log.info("De-registering " + plugin.getClass().getName());
+			log.info("De-registering " + filter.getClass().getName());
 			
-		this.plugins.remove(plugin.getClass().getName());
+		this.filters.remove(filter.getClass().getName());
 	}
 
 	/**
-	 * @see PluginRegistry#getPlugins()
+	 * @see PluginRegistration#register(Blueprint)
 	 */
-	public Collection<Plugin> getPlugins()
+	public synchronized void register(Blueprint print)
 	{
-		return this.plugins.values();
+		if (log.isInfoEnabled())
+			log.info("Registering " + print.getClass().getName());
+			
+		this.blueprints.put(print.getClass().getName(), print);
 	}
 
 	/**
-	 * @see PluginRegistry#getPlugins(String)
+	 * @see PluginRegistration#deregister(Blueprint)
 	 */
-	public Plugin getPlugin(String className)
+	public synchronized void deregister(Blueprint print)
 	{
-		return this.plugins.get(className);
+		if (log.isInfoEnabled())
+			log.info("De-registering " + print.getClass().getName());
+			
+		this.blueprints.remove(print.getClass().getName());
+	}
+	
+	/**
+	 * @see PluginRegistry#getFilters()
+	 */
+	public Collection<Filter> getFilters()
+	{
+		return this.filters.values();
+	}
+
+	/**
+	 * @see PluginRegistry#getFilter(String)
+	 */
+	public Filter getFilter(String className)
+	{
+		return this.filters.get(className);
+	}
+
+	/**
+	 * @see PluginRegistry#getBlueprints()
+	 */
+	public Collection<Blueprint> getBlueprints()
+	{
+		return this.blueprints.values();
+	}
+
+	/**
+	 * @see PluginRegistry#getBlueprint(String)
+	 */
+	public Blueprint getBlueprint(String className)
+	{
+		return this.blueprints.get(className);
 	}
 }

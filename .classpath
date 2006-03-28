@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="entity/src"/>
 	<classpathentry kind="src" path="core/src"/>
-	<classpathentry kind="src" path="pluginapi/src"/>
 	<classpathentry kind="src" path="plugin/src"/>
 	<classpathentry kind="src" path="frontend/src"/>
 	<classpathentry kind="src" path="common/src"/>

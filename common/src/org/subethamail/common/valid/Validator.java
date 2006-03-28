@@ -37,12 +37,12 @@ public class Validator
 	// Role
 	public static final int MAX_ROLE_NAME = 50;
 	
-	// EnabledPlugin
-	public static final int MAX_PLUGIN_CLASSNAME = 256;
+	// EnabledFilter
+	public static final int MAX_FILTER_CLASSNAME = 256;
 	
-	// PluginParam
-	public static final int MAX_PLUGIN_PARAM_NAME = 256;
-	public static final int MAX_PLUGIN_PARAM_VALUE = 4096;
+	// FilterArgument
+	public static final int MAX_FILTER_ARGUMENT_NAME = 256;
+	public static final int MAX_FILTER_ARGUMENT_VALUE = 4096;
 	
 	// Subscription
 	public static final int MAX_SUBSCRIPTION_NOTE = 4096;

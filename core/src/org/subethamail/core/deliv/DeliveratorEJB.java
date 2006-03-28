@@ -13,7 +13,7 @@ import org.subethamail.core.deliv.i.DeliveratorRemote;
 /**
  * @author Jeff Schnitzer
  */
-@Stateless
+@Stateless(name="Deliverator")
 //@SecurityDomain("subetha")
 //@RunAs("god")
 public class DeliveratorEJB implements Deliverator, DeliveratorRemote

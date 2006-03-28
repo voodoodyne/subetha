@@ -99,7 +99,7 @@ minutes.
 public interface Deliverator
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/DeliveratorEJB/local";
+	public static final String JNDI_NAME = "Deliverator/local";
 
 	/**
 	 * Actually delivers a piece of mail to a person.  No queueing

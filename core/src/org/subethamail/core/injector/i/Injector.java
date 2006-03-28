@@ -17,7 +17,7 @@ import javax.mail.MessagingException;
 public interface Injector
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/InjectorEJB/local";
+	public static final String JNDI_NAME = "Injector/local";
 
 	/**
 	 * Processes of a piece of raw mail.  The mail is expected

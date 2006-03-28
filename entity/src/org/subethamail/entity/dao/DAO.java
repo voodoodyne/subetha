@@ -23,7 +23,7 @@ import org.subethamail.entity.MailingList;
 public interface DAO
 {
 	/** */
-	public static final String JNDI_NAME = "kink/DAOEJB/local";
+	public static final String JNDI_NAME = "DAO/local";
 	
 	/**
 	 * Persists the object in the database

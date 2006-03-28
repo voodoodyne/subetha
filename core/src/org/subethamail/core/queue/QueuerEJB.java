@@ -13,7 +13,7 @@ import org.subethamail.core.queue.i.QueuerRemote;
 /**
  * @author Jeff Schnitzer
  */
-@Stateless
+@Stateless(name="Queuer")
 //@SecurityDomain("subetha")
 //@RunAs("god")
 public class QueuerEJB implements Queuer, QueuerRemote

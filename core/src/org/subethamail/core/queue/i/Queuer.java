@@ -20,7 +20,7 @@ import javax.ejb.Local;
 public interface Queuer
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/QueuerEJB/local";
+	public static final String JNDI_NAME = "Queuer/local";
 
 	/**
 	 * Queues a mail for delivery to all receipients that want this

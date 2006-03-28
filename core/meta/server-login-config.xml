@@ -11,8 +11,8 @@
 <policy>
 	<application-policy name="subetha">
 		<authentication>
-			<login-module code="org.subethamail.core.jaas.SubEthaLoginModule" flag="required">
-				<module-option name="unauthenticatedIdentity">-1</module-option>
+			<login-module code="org.subethamail.core.util.SubEthaLoginModule" flag="required">
+				<module-option name="unauthenticatedIdentity"></module-option>
 			</login-module>
 		</authentication>
 	</application-policy>

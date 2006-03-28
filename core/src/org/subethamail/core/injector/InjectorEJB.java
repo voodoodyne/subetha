@@ -31,7 +31,7 @@ import org.subethamail.entity.dao.DAO;
 /**
  * @author Jeff Schnitzer
  */
-@Stateless
+@Stateless(name="Injector")
 //@SecurityDomain("subetha")
 //@RunAs("god")
 public class InjectorEJB implements Injector, InjectorRemote

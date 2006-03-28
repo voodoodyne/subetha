@@ -28,7 +28,7 @@ import org.subethamail.entity.MailingList;
  *
  * @author Jeff Schnitzer
  */
-@Stateless
+@Stateless(name="DAO")
 @Local(DAO.class)
 public class DAOEJB implements DAO
 {

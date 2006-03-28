@@ -15,5 +15,5 @@ import javax.ejb.Remote;
 public interface QueuerRemote extends Queuer
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/QueuerEJB/remote";
+	public static final String JNDI_NAME = "Queuer/remote";
 }

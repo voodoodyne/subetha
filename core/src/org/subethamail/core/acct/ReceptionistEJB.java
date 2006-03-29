@@ -5,14 +5,13 @@
 
 package org.subethamail.core.acct;
 
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.EJB;
 import javax.ejb.Stateless;
 import javax.mail.MessagingException;
-import javax.security.auth.login.FailedLoginException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,8 +19,8 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.core.acct.i.Receptionist;
 import org.subethamail.core.acct.i.ReceptionistRemote;
+import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.PostOffice;
-import org.subethamail.core.util.CipherUtil;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.dao.DAO;
@@ -54,13 +53,6 @@ public class ReceptionistEJB implements Receptionist, ReceptionistRemote
 	protected static final int PASSWORD_GEN_LENGTH = 6;
 	
 	/**
-	 * The key used to encrypt (and decrypt) the "subscribe" token.
-	 * TODO:  put this on a rotation schedule
-	 */
-	private static final byte[] SUBSCRIBE_TOKEN_KEY = 
-		{ 11, 39, 49, 55, 9, 75, 67, 13, 48, 119, 102, 21, 53, 80, 2, 9 };
-	
-	/**
 	 * A known prefix so we know if decryption worked properly
 	 */
 	private static final String SUBSCRIBE_TOKEN_PREFIX = "sub";
@@ -68,11 +60,12 @@ public class ReceptionistEJB implements Receptionist, ReceptionistRemote
 	/** */
 	@EJB DAO dao;
 	@EJB PostOffice postOffice;
+	@EJB Encryptor encryptor;
 	
 	/**
 	 * For generating random passwords.
 	 */
-	protected java.util.Random randomizer = new java.util.Random();
+	protected Random randomizer = new Random();
 	
 	/**
 	 * @see Receptionist#requestSubscription(String, Long, String)
@@ -93,13 +86,9 @@ public class ReceptionistEJB implements Receptionist, ReceptionistRemote
 		plainList.add(listId.toString());
 		plainList.add(name);
 		
-		try
-		{
-			String cipherText = CipherUtil.encryptList(plainList, SUBSCRIBE_TOKEN_KEY);
-			
-			this.postOffice.sendSubscribeToken(mailingList, email, cipherText);
-		}
-		catch (GeneralSecurityException ex) { throw new RuntimeException(ex); }	// should be impossible
+		String cipherText = this.encryptor.encryptList(plainList);
+		
+		this.postOffice.sendSubscribeToken(mailingList, email, cipherText);
 	}
 	
 	/**
@@ -107,12 +96,7 @@ public class ReceptionistEJB implements Receptionist, ReceptionistRemote
 	 */
 	public Long subscribe(String cipherToken) throws BadTokenException
 	{
-		List<String> plainList;
-		try
-		{
-			plainList = CipherUtil.decryptList(cipherToken, SUBSCRIBE_TOKEN_KEY);
-		}
-		catch (GeneralSecurityException ex) { throw new BadTokenException(ex); }
+		List<String> plainList = this.encryptor.decryptList(cipherToken);
 		
 		if (plainList.isEmpty() || !plainList.get(0).equals(SUBSCRIBE_TOKEN_PREFIX))
 			throw new BadTokenException("Invalid token");
@@ -124,22 +108,6 @@ public class ReceptionistEJB implements Receptionist, ReceptionistRemote
 		//TODO
 		
 		return null;
-	}
-
-	/**
-	 * @see Receptionist#authenticate(String, String)
-	 */
-	public Long authenticate(String email, String password) throws NotFoundException, FailedLoginException
-	{
-		if (log.isDebugEnabled())
-			log.debug("Authenticating " + email);
-		
-		EmailAddress addy = this.dao.findEmailAddress(email);
-		
-		if (!addy.getPerson().checkPassword(password))
-			throw new FailedLoginException("Bad password.");
-		
-		return addy.getPerson().getId();
 	}
 
 	/**

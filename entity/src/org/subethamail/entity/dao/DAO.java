@@ -8,6 +8,7 @@ package org.subethamail.entity.dao;
 import javax.persistence.LockModeType;
 
 import org.subethamail.common.NotFoundException;
+import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
@@ -17,6 +18,11 @@ import org.subethamail.entity.MailingList;
  * of directly manipulating the EntityManager from other EJBs.
  * It's just a convenient layer of abstraction, usable from
  * multiple applications that share a data model.
+ * 
+ * By convention, findXXX methods (that return single objects) throw
+ * a NotFoundException if there is no data matching the criteria, but
+ * getXXX methods return null.  findXXX methods that return collections
+ * will return empty collections.
  *
  * @author Jeff Schnitzer
  */
@@ -44,6 +50,20 @@ public interface DAO
 	 * Lock an entity.
 	 */
 	public void lock(Object obj, LockModeType lockMode);
+
+	/**
+	 * Finds a config entity.
+	 */
+	public Config findConfig(String id) throws NotFoundException;
+	
+	/**
+	 * @return the value of a config entity with the specified id,
+	 *  or null if there is no entity with that id.  This method
+	 *  does not distinguish between missing entities and actual
+	 *  null values stored as the config value.  The return type
+	 *  will be the stored type of the value.
+	 */
+	public Object getConfigValue(String id);
 
 	/**
 	 * Finds an email address with the specified address.

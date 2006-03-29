@@ -7,7 +7,6 @@ package org.subethamail.core.acct.i;
 
 import javax.ejb.Local;
 import javax.mail.MessagingException;
-import javax.security.auth.login.FailedLoginException;
 
 import org.subethamail.common.NotFoundException;
 
@@ -51,17 +50,9 @@ public interface Receptionist
 	public Long subscribe(String cipherToken) throws BadTokenException;
 
 	/**
-	 * Checks to see if the password is valid for the user.
-	 * 
-	 * @return the id of the person with the email address.
-	 */
-	public Long authenticate(String email, String password) throws NotFoundException, FailedLoginException;
-	
-	/**
 	 * Requests that the user's password be sent back to them in plaintext.
 	 * 
 	 * @throws NotFoundException if no account has that email address.
 	 */
 	public void forgotPassword(String email) throws NotFoundException, MessagingException;
-	
 }

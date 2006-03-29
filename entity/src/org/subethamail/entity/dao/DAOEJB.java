@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.valid.Validator;
+import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
@@ -68,6 +69,32 @@ public class DAOEJB implements DAO
 	public void lock(Object obj, LockModeType lockMode)
 	{
 		this.em.lock(obj, lockMode);
+	}
+
+	/**
+	 * @see DAO#findConfig(String)
+	 */
+	public Config findConfig(String id) throws NotFoundException
+	{
+		Config c = this.em.find(Config.class, id);
+		
+		if (c == null)
+			throw new NotFoundException("No config " + id);
+		else
+			return c;
+	}
+
+	/**
+	 * @see DAO#getConfigValue(String)
+	 */
+	public Object getConfigValue(String id)
+	{
+		Config c = this.em.find(Config.class, id);
+		
+		if (c == null)
+			return null;
+		else
+			return c.getValue();
 	}
 
 	/**
@@ -151,5 +178,4 @@ public class DAOEJB implements DAO
 		else
 			return m;
 	}
-
 }

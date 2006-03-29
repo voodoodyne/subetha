@@ -28,20 +28,20 @@ public class Validator
 	public static final int MAX_PERSON_NAME = 80;
 	
 	// EmailAddress
-	public static final int MAX_EMAIL_ADDRESS = 256;
+	public static final int MAX_EMAIL_ADDRESS = 255;
 	
 	// MailingList
-	public static final int MAX_LIST_ADDRESS = 256;
-	public static final int MAX_LIST_URL = 256;
+	public static final int MAX_LIST_ADDRESS = 255;
+	public static final int MAX_LIST_URL = 255;
 	
 	// Role
 	public static final int MAX_ROLE_NAME = 50;
 	
 	// EnabledFilter
-	public static final int MAX_FILTER_CLASSNAME = 256;
+	public static final int MAX_FILTER_CLASSNAME = 255;
 	
 	// FilterArgument
-	public static final int MAX_FILTER_ARGUMENT_NAME = 256;
+	public static final int MAX_FILTER_ARGUMENT_NAME = 255;
 	public static final int MAX_FILTER_ARGUMENT_VALUE = 4096;
 	
 	// Subscription
@@ -49,7 +49,7 @@ public class Validator
 	
 	// Mail
 	public static final int MAX_MAIL_CONTENT = 1024 * 1024;	// 1M enough?
-	public static final int MAX_MAIL_MESSAGE_ID = 256;
+	public static final int MAX_MAIL_MESSAGE_ID = 255;
 	public static final int MAX_MAIL_SUBJECT = 4096;
 	public static final int MAX_MAIL_FROM = 4096;
 	

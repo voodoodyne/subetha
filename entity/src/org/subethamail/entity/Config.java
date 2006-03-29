@@ -34,7 +34,7 @@ public class Config implements Serializable, Comparable
 	
 	/** */
 	@Id
-	@Column(nullable=false, length=Validator.MAX_CONFIG_ID)
+	@Column(length=Validator.MAX_CONFIG_ID)
 	String id;
 	
 	/** */

@@ -43,7 +43,7 @@ public class EmailAddress implements Serializable, Comparable
 	
 	/** */
 	@Id
-	@Column(nullable=false, length=Validator.MAX_EMAIL_ADDRESS)
+	@Column(length=Validator.MAX_EMAIL_ADDRESS)
 	String id;
 	
 	@ManyToOne

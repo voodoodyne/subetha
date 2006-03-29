@@ -43,7 +43,7 @@ import org.subethamail.entity.dao.DAO;
  */
 @Service(name="Encryptor", objectName="subetha:service=Encryptor")
 // This depends annotation can be removed when JBoss fixes dependency bug.
-@Depends("jboss.j2ee:ear=subetha.ear,jar=entity.jar,name=DAOEJB,service=EJB3")
+@Depends("jboss.j2ee:ear=subetha.ear,jar=entity.jar,name=DAO,service=EJB3")
 public class EncryptorService implements Encryptor, EncryptorManagement
 {
 	/** */

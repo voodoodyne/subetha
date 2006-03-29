@@ -118,9 +118,17 @@ public class AnyImmutableType implements UserType
 		try
 		{
 			Class clazz = Class.forName(type);
-			Method m = clazz.getMethod("valueOf", String.class);
 			
-			return m.invoke(null, value);
+			if (clazz.equals(String.class))
+			{
+				return value;
+			}
+			else
+			{
+				Method m = clazz.getMethod("valueOf", String.class);
+				
+				return m.invoke(null, value);
+			}
 		}
 		catch (ClassNotFoundException ex)
 		{

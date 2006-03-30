@@ -5,10 +5,7 @@
 
 package org.subethamail.plugin.blueprint;
 
-import javax.annotation.EJB;
-
 import org.jboss.annotation.ejb.Service;
-import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
 

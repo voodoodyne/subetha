@@ -30,11 +30,11 @@
 			</li>
 			<li>
 				Edit ${jboss.dir}/server/default/deploy/mail-service.xml and make
-				sure the smtp host is set correctly.  The other config parameters
-				are unimportant.
+				sure the mail.smtp.host property value is set to your outgoing mail
+				server.  The other config parameters are unimportant.
 			</li>
 			<li>
-				Download MySQL JDBC driver from <a href="http://dev.mysql.com/downloads/">here</a>.
+				Download MySQL JDBC driver (MySQL Connector/J) from <a href="http://dev.mysql.com/downloads/">here</a>.
 				Copy to ${jboss.dir}/server/default/lib.  The file should be mysql-connector-java-X.X.XX-bin.jar.
 				You can use a different RDBMS but you'll need to use a different -ds.xml file
 				than the one described below.
@@ -44,6 +44,10 @@
 				Use ${jboss.dir}/docs/examples/jca/mysql-ds.xml as a template.  The jndi-name must
 				be SubEthaDS:
 				<blockquote>&lt;jndi-name&gt;SubEthaDS&lt;/jndi-name&gt;</blockquote>
+			</li>
+			<li>
+				Create a database called 'jbossdb' which can be accessed by the host, user
+				and password specified in the -ds.xml file.
 			</li>
 		</ul>
 		

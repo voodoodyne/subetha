@@ -16,7 +16,7 @@ import javax.ejb.Local;
 public interface Admin
 {
 	/** */
-	public static final String JNDI_NAME = "Admin/local";
+	public static final String JNDI_NAME = "subetha/Admin/local";
 
 	/**
 	 * Creates a mailing list.

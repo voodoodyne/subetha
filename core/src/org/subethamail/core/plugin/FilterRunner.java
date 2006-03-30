@@ -23,7 +23,7 @@ import org.subethamail.entity.MailingList;
 public interface FilterRunner
 {
 	/** */
-	public static final String JNDI_NAME = "FilterRunner/local";
+	public static final String JNDI_NAME = "subetha/FilterRunner/local";
 
 	/**
 	 * Runs the message through all the filters associated with the list.

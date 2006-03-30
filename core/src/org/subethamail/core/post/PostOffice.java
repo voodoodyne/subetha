@@ -20,7 +20,7 @@ import org.subethamail.entity.MailingList;
 public interface PostOffice
 {
 	/** */
-	public static final String JNDI_NAME = "PostOffice/local";
+	public static final String JNDI_NAME = "subetha/PostOffice/local";
 		
 	/**
 	 * Sends a special token that will subscribe a user to a list.

@@ -15,5 +15,5 @@ import javax.ejb.Remote;
 public interface DeliveratorRemote extends Deliverator
 {
 	/** */
-	public static final String JNDI_NAME = "Deliverator/remote";
+	public static final String JNDI_NAME = "subetha/Deliverator/remote";
 }

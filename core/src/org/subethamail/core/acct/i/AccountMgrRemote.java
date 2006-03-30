@@ -15,5 +15,5 @@ import javax.ejb.Remote;
 public interface AccountMgrRemote extends AccountMgr
 {
 	/** */
-	public static final String JNDI_NAME = "AccountMgr/remote";
+	public static final String JNDI_NAME = "subetha/AccountMgr/remote";
 }

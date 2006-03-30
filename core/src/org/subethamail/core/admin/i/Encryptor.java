@@ -19,7 +19,7 @@ import javax.ejb.Local;
 public interface Encryptor
 {
 	/** */
-	public static final String JNDI_NAME = "Encryptor/local";
+	public static final String JNDI_NAME = "subetha/Encryptor/local";
 
 	/**
 	 * Encrypts a string.  It will be AES encrypted to binary.

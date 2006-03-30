@@ -20,7 +20,7 @@ import javax.mail.MessagingException;
 public interface AccountMgr
 {
 	/** */
-	public static final String JNDI_NAME = "AccountMgr/local";
+	public static final String JNDI_NAME = "subetha/AccountMgr/local";
 		
 	/**
 	 * @return many details about myself, including email addresses

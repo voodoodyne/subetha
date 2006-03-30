@@ -21,7 +21,7 @@ import org.subethamail.common.NotFoundException;
 public interface Receptionist
 {
 	/** */
-	public static final String JNDI_NAME = "Receptionist/local";
+	public static final String JNDI_NAME = "subetha/Receptionist/local";
 		
 	/**
 	 * Requests to subscribe to a mailing list.  Does not actually create a user;

@@ -25,7 +25,7 @@ import org.subethamail.core.plugin.i.PluginRegistration;
  * 
  * @author Jeff Schnitzer
  */
-@Service(objectName="subetha:service=PluginRegistry")
+@Service(name="PluginRegistry", objectName="subetha:service=PluginRegistry")
 public class PluginRegistryService implements PluginRegistration, PluginRegistry
 {
 	/** */

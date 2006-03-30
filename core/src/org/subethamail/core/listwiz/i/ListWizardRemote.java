@@ -16,5 +16,5 @@ import javax.ejb.Remote;
 public interface ListWizardRemote extends ListWizard
 {
 	/** */
-	public static final String JNDI_NAME = "ListWizard/remote";
+	public static final String JNDI_NAME = "subetha/ListWizard/remote";
 }

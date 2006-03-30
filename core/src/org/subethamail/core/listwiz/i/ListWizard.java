@@ -18,7 +18,7 @@ import javax.ejb.Local;
 public interface ListWizard
 {
 	/** */
-	public static final String JNDI_NAME = "ListWizard/local";
+	public static final String JNDI_NAME = "subetha/ListWizard/local";
 	
 	/**
 	 * @return a list of all known blueprints. 

@@ -16,5 +16,5 @@ import javax.ejb.Remote;
 public interface ReceptionistRemote extends Receptionist
 {
 	/** */
-	public static final String JNDI_NAME = "Receptionist/remote";
+	public static final String JNDI_NAME = "subetha/Receptionist/remote";
 }

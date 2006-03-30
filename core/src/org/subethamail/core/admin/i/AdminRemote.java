@@ -16,5 +16,5 @@ import javax.ejb.Remote;
 public interface AdminRemote extends Admin
 {
 	/** */
-	public static final String JNDI_NAME = "Admin/remote";
+	public static final String JNDI_NAME = "subetha/Admin/remote";
 }

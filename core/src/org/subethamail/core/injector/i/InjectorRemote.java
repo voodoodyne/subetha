@@ -15,5 +15,5 @@ import javax.ejb.Remote;
 public interface InjectorRemote extends Injector
 {
 	/** */
-	public static final String JNDI_NAME = "Injector/remote";
+	public static final String JNDI_NAME = "subetha/Injector/remote";
 }

@@ -48,9 +48,6 @@ public class Security
 	/** The j2ee security role for authenticated users */
 	public final static String USER_ROLE = "user";
 	
-	/** The j2ee security role for administrative users */
-	public final static String GOD_ROLE = "god";
-	
 	/** Prefix for roles cached in the http session */
 	protected final static String ROLE_CACHE_PREFIX = "subetha.role.";
 	
@@ -72,12 +69,12 @@ public class Security
 	 * Logs in the user, as far as jboss security is concerned.
 	 * Assumes that the credentials are valid.
 	 */
-	public static void login(HttpSession sess, Long id, String password)
+	public static void login(HttpSession sess, String name, String password)
 	{
 		if (log.isDebugEnabled())
-			log.debug("Logging in " + id);
+			log.debug("Logging in " + name);
 		
-		Principal prin = new SimplePrincipal(id.toString());
+		Principal prin = new SimplePrincipal(name);
 		
 		sess.setAttribute(PRINCIPAL_KEY, prin);
 		sess.setAttribute(CREDENTIAL_KEY, password);
@@ -105,15 +102,6 @@ public class Security
 		return isUserInRole(USER_ROLE, request);
 	}
 	
-	/**
-	 * @return whether or not the user is currently logged in and
-	 * an administrator.
-	 */
-	public static boolean isGod(HttpServletRequest request)
-	{
-		return isUserInRole(GOD_ROLE, request);
-	}
-		
 	/**
 	 * This checks the jboss security manager and caches the result in the
 	 * http session.

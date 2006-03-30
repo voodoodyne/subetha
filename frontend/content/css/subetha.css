@@ -1,0 +1,25 @@
+/***************************************************************
+ * Local stylesheet extensions
+ ***************************************************************/
+
+form th {
+	text-align: right;
+}
+
+.error {
+	color: red;
+	border: 1px solid red;
+}
+
+.sideBox {
+	margin-bottom: 1em;
+}
+
+.menuBar a {
+	border-left: 2px solid blue;
+	padding-left: 1ex;
+}
+
+.menuBar a.first {
+	border-left: none;
+}

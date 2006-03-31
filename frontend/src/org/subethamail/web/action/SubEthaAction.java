@@ -9,12 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.http.Cookie;
 
-import org.subethamail.core.acct.i.Receptionist;
-import org.subethamail.core.admin.i.Encryptor;
 import org.tagonist.AbstractAction;
 
 /**
@@ -24,30 +20,6 @@ import org.tagonist.AbstractAction;
  */
 abstract public class SubEthaAction extends AbstractAction 
 {
-	/** Thread-safe, so we should be able to cache this as static. */
-	protected static Receptionist receptionist;
-	static
-	{
-		try
-		{
-			InitialContext ctx = new InitialContext();
-			receptionist = (Receptionist)ctx.lookup(Receptionist.JNDI_NAME);
-		}
-		catch (NamingException ex) { throw new RuntimeException(ex); }
-	}
-	
-	/** Thread-safe, so we should be able to cache this as static. */
-	protected static Encryptor encryptor;
-	static
-	{
-		try
-		{
-			InitialContext ctx = new InitialContext();
-			encryptor = (Encryptor)ctx.lookup(Encryptor.JNDI_NAME);
-		}
-		catch (NamingException ex) { throw new RuntimeException(ex); }
-	}
-	
 	/**
 	 * @return the action param specified by the key, as a String
 	 */

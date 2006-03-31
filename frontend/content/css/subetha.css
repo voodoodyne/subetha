@@ -4,6 +4,7 @@
 
 form th {
 	text-align: right;
+	vertical-align: top;
 }
 
 .error {

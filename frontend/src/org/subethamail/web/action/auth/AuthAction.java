@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.security.auth.callback.UsernamePasswordHandler;
 import org.subethamail.web.action.SubEthaAction;
 import org.subethamail.web.security.Security;
+import org.subethamail.web.servlet.Backend;
 
 /**
  * Provides basic authentication services to action subclasses.
@@ -162,7 +163,7 @@ abstract public class AuthAction extends SubEthaAction
 			URLEncoder.encode(name, "UTF-8") + "/" + 
 			URLEncoder.encode(password, "UTF-8");
 		
-		return encryptor.encryptString(value);
+		return Backend.instance().getEncryptor().encryptString(value);
 	}
 	
 	/**
@@ -174,7 +175,7 @@ abstract public class AuthAction extends SubEthaAction
 	{
 		try
 		{
-			String plain = encryptor.decryptString(cookieText);
+			String plain = Backend.instance().getEncryptor().decryptString(cookieText);
 			
 			int separatorIndex = plain.indexOf('/');
 			if (separatorIndex <= 0)

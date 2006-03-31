@@ -21,4 +21,11 @@
 		<filter-name>SecurityAssociationFilter</filter-name>
 		<url-pattern>*.jsp</url-pattern>
 	</filter-mapping>
+	
+	<servlet>
+		<servlet-name>Backend</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.Backend</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
 </web-app>

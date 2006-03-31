@@ -4,68 +4,76 @@
 	<h1>Create List</h1>
 	
 	<p>
-		This page lets site admins create a new mailing list.  It shows
-		all the "list wizard" create options.
+		You may create a mailing list:
 	</p>
 	
 	<form action="list_create_submit.jsp" method="post">
-		<table border="1">
+	
+		<table>
 			<tr>
-				<th>List Address</th>
-				<td>
-					<input type="text" size="60" />
+				<th><label for="address">List Address</label></th>
+				<td
+					<c:if test="${!empty model.errors.address}">
+						class="error"
+					</c:if>
+				>
+					<input id="address" name="address" type="text" size="60" value="${model.address}" />
 					<div>Example:  announce@somedomain.com</div>
+					
+					<c:if test="${!empty model.errors.address}">
+						<p class="error"><c:out value="${model.errors.address}"/></p>
+					</c:if>
 				</td>
 			</tr>
 			<tr>
-				<th>List URL</th>
-				<td>
-					<input type="text" size="60" />
-					<div>Example:  http://somedomain.com/list/announce</div>
-					<div>The URL <strong>must</strong> contain the /list/ path</div>
+				<th><label for="url">List URL</label></th>
+				<td
+					<c:if test="${!empty model.errors.url}">
+						class="error"
+					</c:if>
+				>
+					<input id="url" name="url" type="text" size="60" value="${model.url}" />
+					<div>Example:  http://somedomain.com<strong>/list/</strong>announce</div>
+					<div>The URL <strong>must</strong> contain /list/ after the domain</div>
+					
+					<c:if test="${!empty model.errors.url}">
+						<p class="error"><c:out value="${model.errors.url}"/></p>
+					</c:if>
 				</td>
 			</tr>
 			<tr>
-				<th>
-					Blueprint
-					<p>
-						Blueprints represent a starting point.  List configuration can
-						be changed at any time.
-					</p>
-				</th>
-				<td>
-					<table>
-						<tr>
-							<th><input type="radio" /> Announce-Only List</th>
-							<td>
-								Create a list which allows only moderators to post.  Normal
-								users are not allowd to view the subscriber list.
-							</td>
-						</tr>
-						<tr>
-							<th><input type="radio" /> Social List</th>
-							<td>
-								Create a list suitable for social groups.
-								Subscriptions must be approved by moderators
-								but any subscriber may post.  Reply-To will be
-								set back to the list.
-							</td>
-						</tr>
-						<tr>
-							<th><input type="radio" /> Barebones List</th>
-							<td>
-								Create a list with no additional configuration.  No plugins
-								will be added and the default role will have no permissions.
-							</td>
-						</tr>
-					</table>
+				<th><label for="owners">Initial Owner(s)</label></th>
+				<td
+					<c:if test="${!empty model.errors.owners}">
+						class="error"
+					</c:if>
+				>
+					<textarea id="owners" name="owners" rows="5" cols="60" style="width:95%"
+					><c:out value="${model.owners}"/></textarea>
+					
+					<c:if test="${!empty model.errors.owners}">
+						<p class="error"><c:out value="${model.errors.owners}"/></p>
+					</c:if>
 				</td>
-			</tr>
-			<tr>
-				<th></th>
-				<td><input type="submit" value="submit" /></td>
 			</tr>
 		</table>
-	</form>
+		
+		<h3>Choose Blueprint</h3>
+		<table>
+			<c:forEach var="blueprint" items="${backend.listWizard.blueprints}" varStatus="loop">
+				<tr>
+					<th>
+						<input type="radio" name="blueprint" value="${blueprint.id}" 
+							<c:if test="${(empty model.blueprint && loop.first) || model.blueprint == blueprint.id}">checked="checked"</c:if>
+						/>
+					</th>
+					<th><c:out value="${blueprint.name}" /></th>
+					<td><c:out value="${blueprint.description}" /></td>
+				</tr>
+			</c:forEach>
+		</table>
+		
+		<input type="submit" value="Create List" />
 
+	</form>
 </trim:admin>

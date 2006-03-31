@@ -1,7 +1,1 @@
-<%@ taglib prefix="se" tagdir="/WEB-INF/tags" %>
-<%@ taglib prefix="trim" tagdir="/WEB-INF/tags/trim" %>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<%@ taglib prefix="t" uri="http://www.tagonist.org/tagonist" %>
+<%@include file="../../../inc/taglibs.jspf" %>

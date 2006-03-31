@@ -1,6 +1,6 @@
 <%@include file="inc/top_standard.jspf" %>
 
-<trim:plain title="Sub-Etha Mail">
+<trim:plain title="SubEtha Mail">
 	<h1>Welcome, <c:out value="${me.name}"/></h1>
 	
 	<p>

@@ -5,9 +5,12 @@
 
 package org.subethamail.core.listwiz.i;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.ejb.Local;
+
+import org.subethamail.core.admin.i.CreateMailingListException;
 
 /**
  * Administrative interface for managing the site.
@@ -26,9 +29,11 @@ public interface ListWizard
 	public List<BlueprintData> getBlueprints();
 
 	/**
-	 * Creates a mailing list defined by an archetype.
+	 * Creates a mailing list and configures it to a blueprint.  
 	 * 
-	 * @param blueprint is the classname of a blueprint object.
+	 * @see Admin#createMailingList(String, String, Collection)
+	 * 
+	 * @param blueprint is the id of a blueprint object from getBlueprints().
 	 */
-	public Long createMailingList(String address, String url, String blueprintId);
+	public Long createMailingList(String address, String url, Collection<String> initialOwners, String blueprintId) throws CreateMailingListException;
 }

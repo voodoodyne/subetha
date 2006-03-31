@@ -5,13 +5,15 @@
 
 package org.subethamail.core.plugin.i;
 
+import java.util.Collection;
+
 import javax.ejb.Local;
 
 
 /**
  * A blueprint generates the starting characteristics for
  * a mailing list.  When it executes, it uses the normal EJB
- * interfaces to construct a list with predefined roles, plugins,
+ * interfaces to configure a list with predefined roles, plugins,
  * and configuration.
  *
  * @author Jeff Schnitzer
@@ -30,9 +32,7 @@ public interface Blueprint
 	public String getDescription();
 	
 	/**
-	 * Actually create a mailing list to this blueprint.
-	 * 
-	 * @return the id of the new list.
+	 * Configure a freshly-created mailing list to the specification.
 	 */
-	public Long createMailingList(String address, String url);
+	public void configureMailingList(Long listId);
 }

@@ -5,6 +5,8 @@
 
 package org.subethamail.core.admin.i;
 
+import java.util.Collection;
+
 import javax.ejb.Local;
 
 /**
@@ -19,7 +21,14 @@ public interface Admin
 	public static final String JNDI_NAME = "subetha/Admin/local";
 
 	/**
-	 * Creates a mailing list.
+	 * Creates a mailing list.  If any of the initial owner addresses
+	 * have not been registered, accounts will be created without confirmation.
+	 * 
+	 * @param address is a valid email address
+	 * @param url is a valid list URL, including the /list/ portion.
+	 * @param initialOwners is a list of email addresses.
+	 * 
+	 * @throws CreateMailingListException if the address or url are already in use.
 	 */
-	public Long createMailingList(String address, String url);
+	public Long createMailingList(String address, String url, Collection<String> initialOwners) throws CreateMailingListException;
 }

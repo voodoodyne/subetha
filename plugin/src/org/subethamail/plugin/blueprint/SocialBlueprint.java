@@ -34,9 +34,8 @@ public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
 	}
 	
 	/** */
-	public Long createMailingList(String address, String url)
+	public void configureMailingList(Long listId)
 	{
 		// TODO
-		return null;
 	}
 }

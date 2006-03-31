@@ -5,6 +5,8 @@
 
 package org.subethamail.core.plugin.i.helper;
 
+import java.util.Collection;
+
 import javax.annotation.EJB;
 
 import org.subethamail.core.admin.i.Admin;

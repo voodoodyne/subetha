@@ -5,6 +5,7 @@
 
 package org.subethamail.core.listwiz;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.EJB;
@@ -14,6 +15,8 @@ import javax.ejb.Stateless;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.core.admin.i.Admin;
+import org.subethamail.core.admin.i.CreateMailingListException;
 import org.subethamail.core.listwiz.i.BlueprintData;
 import org.subethamail.core.listwiz.i.ListWizard;
 import org.subethamail.core.listwiz.i.ListWizardRemote;
@@ -36,6 +39,7 @@ public class ListWizardEJB implements ListWizard, ListWizardRemote
 	
 	/** */
 	@EJB PluginRegistry registry;
+	@EJB Admin admin;
 	
 	/**
 	 * @see ListWizard#getBlueprints() 
@@ -46,16 +50,20 @@ public class ListWizardEJB implements ListWizard, ListWizardRemote
 	}
 
 	/**
-	 * @see ListWizard#createMailingList(String, String, String)
+	 * @see ListWizard#createMailingList(String, String, Collection, String)
 	 */
-	public Long createMailingList(String address, String url, String blueprintId)
+	public Long createMailingList(String address, String url, Collection<String> initialOwners, String blueprintId) throws CreateMailingListException
 	{
 		Blueprint blue = this.registry.getBlueprint(blueprintId);
 
 		if (blue == null)
 			throw new IllegalStateException("Blueprint does not exist");
 		
-		return blue.createMailingList(address, url);
+		Long listId = this.admin.createMailingList(address, url, initialOwners);
+		
+		blue.configureMailingList(listId);
+		
+		return listId;
 	}
 	
 	

@@ -5,6 +5,8 @@
 
 package org.subethamail.core.admin;
 
+import java.util.Collection;
+
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
@@ -13,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
+import org.subethamail.core.admin.i.CreateMailingListException;
 
 /**
  * Implementation of the Admin interface.
@@ -30,9 +33,18 @@ public class AdminEJB implements Admin, AdminRemote
 	/**
 	 * @see Admin#createMailingList(String, String)
 	 */
-	public Long createMailingList(String address, String url)
+	public Long createMailingList(String address, String url, Collection<String> initialOwners) throws CreateMailingListException
 	{
-		// TODO Auto-generated method stub
+		//TODO
+		
+		// First make sure we have a safe address and url.  Check
+		// for validity and duplicates.
+		
+		// Then ensure that all inital owners have accounts, and 
+		// build a list of the associated Person objects
+		
+		// Then create the mailing list and attach the owners.
+		
 		return null;
 	}
 

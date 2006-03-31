@@ -49,7 +49,7 @@
 				</c:choose>
 			</div> <!-- locBar -->
 			
-			<span class="headerTitle">Sub-Etha Mail</span>
+			<span class="headerTitle">SubEtha Mail</span>
 			
 			<c:if test="${auth.loggedIn}">
 				<div class="menuBar">

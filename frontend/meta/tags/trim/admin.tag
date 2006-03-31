@@ -4,7 +4,7 @@
 
 <trim:base title="${title}">
 	<div class="sideBox LHS">
-		<div>Admin Menu</div>
+		<div>Site Admin Menu</div>
 		<a href="site_status.jsp">&rsaquo; Site Status</a>
 		<a href="list_create.jsp">&rsaquo; Create List</a>
 		<a href="lists.jsp">&rsaquo; List Lists</a>

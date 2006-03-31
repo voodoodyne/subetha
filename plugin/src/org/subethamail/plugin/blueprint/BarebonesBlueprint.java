@@ -14,9 +14,9 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  * 
  * @author Jeff Schnitzer
  */
-@Service(objectName="subetha.blueprint:service=SimpleBlueprint")
+@Service(objectName="subetha.blueprint:service=BarebonesBlueprint")
 //TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
-public class SimpleBlueprint extends AbstractBlueprint implements Lifecycle
+public class BarebonesBlueprint extends AbstractBlueprint implements Lifecycle
 {
 	/** */
 	public String getName()
@@ -33,9 +33,8 @@ public class SimpleBlueprint extends AbstractBlueprint implements Lifecycle
 	}
 	
 	/** */
-	public Long createMailingList(String address, String url)
+	public void configureMailingList(Long listId)
 	{
-		// TODO
-		return null;
+		// we're done
 	}
 }

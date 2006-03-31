@@ -33,9 +33,8 @@ public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycl
 	}
 	
 	/** */
-	public Long createMailingList(String address, String url)
+	public void configureMailingList(Long listId)
 	{
 		// TODO
-		return null;
 	}
 }

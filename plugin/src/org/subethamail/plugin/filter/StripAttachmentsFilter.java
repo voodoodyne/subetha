@@ -5,12 +5,14 @@
 
 package org.subethamail.plugin.filter;
 
+import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
+import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterParameter;
@@ -30,6 +32,8 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  */
 @Service(objectName="subetha.filter:service=StripAttachmentsFilter")
 // TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
+@SecurityDomain("subetha")
+@RunAs("siteAdmin")
 public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 {
 	/** */

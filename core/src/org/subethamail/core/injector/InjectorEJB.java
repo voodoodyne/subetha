@@ -7,6 +7,8 @@ package org.subethamail.core.injector;
 
 import javax.annotation.EJB;
 import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -14,6 +16,7 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.filter.FilterRunner;
@@ -32,8 +35,9 @@ import org.subethamail.entity.dao.DAO;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Injector")
-//@SecurityDomain("subetha")
-//@RunAs("god")
+@SecurityDomain("subetha")
+@PermitAll
+@RunAs("siteAdmin")
 public class InjectorEJB implements Injector, InjectorRemote
 {
 	/** */

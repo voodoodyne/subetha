@@ -7,6 +7,7 @@ package org.subethamail.core.acct;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
+import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.MessagingException;
 
@@ -29,8 +30,8 @@ import org.subethamail.entity.Person;
  */
 @Stateless(name="AccountMgr")
 @SecurityDomain("subetha")
-@RolesAllowed({"user"})
-//@RunAs("god")
+@RolesAllowed("user")
+@RunAs("siteAdmin")
 public class AccountMgrEJB extends PersonalEJB implements AccountMgr, AccountMgrRemote
 {
 	/** */

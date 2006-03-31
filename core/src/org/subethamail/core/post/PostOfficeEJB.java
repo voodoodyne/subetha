@@ -9,6 +9,7 @@ import java.io.StringWriter;
 
 import javax.annotation.EJB;
 import javax.annotation.Resource;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.PostConstruct;
 import javax.ejb.Stateless;
@@ -24,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.dao.DAO;
@@ -34,6 +36,8 @@ import org.subethamail.entity.dao.DAO;
  * @author Jeff Schnitzer
  */
 @Stateless(name="PostOffice")
+@SecurityDomain("subetha")
+@RolesAllowed("siteAdmin")
 public class PostOfficeEJB implements PostOffice
 {
 	/** */

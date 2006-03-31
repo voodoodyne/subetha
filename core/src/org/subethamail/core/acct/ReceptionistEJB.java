@@ -10,11 +10,14 @@ import java.util.List;
 import java.util.Random;
 
 import javax.annotation.EJB;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.MessagingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.core.acct.i.Receptionist;
@@ -31,8 +34,9 @@ import org.subethamail.entity.dao.DAO;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Receptionist")
-//@SecurityDomain("subetha")
-//@RunAs("god")
+@SecurityDomain("subetha")
+@PermitAll
+@RunAs("siteAdmin")
 public class ReceptionistEJB implements Receptionist, ReceptionistRemote
 {
 	/** */

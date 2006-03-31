@@ -5,8 +5,10 @@
 
 package org.subethamail.core.deliv;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
+import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.deliv.i.DeliveratorRemote;
 
@@ -14,8 +16,8 @@ import org.subethamail.core.deliv.i.DeliveratorRemote;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Deliverator")
-//@SecurityDomain("subetha")
-//@RunAs("god")
+@SecurityDomain("subetha")
+@RolesAllowed("siteAdmin")
 public class DeliveratorEJB implements Deliverator, DeliveratorRemote
 {
 	/**

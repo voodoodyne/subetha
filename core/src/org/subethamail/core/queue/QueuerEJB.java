@@ -5,8 +5,10 @@
 
 package org.subethamail.core.queue;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 
+import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.queue.i.QueuerRemote;
 
@@ -14,8 +16,8 @@ import org.subethamail.core.queue.i.QueuerRemote;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Queuer")
-//@SecurityDomain("subetha")
-//@RunAs("god")
+@SecurityDomain("subetha")
+@RolesAllowed("siteAdmin")
 public class QueuerEJB implements Queuer, QueuerRemote
 {
 	/**

@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.StringTokenizer;
 
 import javax.annotation.EJB;
+import javax.annotation.security.PermitAll;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -26,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Depends;
 import org.jboss.annotation.ejb.Service;
+import org.jboss.annotation.security.SecurityDomain;
 import org.jboss.util.Base64;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Encryptor;
@@ -44,6 +46,8 @@ import org.subethamail.entity.dao.DAO;
 @Service(name="Encryptor", objectName="subetha:service=Encryptor")
 // This depends annotation can be removed when JBoss fixes dependency bug.
 @Depends("jboss.j2ee:ear=subetha.ear,jar=entity.jar,name=DAO,service=EJB3")
+@SecurityDomain("subetha")
+@PermitAll
 public class EncryptorService implements Encryptor, EncryptorManagement
 {
 	/** */

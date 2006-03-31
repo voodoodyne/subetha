@@ -6,7 +6,9 @@
 package org.subethamail.core.plugin.i.helper;
 
 import javax.annotation.EJB;
+import javax.annotation.security.RunAs;
 
+import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterRegistry;
 
@@ -16,6 +18,8 @@ import org.subethamail.core.plugin.i.FilterRegistry;
  * 
  * @author Jeff Schnitzer
  */
+@SecurityDomain("subetha")
+@RunAs("siteAdmin")
 abstract public class AbstractFilter implements Filter, Lifecycle
 {
 	/**

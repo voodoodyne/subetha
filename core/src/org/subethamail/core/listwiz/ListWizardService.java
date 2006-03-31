@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.EJB;
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 
 import org.apache.commons.logging.Log;
@@ -51,7 +50,6 @@ public class ListWizardService implements ListWizard, ListWizardRemote, Blueprin
 	/**
 	 * @see BlueprintRegistry#register(Blueprint)
 	 */
-	@PermitAll
 	public void register(Blueprint print)
 	{
 		if (log.isInfoEnabled())
@@ -63,7 +61,6 @@ public class ListWizardService implements ListWizard, ListWizardRemote, Blueprin
 	/**
 	 * @see BlueprintRegistry#deregister(Blueprint)
 	 */
-	@PermitAll
 	public void deregister(Blueprint print)
 	{
 		if (log.isInfoEnabled())

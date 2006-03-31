@@ -5,7 +5,10 @@
 
 package org.subethamail.plugin.blueprint;
 
+import javax.annotation.security.RunAs;
+
 import org.jboss.annotation.ejb.Service;
+import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
 
@@ -16,6 +19,8 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  */
 @Service(objectName="subetha.blueprint:service=AnnounceOnlyBlueprint")
 //TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
+@SecurityDomain("subetha")
+@RunAs("siteAdmin")
 public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycle
 {
 	/** */

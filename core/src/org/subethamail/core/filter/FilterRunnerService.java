@@ -8,13 +8,14 @@ package org.subethamail.core.filter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
+import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterRegistry;
@@ -27,7 +28,8 @@ import org.subethamail.entity.MailingList;
  * @author Jeff Schnitzer
  */
 @Service(name="FilterRunner")
-//@SecurityDomain("subetha")
+@SecurityDomain("subetha")
+@RolesAllowed("siteAdmin")
 public class FilterRunnerService implements FilterRunner, FilterRegistry
 {
 	/** */
@@ -41,7 +43,6 @@ public class FilterRunnerService implements FilterRunner, FilterRegistry
 	/**
 	 * @see FilterRegistry#register(Filter)
 	 */
-	@PermitAll
 	public void register(Filter filter)
 	{
 		if (log.isInfoEnabled())
@@ -53,7 +54,6 @@ public class FilterRunnerService implements FilterRunner, FilterRegistry
 	/**
 	 * @see FilterRegistry#deregister(Filter)
 	 */
-	@PermitAll
 	public void deregister(Filter filter)
 	{
 		if (log.isInfoEnabled())

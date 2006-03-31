@@ -17,11 +17,11 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  * 
  * @author Jeff Schnitzer
  */
-@Service(objectName="subetha.blueprint:service=FreeForAllBlueprint")
-//TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
+@Service
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
 public class FreeForAllBlueprint extends AbstractBlueprint implements Lifecycle
+//TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {
 	/** */
 	public String getName()

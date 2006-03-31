@@ -30,11 +30,11 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  * 
  * @author Jeff Schnitzer
  */
-@Service(objectName="subetha.filter:service=StripAttachmentsFilter")
-// TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
+@Service
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
 public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
+//TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {
 	/** */
 	private static Log log = LogFactory.getLog(StripAttachmentsFilter.class);

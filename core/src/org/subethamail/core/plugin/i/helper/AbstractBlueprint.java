@@ -5,13 +5,10 @@
 
 package org.subethamail.core.plugin.i.helper;
 
-import java.util.Collection;
-
 import javax.annotation.EJB;
 
-import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.plugin.i.Blueprint;
-import org.subethamail.core.plugin.i.PluginRegistration;
+import org.subethamail.core.plugin.i.BlueprintRegistry;
 
 /**
  * Base implementation of a blueprint that registers itself upon deployment.
@@ -24,8 +21,7 @@ abstract public class AbstractBlueprint implements Blueprint, Lifecycle
 	/**
 	 * These will automatically be injected by JBoss.
 	 */
-	protected @EJB PluginRegistration registry;
-	protected @EJB Admin admin;	// We'll need this to actually create lists
+	protected @EJB BlueprintRegistry registry;
 
 	/**
 	 * @see Lifecycle#start()

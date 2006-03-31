@@ -3,7 +3,7 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/util/Transmute.java $
  */
 
-package org.subethamail.core.plugin;
+package org.subethamail.core.filter;
 
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;

@@ -7,21 +7,24 @@ package org.subethamail.core.listwiz;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.EJB;
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.CreateMailingListException;
 import org.subethamail.core.listwiz.i.BlueprintData;
 import org.subethamail.core.listwiz.i.ListWizard;
 import org.subethamail.core.listwiz.i.ListWizardRemote;
-import org.subethamail.core.plugin.PluginRegistry;
 import org.subethamail.core.plugin.i.Blueprint;
+import org.subethamail.core.plugin.i.BlueprintRegistry;
 import org.subethamail.core.util.Transmute;
 
 /**
@@ -29,24 +32,52 @@ import org.subethamail.core.util.Transmute;
  * 
  * @author Jeff Schnitzer
  */
-@Stateless(name="ListWizard")
+@Service(name="ListWizard")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class ListWizardEJB implements ListWizard, ListWizardRemote
+public class ListWizardService implements ListWizard, ListWizardRemote, BlueprintRegistry
 {
 	/** */
-	private static Log log = LogFactory.getLog(ListWizardEJB.class);
+	private static Log log = LogFactory.getLog(ListWizardService.class);
 	
 	/** */
-	@EJB PluginRegistry registry;
 	@EJB Admin admin;
+	
+	/**
+	 * Key is blueprint classname.  Watch out for concurrency.
+	 */
+	Map<String, Blueprint> blueprints = new ConcurrentHashMap<String, Blueprint>();
+
+	/**
+	 * @see BlueprintRegistry#register(Blueprint)
+	 */
+	@PermitAll
+	public void register(Blueprint print)
+	{
+		if (log.isInfoEnabled())
+			log.info("Registering " + print.getClass().getName());
+			
+		this.blueprints.put(print.getClass().getName(), print);
+	}
+
+	/**
+	 * @see BlueprintRegistry#deregister(Blueprint)
+	 */
+	@PermitAll
+	public void deregister(Blueprint print)
+	{
+		if (log.isInfoEnabled())
+			log.info("De-registering " + print.getClass().getName());
+			
+		this.blueprints.remove(print.getClass().getName());
+	}
 	
 	/**
 	 * @see ListWizard#getBlueprints() 
 	 */
 	public List<BlueprintData> getBlueprints()
 	{
-		return Transmute.blueprints(this.registry.getBlueprints());
+		return Transmute.blueprints(this.blueprints.values());
 	}
 
 	/**
@@ -54,7 +85,7 @@ public class ListWizardEJB implements ListWizard, ListWizardRemote
 	 */
 	public Long createMailingList(String address, String url, Collection<String> initialOwners, String blueprintId) throws CreateMailingListException
 	{
-		Blueprint blue = this.registry.getBlueprint(blueprintId);
+		Blueprint blue = this.blueprints.get(blueprintId);
 
 		if (blue == null)
 			throw new IllegalStateException("Blueprint does not exist");

@@ -8,7 +8,7 @@ package org.subethamail.core.plugin.i.helper;
 import javax.annotation.EJB;
 
 import org.subethamail.core.plugin.i.Filter;
-import org.subethamail.core.plugin.i.PluginRegistration;
+import org.subethamail.core.plugin.i.FilterRegistry;
 
 /**
  * Base implementation of a filter that registers itself upon deployment.
@@ -21,7 +21,7 @@ abstract public class AbstractFilter implements Filter, Lifecycle
 	/**
 	 * This will automatically be injected by JBoss.
 	 */
-	@EJB PluginRegistration registry;
+	@EJB FilterRegistry registry;
 
 	/**
 	 * @see Lifecycle#start()

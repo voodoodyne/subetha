@@ -3,36 +3,64 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/acct/i/AccountMgrRemote.java $
  */
 
-package org.subethamail.core.plugin;
+package org.subethamail.core.filter;
 
-import javax.annotation.EJB;
-import javax.ejb.Stateless;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.security.PermitAll;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.annotation.ejb.Service;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
+import org.subethamail.core.plugin.i.FilterRegistry;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.MailingList;
-import org.subethamail.entity.dao.DAO;
 
 /**
  * @author Jeff Schnitzer
  */
-@Stateless(name="FilterRunner")
+@Service(name="FilterRunner")
 //@SecurityDomain("subetha")
-public class FilterRunnerEJB implements FilterRunner
+public class FilterRunnerService implements FilterRunner, FilterRegistry
 {
 	/** */
-	private static Log log = LogFactory.getLog(FilterRunnerEJB.class);
+	private static Log log = LogFactory.getLog(FilterRunnerService.class);
 
-	/** */
-	@EJB DAO dao;
-	@EJB PluginRegistry registry;
+	/**
+	 * Key is filter classname.  Make sure we have concurrent access.
+	 */
+	Map<String, Filter> filters = new ConcurrentHashMap<String, Filter>();
+
+	/**
+	 * @see FilterRegistry#register(Filter)
+	 */
+	@PermitAll
+	public void register(Filter filter)
+	{
+		if (log.isInfoEnabled())
+			log.info("Registering " + filter.getClass().getName());
+			
+		this.filters.put(filter.getClass().getName(), filter);
+	}
+
+	/**
+	 * @see FilterRegistry#deregister(Filter)
+	 */
+	@PermitAll
+	public void deregister(Filter filter)
+	{
+		if (log.isInfoEnabled())
+			log.info("De-registering " + filter.getClass().getName());
+			
+		this.filters.remove(filter.getClass().getName());
+	}
 
 	/**
 	 * @see FilterRunner#onInject(MimeMessage, MailingList)
@@ -45,7 +73,7 @@ public class FilterRunnerEJB implements FilterRunner
 		
 		for (EnabledFilter enabled: list.getEnabledFilters())
 		{
-			Filter filter = this.registry.getFilter(enabled.getClassName());
+			Filter filter = this.filters.get(enabled.getClassName());
 			if (filter == null)
 			{
 				// Log and ignore

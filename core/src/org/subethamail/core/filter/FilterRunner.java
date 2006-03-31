@@ -3,7 +3,7 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/acct/i/AccountMgr.java $
  */
 
-package org.subethamail.core.plugin;
+package org.subethamail.core.filter;
 
 import javax.ejb.Local;
 import javax.mail.MessagingException;

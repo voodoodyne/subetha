@@ -9,8 +9,9 @@ import javax.ejb.Local;
 
 
 
+
 /**
- * This local interface allows various plugins register themsleves with the
+ * This local interface allows filters to register themsleves with the
  * application.  Plugins should register themselves when the application deploys
  * and de-register themselves when the app undeploys.  The JBoss service
  * lifecycle methods start() and stop() can be used.
@@ -18,7 +19,7 @@ import javax.ejb.Local;
  * @author Jeff Schnitzer
  */
 @Local
-public interface PluginRegistration
+public interface FilterRegistry
 {
 	/**
 	 * Register a mail filter.  The filter will become available
@@ -30,15 +31,4 @@ public interface PluginRegistration
 	 * Deregister a mail filter.  The filter will no longer be processed.
 	 */
 	public void deregister(Filter filter);
-	
-	/**
-	 * Register a blueprint.  The blueprint will become available
-	 * immediately.
-	 */
-	public void register(Blueprint print);
-	
-	/**
-	 * Deregister a blueprint.
-	 */
-	public void deregister(Blueprint print);
 }

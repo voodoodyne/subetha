@@ -36,7 +36,7 @@ public class Backend extends HttpServlet
 	 */
 	static Backend singleton;
 	
-	/** Stateless ession EJB references are all thread-safe */
+	/** Stateless session EJB references are all thread-safe */
 	Receptionist receptionist;
 	Encryptor encryptor;
 	ListWizard listWizard;

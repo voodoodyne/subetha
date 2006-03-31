@@ -2,6 +2,24 @@
  * Local stylesheet extensions
  ***************************************************************/
 
+/* start bluehaze.css overrides */
+body {
+	font-size: 0.8em;
+}
+
+#bodyText {
+  margin: 0mm 5mm 0 13em;
+}
+
+.sideBox {
+  margin-top: 0mm;
+}
+
+.sideBox a, .sideBox a:hover, .sideBox span {
+  line-height: .75em;
+}
+/* end bluehaze.css overrides */
+
 form th {
 	text-align: right;
 	vertical-align: top;

@@ -77,7 +77,7 @@
 			</div> <!-- footerLHS -->
 			
 			<div>
-				<a href="http://subetha.tigris.org/">Sub-Etha Mail</a> is free software
+				<a href="http://subetha.tigris.org/">SubEtha Mail</a> is free software
 			</div>
 			
 			<div>

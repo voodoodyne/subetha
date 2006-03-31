@@ -25,20 +25,22 @@ import org.hibernate.usertype.UserType;
  * <ul>
  *   <li>The type must be immutable.</li>
  *   <li>The type must implement a toString() method.</li>
- *   <li>
- *     The type must have a static valueOf(String) method that
- *     can reconstitute an object from the toString() value.
- *   </li>
+ *   <li>The type must have a public static valueOf(String) method that
+ *       will convert the String back into the object type.</li>
  *   <li>The object must be serializable.</li>
  * </ul>
  * 
  * <p>The type is stored in two String columns, the first
  * stores the classname and the second stores the toString() value.</p>
  * 
- * <p>Noteably, this can be used to store any java primitive type or
- * Enum.</p>
+ * <p>Noteably, this can be used to store any java primitive type 
+ * or Enum.  Technically java.lang.Character is missing the valueOf(String)
+ * method but we handle that case specially.</p>
  * 
- * <p>The method comments are stripped from UserType.</p>
+ * <p>When this type is cached in the 2nd-level cache, the materialized
+ * object is stored, eliminating the need for String conversion.</p>
+ * 
+ * <p>The method comments are copied from UserType.</p>
  * 
  * @author Jeff Schnitzer
  */
@@ -122,6 +124,10 @@ public class AnyImmutableType implements UserType
 			if (clazz.equals(String.class))
 			{
 				return value;
+			}
+			else if (clazz.equals(Character.class))
+			{
+				return value.charAt(0);
 			}
 			else
 			{

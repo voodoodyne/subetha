@@ -4,7 +4,7 @@
 	<t:param name="dest" value="home.jsp"/>
 </t:action>
 
-<trim:plain title="Sub-Etha Mail">
+<trim:plain title="SubEtha Mail">
 	<h1>Welcome</h1>
 	<p>
 		You must log in before you can do anything interesting.  To create

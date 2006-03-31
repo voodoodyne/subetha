@@ -37,10 +37,10 @@ import org.subethamail.entity.dao.DAO;
 @SecurityDomain("subetha")
 @PermitAll
 @RunAs("siteAdmin")
-public class ReceptionistEJB implements Receptionist, ReceptionistRemote
+public class ReceptionistBean implements Receptionist, ReceptionistRemote
 {
 	/** */
-	private static Log log = LogFactory.getLog(ReceptionistEJB.class);
+	private static Log log = LogFactory.getLog(ReceptionistBean.class);
 
 	/**
 	 * The set of characters from which randomly generated

@@ -48,10 +48,10 @@ import org.subethamail.entity.dao.DAO;
 @Depends("jboss.j2ee:ear=subetha.ear,jar=entity.jar,name=DAO,service=EJB3")
 @SecurityDomain("subetha")
 @PermitAll
-public class EncryptorService implements Encryptor, EncryptorManagement
+public class EncryptorBean implements Encryptor, EncryptorManagement
 {
 	/** */
-	private static Log log = LogFactory.getLog(EncryptorService.class);
+	private static Log log = LogFactory.getLog(EncryptorBean.class);
 	
 	/**
 	 * The name of the config value that holds the current encryption key.

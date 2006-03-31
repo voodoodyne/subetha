@@ -18,7 +18,7 @@ import org.subethamail.core.queue.i.QueuerRemote;
 @Stateless(name="Queuer")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class QueuerEJB implements Queuer, QueuerRemote
+public class QueuerBean implements Queuer, QueuerRemote
 {
 	/**
 	 * @see Queuer#queueForDelivery(Long)

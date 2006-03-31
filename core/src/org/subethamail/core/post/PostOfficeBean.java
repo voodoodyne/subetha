@@ -38,10 +38,10 @@ import org.subethamail.entity.dao.DAO;
 @Stateless(name="PostOffice")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class PostOfficeEJB implements PostOffice
+public class PostOfficeBean implements PostOffice
 {
 	/** */
-	private static Log log = LogFactory.getLog(PostOfficeEJB.class);
+	private static Log log = LogFactory.getLog(PostOfficeBean.class);
 	
 	/** */
 	static final String FORGOT_PASSWORD_TEMPLATE = "org/subethamail/core/post/forgot_password.vm";

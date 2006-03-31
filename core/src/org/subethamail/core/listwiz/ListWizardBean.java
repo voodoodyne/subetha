@@ -34,10 +34,10 @@ import org.subethamail.core.util.Transmute;
 @Service(name="ListWizard")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class ListWizardService implements ListWizard, ListWizardRemote, BlueprintRegistry
+public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRegistry
 {
 	/** */
-	private static Log log = LogFactory.getLog(ListWizardService.class);
+	private static Log log = LogFactory.getLog(ListWizardBean.class);
 	
 	/** */
 	@EJB Admin admin;

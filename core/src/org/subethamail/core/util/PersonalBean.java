@@ -31,10 +31,10 @@ import org.subethamail.entity.dao.DAO;
  * 
  * @author Jeff Schnitzer
  */
-public class PersonalEJB
+public class PersonalBean
 {
 	/** */
-	private static Log log = LogFactory.getLog(PersonalEJB.class);
+	private static Log log = LogFactory.getLog(PersonalBean.class);
 
 	/** */
 	@Resource protected SessionContext sessionContext;

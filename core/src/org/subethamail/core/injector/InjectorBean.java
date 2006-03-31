@@ -38,10 +38,10 @@ import org.subethamail.entity.dao.DAO;
 @SecurityDomain("subetha")
 @PermitAll
 @RunAs("siteAdmin")
-public class InjectorEJB implements Injector, InjectorRemote
+public class InjectorBean implements Injector, InjectorRemote
 {
 	/** */
-	private static Log log = LogFactory.getLog(InjectorEJB.class);
+	private static Log log = LogFactory.getLog(InjectorBean.class);
 
 	/** */
 	@EJB DAO dao;

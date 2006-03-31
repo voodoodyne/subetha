@@ -25,10 +25,10 @@ import org.subethamail.core.admin.i.CreateMailingListException;
 @Stateless(name="Admin")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class AdminEJB implements Admin, AdminRemote
+public class AdminBean implements Admin, AdminRemote
 {
 	/** */
-	private static Log log = LogFactory.getLog(AdminEJB.class);
+	private static Log log = LogFactory.getLog(AdminBean.class);
 
 	/**
 	 * @see Admin#createMailingList(String, String)

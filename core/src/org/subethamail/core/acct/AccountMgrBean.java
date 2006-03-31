@@ -19,7 +19,7 @@ import org.subethamail.core.acct.i.AccountMgrRemote;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.core.acct.i.Self;
 import org.subethamail.core.post.PostOffice;
-import org.subethamail.core.util.PersonalEJB;
+import org.subethamail.core.util.PersonalBean;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Person;
 
@@ -32,10 +32,10 @@ import org.subethamail.entity.Person;
 @SecurityDomain("subetha")
 @RolesAllowed("user")
 @RunAs("siteAdmin")
-public class AccountMgrEJB extends PersonalEJB implements AccountMgr, AccountMgrRemote
+public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountMgrRemote
 {
 	/** */
-	private static Log log = LogFactory.getLog(AccountMgrEJB.class);
+	private static Log log = LogFactory.getLog(AccountMgrBean.class);
 
 	/**
 	 */

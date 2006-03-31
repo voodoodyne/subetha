@@ -30,10 +30,10 @@ import org.subethamail.entity.MailingList;
 @Service(name="FilterRunner")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class FilterRunnerService implements FilterRunner, FilterRegistry
+public class FilterRunnerBean implements FilterRunner, FilterRegistry
 {
 	/** */
-	private static Log log = LogFactory.getLog(FilterRunnerService.class);
+	private static Log log = LogFactory.getLog(FilterRunnerBean.class);
 
 	/**
 	 * Key is filter classname.  Make sure we have concurrent access.

@@ -18,7 +18,7 @@ import org.subethamail.core.deliv.i.DeliveratorRemote;
 @Stateless(name="Deliverator")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class DeliveratorEJB implements Deliverator, DeliveratorRemote
+public class DeliveratorBean implements Deliverator, DeliveratorRemote
 {
 	/**
 	 * @see Deliverator#deliver(Long, Long)

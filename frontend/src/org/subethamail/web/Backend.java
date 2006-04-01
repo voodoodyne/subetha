@@ -1,9 +1,9 @@
 /*
- * $Id: AbstractFilter.java 86 2006-02-22 03:36:01Z jeff $
- * $URL: https://svn.infohazard.org/blorn/trunk/frontend/src/com/blorn/web/util/AbstractFilter.java $
+ * $Id: AuthAction.java 110 2006-02-28 06:59:40Z jeff $
+ * $URL: https://svn.infohazard.org/blorn/trunk/frontend/src/com/blorn/web/action/AuthAction.java $
  */
 
-package org.subethamail.web.servlet;
+package org.subethamail.web;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -50,6 +50,7 @@ public class Backend extends HttpServlet
 	 * Initialize all the ejb references and make them
 	 * available in the application scope.
 	 */
+	@Override
 	public void init() throws ServletException
 	{
 		try
@@ -65,6 +66,17 @@ public class Backend extends HttpServlet
 		this.getServletContext().setAttribute(KEY, this);
 		
 		singleton = this;
+	}
+
+	/* (non-Javadoc)
+	 * @see javax.servlet.GenericServlet#destroy()
+	 */
+	@Override
+	public void destroy()
+	{
+		this.getServletContext().removeAttribute(KEY);
+		
+		singleton = null;
 	}
 
 	/** */

@@ -5,10 +5,15 @@
 
 package org.subethamail.core.queue;
 
+import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.jms.JMSException;
 
 import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.mdb.ProducerManager;
+import org.jboss.ejb3.mdb.ProducerObject;
 import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.queue.i.QueuerRemote;
 
@@ -20,12 +25,28 @@ import org.subethamail.core.queue.i.QueuerRemote;
 @RolesAllowed("siteAdmin")
 public class QueuerBean implements Queuer, QueuerRemote
 {
+	@Resource(mappedName=Inbound.JNDI_NAME) Inbound inbound;
+	@Resource(mappedName=Outbound.JNDI_NAME) Outbound outbound;
+	
 	/**
 	 * @see Queuer#queueForDelivery(Long)
 	 */
 	public void queueForDelivery(Long mailId)
 	{
-		
+		try
+		{
+			ProducerManager manager = (ProducerManager)((ProducerObject)inbound).getProducerManager();
+			manager.connect();
+			try
+			{
+				inbound.deliver(mailId);
+			}
+			finally
+			{
+				manager.close();
+			}
+		}
+		catch (JMSException ex) { throw new EJBException(ex); }
 	}
 	
 	/**
@@ -33,7 +54,20 @@ public class QueuerBean implements Queuer, QueuerRemote
 	 */
 	public void queueForDelivery(Long mailId, Long personId)
 	{
-		
+		try
+		{
+			ProducerManager manager = (ProducerManager)((ProducerObject)outbound).getProducerManager();
+			manager.connect();
+			try
+			{
+				outbound.deliver(mailId, personId);
+			}
+			finally
+			{
+				manager.close();
+			}
+		}
+		catch (JMSException ex) { throw new EJBException(ex); }
 	}
 }
 

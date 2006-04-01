@@ -18,9 +18,9 @@ import javax.servlet.http.Cookie;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.security.auth.callback.UsernamePasswordHandler;
+import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
 import org.subethamail.web.security.Security;
-import org.subethamail.web.servlet.Backend;
 
 /**
  * Provides basic authentication services to action subclasses.

@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.CreateMailingListException;
 
 /**

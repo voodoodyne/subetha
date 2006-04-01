@@ -1,5 +1,7 @@
 <%@include file="inc/top_standard.jspf" %>
 
+<t:action type="org.subethamail.web.action.auth.AuthRequired" />
+
 <trim:admin title="Create List">
 	<h1>Create List</h1>
 	

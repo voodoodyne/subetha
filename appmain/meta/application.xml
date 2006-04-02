@@ -28,7 +28,7 @@
 	<module>
 		<web>
 			<web-uri>frontend.war</web-uri>
-			<context-root></context-root>
+			<context-root>/se</context-root>
 		</web>
 	</module>
 

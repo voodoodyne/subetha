@@ -6,16 +6,15 @@
 package org.subethamail.rtest;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.acct.i.Self;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.PersonInfoMixin;
 import org.subethamail.rtest.util.PersonMixin;
 import org.subethamail.rtest.util.Smtp;
+import org.subethamail.rtest.util.SubEthaTestCase;
 
 import com.dumbster.smtp.SimpleSmtpServer;
 
@@ -24,7 +23,7 @@ import com.dumbster.smtp.SimpleSmtpServer;
  * 
  * @author Jeff Schnitzer
  */
-public class EmailAddressTest extends TestCase
+public class EmailAddressTest extends SubEthaTestCase
 {
 	/** */
 	private static Log log = LogFactory.getLog(EmailAddressTest.class);
@@ -48,14 +47,10 @@ public class EmailAddressTest extends TestCase
 	/** */
 	public void testAddEmail() throws Exception
 	{
-		SimpleSmtpServer server = Smtp.start();
-		
 		PersonInfoMixin additional = new PersonInfoMixin();
 		this.pers.getAccountMgr().requestAddEmail(additional.getEmail());
 
-		server.stop();
-		
-		assertEquals(1, server.getReceivedEmailSize());
+		assertEquals(1, this.smtp.getReceivedEmailSize());
 	}
 	
 	/** */

@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.ejb.Local;
+import javax.mail.internet.InternetAddress;
 
-import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.CreateMailingListException;
 
 /**
@@ -36,5 +36,5 @@ public interface ListWizard
 	 * 
 	 * @param blueprint is the id of a blueprint object from getBlueprints().
 	 */
-	public Long createMailingList(String address, String url, Collection<String> initialOwners, String blueprintId) throws CreateMailingListException;
+	public Long createMailingList(String address, String url, Collection<InternetAddress> initialOwners, String blueprintId) throws CreateMailingListException;
 }

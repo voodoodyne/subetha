@@ -26,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.core.post.i.MailType;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.dao.DAO;
@@ -42,10 +43,6 @@ public class PostOfficeBean implements PostOffice
 {
 	/** */
 	private static Log log = LogFactory.getLog(PostOfficeBean.class);
-	
-	/** */
-	static final String FORGOT_PASSWORD_TEMPLATE = "org/subethamail/core/post/forgot_password.vm";
-	static final String CONFIRM_SUBSCRIBE_TEMPLATE = "org/subethamail/core/post/confirm_subscribe.vm";
 	
 	/** */
 	@Resource(mappedName="java:/Mail") Session mailSession;
@@ -76,22 +73,26 @@ public class PostOfficeBean implements PostOffice
 	/**
 	 * Does the work of sending an email using a velocity template.
 	 */
-	protected void sendMail(String template, VelocityContext vctx, String email) throws MessagingException
+	protected void sendMail(MailType kind, VelocityContext vctx, String email) throws MessagingException
 	{
 		StringWriter writer = new StringWriter(4096);
 		
 		try
 		{
-			Velocity.mergeTemplate(template, "UTF-8", vctx, writer);
+			Velocity.mergeTemplate(kind.getTemplate(), "UTF-8", vctx, writer);
 		}
 		catch (Exception ex)
 		{
-			log.fatal("Error merging " + template);
+			log.fatal("Error merging " + kind.getTemplate());
 			throw new EJBException(ex);
 		}
 		
 		String mailSubject = (String)vctx.get("subject");
 		String mailBody = writer.toString();
+		
+		// If we're in debug mode, annotate the subject.
+		if (log.isDebugEnabled())
+			mailSubject = kind.toString() + " " + mailSubject;
 
 		InternetAddress toAddress = new InternetAddress(email);
 		InternetAddress fromAddress;
@@ -128,7 +129,7 @@ public class PostOfficeBean implements PostOffice
 		vctx.put("addy", addy);
 		vctx.put("list", list);
 		
-		this.sendMail(FORGOT_PASSWORD_TEMPLATE, vctx, addy.getId());
+		this.sendMail(MailType.FORGOT_PASSWORD, vctx, addy.getId());
 	}
 
 	/**
@@ -151,6 +152,6 @@ public class PostOfficeBean implements PostOffice
 		vctx.put("token", token);
 		vctx.put("email", email);
 		
-		this.sendMail(CONFIRM_SUBSCRIBE_TEMPLATE, vctx, email);
+		this.sendMail(MailType.CONFIRM_SUBSCRIBE, vctx, email);
 	}
 }

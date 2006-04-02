@@ -6,7 +6,6 @@
 package org.subethamail.rtest;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
@@ -14,13 +13,14 @@ import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.acct.i.Self;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.PersonMixin;
+import org.subethamail.rtest.util.SubEthaTestCase;
 
 /**
  * Tests for user account manipulation.
  * 
  * @author Jeff Schnitzer
  */
-public class AccountTest extends TestCase
+public class AccountTest extends SubEthaTestCase
 {
 	/** */
 	private static Log log = LogFactory.getLog(AccountTest.class);

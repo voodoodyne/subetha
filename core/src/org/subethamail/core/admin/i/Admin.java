@@ -8,6 +8,7 @@ package org.subethamail.core.admin.i;
 import java.util.Collection;
 
 import javax.ejb.Local;
+import javax.mail.internet.InternetAddress;
 
 import org.subethamail.common.NotFoundException;
 
@@ -32,7 +33,7 @@ public interface Admin
 	 * 
 	 * @throws CreateMailingListException if the address or url are already in use.
 	 */
-	public Long createMailingList(String address, String url, Collection<String> initialOwners) throws CreateMailingListException;
+	public Long createMailingList(String address, String url, Collection<InternetAddress> initialOwners) throws CreateMailingListException;
 	
 	/**
 	 * Finds a person's id if the user exists, or creates a user account and

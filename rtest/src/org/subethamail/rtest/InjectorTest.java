@@ -9,7 +9,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
@@ -17,11 +16,12 @@ import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.rtest.util.Samples;
+import org.subethamail.rtest.util.SubEthaTestCase;
 
 /**
  * @author Jeff Schnitzer
  */
-public class InjectorTest extends TestCase
+public class InjectorTest extends SubEthaTestCase
 {
 	/** */
 	private static Log log = LogFactory.getLog(InjectorTest.class);

@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -60,9 +61,9 @@ public class AdminBean implements Admin, AdminRemote
 	protected Random randomizer = new Random();
 	
 	/**
-	 * @see Admin#createMailingList(String, String)
+	 * @see Admin#createMailingList(String, String, Collection)
 	 */
-	public Long createMailingList(String address, String url, Collection<String> initialOwners) throws CreateMailingListException
+	public Long createMailingList(String address, String url, Collection<InternetAddress> initialOwners) throws CreateMailingListException
 	{
 		//TODO
 		

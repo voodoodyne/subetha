@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
+import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -80,7 +81,7 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 	/**
 	 * @see ListWizard#createMailingList(String, String, Collection, String)
 	 */
-	public Long createMailingList(String address, String url, Collection<String> initialOwners, String blueprintId) throws CreateMailingListException
+	public Long createMailingList(String address, String url, Collection<InternetAddress> initialOwners, String blueprintId) throws CreateMailingListException
 	{
 		Blueprint blue = this.blueprints.get(blueprintId);
 

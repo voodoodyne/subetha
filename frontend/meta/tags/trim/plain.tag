@@ -2,8 +2,8 @@
 
 <%@ attribute name="title" required="true" %>
 
-<trim:base title="${title}">
+<trim:header title="${title}">
 	<div id="bodyText">
 		<jsp:doBody/>
 	</div> <!-- bodyText -->
-</trim:base>
+</trim:header>

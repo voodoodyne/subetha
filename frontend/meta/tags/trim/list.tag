@@ -3,7 +3,7 @@
 <%@ attribute name="title" required="true" %>
 <%@ attribute name="listId" required="true" %>
 
-<trim:base title="${title}">
+<trim:header title="${title}">
 	<div class="sideBox LHS">
 		<div>List Menu</div>
 		<a href="list.jsp?listId=${listId}">&rsaquo; List Overivew</a>
@@ -23,4 +23,4 @@
 	<div id="bodyText">
 		<jsp:doBody/>
 	</div> <!-- bodyText -->
-</trim:base>
+</trim:header>

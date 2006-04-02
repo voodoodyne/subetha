@@ -2,7 +2,7 @@
 
 <%@ attribute name="title" required="true" %>
 
-<trim:base title="${title}">
+<trim:header title="${title}">
 	<div class="sideBox LHS">
 		<div>Site Admin Menu</div>
 		<a href="site_status.jsp">&rsaquo; Site Status</a>
@@ -13,4 +13,4 @@
 	<div id="bodyText">
 		<jsp:doBody/>
 	</div> <!-- bodyText -->
-</trim:base>
+</trim:header>

@@ -9,6 +9,8 @@ import java.util.Collection;
 
 import javax.ejb.Local;
 
+import org.subethamail.common.NotFoundException;
+
 /**
  * Administrative interface for managing the site.
  * 
@@ -31,4 +33,34 @@ public interface Admin
 	 * @throws CreateMailingListException if the address or url are already in use.
 	 */
 	public Long createMailingList(String address, String url, Collection<String> initialOwners) throws CreateMailingListException;
+	
+	/**
+	 * Finds a person's id if the user exists, or creates a user account and
+	 * returns the new person's id.  If the user already exists, the name
+	 * parameter is ignored.
+	 * 
+	 * If a user is created, the password will be random.
+	 * 
+	 * @param email is the address of the person to look for (or create)
+	 * @param name will be ignored if the person already exists
+	 * 
+	 * @return the id of the person with that email, which may have just
+	 *  now been created.
+	 */
+	public Long establishPerson(String email, String name);
+	
+	/**
+	 * Just like the other version, but allows the password to be set.  If
+	 * the user already exists, password is ignored.
+	 * 
+	 * @param password can be null to get a random password
+	 * 
+	 * @see Admin#establishPerson(String, String)
+	 */
+	public Long establishPerson(String email, String name, String password);
+	
+	/**
+	 * Sets whether or not the person is a site admin.
+	 */
+	public void setSiteAdmin(Long personId, boolean value) throws NotFoundException;
 }

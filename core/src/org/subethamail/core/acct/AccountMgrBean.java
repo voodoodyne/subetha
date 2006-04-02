@@ -61,7 +61,8 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		return new Self(
 				me.getId(),
 				me.getName(),
-				addresses
+				addresses,
+				me.isSiteAdmin()
 			);
 	}
 	

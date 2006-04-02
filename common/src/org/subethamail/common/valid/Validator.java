@@ -101,20 +101,9 @@ public class Validator
 			if (log.isDebugEnabled()) log.debug("@ missing: " + email);
 			return false;
 		}
-		
-		if (site.indexOf('.') < 0){
-			if (log.isDebugEnabled()) log.debug(". missing: " + email);
-			return false;
-		}
-		
+
 		if (site.startsWith(".") || site.endsWith(".")){
 			if (log.isDebugEnabled()) log.debug("cannot start or end with '.': " + email);
-			return false;
-		}
-		
-		// smallest site name could be "a.bb"
-		if (site.length() < 4){
-			if (log.isDebugEnabled()) log.debug("site too short: " + email);
 			return false;
 		}
 		

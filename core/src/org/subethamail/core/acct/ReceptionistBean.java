@@ -7,7 +7,6 @@ package org.subethamail.core.acct;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
@@ -43,20 +42,6 @@ public class ReceptionistBean implements Receptionist, ReceptionistRemote
 	private static Log log = LogFactory.getLog(ReceptionistBean.class);
 
 	/**
-	 * The set of characters from which randomly generated
-	 * passwords will be obtained.
-	 */
-	protected static final String PASSWORD_GEN_CHARS =
-		"abcdefghijklmnopqrstuvwxyz" +
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
-		"0123456789";
-	
-	/**
-	 * The length of randomly generated passwords.
-	 */
-	protected static final int PASSWORD_GEN_LENGTH = 6;
-	
-	/**
 	 * A known prefix so we know if decryption worked properly
 	 */
 	private static final String SUBSCRIBE_TOKEN_PREFIX = "sub";
@@ -65,11 +50,6 @@ public class ReceptionistBean implements Receptionist, ReceptionistRemote
 	@EJB DAO dao;
 	@EJB PostOffice postOffice;
 	@EJB Encryptor encryptor;
-	
-	/**
-	 * For generating random passwords.
-	 */
-	protected Random randomizer = new Random();
 	
 	/**
 	 * @see Receptionist#requestSubscription(String, Long, String)
@@ -123,22 +103,5 @@ public class ReceptionistBean implements Receptionist, ReceptionistRemote
 		
 		// TODO
 		this.postOffice.sendPassword(null, null);
-	}
-	
-	/**
-	 * @return a valid password.
-	 */
-	protected String generateRandomPassword()
-	{
-		StringBuffer gen = new StringBuffer(PASSWORD_GEN_LENGTH);
-		
-		for (int i=0; i<PASSWORD_GEN_LENGTH; i++)
-		{
-			int which = (int)(PASSWORD_GEN_CHARS.length() * randomizer.nextDouble());
-			
-			gen.append(PASSWORD_GEN_CHARS.charAt(which));
-		}
-		
-		return gen.toString();
 	}
 }

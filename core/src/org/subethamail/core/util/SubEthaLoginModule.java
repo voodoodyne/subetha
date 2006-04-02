@@ -103,7 +103,7 @@ public class SubEthaLoginModule extends UsernamePasswordLoginModule
 		{
 			EmailAddress addy = dao.findEmailAddress(email);
 			
-			if (addy.getPerson().isAdmin())
+			if (addy.getPerson().isSiteAdmin())
 				this.roles = SITE_ADMIN_ROLES;
 			else
 				this.roles = USER_ROLES;

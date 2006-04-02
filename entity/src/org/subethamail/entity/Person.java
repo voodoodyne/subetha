@@ -126,13 +126,13 @@ public class Person implements Serializable, Comparable
 	}
 
 	/** */
-	public boolean isAdmin()
+	public boolean isSiteAdmin()
 	{
 		return this.siteAdmin;
 	}
 
 	/** */
-	public void setAdmin(boolean value)
+	public void setSiteAdmin(boolean value)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Setting admin flag of " + this + " to " + value);

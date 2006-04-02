@@ -12,6 +12,7 @@ import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
+import org.subethamail.entity.Person;
 
 /**
  * DAO interface to all persisted objects.  Use this EJB instead
@@ -86,5 +87,10 @@ public interface DAO
 	 * @return the mailing list with the specified id
 	 */
 	public MailingList findMailingList(Long id) throws NotFoundException;
+
+	/**
+	 * @return the identified person.
+	 */
+	public Person findPerson(Long personId) throws NotFoundException;
 
 }

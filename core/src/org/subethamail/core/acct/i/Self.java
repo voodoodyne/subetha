@@ -14,8 +14,10 @@ package org.subethamail.core.acct.i;
  */
 public class Self extends PersonData
 {
-	/** */
 	// TODO:  add list of subscriptions
+
+	/** */
+	boolean siteAdmin;
 
 	/**
 	 */
@@ -25,10 +27,18 @@ public class Self extends PersonData
 	 */
 	public Self(Long id, 
 				String name,
-				String[] emailAddresses)
+				String[] emailAddresses,
+				boolean siteAdmin)
 	{
 		super(id, name, emailAddresses);
 		
+		this.siteAdmin = siteAdmin;
+	}
+
+	/** */
+	public boolean isSiteAdmin()
+	{
+		return this.siteAdmin;
 	}
 	
 }

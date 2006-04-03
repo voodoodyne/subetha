@@ -6,7 +6,6 @@
 package org.subethamail.core.listwiz;
 
 import java.net.URL;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -80,9 +79,9 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 	}
 
 	/**
-	 * @see ListWizard#createMailingList(InternetAddress, URL, String, Collection, String)
+	 * @see ListWizard#createMailingList(InternetAddress, URL, String, InternetAddress[], String)
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, Collection<InternetAddress> initialOwners, String blueprintId) throws CreateMailingListException
+	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws CreateMailingListException
 	{
 		Blueprint blue = this.blueprints.get(blueprintId);
 

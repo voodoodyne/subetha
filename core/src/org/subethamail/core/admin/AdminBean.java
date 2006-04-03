@@ -6,7 +6,6 @@
 package org.subethamail.core.admin;
 
 import java.net.URL;
-import java.util.Collection;
 import java.util.Random;
 
 import javax.annotation.EJB;
@@ -66,9 +65,9 @@ public class AdminBean implements Admin, AdminRemote
 	protected Random randomizer = new Random();
 	
 	/**
-	 * @see Admin#createMailingList(InternetAddress, URL, String, Collection)
+	 * @see Admin#createMailingList(InternetAddress, URL, String, InternetAddress[])
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, Collection<InternetAddress> initialOwners) throws CreateMailingListException
+	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws CreateMailingListException
 	{
 		// TODO:  consider whether or not we should enforce any formatting of
 		// the url here.  Seems like that's a job for the web front end?
@@ -100,7 +99,7 @@ public class AdminBean implements Admin, AdminRemote
 		
 		for (InternetAddress ownerAddress: initialOwners)
 		{
-			EmailAddress ea = this.internalEstablishPerson(ownerAddress, null);
+			EmailAddress ea = this.establishEmailAddress(ownerAddress, null);
 			Subscription sub = new Subscription(ea.getPerson(), list, ea, null);
 			
 			this.dao.persist(sub);
@@ -139,13 +138,13 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public Long establishPerson(InternetAddress address, String password)
 	{
-		return this.internalEstablishPerson(address, password).getPerson().getId();
+		return this.establishEmailAddress(address, password).getPerson().getId();
 	}
 
 	/**
-	 * @see Admin#establishPerson(InternetAddress, String)
+	 * Establishes the email address and the person entity.
 	 */
-	protected EmailAddress internalEstablishPerson(InternetAddress address, String password)
+	protected EmailAddress establishEmailAddress(InternetAddress address, String password)
 	{
 		try
 		{
@@ -158,7 +157,11 @@ public class AdminBean implements Admin, AdminRemote
 			if (password == null)
 				password = this.generateRandomPassword();
 			
-			Person p = new Person(password, address.getPersonal());
+			String personal = address.getPersonal();
+			if (personal == null)
+				personal = "";
+			
+			Person p = new Person(password, personal);
 			EmailAddress e = new EmailAddress(p, address.getAddress());
 			p.addEmailAddress(e);
 			

@@ -3,7 +3,7 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/blog/i/PersonData.java $
  */
 
-package org.subethamail.core.listwiz.i;
+package org.subethamail.core.admin.i;
 
 import java.io.Serializable;
 

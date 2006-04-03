@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 
 import org.subethamail.core.acct.i.Receptionist;
 import org.subethamail.core.admin.i.Encryptor;
-import org.subethamail.core.listwiz.i.ListWizard;
+import org.subethamail.core.admin.i.ListWizard;
 
 /**
  * Singleton which provides access to the backend EJBs.  

@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.listwiz.i.BlueprintData;
+import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.plugin.i.Blueprint;
 
 

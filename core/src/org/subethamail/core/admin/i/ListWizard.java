@@ -3,7 +3,7 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/recep/i/Receptionist.java $
  */
 
-package org.subethamail.core.listwiz.i;
+package org.subethamail.core.admin.i;
 
 import java.net.URL;
 import java.util.List;
@@ -11,8 +11,6 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 
-import org.subethamail.core.admin.i.Admin;
-import org.subethamail.core.admin.i.CreateMailingListException;
 
 /**
  * Administrative interface for managing the site.

@@ -3,7 +3,7 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/recep/ReceptionistEJB.java $
  */
 
-package org.subethamail.core.listwiz;
+package org.subethamail.core.admin;
 
 import java.net.URL;
 import java.util.List;
@@ -19,10 +19,10 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.admin.i.Admin;
+import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.admin.i.CreateMailingListException;
-import org.subethamail.core.listwiz.i.BlueprintData;
-import org.subethamail.core.listwiz.i.ListWizard;
-import org.subethamail.core.listwiz.i.ListWizardRemote;
+import org.subethamail.core.admin.i.ListWizard;
+import org.subethamail.core.admin.i.ListWizardRemote;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.core.plugin.i.BlueprintRegistry;
 import org.subethamail.core.util.Transmute;

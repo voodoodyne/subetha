@@ -5,6 +5,8 @@
 
 package org.subethamail.core.lists.i;
 
+import java.net.URL;
+
 import javax.ejb.Local;
 
 import org.subethamail.common.NotFoundException;
@@ -21,7 +23,12 @@ public interface ListMgr
 	public static final String JNDI_NAME = "subetha/ListMgr/local";
 
 	/**
-	 * Gets some data about a mailing list.  Anyone can call this method.
+	 * Finds the id for a particular list URL.  No access control.
+	 */
+	public Long lookup(URL url) throws NotFoundException;
+	
+	/**
+	 * Gets some data about a mailing list.  No access control.
 	 */
 	public MailingListData getMailingList(Long id) throws NotFoundException;
 }

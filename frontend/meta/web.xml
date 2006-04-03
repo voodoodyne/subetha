@@ -28,4 +28,14 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>ListServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.ListServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ListServlet</servlet-name>
+		<url-pattern>/list/*</url-pattern>
+	</servlet-mapping>
+	
 </web-app>

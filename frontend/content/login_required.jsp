@@ -1,4 +1,4 @@
-<%@include file="inc/top_standard.jspf" %>
+<%@include file="/inc/top_standard.jspf" %>
 
 <trim:headerless title="Log In First">
 	<h1>Log In First</h1>
@@ -10,6 +10,6 @@
 		you must have cookies enabled to use this site.
 	</p>
 	
-	<%@include file="inc/login_form.jspf" %>
+	<%@include file="/inc/login_form.jspf" %>
 </trim:headerless>
 

@@ -13,14 +13,14 @@
 
 <p>
 	Would you like to have your password 
-	<c:url var="emailUrl" value="pw_forgot.jsp">
+	<c:url var="emailUrl" value="/pw_forgot.jsp">
 		<c:param name="email" value="${loginEmail}" />
 	</c:url>
 	<a href="${emailUrl}">sent to your email address</a>?
 </p>
 
-
-<form action="login_submit.jsp" method="post">
+<c:url var="loginUrl" value="login_submit.jsp" />
+<form action="${loginUrl}" method="post">
 	<input type="hidden" name="dest" value="<c:out value="${loginDest}"/>"/>
 	
 	<div class="form">

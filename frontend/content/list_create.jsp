@@ -1,11 +1,11 @@
-<%@include file="inc/top_standard.jspf" %>
+<%@include file="/inc/top_standard.jspf" %>
 
 <t:action type="org.subethamail.web.action.auth.AuthRequired" />
 
 <trim:admin title="Create List">
 	<h1>Create List</h1>
 	
-	<form action="list_create_submit.jsp" method="post">
+	<form action="<c:url value="/list_create_submit.jsp"/>" method="post">
 	
 		<table>
 			<tr>

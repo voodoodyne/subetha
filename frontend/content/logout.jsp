@@ -1,4 +1,4 @@
-<%@include file="inc/taglibs.jspf" %>
+<%@include file="/inc/taglibs.jspf" %>
 <%-- Does NOT include the standard top, which would trigger an autologin --%>
 
 <t:action var="logout" type="org.subethamail.web.action.auth.Logout"/>
@@ -9,13 +9,13 @@
 	
 	<p>
 		You are now logged out.  If you would like to log in again,
-		<a href="index.jsp">click here</a>.
+		<a href="<c:url value="/index.jsp"/>">click here</a>.
 	</p>
 	
 	<c:if test="${logout.autoLoginEnabled}">
 		<h2>Auto-Login Enabled</h2>
 		
-		<form action="stop_auto_login.jsp" method="get">
+		<form action="<c:url value="/stop_auto_login.jsp"/>" method="get">
 			<p>
 				You have enabled auto-login by checking the "remember me" box.  If
 				you would like to disable this behavior, click

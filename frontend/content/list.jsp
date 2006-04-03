@@ -1,9 +1,12 @@
-<%@include file="inc/top_standard.jspf" %>
+<%@include file="/inc/top_standard.jspf" %>
 
 <t:action var="list" type="org.subethamail.web.action.GetList" />
 
-<trim:list title="announce@happyhour.com" listId="${param.listId}">
-	<h1>announce@happyhour.com</h1>
+<trim:list title="${list.email}" listId="${list.id}">
+	<h1><c:out value="${list.name}" /></h1>
+	<h2><c:out value="${list.email}" /></h2>
+	
+	<p><c:out value="${list.description}" /></p>
 	
 	<p>
 		Public overview of the mailing list.  The long description

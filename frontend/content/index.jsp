@@ -1,7 +1,9 @@
-<%@include file="inc/top_standard.jspf" %>
+<%@include file="/inc/top_standard.jspf" %>
+
+<c:url var="homeUrl" value="/home.jsp"/>
 
 <t:action type="org.subethamail.web.action.auth.AuthRedirect">
-	<t:param name="dest" value="home.jsp"/>
+	<t:param name="dest" value="${homeUrl}"/>
 </t:action>
 
 <trim:plain title="SubEtha Mail">

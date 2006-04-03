@@ -1,4 +1,4 @@
-<%@include file="inc/top_standard.jspf" %>
+<%@include file="/inc/top_standard.jspf" %>
 
 <trim:admin title="Site Status">
 	<h1>Site Status</h1>

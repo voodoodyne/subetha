@@ -9,9 +9,9 @@
 	<head>
 		<title>${title}</title>
 		
-		<link rel="stylesheet" type="text/css" href="css/bluehaze.css" />
-		<link rel="stylesheet" type="text/css" href="css/color-scheme.css" />
-		<link rel="stylesheet" type="text/css" href="css/subetha.css" />
+		<link rel="stylesheet" type="text/css" href="<c:url value="/css/bluehaze.css"/>" />
+		<link rel="stylesheet" type="text/css" href="<c:url value="/css/color-scheme.css"/>" />
+		<link rel="stylesheet" type="text/css" href="<c:url value="/css/subetha.css"/>" />
   	</head>
 	
 	<body>

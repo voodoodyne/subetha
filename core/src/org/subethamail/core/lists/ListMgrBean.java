@@ -5,6 +5,8 @@
 
 package org.subethamail.core.lists;
 
+import java.net.URL;
+
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -42,6 +44,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	@EJB DAO dao;
 
 	/**
+	 * @see ListMgr#lookup(URL)
+	 */
+	@PermitAll
+	public Long lookup(URL url) throws NotFoundException
+	{
+		return this.dao.findMailingList(url).getId();
+	}
+	
+	/**
 	 * @see ListMgr#getMailingList(Long)
 	 */
 	@PermitAll
@@ -50,5 +61,5 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		MailingList ml = this.dao.findMailingList(id);
 		return Transmute.mailingList(ml);
 	}
-	
+
 }

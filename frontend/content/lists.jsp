@@ -1,4 +1,4 @@
-<%@include file="inc/top_standard.jspf" %>
+<%@include file="/inc/top_standard.jspf" %>
 
 <trim:admin title="All Lists">
 	<h1>All Lists</h1>

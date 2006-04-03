@@ -21,13 +21,13 @@ public class GetList extends AuthAction
 	private static Log log = LogFactory.getLog(GetList.class);
 	
 	/** */
-	Long id;
-	public Long getId() { return this.id; }
-	public void setId(Long value) { this.id = value; }
+	Long listId;
+	public Long getListId() { return this.listId; }
+	public void setListId(Long value) { this.listId = value; }
 		
 	/** */
 	public void execute() throws Exception
 	{
-		this.getCtx().setModel(Backend.instance().getListMgr().getMailingList(this.id));
+		this.getCtx().setModel(Backend.instance().getListMgr().getMailingList(this.listId));
 	}
 }

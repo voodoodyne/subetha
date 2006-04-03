@@ -6,18 +6,50 @@
 <trim:header title="${title}">
 	<div class="sideBox LHS">
 		<div>List Menu</div>
-		<a href="list.jsp?listId=${listId}">&rsaquo; List Overivew</a>
-		<a href="list_archives.jsp?listId=${listId}">&rsaquo; Archives</a>
-		<a href="list_subscribers.jsp?listId=${listId}">&rsaquo; Subscribers</a>
+		
+		<c:url var="listUrl" value="list.jsp">
+			<c:param name="listId" value="${listId}"/>
+		</c:url>
+		<a href="${listUrl}">&rsaquo; List Overivew</a>
+		
+		<c:url var="listArchivesUrl" value="list_archives.jsp">
+			<c:param name="listId" value="${listId}"/>
+		</c:url>
+		<a href="${listArchivesUrl}">&rsaquo; Archives</a>
+		
+		<c:url var="listSubscribersUrl" value="list_subscribers.jsp">
+			<c:param name="listId" value="${listId}"/>
+		</c:url>
+		<a href="${listSubscribersUrl}">&rsaquo; Subscribers</a>
 	</div> <!-- sideBox LHS -->
 	
 	<div class="sideBox LHS">
 		<div>List Admin Menu</div>
-		<a href="list_settings.jsp?listId=${listId}">&rsaquo; Settings</a>
-		<a href="list_filters.jsp?listId=${listId}">&rsaquo; Filters</a>
-		<a href="list_roles.jsp?listId=${listId}">&rsaquo; Roles</a>
-		<a href="list_held_subs.jsp?listId=${listId}">&rsaquo; Held Subscriptions</a>
-		<a href="list_held_msgs.jsp?listId=${listId}">&rsaquo; Held Messages</a>
+		
+		<c:url var="listSettingsUrl" value="list_settings.jsp">
+			<c:param name="listId" value="${listId}"/>
+		</c:url>
+		<a href="${listSettingsUrl}">&rsaquo; Settings</a>
+		
+		<c:url var="listFiltersUrl" value="list_filters.jsp">
+			<c:param name="listId" value="${listId}"/>
+		</c:url>
+		<a href="${listFiltersUrl}">&rsaquo; Filters</a>
+		
+		<c:url var="listRolesUrl" value="list_roles.jsp">
+			<c:param name="listId" value="${listId}"/>
+		</c:url>
+		<a href="${listRolesUrl}">&rsaquo; Roles</a>
+		
+		<c:url var="listHeldSubsUrl" value="list_held_subs.jsp">
+			<c:param name="listId" value="${listId}"/>
+		</c:url>
+		<a href="${listHeldSubsUrl}">&rsaquo; Held Subscriptions</a>
+		
+		<c:url var="listHeldMsgsUrl" value="list_held_msgs.jsp">
+			<c:param name="listId" value="${listId}"/>
+		</c:url>
+		<a href="${listHeldMsgsUrl}">&rsaquo; Held Messages</a>
 	</div> <!-- sideBox LHS -->
 	
 	<div id="bodyText">

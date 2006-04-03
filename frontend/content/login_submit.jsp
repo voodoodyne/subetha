@@ -1,11 +1,11 @@
-<%@include file="inc/top_standard.jspf" %>
+<%@include file="/inc/top_standard.jspf" %>
 
 <t:action var="loginModel" type="org.subethamail.web.action.auth.Login"/>
 
 <c:if test="${empty loginModel.error}">
 	<c:choose>
 		<c:when test="${empty loginModel.dest}">
-			<c:redirect url="home.jsp"/>
+			<c:redirect url="/home.jsp"/>
 		</c:when>
 		<c:otherwise>
 			<c:redirect url="${loginModel.dest}"/>
@@ -21,5 +21,5 @@
 		<c:out value="${loginModel.error}"/>
 	</p>
 	
-	<%@include file="inc/login_form.jspf" %>
+	<%@include file="/inc/login_form.jspf" %>
 </trim:plain>

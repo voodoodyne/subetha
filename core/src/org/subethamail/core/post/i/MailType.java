@@ -22,8 +22,9 @@ package org.subethamail.core.post.i;
  */
 public enum MailType
 {
-	CONFIRM_SUBSCRIBE("org/subethamail/core/post/forgot_password.vm"),
-	FORGOT_PASSWORD("org/subethamail/core/post/confirm_subscribe.vm");
+	NEW_MAILING_LIST("org/subethamail/core/post/new_mailing_list.vm"),
+	CONFIRM_SUBSCRIBE("org/subethamail/core/post/confirm_subscribe.vm"),
+	FORGOT_PASSWORD("org/subethamail/core/post/forgot_password.vm");
 
 	/** */
 	private final String template;

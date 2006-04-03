@@ -67,6 +67,7 @@ public class PostOfficeBean implements PostOffice
 		catch (Exception ex)
 		{
 			log.fatal("Unable to initialize Velocity", ex);
+			throw new RuntimeException(ex);
 		}
 	}
 	
@@ -83,7 +84,7 @@ public class PostOfficeBean implements PostOffice
 		}
 		catch (Exception ex)
 		{
-			log.fatal("Error merging " + kind.getTemplate());
+			log.fatal("Error merging " + kind.getTemplate(), ex);
 			throw new EJBException(ex);
 		}
 		
@@ -153,5 +154,20 @@ public class PostOfficeBean implements PostOffice
 		vctx.put("email", email);
 		
 		this.sendMail(MailType.CONFIRM_SUBSCRIBE, vctx, email);
+	}
+
+	/**
+	 * @see PostOffice#sendOwnerNewMailingList(EmailAddress, MailingList)
+	 */
+	public void sendOwnerNewMailingList(EmailAddress address, MailingList list) throws MessagingException
+	{
+		if (log.isDebugEnabled())
+			log.debug("Sending notification of new mailing list " + list + " to owner " + address);
+		
+		VelocityContext vctx = new VelocityContext();
+		vctx.put("addy", address);
+		vctx.put("list", list);
+		
+		this.sendMail(MailType.NEW_MAILING_LIST, vctx, address.getId());
 	}
 }

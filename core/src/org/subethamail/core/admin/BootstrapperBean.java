@@ -5,8 +5,11 @@
 
 package org.subethamail.core.admin;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -93,7 +96,14 @@ public class BootstrapperBean implements BootstrapperManagement
 	{
 		log.debug("Bootstrapping - establishing default site administrator");
 		
-		Long id = this.admin.establishPerson(DEFAULT_EMAIL, DEFAULT_NAME, DEFAULT_PASSWORD);
+		InternetAddress addy;
+		try
+		{
+			addy = new InternetAddress(DEFAULT_EMAIL, DEFAULT_NAME);
+		}
+		catch (UnsupportedEncodingException ex) { throw new RuntimeException(ex); }
+		
+		Long id = this.admin.establishPerson(addy, DEFAULT_PASSWORD);
 		
 		try
 		{

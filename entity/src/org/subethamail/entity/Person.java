@@ -6,6 +6,9 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +16,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
@@ -50,7 +54,13 @@ public class Person implements Serializable, Comparable
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	Set<EmailAddress> emailAddresses;
+	@MapKey(name="id")
+	Map<String, EmailAddress> emailAddresses;
+	
+	/** TODO: this should probably be a Map of list id to Subscription */
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
+	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	Set<Subscription> subscriptions;
 	
 	/**
 	 */
@@ -66,6 +76,9 @@ public class Person implements Serializable, Comparable
 		// These are validated normally.
 		this.setPassword(password);
 		this.setName(name);
+		
+		this.emailAddresses = new HashMap<String, EmailAddress>();
+		this.subscriptions = new HashSet<Subscription>();
 	}
 	
 	/** */
@@ -141,13 +154,18 @@ public class Person implements Serializable, Comparable
 	}
 	
 	/** */
-	public Set<EmailAddress> getEmailAddresses() { return this.emailAddresses; }
+	public Map<String, EmailAddress> getEmailAddresses() { return this.emailAddresses; }
 	
 	/** */
-	public void setEmailAddresses(Set<EmailAddress> value)
+	public void addEmailAddress(EmailAddress value)
 	{
-		this.emailAddresses = value;
+		this.emailAddresses.put(value.getId(), value);
 	}
+	
+	/** 
+	 * @return all the subscriptions associated with this person
+	 */
+	public Set<Subscription> getSubscriptions() { return this.subscriptions; }
 	
 	/**
 	 * @return true if this person is subscribed to the list

@@ -12,11 +12,10 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.security.SecurityAssociation;
-import org.jboss.security.SimplePrincipal;
-import org.subethamail.core.acct.i.AccountMgr;
 
 /**
+ * Easy way to create a mailing list from a unit test.
+ * 
  * @author Jeff Schnitzer
  */
 public class MailingListMixin extends MailingListInfoMixin
@@ -27,30 +26,21 @@ public class MailingListMixin extends MailingListInfoMixin
 	Long id;
 	List<InternetAddress> initialOwners;
 	
-	/** */
-	public MailingListMixin(AdminMixin adminMixin, PersonInfoMixin personMixin) throws Exception
+	/**
+	 * @param initialOwner can be null to create an ownerless list. 
+	 */
+	public MailingListMixin(AdminMixin adminMixin, InternetAddress initialOwner) throws Exception
 	{
 		super();
 		
-		this.initialOwners = Collections.singletonList(new InternetAddress(personMixin.getEmail()));
+		if (initialOwner == null)
+			this.initialOwners = Collections.EMPTY_LIST;
+		else
+			this.initialOwners = Collections.singletonList(initialOwner);
 		
-		this.id = adminMixin.getAdmin().createMailingList(this.address, this.url, this.initialOwners);
+		this.id = adminMixin.getAdmin().createMailingList(this.address, this.url, this.description, this.initialOwners);
 	}
 	
 	/** */
 	public Long getId() { return this.id; }
-	
-	/** */
-	public void establish()
-	{
-		SecurityAssociation.setPrincipal(new SimplePrincipal(this.email));
-		SecurityAssociation.setCredential(this.password);
-	}
-	
-	/** */
-	public AccountMgr getAccountMgr()
-	{
-		this.establish();
-		return this.accountMgr;
-	}
 }

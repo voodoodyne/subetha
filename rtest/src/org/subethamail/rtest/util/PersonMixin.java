@@ -35,7 +35,7 @@ public class PersonMixin extends PersonInfoMixin
 		Context ctx = new InitialContext();
 		this.accountMgr = (AccountMgr)ctx.lookup(AccountMgrRemote.JNDI_NAME);
 		
-		this.id = adminMixin.getAdmin().establishPerson(this.email, this.name, this.password);
+		this.id = adminMixin.getAdmin().establishPerson(this.address, this.password);
 	}
 	
 	/** */

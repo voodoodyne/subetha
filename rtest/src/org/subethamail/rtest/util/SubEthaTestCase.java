@@ -12,8 +12,6 @@ import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.dumbster.smtp.SimpleSmtpServer;
-
 /**
  * All SubEtha tests require a running smtp server.
  * 

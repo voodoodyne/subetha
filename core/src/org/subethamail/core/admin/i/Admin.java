@@ -5,6 +5,7 @@
 
 package org.subethamail.core.admin.i;
 
+import java.net.URL;
 import java.util.Collection;
 
 import javax.ejb.Local;
@@ -27,28 +28,28 @@ public interface Admin
 	 * Creates a mailing list.  If any of the initial owner addresses
 	 * have not been registered, accounts will be created without confirmation.
 	 * 
-	 * @param address is a valid email address
+	 * @param address contains both the email address and the short textual name of the list
 	 * @param url is a valid list URL, including the /list/ portion.
+	 * @param description is a long description of this list
 	 * @param initialOwners is a list of email addresses.
 	 * 
 	 * @throws CreateMailingListException if the address or url are already in use.
 	 */
-	public Long createMailingList(String address, String url, Collection<InternetAddress> initialOwners) throws CreateMailingListException;
+	public Long createMailingList(InternetAddress address, URL url, String description, Collection<InternetAddress> initialOwners) throws CreateMailingListException;
 	
 	/**
 	 * Finds a person's id if the user exists, or creates a user account and
-	 * returns the new person's id.  If the user already exists, the name
-	 * parameter is ignored.
+	 * returns the new person's id.  If the user already exists, any additional
+	 * personal name information in the address is ignored.
 	 * 
 	 * If a user is created, the password will be random.
 	 * 
-	 * @param email is the address of the person to look for (or create)
-	 * @param name will be ignored if the person already exists
+	 * @param address contains both the email addy and name of the user.
 	 * 
 	 * @return the id of the person with that email, which may have just
 	 *  now been created.
 	 */
-	public Long establishPerson(String email, String name);
+	public Long establishPerson(InternetAddress address);
 	
 	/**
 	 * Just like the other version, but allows the password to be set.  If
@@ -56,9 +57,9 @@ public interface Admin
 	 * 
 	 * @param password can be null to get a random password
 	 * 
-	 * @see Admin#establishPerson(String, String)
+	 * @see Admin#establishPerson(InternetAddress)
 	 */
-	public Long establishPerson(String email, String name, String password);
+	public Long establishPerson(InternetAddress address, String password);
 	
 	/**
 	 * Sets whether or not the person is a site admin.

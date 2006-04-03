@@ -5,6 +5,7 @@
 
 package org.subethamail.core.listwiz;
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -79,16 +80,16 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 	}
 
 	/**
-	 * @see ListWizard#createMailingList(String, String, Collection, String)
+	 * @see ListWizard#createMailingList(InternetAddress, URL, String, Collection, String)
 	 */
-	public Long createMailingList(String address, String url, Collection<InternetAddress> initialOwners, String blueprintId) throws CreateMailingListException
+	public Long createMailingList(InternetAddress address, URL url, String description, Collection<InternetAddress> initialOwners, String blueprintId) throws CreateMailingListException
 	{
 		Blueprint blue = this.blueprints.get(blueprintId);
 
 		if (blue == null)
 			throw new IllegalStateException("Blueprint does not exist");
 		
-		Long listId = this.admin.createMailingList(address, url, initialOwners);
+		Long listId = this.admin.createMailingList(address, url, description, initialOwners);
 		
 		blue.configureMailingList(listId);
 		

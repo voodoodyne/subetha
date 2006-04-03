@@ -5,6 +5,8 @@
 
 package org.subethamail.rtest.util;
 
+import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -19,6 +21,7 @@ public class PersonInfoMixin
 	String email;
 	String password;
 	String name;
+	InternetAddress address;
 	
 	/** */
 	public PersonInfoMixin() throws Exception
@@ -34,12 +37,15 @@ public class PersonInfoMixin
 		this.email = "subetha-" + name + "@localhost";
 		
 		this.name = "Test User";
+		
+		this.address = new InternetAddress(this.email, this.name);
 	}
 	
 	/** */
 	public String getEmail() { return this.email; }
 	public String getPassword() { return this.password; }
 	public String getName() { return this.name; }
+	public InternetAddress getAddress() { return this.address; }
 	
 	/** Used to modify credentials */
 	public void setPassword(String value) { this.password = value; }

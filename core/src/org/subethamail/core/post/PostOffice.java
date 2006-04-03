@@ -21,6 +21,12 @@ public interface PostOffice
 {
 	/** */
 	public static final String JNDI_NAME = "subetha/PostOffice/local";
+	
+	/**
+	 * Notifies the user that they are now the pround owner of a
+	 * bouncing new baby mailing list.
+	 */
+	public void sendOwnerNewMailingList(EmailAddress address, MailingList list) throws MessagingException;
 		
 	/**
 	 * Sends a special token that will subscribe a user to a list.

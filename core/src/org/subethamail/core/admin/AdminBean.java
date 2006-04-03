@@ -5,13 +5,14 @@
 
 package org.subethamail.core.admin;
 
+import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Random;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -21,8 +22,11 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
 import org.subethamail.core.admin.i.CreateMailingListException;
+import org.subethamail.core.post.PostOffice;
 import org.subethamail.entity.EmailAddress;
+import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.Subscription;
 import org.subethamail.entity.dao.DAO;
 
 /**
@@ -54,6 +58,7 @@ public class AdminBean implements Admin, AdminRemote
 	
 	/** */
 	@EJB DAO dao;
+	@EJB PostOffice postOffice;
 
 	/**
 	 * For generating random passwords.
@@ -61,39 +66,90 @@ public class AdminBean implements Admin, AdminRemote
 	protected Random randomizer = new Random();
 	
 	/**
-	 * @see Admin#createMailingList(String, String, Collection)
+	 * @see Admin#createMailingList(InternetAddress, URL, String, Collection)
 	 */
-	public Long createMailingList(String address, String url, Collection<InternetAddress> initialOwners) throws CreateMailingListException
+	public Long createMailingList(InternetAddress address, URL url, String description, Collection<InternetAddress> initialOwners) throws CreateMailingListException
 	{
-		//TODO
+		// TODO:  consider whether or not we should enforce any formatting of
+		// the url here.  Seems like that's a job for the web front end?
 		
-		// First make sure we have a safe address and url.  Check
-		// for validity and duplicates.
+		// Make sure address and url are not duplicates
+		boolean dupAddress = false;
+		boolean dupUrl = false;
 		
-		// Then ensure that all inital owners have accounts, and 
-		// build a list of the associated Person objects
+		try
+		{
+			this.dao.findMailingList(address);
+			dupAddress = true;
+		}
+		catch (NotFoundException ex) {}
+		
+		try
+		{
+			this.dao.findMailingList(url);
+			dupUrl = true;
+		}
+		catch (NotFoundException ex) {}
+		
+		if (dupAddress || dupUrl)
+			throw new CreateMailingListException("Mailing list already exists", dupAddress, dupUrl);
 		
 		// Then create the mailing list and attach the owners.
+		MailingList list = new MailingList(address.getAddress(), address.getPersonal(), url.toString(), description);
+		this.dao.persist(list);
 		
-		return null;
+		for (InternetAddress ownerAddress: initialOwners)
+		{
+			EmailAddress ea = this.internalEstablishPerson(ownerAddress, null);
+			Subscription sub = new Subscription(ea.getPerson(), list, ea, null);
+			
+			this.dao.persist(sub);
+			
+			list.getSubscriptions().add(sub);
+			ea.getPerson().getSubscriptions().add(sub);
+			
+			try
+			{
+				this.postOffice.sendOwnerNewMailingList(ea, list);
+			}
+			catch (MessagingException ex)
+			{
+				log.error("Unable to send list owner notification of new list", ex);
+				// Lets propagate the exception and abort everything, this is serious.
+				// At worst someone will get email about a new list that doesn't exist.
+				// Most likely, if javamail will let us send one msg, it will let us
+				// send all of them, so any problem will come from the first msg.
+				throw new RuntimeException(ex);
+			}
+		}
+		
+		return list.getId();
 	}
 
 	/**
-	 * @see Admin#establishPerson(String, String)
+	 * @see Admin#establishPerson(InternetAddress)
 	 */
-	public Long establishPerson(String email, String name)
+	public Long establishPerson(InternetAddress address)
 	{
-		return this.establishPerson(email, name, null);
+		return this.establishPerson(address, null);
 	}
 
 	/**
-	 * @see Admin#establishPerson(String, String, String)
+	 * @see Admin#establishPerson(InternetAddress, String)
 	 */
-	public Long establishPerson(String email, String name, String password)
+	public Long establishPerson(InternetAddress address, String password)
+	{
+		return this.internalEstablishPerson(address, password).getPerson().getId();
+	}
+
+	/**
+	 * @see Admin#establishPerson(InternetAddress, String)
+	 */
+	protected EmailAddress internalEstablishPerson(InternetAddress address, String password)
 	{
 		try
 		{
-			return this.dao.findEmailAddress(email).getPerson().getId();
+			return this.dao.findEmailAddress(address.getAddress());
 		}
 		catch (NotFoundException ex)
 		{
@@ -102,16 +158,14 @@ public class AdminBean implements Admin, AdminRemote
 			if (password == null)
 				password = this.generateRandomPassword();
 			
-			Person p = new Person(password, name);
-			EmailAddress e = new EmailAddress(p, email);
-			p.setEmailAddresses(Collections.singleton(e));
+			Person p = new Person(password, address.getPersonal());
+			EmailAddress e = new EmailAddress(p, address.getAddress());
+			p.addEmailAddress(e);
 			
 			this.dao.persist(p);
 			this.dao.persist(e);
 			
-			// TODO:  send the person an email about their new account
-			
-			return p.getId();
+			return e;
 		}
 	}
 

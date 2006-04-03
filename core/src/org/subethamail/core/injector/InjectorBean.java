@@ -68,7 +68,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		MailingList toList;
 		try
 		{
-			toList = this.dao.findMailingListByAddress(addy.getAddress());
+			toList = this.dao.findMailingList(addy);
 		}
 		catch (NotFoundException ex)
 		{

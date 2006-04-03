@@ -6,6 +6,7 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -40,6 +41,14 @@ import org.subethamail.common.valid.Validator;
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")
 		}
+	),
+	@NamedQuery(
+		name="MailingListByUrl", 
+		query="from MailingList l where l.url = :url",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
 	)
 })
 @Entity
@@ -58,19 +67,19 @@ public class MailingList implements Serializable, Comparable
 	@Column(nullable=false, length=Validator.MAX_LIST_ADDRESS)
 	String address;
 	
-	/** */
-	@Column(nullable=false)
-	String url;
-	
-	@Column(nullable=false)
+	@Column(nullable=false, length=Validator.MAX_LIST_NAME)
 	String name;
 	
-	@Column(nullable=false)
+	/** */
+	@Column(nullable=false, length=Validator.MAX_LIST_URL)
+	String url;
+	
+	@Column(nullable=false, length=Validator.MAX_LIST_DESCRIPTION)
 	String description;
 	
-	/** The default role for new subscribers */
+	/** The default role for new subscribers, could be owner (null) */
 	@OneToOne
-	@JoinColumn(name="defaultRoleId", nullable=false)
+	@JoinColumn(name="defaultRoleId", nullable=true)
 	Role defaultRole;
 	
 	/** */
@@ -94,13 +103,19 @@ public class MailingList implements Serializable, Comparable
 	
 	/**
 	 */
-	public MailingList(String emailAddress)
+	public MailingList(String email, String name, String url, String description)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mailing list");
 		
 		// These are validated normally.
-		this.setAddress(emailAddress);
+		this.setAddress(email);
+		this.setName(name);
+		this.setUrl(url);
+		this.setDescription(description);
+		
+		// Make sure collections start empty
+		this.subscriptions = new HashSet<Subscription>();
 	}
 	
 	/** */
@@ -114,13 +129,30 @@ public class MailingList implements Serializable, Comparable
 	 */
 	public void setAddress(String value)
 	{
-		if (value == null || value.length() > Validator.MAX_LIST_ADDRESS)
+		if (!Validator.validEmail(value))
 			throw new IllegalArgumentException("Invalid list address");
 
 		if (log.isDebugEnabled())
 			log.debug("Setting address of " + this + " to " + value);
 		
 		this.address = value;
+	}
+	
+	/**
+	 */
+	public String getName() { return this.name; }
+	
+	/**
+	 */
+	public void setName(String value)
+	{
+		if (value == null || value.length() == 0 || value.length() > Validator.MAX_LIST_NAME)
+			throw new IllegalArgumentException("Invalid list name");
+
+		if (log.isDebugEnabled())
+			log.debug("Setting name of " + this + " to " + value);
+		
+		this.name = value;
 	}
 	
 	/**
@@ -138,6 +170,23 @@ public class MailingList implements Serializable, Comparable
 			log.debug("Setting url of " + this + " to " + value);
 		
 		this.url = value;
+	}
+	
+	/**
+	 */
+	public String getDescription() { return this.url; }
+	
+	/**
+	 */
+	public void setDescription(String value)
+	{
+		if (value == null || value.length() > Validator.MAX_LIST_DESCRIPTION)
+			throw new IllegalArgumentException("Invalid description");
+
+		if (log.isDebugEnabled())
+			log.debug("Setting description of " + this + " to " + value);
+		
+		this.description = value;
 	}
 	
 	/** 

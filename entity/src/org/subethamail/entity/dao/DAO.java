@@ -5,6 +5,9 @@
 
 package org.subethamail.entity.dao;
 
+import java.net.URL;
+
+import javax.mail.internet.InternetAddress;
 import javax.persistence.LockModeType;
 
 import org.subethamail.common.NotFoundException;
@@ -72,13 +75,6 @@ public interface DAO
 	public EmailAddress findEmailAddress(String address) throws NotFoundException;
 
 	/**
-	 * Finds a mailing list with the specified address.
-	 * 
-	 * @return a readonly MailingList entity
-	 */
-	public MailingList findMailingListByAddress(String address) throws NotFoundException;
-
-	/**
 	 * Tries to find a mail entity which has the specified message id.
 	 */
 	public Mail findMailByMessageId(String msgId) throws NotFoundException;
@@ -87,6 +83,20 @@ public interface DAO
 	 * @return the mailing list with the specified id
 	 */
 	public MailingList findMailingList(Long id) throws NotFoundException;
+
+	/**
+	 * Finds a mailing list with the specified address.
+	 * 
+	 * @return a readonly MailingList entity
+	 */
+	public MailingList findMailingList(InternetAddress address) throws NotFoundException;
+
+	/**
+	 * Finds a mailing list with the specified url
+	 *  
+	 * @return a readonly MailingList entity
+	 */
+	public MailingList findMailingList(URL url) throws NotFoundException;
 
 	/**
 	 * @return the identified person.

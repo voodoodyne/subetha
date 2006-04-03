@@ -5,8 +5,11 @@
 
 package org.subethamail.entity.dao;
 
+import java.net.URL;
+
 import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.mail.internet.InternetAddress;
 import javax.persistence.EntityManager;
 import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
@@ -99,31 +102,6 @@ public class DAOEJB implements DAO
 	}
 
 	/**
-	 * @see DAO#findMailingListByAddress(String)
-	 */
-	public MailingList findMailingListByAddress(String address) throws NotFoundException
-	{
-		if (log.isDebugEnabled())
-			log.debug("Finding MailingList with address " + address);
-		
-		// Normalize out any weird casing in the domain part
-		address = Validator.normalizeEmail(address);
-		
-		Query q = this.em.createNamedQuery("MailingListByAddress");
-		q.setParameter("address", address);
-		
-		try
-		{
-			return (MailingList)q.getSingleResult();
-		}
-		catch (NoResultException ex)
-		{
-			log.debug("Not found");
-			throw new NotFoundException(ex);
-		}
-	}
-
-	/**
 	 * @see DAO#findEmailAddress(String)
 	 */
 	public EmailAddress findEmailAddress(String address) throws NotFoundException
@@ -181,6 +159,50 @@ public class DAOEJB implements DAO
 	}
 
 	/**
+	 * @see DAO#findMailingList(InternetAddress)
+	 */
+	public MailingList findMailingList(InternetAddress address) throws NotFoundException
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding MailingList with address " + address.getAddress());
+		
+		Query q = this.em.createNamedQuery("MailingListByAddress");
+		q.setParameter("address", address.getAddress());
+		
+		try
+		{
+			return (MailingList)q.getSingleResult();
+		}
+		catch (NoResultException ex)
+		{
+			log.debug("Not found");
+			throw new NotFoundException(ex);
+		}
+	}
+
+	/**
+	 * @see DAO#findMailingListByUrl(URL)
+	 */
+	public MailingList findMailingList(URL url) throws NotFoundException
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding MailingList with url " + url);
+		
+		Query q = this.em.createNamedQuery("MailingListByUrl");
+		q.setParameter("url", url.toString());
+		
+		try
+		{
+			return (MailingList)q.getSingleResult();
+		}
+		catch (NoResultException ex)
+		{
+			log.debug("Not found");
+			throw new NotFoundException(ex);
+		}
+	}
+	
+	/**
 	 * @see DAO#findPerson(Long)
 	 */
 	public Person findPerson(Long personId) throws NotFoundException
@@ -195,4 +217,5 @@ public class DAOEJB implements DAO
 		else
 			return p;
 	}
+
 }

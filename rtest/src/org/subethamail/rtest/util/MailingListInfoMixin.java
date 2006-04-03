@@ -5,6 +5,10 @@
 
 package org.subethamail.rtest.util;
 
+import java.net.URL;
+
+import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -16,8 +20,11 @@ public class MailingListInfoMixin
 	/** */
 	private static Log log = LogFactory.getLog(MailingListInfoMixin.class);
 
-	String address;
-	String url;
+	String email;
+	String name;
+	InternetAddress address;
+	URL url;
+	String description;
 	
 	/** */
 	public MailingListInfoMixin() throws Exception
@@ -26,14 +33,19 @@ public class MailingListInfoMixin
 		// looks like:  com.similarity.rtest.PersonInfoMixin@bb0d0d
 		objectId = objectId.substring(objectId.lastIndexOf('@') + 1);
 		
-		String baseName = Long.toString(System.currentTimeMillis(), 36); 
-		String name =  baseName + objectId;
+		this.name = "List Name " + objectId;	// deliberately not very unique
 		
-		this.address = name + "@localhost";
-		this.url = "http://localhost:8080/list/" + name;
+		String baseEmail = Long.toString(System.currentTimeMillis(), 36) + objectId;
+		
+		this.email = baseEmail + "@localhost";
+		this.url = new URL("http://localhost:8080/list/" + name);
+		this.address = new InternetAddress(this.email, this.name);
+		this.description = "Test list description";
 	}
 	
 	/** */
-	public String getAddress() { return this.address; }
-	public String getUrl() { return this.url; }
+	public String getEmail() { return this.email; }
+	public URL getUrl() { return this.url; }
+	public InternetAddress getAddress() { return this.address; }
+	public String getDescription() { return this.description; }
 }

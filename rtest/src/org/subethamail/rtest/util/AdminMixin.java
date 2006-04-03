@@ -55,15 +55,6 @@ public class AdminMixin
         SecurityAssociation.setCredential(PASSWORD);
 	}
 	
-	/**
-	 * Get rid of all credentials
-	 */
-	public void clearCredentials()
-	{
-        SecurityAssociation.setPrincipal(null);
-        SecurityAssociation.setCredential(null);
-	}
-	
 	/** */
 	public Admin getAdmin() throws Exception
 	{

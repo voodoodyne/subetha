@@ -50,6 +50,13 @@ public class Subscription implements Serializable, Comparable
 	@JoinColumn(name="listId", nullable=false)
 	MailingList mailingList;
 	
+	/**
+	 * A value of null means that mail should not be delivered. 
+	 */
+	@ManyToOne
+	@JoinColumn(name="deliverToId", nullable=true)
+	EmailAddress deliverTo;
+	
 	/** 
 	 * The role of this subscription.  Null indicates the Owner role.
 	 * The reason for choosing null is so that if we ever expand the
@@ -69,7 +76,7 @@ public class Subscription implements Serializable, Comparable
 	
 	/**
 	 */
-	public Subscription(Person person, MailingList list, Role role)
+	public Subscription(Person person, MailingList list, EmailAddress deliverTo, Role role)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new Subscription");
@@ -78,6 +85,7 @@ public class Subscription implements Serializable, Comparable
 		this.mailingList = list;
 		
 		// This involves some validation
+		this.setDeliverTo(deliverTo);
 		this.setRole(role);
 		
 		// Notes should always start out empty
@@ -92,6 +100,22 @@ public class Subscription implements Serializable, Comparable
 	
 	/** */
 	public MailingList getMailingList() { return this.mailingList; }
+	
+	/**
+	 * A value of null indicates that mail should not be delivered. 
+	 */
+	public EmailAddress getDeliverTo() { return this.deliverTo; }
+	
+	public void setDeliverTo(EmailAddress value)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Setting deliverTo to " + value);
+		
+		if (value != null && !this.person.getEmailAddresses().containsKey(value.getId()))
+			throw new IllegalArgumentException("Email address does not belong to the correct user");
+			
+		this.deliverTo = value;
+	}
 	
 	/**
 	 * A value of null indicates the special Owner role 

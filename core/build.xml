@@ -13,7 +13,7 @@
 	
 	<property name="build.core.classes.dir" location="${build.dir}/core-classes" />
 	<property name="build.core.classes.i.dir" location="${build.dir}/core-i-classes" />
-	<property name="build.core.ejbclient.file" location="${build.dir}/core-client.jar" />
+	<property name="build.core.ejbclient.file" location="${build.dir}/subetha-api.jar" />
 	<property name="build.core.ejb.file" location="${build.dir}/core.jar" />
 	<property name="build.core.sar.file" location="${build.dir}/core.sar" />
 	
@@ -74,6 +74,10 @@
 	<target name="core-ejb-jar" depends="core-classes">
 		<jar jarfile="${build.core.ejb.file}">
 			<fileset dir="${build.core.classes.dir}"/>
+			
+			<fileset dir="${core.javasrc.dir}">
+				<include name="**/*.vm" />
+			</fileset>
 		</jar>
 	</target>
 

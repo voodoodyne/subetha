@@ -52,7 +52,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		
 		String[] addresses = new String[me.getEmailAddresses().size()];
 		int i = 0;
-		for (EmailAddress addy: me.getEmailAddresses())
+		for (EmailAddress addy: me.getEmailAddresses().values())
 		{
 			addresses[i] = addy.getId();
 			i++;

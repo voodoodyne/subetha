@@ -11,6 +11,8 @@ import java.util.Map;
 
 import javax.servlet.http.Cookie;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.tagonist.AbstractAction;
 
 /**
@@ -20,6 +22,9 @@ import org.tagonist.AbstractAction;
  */
 abstract public class SubEthaAction extends AbstractAction 
 {
+	/** */
+	private static Log log = LogFactory.getLog(SubEthaAction.class);
+	
 	/**
 	 * @return the action param specified by the key, as a String
 	 */
@@ -70,10 +75,25 @@ abstract public class SubEthaAction extends AbstractAction
 	}
 	
 	/**
-	 * @return the full URI, including the query string.  Works even
-	 *  if an http POST was submitted.
+	 * @return the request URI without the context path.
 	 */
-	protected String getFullRequestURI()
+	protected String getContextlessRequestURI()
+	{
+		String contextPath = this.getCtx().getRequest().getContextPath();
+		String requestURI = this.getCtx().getRequest().getRequestURI();
+		
+		if (log.isDebugEnabled())
+			log.debug("Getting contextless request URI.  contextPath is " + contextPath + ", requestURI is " + requestURI);
+		
+		return requestURI.substring(contextPath.length());
+	}
+	
+	/**
+	 * @return the contextless URI plus the query string.  Works even
+	 *  if an http POST was submitted.  This is what you can safely
+	 *  use <c:redirect> with.
+	 */
+	protected String getUsefulRequestURI()
 	{
 		if ("POST".equals(this.getCtx().getRequest().getMethod().toUpperCase()))
 		{
@@ -81,13 +101,13 @@ abstract public class SubEthaAction extends AbstractAction
 			
 			if (params.isEmpty())
 			{
-				return this.getCtx().getRequest().getRequestURI();
+				return this.getContextlessRequestURI();
 			}
 			else
 			{
 				// We have to build the query string from the parameters by hand
 				StringBuffer queryBuf = new StringBuffer(1024);
-				queryBuf.append(this.getCtx().getRequest().getRequestURI());
+				queryBuf.append(this.getContextlessRequestURI());
 	
 				boolean afterFirst = false;
 				for (Map.Entry<String, String[]> entry: params.entrySet())
@@ -125,9 +145,9 @@ abstract public class SubEthaAction extends AbstractAction
 		{
 			String query = this.getCtx().getRequest().getQueryString();
 			if (query == null)
-				return this.getCtx().getRequest().getRequestURI();
+				return this.getContextlessRequestURI();
 			else
-				return this.getCtx().getRequest().getRequestURI() + "?" + query;
+				return this.getContextlessRequestURI() + "?" + query;
 		}
 	}
 }

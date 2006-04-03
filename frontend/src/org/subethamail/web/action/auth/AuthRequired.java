@@ -66,7 +66,10 @@ public class AuthRequired extends AutoLogin
 		{
 			Login.Model model = new Login.Model();
 			
-			model.setDest(this.getFullRequestURI());
+			model.setDest(this.getUsefulRequestURI());
+			
+			if (log.isDebugEnabled())
+				log.debug("Destination will be: " + model.getDest());
 			
 			this.getCtx().getRequest().setAttribute(LOGIN_REQUIRED_MODEL_ATTR, model);
 			

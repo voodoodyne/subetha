@@ -1,6 +1,6 @@
 <%@include file="inc/top_standard.jspf" %>
 
-<trim:plain title="Log In First">
+<trim:headerless title="Log In First">
 	<h1>Log In First</h1>
 	
 	<strong>You must sign in to access this page</strong>
@@ -11,5 +11,5 @@
 	</p>
 	
 	<%@include file="inc/login_form.jspf" %>
-</trim:main>
+</trim:headerless>
 

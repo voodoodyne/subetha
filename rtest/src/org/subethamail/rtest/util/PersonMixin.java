@@ -5,17 +5,12 @@
 
 package org.subethamail.rtest.util;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.security.SecurityAssociation;
-import org.jboss.security.SimplePrincipal;
-import org.subethamail.core.acct.i.AccountMgr;
-import org.subethamail.core.acct.i.AccountMgrRemote;
 
 /**
+ * Actually creates the person.
+ * 
  * @author Jeff Schnitzer
  */
 public class PersonMixin extends PersonInfoMixin
@@ -25,33 +20,14 @@ public class PersonMixin extends PersonInfoMixin
 
 	Long id;
 	
-	AccountMgr accountMgr;
-	
 	/** */
 	public PersonMixin(AdminMixin adminMixin) throws Exception
 	{
 		super();
-		
-		Context ctx = new InitialContext();
-		this.accountMgr = (AccountMgr)ctx.lookup(AccountMgrRemote.JNDI_NAME);
 		
 		this.id = adminMixin.getAdmin().establishPerson(this.address, this.password);
 	}
 	
 	/** */
 	public Long getId() { return this.id; }
-	
-	/** */
-	public void establish()
-	{
-		SecurityAssociation.setPrincipal(new SimplePrincipal(this.email));
-		SecurityAssociation.setCredential(this.password);
-	}
-	
-	/** */
-	public AccountMgr getAccountMgr()
-	{
-		this.establish();
-		return this.accountMgr;
-	}
 }

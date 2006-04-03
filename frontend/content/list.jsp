@@ -1,5 +1,7 @@
 <%@include file="inc/top_standard.jspf" %>
 
+<t:action var="list" type="org.subethamail.web.action.GetList" />
+
 <trim:list title="announce@happyhour.com" listId="${param.listId}">
 	<h1>announce@happyhour.com</h1>
 	

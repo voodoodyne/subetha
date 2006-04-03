@@ -21,10 +21,6 @@ public class Self extends PersonData
 
 	/**
 	 */
-	public Self() {}
-	
-	/**
-	 */
 	public Self(Long id, 
 				String name,
 				String[] emailAddresses,

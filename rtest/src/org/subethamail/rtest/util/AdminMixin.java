@@ -5,61 +5,29 @@
 
 package org.subethamail.rtest.util;
 
-import java.security.Principal;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.security.SecurityAssociation;
-import org.jboss.security.SimplePrincipal;
-import org.subethamail.core.admin.i.Admin;
-import org.subethamail.core.admin.i.AdminRemote;
 
 /**
- * This class makes it easy to obtain and use the secured 
- * administration interfaces from unit tests.  Every time
- * getAdmin() is called, it resets the security credentials
- * to a known administrative user.
- * 
- * You must have a siteAdmin account "root@localhost", password
- * "password".
+ * Using this mixin allows accessing ejbs from the siteAdmin
+ * role.  You must have a siteAdmin account "root@localhost",
+ * password "password".
  * 
  * @author Jeff Schnitzer
  */
-public class AdminMixin
+public class AdminMixin extends BeanMixin
 {
 	/** */
 	private static Log log = LogFactory.getLog(AdminMixin.class);
 
-	public static final String EMAIL = "root@localhost";
-	public static final String PASSWORD = "password";
-	
-	private Admin admin;
-	
 	/** */
 	public AdminMixin() throws Exception
-	{
-		Context ctx = new InitialContext();
-		this.admin = (Admin)ctx.lookup(AdminRemote.JNDI_NAME);
-	}
+	{}
 	
-	/**
-	 * Establish administrator credentials
-	 */
-	public void establish()
-	{
-		Principal p = new SimplePrincipal(EMAIL);
-        SecurityAssociation.setPrincipal(p);
-        SecurityAssociation.setCredential(PASSWORD);
-	}
+	@Override
+	public String getEmail() { return "root@localhost"; }
 	
-	/** */
-	public Admin getAdmin() throws Exception
-	{
-		this.establish();
-		
-		return this.admin;
-	}
+	@Override
+	public String getPassword() { return "password"; }
+	
 }

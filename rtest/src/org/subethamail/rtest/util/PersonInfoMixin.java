@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * @author Jeff Schnitzer
  */
-public class PersonInfoMixin
+public class PersonInfoMixin extends BeanMixin
 {
 	/** */
 	private static Log log = LogFactory.getLog(PersonInfoMixin.class);
@@ -42,9 +42,14 @@ public class PersonInfoMixin
 	}
 	
 	/** */
+	@Override
 	public String getEmail() { return this.email; }
+	
+	@Override
 	public String getPassword() { return this.password; }
+	
 	public String getName() { return this.name; }
+	
 	public InternetAddress getAddress() { return this.address; }
 	
 	/** Used to modify credentials */

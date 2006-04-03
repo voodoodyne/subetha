@@ -10,10 +10,11 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.core.lists.i.MailingListData;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
+import org.subethamail.rtest.util.BeanMixin;
 import org.subethamail.rtest.util.MailingListMixin;
-import org.subethamail.rtest.util.NobodyMixin;
 import org.subethamail.rtest.util.PersonInfoMixin;
 import org.subethamail.rtest.util.PersonMixin;
 import org.subethamail.rtest.util.SubEthaTestCase;
@@ -31,7 +32,7 @@ public class MailingListTest extends SubEthaTestCase
 	/** */
 	AdminMixin admin;
 	PersonMixin pers;
-	NobodyMixin nobody;
+	BeanMixin nobody;
 	
 	/** */
 	public MailingListTest(String name) { super(name); }
@@ -43,7 +44,7 @@ public class MailingListTest extends SubEthaTestCase
 		
 		this.admin = new AdminMixin();
 		this.pers = new PersonMixin(this.admin);
-		this.nobody = new NobodyMixin();
+		this.nobody = new BeanMixin();
 	}
 	
 	/** */
@@ -54,6 +55,12 @@ public class MailingListTest extends SubEthaTestCase
 		// Should contain a "Your new list" email
 		assertEquals(1, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.NEW_MAILING_LIST));
+		
+		MailingListData data = this.nobody.getListMgr().getMailingList(ml.getId());
+		assertEquals(ml.getEmail(), data.getEmail());
+		assertEquals(ml.getUrl().toString(), data.getUrl());
+		assertEquals(ml.getDescription(), data.getDescription());
+		assertEquals(ml.getAddress().getPersonal(), data.getName());
 	}
 	
 	/** */
@@ -65,6 +72,12 @@ public class MailingListTest extends SubEthaTestCase
 		// Should contain a "Your new list" email
 		assertEquals(1, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.NEW_MAILING_LIST));
+		
+		MailingListData data = this.nobody.getListMgr().getMailingList(ml.getId());
+		assertEquals(ml.getEmail(), data.getEmail());
+		assertEquals(ml.getUrl().toString(), data.getUrl());
+		assertEquals(ml.getDescription(), data.getDescription());
+		assertEquals(ml.getAddress().getPersonal(), data.getName());
 	}
 	
 	/** */

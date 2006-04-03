@@ -10,9 +10,11 @@ import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.Receptionist;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ListWizard;
+import org.subethamail.core.lists.i.ListMgr;
 
 /**
  * Singleton which provides access to the backend EJBs.  
@@ -40,6 +42,8 @@ public class Backend extends HttpServlet
 	Receptionist receptionist;
 	Encryptor encryptor;
 	ListWizard listWizard;
+	ListMgr listMgr;
+	AccountMgr accountMgr;
 	
 	/**
 	 * Obtain the current instance.
@@ -60,6 +64,8 @@ public class Backend extends HttpServlet
 			receptionist = (Receptionist)ctx.lookup(Receptionist.JNDI_NAME);
 			encryptor = (Encryptor)ctx.lookup(Encryptor.JNDI_NAME);
 			listWizard = (ListWizard)ctx.lookup(ListWizard.JNDI_NAME);
+			listMgr = (ListMgr)ctx.lookup(ListMgr.JNDI_NAME);
+			accountMgr = (AccountMgr)ctx.lookup(AccountMgr.JNDI_NAME);
 		}
 		catch (NamingException ex) { throw new ServletException(ex); }
 		
@@ -95,6 +101,18 @@ public class Backend extends HttpServlet
 	public Receptionist getReceptionist()
 	{
 		return this.receptionist;
+	}
+
+	/** */
+	public AccountMgr getAccountMgr()
+	{
+		return this.accountMgr;
+	}
+
+	/** */
+	public ListMgr getListMgr()
+	{
+		return this.listMgr;
 	}
 	
 }

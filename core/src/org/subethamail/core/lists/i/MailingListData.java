@@ -3,30 +3,36 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/blog/i/PersonData.java $
  */
 
-package org.subethamail.core.acct.i;
+package org.subethamail.core.lists.i;
 
 import java.io.Serializable;
 
 /**
- * Some detail about a person.
+ * Some detail about a mailing list.
  *
  * @author Jeff Schnitzer
  */
-public class PersonData implements Serializable
+public class MailingListData implements Serializable
 {
 	Long id;
+	String email;
 	String name;
-	String[] emailAddresses;
+	String url;
+	String description;
 	
 	/**
 	 */
-	public PersonData(Long id, 
+	public MailingListData(Long id, 
+					String email,
 					String name,
-					String[] emailAddresses)
+					String url, 
+					String description)
 	{
 		this.id = id;
+		this.email = email;
 		this.name = name;
-		this.emailAddresses = emailAddresses;
+		this.url = url;
+		this.description = description;
 	}
 	
 	/** */
@@ -48,8 +54,21 @@ public class PersonData implements Serializable
 	}
 
 	/** */
-	public String[] getEmailAddresses()
+	public String getDescription()
 	{
-		return this.emailAddresses;
+		return this.description;
 	}
+
+	/** */
+	public String getEmail()
+	{
+		return this.email;
+	}
+
+	/** */
+	public String getUrl()
+	{
+		return this.url;
+	}
+
 }

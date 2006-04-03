@@ -12,7 +12,9 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.admin.i.BlueprintData;
+import org.subethamail.core.lists.i.MailingListData;
 import org.subethamail.core.plugin.i.Blueprint;
+import org.subethamail.entity.MailingList;
 
 
 
@@ -47,6 +49,31 @@ public class Transmute
 		return new BlueprintData(
 				raw.getClass().getName(),
 				raw.getName(),
+				raw.getDescription());
+	}
+	
+	/** */
+	public static List<MailingListData> mailingLists(Collection<MailingList> rawColl)
+	{
+		List<MailingListData> result = new ArrayList<MailingListData>(rawColl.size());
+		
+		for (MailingList raw: rawColl)
+			result.add(mailingList(raw));
+		
+		return result;
+	}
+	
+	/** */
+	public static MailingListData mailingList(MailingList raw)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+			
+		return new MailingListData(
+				raw.getId(),
+				raw.getAddress(),
+				raw.getName(),
+				raw.getUrl(),
 				raw.getDescription());
 	}
 	

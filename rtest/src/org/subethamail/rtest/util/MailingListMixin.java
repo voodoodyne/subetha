@@ -5,9 +5,6 @@
 
 package org.subethamail.rtest.util;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -24,7 +21,7 @@ public class MailingListMixin extends MailingListInfoMixin
 	private static Log log = LogFactory.getLog(MailingListMixin.class);
 
 	Long id;
-	List<InternetAddress> initialOwners;
+	InternetAddress[] initialOwners;
 	
 	/**
 	 * @param initialOwner can be null to create an ownerless list. 
@@ -34,9 +31,9 @@ public class MailingListMixin extends MailingListInfoMixin
 		super();
 		
 		if (initialOwner == null)
-			this.initialOwners = Collections.EMPTY_LIST;
+			this.initialOwners = new InternetAddress[0];
 		else
-			this.initialOwners = Collections.singletonList(initialOwner);
+			this.initialOwners = new InternetAddress[] { initialOwner };
 		
 		this.id = adminMixin.getAdmin().createMailingList(this.address, this.url, this.description, this.initialOwners);
 	}

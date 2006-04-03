@@ -33,12 +33,11 @@ public class MailingListInfoMixin
 		// looks like:  com.similarity.rtest.PersonInfoMixin@bb0d0d
 		objectId = objectId.substring(objectId.lastIndexOf('@') + 1);
 		
-		this.name = "List Name " + objectId;	// deliberately not very unique
-		
 		String baseEmail = Long.toString(System.currentTimeMillis(), 36) + objectId;
 		
+		this.name = "List Name " + objectId;	// deliberately not very unique
 		this.email = baseEmail + "@localhost";
-		this.url = new URL("http://localhost:8080/list/" + name);
+		this.url = new URL("http://localhost:8080/se/list/" + baseEmail);
 		this.address = new InternetAddress(this.email, this.name);
 		this.description = "Test list description";
 	}

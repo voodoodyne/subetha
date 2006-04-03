@@ -174,7 +174,7 @@ public class MailingList implements Serializable, Comparable
 	
 	/**
 	 */
-	public String getDescription() { return this.url; }
+	public String getDescription() { return this.description; }
 	
 	/**
 	 */

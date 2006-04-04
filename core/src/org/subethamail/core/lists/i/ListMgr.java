@@ -23,13 +23,23 @@ public interface ListMgr
 	public static final String JNDI_NAME = "subetha/ListMgr/local";
 
 	/**
-	 * Finds the id for a particular list URL.  No access control.
+	 * Finds the id for a particular list URL.
+	 * 
+	 * No access control.
 	 */
 	public Long lookup(URL url) throws NotFoundException;
 	
 	/**
-	 * Gets some data about a mailing list.  No access control.
+	 * Gets some data about a mailing list.  Includes the subscriber
+	 * status (including role and permissions) of the person calling
+	 * this method.
+	 * 
+	 * If not authenticated, subscriber status will reflect that state.
+	 * If authed as site admin, all permissions are granted no matter
+	 * what the actual role.
+	 * 
+	 * No access control.
 	 */
-	public MailingListData getMailingList(Long id) throws NotFoundException;
+	public MySubscription getMySubscription(Long listId) throws NotFoundException;
 }
 

@@ -19,10 +19,12 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
-import org.subethamail.core.lists.i.MailingListData;
+import org.subethamail.core.lists.i.MySubscription;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.MailingList;
+import org.subethamail.entity.Person;
+import org.subethamail.entity.Subscription;
 import org.subethamail.entity.dao.DAO;
 
 /**
@@ -53,13 +55,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	}
 	
 	/**
-	 * @see ListMgr#getMailingList(Long)
+	 * @see ListMgr#getMySubscription(Long)
 	 */
 	@PermitAll
-	public MailingListData getMailingList(Long id) throws NotFoundException
+	public MySubscription getMySubscription(Long listId) throws NotFoundException
 	{
-		MailingList ml = this.dao.findMailingList(id);
-		return Transmute.mailingList(ml);
+		MailingList ml = this.dao.findMailingList(listId);
+		Person me = this.getMe();
+			
+		return Transmute.mySubscription(me, ml);
 	}
 
 }

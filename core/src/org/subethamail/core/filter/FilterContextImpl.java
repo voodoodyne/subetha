@@ -35,7 +35,7 @@ class FilterContextImpl implements FilterContext
 	 */
 	public String getListAddress()
 	{
-		return this.enabledFilter.getMailingList().getAddress();
+		return this.enabledFilter.getList().getEmail();
 	}
 
 	/**
@@ -43,7 +43,7 @@ class FilterContextImpl implements FilterContext
 	 */
 	public String getListURL()
 	{
-		return this.enabledFilter.getMailingList().getUrl();
+		return this.enabledFilter.getList().getUrl();
 	}
 
 	/**

@@ -6,12 +6,18 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
@@ -19,6 +25,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CollectionOfElements;
+import org.subethamail.common.Permission;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -35,6 +43,9 @@ public class Role implements Serializable, Comparable
 	@Transient private static Log log = LogFactory.getLog(Role.class);
 	
 	/** */
+	@Transient public static final String OWNER_NAME = "Owner"; 
+	
+	/** */
 	@Id
 	@GeneratedValue
 	Long id;
@@ -46,39 +57,37 @@ public class Role implements Serializable, Comparable
 	/** */
 	@ManyToOne
 	@JoinColumn(name="listId", nullable=false)
-	MailingList mailingList;
+	MailingList list;
 	
 	/** */
 	@Column(nullable=false)
-	boolean canEditRoles;
+	boolean owner;
 	
-	@Column(nullable=false)
-	boolean canEditPlugins;
-	
-	@Column(nullable=false)
-	boolean canApproveMessages;
-	
-	@Column(nullable=false)
-	boolean canApproveSubscriptions;
-	
-	@Column(nullable=false)
-	boolean canPost;
-	
-	@Column(nullable=false)
-	boolean canViewSubscribers;
-	
-	@Column(nullable=false)
-	boolean canReadArchives;
-	
-	@Column(nullable=false)
-	boolean canReadNotes;
-	
-	@Column(nullable=false)
-	boolean canEditNotes;
+	/** */
+	@CollectionOfElements
+	@JoinTable(name="RolePermission", joinColumns={@JoinColumn(name="roleId")})
+	@Enumerated(EnumType.STRING)
+	@Column(name="perm", nullable=false)
+	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	Set<Permission> permissions;
 	
 	/**
 	 */
 	public Role() {}
+	
+	/**
+	 * Creates a new owner role.  There should be at most one of these
+	 * in any given list.
+	 */
+	public Role(MailingList list)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Creating new owner Role");
+		
+		this.list = list;
+		this.setName(OWNER_NAME);
+		this.owner = true;
+	}
 	
 	/**
 	 */
@@ -87,15 +96,17 @@ public class Role implements Serializable, Comparable
 		if (log.isDebugEnabled())
 			log.debug("Creating new Role");
 		
-		this.mailingList = list;
+		this.list = list;
 		this.setName(name);
+		
+		this.permissions = new HashSet<Permission>();
 	}
 	
 	/** */
 	public Long getId()		{ return this.id; }
 
 	/** */
-	public MailingList getMailingList() { return this.mailingList; }
+	public MailingList getList() { return this.list; }
 	
 	/** */
 	public String getName() { return this.name; }
@@ -111,6 +122,21 @@ public class Role implements Serializable, Comparable
 			log.debug("Setting name of " + this + " to " + value);
 		
 		this.name = value;
+	}
+	
+	/** */
+	public boolean isOwner() { return this.owner; }
+	
+	/**
+	 * If this is the owner role, return an unmodifiable set of all permissions.
+	 * Otherwise, return the normal set of permissions.
+	 */
+	public Set<Permission> getPermissions()
+	{
+		if (this.owner)
+			return Permission.ALL;
+		else
+			return this.permissions;
 	}
 
 	/** */

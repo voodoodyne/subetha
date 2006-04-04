@@ -8,13 +8,19 @@ package org.subethamail.core.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.common.Permission;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.lists.i.MailingListData;
+import org.subethamail.core.lists.i.MySubscription;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.entity.MailingList;
+import org.subethamail.entity.Person;
+import org.subethamail.entity.Role;
+import org.subethamail.entity.Subscription;
 
 
 
@@ -68,13 +74,40 @@ public class Transmute
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-			
+	
 		return new MailingListData(
 				raw.getId(),
-				raw.getAddress(),
+				raw.getEmail(),
 				raw.getName(),
 				raw.getUrl(),
 				raw.getDescription());
 	}
 	
+	/** */
+	/**
+	 * @param rawPerson can be null
+	 * @return the status of the person for the given list. 
+	 */
+	public static MySubscription mySubscription(Person rawPerson, MailingList rawList)
+	{
+		MailingListData listData = mailingList(rawList);
+		
+		Role role = rawList.getRoleFor(rawPerson);
+		
+		Set<Permission> perms = role.getPermissions();
+		
+		// If we're the site admin, override with all.
+		if (rawPerson != null && rawPerson.isSiteAdmin())
+			perms = Permission.ALL;
+		
+		Subscription rawSub = (rawPerson == null) ? null : rawPerson.getSubscription(rawList.getId());
+		
+		return new MySubscription(
+				listData,
+				(rawSub == null) ? null : rawSub.getDeliverTo().getId(),
+				(rawSub != null),
+				role.isOwner(),
+				role.getName(),
+				perms);
+	}
 }

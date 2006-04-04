@@ -6,10 +6,10 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.subethamail.common.Permission;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -37,18 +38,17 @@ public class Subscription implements Serializable, Comparable
 	
 	/** */
 	@Id
-	@GeneratedValue
-	Long id;
+	SubscriptionPK pk;
 	
-	/** */
+	/** This "overlaps" with the PK */
 	@ManyToOne
-	@JoinColumn(name="personId", nullable=false)
+	@JoinColumn(name="personId", insertable=false, updatable=false)
 	Person person;
 	
-	/** */
+	/** This "overlaps" with the PK */
 	@ManyToOne
-	@JoinColumn(name="listId", nullable=false)
-	MailingList mailingList;
+	@JoinColumn(name="listId", insertable=false, updatable=false)
+	MailingList list;
 	
 	/**
 	 * A value of null means that mail should not be delivered. 
@@ -58,12 +58,10 @@ public class Subscription implements Serializable, Comparable
 	EmailAddress deliverTo;
 	
 	/** 
-	 * The role of this subscription.  Null indicates the Owner role.
-	 * The reason for choosing null is so that if we ever expand the
-	 * permission list, existing owners automatically get the perms. 
+	 * The role of this subscription.
 	 */
 	@OneToOne
-	@JoinColumn(name="roleId", nullable=true)
+	@JoinColumn(name="roleId", nullable=false)
 	Role role;
 	
 	/** */
@@ -81,8 +79,10 @@ public class Subscription implements Serializable, Comparable
 		if (log.isDebugEnabled())
 			log.debug("Creating new Subscription");
 		
+		this.pk = new SubscriptionPK(person.getId(), list.getId());
+		
 		this.person = person;
-		this.mailingList = list;
+		this.list = list;
 		
 		// This involves some validation
 		this.setDeliverTo(deliverTo);
@@ -93,13 +93,13 @@ public class Subscription implements Serializable, Comparable
 	}
 	
 	/** */
-	public Long getId()		{ return this.id; }
+	public SubscriptionPK getPk()		{ return this.pk; }
 
 	/** */
 	public Person getPerson() { return this.person; }
 	
 	/** */
-	public MailingList getMailingList() { return this.mailingList; }
+	public MailingList getList() { return this.list; }
 	
 	/**
 	 * A value of null indicates that mail should not be delivered. 
@@ -118,7 +118,6 @@ public class Subscription implements Serializable, Comparable
 	}
 	
 	/**
-	 * A value of null indicates the special Owner role 
 	 */
 	public Role getRole() { return this.role; }
 	
@@ -127,7 +126,7 @@ public class Subscription implements Serializable, Comparable
 		if (log.isDebugEnabled())
 			log.debug("Setting role to " + value);
 		
-		if (!this.mailingList.isValidRole(value))
+		if (!this.list.isValidRole(value))
 			throw new IllegalArgumentException("Role does not belong to the correct list");
 			
 		this.role = value;
@@ -152,17 +151,17 @@ public class Subscription implements Serializable, Comparable
 	/** */
 	public String toString()
 	{
-		return this.getClass() + " {id=" + this.id + "}";
+		return this.getClass() + " {pk=" + this.pk + "}";
 	}
 
 	/**
-	 * Natural sort order is based on id?
+	 * Natural sort order is based list
 	 */
 	public int compareTo(Object arg0)
 	{
 		Subscription other = (Subscription)arg0;
 
-		return this.id.compareTo(other.getId());
+		return this.list.compareTo(other.getList());
 	}
 }
 

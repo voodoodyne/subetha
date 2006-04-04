@@ -1,7 +1,10 @@
 <%@include file="../inc/taglibs.jspf" %>
 
 <%@ attribute name="title" required="true" %>
-<%@ attribute name="listId" required="true" %>
+<%@ attribute name="sub" required="true" type="org.subethamail.core.lists.i.MySubscription" %>
+
+<c:set var="listId" value="${sub.list.id}" />
+<c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
 
 <trim:header title="${title}">
 	<div class="sideBox LHS">
@@ -12,11 +15,13 @@
 		</c:url>
 		<a href="${listUrl}">&rsaquo; List Overivew</a>
 		
-		<c:url var="listArchivesUrl" value="list_archives.jsp">
-			<c:param name="listId" value="${listId}"/>
-		</c:url>
-		<a href="${listArchivesUrl}">&rsaquo; Archives</a>
-		
+		<c:if test="${sub.perms.READ_ARCHIVES}">
+			<c:url var="listArchivesUrl" value="list_archives.jsp">
+				<c:param name="listId" value="${listId}"/>
+			</c:url>
+			<a href="${listArchivesUrl}">&rsaquo; Archives</a>
+		</c:if>
+
 		<c:url var="listSubscribersUrl" value="list_subscribers.jsp">
 			<c:param name="listId" value="${listId}"/>
 		</c:url>

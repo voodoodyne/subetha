@@ -35,8 +35,8 @@ import org.subethamail.common.valid.Validator;
  */
 @NamedQueries({
 	@NamedQuery(
-		name="MailingListByAddress", 
-		query="from MailingList l where l.address = :address",
+		name="MailingListByEmail", 
+		query="from MailingList l where l.email = :email",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")
@@ -72,8 +72,8 @@ public class MailingList implements Serializable, Comparable
 	Long id;
 	
 	/** TODO:  this should be stored as separate components */
-	@Column(nullable=false, length=Validator.MAX_LIST_ADDRESS)
-	String address;
+	@Column(nullable=false, length=Validator.MAX_LIST_EMAIL)
+	String email;
 	
 	@Column(nullable=false, length=Validator.MAX_LIST_NAME)
 	String name;
@@ -85,23 +85,28 @@ public class MailingList implements Serializable, Comparable
 	@Column(nullable=false, length=Validator.MAX_LIST_DESCRIPTION)
 	String description;
 	
-	/** The default role for new subscribers, could be owner (null) */
-	@OneToOne
-	@JoinColumn(name="defaultRoleId", nullable=true)
+	/** The default role for new subscribers */
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="defaultRoleId", nullable=false)
 	Role defaultRole;
 	
+	/** The role to consider anonymous (not subscribed) people */
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="anonymousRoleId", nullable=false)
+	Role anonymousRole;
+	
 	/** */
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="mailingList")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	Set<Subscription> subscriptions;
 	
 	/** */
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="mailingList")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	Set<EnabledFilter> enabledPlugins;
+	Set<EnabledFilter> enabledFilters;
 	
 	/** */
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="mailingList")
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 	Set<Role> roles;
 	
@@ -117,13 +122,21 @@ public class MailingList implements Serializable, Comparable
 			log.debug("Creating new mailing list");
 		
 		// These are validated normally.
-		this.setAddress(email);
+		this.setEmail(email);
 		this.setName(name);
 		this.setUrl(url);
 		this.setDescription(description);
 		
 		// Make sure collections start empty
 		this.subscriptions = new HashSet<Subscription>();
+		this.enabledFilters = new HashSet<EnabledFilter>();
+		this.roles = new HashSet<Role>();
+		
+		// We have to start with one role, the owner role
+		Role owner = new Role(this);
+		this.roles.add(owner);
+		this.defaultRole = owner;
+		this.anonymousRole = owner;
 	}
 	
 	/** */
@@ -131,19 +144,19 @@ public class MailingList implements Serializable, Comparable
 
 	/**
 	 */
-	public String getAddress() { return this.address; }
+	public String getEmail() { return this.email; }
 	
 	/**
 	 */
-	public void setAddress(String value)
+	public void setEmail(String value)
 	{
 		if (!Validator.validEmail(value))
-			throw new IllegalArgumentException("Invalid list address");
+			throw new IllegalArgumentException("Invalid list email address");
 
 		if (log.isDebugEnabled())
-			log.debug("Setting address of " + this + " to " + value);
+			log.debug("Setting email of " + this + " to " + value);
 		
-		this.address = value;
+		this.email = value;
 	}
 	
 	/**
@@ -205,7 +218,7 @@ public class MailingList implements Serializable, Comparable
 	/** 
 	 * @return all plugins enabled on this list
 	 */
-	public Set<EnabledFilter> getEnabledFilters() { return this.enabledPlugins; }
+	public Set<EnabledFilter> getEnabledFilters() { return this.enabledFilters; }
 
 	/** 
 	 * @return all roles available for this list
@@ -217,13 +230,47 @@ public class MailingList implements Serializable, Comparable
 	 */
 	public boolean isValidRole(Role role)
 	{
-		return (role == null || this.roles.contains(role));
+		return this.roles.contains(role);
 	}
+	
+	/** */
+	public Role getDefaultRole() { return this.defaultRole; }
+	
+	public void setDefaultRole(Role value)
+	{
+		if (!this.isValidRole(value))
+			throw new IllegalArgumentException("Role belongs to some other list");
+			
+		this.defaultRole = value;
+	}
+	
+	/** */
+	public Role getAnonymousRole() { return this.anonymousRole; }
 
+	public void setAnonymousRole(Role value)
+	{
+		if (!this.isValidRole(value))
+			throw new IllegalArgumentException("Role belongs to some other list");
+			
+		this.anonymousRole = value;
+	}
+	
+	/**
+	 * Figures out the role for a person.  If pers is null,
+	 * returns the anonymous role. 
+	 */
+	public Role getRoleFor(Person pers)
+	{
+		if (pers == null)
+			return this.anonymousRole;
+		else
+			return pers.getRoleIn(this);
+	}
+	
 	/** */
 	public String toString()
 	{
-		return this.getClass() + " {id=" + this.id + ", address=" + this.address + "}";
+		return this.getClass() + " {id=" + this.id + ", address=" + this.email + "}";
 	}
 
 	/**
@@ -233,7 +280,7 @@ public class MailingList implements Serializable, Comparable
 	{
 		MailingList other = (MailingList)arg0;
 
-		return this.address.compareTo(other.getAddress());
+		return this.email.compareTo(other.getEmail());
 	}
 }
 

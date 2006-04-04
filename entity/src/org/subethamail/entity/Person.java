@@ -7,9 +7,7 @@ package org.subethamail.entity;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -57,10 +55,10 @@ public class Person implements Serializable, Comparable
 	@MapKey(name="id")
 	Map<String, EmailAddress> emailAddresses;
 	
-	/** TODO: this should probably be a Map of list id to Subscription */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	Set<Subscription> subscriptions;
+	@MapKey(name="list")
+	Map<Long, Subscription> subscriptions;
 	
 	/**
 	 */
@@ -78,7 +76,7 @@ public class Person implements Serializable, Comparable
 		this.setName(name);
 		
 		this.emailAddresses = new HashMap<String, EmailAddress>();
-		this.subscriptions = new HashSet<Subscription>();
+		this.subscriptions = new HashMap<Long, Subscription>();
 	}
 	
 	/** */
@@ -165,15 +163,38 @@ public class Person implements Serializable, Comparable
 	/** 
 	 * @return all the subscriptions associated with this person
 	 */
-	public Set<Subscription> getSubscriptions() { return this.subscriptions; }
+	public Map<Long, Subscription> getSubscriptions() { return this.subscriptions; }
+	
+	/**
+	 * Adds a subscription to our internal map.
+	 */
+	public void addSubscription(Subscription value)
+	{
+		this.subscriptions.put(value.getList().getId(), value);
+	}
 	
 	/**
 	 * @return true if this person is subscribed to the list
 	 */
 	public boolean isSubscribed(MailingList list)
 	{
-		// TODO
-		return true;
+		return this.subscriptions.containsKey(list.getId());
+	}
+	
+	/**
+	 * @return the subscription, or null if not subscribed to the list
+	 */
+	public Subscription getSubscription(Long listId)
+	{
+		return this.subscriptions.get(listId);
+	}
+	
+	/** */
+	public Role getRoleIn(MailingList list)
+	{
+		Subscription sub = this.subscriptions.get(list.getId());
+		
+		return (sub == null) ? list.getAnonymousRole() : sub.getRole();
 	}
 	
 	/** */
@@ -183,13 +204,13 @@ public class Person implements Serializable, Comparable
 	}
 
 	/**
-	 * Natural sort order is based on id
+	 * Natural sort order is based on name
 	 */
 	public int compareTo(Object arg0)
 	{
 		Person other = (Person)arg0;
 
-		return this.id.compareTo(other.getId());
+		return this.name.compareTo(other.getName());
 	}
 }
 

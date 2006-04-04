@@ -50,7 +50,7 @@ public class EnabledFilter implements Serializable, Comparable
 	/** If this is null, the plugin is enabled globally */
 	@ManyToOne
 	@JoinColumn(name="listId", nullable=true)
-	MailingList mailingList;
+	MailingList list;
 	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="filter")
@@ -78,7 +78,7 @@ public class EnabledFilter implements Serializable, Comparable
 	public String getClassName() { return this.className; }
 	
 	/** */
-	public MailingList getMailingList() { return this.mailingList; }
+	public MailingList getList() { return this.list; }
 	
 	/** */
 	public Map<String, FilterArgument> getArguments() { return this.arguments; }

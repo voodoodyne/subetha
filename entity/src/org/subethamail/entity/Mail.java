@@ -106,7 +106,7 @@ public class Mail implements Serializable, Comparable
 	/** */
 	@ManyToOne
 	@JoinColumn(name="listId", nullable=false)
-	MailingList mailingList;
+	MailingList list;
 	
 	/** */
 	@ManyToOne
@@ -140,7 +140,7 @@ public class Mail implements Serializable, Comparable
 			log.debug("Creating new mail");
 		
 		this.dateCreated = new Date();
-		this.mailingList = list;
+		this.list = list;
 		this.parent = parent;
 		this.hold = holdFor;
 		

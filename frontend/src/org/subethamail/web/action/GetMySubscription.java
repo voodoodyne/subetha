@@ -11,14 +11,15 @@ import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 
 /**
- * Gets data about a mailing list.  Model becomes a MailingListData.
+ * Gets data about a mailing list and the current user.
+ * Model becomes a MySubscription.
  * 
  * @author Jeff Schnitzer
  */
-public class GetList extends AuthAction 
+public class GetMySubscription extends AuthAction 
 {
 	/** */
-	private static Log log = LogFactory.getLog(GetList.class);
+	private static Log log = LogFactory.getLog(GetMySubscription.class);
 	
 	/** */
 	Long listId;
@@ -28,6 +29,6 @@ public class GetList extends AuthAction
 	/** */
 	public void execute() throws Exception
 	{
-		this.getCtx().setModel(Backend.instance().getListMgr().getMailingList(this.listId));
+		this.getCtx().setModel(Backend.instance().getListMgr().getMySubscription(this.listId));
 	}
 }

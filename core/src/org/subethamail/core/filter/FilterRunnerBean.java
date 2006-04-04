@@ -125,6 +125,6 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	{
 		if (log.isErrorEnabled())
 			log.error("Unregistered filter '" + enPlugin.getClassName() + 
-				"' is enabled on list '" + list.getAddress() + "'");
+				"' is enabled on list '" + list.getEmail() + "'");
 	}
 }

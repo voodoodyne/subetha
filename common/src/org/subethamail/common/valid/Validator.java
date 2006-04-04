@@ -31,7 +31,7 @@ public class Validator
 	public static final int MAX_EMAIL_ADDRESS = 255;
 	
 	// MailingList
-	public static final int MAX_LIST_ADDRESS = 255;
+	public static final int MAX_LIST_EMAIL = 255;
 	public static final int MAX_LIST_NAME = 255;
 	public static final int MAX_LIST_URL = 255;
 	public static final int MAX_LIST_DESCRIPTION = 4096;

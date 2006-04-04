@@ -51,7 +51,7 @@ public class CreateList extends AuthRequired
 		public void setDescription(String value) { this.description = value; }
 	
 		/** */
-		@StringConstraint(maxLength=Validator.MAX_LIST_ADDRESS)
+		@StringConstraint(maxLength=Validator.MAX_LIST_EMAIL)
 		public String address = "";
 		public String getAddress() { return this.address; }
 		public void setAddress(String value) { this.address = value; }

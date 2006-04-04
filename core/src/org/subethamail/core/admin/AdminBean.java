@@ -108,7 +108,7 @@ public class AdminBean implements Admin, AdminRemote
 			this.dao.persist(sub);
 			
 			list.getSubscriptions().add(sub);
-			ea.getPerson().getSubscriptions().add(sub);
+			ea.getPerson().addSubscription(sub);
 			
 			try
 			{

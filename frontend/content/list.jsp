@@ -1,19 +1,14 @@
 <%@include file="/inc/top_standard.jspf" %>
 
-<t:action var="list" type="org.subethamail.web.action.GetList" />
+<t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
 
-<trim:list title="${list.email}" listId="${list.id}">
+<c:set var="list" value="${sub.list}" />
+
+<trim:list title="${list.email}" sub="${sub}">
 	<h1><c:out value="${list.name}" /></h1>
 	<h2><c:out value="${list.email}" /></h2>
 	
 	<p><c:out value="${list.description}" /></p>
-	
-	<p>
-		Public overview of the mailing list.  The long description
-		of this list should be here.  This page is also what is viewed
-		(by way of a servlet filter) when the user navigates to
-		the /list/listname URL.
-	</p>
 	
 	<p>
 		The list of actions available on the LHS will be restricted

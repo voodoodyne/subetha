@@ -165,10 +165,10 @@ public class DAOEJB implements DAO
 	public MailingList findMailingList(InternetAddress address) throws NotFoundException
 	{
 		if (log.isDebugEnabled())
-			log.debug("Finding MailingList with address " + address.getAddress());
+			log.debug("Finding MailingList with email " + address.getAddress());
 		
-		Query q = this.em.createNamedQuery("MailingListByAddress");
-		q.setParameter("address", address.getAddress());
+		Query q = this.em.createNamedQuery("MailingListByEmail");
+		q.setParameter("email", address.getAddress());
 		
 		try
 		{

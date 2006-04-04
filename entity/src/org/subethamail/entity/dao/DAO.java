@@ -8,6 +8,7 @@ package org.subethamail.entity.dao;
 import java.net.URL;
 import java.util.List;
 
+import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.LockModeType;
 
@@ -31,6 +32,7 @@ import org.subethamail.entity.Person;
  *
  * @author Jeff Schnitzer
  */
+@Local
 public interface DAO
 {
 	/** */

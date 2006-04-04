@@ -8,7 +8,6 @@ package org.subethamail.entity.dao;
 import java.net.URL;
 import java.util.List;
 
-import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.EntityManager;
@@ -35,11 +34,10 @@ import org.subethamail.entity.Person;
  * @author Jeff Schnitzer
  */
 @Stateless(name="DAO")
-@Local(DAO.class)
-public class DAOEJB implements DAO
+public class DAOBean implements DAO
 {
 	/** */
-	private static Log log = LogFactory.getLog(DAOEJB.class);
+	private static Log log = LogFactory.getLog(DAOBean.class);
 	
 	/** */
 	@PersistenceContext private EntityManager em;

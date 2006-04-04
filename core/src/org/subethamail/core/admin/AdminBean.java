@@ -6,6 +6,7 @@
 package org.subethamail.core.admin;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.EJB;
@@ -21,7 +22,9 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
 import org.subethamail.core.admin.i.CreateMailingListException;
+import org.subethamail.core.lists.i.MailingListData;
 import org.subethamail.core.post.PostOffice;
+import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
@@ -196,5 +199,14 @@ public class AdminBean implements Admin, AdminRemote
 	{
 		Person p = this.dao.findPerson(personId);
 		p.setSiteAdmin(value);
+	}
+
+	/**
+	 * @see Admin#getAllLists()
+	 */
+	public List<MailingListData> getAllLists()
+	{
+		log.debug("Getting data for all lists");
+		return Transmute.mailingLists(this.dao.findAllLists());
 	}
 }

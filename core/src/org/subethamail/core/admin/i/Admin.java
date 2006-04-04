@@ -6,11 +6,13 @@
 package org.subethamail.core.admin.i;
 
 import java.net.URL;
+import java.util.List;
 
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.lists.i.MailingListData;
 
 /**
  * Administrative interface for managing the site.
@@ -64,4 +66,11 @@ public interface Admin
 	 * Sets whether or not the person is a site admin.
 	 */
 	public void setSiteAdmin(Long personId, boolean value) throws NotFoundException;
+	
+	/**
+	 * TODO:  this (and the UI) should probably be paginated.
+	 * 
+	 * @return some information about all the lists on the site.
+	 */
+	public List<MailingListData> getAllLists();
 }

@@ -49,6 +49,14 @@ import org.subethamail.common.valid.Validator;
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")
 		}
+	),
+	@NamedQuery(
+		name="AllMailingLists", 
+		query="from MailingList l",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
 	)
 })
 @Entity

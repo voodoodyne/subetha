@@ -6,6 +6,7 @@
 package org.subethamail.entity.dao;
 
 import java.net.URL;
+import java.util.List;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -216,6 +217,19 @@ public class DAOEJB implements DAO
 			throw new NotFoundException("No person " + personId);
 		else
 			return p;
+	}
+
+	/**
+	 * @see DAO#findAllLists()
+	 */
+	public List<MailingList> findAllLists()
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding all mailing lists");
+		
+		Query q = this.em.createNamedQuery("AllMailingLists");
+		
+		return q.getResultList();
 	}
 
 }

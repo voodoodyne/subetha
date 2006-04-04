@@ -6,6 +6,7 @@
 package org.subethamail.entity.dao;
 
 import java.net.URL;
+import java.util.List;
 
 import javax.mail.internet.InternetAddress;
 import javax.persistence.LockModeType;
@@ -102,5 +103,10 @@ public interface DAO
 	 * @return the identified person.
 	 */
 	public Person findPerson(Long personId) throws NotFoundException;
+
+	/**
+	 * @return a list of all mailing lists on the site.
+	 */
+	public List<MailingList> findAllLists();
 
 }

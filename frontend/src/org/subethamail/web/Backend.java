@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.Receptionist;
+import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.core.lists.i.ListMgr;
@@ -39,6 +40,7 @@ public class Backend extends HttpServlet
 	static Backend singleton;
 	
 	/** Stateless session EJB references are all thread-safe */
+	Admin admin;
 	Receptionist receptionist;
 	Encryptor encryptor;
 	ListWizard listWizard;
@@ -61,6 +63,7 @@ public class Backend extends HttpServlet
 		{
 			InitialContext ctx = new InitialContext();
 			
+			admin = (Admin)ctx.lookup(Admin.JNDI_NAME);
 			receptionist = (Receptionist)ctx.lookup(Receptionist.JNDI_NAME);
 			encryptor = (Encryptor)ctx.lookup(Encryptor.JNDI_NAME);
 			listWizard = (ListWizard)ctx.lookup(ListWizard.JNDI_NAME);
@@ -83,6 +86,12 @@ public class Backend extends HttpServlet
 		this.getServletContext().removeAttribute(KEY);
 		
 		singleton = null;
+	}
+
+	/** */
+	public Admin getAdmin()
+	{
+		return this.admin;
 	}
 
 	/** */

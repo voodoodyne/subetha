@@ -1,34 +1,34 @@
 <%@include file="/inc/top_standard.jspf" %>
 
+<t:action type="org.subethamail.web.action.auth.AuthRequired" />
+
+<c:set var="lists" value="${backend.admin.allLists}" />
+
 <trim:admin title="All Lists">
 	<h1>All Lists</h1>
 	
-	<p>
-		This page should display a list of all the mailing lists hosted
-		on this site.  Each of the lists can be clicked on and managed.
-	</p>
-	
 	<table>
 		<tr>
-			<th>List</th>
+			<th>Name</th>
+			<th>Address</th>
 			<th>URL</th>
-			<th>Subscribers</th>
 		</tr>
-		<tr>
-			<td><a href="list.jsp">announce@happhour.com</a></td>
-			<td><a href="http://www.happhour.com/list/announce">http://www.happhour.com/list/announce</a></td>
-			<td>72</td>
-		</tr>
-		<tr>
-			<td><a href="list.jsp">goodgod@goatse.cx</a></td>
-			<td><a href="http://www.blah.com/list/goodgod">http://www.blah.com/list/goodgod</a></td>
-			<td>2</td>
-		</tr>
-		<tr>
-			<td><a href="list.jsp">barbarians@nethack.org</a></td>
-			<td><a href="http://www.nethack.org/list/barbarians">http://www.nethack.org/list/barbarians</a></td>
-			<td>9384</td>
-		</tr>
+		<c:forEach var="list" items="${lists}">
+			<tr>
+				<td>
+					<c:url var="listIdUrl" value="list.jsp">
+						<c:param name="listId" value="${list.id}" />
+					</c:url>
+					<a href="${listIdUrl}"><c:out value="${list.name}" /></a>
+				</td>
+				<td>
+					<a href="mailto:<c:out value="${list.email}"/>"><c:out value="${list.email}" /></a>
+				</td>
+				<td>
+					<a href="<c:out value="${list.url}"/>"><c:out value="${list.url}" /></a>
+				</td>
+			</tr>
+		</c:forEach>
 	</table>
 
 </trim:admin>

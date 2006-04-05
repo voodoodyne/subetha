@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.Email;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -71,8 +72,9 @@ public class MailingList implements Serializable, Comparable
 	@GeneratedValue
 	Long id;
 	
-	/** TODO:  this should be stored as separate components */
+	/** */
 	@Column(nullable=false, length=Validator.MAX_LIST_EMAIL)
+	@Email
 	String email;
 	
 	@Column(nullable=false, length=Validator.MAX_LIST_NAME)
@@ -150,9 +152,6 @@ public class MailingList implements Serializable, Comparable
 	 */
 	public void setEmail(String value)
 	{
-		if (!Validator.validEmail(value))
-			throw new IllegalArgumentException("Invalid list email address");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting email of " + this + " to " + value);
 		
@@ -167,9 +166,6 @@ public class MailingList implements Serializable, Comparable
 	 */
 	public void setName(String value)
 	{
-		if (value == null || value.length() == 0 || value.length() > Validator.MAX_LIST_NAME)
-			throw new IllegalArgumentException("Invalid list name");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting name of " + this + " to " + value);
 		
@@ -201,9 +197,6 @@ public class MailingList implements Serializable, Comparable
 	 */
 	public void setDescription(String value)
 	{
-		if (value == null || value.length() > Validator.MAX_LIST_DESCRIPTION)
-			throw new IllegalArgumentException("Invalid description");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting description of " + this + " to " + value);
 		

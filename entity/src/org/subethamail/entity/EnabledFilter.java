@@ -47,9 +47,9 @@ public class EnabledFilter implements Serializable, Comparable
 	@Column(nullable=false, length=Validator.MAX_FILTER_CLASSNAME)
 	String className;
 	
-	/** If this is null, the plugin is enabled globally */
+	/** TODO:  consider allowing null to mean global filter */
 	@ManyToOne
-	@JoinColumn(name="listId", nullable=true)
+	@JoinColumn(name="listId", nullable=false)
 	MailingList list;
 	
 	/** */

@@ -176,9 +176,6 @@ public class Mail implements Serializable, Comparable
 	 */
 	public void setContent(byte[] value)
 	{
-		if (value == null || value.length > Validator.MAX_MAIL_CONTENT)
-			throw new IllegalArgumentException("Invalid content");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting content of " + this);
 		
@@ -193,9 +190,6 @@ public class Mail implements Serializable, Comparable
 	 */
 	public void setMessageId(String value)
 	{
-		if (value != null && value.length() > Validator.MAX_MAIL_MESSAGE_ID)
-			throw new IllegalArgumentException("Invalid message id");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting message id of " + this + " to " + value);
 		
@@ -210,9 +204,6 @@ public class Mail implements Serializable, Comparable
 	 */
 	public void setSubject(String value)
 	{
-		if (value == null || value.length() > Validator.MAX_MAIL_SUBJECT)
-			throw new IllegalArgumentException("Invalid subject");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting subject of " + this + " to " + value);
 		
@@ -230,9 +221,6 @@ public class Mail implements Serializable, Comparable
 	 */
 	public void setFrom(String value)
 	{
-		if (value != null && value.length() > Validator.MAX_MAIL_FROM)
-			throw new IllegalArgumentException("Invalid from");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting from of " + this + " to " + value);
 		
@@ -252,9 +240,6 @@ public class Mail implements Serializable, Comparable
 	 */
 	public void setFromNormal(String value)
 	{
-		if (value != null && value.length() > Validator.MAX_MAIL_FROM)
-			throw new IllegalArgumentException("Invalid fromNormal");
-		
 		value = Validator.normalizeEmail(value);
 
 		if (log.isDebugEnabled())

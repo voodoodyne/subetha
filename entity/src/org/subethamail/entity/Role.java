@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.validator.Length;
 import org.subethamail.common.Permission;
 import org.subethamail.common.valid.Validator;
 
@@ -52,6 +52,7 @@ public class Role implements Serializable, Comparable
 	
 	/** */
 	@Column(nullable=false, length=Validator.MAX_ROLE_NAME)
+	@Length(min=1)
 	String name;
 	
 	/** */
@@ -115,9 +116,6 @@ public class Role implements Serializable, Comparable
 	 */
 	public void setName(String value)
 	{
-		if (value == null || value.length() == 0 || value.length() > Validator.MAX_ROLE_NAME)
-			throw new IllegalArgumentException("Invalid name");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting name of " + this + " to " + value);
 		

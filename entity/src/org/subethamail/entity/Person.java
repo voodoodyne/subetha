@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.Length;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -42,6 +43,7 @@ public class Person implements Serializable, Comparable
 	Long id;
 	
 	@Column(name="passwd", nullable=false, length=Validator.MAX_PERSON_PASSWORD)
+	@Length(min=3)
 	String password;
 	
 	@Column(nullable=false, length=Validator.MAX_PERSON_NAME)
@@ -100,9 +102,6 @@ public class Person implements Serializable, Comparable
 	 */
 	public void setPassword(String value)
 	{
-		if (value == null || value.length() < 3 || value.length() > Validator.MAX_PERSON_PASSWORD)
-			throw new IllegalArgumentException("Invalid password");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting password of " + this);
 		
@@ -127,9 +126,6 @@ public class Person implements Serializable, Comparable
 	 */
 	public void setName(String value)
 	{
-		if (value == null || value.length() > Validator.MAX_PERSON_NAME)
-			throw new IllegalArgumentException("Invalid name");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting name of " + this + " to " + value);
 		

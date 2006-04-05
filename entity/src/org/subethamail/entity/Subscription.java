@@ -139,9 +139,6 @@ public class Subscription implements Serializable, Comparable
 	
 	public void setNote(String value)
 	{
-		if (value == null || value.length() > Validator.MAX_SUBSCRIPTION_NOTE)
-			throw new IllegalArgumentException("Invalid note");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting note of " + this + " to " + value);
 		

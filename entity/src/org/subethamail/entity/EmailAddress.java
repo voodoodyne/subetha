@@ -18,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.Email;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -44,6 +45,7 @@ public class EmailAddress implements Serializable, Comparable
 	/** */
 	@Id
 	@Column(length=Validator.MAX_EMAIL_ADDRESS)
+	@Email
 	String id;
 	
 	@ManyToOne
@@ -74,9 +76,6 @@ public class EmailAddress implements Serializable, Comparable
 	 */
 	private void setId(String value)
 	{
-		if (!Validator.validEmail(value))
-			throw new IllegalArgumentException("Invalid address");
-		
 		value = Validator.normalizeEmail(value);
 
 		if (log.isDebugEnabled())
@@ -88,12 +87,8 @@ public class EmailAddress implements Serializable, Comparable
 	/** */
 	public Person getPerson() { return this.person; }
 	
-	/** */
 	public void setPerson(Person value)
 	{
-		if (value == null)
-			throw new IllegalArgumentException("Cannot be null");
-		
 		this.person = value;
 	}
 

@@ -13,12 +13,13 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.validator.ClassValidator;
+import org.hibernate.validator.Length;
 import org.subethamail.common.valid.Validator;
 import org.subethamail.core.admin.i.CreateMailingListException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
-import org.subethamail.web.model.StringConstraint;
 
 /**
  * Creates a mailing list.  The model starts and remains a CreateList.Model.
@@ -33,31 +34,33 @@ public class CreateList extends AuthRequired
 	/** */
 	public static class Model extends ErrorMapModel
 	{
+		static ClassValidator<Model> validator = new ClassValidator<Model>(Model.class);
+		
 		/** Will be populated if exeuction is successful */
 		public Long id;
 		public Long getId() { return this.id; }
 		public void setId(Long value) { this.id = value; }
 		
 		/** */
-		@StringConstraint(required=true, maxLength=Validator.MAX_LIST_NAME)
+		@Length(min=1, max=Validator.MAX_LIST_NAME)
 		public String name = "";
 		public String getName() { return this.name; }
 		public void setName(String value) { this.name = value; }
 	
 		/** */
-		@StringConstraint(maxLength=Validator.MAX_LIST_DESCRIPTION)
+		@Length(max=Validator.MAX_LIST_DESCRIPTION)
 		public String description = "";
 		public String getDescription() { return this.description; }
 		public void setDescription(String value) { this.description = value; }
 	
 		/** */
-		@StringConstraint(maxLength=Validator.MAX_LIST_EMAIL)
+		@Length(max=Validator.MAX_LIST_EMAIL)
 		public String address = "";
 		public String getAddress() { return this.address; }
 		public void setAddress(String value) { this.address = value; }
 	
 		/** */
-		@StringConstraint(maxLength=Validator.MAX_LIST_URL)
+		@Length(max=Validator.MAX_LIST_URL)
 		public String url = "";
 		public String getUrl() { return this.url; }
 		public void setUrl(String value) { this.url = value; }

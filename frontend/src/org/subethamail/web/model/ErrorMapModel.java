@@ -5,10 +5,13 @@
 
 package org.subethamail.web.model;
 
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.hibernate.validator.ClassValidator;
+import org.hibernate.validator.InvalidValue;
 
 /**
  * Models with a simple error map.
@@ -17,11 +20,15 @@ import java.util.Map;
  */
 public class ErrorMapModel 
 {
+	/** Keep all the validators around */
+	private static Map<Class, ClassValidator> validators = new ConcurrentHashMap<Class, ClassValidator>();
+	
 	/** */
 	Map<String, String> errors;
 	
 	/** */
-	public Map getErrors()
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getErrors()
 	{
 		if (this.errors == null)
 			return Collections.EMPTY_MAP;
@@ -43,28 +50,23 @@ public class ErrorMapModel
 	 * and modify the error map accordingly.  The public requirement is
 	 * inherent to java reflection, unfortunately.
 	 */
+	@SuppressWarnings("unchecked")
 	public void validate() throws IllegalAccessException
 	{
-		for (Field f: this.getClass().getFields())
+		ClassValidator val = validators.get(this.getClass());
+		if (val == null)
 		{
-			StringConstraint constraint = f.getAnnotation(StringConstraint.class);
-			if (constraint != null)
-			{
-				String value = (String)f.get(this);
-				
-				if (constraint.required() && value.length() == 0)
-				{
-					this.setError(f.getName(), "Cannot be empty");
-					if (constraint.reset())
-						f.set(this, "");
-				}
-				else if (constraint.maxLength() > 0 && value.length() > constraint.maxLength())
-				{
-					this.setError(f.getName(), "Too long; you have " + value.length() + " characters but at most " + constraint.maxLength() + " are allowed");
-					if (constraint.reset())
-						f.set(this, "");
-				}
-			}
+			val = new ClassValidator(this.getClass());
+			validators.put(this.getClass(), val);
+		}
+		
+		for (InvalidValue invalid: val.getInvalidValues(this))
+		{
+			String existingError = this.getErrors().get(invalid.getPropertyPath());
+			if (existingError == null)
+				this.setError(invalid.getPropertyPath(), invalid.getMessage());
+			else
+				this.setError(invalid.getPropertyPath(), existingError + "\n" + invalid.getMessage());
 		}
 	}
 }

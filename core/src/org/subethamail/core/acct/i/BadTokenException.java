@@ -8,6 +8,7 @@ package org.subethamail.core.acct.i;
 /**
  * Thrown when a token could not be properly decrypted.
  */
+@SuppressWarnings("serial")
 public class BadTokenException extends Exception
 {
 	/**

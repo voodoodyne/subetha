@@ -10,6 +10,7 @@ package org.subethamail.core.plugin.i;
  * The msg is a user-presentable explanation of why which will be
  * included in the mail back to the user.
  */
+@SuppressWarnings("serial")
 public class HoldException extends Exception
 {
 	/**

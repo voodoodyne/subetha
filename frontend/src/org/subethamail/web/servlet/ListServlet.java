@@ -25,6 +25,7 @@ import org.subethamail.web.util.AddParamHttpRequestWrapper;
  * and then forwards to the normal list.jsp with the
  * new id parameter.
  */
+@SuppressWarnings("serial")
 public class ListServlet extends HttpServlet
 {
 	/** */

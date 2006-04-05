@@ -37,6 +37,7 @@ import org.subethamail.common.valid.Validator;
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@SuppressWarnings("serial")
 public class EmailAddress implements Serializable, Comparable
 {
 	/** */

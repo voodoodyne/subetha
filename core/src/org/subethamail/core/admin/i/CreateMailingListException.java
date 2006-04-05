@@ -8,6 +8,7 @@ package org.subethamail.core.admin.i;
 /**
  * Thrown when a mailing list could not be created.
  */
+@SuppressWarnings("serial")
 public class CreateMailingListException extends Exception
 {
 	/** */

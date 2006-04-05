@@ -12,6 +12,7 @@ import java.io.Serializable;
  *
  * @author Jeff Schnitzer
  */
+@SuppressWarnings("serial")
 public class PersonData implements Serializable
 {
 	Long id;

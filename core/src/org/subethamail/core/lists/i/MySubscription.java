@@ -17,6 +17,7 @@ import org.subethamail.common.Permission;
  *
  * @author Jeff Schnitzer
  */
+@SuppressWarnings("serial")
 public class MySubscription implements Serializable
 {
 	/** */

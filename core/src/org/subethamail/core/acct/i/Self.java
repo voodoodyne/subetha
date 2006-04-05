@@ -12,6 +12,7 @@ package org.subethamail.core.acct.i;
  *
  * @author Jeff Schnitzer
  */
+@SuppressWarnings("serial")
 public class Self extends PersonData
 {
 	// TODO:  add list of subscriptions

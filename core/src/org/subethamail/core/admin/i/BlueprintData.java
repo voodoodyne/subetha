@@ -13,6 +13,7 @@ import java.io.Serializable;
  *
  * @author Jeff Schnitzer
  */
+@SuppressWarnings("serial")
 public class BlueprintData implements Serializable
 {
 	String id;

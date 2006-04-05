@@ -21,6 +21,7 @@ import javax.persistence.Embeddable;
  * @author jeff
  */
 @Embeddable
+@SuppressWarnings("serial")
 public class SubscriptionPK implements java.io.Serializable
 {
 	/** */

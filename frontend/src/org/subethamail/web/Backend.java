@@ -27,6 +27,7 @@ import org.subethamail.core.lists.i.ListMgr;
  * Other classes in the web tier can obtain the instance
  * by calling Backend.instance().
  */
+@SuppressWarnings("serial")
 public class Backend extends HttpServlet
 {
 	/** Application-scope key */

@@ -36,7 +36,7 @@ import org.subethamail.entity.dao.DAO;
  * 
  * @author Jeff Schnitzer
  */
-@Service(name="Bootstrapper", objectName="subetha:service=Bootstrapper")
+@Service(objectName="subetha:service=Bootstrapper")
 // This depends annotation can be removed when JBoss fixes dependency bug.
 @Depends("jboss.j2ee:ear=subetha.ear,jar=entity.jar,name=DAO,service=EJB3")
 @SecurityDomain("subetha")

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
  * Wraps the request and provides one additional http request paramter.
  * Not thread safe.
  */
+@SuppressWarnings("deprecation")
 public class AddParamHttpRequestWrapper extends HttpServletRequestWrapper
 {
 	/** */
@@ -41,6 +42,7 @@ public class AddParamHttpRequestWrapper extends HttpServletRequestWrapper
 	
 	/** */
 	@Override
+	@SuppressWarnings("unchecked")
 	public Map getParameterMap()
 	{
 		if (this.parameterMap == null)

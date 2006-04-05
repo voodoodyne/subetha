@@ -18,7 +18,7 @@ import java.util.Map;
 public class ErrorMapModel 
 {
 	/** */
-	Map errors;
+	Map<String, String> errors;
 	
 	/** */
 	public Map getErrors()
@@ -33,7 +33,7 @@ public class ErrorMapModel
 	public void setError(String key, String msg)
 	{
 		if (this.errors == null)
-			this.errors = new HashMap();
+			this.errors = new HashMap<String, String>();
 		
 		this.errors.put(key, msg);
 	}

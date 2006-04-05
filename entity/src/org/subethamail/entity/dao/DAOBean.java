@@ -220,6 +220,7 @@ public class DAOBean implements DAO
 	/**
 	 * @see DAO#findAllLists()
 	 */
+	@SuppressWarnings("unchecked")
 	public List<MailingList> findAllLists()
 	{
 		if (log.isDebugEnabled())

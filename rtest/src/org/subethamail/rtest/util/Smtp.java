@@ -56,6 +56,7 @@ public class Smtp
 	}
 	
 	/** */
+	@SuppressWarnings("unchecked")
 	public Iterator<SmtpMessage> iterator()
 	{
 		return this.server.getReceivedEmail();

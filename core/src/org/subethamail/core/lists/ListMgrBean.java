@@ -24,7 +24,6 @@ import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
-import org.subethamail.entity.Subscription;
 import org.subethamail.entity.dao.DAO;
 
 /**

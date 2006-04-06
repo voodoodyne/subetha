@@ -13,7 +13,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.ClassValidator;
 import org.hibernate.validator.Length;
 import org.subethamail.common.valid.Validator;
 import org.subethamail.core.admin.i.CreateMailingListException;

@@ -35,8 +35,6 @@ public class CreateList extends AuthRequired
 	/** */
 	public static class Model extends ErrorMapModel
 	{
-		static ClassValidator<Model> validator = new ClassValidator<Model>(Model.class);
-		
 		/** Will be populated if exeuction is successful */
 		@Property Long id;
 		

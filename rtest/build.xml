@@ -19,13 +19,13 @@
 
 	
 	<path id="rtest.classpath">
-		<path refid="master.classpath" />
-
 		<fileset dir="${rtest.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
 		
 		<pathelement location="${build.core.ejbclient.file}" />
+		
+		<path refid="master.classpath" />
 	</path>
 
 	<path id="rtest.run.classpath">

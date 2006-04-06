@@ -40,15 +40,15 @@
 			<tr>
 				<th><label for="address">List Address</label></th>
 				<td
-					<c:if test="${!empty model.errors.address}">
+					<c:if test="${!empty model.errors.email}">
 						class="error"
 					</c:if>
 				>
-					<input id="address" name="address" type="text" size="60" value="${model.address}" />
+					<input id="email" name="email" type="text" size="60" value="${model.email}" />
 					<div>Example:  announce@somedomain.com</div>
 					
-					<c:if test="${!empty model.errors.address}">
-						<p class="error"><c:out value="${model.errors.address}"/></p>
+					<c:if test="${!empty model.errors.email}">
+						<p class="error"><c:out value="${model.errors.email}"/></p>
 					</c:if>
 				</td>
 			</tr>

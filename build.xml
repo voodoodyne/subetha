@@ -28,8 +28,6 @@
 
 	<!-- Set up a basic path for everyone -->
 	<path id="base.classpath">
-		<pathelement path="${java.class.path}" />
-		
 		<fileset dir="${jboss.dir}">
 			<include name="server/default/deploy/ejb3.deployer/*.jar"/>
 			<include name="server/default/lib/jboss-j2ee.jar"/>
@@ -38,14 +36,16 @@
 			<include name="lib/jboss-common.jar"/>
 			<include name="lib/commons-logging.jar"/>
 		</fileset>
+		
+		<pathelement path="${java.class.path}" />
 	</path>
 	
 	<!-- Common is special because master.classpath depends on it -->
 	<import file="common/build.xml"/>
 	
 	<path id="master.classpath">
-		<path refid="common.classpath" />
 		<pathelement location="${build.common.jar.file}" />
+		<path refid="common.classpath" />
 	</path>
 	
 	<!-- Now the rest of the imports -->

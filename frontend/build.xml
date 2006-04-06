@@ -20,8 +20,6 @@
 	<property name="frontend.content.dir" location="${frontend.basedir}/content" />
 		
 	<path id="frontend.classpath">
-		<path refid="master.classpath" />
-		
 		<pathelement location="${build.core.ejbclient.file}" />
 		
 		<fileset dir="${frontend.lib.dir}">
@@ -32,6 +30,8 @@
 			<include name="server/default/lib/javax.servlet.jar"/>
 			<include name="server/default/lib/javax.servlet.jsp.jar"/>
 		</fileset>
+		
+		<path refid="master.classpath" />
 	</path>
 
  	<target name="frontend-classes" depends="core-ejbclient-jar, common-jar">
@@ -46,7 +46,21 @@
 		</javac>
 	</target>
 
-	<target name="frontend-war" depends="frontend-classes">
+	<target name="frontend-propertize" depends="frontend-classes">
+		<taskdef name="propertize" classname="org.tagonist.propertize.PropertizeTask">
+			<!-- <classpath refid="frontend.classpath" /> -->
+			<classpath>
+				<path refid="frontend.classpath" />
+				<pathelement location="${build.frontend.classes.dir}"/>
+			</classpath>
+		</taskdef>
+		
+		<propertize verbose="false">
+			<fileset dir="${build.frontend.classes.dir}"/>
+		</propertize>
+	</target>
+
+	<target name="frontend-war" depends="frontend-propertize">
 		<war destfile="${build.frontend.war.file}" webxml="${frontend.meta.dir}/web.xml">
 			<webinf dir="${frontend.meta.dir}">
 				<exclude name="web.xml" />

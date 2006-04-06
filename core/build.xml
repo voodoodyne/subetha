@@ -29,10 +29,11 @@
 
 	<!-- used to build the core implementation -->
 	<path id="core.classpath">
-		<path refid="core.i.classpath" />
 		<pathelement location="${build.core.ejbclient.file}" />
 		<pathelement location="${build.entity.ejb.file}"/>
 		<fileset dir="${core.lib.dir}"/>
+		
+		<path refid="core.i.classpath" />
 	</path>
 
  	<target name="core-classes" depends="core-ejbclient-jar, entity-ejb-jar">

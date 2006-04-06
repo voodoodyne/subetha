@@ -23,8 +23,8 @@
 
 	<!-- used to build the plugin interfaces -->
 	<path id="plugin.classpath">
-		<path refid="master.classpath" />
 		<pathelement location="${build.core.ejbclient.file}" />
+		<path refid="master.classpath" />
 	</path>
 
  	<target name="plugin-classes" depends="core-ejbclient-jar">

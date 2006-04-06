@@ -17,11 +17,11 @@
 	<property name="common.lib.dir" location="${common.basedir}/lib" />
 		
 	<path id="common.classpath">
-		<path refid="base.classpath" />
-
 		<fileset dir="${common.lib.dir}">
 			<include name="**/*.jar" />
 		</fileset>
+		
+		<path refid="base.classpath" />
 	</path>
 
  	<target name="common-classes" depends="">

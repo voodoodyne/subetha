@@ -20,6 +20,7 @@ import org.subethamail.core.admin.i.CreateMailingListException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
+import org.tagonist.propertize.Property;
 
 /**
  * Creates a mailing list.  The model starts and remains a CreateList.Model.
@@ -37,43 +38,29 @@ public class CreateList extends AuthRequired
 		static ClassValidator<Model> validator = new ClassValidator<Model>(Model.class);
 		
 		/** Will be populated if exeuction is successful */
-		public Long id;
-		public Long getId() { return this.id; }
-		public void setId(Long value) { this.id = value; }
+		@Property Long id;
 		
 		/** */
 		@Length(min=1, max=Validator.MAX_LIST_NAME)
-		public String name = "";
-		public String getName() { return this.name; }
-		public void setName(String value) { this.name = value; }
+		@Property String name = "";
 	
 		/** */
 		@Length(max=Validator.MAX_LIST_DESCRIPTION)
-		public String description = "";
-		public String getDescription() { return this.description; }
-		public void setDescription(String value) { this.description = value; }
+		@Property String description = "";
 	
 		/** */
 		@Length(max=Validator.MAX_LIST_EMAIL)
-		public String address = "";
-		public String getAddress() { return this.address; }
-		public void setAddress(String value) { this.address = value; }
+		@Property String email = "";
 	
 		/** */
 		@Length(max=Validator.MAX_LIST_URL)
-		public String url = "";
-		public String getUrl() { return this.url; }
-		public void setUrl(String value) { this.url = value; }
+		@Property String url = "";
 
 		/** */
-		public String owners = "";
-		public String getOwners() { return this.owners; }
-		public void setOwners(String value) { this.owners = value; }
+		@Property String owners = "";
 		
 		/** */
-		public String blueprint = "";
-		public String getBlueprint() { return this.blueprint; }
-		public void setBlueprint(String value) { this.blueprint = value; }
+		@Property String blueprint = "";
 	}
 	
 	/** */
@@ -94,7 +81,7 @@ public class CreateList extends AuthRequired
 		URL url = null;
 		try
 		{
-			url = new URL(model.getUrl());
+			url = new URL(model.url);
 		}
 		catch (MalformedURLException ex)
 		{
@@ -105,20 +92,20 @@ public class CreateList extends AuthRequired
 		InternetAddress listAddress = null;
 		try
 		{
-			listAddress = new InternetAddress(model.getAddress());
+			listAddress = new InternetAddress(model.email);
 			listAddress.validate();
-			listAddress.setPersonal(model.getName());
+			listAddress.setPersonal(model.name);
 		}
 		catch (AddressException ex)
 		{
-			model.setError("address", ex.getMessage());
+			model.setError("email", ex.getMessage());
 		}
 		
 		// Check the list owners
 		InternetAddress[] owners = null;
 		try
 		{
-			owners = InternetAddress.parse(model.getOwners());
+			owners = InternetAddress.parse(model.owners);
 			for (InternetAddress owner: owners)
 				owner.validate();
 		}
@@ -132,13 +119,12 @@ public class CreateList extends AuthRequired
 		{
 			try
 			{
-				Long id = Backend.instance().getListWizard().createMailingList(listAddress, url, model.getDescription(), owners, model.getBlueprint());
-				model.setId(id);
+				model.id = Backend.instance().getListWizard().createMailingList(listAddress, url, model.description, owners, model.blueprint);
 			}
 			catch (CreateMailingListException ex)
 			{
 				if (ex.isAddressTaken())
-					model.setError("address", "That address is already in use");
+					model.setError("email", "That address is already in use");
 				
 				if (ex.isUrlTaken())
 					model.setError("url", "That url is already in use");

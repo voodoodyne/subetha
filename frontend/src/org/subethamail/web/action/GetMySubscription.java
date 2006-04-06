@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
+import org.tagonist.propertize.Property;
 
 /**
  * Gets data about a mailing list and the current user.
@@ -22,9 +23,7 @@ public class GetMySubscription extends AuthAction
 	private static Log log = LogFactory.getLog(GetMySubscription.class);
 	
 	/** */
-	Long listId;
-	public Long getListId() { return this.listId; }
-	public void setListId(Long value) { this.listId = value; }
+	@Property Long listId;
 		
 	/** */
 	public void execute() throws Exception

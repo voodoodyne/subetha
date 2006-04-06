@@ -9,6 +9,7 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.tagonist.propertize.Property;
 
 /**
  * Performs a login.  The model starts as (and remains)
@@ -24,30 +25,11 @@ public class Login extends AuthAction
 	/** */
 	public static class Model
 	{
-		/** */
-		String email = "";
-		public String getEmail() { return this.email; }
-		public void setEmail(String value) { this.email = value; }
-	
-		/** */
-		String password = "";
-		public String getPassword() { return this.password; }
-		public void setPassword(String value) { this.password = value; }
-	
-		/** */
-		boolean remember;
-		public boolean getRemember() { return this.remember; }
-		public void setRemember(boolean value) { this.remember = value; }
-		
-		/** */
-		String dest = "";
-		public String getDest() { return this.dest; }
-		public void setDest(String value) { this.dest = value; }
-	
-		/** */
-		String error = "";
-		public String getError() { return this.error; }
-		public void setError(String value) { this.error = value; }
+		@Property String email = "";
+		@Property String password = "";
+		@Property boolean remember;
+		@Property String dest = "";
+		@Property String error = "";
 	}
 	
 	/** */
@@ -63,15 +45,15 @@ public class Login extends AuthAction
 		
 		try
 		{
-			this.login(model.getEmail(), model.getPassword());
+			this.login(model.email, model.password);
 			
-			if (model.getRemember())
-				this.setAutoLogin(model.getEmail(), model.getPassword());
+			if (model.remember)
+				this.setAutoLogin(model.email, model.password);
 		}
 		catch (LoginException ex)
 		{
-			model.setPassword("");
-			model.setError("Invalid username or password");
+			model.password = "";
+			model.error = "Invalid username or password";
 		}
 	}
 }

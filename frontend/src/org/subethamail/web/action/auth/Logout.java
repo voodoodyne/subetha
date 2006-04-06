@@ -5,6 +5,8 @@
 
 package org.subethamail.web.action.auth;
 
+import org.tagonist.propertize.Property;
+
 
 /**
  * Very simple - logs the user out.  Also indicates whether or
@@ -16,8 +18,7 @@ package org.subethamail.web.action.auth;
 public class Logout extends AuthAction 
 {
 	/** */
-	boolean autoLoginEnabled;
-	public boolean isAutoLoginEnabled() { return this.autoLoginEnabled; }
+	@Property(set=false) boolean autoLoginEnabled;
 	
 	/** */
 	public void execute() throws Exception

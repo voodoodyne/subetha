@@ -56,7 +56,7 @@ public class MailingListTest extends SubEthaTestCase
 		assertEquals(1, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.NEW_MAILING_LIST));
 		
-		MailingListData data = this.nobody.getListMgr().getMailingList(ml.getId());
+		MailingListData data = this.nobody.getListMgr().getMySubscription(ml.getId()).getList();
 		assertEquals(ml.getEmail(), data.getEmail());
 		assertEquals(ml.getUrl().toString(), data.getUrl());
 		assertEquals(ml.getDescription(), data.getDescription());
@@ -73,7 +73,7 @@ public class MailingListTest extends SubEthaTestCase
 		assertEquals(1, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.NEW_MAILING_LIST));
 		
-		MailingListData data = this.nobody.getListMgr().getMailingList(ml.getId());
+		MailingListData data = this.nobody.getListMgr().getMySubscription(ml.getId()).getList();
 		assertEquals(ml.getEmail(), data.getEmail());
 		assertEquals(ml.getUrl().toString(), data.getUrl());
 		assertEquals(ml.getDescription(), data.getDescription());

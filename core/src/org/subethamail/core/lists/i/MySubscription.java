@@ -90,4 +90,12 @@ public class MySubscription implements Serializable
 	{
 		return this.perms;
 	}
+
+	/**
+	 * @return the mailing list data for this subscription.
+	 */
+	public MailingListData getList()
+	{
+		return this.list;
+	}
 }

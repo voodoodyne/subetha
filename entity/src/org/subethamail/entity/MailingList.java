@@ -88,14 +88,21 @@ public class MailingList implements Serializable, Comparable
 	@Column(nullable=false, length=Validator.MAX_LIST_DESCRIPTION)
 	String description;
 	
+	//
+	// TODO:  set these two columns back to nullable=false when
+	// this hibernate bug is fixed:
+	// http://opensource.atlassian.com/projects/hibernate/browse/HHH-1654
+	// Also, this affects the creation sequence for mailing lists
+	//
+	
 	/** The default role for new subscribers */
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="defaultRoleId", nullable=false)
+	@JoinColumn(name="defaultRoleId", nullable=true)
 	Role defaultRole;
 	
 	/** The role to consider anonymous (not subscribed) people */
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="anonymousRoleId", nullable=false)
+	@JoinColumn(name="anonymousRoleId", nullable=true)
 	Role anonymousRole;
 	
 	/** */
@@ -138,8 +145,12 @@ public class MailingList implements Serializable, Comparable
 		// We have to start with one role, the owner role
 		Role owner = new Role(this);
 		this.roles.add(owner);
-		this.defaultRole = owner;
-		this.anonymousRole = owner;
+		
+// TODO:  restore this code when hibernate bug fixed.  In the mean time,
+// the creator MUST persist the MailingList *then* set these values.
+// http://opensource.atlassian.com/projects/hibernate/browse/HHH-1654
+//		this.defaultRole = owner;
+//		this.anonymousRole = owner;
 	}
 	
 	/** */
@@ -247,6 +258,18 @@ public class MailingList implements Serializable, Comparable
 			throw new IllegalArgumentException("Role belongs to some other list");
 			
 		this.anonymousRole = value;
+	}
+	
+	/**
+	 * Figures out which role is the owner and returns it
+	 */
+	public Role getOwnerRole()
+	{
+		for (Role check: this.roles)
+			if (check.isOwner())
+				return check;
+		
+		throw new IllegalStateException("Missing owner role");
 	}
 	
 	/**

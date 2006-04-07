@@ -16,8 +16,9 @@ import java.util.Set;
  */
 public enum Permission
 {
+	EDIT_SETTINGS,
 	EDIT_ROLES,
-	EDIT_PLUGINS,
+	EDIT_FILTERS,
 	APPROVE_MESSAGES,
 	APPROVE_SUBSCRIPTIONS,
 	POST,

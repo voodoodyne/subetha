@@ -7,7 +7,7 @@
 #set($subject = "Your new mailing list $list.name")
 Welcome to your new mailing list "$list.name".  The email address for this list is:
 
-	$list.address
+	$list.email
 
 To administer this list, visit the main list URL and log in:
 

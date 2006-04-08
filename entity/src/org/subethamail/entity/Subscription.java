@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
@@ -59,7 +58,7 @@ public class Subscription implements Serializable, Comparable
 	/** 
 	 * The role of this subscription.
 	 */
-	@OneToOne
+	@ManyToOne(optional=false)
 	@JoinColumn(name="roleId", nullable=false)
 	Role role;
 	

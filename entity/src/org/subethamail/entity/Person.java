@@ -60,7 +60,7 @@ public class Person implements Serializable, Comparable
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	@MapKey(name="list")
+	@MapKey(name="pk.listId")
 	Map<Long, Subscription> subscriptions;
 	
 	/**
@@ -155,6 +155,18 @@ public class Person implements Serializable, Comparable
 	public void addEmailAddress(EmailAddress value)
 	{
 		this.emailAddresses.put(value.getId(), value);
+	}
+	
+	/**
+	 * Gets the email address associated with that email, properly
+	 * normalizing before checking.
+	 * 
+	 * @return null if that is not one of my email addresses.
+	 */
+	public EmailAddress getEmailAddress(String email)
+	{
+		email = Validator.normalizeEmail(email);
+		return this.emailAddresses.get(email);
 	}
 	
 	/** 

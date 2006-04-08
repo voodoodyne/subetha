@@ -8,6 +8,8 @@ package org.subethamail.core.acct.i;
 import javax.ejb.Local;
 import javax.mail.MessagingException;
 
+import org.subethamail.common.NotFoundException;
+
 
 /**
  * Tools which let a user manipulate their own account data.
@@ -56,5 +58,12 @@ public interface AccountMgr
 	 */
 	public void addEmail(String token) throws BadTokenException;
 	
+	/**
+	 * Subscribes an email address to the list.
+	 * 
+	 * @param email must be one of the current user's email addresses,
+	 *  or null to subscribe without delivery.
+	 */
+	public void subscribe(Long listId, String email) throws NotFoundException;
 }
 

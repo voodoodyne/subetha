@@ -82,7 +82,7 @@ public class Validator
 	 */
 	public static boolean validEmail(String email)
 	{
-		if (email == null)
+		if (email == null || email.length() == 0)
 			return false;
 		
 		if (email.length() > MAX_EMAIL_ADDRESS){
@@ -108,9 +108,9 @@ public class Validator
 			if (log.isDebugEnabled()) log.debug("cannot start or end with '.': " + email);
 			return false;
 		}
-		
+
 		// Make sure we don't have a one-letter TLD
-		if (site.charAt(site.length() - 2) == '.'){
+		if (site.length() - 2 > 0 && site.charAt(site.length() - 2) == '.'){
 			if (log.isDebugEnabled()) log.debug("TLD too short:" + email);
 			return false;
 		}
@@ -118,5 +118,3 @@ public class Validator
 		return true;
 	}
 }
-
-

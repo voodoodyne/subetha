@@ -87,6 +87,11 @@ public class Mail implements Serializable, Comparable
 	@Index(name="mailMessageIdIndex")
 	String messageId;
 	
+	/** Parent message id might not exist */
+	@Column(nullable=true, length=Validator.MAX_MAIL_MESSAGE_ID)
+	@Index(name="mailParentMessageIdIndex")
+	String parentMessageId;
+	
 	/** */
 	@Column(nullable=false, length=Validator.MAX_MAIL_SUBJECT)
 	String subject;

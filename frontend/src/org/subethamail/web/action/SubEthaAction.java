@@ -94,7 +94,7 @@ abstract public class SubEthaAction extends AbstractAction
 	 *  use <c:redirect> with.
 	 */
 	@SuppressWarnings("unchecked")
-	protected String getUsefulRequestURI()
+	public String getUsefulRequestURI()
 	{
 		if ("POST".equals(this.getCtx().getRequest().getMethod().toUpperCase()))
 		{

@@ -12,7 +12,8 @@ import org.subethamail.web.action.auth.AuthRequired;
 import org.tagonist.propertize.Property;
 
 /**
- * Subscribes an existing user to a mailing list.  The resulting model
+ * Subscribes an existing user to a mailing list, or changes the
+ * address to which delivery is enabled.  The resulting model
  * will be Boolean.TRUE if the user was immediately subscribed, or
  * Boolean.FALSE if the subscription is held for approval.
  * 

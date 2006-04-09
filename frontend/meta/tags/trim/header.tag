@@ -15,6 +15,7 @@
 				
 				<c:otherwise>
 					<form action="<c:url value="/login_submit.jsp"/>" method="post">
+						<input type="hidden" name="dest" value="${auth.usefulRequestURI}" />
 						<table>
 							<tr>
 								<th>Email:</th>

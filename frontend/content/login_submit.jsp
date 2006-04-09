@@ -14,7 +14,7 @@
 </c:if>
 
 
-<trim:plain title="Login Failed">
+<trim:headerless title="Login Failed">
 	<h1>Login Failed</h1>
 	
 	<p class="error">
@@ -22,4 +22,4 @@
 	</p>
 	
 	<%@include file="/inc/login_form.jspf" %>
-</trim:plain>
+</trim:headerless>

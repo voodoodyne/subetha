@@ -16,15 +16,15 @@
 	
 	<c:choose>
 		<c:when test="${sub.subscribed}">
-			<form action="<c:url value="/deliver_to.jsp"/>" method="post">
+			<form action="<c:url value="/subscribe_me.jsp"/>" method="post">
 				<input type="hidden" name="listId" value="${sub.list.id}" />
 				<p>
 					<c:choose>
 						<c:when test="${empty sub.deliverTo}">
-							You have disabled delivery of mail.
+							You have disabled delivery of mail from this list.
 						</c:when>
 						<c:otherwise>
-							You have chosen to receive mail at <strong><c:out value="${sub.deliverTo}"/></strong>.
+							Messages from this list will be delivered to <strong><c:out value="${sub.deliverTo}"/></strong>.
 						</c:otherwise>
 					</c:choose>
 					Change to
@@ -33,8 +33,7 @@
 						<c:forEach var="email" items="${me.emailAddresses}">
 							<option value="<c:out value="${email}"/>"><c:out value="${email}"/></option>
 						</c:forEach>
-					</select>
-					<input type="submit" value="Change" />
+					</select><input type="submit" value="Change" />
 				</p>
 			</form>
 		</c:when>
@@ -61,7 +60,7 @@
 				If you are already subscribed, you may log in to be presented
 				with additional options.  Use the form at the top of the page.
 			</p>
-			<form action="<c:url value="/subscribe_anonymous.jsp"/>" method="post">
+			<form action="<c:url value="/subscribe_anon.jsp"/>" method="post">
 				<input type="hidden" name="listId" value="${sub.list.id}" />
 				<table>
 					<tr>

@@ -10,20 +10,20 @@
 	<div class="sideBox LHS">
 		<div>List Menu</div>
 		
-		<c:url var="listUrl" value="list.jsp">
+		<c:url var="listUrl" value="/list.jsp">
 			<c:param name="listId" value="${listId}"/>
 		</c:url>
 		<a href="${listUrl}">&rsaquo; List Overivew</a>
 		
 		<c:if test="${perms.READ_ARCHIVES}">
-			<c:url var="listArchivesUrl" value="list_archives.jsp">
+			<c:url var="listArchivesUrl" value="/list_archives.jsp">
 				<c:param name="listId" value="${listId}"/>
 			</c:url>
 			<a href="${listArchivesUrl}">&rsaquo; Archives</a>
 		</c:if>
 
 		<c:if test="${perms.VIEW_SUBSCRIBERS}">
-			<c:url var="listSubscribersUrl" value="list_subscribers.jsp">
+			<c:url var="listSubscribersUrl" value="/list_subscribers.jsp">
 				<c:param name="listId" value="${listId}"/>
 			</c:url>
 			<a href="${listSubscribersUrl}">&rsaquo; Subscribers</a>
@@ -36,35 +36,35 @@
 			<div>List Admin Menu</div>
 			
 			<c:if test="${perms.EDIT_SETTINGS}">
-				<c:url var="listSettingsUrl" value="list_settings.jsp">
+				<c:url var="listSettingsUrl" value="/list_settings.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
 				<a href="${listSettingsUrl}">&rsaquo; Settings</a>
 			</c:if>
 			
 			<c:if test="${perms.EDIT_FILTERS}">
-				<c:url var="listFiltersUrl" value="list_filters.jsp">
+				<c:url var="listFiltersUrl" value="/list_filters.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
 				<a href="${listFiltersUrl}">&rsaquo; Filters</a>
 			</c:if>
 			
 			<c:if test="${perms.EDIT_ROLES}">
-				<c:url var="listRolesUrl" value="list_roles.jsp">
+				<c:url var="listRolesUrl" value="/list_roles.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
 				<a href="${listRolesUrl}">&rsaquo; Roles</a>
 			</c:if>
 			
 			<c:if test="${perms.APPROVE_SUBSCRIPTIONS}">
-				<c:url var="listHeldSubsUrl" value="list_held_subs.jsp">
+				<c:url var="listHeldSubsUrl" value="/list_held_subs.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
 				<a href="${listHeldSubsUrl}">&rsaquo; Held Subscriptions</a>
 			</c:if>
 				
 			<c:if test="${perms.APPROVE_MESSAGES}">
-				<c:url var="listHeldMsgsUrl" value="list_held_msgs.jsp">
+				<c:url var="listHeldMsgsUrl" value="/list_held_msgs.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
 				<a href="${listHeldMsgsUrl}">&rsaquo; Held Messages</a>

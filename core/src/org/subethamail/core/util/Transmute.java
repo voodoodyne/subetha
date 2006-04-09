@@ -17,6 +17,7 @@ import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.lists.i.MailingListData;
 import org.subethamail.core.lists.i.MySubscription;
 import org.subethamail.core.plugin.i.Blueprint;
+import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
@@ -101,10 +102,11 @@ public class Transmute
 			perms = Permission.ALL;
 		
 		Subscription rawSub = (rawPerson == null) ? null : rawPerson.getSubscription(rawList.getId());
+		EmailAddress deliverTo = (rawSub == null) ? null : rawSub.getDeliverTo();
 		
 		return new MySubscription(
 				listData,
-				(rawSub == null) ? null : rawSub.getDeliverTo().getId(),
+				(deliverTo == null) ? null : deliverTo.getId(),
 				(rawSub != null),
 				role.isOwner(),
 				role.getName(),

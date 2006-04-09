@@ -58,12 +58,5 @@ public interface AccountMgr
 	 */
 	public void addEmail(String token) throws BadTokenException;
 	
-	/**
-	 * Subscribes an email address to the list.
-	 * 
-	 * @param email must be one of the current user's email addresses,
-	 *  or null to subscribe without delivery.
-	 */
-	public void subscribe(Long listId, String email) throws NotFoundException;
 }
 

@@ -19,6 +19,7 @@ import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AccountMgrRemote;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.core.acct.i.Self;
+import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.entity.EmailAddress;
@@ -104,35 +105,4 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		//TODO
 	}
 
-	/**
-	 * @see AccountMgr#subscribe(Long, String)
-	 */
-	public void subscribe(Long listId, String email) throws NotFoundException
-	{
-		MailingList list = this.dao.findMailingList(listId);
-		Person me = this.getMe();
-		EmailAddress addy = (email == null) ? null : me.getEmailAddress(email);
-		
-		// If subscribing an address we do not currently own
-		if (email != null && addy == null)
-		{
-			// TODO:  send a token that allows user to add and subscribe in one step
-			return;
-		}
-		
-		if (me.isSubscribed(list))
-		{
-			// TODO: Make sure that the right email address is subscribed,
-			// and if not, switch to this one.
-			return;
-		}
-		
-		// TODO:  maybe we need a subscription hold?
-		
-		Subscription sub = new Subscription(me, list, addy, list.getDefaultRole());
-		this.dao.persist(sub);
-		
-		me.addSubscription(sub);
-		list.getSubscriptions().add(sub);
-	}
 }

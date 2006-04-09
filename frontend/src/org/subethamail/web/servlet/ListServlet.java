@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.subethamail.common.NotFoundException;
 import org.subethamail.web.Backend;
-import org.subethamail.web.util.AddParamHttpRequestWrapper;
 
 /**
  * This servlet is what allows master list URLs to be
@@ -47,9 +46,10 @@ public class ListServlet extends HttpServlet
 		{
 			Long listId = Backend.instance().getListMgr().lookup(url);
 			
-			RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher(LIST_PAGE);
-			HttpServletRequest wrapper = new AddParamHttpRequestWrapper(request, ID_PARAM_NAME, listId.toString());
-			dispatcher.forward(wrapper, response);
+			RequestDispatcher dispatcher = 
+				this.getServletContext().getRequestDispatcher(LIST_PAGE + "?" + ID_PARAM_NAME + "=" + listId);
+			
+			dispatcher.forward(request, response);
 		}
 		catch (NotFoundException ex)
 		{

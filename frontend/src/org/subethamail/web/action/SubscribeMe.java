@@ -34,7 +34,7 @@ public class SubscribeMe extends AuthRequired
 		if (this.deliverTo.length() == 0)
 			this.deliverTo = null;
 		
-		Backend.instance().getAccountMgr().subscribe(this.listId, this.deliverTo);
+		Backend.instance().getListMgr().subscribeMe(this.listId, this.deliverTo);
 	}
 	
 }

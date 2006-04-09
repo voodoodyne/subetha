@@ -8,10 +8,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<title>${title}</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		
 		<link rel="stylesheet" type="text/css" href="<c:url value="/css/bluehaze.css"/>" />
 		<link rel="stylesheet" type="text/css" href="<c:url value="/css/color-scheme.css"/>" />
+		<link rel="styleSheet" type="text/css" href="<c:url value="/css/sortabletable.css"/>" />
 		<link rel="stylesheet" type="text/css" href="<c:url value="/css/subetha.css"/>" />
+
+		<script type="text/javascript" src="<c:url value="/js/sortabletable.js"/>"></script>
   	</head>
 	
 	<body>

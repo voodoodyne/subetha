@@ -14,18 +14,14 @@ import javax.mail.MessagingException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
-import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AccountMgrRemote;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.core.acct.i.Self;
-import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.entity.EmailAddress;
-import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
-import org.subethamail.entity.Subscription;
 
 /**
  * Implementation of the AccountMgr interface.

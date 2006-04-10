@@ -12,9 +12,6 @@
 		</c:when>
 		<c:otherwise>
 			<table class="sort-table" id="lists-table">
-			<col />
-			<col />
-			<col style="text-align: right" />
 			<thead>
 				<tr>
 					<td>Name</td>

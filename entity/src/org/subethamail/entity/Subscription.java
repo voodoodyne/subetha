@@ -114,6 +114,23 @@ public class Subscription implements Serializable, Comparable
 			
 		this.deliverTo = value;
 	}
+
+	/**
+	 * FIXME ? This code is duplicated from AccountMgrBean.java
+	 * 
+	 * @return Gets a String[] of email addresses the Person is subscribed to.
+	 */
+	public String[] getEmailAddresses()
+	{
+		String[] addresses = new String[person.getEmailAddresses().size()];
+		int i = 0;
+		for (EmailAddress addy: person.getEmailAddresses().values())
+		{
+			addresses[i] = addy.getId();
+			i++;
+		}
+		return addresses;
+	}
 	
 	/**
 	 */

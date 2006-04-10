@@ -15,9 +15,9 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class PersonData implements Serializable
 {
-	Long id;
-	String name;
-	String[] emailAddresses;
+	protected Long id;
+	protected String name;
+	protected String[] emailAddresses;
 	
 	/**
 	 */

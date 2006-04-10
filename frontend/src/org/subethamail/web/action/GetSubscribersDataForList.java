@@ -7,35 +7,28 @@ package org.subethamail.web.action;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.Email;
+import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
 
 /**
- * Subscribes an anonymous (not logged in) user to a mailing list.
+ * Gets data about a mailing list and the current user.
+ * Model becomes a MySubscription.
  * 
  * @author Jeff Schnitzer
  */
-public class SubscribeAnon extends AuthAction 
+public class GetSubscribersDataForList extends AuthAction 
 {
 	/** */
-	private static Log log = LogFactory.getLog(SubscribeAnon.class);
-	
-	/** */
+	private static Log log = LogFactory.getLog(GetMySubscription.class);
+
 	public static class Model extends ErrorMapModel
 	{
 		/** */
 		@Property Long listId;
-		
-		/** */
-		@Email
-		@Property String deliverTo = "";
-		
-		/** */
-		@Property String name = "";
 	}
-	
+
 	/** */
 	public void initialize()
 	{
@@ -46,8 +39,6 @@ public class SubscribeAnon extends AuthAction
 	public void execute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();
-		
-		//Backend.instance().getAccountMgr().subscribe(this.listId, this.deliverTo);
+		this.getCtx().setModel(Backend.instance().getListMgr().getSubscribers(model.listId));
 	}
-	
 }

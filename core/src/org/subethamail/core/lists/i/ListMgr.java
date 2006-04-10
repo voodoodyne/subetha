@@ -6,6 +6,7 @@
 package org.subethamail.core.lists.i;
 
 import java.net.URL;
+import java.util.List;
 
 import javax.ejb.Local;
 
@@ -79,6 +80,11 @@ public interface ListMgr
 	 * @throws NotFoundException if the list id is not valid.
 	 */
 	public SubscribeResult subscribeMe(Long listId, String email) throws NotFoundException;
-	
-}
 
+	/**
+	 * Retrieves all the subscribers for a MailingList
+	 * 
+	 * @throws NotFoundException if the list id is not valid.
+	 */
+	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException;
+}

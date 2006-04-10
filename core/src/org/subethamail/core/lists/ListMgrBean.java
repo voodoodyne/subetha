@@ -6,6 +6,8 @@
 package org.subethamail.core.lists;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Set;
 
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
@@ -22,6 +24,7 @@ import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
 import org.subethamail.core.lists.i.MySubscription;
+import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EmailAddress;
@@ -133,4 +136,10 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		}
 	}
 	
+	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException
+	{
+		MailingList list = this.dao.findMailingList(listId);
+		Set<Subscription> listSubscriptions = list.getSubscriptions();
+		return Transmute.getSubscriberDataList(listSubscriptions);
+	}
 }

@@ -16,6 +16,7 @@ import org.subethamail.common.Permission;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.lists.i.MailingListData;
 import org.subethamail.core.lists.i.MySubscription;
+import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
@@ -83,7 +84,31 @@ public class Transmute
 				raw.getUrl(),
 				raw.getDescription());
 	}
+
+	/** */
+	public static List<SubscriberData> getSubscriberDataList(Set<Subscription> subscriptions)
+	{
+		List<SubscriberData> result = new ArrayList<SubscriberData>(subscriptions.size());
+
+		for (Subscription subscription: subscriptions)
+			result.add(subscriberData(subscription));
+		
+		return result;
+	}
 	
+	/** */
+	public static SubscriberData subscriberData(Subscription raw)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+
+		return new SubscriberData(
+				raw.getPerson().getName(),
+				raw.getEmailAddresses(),
+				raw.getRole().getName(),
+				(raw.getDeliverTo() == null) ? true : false);
+	}
+
 	/** */
 	/**
 	 * @param rawPerson can be null

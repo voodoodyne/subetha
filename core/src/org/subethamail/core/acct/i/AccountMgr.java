@@ -8,8 +8,6 @@ package org.subethamail.core.acct.i;
 import javax.ejb.Local;
 import javax.mail.MessagingException;
 
-import org.subethamail.common.NotFoundException;
-
 
 /**
  * Tools which let a user manipulate their own account data.

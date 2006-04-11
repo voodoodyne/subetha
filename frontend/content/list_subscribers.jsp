@@ -30,7 +30,8 @@
 							<c:out value="${p.name}" />
 						</td>
 						<td>
-							<c:forEach var="e" items="${p.emailAddresses}">
+							<c:forEach var="e" items="${p.emailAddresses}"  varStatus="loop">
+								<c:if test="${! loop.first}">, </c:if>
 								<a href="mailto:<c:out value="${e}" />"><c:out value="${e}" /></a>
 							</c:forEach>
 						</td>

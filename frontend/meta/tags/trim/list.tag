@@ -9,7 +9,6 @@
 <trim:header title="${title}">
 	<div class="sideBox LHS">
 		<div>List Menu</div>
-		<a href="<c:url value="/lists.jsp"/>">&rsaquo; List Lists</a>
 
 		<c:url var="listUrl" value="/list.jsp">
 			<c:param name="listId" value="${listId}"/>

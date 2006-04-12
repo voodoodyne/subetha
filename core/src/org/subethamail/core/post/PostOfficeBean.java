@@ -8,10 +8,10 @@ package org.subethamail.core.post;
 import java.io.StringWriter;
 
 import javax.annotation.EJB;
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
+import javax.ejb.PostConstruct;
 import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;

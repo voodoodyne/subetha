@@ -11,6 +11,10 @@ body {
   margin: 0mm 5mm 0 13em;
 }
 
+#bodyText p {
+  padding-bottom: 0ex;
+}
+
 .sideBox {
   margin-top: 0mm;
 }

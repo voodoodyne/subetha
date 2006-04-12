@@ -54,28 +54,34 @@ public class SubscriptionTest extends SubEthaTestCase
 	/** */
 	public void testSubscribeNewPerson() throws Exception
 	{
+		// From the list creation
+		assertEquals(1, this.smtp.size());
+		
 		PersonInfoMixin info = new PersonInfoMixin();
 		
 		this.nobody.getAccountMgr().subscribeAnonymousRequest(ml.getId(), info.getEmail(), info.getName());
 		
 		// Should contain a "Confirm subscription" email
-		assertEquals(1, this.smtp.size());
+		assertEquals(2, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.CONFIRM_SUBSCRIBE));
 		
-		String token = Smtp.extractToken(this.smtp.iterator().next());
+		String token = Smtp.extractToken(this.smtp.get(1));
 		
 		SubscribeResult result = this.nobody.getAccountMgr().subscribeAnonymous(token);
 		
 		assertEquals(SubscribeResult.OK, result);
 		
 		// Now should also contain a "you are subscribed" email
-		assertEquals(2, this.smtp.size());
+		assertEquals(3, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.SUBSCRIBED));
 	}
 	
 	/** */
 	public void testSubscribeExistingPerson() throws Exception
 	{
+		// From the list creation
+		assertEquals(1, this.smtp.size());
+		
 		PersonMixin someone = new PersonMixin(this.admin);
 		
 		SubscribeResult result = someone.getAccountMgr().subscribeMe(ml.getId(), someone.getEmail());
@@ -83,7 +89,7 @@ public class SubscriptionTest extends SubEthaTestCase
 		assertEquals(SubscribeResult.OK, result);
 		
 		// Should contain a "you are subscribed" email
-		assertEquals(1, this.smtp.size());
+		assertEquals(2, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.SUBSCRIBED));
 	}
 	

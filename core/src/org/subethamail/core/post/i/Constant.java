@@ -18,6 +18,6 @@ public class Constant
 	 * but only when debug is enabled.  This makes the token automatically
 	 * recognizable by the unit test harness.
 	 */
-	public static final String DEBUG_TOKEN_BEGIN = "--- BEGIN TOKEN ---\n";
-	public static final String DEBUG_TOKEN_END = "\n--- END TOKEN ---";
+	public static final String DEBUG_TOKEN_BEGIN = "---BEGINTOKEN---";
+	public static final String DEBUG_TOKEN_END = "---ENDTOKEN---";
 }

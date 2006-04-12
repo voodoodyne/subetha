@@ -63,6 +63,19 @@ public class Smtp
 		return this.server.getReceivedEmail();
 	}
 	
+	/** */
+	public SmtpMessage get(int index)
+	{
+		Iterator<SmtpMessage> it = this.iterator();
+		
+		SmtpMessage result = it.next();
+		
+		for (int i=0; i<index; i++)
+			result = it.next();
+		
+		return result;
+	}
+	
 	/**
 	 * @return the number of messages of the specified type 
 	 */
@@ -93,13 +106,13 @@ public class Smtp
 		
 		int start = body.indexOf(Constant.DEBUG_TOKEN_BEGIN);
 		if (start < 0)
-			throw new IllegalStateException("Missing token from email");
+			throw new IllegalStateException("Missing token from email: " + body);
 		
 		start += Constant.DEBUG_TOKEN_BEGIN.length();
 		
 		int end = body.indexOf(Constant.DEBUG_TOKEN_END, start);
 		if (end < 0)
-			throw new IllegalStateException("Missing token from email");
+			throw new IllegalStateException("Missing token from email: " + body);
 		
 		return body.substring(start, end);
 	}

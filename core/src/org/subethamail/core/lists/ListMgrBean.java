@@ -60,6 +60,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	/**
 	 * @see ListMgr#getSubscribers(Long)
 	 */
+	@PermitAll
 	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException
 	{
 		MailingList list = this.dao.findMailingList(listId);

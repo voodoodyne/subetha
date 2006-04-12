@@ -152,7 +152,7 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 	/**
 	 * @see Encryptor#decrypt(byte[])
 	 */
-	public String decrypt(byte[] cipherText)
+	public String decrypt(byte[] cipherText) throws GeneralSecurityException
 	{
 		try
 		{
@@ -170,8 +170,7 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 			
 			return result;
 		}
-		catch (UnsupportedEncodingException ex) { throw new RuntimeException(ex); }
-		catch (GeneralSecurityException ex) { throw new EJBException(ex); }
+		catch (Exception ex) { throw new GeneralSecurityException(ex); }
 	}
 
 	/**
@@ -187,7 +186,7 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 	/**
 	 * @see Encryptor#decryptString(String)
 	 */
-	public String decryptString(String cipherText)
+	public String decryptString(String cipherText) throws GeneralSecurityException
 	{
 		byte[] cipherBytes = Base64.decode(cipherText);
 		
@@ -223,7 +222,7 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 	/**
 	 * @see Encryptor#decryptList(String)
 	 */
-	public List<String> decryptList(String cipherText)
+	public List<String> decryptList(String cipherText) throws GeneralSecurityException
 	{
 		String plainString = this.decryptString(cipherText);
 		

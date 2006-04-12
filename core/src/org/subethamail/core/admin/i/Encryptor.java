@@ -5,6 +5,7 @@
 
 package org.subethamail.core.admin.i;
 
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -29,7 +30,7 @@ public interface Encryptor
 	/**
 	 * Decrypts bytes encrypted with encrypt().
 	 */
-	public String decrypt(byte[] cipherText);
+	public String decrypt(byte[] cipherText) throws GeneralSecurityException;
 	
 	/**
 	 * Encrypts a string.  It will be AES encrypted and Base64 encoded.
@@ -39,7 +40,7 @@ public interface Encryptor
 	/**
 	 * Decrypts a string that was encrypted with encryptString().
 	 */
-	public String decryptString(String cipherText);
+	public String decryptString(String cipherText) throws GeneralSecurityException;
 
 	/**
 	 * Encrypts a list of strings into a single Base64-encoded String.
@@ -49,5 +50,5 @@ public interface Encryptor
 	/**
 	 * Decrypts a string that was encrypted with encryptList().
 	 */
-	public List<String> decryptList(String cipherText);
+	public List<String> decryptList(String cipherText) throws GeneralSecurityException;
 }

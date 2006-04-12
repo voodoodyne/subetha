@@ -84,7 +84,7 @@ public interface AccountMgr
 	 *  
 	 * @throws NotFoundException if the list id is not valid.
 	 */
-	public void subscribeAnonymousRequest(Long listId, String email, String name) throws NotFoundException, MessagingException;
+	public void subscribeAnonymousRequest(Long listId, String email, String name) throws NotFoundException;
 	
 	/**
 	 * Actually executes the request from the method of the same name.

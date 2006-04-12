@@ -5,6 +5,7 @@
 
 package org.subethamail.core.acct;
 
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,6 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
-import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -143,7 +143,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	 * The token emailed is encrypted "listId:email:name".
 	 */
 	@PermitAll
-	public void subscribeAnonymousRequest(Long listId, String email, String name) throws NotFoundException, MessagingException
+	public void subscribeAnonymousRequest(Long listId, String email, String name) throws NotFoundException
 	{
 		// Send a token to the person's account
 		if (log.isDebugEnabled())
@@ -172,7 +172,12 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	{
 		token = Base62.decode(token);
 		
-		List<String> plainList = this.encryptor.decryptList(token);
+		List<String> plainList;
+		try
+		{
+			plainList = this.encryptor.decryptList(token);
+		}
+		catch (GeneralSecurityException ex) { throw new BadTokenException(ex); }
 		
 		if (plainList.isEmpty() || !plainList.get(0).equals(SUBSCRIBE_TOKEN_PREFIX))
 			throw new BadTokenException("Invalid token");

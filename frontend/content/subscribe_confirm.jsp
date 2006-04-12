@@ -16,6 +16,7 @@
 	</ul>
 	
 	<form action="<c:url value="/subscribe_confirm_submit.jsp"/>" method="post">
+		<input type="hidden" name="listId" value="${param.listId}" />
 		<table>
 			<tr>
 				<th><label for="token">Confirmation Code</label></th>

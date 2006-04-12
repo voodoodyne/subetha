@@ -167,13 +167,13 @@ public class Subscription implements Serializable, Comparable
 	}
 
 	/**
-	 * Natural sort order is based list
+	 * Natural sort order is based person
 	 */
 	public int compareTo(Object arg0)
 	{
 		Subscription other = (Subscription)arg0;
 
-		return this.list.compareTo(other.getList());
+		return this.person.compareTo(other.getPerson());
 	}
 }
 

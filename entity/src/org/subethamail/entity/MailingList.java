@@ -8,6 +8,8 @@ package org.subethamail.entity;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,6 +28,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.hibernate.validator.Email;
 import org.subethamail.common.valid.Validator;
 
@@ -107,8 +111,9 @@ public class MailingList implements Serializable, Comparable
 	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
+	@Sort(type=SortType.NATURAL)
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	Set<Subscription> subscriptions;
+	SortedSet<Subscription> subscriptions;
 	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
@@ -138,7 +143,7 @@ public class MailingList implements Serializable, Comparable
 		this.setDescription(description);
 		
 		// Make sure collections start empty
-		this.subscriptions = new HashSet<Subscription>();
+		this.subscriptions = new TreeSet<Subscription>();
 		this.enabledFilters = new HashSet<EnabledFilter>();
 		this.roles = new HashSet<Role>();
 		

@@ -4,118 +4,14 @@
 	</head>
 
 	<body>
-		<h2>Setup Instructions for Development</h2>
-		<ul>
-			<li>
-				Install JBoss 4.04+ using the installer.  Choose the non-clustered ejb3
-				install option, it boots much faster than the clustered option.
-			</li>
-			<li>
-				If you install to a directory other than the default /java/jboss-4.0.4RC1,
-				you will need to set the ${jboss.dir} property.  Copy build.properties to
-				a file called user.properties and edit ${jboss.dir}.
-			</li>
-			<li>
-				Unfortunately there is a little trick to getting JavaMail installed.  It
-				was not installed when you selected "ejb3" but would have been if you had
-				selected "all".  However, "all" would not have installed the ejb3 components (grr).
-				Hopefully this will get cleaned up when 4.0.4 is actually released.  In the
-				mean time, create a second install of JBoss somewhere, choose the "all" option,
-				and then copy the following files from the "all" install to your "ejb3" install:
-				<ul>
-					<li>${jboss.dir}/server/default/lib/mail.jar</li>
-					<li>${jboss.dir}/server/default/lib/mail-plugin.jar</li>
-					<li>${jboss.dir}/server/default/lib/activation.jar</li>
-					<li>${jboss.dir}/server/default/deploy/mail-service.xml</li>
-				</ul>
-			</li>
-			<li>
-				Edit ${jboss.dir}/server/default/deploy/mail-service.xml and make
-				sure the mail.smtp.host property value is set to your outgoing mail
-				server.  The other config parameters are unimportant.
-			</li>
-			<li>
-				Download MySQL JDBC driver (MySQL Connector/J) from <a href="http://dev.mysql.com/downloads/">here</a>.
-				Copy to ${jboss.dir}/server/default/lib.  The file should be mysql-connector-java-X.X.XX-bin.jar.
-				You can use a different RDBMS but you'll need to use a different -ds.xml file
-				than the one described below.
-			</li>
-			<li>
-				Create the data source by creating ${jboss.dir}/server/default/deploy/subetha-ds.xml.
-				Use ${jboss.dir}/docs/examples/jca/mysql-ds.xml as a template.  The jndi-name must
-				be SubEthaDS:
-				<blockquote>&lt;jndi-name&gt;SubEthaDS&lt;/jndi-name&gt;</blockquote>
-			</li>
-			<li>
-				One might also wish to define a database name as well. We like to use 
-				the name 'subetha'. This is also defined in the subetha-ds.xml file: 
-			    <blockquote>&lt;connection-url&gt;jdbc:mysql://localhost:3306/subetha&lt;/connection-url&gt;</blockquote>
-
-			</li>
-			<li>
-				Create a database called 'jbossdb' which can be accessed by the host, user
-				and password specified in the -ds.xml file.
-			</li>
-		</ul>
+		<h1>README</h1>
 		
-		<h2>Directory Layout</h2>
 		<p>
-			The subdirectories correspond to various components:
+			For installation instructions, see <a href="www/developes.html">the developer docs</a>.
 		</p>
-		<ul>
-			<li>
-				appmain - Build system for the main ear archive which gets deployed
-				in the appserver.  No source code, just some packaging instructions
-				and some metadata.  Depends on all of the other components.
-			</li>
-			<li>
-				common - A common jar of utility classes, shared by all components.
-				Includes some constants defined for the data model.
-			</li>
-			<li>
-				core - The core business logic, implemented as a set of session EJBs.
-				There may also be some service EJBs here.  There is also a special
-				component built, a sar, which contains thirdparty jars and some
-				configuration instructions to JBoss.
-			</li>
-			<li>
-				entity - The data model.  Contains EJB3 entity beans and a simple
-				session EJB Data Access Object pattern.  All queries are defined here
-				as well.
-			</li>
-			<li>
-				rtest - All junit regression testing code and instructions.  JUnit
-				tests are remote clients to the core ejb interface.
-			</li>
-			<li>
-				frontend - The front end web application, packaged as a war.  Contains
-				JSPs and all other content, acts as a client to the core layer.
-			</li>
-		</ul>
 		
-		<h2>Running Regression Tests</h2>
 		<p>
-			How to run the JUnit regression tests from ant:
+			Release notes go here eventually.
 		</p>
-		<ul>
-			<li>First make sure JBoss is running.</li>
-			<li>
-				Make sure the code you want to test is deployed.  <em>ant deploy</em>
-				will build the latest and deploy it.
-			</li>
-			<li>
-				Run <em>ant junit</em>.  All your regression tests will run.
-			</li>
-			<li>
-				If you want to run just one set of tests, edit the junit.special.tests
-				property in your build.properties or better yet user.properties.  Then
-				run the <em>ant junit-special</em> target.
-			</li>
-			<li>
-				If you want to run the special unit test(s) in the debugger,
-				run the <em>ant junit-debug</em> target.  The JVM will pause
-				and wait until you attach with Eclipse.
-			</li>
-		</ul>
 	</body>
 </html>

@@ -89,7 +89,9 @@
 				<include name="server-login-config.xml"/>
 			</metainf>
 			
-			<fileset dir="${core.lib.dir}"/>
+			<fileset dir="${core.lib.dir}">
+				<exclude name="**/buildonly/**" />
+			</fileset>
 			
 			<fileset file="${build.core.ejbclient.file}"/>
 			<fileset file="${build.common.jar.file}"/>

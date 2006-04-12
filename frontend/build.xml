@@ -26,11 +26,6 @@
 			<include name="**/*.jar" />
 		</fileset>
 		
-		<fileset dir="${jboss.dir}">
-			<include name="server/default/lib/javax.servlet.jar"/>
-			<include name="server/default/lib/javax.servlet.jsp.jar"/>
-		</fileset>
-		
 		<path refid="master.classpath" />
 	</path>
 

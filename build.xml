@@ -29,12 +29,9 @@
 	<!-- Set up a basic path for everyone -->
 	<path id="base.classpath">
 		<fileset dir="${jboss.dir}">
-			<include name="server/default/deploy/ejb3.deployer/*.jar"/>
-			<include name="server/default/lib/jboss-j2ee.jar"/>
-			<include name="server/default/lib/jbosssx.jar"/>
-			<include name="server/default/lib/mail.jar"/>
-			<include name="lib/jboss-common.jar"/>
-			<include name="lib/commons-logging.jar"/>
+			<include name="server/default/deploy/**/*.jar"/>
+			<include name="server/default/lib/**/*.jar"/>
+			<include name="lib/**/*.jar"/>
 		</fileset>
 		
 		<pathelement path="${java.class.path}" />

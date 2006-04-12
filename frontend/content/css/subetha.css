@@ -24,6 +24,14 @@ body {
 }
 /* end bluehaze.css overrides */
 
+.a td {
+	background: #dfdfdf;
+}
+
+.b td {
+	background: #efefef;
+}
+
 h2 {
   font-size: 135%;
 }

@@ -18,8 +18,16 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="p" items="${data}">
-					<tr>
+				<c:forEach var="p" items="${data}" varStatus="loop">
+					<c:choose>
+						<c:when test="${loop.index % 2 == 0}">
+							<c:set var="color" value="a"/>
+						</c:when>
+						<c:otherwise>
+							<c:set var="color" value="b"/>
+						</c:otherwise>
+					</c:choose>
+					<tr class="${color}">
 						<td>
 							<c:out value="${p.name}" />
 						</td>
@@ -43,6 +51,7 @@
 
 <script type="text/javascript">
 var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String"]);
+st1.onsort = st1.tableRowColors;
 </script>
 
 		</c:otherwise>

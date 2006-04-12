@@ -54,8 +54,16 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="subs" items="${me.subscriptions}">
-				<tr>
+				<c:forEach var="subs" items="${me.subscriptions}" varStatus="loop">
+				<c:choose>
+					<c:when test="${loop.index % 2 == 0}">
+						<c:set var="color" value="a"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="color" value="b"/>
+					</c:otherwise>
+				</c:choose>
+				<tr class="${color}">
 					<td><a href="<c:url value="${subs.url}"/>"><c:out value="${subs.name}"/></a></td>
 					<td><a href="mailto:<c:out value="${subs.email}"/>"><c:out value="${subs.email}"/></a></td>
 					<td><c:out value="${subs.roleName}"/></td>
@@ -81,6 +89,7 @@
 
 <script type="text/javascript">
 var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String", "None"]);
+st1.onsort = st1.tableRowColors;
 </script>
 
 		</c:otherwise>

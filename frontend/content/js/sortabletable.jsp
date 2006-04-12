@@ -455,3 +455,38 @@ SortableTable.prototype.addSortType("CaseInsensitiveString", SortableTable.toUpp
 SortableTable.prototype.addSortType("Date", SortableTable.toDate);
 SortableTable.prototype.addSortType("String");
 // None is a special case
+
+SortableTable.prototype.addClassName = function(el, sClassName) {
+	var s = el.className;
+	var p = s.split(" ");
+	var l = p.length;
+	for (var i = 0; i < l; i++) {
+		if (p[i] == sClassName)
+			return;
+	}
+	p[p.length] = sClassName;
+	el.className = p.join(" ");
+}
+
+SortableTable.prototype.removeClassName = function(el, sClassName) {
+	var s = el.className;
+	var p = s.split(" ");
+	var np = [];
+	var l = p.length;
+	var j = 0;
+	for (var i = 0; i < l; i++) {
+		if (p[i] != sClassName)
+			np[j++] = p[i];
+	}
+	el.className = np.join(" ");
+}
+
+SortableTable.prototype.tableRowColors = function () {
+	var rows = st1.tBody.rows;
+	var l = rows.length;
+	for (var i = 0; i < l; i++) {
+		this.removeClassName(rows[i], i % 2 ? "a" : "b");
+		this.addClassName(rows[i], i % 2 ? "b" : "a");
+	}
+};
+

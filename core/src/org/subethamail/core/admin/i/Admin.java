@@ -12,6 +12,7 @@ import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.lists.i.MailingListData;
 
@@ -75,7 +76,7 @@ public interface Admin
 	 *  
 	 * @throws NotFoundException if the list id is not valid.
 	 */
-	public SubscribeResult subscribe(Long listId, InternetAddress address) throws NotFoundException;
+	public AuthSubscribeResult subscribe(Long listId, InternetAddress address) throws NotFoundException;
 
 	/**
 	 * Sets whether or not the person is a site admin.

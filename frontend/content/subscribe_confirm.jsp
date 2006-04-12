@@ -1,8 +1,6 @@
 <%@include file="inc/top_standard.jspf" %>
 
-<t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
-
-<trim:list title="Confirm Subscribe" sub="${sub}">
+<trim:list title="Confirm Subscribe">
 	<p>
 		An email has been sent to the address you specified.  It contains
 		a confirmation code which will allow you to subscribe.

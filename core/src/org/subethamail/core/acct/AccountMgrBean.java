@@ -22,6 +22,7 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AccountMgrRemote;
+import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.core.acct.i.MySubscription;
 import org.subethamail.core.acct.i.Self;
@@ -167,7 +168,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	 * @see AccountMgr#subscribeAnonymous(String)
 	 */
 	@PermitAll
-	public SubscribeResult subscribeAnonymous(String token) throws BadTokenException, NotFoundException
+	public AuthSubscribeResult subscribeAnonymous(String token) throws BadTokenException, NotFoundException
 	{
 		token = Base62.decode(token);
 		

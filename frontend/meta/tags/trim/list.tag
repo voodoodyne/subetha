@@ -1,7 +1,8 @@
 <%@include file="../inc/taglibs.jspf" %>
 
 <%@ attribute name="title" required="true" %>
-<%@ attribute name="sub" required="true" type="org.subethamail.core.acct.i.MySubscription" %>
+
+<t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
 
 <c:set var="listId" value="${sub.list.id}" />
 <c:set var="perms" value="${f:wrapPerms(sub.perms)}" />

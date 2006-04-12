@@ -1,17 +1,13 @@
 <%@include file="/inc/top_standard.jspf" %>
 
-<t:action type="org.subethamail.web.action.auth.AuthRequired" />
-
 <t:action var="data" type="org.subethamail.web.action.GetSubscribers" />
-<t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
-<c:set var="list" value="${sub.list}" />
 
-<trim:list title="Subscribers" sub="${sub}">
+<trim:list title="Subscribers">
 
 		<c:choose>
-		<c:when test="${empty data}">
-			<p>There are no subscribers to this list.</p>
-		</c:when>
+			<c:when test="${empty data}">
+				<p>There are no subscribers to this list.</p>
+			</c:when>
 		<c:otherwise>
 			<table class="sort-table" id="lists-table">
 			<thead>

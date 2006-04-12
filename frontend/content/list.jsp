@@ -5,10 +5,9 @@
 </c:if>
 
 <t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
-
 <c:set var="list" value="${sub.list}" />
 
-<trim:list title="List Overview" sub="${sub}">
+<trim:list title="List Overview">
 	
 	<p><c:out value="${list.description}" /></p>
 	

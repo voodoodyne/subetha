@@ -96,7 +96,7 @@ public interface AccountMgr
 	 * @throws NotFoundException if the embedded list id is invalid.  Possibly
 	 *  the list was deleted while the token was in transit.
 	 */
-	public SubscribeResult subscribeAnonymous(String token) throws BadTokenException, NotFoundException;
+	public AuthSubscribeResult subscribeAnonymous(String token) throws BadTokenException, NotFoundException;
 	
 	/**
 	 * Subscribes an email address to the list, or changes the delivery

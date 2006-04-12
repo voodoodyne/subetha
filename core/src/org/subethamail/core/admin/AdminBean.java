@@ -18,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
@@ -162,11 +163,13 @@ public class AdminBean implements Admin, AdminRemote
 	/**
 	 * @see Admin#subscribe(Long, String, String)
 	 */
-	public SubscribeResult subscribe(Long listId, InternetAddress address) throws NotFoundException
+	public AuthSubscribeResult subscribe(Long listId, InternetAddress address) throws NotFoundException
 	{
 		EmailAddress addy = this.establishEmailAddress(address, null);
 		
-		return this.subscribe(listId, addy.getPerson(), addy);
+		SubscribeResult result = this.subscribe(listId, addy.getPerson(), addy);
+		
+		return new AuthSubscribeResult(result, listId, addy.getId(), addy.getPerson().getPassword());
 	}
 	
 	/**

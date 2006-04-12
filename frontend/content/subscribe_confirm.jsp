@@ -17,7 +17,7 @@
 		<li>Copy and paste the confirmation code into the form below.</li>
 	</ul>
 	
-	<form action="subscribe_confirm_submit.jsp" method="post">
+	<form action="<c:url value="/subscribe_confirm_submit.jsp"/>" method="post">
 		<table>
 			<tr>
 				<th><label for="token">Confirmation Code</label></th>

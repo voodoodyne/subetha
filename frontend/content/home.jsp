@@ -34,7 +34,7 @@
 					<td>
 						<c:choose>
 							<c:when test="${auth.authName != email}">
-								<form action="<c:url value="/email_add.jsp"/>" method="post">
+								<form action="<c:url value="/email_remove.jsp"/>" method="post">
 									<input type="hidden" name="email" value="<c:out value="${email}"/>" />
 									<input type="submit" value="Remove" style="width: 5em" />
 								</form>
@@ -46,16 +46,13 @@
 					</td>
 				</tr>
 			</c:forEach>
-			<form action="<c:url value="/email_remove.jsp"/>" method="post">
+			<form action="<c:url value="/email_add.jsp"/>" method="post">
 				<tr class="a">
 					<td><input type="text" name="email" value="" /></td>
 					<td><input type="submit" value="Add" style="width: 5em" /></td>
 				</tr>
 			</form>
 		</tbody>
-	</table>
-
-	<table>
 	</table>
 
 	<p>

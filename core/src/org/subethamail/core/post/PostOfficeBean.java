@@ -203,4 +203,20 @@ public class PostOfficeBean implements PostOffice
 		
 		this.sendMail(MailType.NEW_MAILING_LIST, vctx, address.getId());
 	}
+
+	/**
+	 * @see PostOffice#sendAddEmailToken(Person, String, String)
+	 */
+	public void sendAddEmailToken(Person me, String email, String token)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Sending add email token to " + email);
+		
+		VelocityContext vctx = new VelocityContext();
+		vctx.put("token", this.token(token));
+		vctx.put("email", email);
+		vctx.put("person", me);
+		
+		this.sendMail(MailType.CONFIRM_EMAIL, vctx, email);
+	}
 }

@@ -51,5 +51,11 @@ public interface PostOffice
 	 *  website we are visiting.
 	 */
 	public void sendPassword(MailingList list, EmailAddress addy);
+
+	/**
+	 * Sends a token to the address which will merge that address (and
+	 * any account that may exist at that address) into the person.
+	 */
+	public void sendAddEmailToken(Person me, String email, String token);
 	
 }

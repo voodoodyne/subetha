@@ -56,6 +56,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	 * A known prefix so we know if decryption worked properly
 	 */
 	private static final String SUBSCRIBE_TOKEN_PREFIX = "sub";
+	private static final String ADD_EMAIL_TOKEN_PREFIX = "add";
 	
 	/**
 	 */
@@ -114,7 +115,22 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	 */
 	public void addEmailRequest(String newEmail)
 	{
-		//TODO
+		// Send a token to the person's account
+		if (log.isDebugEnabled())
+			log.debug("Requesting to add email " + newEmail);
+		
+		Person me = this.getMe();
+		
+		List<String> plainList = new ArrayList<String>();
+		plainList.add(ADD_EMAIL_TOKEN_PREFIX);
+		plainList.add(me.getId().toString());
+		plainList.add(newEmail);
+		
+		String cipherText = this.encryptor.encryptList(plainList);
+		
+		cipherText = Base62.encode(cipherText);
+		
+		this.postOffice.sendAddEmailToken(me, newEmail, cipherText);
 	}
 
 	/**

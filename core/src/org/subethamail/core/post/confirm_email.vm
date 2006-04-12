@@ -1,0 +1,36 @@
+## Context will contain:
+##   "token" of type String
+##   "email" of type String
+##   "person" of type Person
+##
+## Expects a String value "subject" to be set in the context
+##
+#set($subject = "Confirm additional email address")
+Someone (hopefully you) requested to add an email address to your mailing list server account.  To confirm, you must either click on the following link:
+
+${list.urlBase}/email_confirm_submit.jsp?token=$token
+
+*OR*
+
+Copy and paste the following confirmation code into the appropriate field on the confirmation page:
+
+$token
+
+If you did not make this request, simply ignore this message.
+
+You are currently registered on this mailing list server with the following email addresss:
+
+#foreach($personalAddress in $person.emailAddresses)
+	$personalAddress.id
+#end
+
+You are subscribed to these lists:
+
+#foreach($sub in $person.subscriptions.values())
+	$sub.list.name <$sub.list.email> #if($sub.deliverTo)deliver to $sub.deliverTo.id#end
+
+#end
+
+Your password is:
+
+	$person.password

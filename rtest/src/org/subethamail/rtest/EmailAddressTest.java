@@ -10,8 +10,12 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.core.acct.i.Self;
+import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
+import org.subethamail.rtest.util.PersonInfoMixin;
 import org.subethamail.rtest.util.PersonMixin;
+import org.subethamail.rtest.util.Smtp;
 import org.subethamail.rtest.util.SubEthaTestCase;
 
 /**
@@ -43,10 +47,65 @@ public class EmailAddressTest extends SubEthaTestCase
 	/** */
 	public void testAddEmail() throws Exception
 	{
-//		PersonInfoMixin additional = new PersonInfoMixin();
-//		this.pers.getAccountMgr().requestAddEmail(additional.getEmail());
-//
-//		assertEquals(1, this.smtp.size());
+		PersonInfoMixin additional = new PersonInfoMixin();
+		this.pers.getAccountMgr().addEmailRequest(additional.getEmail());
+
+		// Should have a CONFIRM_EMAIL msg
+		assertEquals(1, this.smtp.size());
+		assertEquals(1, this.smtp.count(MailType.CONFIRM_EMAIL));
+		
+		String token = Smtp.extractToken(this.smtp.get(0));
+		
+		this.pers.getAccountMgr().addEmail(token);
+		
+		Self me = this.pers.getAccountMgr().getSelf();
+		
+		assertEmailInSelf(additional.getEmail(), me);
+	}
+	
+	/** */
+	public void testMergeAccounts() throws Exception
+	{
+		PersonMixin additional = new PersonMixin(this.admin);
+		
+		this.pers.getAccountMgr().addEmailRequest(additional.getEmail());
+
+		// Should have a CONFIRM_EMAIL msg
+		assertEquals(1, this.smtp.size());
+		assertEquals(1, this.smtp.count(MailType.CONFIRM_EMAIL));
+		
+		String token = Smtp.extractToken(this.smtp.get(0));
+		
+		this.pers.getAccountMgr().addEmail(token);
+		
+		Self me = this.pers.getAccountMgr().getSelf();
+		
+		assertEmailInSelf(additional.getEmail(), me);
+		
+		try
+		{
+			me = additional.getAccountMgr().getSelf();
+			fail("Accessed an account that should have been deleted");
+		}
+		catch (Exception ex) {}
+	}
+	
+	/** */
+	public void testMergeSubscription() throws Exception
+	{
+		// TODO
+	}
+	
+	/** */
+	protected void assertEmailInSelf(String email, Self me)
+	{
+		for (String selfEmail: me.getEmailAddresses())
+		{
+			if (selfEmail.equals(email))
+				return;
+		}
+		
+		fail("Missing " + email + " from " + me);
 	}
 	
 	/** */

@@ -10,6 +10,7 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
@@ -67,9 +68,9 @@ public class SubscriptionTest extends SubEthaTestCase
 		
 		String token = Smtp.extractToken(this.smtp.get(1));
 		
-		SubscribeResult result = this.nobody.getAccountMgr().subscribeAnonymous(token);
+		AuthSubscribeResult result = this.nobody.getAccountMgr().subscribeAnonymous(token);
 		
-		assertEquals(SubscribeResult.OK, result);
+		assertEquals(SubscribeResult.OK, result.getResult());
 		
 		// Now should also contain a "you are subscribed" email
 		assertEquals(3, this.smtp.size());

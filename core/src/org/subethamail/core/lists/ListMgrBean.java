@@ -19,12 +19,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.common.Permission;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.MailingList;
+import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.dao.DAO;
 
@@ -61,6 +63,11 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException
 	{
 		MailingList list = this.dao.findMailingList(listId);
+		Role role = list.getRoleFor(this.getMe());
+
+		if (! role.getPermissions().contains(Permission.VIEW_SUBSCRIBERS))
+			throw new IllegalStateException("Not allowed");
+
 		Set<Subscription> listSubscriptions = list.getSubscriptions();
 		return Transmute.subscribers(listSubscriptions);
 	}

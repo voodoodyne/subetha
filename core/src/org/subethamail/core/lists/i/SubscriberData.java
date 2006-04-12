@@ -16,7 +16,7 @@ import org.subethamail.core.acct.i.PersonData;
 public class SubscriberData extends PersonData
 {	
 	String roleName;
-	boolean disabled;
+	String deliverTo;
 
 	/**
 	 */
@@ -24,11 +24,11 @@ public class SubscriberData extends PersonData
 			String name,
 			String[] emailAddresses,
 			String roleName,
-			boolean disabled)
+			String deliverTo)
 	{
 		super(null, name, emailAddresses);
 		this.roleName = roleName;
-		this.disabled = disabled;
+		this.deliverTo = deliverTo;
 	}
 	
 	/** */
@@ -43,8 +43,8 @@ public class SubscriberData extends PersonData
 		return this.roleName;
 	}
 
-	public boolean isDisabled()
+	public String getDeliverTo()
 	{
-		return this.disabled;
+		return this.deliverTo;
 	}
 }

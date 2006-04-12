@@ -12,10 +12,10 @@
 		
 		<link rel="stylesheet" type="text/css" href="<c:url value="/css/bluehaze.css"/>" />
 		<link rel="stylesheet" type="text/css" href="<c:url value="/css/color-scheme.css"/>" />
-		<link rel="styleSheet" type="text/css" href="<c:url value="/css/sortabletable.css"/>" />
+		<link rel="stylesheet" type="text/css" href="<c:url value="/css/sortabletable.jsp"/>" />
 		<link rel="stylesheet" type="text/css" href="<c:url value="/css/subetha.css"/>" />
 
-		<script type="text/javascript" src="<c:url value="/js/sortabletable.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/sortabletable.jsp"/>"></script>
   	</head>
 	
 	<body>

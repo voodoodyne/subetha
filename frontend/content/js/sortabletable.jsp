@@ -1,3 +1,5 @@
+<%@page contentType="text/javascript" %>
+<%@include file="../inc/taglibs.jspf" %>
 
 /*----------------------------------------------------------------------------\
 |                            Sortable Table 1.12                              |
@@ -145,7 +147,7 @@ SortableTable.prototype.initHeader = function (oSortTypes) {
 		c = cells[i];
 		if (this.sortTypes[i] != null && this.sortTypes[i] != "None") {
 			img = doc.createElement("IMG");
-			img.src = "/se/img/blank.png";
+			img.src = "<c:url value="/img/blank.png"/>";
 			c.appendChild(img);
 			if (this.sortTypes[i] != null)
 				c._sortType = this.sortTypes[i];

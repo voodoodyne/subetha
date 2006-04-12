@@ -9,7 +9,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
-import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
 
 /**
@@ -18,27 +17,17 @@ import org.tagonist.propertize.Property;
  * 
  * @author Jeff Schnitzer
  */
-public class GetSubscribersDataForList extends AuthAction 
+public class GetSubscribers extends AuthAction 
 {
 	/** */
 	private static Log log = LogFactory.getLog(GetMySubscription.class);
 
-	public static class Model extends ErrorMapModel
-	{
-		/** */
-		@Property Long listId;
-	}
-
 	/** */
-	public void initialize()
-	{
-		this.getCtx().setModel(new Model());
-	}
-	
+	@Property Long listId;
+
 	/** */
 	public void execute() throws Exception
 	{
-		Model model = (Model)this.getCtx().getModel();
-		this.getCtx().setModel(Backend.instance().getListMgr().getSubscribers(model.listId));
+		this.getCtx().setModel(Backend.instance().getListMgr().getSubscribers(listId));
 	}
 }

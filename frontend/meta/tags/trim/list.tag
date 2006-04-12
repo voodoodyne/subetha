@@ -1,7 +1,7 @@
 <%@include file="../inc/taglibs.jspf" %>
 
 <%@ attribute name="title" required="true" %>
-<%@ attribute name="sub" required="true" type="org.subethamail.core.lists.i.MySubscription" %>
+<%@ attribute name="sub" required="true" type="org.subethamail.core.acct.i.MySubscription" %>
 
 <c:set var="listId" value="${sub.list.id}" />
 <c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
@@ -73,6 +73,8 @@
 	</c:if>
 	
 	<div id="bodyText">
+		<h1><c:out value="${sub.list.name}"/> &lt;<c:out value="${sub.list.email}"/>&gt;</h1>
+		<h2><c:out value="${title}"/></h2>
 		<jsp:doBody/>
 	</div> <!-- bodyText -->
 </trim:header>

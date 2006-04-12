@@ -20,6 +20,10 @@ body {
 }
 /* end bluehaze.css overrides */
 
+h2 {
+  font-size: 135%;
+}
+
 form th {
 	text-align: right;
 	vertical-align: top;

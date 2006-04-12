@@ -8,9 +8,7 @@
 
 <c:set var="list" value="${sub.list}" />
 
-<trim:list title="${list.email}" sub="${sub}">
-	<h1><c:out value="${list.name}" /></h1>
-	<h2><c:out value="${list.email}" /></h2>
+<trim:list title="List Overview" sub="${sub}">
 	
 	<p><c:out value="${list.description}" /></p>
 	

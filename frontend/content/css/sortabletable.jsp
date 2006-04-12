@@ -1,3 +1,6 @@
+<%@page contentType="text/css" %>
+<%@include file="../inc/taglibs.jspf" %>
+
 .sort-table {
 	font:		Icon;
 	border:		1px Solid ThreeDShadow;
@@ -41,10 +44,10 @@
 }
 
 .sort-arrow.descending {
-	background-image:		url("/se/img/downsimple.png");
+	background-image:		url("<c:url value="/img/downsimple.png"/>");
 
 }
 
 .sort-arrow.ascending {
-	background-image:		url("/se/img/upsimple.png");
+	background-image:		url("<c:url value="/img/upsimple.png"/>");
 }

@@ -11,29 +11,52 @@
 		<strong>Your email addresses:</strong>
 	</p>
 
-	<form action="<c:url value="/email_add.jsp"/>" method="post">
-	<table>
-	<c:forEach var="email" items="${me.emailAddresses}">
-		<tr>
-			<td><a href="mailto:<c:out value="${email}"/>"><c:out value="${email}"/></a></td>
-			<td>
-				<c:if test="${auth.authName != email}">
-					<input type="submit" name="email_<c:out value="${email}"/>" value="remove" />
-				</c:if>
-			</td>
-		</tr>
-	</c:forEach>
+	
+	<table class="sort-table" id="emails-table">
+		<thead>
+			<tr>
+				<td>Email</td>
+				<td>Action</td>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach var="email" items="${me.emailAddresses}" varStatus="loop">
+				<c:choose>
+					<c:when test="${loop.index % 2 == 0}">
+						<c:set var="color" value="a"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="color" value="b"/>
+					</c:otherwise>
+				</c:choose>
+				<tr class="${color}">
+					<td><a href="mailto:<c:out value="${email}"/>"><c:out value="${email}"/></a></td>
+					<td>
+						<c:choose>
+							<c:when test="${auth.authName != email}">
+								<form action="<c:url value="/email_add.jsp"/>" method="post">
+									<input type="hidden" name="email" value="<c:out value="${email}"/>" />
+									<input type="submit" value="Remove" style="width: 5em" />
+								</form>
+							</c:when>
+							<c:otherwise>
+								Logged In
+							</c:otherwise>
+						</c:choose>
+					</td>
+				</tr>
+			</c:forEach>
+			<form action="<c:url value="/email_remove.jsp"/>" method="post">
+				<tr class="a">
+					<td><input type="text" name="email" value="" /></td>
+					<td><input type="submit" value="Add" style="width: 5em" /></td>
+				</tr>
+			</form>
+		</tbody>
 	</table>
-	</form>
 
-	<form action="<c:url value="/email_remove.jsp"/>" method="post">
 	<table>
-		<tr>
-			<td><input type="text" name="email" value="" /></td>
-			<td><input type="submit" value="add" /></td>
-		</tr>
 	</table>
-	</form>
 
 	<p>
 		<strong>Your subscriptions:</strong>
@@ -79,7 +102,7 @@
 								</option>
 							</c:forEach>
 						</select>
-						<input type="submit" value="set" />
+						<input type="submit" value="Set" />
 					</form>
 					</td>
 				</tr>
@@ -88,6 +111,9 @@
 			</table>
 
 <script type="text/javascript">
+var st = new SortableTable(document.getElementById("emails-table"), ["None", "None"]);
+st.onsort = st.tableRowColors;
+
 var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String", "None"]);
 st1.onsort = st1.tableRowColors;
 </script>

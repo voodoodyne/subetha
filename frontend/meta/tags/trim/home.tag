@@ -5,6 +5,7 @@
 <trim:header title="${title}">
 	<div class="sideBox LHS">
 		<div>Settings</div>
+		<a href="<c:url value="/home.jsp"/>">&rsaquo; Home</a>
 		<a href="<c:url value="/user_profile.jsp"/>">&rsaquo; User Profile</a>
 	</div>
 

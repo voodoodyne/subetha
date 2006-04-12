@@ -38,6 +38,10 @@ import org.subethamail.entity.dao.DAO;
 @SecurityDomain("subetha")
 @PermitAll
 @RunAs("siteAdmin")
+//@WebService(
+//		name="InjectorEndpoint", 
+//		targetNamespace="http://www.subethamila.org/injector",
+//		serviceName="InjectorService")
 public class InjectorBean implements Injector, InjectorRemote
 {
 	/** */
@@ -55,6 +59,7 @@ public class InjectorBean implements Injector, InjectorRemote
 	/**
 	 * @see Injector#inject(String)
 	 */
+//	@WebMethod
 	public void inject(String toAddress, byte[] mailData) throws MessagingException
 	{
 		if (log.isDebugEnabled())

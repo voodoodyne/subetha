@@ -38,15 +38,21 @@ public class SubEthaLoginModule extends UsernamePasswordLoginModule
 	 * We need this to lookup data objects
 	 */
 	protected static DAO dao;
-	static
+	
+	protected static DAO getDAO()
 	{
-		try
+		if (dao == null)
 		{
-			Context ctx = new InitialContext();
-			dao = (DAO)ctx.lookup(DAO.JNDI_NAME);
+			try
+			{
+				Context ctx = new InitialContext();
+				dao = (DAO)ctx.lookup(DAO.JNDI_NAME);
+			}
+			catch (NamingException ex) { throw new RuntimeException(ex); }
 		}
-		catch (NamingException ex) { throw new RuntimeException(ex); }
-	}
+		
+		return dao; 
+	} 
 	
 	/** */
 	protected static final Group[] EMPTY_ROLES = { new SimpleGroup("Roles") };
@@ -101,7 +107,7 @@ public class SubEthaLoginModule extends UsernamePasswordLoginModule
 
 		try
 		{
-			EmailAddress addy = dao.findEmailAddress(email);
+			EmailAddress addy = getDAO().findEmailAddress(email);
 			
 			if (addy.getPerson().isSiteAdmin())
 				this.roles = SITE_ADMIN_ROLES;

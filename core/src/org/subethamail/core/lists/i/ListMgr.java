@@ -32,6 +32,7 @@ public interface ListMgr
 	
 	/**
 	 * Retrieves all the subscribers for a MailingList
+	 * Can only call this method if you have the Permission.VIEW_SUBSCRIBERS.
 	 * 
 	 * @throws NotFoundException if the list id is not valid.
 	 */

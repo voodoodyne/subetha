@@ -184,7 +184,6 @@ public class Transmute
 				raw.getList().getUrl(),
 				raw.getList().getDescription(),
 				raw.getRole().getName(),
-				raw.getDeliverTo().getId());
+				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null);
 	}
-
 }

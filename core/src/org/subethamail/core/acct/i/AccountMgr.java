@@ -8,11 +8,14 @@ package org.subethamail.core.acct.i;
 import javax.ejb.Local;
 import javax.mail.MessagingException;
 
+import org.subethamail.common.NotFoundException;
+
 
 /**
  * Tools which let a user manipulate their own account data.
- * To use this ejb you must be authenticated.  All methods 
- * are relative to the caller principal person.
+ * Unless otherwiste noted in the method, all methods require
+ * authentication.  All methods are relative to the caller
+ * principal person.
  *
  * @author Jeff Schnitzer
  */
@@ -45,16 +48,74 @@ public interface AccountMgr
 	 * 
 	 * @param newEmail must be a valid email address
 	 */
-	public void requestAddEmail(String newEmail) throws MessagingException;
+	public void addEmailRequest(String newEmail);
 	
 	/**
 	 * Actually sets a user's email address based on a token generated
-	 * by requestSetEmail.  Also sends an email to the old email address
+	 * by addEmailRequest.  Also sends an email to the old email address
 	 * notifying the user of the change.
 	 * 
-	 * @param token was generated with requestAddEmail
+	 * @param token was generated with addEmailRequest
 	 */
 	public void addEmail(String token) throws BadTokenException;
 	
+	/**
+	 * Gets some data about a mailing list.  Includes the subscriber
+	 * status (including role and permissions) of the person calling
+	 * this method.
+	 * 
+	 * If not authenticated, subscriber status will reflect that state.
+	 * If authed as site admin, all permissions are granted no matter
+	 * what the actual role.
+	 * 
+	 * No access control.
+	 */
+	public MySubscription getMySubscription(Long listId) throws NotFoundException;
+
+	/**
+	 * Anonymously requests to subscribe to a list.  This results in sending
+	 * a token to the email address.  The token can be used to the other
+	 * subscribeAnonymous() method to actually subscribe.
+	 * 
+	 * @param email must be a valid email address.  Can be the address
+	 *  of an existing user.
+	 * @param name is a name for the user.  This will be stored as the
+	 *  user's name if the email address is for a new account.
+	 *  
+	 * @throws NotFoundException if the list id is not valid.
+	 */
+	public void subscribeAnonymousRequest(Long listId, String email, String name) throws NotFoundException, MessagingException;
+	
+	/**
+	 * Actually executes the request from the method of the same name.
+	 * No access control.
+	 * 
+	 * @param token must have been created by subscribeAnonymous().
+	 *  
+	 * @throws BadTokenException if something was wrong with the token.
+	 * @throws NotFoundException if the embedded list id is invalid.  Possibly
+	 *  the list was deleted while the token was in transit.
+	 */
+	public SubscribeResult subscribeAnonymous(String token) throws BadTokenException, NotFoundException;
+	
+	/**
+	 * Subscribes an email address to the list, or changes the delivery
+	 * address of an existing subscription.  User must be authenticated.
+	 * 
+	 * @param email must be one of the current user's email addresses,
+	 *  or null to subscribe delivery disabled.
+	 *  
+	 * @throws NotFoundException if the list id is not valid.
+	 */
+	public SubscribeResult subscribeMe(Long listId, String email) throws NotFoundException;
+
+
+	/**
+	 * Requests that the user's password be sent back to them in plaintext.
+	 * No access control.
+	 * 
+	 * @throws NotFoundException if no account has that email address.
+	 */
+	public void forgotPassword(String email) throws NotFoundException;
 }
 

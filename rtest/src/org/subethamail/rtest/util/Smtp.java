@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
 
 import com.dumbster.smtp.SimpleSmtpServer;
@@ -79,5 +80,27 @@ public class Smtp
 		}
 		
 		return count;
+	}
+	
+	/**
+	 * Gets an embedded token from a message.
+	 * 
+	 * @throws IllegalArgumentException if msg has no token
+	 */
+	public static String extractToken(SmtpMessage msg)
+	{
+		String body = msg.getBody();
+		
+		int start = body.indexOf(Constant.DEBUG_TOKEN_BEGIN);
+		if (start < 0)
+			throw new IllegalStateException("Missing token from email");
+		
+		start += Constant.DEBUG_TOKEN_BEGIN.length();
+		
+		int end = body.indexOf(Constant.DEBUG_TOKEN_END, start);
+		if (end < 0)
+			throw new IllegalStateException("Missing token from email");
+		
+		return body.substring(start, end);
 	}
 }

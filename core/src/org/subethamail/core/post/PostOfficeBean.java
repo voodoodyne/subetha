@@ -8,10 +8,10 @@ package org.subethamail.core.post;
 import java.io.StringWriter;
 
 import javax.annotation.EJB;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
-import javax.ejb.PostConstruct;
 import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -26,9 +26,11 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
+import org.subethamail.entity.Person;
 import org.subethamail.entity.dao.DAO;
 
 /**
@@ -74,7 +76,7 @@ public class PostOfficeBean implements PostOffice
 	/**
 	 * Does the work of sending an email using a velocity template.
 	 */
-	protected void sendMail(MailType kind, VelocityContext vctx, String email) throws MessagingException
+	protected void sendMail(MailType kind, VelocityContext vctx, String email)
 	{
 		StringWriter writer = new StringWriter(4096);
 		
@@ -95,33 +97,49 @@ public class PostOfficeBean implements PostOffice
 		if (log.isDebugEnabled())
 			mailSubject = kind.toString() + " " + mailSubject;
 
-		InternetAddress toAddress = new InternetAddress(email);
-		InternetAddress fromAddress;
 		try
 		{
-			//TODO:  figure out something good for this
-			fromAddress = new InternetAddress("donotreply@nowhere.com", "Someone");
+			InternetAddress toAddress = new InternetAddress(email);
+			InternetAddress fromAddress;
+			try
+			{
+				//TODO:  figure out something good for this
+				fromAddress = new InternetAddress("donotreply@nowhere.com", "Someone");
+			}
+			catch (java.io.UnsupportedEncodingException ex)
+			{
+				// Impossible
+				throw new AddressException(ex.toString());
+			}
+	
+			Message message = new MimeMessage(this.mailSession);
+			message.setRecipient(Message.RecipientType.TO, toAddress);
+			message.setFrom(fromAddress);
+			message.setReplyTo(new InternetAddress[0]);	// reply to nobody
+			message.setSubject(mailSubject);
+			message.setText(mailBody);
+	
+			Transport.send(message);
 		}
-		catch (java.io.UnsupportedEncodingException ex)
-		{
-			// Impossible
-			throw new AddressException(ex.toString());
-		}
-
-		Message message = new MimeMessage(this.mailSession);
-		message.setRecipient(Message.RecipientType.TO, toAddress);
-		message.setFrom(fromAddress);
-		message.setReplyTo(new InternetAddress[0]);	// reply to nobody
-		message.setSubject(mailSubject);
-		message.setText(mailBody);
-
-		Transport.send(message);
+		catch (MessagingException ex) { throw new RuntimeException(ex); }
+	}
+	
+	/**
+	 * Modifies the token with debug information which can be picked out
+	 * by the unit tester.
+	 */
+	protected String token(String tok)
+	{
+		if (log.isDebugEnabled())
+			return Constant.DEBUG_TOKEN_BEGIN + tok + Constant.DEBUG_TOKEN_END;
+		else
+			return tok;
 	}
 	
 	/**
 	 * @see PostOffice#sendPassword(MailingList, EmailAddress)
 	 */
-	public void sendPassword(MailingList list, EmailAddress addy) throws MessagingException
+	public void sendPassword(MailingList list, EmailAddress addy)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Sending password for " + addy.getId());
@@ -134,32 +152,47 @@ public class PostOfficeBean implements PostOffice
 	}
 
 	/**
-	 * @see PostOffice#sendSubscribeToken(MailingList, String, String)
+	 * @see PostOffice#sendConfirmSubscribeToken(MailingList, String, String)
 	 */
-	public void sendSubscribeToken(MailingList list, String email, String token) throws MessagingException
+	public void sendConfirmSubscribeToken(MailingList list, String email, String token)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Sending subscribe token to " + email);
 		
-		// TODO:  The link needs to come from the mailing list URL
-		String link = log.isDebugEnabled() ?
-			"http://localhost:8080/signup_confirm_submit.jsp?token="
-			: "http://www.blorn.com/signup_confirm_submit.jsp?token=";
-		
-		link = link + token;
-		
 		VelocityContext vctx = new VelocityContext();
-		vctx.put("link", link);
-		vctx.put("token", token);
+		vctx.put("token", this.token(token));
 		vctx.put("email", email);
+		vctx.put("list", list);
 		
 		this.sendMail(MailType.CONFIRM_SUBSCRIBE, vctx, email);
 	}
 
 	/**
+	 * @see PostOffice#sendSubscribed(MailingList, Person, EmailAddress)
+	 */
+	public void sendSubscribed(MailingList list, Person who, EmailAddress deliverTo)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Sending welcome to list msg to " + who);
+
+		String email;
+		if (deliverTo != null)
+			email = deliverTo.getId();
+		else
+			email = who.getEmailAddresses().values().iterator().next().getId();
+		
+		VelocityContext vctx = new VelocityContext();
+		vctx.put("list", list);
+		vctx.put("person", who);
+		vctx.put("email", email);
+		
+		this.sendMail(MailType.SUBSCRIBED, vctx, email);
+	}
+
+	/**
 	 * @see PostOffice#sendOwnerNewMailingList(EmailAddress, MailingList)
 	 */
-	public void sendOwnerNewMailingList(EmailAddress address, MailingList list) throws MessagingException
+	public void sendOwnerNewMailingList(EmailAddress address, MailingList list)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Sending notification of new mailing list " + list + " to owner " + address);

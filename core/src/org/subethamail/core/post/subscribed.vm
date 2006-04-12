@@ -1,0 +1,25 @@
+## Context will contain:
+##   "list" of type MailingList
+##   "person" of type Person
+##   "email" of type String
+##
+## Expects a String value "subject" to be set in the context
+##
+#set($subject = "Welcome to $list.name")
+You are now subscribed to "$list.name".  The email address for this list is:
+
+	$list.email
+
+To change your delivery options, visit the main list URL and log in:
+
+	$list.url
+
+You are registered on this mailing list server with the following email addresss:
+
+#foreach($personalAddress in $person.emailAddresses)
+	$personalAddress.id
+#end
+
+Your password is:
+
+	$person.password

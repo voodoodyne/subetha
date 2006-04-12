@@ -3,12 +3,13 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/blog/i/PersonData.java $
  */
 
-package org.subethamail.core.lists.i;
+package org.subethamail.core.acct.i;
 
 import java.io.Serializable;
 import java.util.Set;
 
 import org.subethamail.common.Permission;
+import org.subethamail.core.lists.i.MailingListData;
 
 
 /**

@@ -1,11 +1,19 @@
 ## Context will contain:
 ##   "token" of type String
-##   "link" of type String
 ##   "email" of type String
-##   "name" of type String
+##   "list" of type MailingList
 ##
 ## Expects a String value "subject" to be set in the context
 ##
-#set($subject = "Confirm subscription to ?")
+#set($subject = "Confirm subscription to $list.name")
+Someone (hopefully you) requested to subscribe to the mailing list '$list.name'.  To confirm, you must either click on the following link:
 
-TODO:  implement this template
+${list.urlBase}/subscribe_confirm_submit.jsp?token=$token
+
+*OR*
+
+Copy and paste the following confirmation code into the appropriate field on the confirmation page:
+
+$token
+
+If you did not make this request, simply ignore this message.

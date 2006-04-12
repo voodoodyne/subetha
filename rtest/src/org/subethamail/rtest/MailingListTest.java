@@ -56,7 +56,7 @@ public class MailingListTest extends SubEthaTestCase
 		assertEquals(1, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.NEW_MAILING_LIST));
 		
-		MailingListData data = this.nobody.getListMgr().getMySubscription(ml.getId()).getList();
+		MailingListData data = this.nobody.getAccountMgr().getMySubscription(ml.getId()).getList();
 		assertEquals(ml.getEmail(), data.getEmail());
 		assertEquals(ml.getUrl().toString(), data.getUrl());
 		assertEquals(ml.getDescription(), data.getDescription());
@@ -73,26 +73,12 @@ public class MailingListTest extends SubEthaTestCase
 		assertEquals(1, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.NEW_MAILING_LIST));
 		
-		MailingListData data = this.nobody.getListMgr().getMySubscription(ml.getId()).getList();
+		MailingListData data = this.nobody.getAccountMgr().getMySubscription(ml.getId()).getList();
 		assertEquals(ml.getEmail(), data.getEmail());
 		assertEquals(ml.getUrl().toString(), data.getUrl());
 		assertEquals(ml.getDescription(), data.getDescription());
 		assertEquals(ml.getAddress().getPersonal(), data.getName());
 	}
-	
-	/** */
-//	public void testSubscribeNewPersonToList() throws Exception
-//	{
-//		MailingListMixin ml = new MailingListMixin(this.admin, this.pers);
-//		
-//		PersonInfoMixin info = new PersonInfoMixin();
-//		
-//		this.nobody.getReceptionist().requestSubscription(info.getEmail(), ml.getId(), info.getName());
-//		
-//		// Should contain a "Your new account" email
-//		// Should contain a "Your new list" email
-//		assertEquals(2, this.smtp.size());
-//	}
 	
 	/** */
 	public static Test suite()

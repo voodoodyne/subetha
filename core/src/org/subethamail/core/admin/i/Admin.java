@@ -12,6 +12,7 @@ import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.lists.i.MailingListData;
 
 /**
@@ -40,28 +41,42 @@ public interface Admin
 	
 	/**
 	 * Finds a person's id if the user exists, or creates a user account and
-	 * returns the new person's id.  If the user already exists, any additional
-	 * personal name information in the address is ignored.
-	 * 
-	 * If a user is created, the password will be random.
+	 * returns the new person's id.  If the user already exists, the password
+	 * and any additional personal name information in the address is ignored.
 	 * 
 	 * @param address contains both the email addy and name of the user.
+	 * @param password can be null to get a random password
 	 * 
 	 * @return the id of the person with that email, which may have just
 	 *  now been created.
 	 */
-	public Long establishPerson(InternetAddress address);
-	
-	/**
-	 * Just like the other version, but allows the password to be set.  If
-	 * the user already exists, password is ignored.
-	 * 
-	 * @param password can be null to get a random password
-	 * 
-	 * @see Admin#establishPerson(InternetAddress)
-	 */
 	public Long establishPerson(InternetAddress address, String password);
 	
+	/**
+	 * Subscribes an existing user to the list, or changes the delivery
+	 * address of an existing subscription. 
+	 * 
+	 * @param email must be one of the current user's email addresses,
+	 *  or null to subscribe delivery disabled.
+	 *  
+	 * @return either OK or HELD
+	 *  
+	 * @throws NotFoundException if the list id or person id is not valid.
+	 */
+	public SubscribeResult subscribe(Long listId, Long personId, String email) throws NotFoundException;
+
+	/**
+	 * Subscribes a potentially never-before-seen user to the list.
+	 * 
+	 * @param address can be an existing email address or a new one, in which
+	 *  case a new person will be created.
+	 *  
+	 * @return either OK or HELD
+	 *  
+	 * @throws NotFoundException if the list id is not valid.
+	 */
+	public SubscribeResult subscribe(Long listId, InternetAddress address) throws NotFoundException;
+
 	/**
 	 * Sets whether or not the person is a site admin.
 	 */

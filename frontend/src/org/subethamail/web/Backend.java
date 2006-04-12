@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.subethamail.core.acct.i.AccountMgr;
-import org.subethamail.core.acct.i.Receptionist;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ListWizard;
@@ -42,7 +41,6 @@ public class Backend extends HttpServlet
 	
 	/** Stateless session EJB references are all thread-safe */
 	Admin admin;
-	Receptionist receptionist;
 	Encryptor encryptor;
 	ListWizard listWizard;
 	ListMgr listMgr;
@@ -65,7 +63,6 @@ public class Backend extends HttpServlet
 			InitialContext ctx = new InitialContext();
 			
 			admin = (Admin)ctx.lookup(Admin.JNDI_NAME);
-			receptionist = (Receptionist)ctx.lookup(Receptionist.JNDI_NAME);
 			encryptor = (Encryptor)ctx.lookup(Encryptor.JNDI_NAME);
 			listWizard = (ListWizard)ctx.lookup(ListWizard.JNDI_NAME);
 			listMgr = (ListMgr)ctx.lookup(ListMgr.JNDI_NAME);
@@ -105,12 +102,6 @@ public class Backend extends HttpServlet
 	public ListWizard getListWizard()
 	{
 		return this.listWizard;
-	}
-
-	/** */
-	public Receptionist getReceptionist()
-	{
-		return this.receptionist;
 	}
 
 	/** */

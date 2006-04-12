@@ -28,6 +28,6 @@ public class GetMySubscription extends AuthAction
 	/** */
 	public void execute() throws Exception
 	{
-		this.getCtx().setModel(Backend.instance().getListMgr().getMySubscription(this.listId));
+		this.getCtx().setModel(Backend.instance().getAccountMgr().getMySubscription(this.listId));
 	}
 }

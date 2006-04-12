@@ -284,6 +284,21 @@ public class MailingList implements Serializable, Comparable
 			return pers.getRoleIn(this);
 	}
 	
+	/**
+	 * @return the context root of the SubEtha web application, determined
+	 *  from the main URL.
+	 */
+	public String getUrlBase()
+	{
+		//TODO:  make this a constant somewhere
+		
+		int pos = this.url.indexOf("/se/list/");
+		if (pos < 0)
+			throw new IllegalStateException("Malformed list url");
+		
+		return this.url.substring(0, pos + "/se/".length()); 
+	}
+	
 	/** */
 	public String toString()
 	{

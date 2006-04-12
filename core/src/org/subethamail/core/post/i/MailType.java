@@ -24,6 +24,7 @@ public enum MailType
 {
 	NEW_MAILING_LIST("org/subethamail/core/post/new_mailing_list.vm"),
 	CONFIRM_SUBSCRIBE("org/subethamail/core/post/confirm_subscribe.vm"),
+	SUBSCRIBED("org/subethamail/core/post/subscribed.vm"),
 	FORGOT_PASSWORD("org/subethamail/core/post/forgot_password.vm");
 
 	/** */

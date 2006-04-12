@@ -16,8 +16,6 @@ import org.jboss.security.SecurityAssociation;
 import org.jboss.security.SimplePrincipal;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AccountMgrRemote;
-import org.subethamail.core.acct.i.Receptionist;
-import org.subethamail.core.acct.i.ReceptionistRemote;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
 import org.subethamail.core.lists.i.ListMgr;
@@ -39,7 +37,6 @@ public class BeanMixin
 
 	private Admin admin;
 	private AccountMgr accountMgr;
-	private Receptionist receptionist;
 	private ListMgr listMgr;
 	
 	
@@ -49,7 +46,6 @@ public class BeanMixin
 		Context ctx = new InitialContext();
 		this.admin = (Admin)ctx.lookup(AdminRemote.JNDI_NAME);
 		this.accountMgr = (AccountMgr)ctx.lookup(AccountMgrRemote.JNDI_NAME);
-		this.receptionist = (Receptionist)ctx.lookup(ReceptionistRemote.JNDI_NAME);
 		this.listMgr = (ListMgr)ctx.lookup(ListMgrRemote.JNDI_NAME);
 	}
 	
@@ -91,13 +87,6 @@ public class BeanMixin
 		return this.accountMgr;
 	}
 	
-	/** */
-	public Receptionist getReceptionist() throws Exception
-	{
-		this.establish();
-		return this.receptionist;
-	}
-
 	/** */
 	public ListMgr getListMgr()
 	{

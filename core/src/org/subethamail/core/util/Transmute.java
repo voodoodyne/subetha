@@ -5,17 +5,20 @@
 
 package org.subethamail.core.util;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.Permission;
+import org.subethamail.core.acct.i.MySubscription;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.lists.i.MailingListData;
-import org.subethamail.core.lists.i.MySubscription;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.entity.EmailAddress;
@@ -86,18 +89,18 @@ public class Transmute
 	}
 
 	/** */
-	public static List<SubscriberData> getSubscriberDataList(Set<Subscription> subscriptions)
+	public static List<SubscriberData> subscribers(Collection<Subscription> subscriptions)
 	{
 		List<SubscriberData> result = new ArrayList<SubscriberData>(subscriptions.size());
 
 		for (Subscription subscription: subscriptions)
-			result.add(subscriberData(subscription));
+			result.add(subscriber(subscription));
 		
 		return result;
 	}
 	
 	/** */
-	public static SubscriberData subscriberData(Subscription raw)
+	public static SubscriberData subscriber(Subscription raw)
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
@@ -109,7 +112,6 @@ public class Transmute
 				(raw.getDeliverTo() == null) ? true : false);
 	}
 
-	/** */
 	/**
 	 * @param rawPerson can be null
 	 * @return the status of the person for the given list. 
@@ -136,5 +138,20 @@ public class Transmute
 				role.isOwner(),
 				role.getName(),
 				perms);
+	}
+	
+	/**
+	 * Just hides the exception handling
+	 */
+	public static InternetAddress internetAddress(String email, String name)
+	{
+		try
+		{
+			return new InternetAddress(email, name);
+		}
+		catch (UnsupportedEncodingException ex)
+		{
+			throw new IllegalArgumentException("Unable to handle " + email + "/" + name, ex);
+		}
 	}
 }

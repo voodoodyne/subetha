@@ -12,13 +12,13 @@ import java.util.Random;
 import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
-import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
 import org.subethamail.core.admin.i.CreateMailingListException;
@@ -114,30 +114,10 @@ public class AdminBean implements Admin, AdminRemote
 			list.getSubscriptions().add(sub);
 			ea.getPerson().addSubscription(sub);
 			
-			try
-			{
-				this.postOffice.sendOwnerNewMailingList(ea, list);
-			}
-			catch (MessagingException ex)
-			{
-				log.error("Unable to send list owner notification of new list", ex);
-				// Lets propagate the exception and abort everything, this is serious.
-				// At worst someone will get email about a new list that doesn't exist.
-				// Most likely, if javamail will let us send one msg, it will let us
-				// send all of them, so any problem will come from the first msg.
-				throw new RuntimeException(ex);
-			}
+			this.postOffice.sendOwnerNewMailingList(ea, list);
 		}
 		
 		return list.getId();
-	}
-
-	/**
-	 * @see Admin#establishPerson(InternetAddress)
-	 */
-	public Long establishPerson(InternetAddress address)
-	{
-		return this.establishPerson(address, null);
 	}
 
 	/**
@@ -149,9 +129,9 @@ public class AdminBean implements Admin, AdminRemote
 	}
 
 	/**
-	 * Establishes the email address and the person entity.
+	 * @see AdminInternal#establishEmailAddress(InternetAddress, String)
 	 */
-	protected EmailAddress establishEmailAddress(InternetAddress address, String password)
+	public EmailAddress establishEmailAddress(InternetAddress address, String password)
 	{
 		try
 		{
@@ -176,6 +156,80 @@ public class AdminBean implements Admin, AdminRemote
 			this.dao.persist(e);
 			
 			return e;
+		}
+	}
+
+	/**
+	 * @see Admin#subscribe(Long, String, String)
+	 */
+	public SubscribeResult subscribe(Long listId, InternetAddress address) throws NotFoundException
+	{
+		EmailAddress addy = this.establishEmailAddress(address, null);
+		
+		return this.subscribe(listId, addy.getPerson(), addy);
+	}
+	
+	/**
+	 * @see Admin#subscribe(Long, Long, String)
+	 */
+	public SubscribeResult subscribe(Long listId, Long personId, String email) throws NotFoundException
+	{
+		Person who = this.dao.findPerson(personId);
+		
+		if (email == null)
+		{
+			// Subscribing with (or changing to) disabled delivery
+			return this.subscribe(listId, who, null);
+		}
+		else
+		{
+			EmailAddress addy = who.getEmailAddress(email);
+			
+			// If subscribing an address person does not currently own
+			if (addy == null)
+			{
+				// TODO:  send a token that allows user to add and subscribe in one step
+				return SubscribeResult.TOKEN_SENT;
+			}
+			else
+			{
+				return this.subscribe(listId, who, addy);
+			}
+		}
+	}
+	
+	/**
+	 * Subscribes someone to a mailing list, or changes the delivery address
+	 * of an existing subscriber.
+	 * 
+	 * @param deliverTo can be null to disable delivery
+	 */
+	protected SubscribeResult subscribe(Long listId, Person who, EmailAddress deliverTo) throws NotFoundException
+	{
+		MailingList list = this.dao.findMailingList(listId);
+		
+		Subscription sub = who.getSubscription(listId);
+		if (sub != null)
+		{
+			// If we're already subscribed, maybe we want to change the
+			// delivery address.
+			sub.setDeliverTo(deliverTo);
+			
+			return SubscribeResult.OK;
+		}
+		else
+		{
+			// TODO:  maybe we need a subscription hold?
+			
+			sub = new Subscription(who, list, deliverTo, list.getDefaultRole());
+			this.dao.persist(sub);
+			
+			who.addSubscription(sub);
+			list.getSubscriptions().add(sub);
+			
+			this.postOffice.sendSubscribed(list, who, deliverTo);
+			
+			return SubscribeResult.OK;
 		}
 	}
 

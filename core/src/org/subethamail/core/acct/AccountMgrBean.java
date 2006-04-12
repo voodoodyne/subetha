@@ -83,7 +83,8 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 				me.getId(),
 				me.getName(),
 				addresses,
-				me.isSiteAdmin()
+				me.isSiteAdmin(),
+				Transmute.subscriptions(me.getSubscriptions().values())
 			);
 	}
 	

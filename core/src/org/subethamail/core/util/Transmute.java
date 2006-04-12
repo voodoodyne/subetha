@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.MySubscription;
+import org.subethamail.core.acct.i.SubscriptionData;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.lists.i.MailingListData;
 import org.subethamail.core.lists.i.SubscriberData;
@@ -106,6 +107,7 @@ public class Transmute
 			log.debug(raw.toString());
 
 		return new SubscriberData(
+				raw.getPerson().getId(),
 				raw.getPerson().getName(),
 				raw.getEmailAddresses(),
 				raw.getRole().getName(),
@@ -154,4 +156,35 @@ public class Transmute
 			throw new IllegalArgumentException("Unable to handle " + email + "/" + name, ex);
 		}
 	}
+
+	public static List<SubscriptionData> subscriptions(Collection<Subscription> rawColl)
+	{
+		List<SubscriptionData> result = new ArrayList<SubscriptionData>(rawColl.size());
+		
+		for (Subscription raw: rawColl)
+			result.add(subscription(raw));
+		
+		return result;
+	}
+
+	/**
+	 * 
+	 * @param raw
+	 * @return
+	 */
+	public static SubscriptionData subscription(Subscription raw)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+	
+		return new SubscriptionData(
+				raw.getList().getId(),
+				raw.getList().getEmail(),
+				raw.getList().getName(),
+				raw.getList().getUrl(),
+				raw.getList().getDescription(),
+				raw.getRole().getName(),
+				raw.getDeliverTo().getId());
+	}
+
 }

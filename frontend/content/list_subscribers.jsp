@@ -7,7 +7,7 @@
 <c:set var="list" value="${sub.list}" />
 
 <trim:list title="Subscribers" sub="${sub}">
-	
+
 		<c:choose>
 		<c:when test="${empty data}">
 			<p>There are no subscribers to this list.</p>

@@ -1,70 +1,84 @@
 <%@include file="/inc/top_standard.jspf" %>
 
-<trim:plain title="SubEtha Mail">
+<t:action type="org.subethamail.web.action.auth.AuthRequired" />
+
+<c:set var="me" value="${backend.accountMgr.self}"/>
+
+<trim:home title="SubEtha Mail">
 	<h1>Welcome, <c:out value="${me.name}"/></h1>
 	
 	<p>
-		Probably this should be split into multiple pages
-		with subnav on LHS?
-		We need a "change name and password" page too.
+		<strong>Your email addresses:</strong>
 	</p>
-	
-	<p>
-		Your email addresses:
-	</p>
+
+	<form action="<c:url value="/email_add.jsp"/>" method="post">
+	<table>
+	<c:forEach var="email" items="${me.emailAddresses}">
+		<tr>
+			<td><a href="mailto:<c:out value="${email}"/>"><c:out value="${email}"/></a></td>
+			<td>
+				<c:if test="${auth.authName != email}">
+					<input type="submit" name="email_<c:out value="${email}"/>" value="remove" />
+				</c:if>
+			</td>
+		</tr>
+	</c:forEach>
+	</table>
+	</form>
+
+	<form action="<c:url value="/email_remove.jsp"/>" method="post">
 	<table>
 		<tr>
-			<td>foo@bar.com</td>
-			<td><input type="submit" value="remove" /></td>
-		</tr>
-		<tr>
-			<td>bob@subgenius.com</td>
-			<td><input type="submit" value="remove" /></td>
-		</tr>
-		<tr>
-			<td>marvin@siriuscybernetics.com</td>
-			<td><input type="submit" value="remove" /></td>
-		</tr>
-		<tr>
-			<td><input type="text" /></td>
+			<td><input type="text" name="email" value="" /></td>
 			<td><input type="submit" value="add" /></td>
 		</tr>
 	</table>
-	
+	</form>
+
 	<p>
-		Your subscriptions:
+		<strong>Your subscriptions:</strong>
 	</p>
-	<table>
-		<tr>
-			<th>List</th>
-			<th>Role</th>
-			<th>Deliver To</th>
-		</tr>
-		<tr>
-			<td>announce@happyhour.com</td>
-			<td>Owner</td>
-			<td>
-				<select>
-					<option>Delivery Disabled</option>
-					<option>foo@bar.com</option>
-					<option>bob@subgenius.com</option>
-					<option selected="true">marvin@siriuscybernetics.com</option>
-				</select>
-				<input type="submit" value="set" />
-			</td>
-		</tr>
-		<tr>
-			<td>goodgod@goatse.cx</td>
-			<td>Reader</td>
-			<td>
-				<select>
-					<option selected="true">Delivery Disabled</option>
-					<option>foo@bar.com</option>
-					<option>bob@subgenius.com</option>
-					<option>marvin@siriuscybernetics.com</option>
-				</select>
-				<input type="submit" value="set" />
-			</td>
-		</tr>
-	</table>
-</trim:plain>
+	
+	<c:choose>
+		<c:when test="${empty me.subscriptions}">
+			<p>You are not subscribed to any lists!</p>
+		</c:when>
+		<c:otherwise>
+			<table class="sort-table" id="lists-table">
+			<thead>
+				<tr>
+					<td>List Name</td>
+					<td>List Email</td>
+					<td>Role</td>
+					<td>Deliver To</td>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="subs" items="${me.subscriptions}">
+				<tr>
+					<td><a href="<c:url value="${subs.url}"/>"><c:out value="${subs.name}"/></a></td>
+					<td><a href="mailto:<c:out value="${subs.email}"/>"><c:out value="${subs.email}"/></a></td>
+					<td><c:out value="${subs.roleName}"/></td>
+					<td>
+						<select>
+							<c:forEach var="eml" items="${me.emailAddresses}">
+								<option value="<c:out value="${eml}"/>" 
+								<c:if test="${eml == subs.deliverTo}">selected="selected"</c:if>>
+								<c:out value="${eml}"/>
+								</option>
+							</c:forEach>
+						</select>
+						<input type="submit" value="set" />
+					</td>
+				</tr>
+				</c:forEach>
+			</tbody>
+			</table>
+
+<script type="text/javascript">
+var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String", "None"]);
+</script>
+
+		</c:otherwise>
+	</c:choose>
+</trim:home>

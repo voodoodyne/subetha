@@ -5,6 +5,8 @@
 
 package org.subethamail.core.acct.i;
 
+import java.util.List;
+
 
 /**
  * Some detail about the current user, suitable for display on
@@ -15,8 +17,8 @@ package org.subethamail.core.acct.i;
 @SuppressWarnings("serial")
 public class Self extends PersonData
 {
-	// TODO:  add list of subscriptions
-
+	List<SubscriptionData> subscriptions;
+	
 	/** */
 	boolean siteAdmin;
 
@@ -25,11 +27,13 @@ public class Self extends PersonData
 	public Self(Long id, 
 				String name,
 				String[] emailAddresses,
-				boolean siteAdmin)
+				boolean siteAdmin,
+				List<SubscriptionData> subscriptions)
 	{
 		super(id, name, emailAddresses);
 		
 		this.siteAdmin = siteAdmin;
+		this.subscriptions = subscriptions;
 	}
 
 	/** */
@@ -38,4 +42,8 @@ public class Self extends PersonData
 		return this.siteAdmin;
 	}
 	
+	public List<SubscriptionData> getSubscriptions()
+	{
+		return this.subscriptions;
+	}
 }

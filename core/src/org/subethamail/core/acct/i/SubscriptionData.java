@@ -3,33 +3,34 @@
  * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/blog/i/PersonData.java $
  */
 
-package org.subethamail.core.lists.i;
+package org.subethamail.core.acct.i;
 
-import org.subethamail.core.acct.i.PersonData;
+import org.subethamail.core.lists.i.MailingListData;
 
 /**
- * Some detail about a subscriber.
+ * Some detail about a mailing list.
  *
  * @author Jon Scott Stevens
  */
 @SuppressWarnings("serial")
-public class SubscriberData extends PersonData
-{	
+public class SubscriptionData extends MailingListData
+{
 	String roleName;
 	String deliverTo;
-
+		
 	/**
 	 */
-	public SubscriberData(
-			Long id,
-			String name,
-			String[] emailAddresses,
-			String roleName,
-			String deliverTo)
+	public SubscriptionData(Long id, 
+					String email,
+					String name,
+					String url, 
+					String description,
+					String roleName,
+					String deliverTo)
 	{
-		super(id, name, emailAddresses);
+		super(id, email, name, url, description);
 		this.roleName = roleName;
-		this.deliverTo = deliverTo;
+		this.deliverTo = deliverTo;		
 	}
 	
 	/** */

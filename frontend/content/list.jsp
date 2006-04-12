@@ -16,6 +16,7 @@
 		<c:when test="${sub.subscribed}">
 			<form action="<c:url value="/subscribe_me.jsp"/>" method="post">
 				<input type="hidden" name="listId" value="${sub.list.id}" />
+				<input type="hidden" name="goto" value="/list.jsp?listId=${sub.list.id}" />
 				<p>
 					<c:choose>
 						<c:when test="${empty sub.deliverTo}">

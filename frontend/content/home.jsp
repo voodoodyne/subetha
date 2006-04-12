@@ -60,7 +60,10 @@
 					<td><a href="mailto:<c:out value="${subs.email}"/>"><c:out value="${subs.email}"/></a></td>
 					<td><c:out value="${subs.roleName}"/></td>
 					<td>
-						<select>
+					<form action="<c:url value="/subscribe_me.jsp"/>" method="post">
+						<input type="hidden" name="listId" value="<c:out value="${subs.id}"/>" />
+						<select name="deliverTo">
+							<option value="">Disable Delivery</option>
 							<c:forEach var="eml" items="${me.emailAddresses}">
 								<option value="<c:out value="${eml}"/>" 
 								<c:if test="${eml == subs.deliverTo}">selected="selected"</c:if>>
@@ -69,6 +72,7 @@
 							</c:forEach>
 						</select>
 						<input type="submit" value="set" />
+					</form>
 					</td>
 				</tr>
 				</c:forEach>

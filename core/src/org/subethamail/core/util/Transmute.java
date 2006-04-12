@@ -111,7 +111,7 @@ public class Transmute
 				raw.getPerson().getName(),
 				raw.getEmailAddresses(),
 				raw.getRole().getName(),
-				raw.getDeliverTo().getId());
+				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null);
 	}
 
 	/**

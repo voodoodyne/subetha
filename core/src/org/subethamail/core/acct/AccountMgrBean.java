@@ -29,6 +29,7 @@ import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.PostOffice;
+import org.subethamail.core.util.Base62;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EmailAddress;
@@ -157,6 +158,8 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		
 		String cipherText = this.encryptor.encryptList(plainList);
 		
+		cipherText = Base62.encode(cipherText);
+		
 		this.postOffice.sendConfirmSubscribeToken(mailingList, email, cipherText);
 	}
 
@@ -166,6 +169,8 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	@PermitAll
 	public SubscribeResult subscribeAnonymous(String token) throws BadTokenException, NotFoundException
 	{
+		token = Base62.decode(token);
+		
 		List<String> plainList = this.encryptor.decryptList(token);
 		
 		if (plainList.isEmpty() || !plainList.get(0).equals(SUBSCRIBE_TOKEN_PREFIX))

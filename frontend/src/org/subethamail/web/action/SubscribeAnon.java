@@ -8,6 +8,7 @@ package org.subethamail.web.action;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Email;
+import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
@@ -47,7 +48,12 @@ public class SubscribeAnon extends AuthAction
 	{
 		Model model = (Model)this.getCtx().getModel();
 		
-		//Backend.instance().getAccountMgr().subscribe(this.listId, this.deliverTo);
+		model.validate();
+		
+		if (model.getErrors().isEmpty())
+		{
+			Backend.instance().getAccountMgr().subscribeAnonymousRequest(model.listId, model.deliverTo, model.name);
+		}
 	}
 	
 }

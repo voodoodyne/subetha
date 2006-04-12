@@ -62,12 +62,22 @@
 				<input type="hidden" name="listId" value="${sub.list.id}" />
 				<table>
 					<tr>
-						<th>Your Email Address:</th>
-						<td><input type="text" size="60" /></td>
+						<th><label for="deliverTo">Your Email Address:</label></th>
+						<td <c:if test="${!empty model.errors.deliverTo}">class="error"</c:if> >
+							<input id="deliverTo" name="deliverTo" value="<c:out value="${model.deliverTo}"/>" type="text" size="60" />
+							<c:if test="${!empty model.errors.deliverTo}">
+								<div class="error"><c:out value="${model.errors.deliverTo}"/></div>
+							</c:if>
+						</td>
 					</tr>
 					<tr>
-						<th>Your Name:</th>
-						<td><input type="text" size="60" /></td>
+						<th><label for="name">Your Name:</label></th>
+						<td <c:if test="${!empty model.errors.name}">class="error"</c:if> >
+							<input id="name" name="name" value="<c:out value="${model.name}"/>" type="text" size="60" />
+							<c:if test="${!empty model.errors.name}">
+								<div class="error"><c:out value="${model.errors.name}"/></div>
+							</c:if>
+						</td>
 					</tr>
 					<tr>
 						<th></th>

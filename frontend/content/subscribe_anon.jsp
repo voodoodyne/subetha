@@ -2,6 +2,13 @@
 
 <t:action var="model" type="org.subethamail.web.action.SubscribeAnon"/>
 
-<c:redirect url="/list.jsp">
-	<c:param name="listId" value="${param.listId}"/>
-</c:redirect>
+<c:choose>
+	<c:when test="${empty model.errors}">
+		<c:redirect url="/subscribe_confirm.jsp">
+			<c:param name="listId" value="${param.listId}"/>
+		</c:redirect>
+	</c:when>
+	<c:otherwise>
+		<jsp:forward page="/list.jsp" />
+	</c:otherwise>
+</c:choose>

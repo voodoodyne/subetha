@@ -330,8 +330,12 @@ public class AdminBean implements Admin, AdminRemote
 		// Move subscriptions
 		for (Subscription sub: from.getSubscriptions().values())
 		{
-			sub.setPerson(to);
-			to.addSubscription(sub);
+			// Keep our current subscription if there is a duplicate
+			if (!to.getSubscriptions().containsKey(sub.getList().getId()))
+			{
+				sub.setPerson(to);
+				to.addSubscription(sub);
+			}
 		}
 		
 		from.getSubscriptions().clear();

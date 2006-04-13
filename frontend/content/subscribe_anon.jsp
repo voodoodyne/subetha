@@ -4,9 +4,7 @@
 
 <c:choose>
 	<c:when test="${empty model.errors}">
-		<c:redirect url="/subscribe_confirm.jsp">
-			<c:param name="listId" value="${param.listId}"/>
-		</c:redirect>
+		<c:redirect url="/subscribe_confirm.jsp" />
 	</c:when>
 	<c:otherwise>
 		<jsp:forward page="/list.jsp" />

@@ -1,6 +1,6 @@
 <%@include file="inc/top_standard.jspf" %>
 
-<trim:list title="Confirm Subscribe">
+<trim:plain title="Confirm Subscribe">
 	<p>
 		An email has been sent to the address you specified.  It contains
 		a confirmation code which will allow you to subscribe.
@@ -16,7 +16,6 @@
 	</ul>
 	
 	<form action="<c:url value="/subscribe_confirm_submit.jsp"/>" method="post">
-		<input type="hidden" name="listId" value="${param.listId}" />
 		<table>
 			<tr>
 				<th><label for="token">Confirmation Code</label></th>
@@ -38,5 +37,5 @@
 			</tr>
 		</table>
 	</form>
-</trim:list>
+</trim:plain>
 

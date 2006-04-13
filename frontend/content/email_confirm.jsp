@@ -1,6 +1,6 @@
 <%@include file="inc/top_standard.jspf" %>
 
-<trim:home title="Confirm Additional Email Address">
+<trim:plain title="Confirm Additional Email Address">
 	<p>
 		An email has been sent to the address you specified.  It contains
 		a confirmation code which will allow you to verify the new address
@@ -38,5 +38,5 @@
 			</tr>
 		</table>
 	</form>
-</trim:home>
+</trim:plain>
 

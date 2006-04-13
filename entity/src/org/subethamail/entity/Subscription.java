@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -36,17 +37,26 @@ public class Subscription implements Serializable, Comparable
 	
 	/** */
 	@Id
-	SubscriptionPK pk;
+	@GeneratedValue
+	Long id;
 	
-	/** This "overlaps" with the PK */
+	/** */
 	@ManyToOne
-	@JoinColumn(name="personId", insertable=false, updatable=false)
+	@JoinColumn(name="personId", nullable=false)
 	Person person;
 	
-	/** This "overlaps" with the PK */
+	/** */
 	@ManyToOne
-	@JoinColumn(name="listId", insertable=false, updatable=false)
+	@JoinColumn(name="listId", nullable=false)
 	MailingList list;
+	
+	/**
+	 * This overlaps with the relationship and exists solely so
+	 * that we can put a Subscription in a Map on the Person.
+	 * No getters or setters.
+	 */
+	@Column(name="listId", nullable=false, insertable=false, updatable=false)
+	Long listId;
 	
 	/**
 	 * A value of null means that mail should not be delivered. 
@@ -77,8 +87,6 @@ public class Subscription implements Serializable, Comparable
 		if (log.isDebugEnabled())
 			log.debug("Creating new Subscription");
 		
-		this.pk = new SubscriptionPK(person.getId(), list.getId());
-		
 		this.person = person;
 		this.list = list;
 		
@@ -91,10 +99,8 @@ public class Subscription implements Serializable, Comparable
 	}
 	
 	/** */
-	public SubscriptionPK getPk()		{ return this.pk; }
-
-	/** */
 	public Person getPerson() { return this.person; }
+	public void setPerson(Person value) { this.person = value; }
 	
 	/** */
 	public MailingList getList() { return this.list; }
@@ -163,11 +169,11 @@ public class Subscription implements Serializable, Comparable
 	/** */
 	public String toString()
 	{
-		return this.getClass() + " {pk=" + this.pk + "}";
+		return this.getClass() + " {id=" + this.id + ", list=" + this.list + ", person=" + this.person + "}";
 	}
 
 	/**
-	 * Natural sort order is based person
+	 * Natural sort order is based on person
 	 */
 	public int compareTo(Object arg0)
 	{

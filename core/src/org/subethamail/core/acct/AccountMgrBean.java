@@ -136,9 +136,25 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	/**
 	 * @see AccountMgr#addEmail(String)
 	 */
-	public void addEmail(String token) throws BadTokenException
+	@PermitAll
+	public void addEmail(String token) throws BadTokenException, NotFoundException
 	{
-		//TODO
+		token = Base62.decode(token);
+		
+		List<String> plainList;
+		try
+		{
+			plainList = this.encryptor.decryptList(token);
+		}
+		catch (GeneralSecurityException ex) { throw new BadTokenException(ex); }
+		
+		if (plainList.isEmpty() || !plainList.get(0).equals(ADD_EMAIL_TOKEN_PREFIX))
+			throw new BadTokenException("Invalid token");
+		
+		Long personId = Long.valueOf(plainList.get(1));
+		String email = plainList.get(2);
+
+		this.admin.addEmail(personId, email);
 	}
 
 	/**

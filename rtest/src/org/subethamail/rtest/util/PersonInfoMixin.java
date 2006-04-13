@@ -33,7 +33,7 @@ public class PersonInfoMixin extends BeanMixin
 		String baseName = Long.toString(System.currentTimeMillis(), 36); 
 		String name =  baseName + "-" + objectId;
 		
-		this.password = "asdf";
+		this.password = "asdf" + objectId;	// only needs be unique for JVM session
 		this.email = "subetha-" + name + "@localhost";
 		
 		this.name = "Test User";

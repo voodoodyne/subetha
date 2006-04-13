@@ -60,7 +60,7 @@ public class Person implements Serializable, Comparable
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
 	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-	@MapKey(name="pk.listId")
+	@MapKey(name="listId")
 	Map<Long, Subscription> subscriptions;
 	
 	/**

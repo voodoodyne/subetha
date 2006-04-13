@@ -84,6 +84,8 @@ public class EmailAddressTest extends SubEthaTestCase
 		
 		try
 		{
+			this.admin.getAdmin().log("##### the getSelf() should fail");
+			
 			me = additional.getAccountMgr().getSelf();
 			fail("Accessed an account that should have been deleted");
 		}

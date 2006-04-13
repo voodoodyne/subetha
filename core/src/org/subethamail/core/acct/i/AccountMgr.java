@@ -51,13 +51,15 @@ public interface AccountMgr
 	public void addEmailRequest(String newEmail);
 	
 	/**
-	 * Actually sets a user's email address based on a token generated
-	 * by addEmailRequest.  Also sends an email to the old email address
-	 * notifying the user of the change.
+	 * Actually performs the action specified by the addEmailRequest token.
+	 * This method has no access control and can be called by anyone.
 	 * 
 	 * @param token was generated with addEmailRequest
+	 * 
+	 * @throws NotFoundException if the person id embedded in the token
+	 *  no longer exists.
 	 */
-	public void addEmail(String token) throws BadTokenException;
+	public void addEmail(String token) throws BadTokenException, NotFoundException;
 	
 	/**
 	 * Gets some data about a mailing list.  Includes the subscriber

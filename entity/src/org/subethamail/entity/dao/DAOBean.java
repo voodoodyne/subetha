@@ -103,20 +103,28 @@ public class DAOBean implements DAO
 	/**
 	 * @see DAO#findEmailAddress(String)
 	 */
-	public EmailAddress findEmailAddress(String address) throws NotFoundException
+	public EmailAddress findEmailAddress(String email) throws NotFoundException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding EmailAddress with id " + address);
-		
-		// Normalize out any weird casing in the domain part
-		address = Validator.normalizeEmail(address);
-		
-		EmailAddress e = this.em.find(EmailAddress.class, address);
+		EmailAddress e = this.getEmailAddress(email);
 		
 		if (e == null)
-			throw new NotFoundException("No email " + address);
+			throw new NotFoundException("No email " + email);
 		else
 			return e;
+	}
+
+	/**
+	 * @see DAO#getEmailAddress(String)
+	 */
+	public EmailAddress getEmailAddress(String email)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Getting EmailAddress with id " + email);
+		
+		// Normalize out any weird casing in the domain part
+		email = Validator.normalizeEmail(email);
+		
+		return this.em.find(EmailAddress.class, email);
 	}
 
 	/**

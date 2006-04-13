@@ -59,12 +59,12 @@ public class EmailAddress implements Serializable, Comparable
 	
 	/**
 	 */
-	public EmailAddress(Person person, String address)
+	public EmailAddress(Person person, String email)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new EmailAddress");
 		
-		this.setId(address);
+		this.setId(email);
 		this.setPerson(person);
 	}
 	

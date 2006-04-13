@@ -69,6 +69,15 @@ public class AdminBean implements Admin, AdminRemote
 	protected Random randomizer = new Random();
 	
 	/**
+	 * @see Admin#log(String)
+	 */
+	public void log(String msg)
+	{
+		if (log.isInfoEnabled())
+			log.info("CLIENT:  " + msg);
+	}
+	
+	/**
 	 * @see Admin#createMailingList(InternetAddress, URL, String, InternetAddress[])
 	 */
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws CreateMailingListException
@@ -269,5 +278,76 @@ public class AdminBean implements Admin, AdminRemote
 	{
 		log.debug("Getting data for all lists");
 		return Transmute.mailingLists(this.dao.findAllLists());
+	}
+
+	/**
+	 * @see Admin#addEmail(Long, String)
+	 */
+	public void addEmail(Long personId, String email) throws NotFoundException
+	{
+		EmailAddress addy = this.dao.getEmailAddress(email);
+		
+		// Three cases:  either addy is null, addy is already associated with
+		// the person, or addy is already associated with someone else.
+		
+		// Lets quickly handle the case were we don't have to do anything
+		if (addy != null && addy.getPerson().getId().equals(personId))
+			return;
+		
+		Person who = this.dao.findPerson(personId);
+			
+		if (addy == null)
+		{
+			addy = new EmailAddress(who, email);
+			this.dao.persist(addy);
+			who.addEmailAddress(addy);
+		}
+		else
+		{
+			this.merge(addy.getPerson().getId(), who.getId());
+		}
+		
+		this.selfModerate(who.getId());
+	}
+
+	/**
+	 * @see Admin#merge(Long, Long)
+	 */
+	public void merge(Long fromPersonId, Long toPersonId) throws NotFoundException
+	{
+		Person from = this.dao.findPerson(fromPersonId);
+		Person to = this.dao.findPerson(toPersonId);
+
+		// Move email addresses
+		for (EmailAddress addy: from.getEmailAddresses().values())
+		{
+			addy.setPerson(to);
+			to.addEmailAddress(addy);
+		}
+		
+		from.getEmailAddresses().clear();
+		
+		// Move subscriptions
+		for (Subscription sub: from.getSubscriptions().values())
+		{
+			sub.setPerson(to);
+			to.addSubscription(sub);
+		}
+		
+		from.getSubscriptions().clear();
+		
+		// Nuke the old person object
+		this.dao.remove(from);
+	}
+
+	/**
+	 * @see Admin#selfModerate(Long)
+	 */
+	public void selfModerate(Long personId) throws NotFoundException
+	{
+		//TODO
+		
+		// Use a query to join against the email address table and the
+		// mail table to pull out mail objects with SELF holds.
 	}
 }

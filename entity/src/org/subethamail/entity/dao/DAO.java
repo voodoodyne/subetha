@@ -75,7 +75,13 @@ public interface DAO
 	/**
 	 * Finds an email address with the specified address.
 	 */
-	public EmailAddress findEmailAddress(String address) throws NotFoundException;
+	public EmailAddress findEmailAddress(String email) throws NotFoundException;
+
+	/**
+	 * Finds an email address with the specified address.
+	 * @return null if no email address associated with that address
+	 */
+	public EmailAddress getEmailAddress(String email);
 
 	/**
 	 * Tries to find a mail entity which has the specified message id.

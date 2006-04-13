@@ -28,6 +28,12 @@ public interface Admin
 	public static final String JNDI_NAME = "subetha/Admin/local";
 
 	/**
+	 * Puts an arbitrary string in the server log, useful for clients (especially
+	 * unit tests) to delineate method calls.
+	 */
+	public void log(String msg);
+	
+	/**
 	 * Creates a mailing list.  If any of the initial owner addresses
 	 * have not been registered, accounts will be created without confirmation.
 	 * 
@@ -89,4 +95,26 @@ public interface Admin
 	 * @return some information about all the lists on the site.
 	 */
 	public List<MailingListData> getAllLists();
+
+	/**
+	 * Adds an email address to an existing account.  If the email address
+	 * is already associated with another account, the other account will
+	 * be merged into this one and then deleted.
+	 */
+	public void addEmail(Long personId, String email) throws NotFoundException;
+	
+	/**
+	 * Merges one account into another.  At the end of this method, the "to"
+	 * person will have all of the email addresses and subscriptions of the
+	 * "from" person, and the "from" person will be deleted.
+	 */
+	public void merge(Long fromPersonId, Long toPersonId) throws NotFoundException;
+	
+	/**
+	 * Checks to see if any messages from this person are held for self-moderation
+	 * but shouldn't be.  This might be the case immediately after merging two
+	 * accounts; messages from one might be held but the other account is valid.
+	 * It might also be the case after adding a new email address.
+	 */
+	public void selfModerate(Long personId) throws NotFoundException;
 }

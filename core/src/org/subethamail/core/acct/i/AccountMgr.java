@@ -55,10 +55,12 @@ public interface AccountMgr
 	 * 
 	 * @param token was generated with addEmailRequest
 	 * 
+	 * @return credentials which could be used to log in, if necessary.
+	 * 
 	 * @throws NotFoundException if the person id embedded in the token
 	 *  no longer exists.
 	 */
-	public void addEmail(String token) throws BadTokenException, NotFoundException;
+	public AuthCredentials addEmail(String token) throws BadTokenException, NotFoundException;
 	
 	/**
 	 * Gets some data about a mailing list.  Includes the subscriber

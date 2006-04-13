@@ -13,39 +13,25 @@ package org.subethamail.core.acct.i;
  * 
  * @author Jeff Schnitzer
  */
-public class AuthSubscribeResult
+public class AuthSubscribeResult extends AuthCredentials
 {
 	/** */
 	SubscribeResult result;
 	Long listId;
-	String email;
-	String password;
 	
 	/** */
-	public AuthSubscribeResult(SubscribeResult result, Long listId, String email, String password)
+	public AuthSubscribeResult(String email, String password, SubscribeResult result, Long listId)
 	{
+		super(email, password);
+		
 		this.result = result;
 		this.listId = listId;
-		this.email = email;
-		this.password = password;
 	}
 
 	/** */
 	public Long getListId()
 	{
 		return this.listId;
-	}
-
-	/** */
-	public String getEmail()
-	{
-		return this.email;
-	}
-
-	/** */
-	public String getPassword()
-	{
-		return this.password;
 	}
 
 	/** */

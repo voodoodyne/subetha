@@ -178,7 +178,7 @@ public class AdminBean implements Admin, AdminRemote
 		
 		SubscribeResult result = this.subscribe(listId, addy.getPerson(), addy);
 		
-		return new AuthSubscribeResult(result, listId, addy.getId(), addy.getPerson().getPassword());
+		return new AuthSubscribeResult(addy.getId(), addy.getPerson().getPassword(), result, listId);
 	}
 	
 	/**

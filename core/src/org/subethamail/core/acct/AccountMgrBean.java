@@ -22,6 +22,7 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AccountMgrRemote;
+import org.subethamail.core.acct.i.AuthCredentials;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.core.acct.i.MySubscription;
@@ -137,7 +138,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	 * @see AccountMgr#addEmail(String)
 	 */
 	@PermitAll
-	public void addEmail(String token) throws BadTokenException, NotFoundException
+	public AuthCredentials addEmail(String token) throws BadTokenException, NotFoundException
 	{
 		token = Base62.decode(token);
 		
@@ -155,6 +156,10 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		String email = plainList.get(2);
 
 		this.admin.addEmail(personId, email);
+		
+		Person p = this.dao.findPerson(personId);
+		
+		return new AuthCredentials(email, p.getPassword());
 	}
 
 	/**

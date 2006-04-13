@@ -32,7 +32,7 @@ import org.subethamail.common.valid.Validator;
  * @author Jeff Schnitzer
  */
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class EnabledFilter implements Serializable, Comparable
 {
@@ -56,6 +56,7 @@ public class EnabledFilter implements Serializable, Comparable
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="filter")
 	@MapKey(name="name")
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	Map<String, FilterArgument> arguments;
 	
 	/**

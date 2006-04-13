@@ -36,7 +36,7 @@ import org.subethamail.common.valid.Validator;
  * @author Jeff Schnitzer
  */
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class Role implements Serializable, Comparable
 {
@@ -70,7 +70,7 @@ public class Role implements Serializable, Comparable
 	@JoinTable(name="RolePermission", joinColumns={@JoinColumn(name="roleId")})
 	@Enumerated(EnumType.STRING)
 	@Column(name="perm", nullable=false)
-	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	Set<Permission> permissions;
 	
 	/**

@@ -65,7 +65,7 @@ import org.subethamail.common.valid.Validator;
 	)
 })
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class MailingList implements Serializable, Comparable
 {
@@ -112,17 +112,17 @@ public class MailingList implements Serializable, Comparable
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@Sort(type=SortType.NATURAL)
-	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	SortedSet<Subscription> subscriptions;
 	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
-	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	Set<EnabledFilter> enabledFilters;
 	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
-	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	Set<Role> roles;
 	
 	/**

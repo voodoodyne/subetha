@@ -57,7 +57,7 @@ import org.subethamail.common.valid.Validator;
 	)
 })
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class Mail implements Serializable, Comparable
 {
@@ -122,7 +122,7 @@ public class Mail implements Serializable, Comparable
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="parent")
 	@Sort(type=SortType.NATURAL)
-	@Cache(usage=CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	SortedSet<Mail> replies;
 	
 	/** 

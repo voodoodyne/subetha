@@ -60,6 +60,11 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	private static final String ADD_EMAIL_TOKEN_PREFIX = "add";
 	
 	/**
+	 * Allow tokens to be at most 24 hours old
+	 */
+	public static final long MAX_TOKEN_AGE_MILLIS = 1000 * 60 * 60 * 24;
+	
+	/**
 	 */
 	@EJB DAO dao;
 	@EJB PostOffice postOffice;
@@ -127,11 +132,11 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		plainList.add(me.getId().toString());
 		plainList.add(newEmail);
 		
-		String cipherText = this.encryptor.encryptList(plainList);
+		byte[] cipherText = this.encryptor.encryptList(plainList);
 		
-		cipherText = Base62.encode(cipherText);
+		String cipherString = Base62.encode(cipherText);
 		
-		this.postOffice.sendAddEmailToken(me, newEmail, cipherText);
+		this.postOffice.sendAddEmailToken(me, newEmail, cipherString);
 	}
 
 	/**
@@ -140,12 +145,12 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	@PermitAll
 	public AuthCredentials addEmail(String token) throws BadTokenException, NotFoundException
 	{
-		token = Base62.decode(token);
+		byte[] cipherText = Base62.decode(token);
 		
 		List<String> plainList;
 		try
 		{
-			plainList = this.encryptor.decryptList(token);
+			plainList = this.encryptor.decryptList(cipherText, MAX_TOKEN_AGE_MILLIS);
 		}
 		catch (GeneralSecurityException ex) { throw new BadTokenException(ex); }
 		
@@ -155,13 +160,14 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		Long personId = Long.valueOf(plainList.get(1));
 		String email = plainList.get(2);
 
+
 		this.admin.addEmail(personId, email);
 		
 		Person p = this.dao.findPerson(personId);
 		
 		return new AuthCredentials(email, p.getPassword());
 	}
-
+	
 	/**
 	 * @see AccountMgr#getMySubscription(Long)
 	 */
@@ -194,11 +200,11 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		plainList.add(email);
 		plainList.add(name);
 		
-		String cipherText = this.encryptor.encryptList(plainList);
+		byte[] cipherText = this.encryptor.encryptList(plainList);
+
+		String cipherString = Base62.encode(cipherText);
 		
-		cipherText = Base62.encode(cipherText);
-		
-		this.postOffice.sendConfirmSubscribeToken(mailingList, email, cipherText);
+		this.postOffice.sendConfirmSubscribeToken(mailingList, email, cipherString);
 	}
 
 	/**
@@ -207,12 +213,12 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	@PermitAll
 	public AuthSubscribeResult subscribeAnonymous(String token) throws BadTokenException, NotFoundException
 	{
-		token = Base62.decode(token);
+		byte[] cipherText = Base62.decode(token);
 		
 		List<String> plainList;
 		try
 		{
-			plainList = this.encryptor.decryptList(token);
+			plainList = this.encryptor.decryptList(cipherText, MAX_TOKEN_AGE_MILLIS);
 		}
 		catch (GeneralSecurityException ex) { throw new BadTokenException(ex); }
 		

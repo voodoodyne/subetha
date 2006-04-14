@@ -7,16 +7,16 @@ package org.subethamail.core.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.util.Base64;
 
 
 /**
- * Static methods to convert between Base64 and "Base62" encoding.
- * A "Base62" string is composed of only the characters A-Za-z0-9.
- * This helps prevent MUAs from putting linebreaks in the middle
+ * Static methods for "Base62" encoding and decoding.  A Base62
+ * encoded string is very similar to Base64, but eliminates the
+ * '/', '+', and '='.  Having only the characters A-Za-z0-9
+ * helps prevent MUAs from putting linebreaks in the middle
  * of longish encryption tokens.
  * 
- * Note that the start strings must already be Base64 encoded!
- *
  * @author Jeff Schnitzer
  */
 public class Base62
@@ -25,13 +25,34 @@ public class Base62
 	private static Log log = LogFactory.getLog(Base62.class);
 	
 	/**
+	 * Encodes bytes as a Base62 string.
+	 * 
+	 * Having tokens that are a seamless string of letters and numbers
+	 * means that MUAs are less likely to linebreak a long token.
+	 */
+	public static String encode(byte[] data)
+	{
+		String base64 = Base64.encodeBytes(data);
+		return base64ToBase62(base64);
+	}
+	
+	/**
+	 * Returns a Base62 encoded string to it's original state.
+	 */
+	public static byte[] decode(String base62)
+	{
+		String base64 = base62ToBase64(base62);
+		return Base64.decode(base64);
+	}
+	
+	/**
 	 * Takes a base64 encoded string and eliminates the '+' and '/'.
 	 * Also eliminates any CRs.
 	 * 
 	 * Having tokens that are a seamless string of letters and numbers
 	 * means that MUAs are less likely to linebreak a long token.
 	 */
-	public static String encode(String base64)
+	protected static String base64ToBase62(String base64)
 	{
 		StringBuffer buf = new StringBuffer(base64.length() * 2);
 		
@@ -75,7 +96,7 @@ public class Base62
 	 * Returns a string encoded with encodeBase62 to its original
 	 * (base64 encoded) state.
 	 */
-	public static String decode(String base62)
+	protected static String base62ToBase64(String base62)
 	{
 		StringBuffer buf = new StringBuffer(base62.length());
 		

@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import org.subethamail.core.acct.i.BadTokenException;
+
 /**
  * Encrypts and decrypts strings using an internal key.  The key
  * will be randomly generated but otherwise remains constant.
@@ -23,32 +25,40 @@ public interface Encryptor
 	public static final String JNDI_NAME = "subetha/Encryptor/local";
 
 	/**
-	 * Encrypts a string.  It will be AES encrypted to binary.
+	 * Encrypts some bytes.  It will be AES encrypted to binary.
 	 */
-	public byte[] encrypt(String plainText);
+	public byte[] encrypt(byte[] plainText);
 	
 	/**
 	 * Decrypts bytes encrypted with encrypt().
 	 */
-	public String decrypt(byte[] cipherText) throws GeneralSecurityException;
+	public byte[] decrypt(byte[] cipherText) throws GeneralSecurityException;
 	
 	/**
-	 * Encrypts a string.  It will be AES encrypted and Base64 encoded.
+	 * Encrypts a string.  It will be AES encrypted to binary.
 	 */
-	public String encryptString(String plainText);
+	public byte[] encryptString(String plainText);
 	
 	/**
-	 * Decrypts a string that was encrypted with encryptString().
+	 * Decrypts a bytes that were encrypted with encryptString().
 	 */
-	public String decryptString(String cipherText) throws GeneralSecurityException;
+	public String decryptString(byte[] cipherText) throws GeneralSecurityException;
 
 	/**
-	 * Encrypts a list of strings into a single Base64-encoded String.
+	 * Encrypts a list of strings.
 	 */
-	public String encryptList(List<String> parts);
+	public byte[] encryptList(List<String> parts);
 	
 	/**
-	 * Decrypts a string that was encrypted with encryptList().
+	 * Decrypts bytes that were encrypted with encryptList().
 	 */
-	public List<String> decryptList(String cipherText) throws GeneralSecurityException;
+	public List<String> decryptList(byte[] cipherText) throws GeneralSecurityException;
+	
+	/**
+	 * Decrypts bytes that were encrypted with encryptList(), checking
+	 * to make sure the encryption was recent.
+	 * 
+	 * @throws BadTokenException if the age of the list exceeds maxAgeMillis.
+	 */
+	public List<String> decryptList(byte[] cipherText, long maxAgeMillis) throws GeneralSecurityException, ExpiredException;
 }

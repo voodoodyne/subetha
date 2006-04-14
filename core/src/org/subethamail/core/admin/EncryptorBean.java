@@ -5,15 +5,17 @@
 
 package org.subethamail.core.admin;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.StringTokenizer;
 
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
@@ -30,7 +32,9 @@ import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.jboss.util.Base64;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.core.admin.i.Encryptor;
+import org.subethamail.core.admin.i.ExpiredException;
 import org.subethamail.entity.Config;
 import org.subethamail.entity.dao.DAO;
 
@@ -125,34 +129,29 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 	}
 	
 	/**
-	 * @see Encryptor#encrypt(String)
+	 * @see Encryptor#encrypt(byte[])
 	 */
-	public byte[] encrypt(String plainText)
+	public byte[] encrypt(byte[] plainText)
 	{
 		if (log.isDebugEnabled())
-			log.debug("Encrypting: " + plainText);
+			log.debug("Encrypting " + plainText.length + " bytes");
 		
 		try
 		{
-			byte[] plainBytes = plainText.getBytes("UTF-8");
-			
 			SecretKey secretKey = new SecretKeySpec(this.getKey(), "AES");
 			
 			Cipher aes = Cipher.getInstance("AES/CBC/PKCS5Padding");
 			aes.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(IV));
 			
-			byte[] cipherText = aes.doFinal(plainBytes);
-				
-			return cipherText;
+			return aes.doFinal(plainText);
 		}
-		catch (UnsupportedEncodingException ex) { throw new EJBException(ex); }
 		catch (GeneralSecurityException ex) { throw new EJBException(ex); }
 	}
 
 	/**
 	 * @see Encryptor#decrypt(byte[])
 	 */
-	public String decrypt(byte[] cipherText) throws GeneralSecurityException
+	public byte[] decrypt(byte[] cipherText) throws GeneralSecurityException
 	{
 		try
 		{
@@ -163,12 +162,10 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 			
 			byte[] plainText = aes.doFinal(cipherText);
 			
-			String result = new String(plainText, "UTF-8");
-			
 			if (log.isDebugEnabled())
-				log.debug("Decrypted to: " + result);
+				log.debug("Decrypted to: " + plainText.length + " bytes");
 			
-			return result;
+			return plainText;
 		}
 		catch (Exception ex) { throw new GeneralSecurityException(ex); }
 	}
@@ -176,70 +173,103 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 	/**
 	 * @see Encryptor#encryptString(String)
 	 */
-	public String encryptString(String plainText)
+	public byte[] encryptString(String plainText)
 	{
-		byte[] cipherText = this.encrypt(plainText);
+		if (log.isDebugEnabled())
+			log.debug("Encrypting: " + plainText);
 		
-		return Base64.encodeBytes(cipherText);
-	}
-
-	/**
-	 * @see Encryptor#decryptString(String)
-	 */
-	public String decryptString(String cipherText) throws GeneralSecurityException
-	{
-		byte[] cipherBytes = Base64.decode(cipherText);
-		
-		return this.decrypt(cipherBytes);
-	}
-
-	/**
-	 * @see Encryptor#decryptList(String)
-	 */
-	public String encryptList(List<String> parts)
-	{
-		StringBuffer buf = new StringBuffer(128);
-		
-		boolean first = true;
-		
-		for (String part: parts)
+		try
 		{
-			try
-			{
-				if (first)
-					first = false;
-				else
-					buf.append(':');
-				
-				buf.append(URLEncoder.encode(part, "UTF-8"));
-			}
-			catch (UnsupportedEncodingException ex) { throw new RuntimeException(ex); }
+			byte[] plainBytes = plainText.getBytes("UTF-8");
+			
+			return this.encrypt(plainBytes);
+		}
+		catch (UnsupportedEncodingException ex) { throw new EJBException(ex); }
+	}
+
+	/**
+	 * @see Encryptor#decryptString(byte[])
+	 */
+	public String decryptString(byte[] cipherText) throws GeneralSecurityException
+	{
+		byte[] plainText = this.decrypt(cipherText);
+		
+		try
+		{
+			String result = new String(plainText, "UTF-8");
+			
+			if (log.isDebugEnabled())
+				log.debug("Decrypted to: " + result);
+			
+			return result;
+		}
+		catch (UnsupportedEncodingException ex) { throw new GeneralSecurityException(ex); }
+	}
+
+	/**
+	 * @see Encryptor#encryptList(List)
+	 */
+	public byte[] encryptList(List<String> parts)
+	{
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(buf);
+		
+		try
+		{
+			// First write a timestamp
+			long now = System.currentTimeMillis();
+			out.writeLong(now);
+			
+			for (String part: parts)
+				out.writeUTF(part);
+			
+			out.close();
+		}
+		catch (IOException ex)
+		{
+			// Should be impossible
+			throw new RuntimeException(ex);
 		}
 		
-		return this.encryptString(buf.toString());
+		return this.encrypt(buf.toByteArray());
 	}
 
 	/**
-	 * @see Encryptor#decryptList(String)
+	 * @see Encryptor#decryptList(byte[])
 	 */
-	public List<String> decryptList(String cipherText) throws GeneralSecurityException
+	public List<String> decryptList(byte[] cipherText) throws GeneralSecurityException
 	{
-		String plainString = this.decryptString(cipherText);
-		
-		StringTokenizer tok = new StringTokenizer(plainString, ":");
-		
-		List<String> result = new ArrayList<String>();
-		
-		while (tok.hasMoreTokens())
-		{
-			try
-			{
-				String part = URLDecoder.decode(tok.nextToken(), "UTF-8");
-				result.add(part);
-			}
-			catch (UnsupportedEncodingException ex) { throw new RuntimeException(ex); }
-		}
-		
-		return result;
+		return this.decryptList(cipherText, Long.MAX_VALUE);
 	}
+	
+	/**
+	 * @see Encryptor#decryptListCheckAge(byte[], long)
+	 */
+	public List<String> decryptList(byte[] cipherText, long maxAgeMillis) throws GeneralSecurityException, ExpiredException
+	{
+		ByteArrayInputStream inBuf = new ByteArrayInputStream(cipherText);
+		DataInputStream in = new DataInputStream(inBuf);
+
+		try
+		{
+			long time = in.readLong();
+			
+			// First make sure token still good
+			if ((System.currentTimeMillis() - time) > maxAgeMillis)
+				throw new ExpiredException("Token expired");
+	
+			List<String> result = new ArrayList<String>();
+			
+			while (in.available() > 0)
+				result.add(in.readUTF());
+			
+			return result;
+		}
+		catch (IOException ex)
+		{
+			// Should be impossible
+			throw new RuntimeException(ex);
+		}
+	}
+	
 }

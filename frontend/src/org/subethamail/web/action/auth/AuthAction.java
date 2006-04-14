@@ -6,9 +6,9 @@
 package org.subethamail.web.action.auth;
 
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
@@ -18,6 +18,7 @@ import javax.servlet.http.Cookie;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.security.auth.callback.UsernamePasswordHandler;
+import org.jboss.util.Base64;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
 import org.subethamail.web.security.Security;
@@ -160,11 +161,13 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	protected String encryptAutoLogin(String name, String password) throws Exception
 	{
-		String value = 
-			URLEncoder.encode(name, "UTF-8") + "/" + 
-			URLEncoder.encode(password, "UTF-8");
+		List<String> pair = new ArrayList<String>(2);
+		pair.add(name);
+		pair.add(password);
 		
-		return Backend.instance().getEncryptor().encryptString(value);
+		byte[] cipherText = Backend.instance().getEncryptor().encryptList(pair);
+		
+		return Base64.encodeBytes(cipherText);
 	}
 	
 	/**
@@ -176,21 +179,10 @@ abstract public class AuthAction extends SubEthaAction
 	{
 		try
 		{
-			String plain = Backend.instance().getEncryptor().decryptString(cookieText);
+			byte[] cipherText = Base64.decode(cookieText);
+			List<String> pair = Backend.instance().getEncryptor().decryptList(cipherText);
 			
-			int separatorIndex = plain.indexOf('/');
-			if (separatorIndex <= 0)
-				throw new IllegalStateException("Missing separator");
-			else
-			{
-				String name = plain.substring(0, separatorIndex);
-				String password = plain.substring(separatorIndex + 1);
-				
-				name = URLDecoder.decode(name, "UTF-8");
-				password = URLDecoder.decode(password, "UTF-8");
-				
-				return new String[] { name, password };
-			}
+			return new String[] { pair.get(0), pair.get(1) };
 		}
 		catch (Exception ex)
 		{

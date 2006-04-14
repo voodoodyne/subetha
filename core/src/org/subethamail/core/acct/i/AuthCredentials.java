@@ -5,6 +5,8 @@
 
 package org.subethamail.core.acct.i;
 
+import java.io.Serializable;
+
 
 /**
  * Some token-oriented methods return auth credentials so that
@@ -13,7 +15,8 @@ package org.subethamail.core.acct.i;
  * 
  * @author Jeff Schnitzer
  */
-public class AuthCredentials
+@SuppressWarnings("serial")
+public class AuthCredentials implements Serializable
 {
 	/** */
 	String email;

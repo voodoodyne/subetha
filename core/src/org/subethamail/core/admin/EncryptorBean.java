@@ -32,7 +32,6 @@ import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.jboss.util.Base64;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
 import org.subethamail.entity.Config;
@@ -247,7 +246,9 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 	 */
 	public List<String> decryptList(byte[] cipherText, long maxAgeMillis) throws GeneralSecurityException, ExpiredException
 	{
-		ByteArrayInputStream inBuf = new ByteArrayInputStream(cipherText);
+		byte[] plainText = this.decrypt(cipherText);
+		
+		ByteArrayInputStream inBuf = new ByteArrayInputStream(plainText);
 		DataInputStream in = new DataInputStream(inBuf);
 
 		try

@@ -96,6 +96,25 @@ public class Smtp
 	}
 	
 	/**
+	 * @return the number of messages containing the specified subject 
+	 */
+	public int countSubject(String subject)
+	{
+		int count = 0;
+		
+		Iterator<SmtpMessage> it = this.iterator();
+		while (it.hasNext())
+		{
+			SmtpMessage msg = it.next();
+			
+			if (msg.getHeaderValue("Subject").contains(subject))
+				count++;
+		}
+		
+		return count;
+	}
+	
+	/**
 	 * Gets an embedded token from a message.
 	 * 
 	 * @throws IllegalArgumentException if msg has no token

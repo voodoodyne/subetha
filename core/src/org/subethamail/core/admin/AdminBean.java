@@ -197,16 +197,10 @@ public class AdminBean implements Admin, AdminRemote
 		{
 			EmailAddress addy = who.getEmailAddress(email);
 			
-			// If subscribing an address person does not currently own
 			if (addy == null)
-			{
-				// TODO:  send a token that allows user to add and subscribe in one step
-				return SubscribeResult.TOKEN_SENT;
-			}
-			else
-			{
-				return this.subscribe(listId, who, addy);
-			}
+				throw new IllegalStateException("Must be one of person's email addresses");
+			
+			return this.subscribe(listId, who, addy);
 		}
 	}
 	

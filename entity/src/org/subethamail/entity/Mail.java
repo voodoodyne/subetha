@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import java.util.SortedSet;
 
 import javax.ejb.EJBException;
@@ -53,6 +54,12 @@ import org.subethamail.common.valid.Validator;
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
+	),
+	@NamedQuery(
+		name="RepliesToMessageId", 
+		query="from Mail m where m.parent is null and m.parentMessageId = :messageId",
+		hints={
 		}
 	)
 })
@@ -140,7 +147,7 @@ public class Mail implements Serializable, Comparable
 	/**
 	 * @param holdFor can be null which means none required
 	 */
-	public Mail(SubEthaMessage msg, MailingList list, Mail parent, HoldType holdFor) throws MessagingException
+	public Mail(SubEthaMessage msg, MailingList list, Mail parent, String parentMessageId, HoldType holdFor) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mail");
@@ -148,6 +155,7 @@ public class Mail implements Serializable, Comparable
 		this.dateCreated = new Date();
 		this.list = list;
 		this.parent = parent;
+		this.parentMessageId = parentMessageId;
 		this.hold = holdFor;
 		
 		byte[] raw;
@@ -201,6 +209,9 @@ public class Mail implements Serializable, Comparable
 		
 		this.messageId = value;
 	}
+	
+	/** */
+	public String getParentMessageId() { return this.parentMessageId; }
 
 	/**
 	 */
@@ -268,12 +279,26 @@ public class Mail implements Serializable, Comparable
 	{
 		this.hold = null;
 	}
+	
+	/** */
+	public Mail getParent() { return this.parent; }
+	
+	public void setParent(Mail value)
+	{
+		this.parent = value;
+	}
+	
+	/** */
+	public Set<Mail> getReplies() { return this.replies; }
 
 	/** */
 	public String toString()
 	{
 		return this.getClass() + " {id=" + this.id + ", subject=" + this.subject + "}";
 	}
+	
+	/** */
+	public MailingList getList() { return this.list; }
 
 	/**
 	 * Natural sort order is based on creation date

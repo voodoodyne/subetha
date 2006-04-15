@@ -74,6 +74,8 @@ public class InjectorTest extends SubEthaTestCase
 	/** */
 	public void testTrivialInjection() throws Exception
 	{
+		this.admin.getAdmin().log("############### Starting testTrivialInjection()");
+		
 		// Two "you are subscribed" msgs
 		assertEquals(2, this.smtp.size());
 		
@@ -90,6 +92,8 @@ public class InjectorTest extends SubEthaTestCase
 		this.injector.inject(this.ml.getEmail(), buf.toByteArray());
 		
 		assertEquals(2, this.smtp.countSubject(TEST_SUBJECT));
+		
+		this.admin.getAdmin().log("############### Ended testTrivialInjection()");
 	}
 	
 	/** */

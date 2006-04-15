@@ -7,6 +7,8 @@ package org.subethamail.core.deliv.i;
 
 import javax.ejb.Local;
 
+import org.subethamail.common.NotFoundException;
+
 /**
  * Interface for delivering customized mail to a real individuals.
  *
@@ -105,6 +107,6 @@ public interface Deliverator
 	 * Actually delivers a piece of mail to a person.  No queueing
 	 * involved.  The mail will be customized for the person.
 	 */
-	public void deliver(Long mailId, Long personId);
+	public void deliver(Long mailId, Long personId) throws NotFoundException;
 }
 

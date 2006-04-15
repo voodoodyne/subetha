@@ -128,6 +128,22 @@ public class DAOBean implements DAO
 	}
 
 	/**
+	 * @see DAO#findMail(Long)
+	 */
+	public Mail findMail(Long id) throws NotFoundException
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding Mail with id " + id);
+		
+		Mail m = this.em.find(Mail.class, id);
+		
+		if (m == null)
+			throw new NotFoundException("No mail " + id);
+		else
+			return m;
+	}
+
+	/**
 	 * @see DAO#findMailByMessageId(String)
 	 */
 	public Mail findMailByMessageId(String messageId) throws NotFoundException
@@ -147,6 +163,21 @@ public class DAOBean implements DAO
 			log.debug("Not found");
 			throw new NotFoundException(ex);
 		}
+	}
+	
+	/**
+	 * @see DAO#findRepliesToMail(String)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Mail> findRepliesToMail(String messageId)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding replies to Mail with Message-ID " + messageId);
+		
+		Query q = this.em.createNamedQuery("RepliesToMessageId");
+		q.setParameter("messageId", messageId);
+		
+		return q.getResultList();
 	}
 
 	/**

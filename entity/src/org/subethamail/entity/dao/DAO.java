@@ -84,9 +84,20 @@ public interface DAO
 	public EmailAddress getEmailAddress(String email);
 
 	/**
+	 * Gets a mail by its id (not message-id).
+	 */
+	public Mail findMail(Long mailId) throws NotFoundException;
+	
+	/**
 	 * Tries to find a mail entity which has the specified message id.
 	 */
 	public Mail findMailByMessageId(String msgId) throws NotFoundException;
+
+	/**
+	 * Tries to find mail entites whose parent is the specified message id.
+	 * The return values are not readonly.
+	 */
+	public List<Mail> findRepliesToMail(String msgId);
 
 	/**
 	 * @return the mailing list with the specified id

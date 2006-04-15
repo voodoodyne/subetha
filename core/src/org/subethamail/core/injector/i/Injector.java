@@ -31,6 +31,7 @@ public interface Injector
 	 * @param toAddress is an rfc222-compliant destination for the mail.  If the
 	 *  address is not a valid mailing list, the mail is logged and dropped.
 	 * @param mailData is the raw (possibly MIME) mail content, including headers.
+	 * 
 	 * @throws MessagingException if the message data or toAddress could not be parsed.
 	 * 
 	 * TODO:  consider an exception instead of silently dropping irrelevant mail?

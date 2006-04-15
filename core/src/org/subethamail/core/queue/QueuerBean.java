@@ -11,11 +11,14 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.jms.JMSException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.jboss.ejb3.mdb.ProducerManager;
 import org.jboss.ejb3.mdb.ProducerObject;
 import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.queue.i.QueuerRemote;
+import org.subethamail.entity.dao.DAOBean;
 
 /**
  * @author Jeff Schnitzer
@@ -25,6 +28,10 @@ import org.subethamail.core.queue.i.QueuerRemote;
 @RolesAllowed("siteAdmin")
 public class QueuerBean implements Queuer, QueuerRemote
 {
+	/** */
+	private static Log log = LogFactory.getLog(QueuerBean.class);
+	
+	/** */
 	@Resource(mappedName=Inbound.JNDI_NAME) Inbound inbound;
 	@Resource(mappedName=Outbound.JNDI_NAME) Outbound outbound;
 	
@@ -33,6 +40,9 @@ public class QueuerBean implements Queuer, QueuerRemote
 	 */
 	public void queueForDelivery(Long mailId)
 	{
+		if (log.isDebugEnabled())
+			log.debug("Queuing mailId " + mailId + " for distribution");
+			
 		try
 		{
 			ProducerManager manager = (ProducerManager)((ProducerObject)inbound).getProducerManager();
@@ -54,6 +64,9 @@ public class QueuerBean implements Queuer, QueuerRemote
 	 */
 	public void queueForDelivery(Long mailId, Long personId)
 	{
+		if (log.isDebugEnabled())
+			log.debug("Queuing mailId " + mailId + " for delivery to personId " + personId);
+		
 		try
 		{
 			ProducerManager manager = (ProducerManager)((ProducerObject)outbound).getProducerManager();

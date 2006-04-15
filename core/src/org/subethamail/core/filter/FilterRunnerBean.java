@@ -67,6 +67,9 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	 */
 	public void onInject(MimeMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException
 	{
+		if (log.isDebugEnabled())
+			log.debug("Running onInject filters for list '" + list.getName() + "' on message: " + msg.getSubject());
+
 		// TODO:  factor in global plugins
 		
 		HoldException holdException = null;
@@ -85,6 +88,9 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 				
 				try
 				{
+					if (log.isDebugEnabled())
+						log.debug("Running filter " + filter);
+					
 					filter.onInject(msg, ctx);
 				}
 				catch (HoldException ex)

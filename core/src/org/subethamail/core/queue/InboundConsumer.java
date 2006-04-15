@@ -64,6 +64,7 @@ public class InboundConsumer implements Inbound
 				log.warn("Wanted to distribute nonexistant mailId " + mailId);
 			
 			return;
+			//throw new RuntimeException(ex);
 		}
 		
 		// Lookup all recipients and queue the mailId, recipientId pair

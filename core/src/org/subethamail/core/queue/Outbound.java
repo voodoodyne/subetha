@@ -13,7 +13,7 @@ import org.jboss.annotation.ejb.Producer;
  * @author Jeff Schnitzer
  */
 @Local
-@Producer
+@Producer(connectionFactory="java:/JmsXA")
 public interface Outbound
 {
 	/** */

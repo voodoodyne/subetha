@@ -5,11 +5,13 @@
 
 package org.subethamail.core.queue;
 
-import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.jms.JMSException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,7 +20,6 @@ import org.jboss.ejb3.mdb.ProducerManager;
 import org.jboss.ejb3.mdb.ProducerObject;
 import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.queue.i.QueuerRemote;
-import org.subethamail.entity.dao.DAOBean;
 
 /**
  * @author Jeff Schnitzer
@@ -32,8 +33,31 @@ public class QueuerBean implements Queuer, QueuerRemote
 	private static Log log = LogFactory.getLog(QueuerBean.class);
 	
 	/** */
-	@Resource(mappedName=Inbound.JNDI_NAME) Inbound inbound;
-	@Resource(mappedName=Outbound.JNDI_NAME) Outbound outbound;
+	// TODO: remove when fixed http://jira.jboss.com/jira/browse/EJBTHREE-518
+	//@Resource(mappedName=Inbound.JNDI_NAME) Inbound inbound;
+	//@Resource(mappedName=Outbound.JNDI_NAME) Outbound outbound;
+	
+	/** TODO: remove when fixed http://jira.jboss.com/jira/browse/EJBTHREE-518 */
+	Inbound getInbound()
+	{
+		try
+		{
+			Context ctx = new InitialContext();
+			return (Inbound)ctx.lookup(Inbound.JNDI_NAME);
+		}
+		catch (NamingException ex) { throw new RuntimeException(ex); }
+	}
+	
+	/** TODO: remove when fixed http://jira.jboss.com/jira/browse/EJBTHREE-518 */
+	Outbound getOutbound()
+	{
+		try
+		{
+			Context ctx = new InitialContext();
+			return (Outbound)ctx.lookup(Outbound.JNDI_NAME);
+		}
+		catch (NamingException ex) { throw new RuntimeException(ex); }
+	}
 	
 	/**
 	 * @see Queuer#queueForDelivery(Long)
@@ -42,7 +66,9 @@ public class QueuerBean implements Queuer, QueuerRemote
 	{
 		if (log.isDebugEnabled())
 			log.debug("Queuing mailId " + mailId + " for distribution");
-			
+		
+		Inbound inbound = this.getInbound();
+		
 		try
 		{
 			ProducerManager manager = (ProducerManager)((ProducerObject)inbound).getProducerManager();
@@ -66,6 +92,8 @@ public class QueuerBean implements Queuer, QueuerRemote
 	{
 		if (log.isDebugEnabled())
 			log.debug("Queuing mailId " + mailId + " for delivery to personId " + personId);
+		
+		Outbound outbound = this.getOutbound();
 		
 		try
 		{

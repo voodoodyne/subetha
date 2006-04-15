@@ -17,7 +17,7 @@ import org.subethamail.core.queue.i.Queuer;
  * @author Jeff Schnitzer
  */
 @Local
-@Producer
+@Producer(connectionFactory="java:/JmsXA")
 public interface Inbound
 {
 	/** */

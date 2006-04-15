@@ -235,11 +235,14 @@ public class InjectorBean implements Injector, InjectorRemote
 		if (refs != null && refs.length > 0)
 			reference = refs[0];
 		
-		try
+		if (reference != null)
 		{
-			return this.dao.findMailByMessageId(reference);
+			try
+			{
+				return this.dao.findMailByMessageId(reference);
+			}
+			catch (NotFoundException ex) {}
 		}
-		catch (NotFoundException ex) {}
 		
 		// The reference is more likely to be a correctly
 		// formatted message id, even though it is less likely

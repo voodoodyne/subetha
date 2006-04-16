@@ -20,10 +20,12 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.deliv.i.DeliveratorRemote;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
@@ -43,6 +45,7 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 	/** */
 	@EJB DAO dao;
 	@EJB FilterRunner filterRunner;
+	@EJB Encryptor encryptor;
 	
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
@@ -70,12 +73,18 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 			Address destination = new InternetAddress(sub.getDeliverTo().getId());
 			
 			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
+
+			// Set up the VERP bounce address
+			byte[] token = this.encryptor.encryptString(sub.getDeliverTo().getId());
+			msg.setEnvelopeFrom(VERPAddress.encodeVERP(mail.getList().getEmail(), token));
 			
 			try
 			{
 				this.filterRunner.onSendAfterAttaching(msg, mail.getList());
 				
 				Transport.send(msg, new Address[] { destination });
+				
+				sub.getDeliverTo().bounceDecay();
 			}
 			catch (IgnoreException ex)
 			{

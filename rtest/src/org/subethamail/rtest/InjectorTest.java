@@ -5,12 +5,6 @@
 
 package org.subethamail.rtest;
 
-import java.io.ByteArrayOutputStream;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.internet.MimeMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
@@ -26,6 +20,8 @@ import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonMixin;
 import org.subethamail.rtest.util.SubEthaTestCase;
 
+import com.dumbster.smtp.SmtpMessage;
+
 /**
  * @author Jeff Schnitzer
  */
@@ -35,16 +31,10 @@ public class InjectorTest extends SubEthaTestCase
 	private static Log log = LogFactory.getLog(InjectorTest.class);
 	
 	/** */
-	public static final String TEST_SUBJECT = "test subject";
-	public static final String TEST_BODY = "test body";
-
-	/** */
 	Injector injector;
-	Session sess;
 	AdminMixin admin;
 	MailingListMixin ml;
 	PersonMixin person1;
-	PersonMixin person2;
 	
 	/** */
 	public InjectorTest(String name) { super(name); }
@@ -60,42 +50,56 @@ public class InjectorTest extends SubEthaTestCase
 		
 		this.injector = (Injector)ctx.lookup(InjectorRemote.JNDI_NAME);
 		
-		this.sess = Session.getDefaultInstance(new Properties());
-		
 		this.admin = new AdminMixin();
 		this.person1 = new PersonMixin(this.admin);
-		this.person2 = new PersonMixin(this.admin);
 		this.ml = new MailingListMixin(this.admin, null);
 		
 		this.person1.getAccountMgr().subscribeMe(this.ml.getId(), this.person1.getEmail());
-		this.person2.getAccountMgr().subscribeMe(this.ml.getId(), this.person2.getEmail());
 	}
 	
 	/** */
 	public void testTrivialInjection() throws Exception
 	{
+		// Create a second subscriber to make it more interesting
+		PersonMixin person2 = new PersonMixin(this.admin);
+		person2.getAccountMgr().subscribeMe(this.ml.getId(), person2.getEmail());
+		
 		this.admin.getAdmin().log("############### Starting testTrivialInjection()");
 		
 		// Two "you are subscribed" msgs
 		assertEquals(2, this.smtp.size());
 		
-		MimeMessage msg = new MimeMessage(this.sess);
+		byte[] rawMsg = this.createMessage(this.person1.getAddress(), this.ml.getAddress());
 		
-		msg.setFrom(this.person1.getAddress());
-		msg.setRecipient(Message.RecipientType.TO, this.ml.getAddress());
-		msg.setSubject(TEST_SUBJECT);
-		msg.setText(TEST_BODY);
-		
-		ByteArrayOutputStream buf = new ByteArrayOutputStream();
-		msg.writeTo(buf);
-		
-		this.injector.inject(this.ml.getEmail(), buf.toByteArray());
+		this.injector.inject(this.ml.getEmail(), rawMsg);
 		
 		Thread.sleep(1000);
 		
 		assertEquals(2, this.smtp.countSubject(TEST_SUBJECT));
 		
 		this.admin.getAdmin().log("############### Ended testTrivialInjection()");
+	}
+	
+	/** */
+	public void testHasVERP() throws Exception
+	{
+		this.admin.getAdmin().log("############### Starting testHasVERP()");
+		
+		// Two "you are subscribed" msg
+		assertEquals(1, this.smtp.size());
+		
+		byte[] rawMsg = this.createMessage(this.person1.getAddress(), this.ml.getAddress());
+		
+		this.injector.inject(this.ml.getEmail(), rawMsg);
+		
+		Thread.sleep(1000);
+		
+		assertEquals(2, this.smtp.size());
+		SmtpMessage msg = this.smtp.get(1);
+		
+		// TODO:  when dumbster provides an api, check that the envelope sender is a proper VERP address
+		
+		this.admin.getAdmin().log("############### Ended testHasVERP()");
 	}
 	
 	/** */

@@ -49,9 +49,17 @@ public class EmailAddress implements Serializable, Comparable
 	@Email
 	String id;
 	
+	/** */
 	@ManyToOne
 	@JoinColumn(name="personId", nullable=false)
 	Person person;
+	
+	/** 
+	 * Not actually the number of bounces, but this number does
+	 * go up when bounces happen. 
+	 */
+	@Column(nullable=false)
+	int bounces;
 	
 	/**
 	 */
@@ -92,7 +100,30 @@ public class EmailAddress implements Serializable, Comparable
 	{
 		this.person = value;
 	}
+	
+	/** 
+	 * Not actually the number of bounces, but this number does
+	 * go up when bounces happen. It decays if bounces don't.
+	 */
+	public int getBounces() { return this.bounces; }
 
+	/**
+	 * When a bounce occurs, it increments the count by 2.
+	 */
+	public void bounceIncrement()
+	{
+		this.bounces += 2;
+	}
+	
+	/**
+	 * When mail goes out, the bounce count should decay slightly.
+	 */
+	public void bounceDecay()
+	{
+		if (this.bounces > 0)
+			this.bounces--;
+	}
+	
 	/** */
 	public String toString()
 	{

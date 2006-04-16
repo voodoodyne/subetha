@@ -10,7 +10,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -177,13 +176,26 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 		if (log.isDebugEnabled())
 			log.debug("Encrypting: " + plainText);
 		
+		ByteArrayOutputStream buf = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(buf);
+		
 		try
 		{
-			byte[] plainBytes = plainText.getBytes("UTF-8");
+			// First write a timestamp
+			long now = System.currentTimeMillis();
+			out.writeLong(now);
 			
-			return this.encrypt(plainBytes);
+			out.writeUTF(plainText);
+			
+			out.close();
 		}
-		catch (UnsupportedEncodingException ex) { throw new EJBException(ex); }
+		catch (IOException ex)
+		{
+			// Should be impossible
+			throw new RuntimeException(ex);
+		}
+		
+		return this.encrypt(buf.toByteArray());
 	}
 
 	/**
@@ -191,19 +203,41 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 	 */
 	public String decryptString(byte[] cipherText) throws GeneralSecurityException
 	{
+		return this.decryptString(cipherText, Long.MAX_VALUE);
+	}
+	
+	/**
+	 * @see Encryptor#decryptString(byte[], long)
+	 */
+	public String decryptString(byte[] cipherText, long maxAgeMillis) throws GeneralSecurityException, ExpiredException
+	{
 		byte[] plainText = this.decrypt(cipherText);
 		
+		ByteArrayInputStream inBuf = new ByteArrayInputStream(plainText);
+		DataInputStream in = new DataInputStream(inBuf);
+
 		try
 		{
-			String result = new String(plainText, "UTF-8");
+			long time = in.readLong();
+			
+			// First make sure token still good
+			if ((System.currentTimeMillis() - time) > maxAgeMillis)
+				throw new ExpiredException("Token expired");
+	
+			String result = in.readUTF();
 			
 			if (log.isDebugEnabled())
 				log.debug("Decrypted to: " + result);
 			
 			return result;
 		}
-		catch (UnsupportedEncodingException ex) { throw new GeneralSecurityException(ex); }
+		catch (IOException ex)
+		{
+			// Should be impossible
+			throw new RuntimeException(ex);
+		}
 	}
+	
 
 	/**
 	 * @see Encryptor#encryptList(List)
@@ -272,5 +306,5 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 			throw new RuntimeException(ex);
 		}
 	}
-	
+
 }

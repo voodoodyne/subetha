@@ -45,6 +45,13 @@ public interface Encryptor
 	public String decryptString(byte[] cipherText) throws GeneralSecurityException;
 
 	/**
+	 * Decrypts a bytes that were encrypted with encryptString().
+	 * 
+	 * @throws ExpiredException if the token is older than maxAgeMillis
+	 */
+	public String decryptString(byte[] cipherText, long maxAgeMillis) throws GeneralSecurityException, ExpiredException;
+
+	/**
 	 * Encrypts a list of strings.
 	 */
 	public byte[] encryptList(List<String> parts);
@@ -58,7 +65,7 @@ public interface Encryptor
 	 * Decrypts bytes that were encrypted with encryptList(), checking
 	 * to make sure the encryption was recent.
 	 * 
-	 * @throws BadTokenException if the age of the list exceeds maxAgeMillis.
+	 * @throws ExpiredException if the age of the token exceeds maxAgeMillis.
 	 */
 	public List<String> decryptList(byte[] cipherText, long maxAgeMillis) throws GeneralSecurityException, ExpiredException;
 }

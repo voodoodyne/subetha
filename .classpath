@@ -26,7 +26,7 @@
 	<classpathentry kind="lib" path="frontend/lib/jstl.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/standard.jar"/>
 	<classpathentry kind="lib" path="core/lib/velocity-1.4.jar"/>
-	<classpathentry kind="lib" path="rtest/lib/dumbster1.6.jar"/>
+	<classpathentry sourcepath="C:/java/dumbster-1.6/src" kind="lib" path="rtest/lib/dumbster1.6.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/tagonist.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

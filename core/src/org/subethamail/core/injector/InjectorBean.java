@@ -5,6 +5,7 @@
 
 package org.subethamail.core.injector;
 
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import javax.annotation.EJB;
@@ -21,15 +22,20 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.admin.i.Encryptor;
+import org.subethamail.core.admin.i.ExpiredException;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.queue.i.Queuer;
+import org.subethamail.core.util.VERPAddress;
+import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.Subscription;
 import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.dao.DAO;
 
@@ -48,11 +54,27 @@ public class InjectorBean implements Injector, InjectorRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(InjectorBean.class);
+	
+	/**
+	 * The oldest bounce message we are willing to consider valid.  This
+	 * is to prevent anyone that finds an old bounce token for a user
+	 * from using it to mailiciously unsubscribe that person.
+	 */
+	public static final long MAX_BOUNCE_AGE_MILLIS = 1000 * 60 * 60 * 24 * 7;
+
+	/**
+	 * The maximum bounce count at which we disable mail delivery for a user.
+	 * This is not actually a literal number of bounces, it's a number that
+	 * tends to go up as bounces occur and tends to go down when bounces do
+	 * not occur.
+	 */
+	public static final long MAX_BOUNCE_THRESHOLD = 20;
 
 	/** */
 	@EJB DAO dao;
 	@EJB Queuer queuer;
 	@EJB FilterRunner filterRunner;
+	@EJB Encryptor encryptor;
 	
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
@@ -70,7 +92,13 @@ public class InjectorBean implements Injector, InjectorRemote
 		// Figure out which list this is for
 		InternetAddress addy = new InternetAddress(toAddress);
 		
-		// Must split this out and check for -bounces, -subscribe, etc
+		// Must check for VERP bounce
+		VERPAddress verp = VERPAddress.getVERPBounce(addy);
+		if (verp != null)
+		{
+			this.handleBounce(verp);
+			return;
+		}
 		
 		MailingList toList;
 		try
@@ -144,6 +172,61 @@ public class InjectorBean implements Injector, InjectorRemote
 		}
 	}
 	
+	/**
+	 * Handle a bounce message.  Note we don't really care what the
+	 * message data was, just what the VERP address was.
+	 */
+	protected void handleBounce(VERPAddress verp)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Handling bounce from list " + verp.getEmail());
+		
+		try
+		{
+			String originalEmail = this.encryptor.decryptString(verp.getToken(), MAX_BOUNCE_AGE_MILLIS);
+
+			if (log.isDebugEnabled())
+				log.debug("Bounced from " + originalEmail);
+			
+			EmailAddress found = this.dao.findEmailAddress(originalEmail);
+			
+			found.bounceIncrement();
+			
+			if (found.getBounces() > MAX_BOUNCE_THRESHOLD)
+			{
+				// Unsubscribe the address from any delivery
+				for (Subscription sub: found.getPerson().getSubscriptions().values())
+				{
+					if (found.equals(sub.getDeliverTo()))
+					{
+						sub.setDeliverTo(null);
+
+						if (log.isWarnEnabled())
+							log.warn("Stopping delivery of " + sub.getList().getName() + " to " + found.getId() + " due to excessive bounces");
+					}
+				}
+				
+				// TODO: somehow notify the person, perhaps at one of their other addresses?
+				// TODO: notify the administrator?
+			}
+		}
+		catch (NotFoundException ex)
+		{
+			// User already unsubscribed the address, great
+			log.debug("Address already removed");
+		}
+		catch (ExpiredException ex)
+		{
+			// Token is too old, ignore it
+			log.debug("Token is too old");
+		}
+		catch (GeneralSecurityException ex)
+		{
+			// Problem decoding the token?  Someone's messing with us.
+			log.debug("Token is invalid");
+		}
+	}
+
 	/**
 	 * Creates a piece of mail and hooks it into the thread hierarchy (if it can).
 	 */

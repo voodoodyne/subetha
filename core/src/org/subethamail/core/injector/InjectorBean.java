@@ -118,6 +118,9 @@ public class InjectorBean implements Injector, InjectorRemote
 		// Parse up the message
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
 		
+		// This will set a messageid if none exists
+		msg.saveChanges();
+		
 		// If it stays null, no moderation required
 		HoldType hold = null;
 		String holdMsg = null;

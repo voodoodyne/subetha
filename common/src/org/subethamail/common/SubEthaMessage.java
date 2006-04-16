@@ -34,6 +34,7 @@ public class SubEthaMessage extends SMTPMessage
 	private static Log log = LogFactory.getLog(SubEthaMessage.class);
 	
 	/** */
+	public static final String HDR_MESSAGE_ID = "Message-ID";
 	public static final String HDR_IN_REPLY_TO = "In-Reply-To";
 	public static final String HDR_REFERENCES = "References";
 
@@ -47,6 +48,22 @@ public class SubEthaMessage extends SMTPMessage
 	public SubEthaMessage(Session session, byte[] mail) throws MessagingException
 	{
 		this(session, new ByteArrayInputStream(mail));
+	}
+	
+	/**
+	 * Checks for any attempt to rewrite the Message-ID and ignores it.
+	 * This behavior of JavaMail is just dumb.
+	 */
+	@Override
+	public void setHeader(String name, String value) throws MessagingException
+	{
+		if (name.equals(HDR_MESSAGE_ID))
+		{
+			if (this.getMessageID() != null)
+				return;
+		}
+		
+		super.setHeader(name, value);
 	}
 	
 	/**

@@ -2,6 +2,9 @@
 
 <t:action var="model" type="org.subethamail.web.action.Inject"/>
 
+<jsp:forward page="/inject.jsp" />
+
+<%--
 <c:choose>
 	<c:when test="${empty model.errors}">
 		<c:redirect url="/inject.jsp"/>
@@ -10,3 +13,4 @@
 		<jsp:forward page="/inject.jsp" />
 	</c:otherwise>				
 </c:choose>
+--%>

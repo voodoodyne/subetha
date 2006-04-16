@@ -6,6 +6,7 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
@@ -72,6 +73,24 @@ public class MailingList implements Serializable, Comparable
 	/** */
 	@Transient private static Log log = LogFactory.getLog(MailingList.class);
 	
+	/**
+	 * TreeSet requires a weird comparator because it uses the comparator
+	 * instead of equals().  When we return 0, it means the objects must
+	 * really be equal.
+	 */
+	public static class SubscriptionComparator implements Comparator<Subscription>
+	{
+		public int compare(Subscription s1, Subscription s2)
+		{
+			int result = s1.getPerson().compareTo(s2.getPerson());
+			
+			if (result == 0)
+				return s1.getPerson().getId().compareTo(s2.getPerson().getId());
+			else
+				return result;
+		}
+	};
+	
 	/** */
 	@Id
 	@GeneratedValue
@@ -111,7 +130,7 @@ public class MailingList implements Serializable, Comparable
 	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
-	@Sort(type=SortType.NATURAL)
+	@Sort(type=SortType.COMPARATOR, comparator=SubscriptionComparator.class)
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	SortedSet<Subscription> subscriptions;
 	

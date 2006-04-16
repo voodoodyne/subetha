@@ -30,7 +30,7 @@ import org.subethamail.common.valid.Validator;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
-public class Subscription implements Serializable, Comparable
+public class Subscription implements Serializable
 {
 	/** */
 	@Transient private static Log log = LogFactory.getLog(Subscription.class);
@@ -170,16 +170,6 @@ public class Subscription implements Serializable, Comparable
 	public String toString()
 	{
 		return this.getClass() + " {id=" + this.id + ", list=" + this.list + ", person=" + this.person + "}";
-	}
-
-	/**
-	 * Natural sort order is based on person
-	 */
-	public int compareTo(Object arg0)
-	{
-		Subscription other = (Subscription)arg0;
-
-		return this.person.compareTo(other.getPerson());
 	}
 }
 

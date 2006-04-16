@@ -319,7 +319,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		
 		String[] refs = msg.getReferences();
 		if (refs != null && refs.length > 0)
-			reference = refs[0];
+			reference = refs[refs.length-1];
 		
 		if (reference != null)
 		{

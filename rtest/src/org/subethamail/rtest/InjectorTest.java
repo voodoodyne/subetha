@@ -91,6 +91,8 @@ public class InjectorTest extends SubEthaTestCase
 		
 		this.injector.inject(this.ml.getEmail(), buf.toByteArray());
 		
+		Thread.sleep(1000);
+		
 		assertEquals(2, this.smtp.countSubject(TEST_SUBJECT));
 		
 		this.admin.getAdmin().log("############### Ended testTrivialInjection()");

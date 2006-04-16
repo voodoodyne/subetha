@@ -9,8 +9,11 @@ import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,6 +22,8 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.deliv.i.DeliveratorRemote;
+import org.subethamail.core.filter.FilterRunner;
+import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
@@ -37,6 +42,7 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 	
 	/** */
 	@EJB DAO dao;
+	@EJB FilterRunner filterRunner;
 	
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
@@ -59,12 +65,23 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 			return;
 		}
 		
-		String destination = sub.getDeliverTo().getId();
-		
 		try
 		{
+			Address destination = new InternetAddress(sub.getDeliverTo().getId());
+			
 			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
-			// TODO
+			
+			try
+			{
+				this.filterRunner.onSendAfterAttaching(msg, mail.getList());
+				
+				Transport.send(msg, new Address[] { destination });
+			}
+			catch (IgnoreException ex)
+			{
+				if (log.isDebugEnabled())
+					log.debug("Ignoring mail " + mail, ex);
+			}
 		}
 		catch (MessagingException ex)
 		{

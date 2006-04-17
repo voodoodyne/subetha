@@ -39,6 +39,16 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>InjectorServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.InjectorServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>InjectorServlet</servlet-name>
+		<url-pattern>/inject</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>dwr-invoker</servlet-name>
 		<servlet-class>uk.ltd.getahead.dwr.DWRServlet</servlet-class>
 		<init-param>

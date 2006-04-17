@@ -1,7 +1,5 @@
 <%@include file="/inc/top_standard.jspf" %>
 
-<t:action type="org.subethamail.web.action.auth.AuthRequired"/>
-
 <trim:admin title="Inject Mail">
 	<h1>Inject Mail</h1>
 	
@@ -10,35 +8,30 @@
 		inject a piece of SMTP mail.
 	</p>
 	
-	<form action="<c:url value="/inject_submit.jsp"/>" method="post">
+	<form action="<c:url value="/inject" />" method="post">
 		<table>
 			<tr>
-				<th><label for="to">To Address</label></th>
-				<td
-					<c:if test="${!empty model.errors.to}">
-						class="error"
-					</c:if>
-				>
-					<input id="to" name="to" type="text" size="60" value="${model.to}" />
-					
-					<c:if test="${!empty model.errors.to}">
-						<p class="error"><c:out value="${model.errors.to}"/></p>
-					</c:if>
+				<th><label for="authName">Auth Name</label></th>
+				<td>
+					<input id="authName" name="authName" type="text" size="60" />
 				</td>
 			</tr>
 			<tr>
-				<th><label for="body">Message Body</label></th>
-				<td
-					<c:if test="${!empty model.errors.body}">
-						class="error"
-					</c:if>
-				>
-					<textarea id="body" name="body" rows="30" cols="80" style="width:95%"
-					><c:out value="${model.body}"/></textarea>
-					
-					<c:if test="${!empty model.errors.body}">
-						<p class="error"><c:out value="${model.errors.body}"/></p>
-					</c:if>
+				<th><label for="authPassword">Auth Password</label></th>
+				<td>
+					<input id="authPassword" name="authPassword" type="password" size="60" />
+				</td>
+			</tr>
+			<tr>
+				<th><label for="recipient">Recipient</label></th>
+				<td>
+					<input id="recipient" name="recipient" type="text" size="60" />
+				</td>
+			</tr>
+			<tr>
+				<th><label for="message">Message Body</label></th>
+				<td>
+					<textarea id="message" name="message" rows="25" cols="80" style="width:95%"></textarea>
 				</td>
 			</tr>
 		</table>

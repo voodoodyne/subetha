@@ -168,7 +168,7 @@ public class Security
 	 * If user is logged in, associate the principal with the jboss
 	 * security context.  To be called by a filter.
 	 */
-	static void associateCredentials(HttpSession sess)
+	public static void associateCredentials(HttpSession sess)
 	{
 		Principal prin = (Principal)sess.getAttribute(PRINCIPAL_KEY);
 		if (prin != null)
@@ -178,16 +178,28 @@ public class Security
 			
 			Object cred = sess.getAttribute(CREDENTIAL_KEY);
 			
-			SecurityAssociation.setPrincipal(prin);
-			SecurityAssociation.setCredential(cred);
+			associateCredentials(prin, cred);
 		}
+	}
+	
+	/** 
+	 * If user is logged in, associate the principal with the jboss
+	 * security context.  To be called by a filter.
+	 */
+	public static void associateCredentials(Principal prin, Object credential)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Associating credentials for " + prin);
+		
+		SecurityAssociation.setPrincipal(prin);
+		SecurityAssociation.setCredential(credential);
 	}
 	
 	/**
 	 * Removes everything associated with the security context.
 	 * To be called by a filter. 
 	 */
-	static void disassociateCredentials()
+	public static void disassociateCredentials()
 	{
 		log.debug("Disassociating all credentials");
 		

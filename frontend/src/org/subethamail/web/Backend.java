@@ -14,6 +14,7 @@ import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ListWizard;
+import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ListMgr;
 
@@ -41,6 +42,7 @@ public class Backend extends HttpServlet
 	static Backend singleton;
 	
 	/** Stateless session EJB references are all thread-safe */
+	Injector injector;
 	Admin admin;
 	Encryptor encryptor;
 	ListWizard listWizard;
@@ -64,6 +66,7 @@ public class Backend extends HttpServlet
 		{
 			InitialContext ctx = new InitialContext();
 			
+			injector = (Injector)ctx.lookup(Injector.JNDI_NAME);
 			admin = (Admin)ctx.lookup(Admin.JNDI_NAME);
 			encryptor = (Encryptor)ctx.lookup(Encryptor.JNDI_NAME);
 			listWizard = (ListWizard)ctx.lookup(ListWizard.JNDI_NAME);
@@ -87,6 +90,12 @@ public class Backend extends HttpServlet
 		this.getServletContext().removeAttribute(KEY);
 		
 		singleton = null;
+	}
+
+	/** */
+	public Injector getInjector()
+	{
+		return this.injector;
 	}
 
 	/** */

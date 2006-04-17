@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -24,6 +25,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,9 +37,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Index;
+import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
+import org.hibernate.annotations.Table;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.valid.Validator;
@@ -57,8 +62,8 @@ import org.subethamail.common.valid.Validator;
 		}
 	),
 	@NamedQuery(
-		name="RepliesToMessageId", 
-		query="from Mail m where m.parent is null and m.parentMessageId = :messageId",
+		name="WantsReferenceToMessageId", 
+		query="select m from Mail as m join fetch m.wantedReference as ref where ref = :messageId and m.list.id = :listId",
 		hints={
 		}
 	)
@@ -66,6 +71,10 @@ import org.subethamail.common.valid.Validator;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
+@Table(
+	name="Mail",
+	indexes={@Index(name="mailMessageIdIndex", columnNames={"listId", "messageId"})}
+)
 public class Mail implements Serializable, Comparable
 {
 	/** */
@@ -91,13 +100,7 @@ public class Mail implements Serializable, Comparable
 	
 	/** Message id might not exist */
 	@Column(nullable=true, length=Validator.MAX_MAIL_MESSAGE_ID)
-	@Index(name="mailMessageIdIndex")
 	String messageId;
-	
-	/** Parent message id might not exist */
-	@Column(nullable=true, length=Validator.MAX_MAIL_MESSAGE_ID)
-	@Index(name="mailParentMessageIdIndex")
-	String parentMessageId;
 	
 	/** */
 	@Column(nullable=false, length=Validator.MAX_MAIL_SUBJECT)
@@ -133,6 +136,19 @@ public class Mail implements Serializable, Comparable
 	SortedSet<Mail> replies;
 	
 	/** 
+	 * This represents a list of references we are more interested
+	 * in using as our parent than what we have currently.  The first
+	 * entry is the best possible. 
+	 */
+	@CollectionOfElements
+	@JoinTable(name="wantedReference", joinColumns={@JoinColumn(name="mailId")})
+	@Column(name="messageId", nullable=false)
+	@IndexColumn(name="ord")
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+	@Index(name="mailWantedRefIndex")	// TODO:  this doesn't seem to work
+	List<String> wantedReference;
+	
+	/** 
 	 * Is it held for moderation?  If null, no need for moderation.
 	 */
 	@Enumerated(EnumType.STRING)
@@ -147,15 +163,13 @@ public class Mail implements Serializable, Comparable
 	/**
 	 * @param holdFor can be null which means none required
 	 */
-	public Mail(SubEthaMessage msg, MailingList list, Mail parent, String parentMessageId, HoldType holdFor) throws MessagingException
+	public Mail(SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mail");
 		
 		this.dateCreated = new Date();
 		this.list = list;
-		this.parent = parent;
-		this.parentMessageId = parentMessageId;
 		this.hold = holdFor;
 		
 		byte[] raw;
@@ -190,9 +204,6 @@ public class Mail implements Serializable, Comparable
 	 */
 	public void setContent(byte[] value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting content of " + this);
-		
 		this.content = value;
 	}
 
@@ -200,25 +211,15 @@ public class Mail implements Serializable, Comparable
 	 */
 	public String getMessageId() { return this.messageId; }
 	
-	/**
-	 */
 	public void setMessageId(String value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting message id of " + this + " to " + value);
-		
 		this.messageId = value;
 	}
 	
-	/** */
-	public String getParentMessageId() { return this.parentMessageId; }
-
 	/**
 	 */
 	public String getSubject() { return this.subject; }
 	
-	/**
-	 */
 	public void setSubject(String value)
 	{
 		if (log.isDebugEnabled())
@@ -299,6 +300,14 @@ public class Mail implements Serializable, Comparable
 	
 	/** */
 	public MailingList getList() { return this.list; }
+
+	/** */
+	public List<String> getWantedReference() { return this.wantedReference; }
+	
+	public void setWantedReference(List<String> value)
+	{
+		this.wantedReference = value;
+	}
 
 	/**
 	 * Natural sort order is based on creation date

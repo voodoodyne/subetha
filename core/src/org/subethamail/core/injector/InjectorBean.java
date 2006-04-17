@@ -6,6 +6,7 @@
 package org.subethamail.core.injector;
 
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.EJB;
@@ -118,8 +119,8 @@ public class InjectorBean implements Injector, InjectorRemote
 		// Parse up the message
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
 		
-		// This will set a messageid if none exists
-		msg.saveChanges();
+		// Make sure we have a unique message id
+		this.checkMessageId(msg);
 		
 		// If it stays null, no moderation required
 		HoldType hold = null;
@@ -162,7 +163,8 @@ public class InjectorBean implements Injector, InjectorRemote
 		if (log.isDebugEnabled())
 			log.debug("Moderate this message:  " + hold);
 
-		Mail mail = this.createMail(msg, toList, hold);
+		Mail mail = new Mail(msg, toList, hold);
+		this.dao.persist(mail);
 		
 		if (mail.getHold() != null)
 		{
@@ -171,10 +173,33 @@ public class InjectorBean implements Injector, InjectorRemote
 		}
 		else
 		{
+			this.threadMail(mail, msg);
 			this.queuer.queueForDelivery(mail.getId());
 		}
 	}
 	
+	/**
+	 * Ensures that the message has a unique message id.
+	 */
+	protected void checkMessageId(SubEthaMessage msg) throws MessagingException
+	{
+		String messageId = msg.getMessageID();
+		
+		if (messageId == null)
+		{
+			msg.replaceMessageID();
+		}
+		else
+		{
+			try
+			{
+				this.dao.findMailByMessageId(messageId);
+				msg.replaceMessageID();
+			}
+			catch (NotFoundException ex) {}
+		}
+	}
+
 	/**
 	 * Handle a bounce message.  Note we don't really care what the
 	 * message data was, just what the VERP address was.
@@ -231,46 +256,100 @@ public class InjectorBean implements Injector, InjectorRemote
 	}
 
 	/**
-	 * Creates a piece of mail and hooks it into the thread hierarchy (if it can).
+	 * Places the mail in a thread hierarchy, possibly updating a variety
+	 * of other mails which are part of the hierarchy.
+	 * 
+	 * When this completes, the mail may have a parent and children.
 	 */
-	Mail createMail(SubEthaMessage msg, MailingList toList, HoldType hold) throws MessagingException
+	void threadMail(Mail mail, SubEthaMessage msg) throws MessagingException
 	{
-		// Figure out parent, if there is one
-		Mail parent = null;
-		String parentMessageId;
+		if (log.isDebugEnabled())
+			log.debug("Threading mail " + mail);
 		
-		try
-		{
-			parent = this.findParentMail(msg);
-			parentMessageId = parent.getMessageId();
+		//
+		// STEP ONE:  Figure who we want to be our parent.
+		//
+		List<String> wantedReference = new ArrayList<String>();
+		
+		// If there is an InReplyTo, that tops the list
+		String inReplyTo = msg.getInReplyTo();
+		if (inReplyTo != null)
+			wantedReference.add(inReplyTo);
 			
-			if (log.isDebugEnabled())
-				log.debug("Message parent is: " + parent);
-		}
-		catch (UnknownParentException ex)
+		// Now add the references field.  Careful that the
+		// last reference might be duplicate of inReplyTo
+		String[] references = msg.getReferences();
+		if (references != null)
 		{
-			parentMessageId = ex.getParentMessageId();
-		}
-		
-		// Create a mail object
-		Mail mail = new Mail(msg, toList, parent, parentMessageId, hold);
-		this.dao.persist(mail);
-		
-		if (parent != null)
-			parent.getReplies().add(mail);
-
-		// Now look for any children of this mail
-		if (parentMessageId != null)
-		{
-			List<Mail> replies = this.dao.findRepliesToMail(parentMessageId);
-			for (Mail reply: replies)
+			// Walk it backwards because recent refs are at the end
+			for (int i=(references.length-1); i>=0; i--)
 			{
-				reply.setParent(mail);
-				mail.getReplies().add(reply);
+				if (!wantedReference.contains(references[i]))
+					wantedReference.add(references[i]);
 			}
 		}
 		
-		return mail;
+		if (log.isDebugEnabled())
+			log.debug("Wanted references is " + wantedReference);
+		
+		//
+		// STEP TWO:  Find an acceptable candidate to be our thread parent,
+		// and eliminate any candidates that are inferior.
+		//
+		Mail parent = null;
+		
+		for (int i=0; i<wantedReference.size(); i++)
+		{
+			String candidate = wantedReference.get(i);
+			
+			try
+			{
+				parent = this.dao.findMailByMessageId(candidate);
+				
+				// Got one, eliminate anything from wantedReference that is at this
+				// level or later.  Do it from the end to make ArrayList happy.
+				for (int delInd=wantedReference.size()-1; delInd>=i; delInd--)
+					wantedReference.remove(delInd);
+				
+				break;
+			}
+			catch (NotFoundException ex) {}
+		}
+		
+		if (log.isDebugEnabled())
+			log.debug("Found thread ancestor " + parent);
+		
+		// Intermission - we can now set the mail's parent and wantedReference
+		mail.setParent(parent);
+		mail.setWantedReference(wantedReference);
+		
+		//
+		// STEP THREE:  Find anyone looking for us as a parent and insert us in
+		// their thread ancestry.
+		//
+		List<Mail> descendants = this.dao.findMailWantingParent(mail.getList().getId(), mail.getMessageId());
+		for (Mail descendant: descendants)
+		{
+			if (log.isDebugEnabled())
+				log.debug("Replacing parent of " + descendant);
+			
+			// Remove from the old parent
+			Mail oldParent = descendant.getParent();
+			oldParent.getReplies().remove(descendant);
+			
+			// Add the new parent
+			descendant.setParent(mail);
+			mail.getReplies().add(descendant);
+			
+			// Prune the wantedReference collection, possibly to empty
+			List<String> wanted = descendant.getWantedReference();
+			for (int i=wanted.size()-1; i>=0; i--)
+			{
+				String removed = wanted.remove(i);
+				if (mail.getMessageId().equals(removed))
+					break;
+			}
+		}
 	}
 	
 	/**
@@ -296,49 +375,6 @@ public class InjectorBean implements Injector, InjectorRemote
 	}
 	
 	/**
-	 * Figures out, best we can, what the parent Mail object is.
-	 * 
-	 * @throws UnknownParentException if the parent cannot be identified.
-	 */
-	Mail findParentMail(SubEthaMessage msg) throws UnknownParentException, MessagingException
-	{
-		// First try message id
-		String inReplyTo = msg.getInReplyTo();
-		if (inReplyTo != null)
-		{
-			try
-			{
-				return this.dao.findMailByMessageId(inReplyTo);
-			}
-			catch (NotFoundException ex) {}
-		}
-		
-		// Next try the first reference.  Everything else in the references
-		// list should be farther up the hierarchy and so we don't want them.
-		String reference = null;
-		
-		String[] refs = msg.getReferences();
-		if (refs != null && refs.length > 0)
-			reference = refs[refs.length-1];
-		
-		if (reference != null)
-		{
-			try
-			{
-				return this.dao.findMailByMessageId(reference);
-			}
-			catch (NotFoundException ex) {}
-		}
-		
-		// The reference is more likely to be a correctly
-		// formatted message id, even though it is less likely
-		// to be the one we want.
-		String preferred = (reference != null) ? reference : inReplyTo;
-		
-		throw new UnknownParentException(preferred);
-	}
-	
-	/**
 	 * @see Injector#log(byte[])
 	 */
 	public void log(byte[] mailData) throws MessagingException
@@ -354,30 +390,5 @@ public class InjectorBean implements Injector, InjectorRemote
 		else
 			for (String ref: refs)
 				log.info("Has Reference: " + ref);
-	}
-	
-	/**
-	 * Internal exception thrown when no parent Mail for a message
-	 * could be found.  The exception message will be the best guess
-	 * at what the parent Message-ID will be.
-	 * 
-	 * It might also be null if nothing could be figured out!
-	 */
-	@SuppressWarnings("serial")
-	static class UnknownParentException extends Exception
-	{
-		/** */
-		public UnknownParentException(String parentMessageId)
-		{
-			super(parentMessageId);
-		}
-		
-		/**
-		 * @return the best guess, or null if nothing could be determined.  
-		 */
-		public String getParentMessageId()
-		{
-			return this.getMessage();
-		}
 	}
 }

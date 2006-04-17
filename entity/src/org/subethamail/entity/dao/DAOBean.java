@@ -160,21 +160,21 @@ public class DAOBean implements DAO
 		}
 		catch (NoResultException ex)
 		{
-			log.debug("Not found");
 			throw new NotFoundException(ex);
 		}
 	}
 	
 	/**
-	 * @see DAO#findRepliesToMail(String)
+	 * @see DAO#findMailWantingParent(Long, String)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Mail> findRepliesToMail(String messageId)
+	public List<Mail> findMailWantingParent(Long listId, String messageId)
 	{
 		if (log.isDebugEnabled())
-			log.debug("Finding replies to Mail with Message-ID " + messageId);
+			log.debug("Finding mail wanting ancestor with Message-ID " + messageId);
 		
-		Query q = this.em.createNamedQuery("RepliesToMessageId");
+		Query q = this.em.createNamedQuery("WantsReferenceToMessageId");
+		q.setParameter("listId", listId);
 		q.setParameter("messageId", messageId);
 		
 		return q.getResultList();

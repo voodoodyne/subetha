@@ -5,12 +5,15 @@
 
 package org.subethamail.common;
 
+import static org.subethamail.common.SubEthaMessage.HDR_MESSAGE_ID;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.StringTokenizer;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -116,7 +119,11 @@ public class SubEthaMessage extends SMTPMessage
 
 		StringTokenizer tokenizer = new StringTokenizer(values[0]);
 		
-		String[] toks = new String[tokenizer.countTokens()];
+		int count = tokenizer.countTokens();
+		if (count == 0)
+			return null;
+		
+		String[] toks = new String[count];
 		int i = 0;
 		while (tokenizer.hasMoreTokens())
 		{
@@ -125,5 +132,32 @@ public class SubEthaMessage extends SMTPMessage
 		}
 		
 		return toks;
+	}
+
+	/**
+	 * Generates and assigns a new message id.  Uses the same algorithm
+	 * as JavaMail.
+	 */
+	public void replaceMessageID() throws MessagingException
+	{
+		String suffix = null;
+
+		InternetAddress addr = InternetAddress.getLocalAddress(this.session);
+		if (addr != null)
+			suffix = addr.getAddress();
+		else
+			suffix = "subetha@localhost"; // worst-case default
+
+		StringBuffer s = new StringBuffer();
+
+		// Unique string is <hashcode>.<currentTime>.SubEtha.<suffix>
+		s.append(s.hashCode())
+			.append('.')
+			.append(System.currentTimeMillis())
+			.append('.')
+			.append("SubEtha.")
+			.append(suffix);
+
+		super.setHeader(HDR_MESSAGE_ID, "<" + s + ">");
 	}
 }

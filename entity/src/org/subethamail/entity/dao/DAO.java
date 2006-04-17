@@ -94,10 +94,16 @@ public interface DAO
 	public Mail findMailByMessageId(String msgId) throws NotFoundException;
 
 	/**
-	 * Tries to find mail entites whose parent is the specified message id.
+	 * Tries to find mail entites which are looking for an ancestor
+	 * with the specified message id.
+	 * 
+	 * @param listId is the id of a mailing list in whose archives to search.
+	 * @param messageId is the Message-ID to search for.
+	 * 
 	 * The return values are not readonly.
+	 * Will prefetch the wantedReference collection.
 	 */
-	public List<Mail> findRepliesToMail(String msgId);
+	public List<Mail> findMailWantingParent(Long listId, String msgId);
 
 	/**
 	 * @return the mailing list with the specified id

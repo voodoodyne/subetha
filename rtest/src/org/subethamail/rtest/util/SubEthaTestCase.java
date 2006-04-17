@@ -6,9 +6,11 @@
 package org.subethamail.rtest.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -69,9 +71,9 @@ public class SubEthaTestCase extends TestCase
 	}
 	
 	/**
-	 * 
+	 * Create the bytes of a simple test message
 	 */
-	protected byte[] createMessage(InternetAddress from, InternetAddress to)
+	protected byte[] createMessage(InternetAddress from, InternetAddress to) throws MessagingException, IOException
 	{
 		MimeMessage msg = new MimeMessage(this.sess);
 		

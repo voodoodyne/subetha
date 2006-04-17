@@ -89,9 +89,10 @@ public interface DAO
 	public Mail findMail(Long mailId) throws NotFoundException;
 	
 	/**
-	 * Tries to find a mail entity which has the specified message id.
+	 * Tries to find a mail entity which has the specified message id
+	 * in the given mailing list.
 	 */
-	public Mail findMailByMessageId(String msgId) throws NotFoundException;
+	public Mail findMailByMessageId(Long listId, String msgId) throws NotFoundException;
 
 	/**
 	 * Tries to find mail entites which are looking for an ancestor

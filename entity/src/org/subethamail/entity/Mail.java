@@ -55,7 +55,7 @@ import org.subethamail.common.valid.Validator;
 @NamedQueries({
 	@NamedQuery(
 		name="MailByMessageId", 
-		query="from Mail m where m.messageId = :messageId",
+		query="from Mail m where m.list.id = :listId and m.messageId = :messageId",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")

@@ -144,14 +144,15 @@ public class DAOBean implements DAO
 	}
 
 	/**
-	 * @see DAO#findMailByMessageId(String)
+	 * @see DAO#findMailByMessageId(Long, String)
 	 */
-	public Mail findMailByMessageId(String messageId) throws NotFoundException
+	public Mail findMailByMessageId(Long listId, String messageId) throws NotFoundException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Finding Mail with Message-ID " + messageId);
 		
 		Query q = this.em.createNamedQuery("MailByMessageId");
+		q.setParameter("listId", listId);
 		q.setParameter("messageId", messageId);
 		
 		try

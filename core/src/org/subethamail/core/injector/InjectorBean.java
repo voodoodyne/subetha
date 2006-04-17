@@ -120,7 +120,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
 		
 		// Make sure we have a unique message id
-		this.checkMessageId(msg);
+		this.checkMessageId(toList, msg);
 		
 		// If it stays null, no moderation required
 		HoldType hold = null;
@@ -181,7 +181,7 @@ public class InjectorBean implements Injector, InjectorRemote
 	/**
 	 * Ensures that the message has a unique message id.
 	 */
-	protected void checkMessageId(SubEthaMessage msg) throws MessagingException
+	protected void checkMessageId(MailingList list, SubEthaMessage msg) throws MessagingException
 	{
 		String messageId = msg.getMessageID();
 		
@@ -193,7 +193,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		{
 			try
 			{
-				this.dao.findMailByMessageId(messageId);
+				this.dao.findMailByMessageId(list.getId(), messageId);
 				msg.replaceMessageID();
 			}
 			catch (NotFoundException ex) {}
@@ -304,7 +304,7 @@ public class InjectorBean implements Injector, InjectorRemote
 			
 			try
 			{
-				parent = this.dao.findMailByMessageId(candidate);
+				parent = this.dao.findMailByMessageId(mail.getList().getId(), candidate);
 				
 				// Got one, eliminate anything from wantedReference that is at this
 				// level or later.  Do it from the end to make ArrayList happy.

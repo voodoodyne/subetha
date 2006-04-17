@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -19,10 +20,12 @@ import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.MySubscription;
 import org.subethamail.core.acct.i.SubscriptionData;
 import org.subethamail.core.admin.i.BlueprintData;
+import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.MailingListData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.entity.EmailAddress;
+import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
@@ -168,9 +171,6 @@ public class Transmute
 	}
 
 	/**
-	 * 
-	 * @param raw
-	 * @return
 	 */
 	public static SubscriptionData subscription(Subscription raw)
 	{
@@ -185,5 +185,46 @@ public class Transmute
 				raw.getList().getDescription(),
 				raw.getRole().getName(),
 				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null);
+	}
+
+	/**
+	 * @param showEmail determines whether or not the summary will contain the
+	 *  email address of the author.
+	 */
+	public static List<MailSummary> mailSummaries(Collection<Mail> rawColl, boolean showEmail)
+	{
+		List<MailSummary> result = new ArrayList<MailSummary>(rawColl.size());
+		
+		for (Mail raw: rawColl)
+			result.add(mailSummary(raw, showEmail));
+		
+		return result;
+	}
+
+	/**
+	 */
+	public static MailSummary mailSummary(Mail raw, boolean showEmail)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+	
+		InternetAddress addy;
+		try
+		{
+			addy = new InternetAddress(raw.getFromNormal());
+		}
+		catch (AddressException ex)
+		{
+			// Should be impossible
+			throw new RuntimeException(ex);
+		}
+			
+		return new MailSummary(
+				raw.getId(),
+				raw.getSubject(),
+				showEmail ? addy.getAddress() : null,
+				addy.getPersonal(),
+				raw.getDateCreated(),
+				mailSummaries(raw.getReplies(), showEmail));
 	}
 }

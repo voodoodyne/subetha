@@ -271,4 +271,21 @@ public class DAOBean implements DAO
 		return q.getResultList();
 	}
 
+	/**
+	 * @see DAO#findMailByList(Long, int, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Mail> findMailByList(Long listId, int start, int count)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding all mail for list " + listId);
+		
+		Query q = this.em.createNamedQuery("MailByList");
+		q.setParameter("listId", listId);
+		q.setFirstResult(start);
+		q.setMaxResults(count);
+		
+		return q.getResultList();
+	}
+
 }

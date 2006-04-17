@@ -135,4 +135,8 @@ public interface DAO
 	 */
 	public List<MailingList> findAllLists();
 
+	/**
+	 * @return all the threads for the list
+	 */
+	public List<Mail> findMailByList(Long listId, int start, int count);
 }

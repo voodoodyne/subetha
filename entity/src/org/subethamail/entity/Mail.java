@@ -62,6 +62,14 @@ import org.subethamail.common.valid.Validator;
 		}
 	),
 	@NamedQuery(
+			name="MailByList", 
+			query="from Mail m where m.list.id = :listId order by m.dateCreated desc",
+			hints={
+				@QueryHint(name="org.hibernate.readOnly", value="true"),
+				@QueryHint(name="org.hibernate.cacheable", value="true")
+			}
+		),
+	@NamedQuery(
 		name="WantsReferenceToMessageId", 
 		query="select m from Mail as m join fetch m.wantedReference as ref where ref = :messageId and m.list.id = :listId",
 		hints={

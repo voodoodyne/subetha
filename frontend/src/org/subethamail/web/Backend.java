@@ -14,6 +14,7 @@ import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ListWizard;
+import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ListMgr;
 
 /**
@@ -45,6 +46,7 @@ public class Backend extends HttpServlet
 	ListWizard listWizard;
 	ListMgr listMgr;
 	AccountMgr accountMgr;
+	Archiver archiver;
 	
 	/**
 	 * Obtain the current instance.
@@ -67,6 +69,7 @@ public class Backend extends HttpServlet
 			listWizard = (ListWizard)ctx.lookup(ListWizard.JNDI_NAME);
 			listMgr = (ListMgr)ctx.lookup(ListMgr.JNDI_NAME);
 			accountMgr = (AccountMgr)ctx.lookup(AccountMgr.JNDI_NAME);
+			archiver = (Archiver)ctx.lookup(Archiver.JNDI_NAME);
 		}
 		catch (NamingException ex) { throw new ServletException(ex); }
 		
@@ -114,6 +117,12 @@ public class Backend extends HttpServlet
 	public ListMgr getListMgr()
 	{
 		return this.listMgr;
+	}
+	
+	/** */
+	public Archiver getArchiver()
+	{
+		return this.archiver;
 	}
 	
 }

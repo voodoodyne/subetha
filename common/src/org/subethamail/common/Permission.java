@@ -25,7 +25,8 @@ public enum Permission
 	VIEW_SUBSCRIBERS,
 	READ_ARCHIVES,
 	READ_NOTES,
-	EDIT_NOTES;
+	EDIT_NOTES,
+	SEE_ADDRESSES;		// See email addresses in archives and subscription list
 	
 	/** A set that contains all permissions */
 	public static final Set<Permission> ALL;

@@ -149,7 +149,7 @@ public class Mail implements Serializable, Comparable
 	 * entry is the best possible. 
 	 */
 	@CollectionOfElements
-	@JoinTable(name="wantedReference", joinColumns={@JoinColumn(name="mailId")})
+	@JoinTable(name="WantedReference", joinColumns={@JoinColumn(name="mailId")})
 	@Column(name="messageId", nullable=false)
 	@IndexColumn(name="ord")
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)

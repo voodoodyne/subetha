@@ -26,6 +26,7 @@ import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
 import org.subethamail.core.filter.FilterRunner;
+import org.subethamail.core.injector.i.AddressUnknownException;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.plugin.i.HoldException;
@@ -85,7 +86,7 @@ public class InjectorBean implements Injector, InjectorRemote
 	 * @see Injector#inject(String)
 	 */
 //	@WebMethod
-	public void inject(String toAddress, byte[] mailData) throws MessagingException
+	public void inject(String toAddress, byte[] mailData) throws MessagingException, AddressUnknownException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Injecting message sent to " + toAddress);
@@ -108,9 +109,8 @@ public class InjectorBean implements Injector, InjectorRemote
 		}
 		catch (NotFoundException ex)
 		{
-			// Cautiously ignore.  Maybe we should propagate the exception instead?
 			log.error("Unknown destination: " + addy);
-			return;
+			throw new AddressUnknownException(ex);
 		}
 		
 		if (log.isDebugEnabled())

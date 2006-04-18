@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.security.SimplePrincipal;
+import org.subethamail.core.injector.i.AddressUnknownException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.security.Security;
 
@@ -28,7 +29,8 @@ import org.subethamail.web.security.Security;
  * recipient: the email address of the envelope recipient
  * message: the rfc822 content of the message
  * 
- * The result will be 200 OK if accepted, 500 if rejected.
+ * The result will be 200 OK if accepted, 500 if an error occurred.
+ * A 599 will be returned if the recipient is unknown.
  * 
  * TODO:  make this a lot more efficient by using the content body
  * as the raw message bytes instead of requiring www-form-urlencoded 
@@ -41,6 +43,11 @@ public class InjectorServlet extends HttpServlet
 	public static final String AUTH_PASS_PARAM = "authPassword";
 	public static final String RECIPIENT_PARAM = "recipient";
 	public static final String MESSAGE_PARAM = "message";
+	
+	/**
+	 * Status code we return when we don't know what to do with the recipient.
+	 */
+	public static final int SC_ADDRESS_UNKNOWN = 599;
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -61,6 +68,10 @@ public class InjectorServlet extends HttpServlet
 			Security.associateCredentials(new SimplePrincipal(authName), authPass);
 			
 			Backend.instance().getInjector().inject(recipient, message.getBytes());
+		}
+		catch (AddressUnknownException ex)
+		{
+			response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
 		}
 		catch (MessagingException ex)
 		{

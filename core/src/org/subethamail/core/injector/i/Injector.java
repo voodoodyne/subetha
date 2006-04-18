@@ -33,10 +33,9 @@ public interface Injector
 	 * @param mailData is the raw (possibly MIME) mail content, including headers.
 	 * 
 	 * @throws MessagingException if the message data or toAddress could not be parsed.
-	 * 
-	 * TODO:  consider an exception instead of silently dropping irrelevant mail?
+	 * @throws AddressUnknownException if we don't know what to do with teh address.
 	 */
-	public void inject(String toAddress, byte[] mailData) throws MessagingException;
+	public void inject(String toAddress, byte[] mailData) throws MessagingException, AddressUnknownException;
 	
 	/**
 	 * A test method that logs the deconstruction of a message.

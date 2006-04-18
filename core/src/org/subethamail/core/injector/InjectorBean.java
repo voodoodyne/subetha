@@ -373,22 +373,4 @@ public class InjectorBean implements Injector, InjectorRemote
 		
 		return null;
 	}
-	
-	/**
-	 * @see Injector#log(byte[])
-	 */
-	public void log(byte[] mailData) throws MessagingException
-	{
-		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
-		
-		log.info("Message-ID is: " + msg.getMessageID());
-		log.info("In-Reply-To is: " + msg.getInReplyTo());
-		
-		String[] refs = msg.getReferences();
-		if (refs == null)
-			log.info("Null References");
-		else
-			for (String ref: refs)
-				log.info("Has Reference: " + ref);
-	}
 }

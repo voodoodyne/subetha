@@ -20,26 +20,18 @@ public interface Injector
 	public static final String JNDI_NAME = "subetha/Injector/local";
 
 	/**
-	 * Processes of a piece of raw mail.  The mail is expected
-	 * to be in the format that a MDA would expect, headers first
-	 * then an empty line then body.
+	 * Processes of a piece of raw mail in rfc822 format.
 	 * 
 	 * Mail can be anything - a message to a mailing list, a bounce
-	 * message, or some random junk.  It will be processed accordingly.
-	 * If the mail is not significant to us, it will be silently dropped.
+	 * message, or something else.  It will be processed accordingly.
 	 * 
-	 * @param toAddress is an rfc222-compliant destination for the mail.  If the
-	 *  address is not a valid mailing list, the mail is logged and dropped.
-	 * @param mailData is the raw (possibly MIME) mail content, including headers.
+	 * @param toAddress is an rfc822-compliant destination for the mail.
+	 * @param mailData is the rfc822-compliant message.
 	 * 
 	 * @throws MessagingException if the message data or toAddress could not be parsed.
-	 * @throws AddressUnknownException if we don't know what to do with teh address.
+	 * @throws AddressUnknownException if the address is not something we know what to
+	 *  do with; ie it is not a known list address or a VERP bounce.
 	 */
 	public void inject(String toAddress, byte[] mailData) throws MessagingException, AddressUnknownException;
-	
-	/**
-	 * A test method that logs the deconstruction of a message.
-	 */
-	public void log(byte[] mailData) throws MessagingException;
 }
 

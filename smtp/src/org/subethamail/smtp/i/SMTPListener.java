@@ -21,18 +21,20 @@ public interface SMTPListener
 	/** 
 	 * Called once for every RCPT TO during a SMTP exchange.
 	 * 
+	 * @param from is a rfc822-compliant email address.
 	 * @param recipient is a rfc822-compliant email address.
 	 * 
 	 * @return true if the listener wants delivery of the message,
 	 *  false if the message is not for this listener.
 	 */
-	public boolean accept(String recipient);
+	public boolean accept(String from, String recipient);
 	
 	/** 
 	 * When a message arrives, this method will be called once for
 	 * every recipient this listener accepted.
 	 * 
-	 * @param recipient will be an accepted recipient
+	 * @param from is the envelope sender in rfc822 form
+	 * @param recipient will be an accepted recipient in rfc822 form
 	 */
-	public void deliver(String recipient, byte[] data); 
+	public void deliver(String from, String recipient, byte[] data); 
 }

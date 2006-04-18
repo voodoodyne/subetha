@@ -26,6 +26,10 @@
 	</module>
 
 	<module>
+		<ejb>smtp.jar</ejb>
+	</module>
+
+	<module>
 		<web>
 			<web-uri>frontend.war</web-uri>
 			<context-root>/se</context-root>

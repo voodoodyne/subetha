@@ -31,12 +31,13 @@
 	<path id="core.classpath">
 		<pathelement location="${build.core.ejbclient.file}" />
 		<pathelement location="${build.entity.ejb.file}"/>
+		<pathelement location="${build.smtp.api.file}"/>
 		<fileset dir="${core.lib.dir}"/>
 		
 		<path refid="core.i.classpath" />
 	</path>
 
- 	<target name="core-classes" depends="core-ejbclient-jar, entity-ejb-jar">
+ 	<target name="core-classes" depends="core-ejbclient-jar, entity-ejb-jar, smtp-api-jar">
 		<mkdir dir="${build.core.classes.dir}" />
  		
 		<javac srcdir="${core.javasrc.dir}"
@@ -82,7 +83,7 @@
 		</jar>
 	</target>
 
-	<target name="core-sar" depends="core-ejbclient-jar, common-jar">
+	<target name="core-sar" depends="core-ejbclient-jar, common-jar, smtp-api-jar">
 		<jar destfile="${build.core.sar.file}">
 			<metainf dir="${core.meta.dir}">
 				<include name="jboss-service.xml"/>
@@ -95,6 +96,9 @@
 			
 			<fileset file="${build.core.ejbclient.file}"/>
 			<fileset file="${build.common.jar.file}"/>
+			
+			<!-- This really belongs in a smtp.sar, but for now here is fine -->
+			<fileset file="${build.smtp.api.file}"/>
 		</jar>
 	</target>
 					

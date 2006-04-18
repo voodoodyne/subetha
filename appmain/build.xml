@@ -15,12 +15,13 @@
 
 	<property name="build.appmain.ear.file" location="${build.dir}/${name}.ear" />
 	
-	<target name="appmain-ear" depends="core-all, frontend-war, entity-ejb-jar, plugin-sar">
+	<target name="appmain-ear" depends="core-all, frontend-war, entity-ejb-jar, plugin-sar, smtp-jar">
 		<ear destfile="${build.appmain.ear.file}" appxml="${appmain.meta.dir}/application.xml">
 			<metainf dir="${appmain.meta.dir}">
 				<include name="jboss-app.xml" />
 			</metainf>
 			
+			<fileset file="${build.smtp.jar.file}" />
 			<fileset file="${build.entity.ejb.file}" />
 			<fileset file="${build.core.ejb.file}" />
 			<fileset file="${build.core.sar.file}" />

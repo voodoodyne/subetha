@@ -6,6 +6,7 @@
 	<classpathentry kind="src" path="frontend/src"/>
 	<classpathentry kind="src" path="common/src"/>
 	<classpathentry kind="src" path="rtest/src"/>
+	<classpathentry kind="src" path="smtp/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/javax.servlet.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/javax.servlet.jsp.jar"/>

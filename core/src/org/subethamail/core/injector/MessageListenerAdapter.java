@@ -69,7 +69,7 @@ public class MessageListenerAdapter implements MessageListener, Lifecycle
 	{
 		try
 		{
-			if (!this.injector.inject(recipient, data))
+			if (!this.injector.inject(from, recipient, data))
 				throw new RuntimeException("Data no longer wanted");
 		}
 		catch (MessagingException ex)

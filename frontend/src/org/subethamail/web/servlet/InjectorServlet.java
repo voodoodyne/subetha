@@ -25,6 +25,7 @@ import org.subethamail.web.security.Security;
  * 
  * authName: the email address of a site administrator
  * authPassword: the password for the site administrator account
+ * from: the email address of the envelope sender
  * recipient: the email address of the envelope recipient
  * message: the rfc822 content of the message
  * 
@@ -40,6 +41,7 @@ public class InjectorServlet extends HttpServlet
 	/** */
 	public static final String AUTH_NAME_PARAM = "authName";
 	public static final String AUTH_PASS_PARAM = "authPassword";
+	public static final String FROM_PARAM = "from";
 	public static final String RECIPIENT_PARAM = "recipient";
 	public static final String MESSAGE_PARAM = "message";
 	
@@ -56,17 +58,18 @@ public class InjectorServlet extends HttpServlet
 	{
 		String authName = request.getParameter(AUTH_NAME_PARAM);
 		String authPass = request.getParameter(AUTH_PASS_PARAM);
+		String from = request.getParameter(FROM_PARAM);
 		String recipient = request.getParameter(RECIPIENT_PARAM);
 		String message = request.getParameter(MESSAGE_PARAM);
 		
-		if (authName == null || authPass == null || recipient == null || message == null)
+		if (authName == null || authPass == null || from == null || recipient == null || message == null)
 			throw new ServletException("Missing parameter");
 		
 		try
 		{
 			Security.associateCredentials(new SimplePrincipal(authName), authPass);
 			
-			if (!Backend.instance().getInjector().inject(recipient, message.getBytes()))
+			if (!Backend.instance().getInjector().inject(from, recipient, message.getBytes()))
 				response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
 		}
 		catch (MessagingException ex)

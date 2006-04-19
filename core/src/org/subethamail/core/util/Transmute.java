@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -20,8 +19,9 @@ import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.MySubscription;
 import org.subethamail.core.acct.i.SubscriptionData;
 import org.subethamail.core.admin.i.BlueprintData;
+import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.MailSummary;
-import org.subethamail.core.lists.i.MailingListData;
+import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.entity.EmailAddress;
@@ -68,9 +68,9 @@ public class Transmute
 	}
 	
 	/** */
-	public static List<MailingListData> mailingLists(Collection<MailingList> rawColl)
+	public static List<ListData> mailingLists(Collection<MailingList> rawColl)
 	{
-		List<MailingListData> result = new ArrayList<MailingListData>(rawColl.size());
+		List<ListData> result = new ArrayList<ListData>(rawColl.size());
 		
 		for (MailingList raw: rawColl)
 			result.add(mailingList(raw));
@@ -79,12 +79,12 @@ public class Transmute
 	}
 	
 	/** */
-	public static MailingListData mailingList(MailingList raw)
+	public static ListData mailingList(MailingList raw)
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
 	
-		return new MailingListData(
+		return new ListData(
 				raw.getId(),
 				raw.getEmail(),
 				raw.getName(),
@@ -123,7 +123,7 @@ public class Transmute
 	 */
 	public static MySubscription mySubscription(Person rawPerson, MailingList rawList)
 	{
-		MailingListData listData = mailingList(rawList);
+		ListData listData = mailingList(rawList);
 		
 		Role role = rawList.getRoleFor(rawPerson);
 		
@@ -191,33 +191,29 @@ public class Transmute
 	 * @param showEmail determines whether or not the summary will contain the
 	 *  email address of the author.
 	 */
-	public static List<MailSummary> mailSummaries(Collection<Mail> rawColl, boolean showEmail)
+	public static List<MailSummary> mailSummaries(Collection<Mail> rawColl, boolean showEmail, MailSummary replacement)
 	{
 		List<MailSummary> result = new ArrayList<MailSummary>(rawColl.size());
 		
 		for (Mail raw: rawColl)
-			result.add(mailSummary(raw, showEmail));
+			result.add(mailSummary(raw, showEmail, replacement));
 		
 		return result;
 	}
 
 	/**
+	 * @param replacement is a summary we stop and use instead of continuing recursion.
+	 *  If null, no replacement will occur.
 	 */
-	public static MailSummary mailSummary(Mail raw, boolean showEmail)
+	public static MailSummary mailSummary(Mail raw, boolean showEmail, MailSummary replacement)
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
 	
-		InternetAddress addy;
-		try
-		{
-			addy = new InternetAddress(raw.getFromNormal());
-		}
-		catch (AddressException ex)
-		{
-			// Should be impossible
-			throw new RuntimeException(ex);
-		}
+		if (replacement != null && replacement.getId().equals(raw.getId()))
+			return replacement;
+			
+		InternetAddress addy = raw.getFromAddress();
 			
 		return new MailSummary(
 				raw.getId(),
@@ -225,6 +221,33 @@ public class Transmute
 				showEmail ? addy.getAddress() : null,
 				addy.getPersonal(),
 				raw.getDateCreated(),
-				mailSummaries(raw.getReplies(), showEmail));
+				mailSummaries(raw.getReplies(), showEmail, replacement));
 	}
+
+	/**
+	 */
+	public static List<RoleData> roles(Collection<Role> rawColl)
+	{
+		List<RoleData> result = new ArrayList<RoleData>(rawColl.size());
+		
+		for (Role raw: rawColl)
+			result.add(role(raw));
+		
+		return result;
+	}
+
+	/**
+	 */
+	public static RoleData role(Role raw)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+	
+		return new RoleData(
+				raw.getId(),
+				raw.getName(),
+				raw.isOwner(),
+				raw.getPermissions());
+	}
+
 }

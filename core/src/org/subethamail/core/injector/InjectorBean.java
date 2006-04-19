@@ -109,18 +109,19 @@ public class InjectorBean implements Injector, InjectorRemote
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, byte[])
+	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, byte[])
 	 */
 //	@WebMethod
-	public boolean inject(String toAddress, byte[] mailData) throws MessagingException
+	public boolean inject(String fromAddress, String toAddress, byte[] mailData) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Injecting message sent to " + toAddress);
 		
-		InternetAddress addy = new InternetAddress(toAddress);
+		InternetAddress fromAddy = new InternetAddress(fromAddress);
+		InternetAddress toAddy = new InternetAddress(toAddress);
 		
 		// Must check for VERP bounce
-		VERPAddress verp = VERPAddress.getVERPBounce(addy);
+		VERPAddress verp = VERPAddress.getVERPBounce(toAddy);
 		if (verp != null)
 		{
 			this.handleBounce(verp);
@@ -130,11 +131,11 @@ public class InjectorBean implements Injector, InjectorRemote
 		MailingList toList;
 		try
 		{
-			toList = this.dao.findMailingList(addy);
+			toList = this.dao.findMailingList(toAddy);
 		}
 		catch (NotFoundException ex)
 		{
-			log.error("Unknown destination: " + addy);
+			log.error("Unknown destination: " + toAddy);
 			return false;
 		}
 		
@@ -173,23 +174,30 @@ public class InjectorBean implements Injector, InjectorRemote
 			holdMsg = ex.getMessage();
 		}
 		
-		// Figure out who sent it, if we know
-		Person author = this.findPersonFrom(msg);
-		
-		if (log.isDebugEnabled())
-			log.debug("Message author is: " + author);
-		
 		// Find out if the message should be held for moderation
 		if (hold == null)
 		{
-			if (author == null || !author.isSubscribed(toList))
+			// Figure out who sent it, if we know
+			try
+			{
+				Person author = this.dao.findEmailAddress(fromAddy.getAddress()).getPerson();
+				
+				if (log.isDebugEnabled())
+					log.debug("Message author is: " + author);
+				
+				if (!author.isSubscribed(toList))
+					hold = HoldType.SELF;
+			}
+			catch (NotFoundException ex)
+			{
 				hold = HoldType.SELF;
+			}
 		}
 		
 		if (log.isDebugEnabled())
 			log.debug("Moderate this message:  " + hold);
 
-		Mail mail = new Mail(msg, toList, hold);
+		Mail mail = new Mail(fromAddy, msg, toList, hold);
 		this.dao.persist(mail);
 		
 		if (mail.getHold() != null)
@@ -379,27 +387,4 @@ public class InjectorBean implements Injector, InjectorRemote
 			}
 		}
 	}
-	
-	/**
-	 * Figures out which person sent the message, if it was anyone we know.
-	 * @return null if we can't figure it out
-	 */
-	Person findPersonFrom(SubEthaMessage msg) throws MessagingException
-	{
-		InternetAddress[] froms = (InternetAddress[])msg.getFrom();
-		if (froms != null)
-		{
-			for (InternetAddress fromAddy: froms)
-			{
-				try
-				{
-					return this.dao.findEmailAddress(fromAddy.getAddress()).getPerson();
-				}
-				catch (NotFoundException ex) {}
-			}
-		}
-		
-		return null;
-	}
-
 }

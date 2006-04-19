@@ -5,7 +5,7 @@
 
 package org.subethamail.core.acct.i;
 
-import org.subethamail.core.lists.i.MailingListData;
+import org.subethamail.core.lists.i.ListData;
 
 /**
  * Some detail about a mailing list.
@@ -13,7 +13,7 @@ import org.subethamail.core.lists.i.MailingListData;
  * @author Jon Scott Stevens
  */
 @SuppressWarnings("serial")
-public class SubscriptionData extends MailingListData
+public class SubscriptionData extends ListData
 {
 	String roleName;
 	String deliverTo;

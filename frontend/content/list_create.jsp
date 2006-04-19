@@ -3,37 +3,6 @@
 <t:action type="org.subethamail.web.action.auth.AuthRequired" />
 
 <trim:admin title="Create List">
-<script type='text/javascript' src='/se/dwr/interface/Validator.js'></script>
-<script type='text/javascript' src='/se/dwr/engine.js'></script>
-<script type='text/javascript' src='/se/dwr/util.js'></script>
-
-<script type='text/javascript'>
-function checkEMail() {
-  Validator.validEmail(replyEMail, DWRUtil.getValue("email"));
-}
-
-function replyEMail(valid) {
-  processReply(valid, "email", "email-error", "Please enter a valid EMail Address.");
-}
-
-function processReply(valid, id, errid, error) {
-  if (valid) {
-    DWRUtil.setValue(errid, "");
-    $(id).style.color = "black";
-  }
-  else {
-    DWRUtil.setValue(errid, error);
-    $(id).style.color = "red";
-  }
-}
-
-function init() {
-  DWRUtil.useLoadingMessage();
-}
-
-callOnLoad(init);
-</script>
-
 	<h1>Create List</h1>
 	
 	<form action="<c:url value="/list_create_submit.jsp"/>" method="post">
@@ -75,7 +44,7 @@ callOnLoad(init);
 						class="error"
 					</c:if>
 				>
-					<input id="email" name="email" type="text" size="60" value="${model.email}" onchange="checkEMail()" />
+					<input id="email" name="email" type="text" size="60" value="${model.email}" />
 					<div>Example:  announce@somedomain.com</div>
 					<div id="email-error" style="color: red"></div>
 					

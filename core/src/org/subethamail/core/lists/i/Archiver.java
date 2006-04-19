@@ -26,5 +26,10 @@ public interface Archiver
 	 * @return a list of threads in the archive.  Most recent thread
 	 *  is at the top.
 	 */
-	public List<MailSummary> getThreads(Long listId) throws NotFoundException; 
+	public List<MailSummary> getThreads(Long listId) throws NotFoundException;
+	
+	/**
+	 * @return a whole lot of information about the message.
+	 */
+	public MailData getMail(Long mailId) throws NotFoundException;
 }

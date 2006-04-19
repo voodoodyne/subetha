@@ -13,7 +13,10 @@ import javax.ejb.Local;
 import org.subethamail.common.NotFoundException;
 
 /**
- * Tools for querying and modifying list configurations.
+ * Tools for querying and modifying list configurations.  Most methods
+ * require that the caller principal have certain permissions on the list,
+ * either defined by their subscription role or the anonymous role (if
+ * there is no caller principal).
  *
  * @author Jeff Schnitzer
  */
@@ -32,9 +35,27 @@ public interface ListMgr
 	
 	/**
 	 * Retrieves all the subscribers for a MailingList
-	 * Can only call this method if you have the Permission.VIEW_SUBSCRIBERS.
+	 * Requires Permission.VIEW_SUBSCRIBERS.
 	 * 
 	 * @throws NotFoundException if the list id is not valid.
 	 */
 	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException;
+
+	/**
+	 * Sets list name and description.
+	 * Requires Permission.EDIT_SETTINGS
+	 */
+	public void setListName(Long listId, String name, String description) throws NotFoundException;
+	
+	/**
+	 * Gets some basic information about a mailing list. 
+	 * No permissions necessary.
+	 */
+	public ListData getList(Long listId) throws NotFoundException;
+
+	/**
+	 * Gets information about the roles associated with a list.
+	 * Requires Permission.EDIT_ROLES
+	 */
+	public ListRoles getRoles(Long listId) throws NotFoundException;
 }

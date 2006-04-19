@@ -5,11 +5,10 @@
 </c:if>
 
 <t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
-<c:set var="list" value="${sub.list}" />
 
-<trim:list title="List Overview">
+<trim:list title="List Overview" listId="${param.listId}">
 	
-	<p><c:out value="${list.description}" /></p>
+	<p><c:out value="${sub.list.description}" /></p>
 	
 	<c:choose>
 		<c:when test="${sub.subscribed}">
@@ -25,6 +24,8 @@
 							Messages from this list will be delivered to <strong><c:out value="${sub.deliverTo}"/></strong>.
 						</c:otherwise>
 					</c:choose>
+				</p>
+				<p>
 					Change to
 					<select name="deliverTo">
 						<option value="">Disable Delivery</option>
@@ -66,7 +67,7 @@
 						<td <c:if test="${!empty model.errors.deliverTo}">class="error"</c:if> >
 							<input id="deliverTo" name="deliverTo" value="<c:out value="${model.deliverTo}"/>" type="text" size="60" />
 							<c:if test="${!empty model.errors.deliverTo}">
-								<div class="error"><c:out value="${model.errors.deliverTo}"/></div>
+								<p class="error"><c:out value="${model.errors.deliverTo}"/></p>
 							</c:if>
 						</td>
 					</tr>
@@ -75,7 +76,7 @@
 						<td <c:if test="${!empty model.errors.name}">class="error"</c:if> >
 							<input id="name" name="name" value="<c:out value="${model.name}"/>" type="text" size="60" />
 							<c:if test="${!empty model.errors.name}">
-								<div class="error"><c:out value="${model.errors.name}"/></div>
+								<p class="error"><c:out value="${model.errors.name}"/></p>
 							</c:if>
 						</td>
 					</tr>

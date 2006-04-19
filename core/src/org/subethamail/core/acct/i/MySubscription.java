@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.subethamail.common.Permission;
-import org.subethamail.core.lists.i.MailingListData;
+import org.subethamail.core.lists.i.ListData;
 
 
 /**
@@ -22,7 +22,7 @@ import org.subethamail.core.lists.i.MailingListData;
 public class MySubscription implements Serializable
 {
 	/** */
-	MailingListData list;
+	ListData list;
 	String deliverTo;
 	boolean subscribed;
 	boolean owner;
@@ -32,7 +32,7 @@ public class MySubscription implements Serializable
 	/**
 	 */
 	public MySubscription(
-					MailingListData list,
+					ListData list,
 					String deliverTo,
 					boolean subscribed,
 					boolean owner,
@@ -95,7 +95,7 @@ public class MySubscription implements Serializable
 	/**
 	 * @return the mailing list data for this subscription.
 	 */
-	public MailingListData getList()
+	public ListData getList()
 	{
 		return this.list;
 	}

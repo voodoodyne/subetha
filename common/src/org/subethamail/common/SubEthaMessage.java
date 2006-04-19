@@ -5,13 +5,16 @@
 
 package org.subethamail.common;
 
-import static org.subethamail.common.SubEthaMessage.HDR_MESSAGE_ID;
-
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 
@@ -158,6 +161,46 @@ public class SubEthaMessage extends SMTPMessage
 			.append("SubEtha.")
 			.append(suffix);
 
-		super.setHeader(HDR_MESSAGE_ID, "<" + s + ">");
+		super.setHeader(SubEthaMessage.HDR_MESSAGE_ID, "<" + s + ">");
+	}
+	
+	/**
+	 * @return a flattened container of all the textual parts in this
+	 *  message.
+	 */
+	public List<String> getTextParts() throws MessagingException, IOException
+	{
+		List<String> textParts = new ArrayList<String>();
+		
+		getTextParts(this, textParts);
+		
+		return textParts;
+	}
+	
+	/**
+	 * Recursive method for getting all text parts
+	 */
+	protected static void getTextParts(Part part, List<String> textParts) throws MessagingException, IOException
+	{
+		Object content = part.getContent();
+		
+		if (content instanceof String)
+		{
+			textParts.add((String)content);
+		}
+		else if (content instanceof Multipart)
+		{
+			Multipart multipartContent = (Multipart)content;
+			
+			for (int i=0; i<multipartContent.getCount(); i++)
+			{
+				// Recurse
+				getTextParts(multipartContent.getBodyPart(i), textParts);
+			}
+		}
+		else
+		{
+			log.debug("Didn't know what to do with content " + content);
+		}
 	}
 }

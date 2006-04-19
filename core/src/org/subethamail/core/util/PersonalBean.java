@@ -14,8 +14,11 @@ import javax.ejb.SessionContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.common.Permission;
 import org.subethamail.entity.EmailAddress;
+import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.Role;
 import org.subethamail.entity.dao.DAO;
 
 /**
@@ -90,5 +93,19 @@ public class PersonalBean
 			return null;
 		else
 			return addy.getPerson();
+	}
+
+	/**
+	 * Helper method throws an exception if you don't have the permission on the list.
+	 */
+	protected MailingList getListFor(Long listId, Permission check) throws NotFoundException
+	{
+		MailingList list = this.dao.findMailingList(listId);
+		Role role = list.getRoleFor(this.getMe());
+	
+		if (! role.getPermissions().contains(check))
+			throw new IllegalStateException("Not allowed");
+		
+		return list;
 	}
 }

@@ -14,8 +14,8 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import javax.ejb.EJBException;
-import javax.mail.Address;
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -43,7 +43,7 @@ import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Table;
-import org.subethamail.common.MailUtils;
+import org.hibernate.validator.Email;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.valid.Validator;
 
@@ -114,11 +114,13 @@ public class Mail implements Serializable, Comparable
 	@Column(nullable=false, length=Validator.MAX_MAIL_SUBJECT)
 	String subject;
 	
-	/** rfc222-style comma-separated address list */
+	/** rfc222-style, should be taken from the envelope sender */
+	@Email
 	@Column(name="fromField", nullable=true, length=Validator.MAX_MAIL_FROM)
 	String from;
 	
-	/** normalized box@domain.tld */
+	/** normalized to box@domain.tld (no "personal" part) */
+	@Email
 	@Column(nullable=true, length=Validator.MAX_MAIL_FROM)
 	@Index(name="mailFromNormalIndex")
 	String fromNormal;
@@ -171,7 +173,7 @@ public class Mail implements Serializable, Comparable
 	/**
 	 * @param holdFor can be null which means none required
 	 */
-	public Mail(SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
+	public Mail(InternetAddress from, SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mail");
@@ -193,12 +195,8 @@ public class Mail implements Serializable, Comparable
 		this.setContent(raw);
 		this.setSubject(msg.getSubject());
 		this.setMessageId(msg.getMessageID());
-		this.setFrom(MailUtils.getFrom(msg));
-
-		// We also track the first from entry so we can do lookups
-		Address[] froms = msg.getFrom();
-		if (froms != null && froms.length > 0)
-			this.setFromNormal(((InternetAddress)froms[0]).getAddress());
+		this.setFrom(from.toString());
+		this.setFromNormal(from.getAddress());
 	}
 	
 	/** */
@@ -251,6 +249,22 @@ public class Mail implements Serializable, Comparable
 			log.debug("Setting from of " + this + " to " + value);
 		
 		this.from = value;
+	}
+	
+	/** 
+	 * Convenient way of getting the javamail object. 
+	 */
+	public InternetAddress getFromAddress()
+	{
+		try
+		{
+			return new InternetAddress(this.getFrom());
+		}
+		catch (AddressException ex)
+		{
+			// Should be impossible because we were created with a valid InternetAddress
+			throw new RuntimeException(ex);
+		}
 	}
 	
 	/**

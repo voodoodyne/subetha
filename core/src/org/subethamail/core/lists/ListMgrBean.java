@@ -9,9 +9,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 
@@ -20,15 +18,15 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
+import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
+import org.subethamail.core.lists.i.ListRoles;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.MailingList;
-import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
-import org.subethamail.entity.dao.DAO;
 
 /**
  * Implementation of the AccountMgr interface.
@@ -37,39 +35,69 @@ import org.subethamail.entity.dao.DAO;
  */
 @Stateless(name="ListMgr")
 @SecurityDomain("subetha")
-@RolesAllowed("user")
+@PermitAll
 @RunAs("siteAdmin")
 public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(ListMgrBean.class);
 
-	/**
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#lookup(java.net.URL)
 	 */
-	@EJB DAO dao;
-
-	/**
-	 * @see ListMgr#lookup(URL)
-	 */
-	@PermitAll
 	public Long lookup(URL url) throws NotFoundException
 	{
 		return this.dao.findMailingList(url).getId();
 	}
 	
-	/**
-	 * @see ListMgr#getSubscribers(Long)
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getSubscribers(java.lang.Long)
 	 */
-	@PermitAll
 	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException
 	{
-		MailingList list = this.dao.findMailingList(listId);
-		Role role = list.getRoleFor(this.getMe());
-
-		if (! role.getPermissions().contains(Permission.VIEW_SUBSCRIBERS))
-			throw new IllegalStateException("Not allowed");
+		MailingList list = this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
 
 		Set<Subscription> listSubscriptions = list.getSubscriptions();
 		return Transmute.subscribers(listSubscriptions);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#setListName(java.lang.Long, java.lang.String, java.lang.String)
+	 */
+	public void setListName(Long listId, String name, String description) throws NotFoundException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_SETTINGS);
+		
+		list.setName(name);
+		list.setDescription(description);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getList(java.lang.Long)
+	 */
+	public ListData getList(Long listId) throws NotFoundException
+	{
+		MailingList list = this.dao.findMailingList(listId);
+		
+		return Transmute.mailingList(list);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getRoles(java.lang.Long)
+	 */
+	public ListRoles getRoles(Long listId) throws NotFoundException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
+		
+		return new ListRoles(
+				listId,
+				Transmute.role(list.getDefaultRole()),
+				Transmute.role(list.getAnonymousRole()),
+				Transmute.roles(list.getRoles()));
 	}
 }

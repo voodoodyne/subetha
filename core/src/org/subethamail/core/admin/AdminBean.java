@@ -23,7 +23,7 @@ import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
 import org.subethamail.core.admin.i.CreateMailingListException;
-import org.subethamail.core.lists.i.MailingListData;
+import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EmailAddress;
@@ -268,7 +268,7 @@ public class AdminBean implements Admin, AdminRemote
 	/**
 	 * @see Admin#getAllLists()
 	 */
-	public List<MailingListData> getAllLists()
+	public List<ListData> getAllLists()
 	{
 		log.debug("Getting data for all lists");
 		return Transmute.mailingLists(this.dao.findAllLists());

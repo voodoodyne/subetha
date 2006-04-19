@@ -14,7 +14,7 @@ import javax.mail.internet.InternetAddress;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.SubscribeResult;
-import org.subethamail.core.lists.i.MailingListData;
+import org.subethamail.core.lists.i.ListData;
 
 /**
  * Administrative interface for managing the site.
@@ -94,7 +94,7 @@ public interface Admin
 	 * 
 	 * @return some information about all the lists on the site.
 	 */
-	public List<MailingListData> getAllLists();
+	public List<ListData> getAllLists();
 
 	/**
 	 * Adds an email address to an existing account.  If the email address

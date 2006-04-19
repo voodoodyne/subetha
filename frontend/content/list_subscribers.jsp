@@ -2,7 +2,7 @@
 
 <t:action var="data" type="org.subethamail.web.action.GetSubscribers" />
 
-<trim:list title="Subscribers">
+<trim:list title="Subscribers" listId="${param.listId}">
 
 		<c:choose>
 			<c:when test="${empty data}">

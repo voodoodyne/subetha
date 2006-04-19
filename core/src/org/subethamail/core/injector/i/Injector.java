@@ -31,13 +31,14 @@ public interface Injector
 	 * Mail can be anything - a message to a mailing list, a bounce
 	 * message, or something else.  It will be processed accordingly.
 	 * 
-	 * @param toAddress is an rfc822-compliant destination for the mail.
+	 * @param fromAddress is the rfc822-compliant envelope sender.
+	 * @param toAddress is the rfc822-compliant envelope recipient.
 	 * @param mailData is the rfc822-compliant message.
 	 *
 	 * @return true if the message was handled, false if message is not for us
 	 * 
 	 * @throws MessagingException if the message data or toAddress could not be parsed.
 	 */
-	public boolean inject(String toAddress, byte[] mailData) throws MessagingException;
+	public boolean inject(String fromAddress, String toAddress, byte[] mailData) throws MessagingException;
 }
 

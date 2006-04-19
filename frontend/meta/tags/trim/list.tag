@@ -1,10 +1,12 @@
 <%@include file="../inc/taglibs.jspf" %>
 
 <%@ attribute name="title" required="true" %>
+<%@ attribute name="listId" required="true" type="java.lang.Long" %>
 
-<t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
+<t:action var="sub" type="org.subethamail.web.action.GetMySubscription">
+	<t:param name="listId" value="${listId}"/>
+</t:action>
 
-<c:set var="listId" value="${sub.list.id}" />
 <c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
 
 <trim:header title="${title}">
@@ -43,25 +45,25 @@
 				<a href="${listSettingsUrl}">&rsaquo; Settings</a>
 			</c:if>
 			
+			<c:if test="${perms.EDIT_ROLES}">
+				<c:url var="listRolesUrl" value="/roles.jsp">
+					<c:param name="listId" value="${listId}"/>
+				</c:url>
+				<a href="${listRolesUrl}">&rsaquo; Roles</a>
+			</c:if>
+			
 			<c:if test="${perms.EDIT_FILTERS}">
 				<c:url var="listFiltersUrl" value="/list_filters.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
-				<a href="${listFiltersUrl}">&rsaquo; Filters</a>
-			</c:if>
-			
-			<c:if test="${perms.EDIT_ROLES}">
-				<c:url var="listRolesUrl" value="/list_roles.jsp">
-					<c:param name="listId" value="${listId}"/>
-				</c:url>
-				<a href="${listRolesUrl}">&rsaquo; Roles</a>
+				<a href="${listFiltersUrl}">&rsaquo; Mail Filters</a>
 			</c:if>
 			
 			<c:if test="${perms.APPROVE_SUBSCRIPTIONS}">
 				<c:url var="listHeldSubsUrl" value="/list_held_subs.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
-				<a href="${listHeldSubsUrl}">&rsaquo; Held Subscriptions</a>
+				<a href="${listHeldSubsUrl}">&rsaquo; Held Subscrip</a>
 			</c:if>
 				
 			<c:if test="${perms.APPROVE_MESSAGES}">

@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @author Jeff Schnitzer
  */
 @SuppressWarnings("serial")
-public class MailingListData implements Serializable
+public class ListData implements Serializable
 {
 	Long id;
 	String email;
@@ -23,7 +23,7 @@ public class MailingListData implements Serializable
 	
 	/**
 	 */
-	public MailingListData(Long id, 
+	public ListData(Long id, 
 					String email,
 					String name,
 					String url, 

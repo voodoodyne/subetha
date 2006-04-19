@@ -23,6 +23,12 @@
 				</td>
 			</tr>
 			<tr>
+				<th><label for="from">Sender</label></th>
+				<td>
+					<input id="from" name="from" type="text" size="60" />
+				</td>
+			</tr>
+			<tr>
 				<th><label for="recipient">Recipient</label></th>
 				<td>
 					<input id="recipient" name="recipient" type="text" size="60" />

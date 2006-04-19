@@ -15,8 +15,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
-import org.subethamail.smtp.i.SMTPListener;
-import org.subethamail.smtp.i.SMTPListenerRegistry;
+import org.subethamail.smtp.i.MessageListener;
+import org.subethamail.smtp.i.MessageListenerRegistry;
 
 /**
  * @author Jeff Schnitzer
@@ -24,7 +24,7 @@ import org.subethamail.smtp.i.SMTPListenerRegistry;
 @Service(name="SMTPService", objectName="subetha:service=SMTP")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class SMTPService implements SMTPListenerRegistry, SMTPManagement
+public class SMTPService implements MessageListenerRegistry, SMTPManagement
 {
 	/** */
 	private static Log log = LogFactory.getLog(SMTPService.class);
@@ -33,12 +33,12 @@ public class SMTPService implements SMTPListenerRegistry, SMTPManagement
 	 * There is no ConcurrentHashSet, so we make up our own by mapping the
 	 * object to itself.
 	 */
-	Map<SMTPListener, SMTPListener> listeners = new ConcurrentHashMap<SMTPListener, SMTPListener>();
+	Map<MessageListener, MessageListener> listeners = new ConcurrentHashMap<MessageListener, MessageListener>();
 
 	/**
-	 * @see SMTPListenerRegistry#register(SMTPListener)
+	 * @see MessageListenerRegistry#register(MessageListener)
 	 */
-	public void register(SMTPListener listener)
+	public void register(MessageListener listener)
 	{
 		if (log.isInfoEnabled())
 			log.info("Registering " + listener);
@@ -47,9 +47,9 @@ public class SMTPService implements SMTPListenerRegistry, SMTPManagement
 	}
 
 	/**
-	 * @see SMTPListenerRegistry#deregister(SMTPListener)
+	 * @see MessageListenerRegistry#deregister(MessageListener)
 	 */
-	public void deregister(SMTPListener listener)
+	public void deregister(MessageListener listener)
 	{
 		if (log.isInfoEnabled())
 			log.info("De-registering " + listener);

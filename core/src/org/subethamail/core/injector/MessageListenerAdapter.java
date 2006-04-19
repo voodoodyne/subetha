@@ -12,8 +12,8 @@ import javax.mail.MessagingException;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
-import org.subethamail.smtp.i.SMTPListener;
-import org.subethamail.smtp.i.SMTPListenerRegistry;
+import org.subethamail.smtp.i.MessageListener;
+import org.subethamail.smtp.i.MessageListenerRegistry;
 
 /**
  * This acts as an SMTP listener and injects any interesting messages
@@ -23,11 +23,11 @@ import org.subethamail.smtp.i.SMTPListenerRegistry;
  */
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
-public class SMTPListenerAdapter implements SMTPListener, Lifecycle
+public class MessageListenerAdapter implements MessageListener, Lifecycle
 {
 	/**
 	 */
-	@EJB SMTPListenerRegistry registry;
+	@EJB MessageListenerRegistry registry;
 	@EJB Injector injector;
 
 	/**
@@ -47,7 +47,7 @@ public class SMTPListenerAdapter implements SMTPListener, Lifecycle
 	}
 
 	/**
-	 * @see SMTPListener#accept(String, String)
+	 * @see MessageListener#accept(String, String)
 	 */
 	public boolean accept(String from, String recipient)
 	{
@@ -63,7 +63,7 @@ public class SMTPListenerAdapter implements SMTPListener, Lifecycle
 	}
 
 	/**
-	 * @see SMTPListener#deliver(String, String, byte[])
+	 * @see MessageListener#deliver(String, String, byte[])
 	 */
 	public void deliver(String from, String recipient, byte[] data)
 	{

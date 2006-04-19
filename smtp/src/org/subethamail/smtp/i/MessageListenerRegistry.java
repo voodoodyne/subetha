@@ -15,15 +15,15 @@ import javax.ejb.Local;
  * @author Jeff Schnitzer
  */
 @Local
-public interface SMTPListenerRegistry
+public interface MessageListenerRegistry
 {
 	/**
 	 * Register a listener.  The listener will become active immediately.
 	 */
-	public void register(SMTPListener listener);
+	public void register(MessageListener listener);
 	
 	/**
 	 * Deregister a listener.  The listener will no longer receive notifications.
 	 */
-	public void deregister(SMTPListener listener);
+	public void deregister(MessageListener listener);
 }

@@ -16,7 +16,7 @@ package org.subethamail.smtp.i;
  * 
  * @author Jeff Schnitzer
  */
-public interface SMTPListener
+public interface MessageListener
 {
 	/** 
 	 * Called once for every RCPT TO during a SMTP exchange.

@@ -31,5 +31,35 @@
 			</select><input type="submit" value="Set" />
 		</p>
 	</form>
+	
+	<form action="" method="post">
+		<table class="permissions">
+			<tr>
+				<th>Role Name</th>
+				<c:forEach var="perm" items="${backend.allPermissions}">
+					<th style="writing-mode: tb-rl"><c:out value="${perm}"/></th>
+				</c:forEach>
+			</tr>
+			<c:forEach var="role" items="${list.roles}">
+				<tr>
+					<td><c:out value="${role.name}"/></td>
+					<c:forEach var="perm" items="${backend.allPermissions}">
+						<td>
+							<c:choose>
+								<c:when test="${role.owner}">
+									x
+								</c:when>
+								<c:otherwise>
+									<input type="checkbox" name="" 
+										<c:if test="${f:contains(role.permissions, perm)}">checked="checked"</c:if>
+									/>
+								</c:otherwise>
+							</c:choose>
+						</td>
+					</c:forEach>
+				</tr>
+			</c:forEach>
+		</table>
+	</form>
 
 </trim:list>

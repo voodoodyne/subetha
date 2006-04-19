@@ -5,11 +5,14 @@
 
 package org.subethamail.web;
 
+import java.util.Set;
+
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
@@ -90,6 +93,14 @@ public class Backend extends HttpServlet
 		this.getServletContext().removeAttribute(KEY);
 		
 		singleton = null;
+	}
+	
+	/**
+	 * A convenient way of enumerating all the permissions from the presentation tier. 
+	 */
+	public Set<Permission> getAllPermissions()
+	{
+		return Permission.ALL;
 	}
 
 	/** */

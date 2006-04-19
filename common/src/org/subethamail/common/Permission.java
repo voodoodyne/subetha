@@ -6,8 +6,8 @@
 package org.subethamail.common;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * All the possible permissions on a mailing list.
@@ -32,7 +32,7 @@ public enum Permission
 	public static final Set<Permission> ALL;
 	static
 	{
-		Set<Permission> tmp = new HashSet<Permission>();
+		Set<Permission> tmp = new TreeSet<Permission>();
 		
 		for (Permission p: Permission.values())
 			tmp.add(p);

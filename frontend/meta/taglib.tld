@@ -24,8 +24,13 @@
 	<function>
 		<name>wrapPerms</name>
 		<function-class>org.subethamail.web.util.PermissionWrapper</function-class>
-<!--		<function-signature>java.util.Map&lt;java.lang.String, java.lang.Boolean&gt; wrapPerms(java.util.Set&lt;org.subethamail.common.Permission&gt;)</function-signature>-->
 		<function-signature>java.util.Map wrapPerms(java.util.Set)</function-signature>
+	</function>
+	
+	<function>
+		<name>contains</name>
+		<function-class>org.subethamail.web.util.CollectionTool</function-class>
+		<function-signature>boolean contains(java.util.Set, java.lang.Object)</function-signature>
 	</function>
 	
 </taglib>

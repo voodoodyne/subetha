@@ -68,3 +68,15 @@ p.error {
 
 .message {
 }
+
+table.permissions {
+	text-align: center;
+	border: 1px dashed grey;
+}
+table.permissions th {
+	vertical-align: bottom;
+	border: 1px solid grey;
+}
+table.permissions td {
+	border: 1px solid grey;
+}

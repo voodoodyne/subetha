@@ -26,7 +26,6 @@ import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
 import org.subethamail.core.filter.FilterRunner;
-import org.subethamail.core.injector.i.AddressUnknownException;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.plugin.i.HoldException;
@@ -81,17 +80,43 @@ public class InjectorBean implements Injector, InjectorRemote
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
 
-
-	/**
-	 * @see Injector#inject(String)
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.injector.i.Injector#accept(java.lang.String)
+	 */
+	public boolean accept(String toAddress) throws MessagingException
+	{
+		if (log.isDebugEnabled())
+			log.debug("Checking if we want address " + toAddress);
+		
+		InternetAddress addy = new InternetAddress(toAddress);
+		
+		// Maybe it's a VERP bounce?
+		VERPAddress verp = VERPAddress.getVERPBounce(addy);
+		if (verp != null)
+			return true;
+		
+		try
+		{
+			this.dao.findMailingList(addy);
+			return true;
+		}
+		catch (NotFoundException ex)
+		{
+			return false;
+		}
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, byte[])
 	 */
 //	@WebMethod
-	public void inject(String toAddress, byte[] mailData) throws MessagingException, AddressUnknownException
+	public boolean inject(String toAddress, byte[] mailData) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Injecting message sent to " + toAddress);
 		
-		// Figure out which list this is for
 		InternetAddress addy = new InternetAddress(toAddress);
 		
 		// Must check for VERP bounce
@@ -99,7 +124,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		if (verp != null)
 		{
 			this.handleBounce(verp);
-			return;
+			return true;
 		}
 		
 		MailingList toList;
@@ -110,7 +135,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		catch (NotFoundException ex)
 		{
 			log.error("Unknown destination: " + addy);
-			throw new AddressUnknownException(ex);
+			return false;
 		}
 		
 		if (log.isDebugEnabled())
@@ -136,7 +161,8 @@ public class InjectorBean implements Injector, InjectorRemote
 			if (log.isDebugEnabled())
 				log.debug("Plugin ignoring message", ex);
 			
-			return;
+			// Maybe we should return false instead?
+			return true;
 		}
 		catch (HoldException ex)
 		{
@@ -176,6 +202,8 @@ public class InjectorBean implements Injector, InjectorRemote
 			this.threadMail(mail, msg);
 			this.queuer.queueForDelivery(mail.getId());
 		}
+		
+		return true;
 	}
 	
 	/**
@@ -373,4 +401,5 @@ public class InjectorBean implements Injector, InjectorRemote
 		
 		return null;
 	}
+
 }

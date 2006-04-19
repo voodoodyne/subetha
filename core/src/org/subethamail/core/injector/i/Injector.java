@@ -18,6 +18,12 @@ public interface Injector
 {
 	/** */
 	public static final String JNDI_NAME = "subetha/Injector/local";
+	
+	/**
+	 * @return true of the address is intended for us, ie, it is for
+	 *  a known mailing list or it is a VERP bounce.
+	 */
+	public boolean accept(String toAddress) throws MessagingException;
 
 	/**
 	 * Processes of a piece of raw mail in rfc822 format.
@@ -27,11 +33,11 @@ public interface Injector
 	 * 
 	 * @param toAddress is an rfc822-compliant destination for the mail.
 	 * @param mailData is the rfc822-compliant message.
+	 *
+	 * @return true if the message was handled, false if message is not for us
 	 * 
 	 * @throws MessagingException if the message data or toAddress could not be parsed.
-	 * @throws AddressUnknownException if the address is not something we know what to
-	 *  do with; ie it is not a known list address or a VERP bounce.
 	 */
-	public void inject(String toAddress, byte[] mailData) throws MessagingException, AddressUnknownException;
+	public boolean inject(String toAddress, byte[] mailData) throws MessagingException;
 }
 

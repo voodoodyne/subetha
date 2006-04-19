@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jboss.security.SimplePrincipal;
-import org.subethamail.core.injector.i.AddressUnknownException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.security.Security;
 
@@ -67,11 +66,8 @@ public class InjectorServlet extends HttpServlet
 		{
 			Security.associateCredentials(new SimplePrincipal(authName), authPass);
 			
-			Backend.instance().getInjector().inject(recipient, message.getBytes());
-		}
-		catch (AddressUnknownException ex)
-		{
-			response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
+			if (!Backend.instance().getInjector().inject(recipient, message.getBytes()))
+				response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
 		}
 		catch (MessagingException ex)
 		{

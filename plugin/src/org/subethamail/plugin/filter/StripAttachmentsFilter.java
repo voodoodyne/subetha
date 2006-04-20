@@ -49,6 +49,24 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 			)
 	};
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.Filter#getName()
+	 */
+	public String getName()
+	{
+		return "Strip Attachments";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.Filter#getDescription()
+	 */
+	public String getDescription()
+	{
+		return "Eliminates attachments larger than a certain size.";
+	}
+	
 	/**
 	 * @see PluginFactory#getParameters()
 	 */

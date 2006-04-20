@@ -20,7 +20,7 @@ import org.subethamail.core.plugin.i.IgnoreException;
  * 
  * @author Jeff Schnitzer
  */
-public class GenericFilter extends AbstractFilter
+public abstract class GenericFilter extends AbstractFilter
 {
 	/**
 	 * @see Filter#getParameters()

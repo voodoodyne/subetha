@@ -17,6 +17,16 @@ import javax.mail.internet.MimeMessage;
 public interface Filter
 {
 	/**
+	 * @return a nice short name for the filter.
+	 */
+	public String getName();
+	
+	/**
+	 * @return a reasonably lengthy description of the filter.
+	 */
+	public String getDescription();
+	
+	/**
 	 * Gets the list of parameters that this filter supports.
 	 */
 	public FilterParameter[] getParameters();

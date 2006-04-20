@@ -19,12 +19,16 @@ import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.MySubscription;
 import org.subethamail.core.acct.i.SubscriptionData;
 import org.subethamail.core.admin.i.BlueprintData;
+import org.subethamail.core.lists.i.EnabledFilterData;
+import org.subethamail.core.lists.i.FilterData;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Blueprint;
+import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.entity.EmailAddress;
+import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
@@ -254,6 +258,48 @@ public class Transmute
 				raw.isOwner(),
 				raw.getPermissions(),
 				raw.getList().getId());
+	}
+
+	/**
+	 */
+	public static List<FilterData> filters(Collection<Filter> rawColl)
+	{
+		List<FilterData> result = new ArrayList<FilterData>(rawColl.size());
+		
+		for (Filter raw: rawColl)
+			result.add(filter(raw));
+		
+		return result;
+	}
+
+	/**
+	 */
+	public static FilterData filter(Filter raw)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+	
+		return new FilterData(
+				raw.getClass().getName(),
+				raw.getName(),
+				raw.getDescription(),
+				raw.getParameters());
+	}
+
+	/**
+	 */
+	public static EnabledFilterData enabledFilter(Filter filter, EnabledFilter enabled)
+	{
+		if (log.isDebugEnabled())
+			log.debug(enabled.toString());
+	
+		return new EnabledFilterData(
+				filter.getClass().getName(),
+				filter.getName(),
+				filter.getDescription(),
+				filter.getParameters(),
+				enabled.getList().getId(),
+				enabled.getArgumentMap());
 	}
 
 }

@@ -111,4 +111,20 @@ public interface ListMgr
 	 * @return the id of the list which owns the roles.
 	 */
 	public Long deleteRole(Long deleteRoleId, Long convertToRoleId) throws NotFoundException, PermissionException;
+	
+	/**
+	 * Gets some data about the filters which have NOT yet been enabled
+	 * on this list.
+	 * 
+	 * Requires Permission.EDIT_FILTERS
+	 */
+	public List<FilterData> getAvailableFilters(Long listId) throws NotFoundException, PermissionException;
+	
+	/**
+	 * Gets information about the filters that ARE enabled and what
+	 * their arguments are set to.
+	 * 
+	 * Requires Permission.EDIT_FILTERS
+	 */
+	public List<EnabledFilterData> getEnabledFilters(Long listId) throws NotFoundException, PermissionException;
 }

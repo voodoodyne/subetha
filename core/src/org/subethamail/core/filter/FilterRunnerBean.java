@@ -133,4 +133,13 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 			log.error("Unregistered filter '" + enPlugin.getClassName() + 
 				"' is enabled on list '" + list.getEmail() + "'");
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.filter.FilterRunner#getFilters()
+	 */
+	public Map<String, Filter> getFilters()
+	{
+		return this.filters;
+	}
 }

@@ -6,9 +6,13 @@
 package org.subethamail.core.lists;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
@@ -18,6 +22,9 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
+import org.subethamail.core.filter.FilterRunner;
+import org.subethamail.core.lists.i.EnabledFilterData;
+import org.subethamail.core.lists.i.FilterData;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
@@ -25,8 +32,10 @@ import org.subethamail.core.lists.i.ListRoles;
 import org.subethamail.core.lists.i.PermissionException;
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
+import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
+import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
@@ -44,6 +53,9 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(ListMgrBean.class);
+	
+	/** */
+	@EJB FilterRunner filterRunner;
 
 	/*
 	 * (non-Javadoc)
@@ -198,5 +210,44 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		this.dao.remove(deleteRole);
 		
 		return convertRole.getList().getId();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getAvailableFilters(java.lang.Long)
+	 */
+	public List<FilterData> getAvailableFilters(Long listId) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
+		
+		Map<String, Filter> allFilters = this.filterRunner.getFilters();
+		
+		Map<String, Filter> filters = new HashMap<String, Filter>(allFilters);
+		
+		for (EnabledFilter enabled: list.getEnabledFilters())
+			filters.remove(enabled.getClassName());
+		
+		return Transmute.filters(filters.values());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getEnabledFilters(java.lang.Long)
+	 */
+	public List<EnabledFilterData> getEnabledFilters(Long listId) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
+		
+		Map<String, Filter> allFilters = this.filterRunner.getFilters();
+		
+		List<EnabledFilterData> result = new ArrayList<EnabledFilterData>(list.getEnabledFilters().size());
+		
+		for (EnabledFilter enabled: list.getEnabledFilters())
+		{
+			Filter filter = allFilters.get(enabled.getClassName());
+			result.add(Transmute.enabledFilter(filter, enabled));
+		}
+		
+		return result;
 	}
 }

@@ -6,6 +6,7 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.CascadeType;
@@ -84,6 +85,19 @@ public class EnabledFilter implements Serializable, Comparable
 	
 	/** */
 	public Map<String, FilterArgument> getArguments() { return this.arguments; }
+	
+	/**
+	 * Builds a nice map of the key/values 
+	 */
+	public Map<String, Object> getArgumentMap()
+	{
+		Map<String, Object> result = new HashMap<String, Object>(this.arguments.size() * 2);
+		
+		for (FilterArgument arg: this.arguments.values())
+			result.put(arg.getName(), arg.getValue());
+		
+		return result;
+	}
 	
 	/** */
 	public String toString()

@@ -5,6 +5,8 @@
 
 package org.subethamail.core.filter;
 
+import java.util.Map;
+
 import javax.ejb.Local;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -45,5 +47,10 @@ public interface FilterRunner
 	 * @see Filter#onSendAfterAttaching(MimeMessage)
 	 */
 	public void onSendAfterAttaching(MimeMessage msg, MailingList list) throws IgnoreException;
+	
+	/**
+	 * @return all the available filters.
+	 */
+	public Map<String, Filter> getFilters();
 }
 

@@ -53,7 +53,7 @@
 			</c:if>
 			
 			<c:if test="${perms.EDIT_FILTERS}">
-				<c:url var="listFiltersUrl" value="/list_filters.jsp">
+				<c:url var="listFiltersUrl" value="/filters.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
 				<a href="${listFiltersUrl}">&rsaquo; Mail Filters</a>

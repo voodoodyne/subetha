@@ -144,4 +144,18 @@ public class PersonalBean
 		
 		return mail;
 	}
+
+	/**
+	 * Requires that you have Permission.EDIT_ROLES
+	 */
+	protected Role getRoleForEdit(Long roleId) throws NotFoundException, PermissionException
+	{
+		Role role = this.dao.findRole(roleId);
+		Role myRole = role.getList().getRoleFor(this.getMe());
+		
+		if (! myRole.getPermissions().contains(Permission.EDIT_ROLES))
+			throw new PermissionException(Permission.EDIT_ROLES);
+		
+		return role;
+	}
 }

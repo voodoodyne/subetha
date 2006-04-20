@@ -56,6 +56,12 @@ public interface ListMgr
 	public ListData getList(Long listId) throws NotFoundException;
 
 	/**
+	 * Gets the basic info about a role. 
+	 * Requires Permission.EDIT_ROLES
+	 */
+	public RoleData getRole(Long roleId) throws NotFoundException, PermissionException;
+
+	/**
 	 * Gets information about the roles associated with a list.
 	 * Requires Permission.EDIT_ROLES
 	 */
@@ -63,9 +69,21 @@ public interface ListMgr
 
 	/**
 	 * Adds a new role to the list.
+	 * 
+	 * @return the id of the new role
+	 * 
 	 * Requires Permission.EDIT_ROLES
 	 */
-	public void addRole(Long listId, String name, Set<Permission> perms) throws NotFoundException, PermissionException;
+	public Long addRole(Long listId, String name, Set<Permission> perms) throws NotFoundException, PermissionException;
+
+	/**
+	 * Changes the properties of an existing role.
+	 * 
+	 * @return the id of the list that owns the role, very useful to have.
+	 * 
+	 * Requires Permission.EDIT_ROLES
+	 */
+	public Long setRole(Long roleId, String name, Set<Permission> perms) throws NotFoundException, PermissionException;
 
 	/**
 	 * Sets the default role for a list.

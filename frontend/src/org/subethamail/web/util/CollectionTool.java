@@ -26,6 +26,9 @@ public class CollectionTool
 	 */
 	public static boolean contains(Set set, Object obj)
 	{
-		return set.contains(obj);
+		if (set == null)
+			return false;
+		else
+			return set.contains(obj);
 	}
 }

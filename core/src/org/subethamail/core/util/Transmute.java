@@ -252,7 +252,8 @@ public class Transmute
 				raw.getId(),
 				raw.getName(),
 				raw.isOwner(),
-				raw.getPermissions());
+				raw.getPermissions(),
+				raw.getList().getId());
 	}
 
 }

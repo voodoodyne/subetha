@@ -22,15 +22,17 @@ public class RoleData implements Serializable
 	String name;
 	boolean owner;
 	Set<Permission> permissions;
+	Long listId;
 	
 	/**
 	 */
-	public RoleData(Long id, String name, boolean owner, Set<Permission> permissions)
+	public RoleData(Long id, String name, boolean owner, Set<Permission> permissions, Long listId)
 	{
 		this.id = id;
 		this.name = name;
 		this.owner = owner;
 		this.permissions = permissions;
+		this.listId = listId;
 	}
 
 	/** */
@@ -57,6 +59,12 @@ public class RoleData implements Serializable
 	public Set<Permission> getPermissions()
 	{
 		return this.permissions;
+	}
+
+	/** */
+	public Long getListId()
+	{
+		return this.listId;
 	}
 	
 }

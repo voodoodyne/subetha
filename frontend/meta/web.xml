@@ -53,4 +53,13 @@
 		<url-pattern>/inject</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>PermissionImageServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.PermissionImageServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>PermissionImageServlet</servlet-name>
+		<url-pattern>/perm_img</url-pattern>
+	</servlet-mapping>
 </web-app>

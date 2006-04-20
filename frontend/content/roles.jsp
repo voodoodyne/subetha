@@ -32,58 +32,71 @@
 		</p>
 	</form>
 	
-	<h3>Change Permissions</h3>
-	
-	<form action="" method="post">
-		<table class="permissions">
-			<tr>
-				<th>Role&nbsp;Name</th>
-				<c:forEach var="perm" items="${backend.allPermissions}">
-					<th style="writing-mode: tb-rl"><c:out value="${perm}"/></th>
-				</c:forEach>
-			</tr>
-			<c:forEach var="role" items="${list.roles}">
-				<tr>
-					<td><c:out value="${role.name}"/></td>
-					<c:forEach var="perm" items="${backend.allPermissions}">
-						<td>
-							<c:choose>
-								<c:when test="${role.owner}">
-									x
-								</c:when>
-								<c:otherwise>
-									<input type="checkbox" name="" 
-										<c:if test="${f:contains(role.permissions, perm)}">checked="checked"</c:if>
-									/>
-								</c:otherwise>
-							</c:choose>
-						</td>
-					</c:forEach>
-				</tr>
+	<table class="permissions">
+		<tr>
+			<th>Role</th>
+			<c:forEach var="perm" items="${backend.allPermissions}">
+				<th style="writing-mode: tb-rl">
+					<img src="<c:url value="/perm_img?perm=${perm}"/>" alt="<c:out value="${perm.pretty}"/>" />
+				</th>
 			</c:forEach>
-		</table>
-		<input type="submit" value="Update Permissions" />
-	</form>
+		</tr>
+		<c:forEach var="role" items="${list.roles}">
+			<tr>
+				<th class="role">
+					<c:choose>
+						<c:when test="${role.owner}">
+							<em><c:out value="${role.name}"/></em>
+						</c:when>
+						<c:otherwise>
+							<c:out value="${role.name}"/>
+						</c:otherwise>
+					</c:choose>
+				</th>
+				<c:forEach var="perm" items="${backend.allPermissions}">
+					<td>
+						<c:if test="${f:contains(role.permissions, perm)}">
+							<img src="<c:url value="/img/check.gif"/>" alt="Yes" />
+						</c:if>
+					</td>
+				</c:forEach>
+				<th class="role">
+					<c:if test="${!role.owner}">
+						<form action="<c:url value="/role_edit.jsp"/>" method="get">
+							<input type="hidden" name="roleId" value="${role.id}" />
+							<input type="submit" value="Edit" />
+						</form>
+					</c:if>
+				</th>
+			</tr>
+		</c:forEach>
+	</table>
 	
 	<h3>Add Role</h3>
 
-	<form action="<c:url value="/role_add.jsp"/>" method="post">
+	<form action="<c:url value="/role_save.jsp"/>" method="post">
 		<input type="hidden" name="listId" value="${param.listId}" />
 		<table class="permissions">
 			<tr>
-				<th>Role&nbsp;Name</th>
+				<th>Name</th>
 				<c:forEach var="perm" items="${backend.allPermissions}">
-					<th style="writing-mode: tb-rl"><c:out value="${perm}"/></th>
+					<th style="writing-mode: tb-rl">
+						<img src="<c:url value="/perm_img?perm=${perm}"/>" alt="<c:out value="${perm.pretty}"/>" />
+					</th>
 				</c:forEach>
 			</tr>
 			<tr>
-				<td>
+				<th class="role <c:if test="${!empty model.errors.name}">error</c:if>">
 					<input name="name" value="${model.name}" type="text" />
-				</td>
+					
+					<c:if test="${!empty model.errors.name}">
+						<p class="error"><c:out value="${model.errors.name}"/></p>
+					</c:if>
+				</th>
 				<c:forEach var="perm" items="${backend.allPermissions}">
 					<td>
-						<input type="checkbox" name="" 
-							<c:if test="">checked="checked"</c:if>
+						<input type="checkbox" name="permissions" value="${perm}"
+							<c:if test="${f:contains(model.realPermissions, perm)}">checked="checked"</c:if>
 						/>
 					</td>
 				</c:forEach>

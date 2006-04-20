@@ -45,7 +45,7 @@ form th {
 	vertical-align: top;
 }
 
-td.error {
+td.error, th.error {
 	background-color: #fee;
 	border: 1px solid red;
 }
@@ -75,11 +75,16 @@ p.error {
 
 table.permissions {
 	text-align: center;
-	border: 1px dashed grey;
+	margin-bottom: 5px;
 }
 table.permissions th {
 	vertical-align: bottom;
-	border: 1px solid grey;
+	text-align: left;
+}
+table.permissions th.role {
+	font-weight: normal;
+	padding-right: 5px;
+	text-align: right;
 }
 table.permissions td {
 	border: 1px solid grey;

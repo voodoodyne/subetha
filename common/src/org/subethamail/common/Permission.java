@@ -39,4 +39,47 @@ public enum Permission
 		
 		ALL = Collections.unmodifiableSet(tmp);
 	}
+	
+	/** */
+	private String pretty;
+	
+	/** 
+	 * Makes the pretty form which is mixed case and converts
+	 * underscores to spaces.
+	 */
+	private Permission()
+	{
+		String original = this.toString();
+		StringBuffer buf = new StringBuffer(original.length());
+		
+		boolean lowerNext = false;
+		
+		for (int i=0; i<original.length(); i++)
+		{
+			char ch = original.charAt(i);
+
+			if (ch == '_')
+			{
+				lowerNext = false;
+				buf.append(' ');
+			}
+			else if (lowerNext)
+			{
+				buf.append(Character.toLowerCase(ch));
+			}
+			else
+			{
+				buf.append(ch);
+				lowerNext = true;
+			}
+		}
+		
+		this.pretty = buf.toString();
+	}
+	
+	/** */
+	public String getPretty()
+	{
+		return this.pretty;
+	}
 }

@@ -23,6 +23,7 @@ import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
 import org.subethamail.core.lists.i.ListRoles;
 import org.subethamail.core.lists.i.PermissionException;
+import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
@@ -107,7 +108,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#addRole(java.lang.Long, java.lang.String, java.util.Set)
 	 */
-	public void addRole(Long listId, String name, Set<Permission> perms) throws NotFoundException, PermissionException
+	public Long addRole(Long listId, String name, Set<Permission> perms) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
 		
@@ -115,6 +116,26 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		this.dao.persist(role);
 		
 		list.getRoles().add(role);
+		
+		return role.getId();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#setRole(java.lang.Long, java.lang.String, java.util.Set)
+	 */
+	public Long setRole(Long roleId, String name, Set<Permission> perms) throws NotFoundException, PermissionException
+	{
+		Role role = this.getRoleForEdit(roleId);
+		
+		if (role.isOwner())
+			throw new IllegalArgumentException("You cannot change the Owner role");
+		
+		role.setName(name);
+		role.getPermissions().clear();
+		role.getPermissions().addAll(perms);
+		
+		return role.getList().getId();
 	}
 
 	/*
@@ -139,5 +160,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		Role role = this.dao.findRole(roleId);
 		
 		list.setAnonymousRole(role);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getRole(java.lang.Long)
+	 */
+	public RoleData getRole(Long roleId) throws NotFoundException, PermissionException
+	{
+		Role role = this.getRoleForEdit(roleId);
+		return Transmute.role(role);
 	}
 }

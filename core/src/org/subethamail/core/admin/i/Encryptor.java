@@ -10,8 +10,6 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import org.subethamail.core.acct.i.BadTokenException;
-
 /**
  * Encrypts and decrypts strings using an internal key.  The key
  * will be randomly generated but otherwise remains constant.

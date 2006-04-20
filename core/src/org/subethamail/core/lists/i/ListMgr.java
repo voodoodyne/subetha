@@ -100,4 +100,15 @@ public interface ListMgr
 	 * @param roleId must be a role belonging to the list.
 	 */
 	public void setAnonymousRole(Long listId, Long roleId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Deletes a role, converting all participants in that role to the
+	 * alternate.  The roles must both belong to the same list.
+	 * 
+	 * You cannot delete the Owner role.
+	 * Requires Permission.EDIT_ROLES
+	 * 
+	 * @return the id of the list which owns the roles.
+	 */
+	public Long deleteRole(Long deleteRoleId, Long convertToRoleId) throws NotFoundException, PermissionException;
 }

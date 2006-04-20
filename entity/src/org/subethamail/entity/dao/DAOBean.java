@@ -26,6 +26,7 @@ import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
+import org.subethamail.entity.Subscription;
 
 /**
  * @see DAO
@@ -304,6 +305,22 @@ public class DAOBean implements DAO
 			throw new NotFoundException("No role " + roleId);
 		else
 			return r;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findSubscriptionsByRole(java.lang.Long)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Subscription> findSubscriptionsByRole(Long roleId)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding Subscriptions with role " + roleId);
+		
+		Query q = this.em.createNamedQuery("SubscriptionsByRoleId");
+		q.setParameter("roleId", roleId);
+		
+		return q.getResultList();
 	}
 
 }

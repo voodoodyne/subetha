@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
@@ -27,6 +29,15 @@ import org.subethamail.common.valid.Validator;
  * 
  * @author Jeff Schnitzer
  */
+@NamedQueries({
+	@NamedQuery(
+		name="SubscriptionsByRoleId", 
+		query="from Subscription s where s.role.id = :roleId",
+		hints={
+			// We want to writable and caching is pointless
+		}
+	)
+})
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")

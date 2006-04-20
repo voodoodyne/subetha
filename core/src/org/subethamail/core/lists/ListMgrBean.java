@@ -171,4 +171,32 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		Role role = this.getRoleForEdit(roleId);
 		return Transmute.role(role);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#deleteRole(java.lang.Long, java.lang.Long)
+	 */
+	public Long deleteRole(Long deleteRoleId, Long convertToRoleId) throws NotFoundException, PermissionException
+	{
+		Role deleteRole = this.getRoleForEdit(deleteRoleId);
+		Role convertRole = this.getRoleForEdit(convertToRoleId);
+		
+		if (deleteRole.getList() != convertRole.getList())
+			throw new IllegalArgumentException("Roles are not from the same list");
+
+		if (deleteRole.getList().getDefaultRole() == deleteRole)
+			deleteRole.getList().setDefaultRole(convertRole);
+		
+		if (deleteRole.getList().getAnonymousRole() == deleteRole)
+			deleteRole.getList().setAnonymousRole(convertRole);
+
+		List<Subscription> subs = this.dao.findSubscriptionsByRole(deleteRole.getId());
+		for (Subscription sub: subs)
+			sub.setRole(convertRole);
+		
+		deleteRole.getList().getRoles().remove(deleteRole);
+		this.dao.remove(deleteRole);
+		
+		return convertRole.getList().getId();
+	}
 }

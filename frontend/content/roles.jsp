@@ -49,7 +49,12 @@
 							<em><c:out value="${role.name}"/></em>
 						</c:when>
 						<c:otherwise>
-							<c:out value="${role.name}"/>
+							<c:url var="roleEditUrl" value="/role_edit.jsp">
+								<c:param name="roleId" value="${role.id}" />
+							</c:url>
+							<a href="${roleEditUrl}">
+								<c:out value="${role.name}"/>
+							</a>
 						</c:otherwise>
 					</c:choose>
 				</th>
@@ -60,14 +65,6 @@
 						</c:if>
 					</td>
 				</c:forEach>
-				<th class="role">
-					<c:if test="${!role.owner}">
-						<form action="<c:url value="/role_edit.jsp"/>" method="get">
-							<input type="hidden" name="roleId" value="${role.id}" />
-							<input type="submit" value="Edit" />
-						</form>
-					</c:if>
-				</th>
 			</tr>
 		</c:forEach>
 	</table>

@@ -50,12 +50,12 @@
 	<h3>Delete Role</h3>
 
 	<form action="<c:url value="/role_delete.jsp"/>" method="post">
-		<input type="hidden" name="roleId" value="${model.roleId}" />
+		<input type="hidden" name="deleteRoleId" value="${model.roleId}" />
 		<p>
 			<input type="submit" value="Delete" />
 			this role, converting any participating subscribers to
 			
-			<select name="convertRoleId">
+			<select name="convertToRoleId">
 				<c:forEach var="convertRole" items="${list.roles}">
 					<c:if test="${convertRole.id != model.roleId}">
 						<option value="<c:out value="${convertRole.id}"/>">

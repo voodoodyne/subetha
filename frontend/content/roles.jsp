@@ -4,11 +4,11 @@
 
 <trim:list title="Roles" listId="${param.listId}">
 
-	<form action="<c:url value="/roles_set_default.jsp"/>" method="post">
+	<form action="<c:url value="/role_set_special.jsp"/>" method="post">
 		<input type="hidden" name="listId" value="${param.listId}" />
 		<p>
 			The default role for new subscribers is
-			<select name="defaultRole">
+			<select name="defaultRoleId">
 				<c:forEach var="role" items="${list.roles}">
 					<option value="<c:out value="${role.id}"/>"
 						<c:if test="${role.id == list.defaultRole.id}">selected="selected"</c:if>
@@ -18,11 +18,11 @@
 		</p>
 	</form>
 
-	<form action="<c:url value="/roles_set_anon.jsp"/>" method="post">
+	<form action="<c:url value="/role_set_special.jsp"/>" method="post">
 		<input type="hidden" name="listId" value="${param.listId}" />
 		<p>
 			The role for anonymous (not logged in) users is
-			<select name="anonymousRole">
+			<select name="anonymousRoleId">
 				<c:forEach var="role" items="${list.roles}">
 					<option value="<c:out value="${role.id}"/>"
 						<c:if test="${role.id == list.anonymousRole.id}">selected="selected"</c:if>
@@ -32,10 +32,12 @@
 		</p>
 	</form>
 	
+	<h3>Change Permissions</h3>
+	
 	<form action="" method="post">
 		<table class="permissions">
 			<tr>
-				<th>Role Name</th>
+				<th>Role&nbsp;Name</th>
 				<c:forEach var="perm" items="${backend.allPermissions}">
 					<th style="writing-mode: tb-rl"><c:out value="${perm}"/></th>
 				</c:forEach>
@@ -60,6 +62,34 @@
 				</tr>
 			</c:forEach>
 		</table>
+		<input type="submit" value="Update Permissions" />
+	</form>
+	
+	<h3>Add Role</h3>
+
+	<form action="<c:url value="/role_add.jsp"/>" method="post">
+		<input type="hidden" name="listId" value="${param.listId}" />
+		<table class="permissions">
+			<tr>
+				<th>Role&nbsp;Name</th>
+				<c:forEach var="perm" items="${backend.allPermissions}">
+					<th style="writing-mode: tb-rl"><c:out value="${perm}"/></th>
+				</c:forEach>
+			</tr>
+			<tr>
+				<td>
+					<input name="name" value="${model.name}" type="text" />
+				</td>
+				<c:forEach var="perm" items="${backend.allPermissions}">
+					<td>
+						<input type="checkbox" name="" 
+							<c:if test="">checked="checked"</c:if>
+						/>
+					</td>
+				</c:forEach>
+			</tr>
+		</table>
+		<input type="submit" value="Add Role" />
 	</form>
 
 </trim:list>

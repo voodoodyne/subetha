@@ -19,6 +19,24 @@ public class TextTool
 	/** */
 	private static Log log = LogFactory.getLog(TextTool.class);
 	
+	/** What we want to delete from exception messages */
+	private static final String EXCEPTION_MSG = "Exception: ";
+	
+	/**
+	 * Provides a nicely formatted version of the exception message,
+	 * without all the unfriendly java crap.
+	 */
+	public static String exceptionMessage(Throwable t)
+	{
+		String msg = t.getMessage();
+		
+		int badIndex = msg.lastIndexOf(EXCEPTION_MSG);
+		if (badIndex < 0)
+			return msg;
+		else
+			return msg.substring(badIndex + EXCEPTION_MSG.length()).trim();
+	}
+	
 	/**
 	 * Escapes all xml characters, but also converts newlines to br tags.
 	 */

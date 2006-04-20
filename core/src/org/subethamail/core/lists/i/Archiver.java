@@ -23,13 +23,16 @@ public interface Archiver
 	public static final String JNDI_NAME = "subetha/Archiver/local";
 
 	/**
-	 * @return a list of threads in the archive.  Most recent thread
-	 *  is at the top.
+	 * Requires Permission.READ_ARCHIVES
+	 * 
+	 * @return a list of threads in the archive.  Most recent thread is at the top.
 	 */
-	public List<MailSummary> getThreads(Long listId) throws NotFoundException;
+	public List<MailSummary> getThreads(Long listId) throws NotFoundException, PermissionException;
 	
 	/**
+	 * Requires Permission.READ_ARCHIVES
+	 * 
 	 * @return a whole lot of information about the message.
 	 */
-	public MailData getMail(Long mailId) throws NotFoundException;
+	public MailData getMail(Long mailId) throws NotFoundException, PermissionException;
 }

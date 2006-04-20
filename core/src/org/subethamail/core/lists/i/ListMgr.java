@@ -7,10 +7,12 @@ package org.subethamail.core.lists.i;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Local;
 
 import org.subethamail.common.NotFoundException;
+import org.subethamail.common.Permission;
 
 /**
  * Tools for querying and modifying list configurations.  Most methods
@@ -39,13 +41,13 @@ public interface ListMgr
 	 * 
 	 * @throws NotFoundException if the list id is not valid.
 	 */
-	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException;
+	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException, PermissionException;
 
 	/**
 	 * Sets list name and description.
 	 * Requires Permission.EDIT_SETTINGS
 	 */
-	public void setListName(Long listId, String name, String description) throws NotFoundException;
+	public void setListName(Long listId, String name, String description) throws NotFoundException, PermissionException;
 	
 	/**
 	 * Gets some basic information about a mailing list. 
@@ -57,5 +59,27 @@ public interface ListMgr
 	 * Gets information about the roles associated with a list.
 	 * Requires Permission.EDIT_ROLES
 	 */
-	public ListRoles getRoles(Long listId) throws NotFoundException;
+	public ListRoles getRoles(Long listId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Adds a new role to the list.
+	 * Requires Permission.EDIT_ROLES
+	 */
+	public void addRole(Long listId, String name, Set<Permission> perms) throws NotFoundException, PermissionException;
+
+	/**
+	 * Sets the default role for a list.
+	 * Requires Permission.EDIT_ROLES
+	 * 
+	 * @param roleId must be a role belonging to the list.
+	 */
+	public void setDefaultRole(Long listId, Long roleId) throws NotFoundException, PermissionException;
+	
+	/**
+	 * Sets the anonymous role for a list.
+	 * Requires Permission.EDIT_ROLES
+	 * 
+	 * @param roleId must be a role belonging to the list.
+	 */
+	public void setAnonymousRole(Long listId, Long roleId) throws NotFoundException, PermissionException;
 }

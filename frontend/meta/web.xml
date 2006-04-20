@@ -11,6 +11,11 @@
 	
 	<display-name>SubEtha Frontend</display-name>
 	
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	
 	<filter>
 		<filter-name>SecurityAssociationFilter</filter-name>
 		<filter-class>
@@ -47,4 +52,5 @@
 		<servlet-name>InjectorServlet</servlet-name>
 		<url-pattern>/inject</url-pattern>
 	</servlet-mapping>
+
 </web-app>

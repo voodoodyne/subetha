@@ -3,6 +3,10 @@
  ***************************************************************/
 
 /* start bluehaze.css overrides */
+table {
+	border-collapse: collapse;
+}
+
 body {
 	font-size: 0.8em;
 }

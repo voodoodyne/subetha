@@ -132,6 +132,8 @@ public class Transmute
 		// If we're the site admin, override with all.
 		if (rawPerson != null && rawPerson.isSiteAdmin())
 			perms = Permission.ALL;
+
+		perms.size();	// initialize if it's a proxy
 		
 		Subscription rawSub = (rawPerson == null) ? null : rawPerson.getSubscription(rawList.getId());
 		EmailAddress deliverTo = (rawSub == null) ? null : rawSub.getDeliverTo();
@@ -243,6 +245,9 @@ public class Transmute
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
 	
+		// Might be a proxy, must initialize 
+		raw.getPermissions().size();
+		
 		return new RoleData(
 				raw.getId(),
 				raw.getName(),

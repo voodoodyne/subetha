@@ -25,6 +25,7 @@ import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.Role;
 
 /**
  * @see DAO
@@ -286,6 +287,23 @@ public class DAOBean implements DAO
 		q.setMaxResults(count);
 		
 		return q.getResultList();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findRole(java.lang.Long)
+	 */
+	public Role findRole(Long roleId) throws NotFoundException
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding Role with id " + roleId);
+		
+		Role r = this.em.find(Role.class, roleId);
+		
+		if (r == null)
+			throw new NotFoundException("No role " + roleId);
+		else
+			return r;
 	}
 
 }

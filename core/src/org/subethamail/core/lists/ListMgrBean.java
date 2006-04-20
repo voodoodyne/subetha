@@ -22,10 +22,12 @@ import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
 import org.subethamail.core.lists.i.ListRoles;
+import org.subethamail.core.lists.i.PermissionException;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.MailingList;
+import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
 
 /**
@@ -55,7 +57,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getSubscribers(java.lang.Long)
 	 */
-	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException
+	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
 
@@ -67,7 +69,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setListName(java.lang.Long, java.lang.String, java.lang.String)
 	 */
-	public void setListName(Long listId, String name, String description) throws NotFoundException
+	public void setListName(Long listId, String name, String description) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_SETTINGS);
 		
@@ -90,7 +92,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getRoles(java.lang.Long)
 	 */
-	public ListRoles getRoles(Long listId) throws NotFoundException
+	public ListRoles getRoles(Long listId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
 		
@@ -99,5 +101,43 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 				Transmute.role(list.getDefaultRole()),
 				Transmute.role(list.getAnonymousRole()),
 				Transmute.roles(list.getRoles()));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#addRole(java.lang.Long, java.lang.String, java.util.Set)
+	 */
+	public void addRole(Long listId, String name, Set<Permission> perms) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
+		
+		Role role = new Role(list, name, perms);
+		this.dao.persist(role);
+		
+		list.getRoles().add(role);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#setDefaultRole(java.lang.Long, java.lang.Long)
+	 */
+	public void setDefaultRole(Long listId, Long roleId) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
+		Role role = this.dao.findRole(roleId);
+		
+		list.setDefaultRole(role);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#setAnonymousRole(java.lang.Long, java.lang.Long)
+	 */
+	public void setAnonymousRole(Long listId, Long roleId) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
+		Role role = this.dao.findRole(roleId);
+		
+		list.setAnonymousRole(role);
 	}
 }

@@ -80,7 +80,13 @@ abstract public class SubEthaAction extends AbstractAction
 	protected String getContextlessRequestURI()
 	{
 		String contextPath = this.getCtx().getRequest().getContextPath();
-		String requestURI = this.getCtx().getRequest().getRequestURI();
+		
+		// Irritatingly, if we have an error the getRequestURI() method
+		// returns the URI of the error page.  The original page is saved
+		// as an attribute in the request.
+		String requestURI = (String)this.getCtx().getRequest().getAttribute("javax.servlet.error.request_uri");
+		if (requestURI == null)
+			requestURI = this.getCtx().getRequest().getRequestURI();
 		
 		if (log.isDebugEnabled())
 			log.debug("Getting contextless request URI.  contextPath is " + contextPath + ", requestURI is " + requestURI);

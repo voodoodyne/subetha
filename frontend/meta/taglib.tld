@@ -33,4 +33,9 @@
 		<function-signature>boolean contains(java.util.Set, java.lang.Object)</function-signature>
 	</function>
 	
+	<function>
+		<name>exceptionMessage</name>
+		<function-class>org.subethamail.web.util.TextTool</function-class>
+		<function-signature>java.lang.String exceptionMessage(java.lang.Throwable)</function-signature>
+	</function>
 </taglib>

@@ -15,7 +15,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
+import org.subethamail.core.lists.i.PermissionException;
 import org.subethamail.entity.EmailAddress;
+import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
@@ -98,14 +100,48 @@ public class PersonalBean
 	/**
 	 * Helper method throws an exception if you don't have the permission on the list.
 	 */
-	protected MailingList getListFor(Long listId, Permission check) throws NotFoundException
+	protected MailingList getListFor(Long listId, Permission check) throws NotFoundException, PermissionException
+	{
+		return this.getListFor(listId, check, this.getMe());
+	}
+	
+	/**
+	 * Useful if you already have retreived the Me object.
+	 * 
+	 * @see PersonalBean#getListFor(Long, Permission)
+	 */
+	protected MailingList getListFor(Long listId, Permission check, Person me) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.dao.findMailingList(listId);
-		Role role = list.getRoleFor(this.getMe());
+		Role role = list.getRoleFor(me);
 	
 		if (! role.getPermissions().contains(check))
-			throw new IllegalStateException("Not allowed");
+			throw new PermissionException(check);
 		
 		return list;
+	}
+	
+	/**
+	 * Helper method throws an exception if you don't have the permission on the list.
+	 */
+	protected Mail getMailFor(Long mailId, Permission check) throws NotFoundException, PermissionException
+	{
+		return this.getMailFor(mailId, check, this.getMe());
+	}
+	
+	/**
+	 * Useful if you already have retreived the Me object.
+	 * 
+	 * @see PersonalBean#getMailFor(Long, Permission)
+	 */
+	protected Mail getMailFor(Long mailId, Permission check, Person me) throws NotFoundException, PermissionException
+	{
+		Mail mail = this.dao.findMail(mailId);
+		Role role = mail.getList().getRoleFor(me);
+	
+		if (! role.getPermissions().contains(check))
+			throw new PermissionException(check);
+		
+		return mail;
 	}
 }

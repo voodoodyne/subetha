@@ -28,10 +28,12 @@ import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ArchiverRemote;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.core.lists.i.MailSummary;
+import org.subethamail.core.lists.i.PermissionException;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
+import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
 
 /**
@@ -55,14 +57,12 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getThreads(java.lang.Long)
 	 */
-	public List<MailSummary> getThreads(Long listId) throws NotFoundException
+	public List<MailSummary> getThreads(Long listId) throws NotFoundException, PermissionException
 	{
-		// Are we allowed to view archives?
-		MailingList list = this.dao.findMailingList(listId);
-		Role role = list.getRoleFor(this.getMe());
+		Person me = this.getMe();
 		
-		if (!role.getPermissions().contains(Permission.READ_ARCHIVES))
-			throw new IllegalStateException("Not allowed to read archives");
+		// Are we allowed to view archives?
+		MailingList list = this.getListFor(listId, Permission.READ_ARCHIVES, me);
 		
 		List<Mail> mails = this.dao.findMailByList(listId, 0, 100000);
 		
@@ -78,6 +78,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		}
 		
 		// Figure out if we're allowed to see emails
+		Role role = list.getRoleFor(me);
 		boolean showEmail = role.getPermissions().contains(Permission.SEE_ADDRESSES);
 		
 		// Now generate the entire summary
@@ -88,16 +89,15 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getMail(java.lang.Long)
 	 */
-	public MailData getMail(Long mailId) throws NotFoundException
+	public MailData getMail(Long mailId) throws NotFoundException, PermissionException
 	{
-		// Are we allowed to view archives?
-		Mail mail = this.dao.findMail(mailId);
-		Role role = mail.getList().getRoleFor(this.getMe());
+		Person me = this.getMe();
 		
-		if (!role.getPermissions().contains(Permission.READ_ARCHIVES))
-			throw new IllegalStateException("Not allowed to read archives");
+		// Are we allowed to view archives?
+		Mail mail = this.getMailFor(mailId, Permission.READ_ARCHIVES, me);
 		
 		// Figure out if we're allowed to see emails
+		Role role = mail.getList().getRoleFor(me);
 		boolean showEmail = role.getPermissions().contains(Permission.SEE_ADDRESSES);
 		
 		MailData data = this.makeMailData(mail, showEmail);

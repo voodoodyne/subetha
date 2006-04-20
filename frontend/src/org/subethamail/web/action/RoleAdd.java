@@ -5,10 +5,13 @@
 
 package org.subethamail.web.action;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.Email;
 import org.hibernate.validator.Length;
+import org.subethamail.common.Permission;
 import org.subethamail.common.valid.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -16,14 +19,14 @@ import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
 
 /**
- * Subscribes an anonymous (not logged in) user to a mailing list.
+ * Adds a role to a mailing list.
  * 
  * @author Jeff Schnitzer
  */
-public class SubscribeAnon extends AuthAction 
+public class RoleAdd extends AuthAction 
 {
 	/** */
-	private static Log log = LogFactory.getLog(SubscribeAnon.class);
+	private static Log log = LogFactory.getLog(RoleAdd.class);
 	
 	/** */
 	public static class Model extends ErrorMapModel
@@ -32,13 +35,11 @@ public class SubscribeAnon extends AuthAction
 		@Property Long listId;
 		
 		/** */
-		@Email
-		@Length(max=Validator.MAX_EMAIL_ADDRESS)
-		@Property String deliverTo = "";
+		@Length(min=1, max=Validator.MAX_ROLE_NAME)
+		@Property String name = "";
 		
 		/** */
-		@Length(max=Validator.MAX_PERSON_NAME)
-		@Property String name = "";
+		@Property String[] permissions;
 	}
 	
 	/** */
@@ -54,9 +55,15 @@ public class SubscribeAnon extends AuthAction
 		
 		model.validate();
 		
+		Set<Permission> perms = new HashSet<Permission>();
+		
+		if (model.permissions != null)
+			for (String permString: model.permissions)
+				perms.add(Permission.valueOf(permString));
+		
 		if (model.getErrors().isEmpty())
 		{
-			Backend.instance().getAccountMgr().subscribeAnonymousRequest(model.listId, model.deliverTo, model.name);
+			Backend.instance().getListMgr().addRole(model.listId, model.name, perms);
 		}
 	}
 	

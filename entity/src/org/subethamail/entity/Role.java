@@ -93,7 +93,7 @@ public class Role implements Serializable, Comparable
 	
 	/**
 	 */
-	public Role(MailingList list, String name)
+	public Role(MailingList list, String name, Set<Permission> permissions)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new Role");
@@ -101,7 +101,7 @@ public class Role implements Serializable, Comparable
 		this.list = list;
 		this.setName(name);
 		
-		this.permissions = new HashSet<Permission>();
+		this.permissions = permissions;
 	}
 	
 	/** */

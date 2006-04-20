@@ -18,6 +18,7 @@ import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.Role;
 
 /**
  * DAO interface to all persisted objects.  Use this EJB instead
@@ -139,4 +140,9 @@ public interface DAO
 	 * @return all the threads for the list
 	 */
 	public List<Mail> findMailByList(Long listId, int start, int count);
+
+	/**
+	 * @return the role
+	 */
+	public Role findRole(Long roleId) throws NotFoundException;
 }

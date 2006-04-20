@@ -32,6 +32,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.validator.Email;
+import org.subethamail.common.Permission;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -306,6 +307,19 @@ public class MailingList implements Serializable, Comparable
 			return this.anonymousRole;
 		else
 			return pers.getRoleIn(this);
+	}
+	
+	/**
+	 * Figures out the permissions for a person.  Very
+	 * similar to getRoleFor() but takes into account
+	 * site adminstrators which always have permission. 
+	 */
+	public Set<Permission> getPermissionsFor(Person pers)
+	{
+		if (pers == null)
+			return this.anonymousRole.getPermissions();
+		else
+			return pers.getPermissionsIn(this);
 	}
 	
 	/**

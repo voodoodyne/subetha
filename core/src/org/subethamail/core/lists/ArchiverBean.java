@@ -78,8 +78,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		}
 		
 		// Figure out if we're allowed to see emails
-		Role role = list.getRoleFor(me);
-		boolean showEmail = role.getPermissions().contains(Permission.SEE_ADDRESSES);
+		boolean showEmail = list.getPermissionsFor(me).contains(Permission.SEE_ADDRESSES);
 		
 		// Now generate the entire summary
 		return Transmute.mailSummaries(roots, showEmail, null);
@@ -97,8 +96,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		Mail mail = this.getMailFor(mailId, Permission.READ_ARCHIVES, me);
 		
 		// Figure out if we're allowed to see emails
-		Role role = mail.getList().getRoleFor(me);
-		boolean showEmail = role.getPermissions().contains(Permission.SEE_ADDRESSES);
+		boolean showEmail = mail.getList().getPermissionsFor(me).contains(Permission.SEE_ADDRESSES);
 		
 		MailData data = this.makeMailData(mail, showEmail);
 		

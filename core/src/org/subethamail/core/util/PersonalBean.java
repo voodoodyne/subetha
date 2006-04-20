@@ -113,9 +113,8 @@ public class PersonalBean
 	protected MailingList getListFor(Long listId, Permission check, Person me) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.dao.findMailingList(listId);
-		Role role = list.getRoleFor(me);
 	
-		if (! role.getPermissions().contains(check))
+		if (! list.getPermissionsFor(me).contains(check))
 			throw new PermissionException(check);
 		
 		return list;
@@ -137,9 +136,8 @@ public class PersonalBean
 	protected Mail getMailFor(Long mailId, Permission check, Person me) throws NotFoundException, PermissionException
 	{
 		Mail mail = this.dao.findMail(mailId);
-		Role role = mail.getList().getRoleFor(me);
 	
-		if (! role.getPermissions().contains(check))
+		if (! mail.getList().getPermissionsFor(me).contains(check))
 			throw new PermissionException(check);
 		
 		return mail;
@@ -151,9 +149,8 @@ public class PersonalBean
 	protected Role getRoleForEdit(Long roleId) throws NotFoundException, PermissionException
 	{
 		Role role = this.dao.findRole(roleId);
-		Role myRole = role.getList().getRoleFor(this.getMe());
 		
-		if (! myRole.getPermissions().contains(Permission.EDIT_ROLES))
+		if (! role.getList().getPermissionsFor(this.getMe()).contains(Permission.EDIT_ROLES))
 			throw new PermissionException(Permission.EDIT_ROLES);
 		
 		return role;

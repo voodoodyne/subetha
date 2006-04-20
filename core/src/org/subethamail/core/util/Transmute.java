@@ -131,11 +131,7 @@ public class Transmute
 		
 		Role role = rawList.getRoleFor(rawPerson);
 		
-		Set<Permission> perms = role.getPermissions();
-		
-		// If we're the site admin, override with all.
-		if (rawPerson != null && rawPerson.isSiteAdmin())
-			perms = Permission.ALL;
+		Set<Permission> perms = rawList.getPermissionsFor(rawPerson);
 
 		perms.size();	// initialize if it's a proxy
 		

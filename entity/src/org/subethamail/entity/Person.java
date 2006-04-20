@@ -8,6 +8,7 @@ package org.subethamail.entity;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.Length;
+import org.subethamail.common.Permission;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -204,6 +206,15 @@ public class Person implements Serializable, Comparable
 		Subscription sub = this.subscriptions.get(list.getId());
 		
 		return (sub == null) ? list.getAnonymousRole() : sub.getRole();
+	}
+	
+	/** */
+	public Set<Permission> getPermissionsIn(MailingList list)
+	{
+		if (this.siteAdmin)
+			return Permission.ALL;
+		else
+			return this.getRoleIn(list).getPermissions();
 	}
 	
 	/** */

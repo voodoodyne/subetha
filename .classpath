@@ -14,9 +14,6 @@
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jbosssx.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/mail.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/activation.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/ejb3-persistence.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/hibernate3.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/hibernate-annotations.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-annotations-ejb3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3x.jar"/>
@@ -29,5 +26,9 @@
 	<classpathentry kind="lib" path="core/lib/velocity-1.4.jar"/>
 	<classpathentry kind="lib" path="rtest/lib/dumbster1.6.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/tagonist.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/ejb3-persistence.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate3.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

@@ -7,6 +7,8 @@ package org.subethamail.core.plugin.i.helper;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.plugin.i.Blueprint;
@@ -32,6 +34,14 @@ abstract public class AbstractBlueprint implements Blueprint, Lifecycle
 	 */
 	public void start() throws Exception
 	{
+		if (this.registry != null)
+			throw new RuntimeException("JBoss fixed, code can be removed now");
+		else
+		{
+			Context ctx = new InitialContext();
+			this.registry = (BlueprintRegistry)ctx.lookup("subetha/ListWizard/local");
+		}
+		
 		this.registry.register(this);
 	}
 	

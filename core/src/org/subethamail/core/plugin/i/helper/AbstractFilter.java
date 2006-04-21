@@ -7,6 +7,8 @@ package org.subethamail.core.plugin.i.helper;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.plugin.i.Filter;
@@ -23,7 +25,7 @@ import org.subethamail.core.plugin.i.FilterRegistry;
 abstract public class AbstractFilter implements Filter, Lifecycle
 {
 	/**
-	 * This will automatically be injected by JBoss.
+	 * This should be injected by JBoss
 	 */
 	@EJB FilterRegistry registry;
 
@@ -32,6 +34,14 @@ abstract public class AbstractFilter implements Filter, Lifecycle
 	 */
 	public void start() throws Exception
 	{
+		if (this.registry != null)
+			throw new RuntimeException("JBoss fixed, code can be removed now");
+		else
+		{
+			Context ctx = new InitialContext();
+			this.registry = (FilterRegistry)ctx.lookup("subetha/FilterRunner/local");
+		}
+		
 		this.registry.register(this);
 	}
 	

@@ -23,6 +23,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJBException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -85,6 +87,14 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 	 */
 	public void start() throws Exception
 	{
+		if (this.dao != null)
+			throw new RuntimeException("JBoss fixed, code can be removed now");
+		else
+		{
+			Context ctx = new InitialContext();
+			this.dao = (DAO)ctx.lookup(DAO.JNDI_NAME);
+		}
+		
 		// If we don't already have a key, generate one
 		try
 		{

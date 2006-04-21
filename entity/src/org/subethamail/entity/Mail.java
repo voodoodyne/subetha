@@ -80,7 +80,7 @@ import org.subethamail.common.valid.Validator;
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 @Table(
-	name="Mail",
+	appliesTo="Mail",
 	indexes={@Index(name="mailMessageIdIndex", columnNames={"listId", "messageId"})}
 )
 public class Mail implements Serializable, Comparable
@@ -155,7 +155,7 @@ public class Mail implements Serializable, Comparable
 	@Column(name="messageId", nullable=false)
 	@IndexColumn(name="ord")
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
-	@Index(name="mailWantedRefIndex")	// TODO:  this doesn't seem to work
+	//@Index(name="mailWantedRefIndex")	// TODO:  this doesn't seem to work
 	List<String> wantedReference;
 	
 	/** 

@@ -7,7 +7,9 @@ package org.subethamail.entity;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -18,6 +20,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapKey;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -138,7 +141,8 @@ public class MailingList implements Serializable, Comparable
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
-	Set<EnabledFilter> enabledFilters;
+	@MapKey(name="className")
+	Map<String, EnabledFilter> enabledFilters;
 	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
@@ -164,7 +168,7 @@ public class MailingList implements Serializable, Comparable
 		
 		// Make sure collections start empty
 		this.subscriptions = new TreeSet<Subscription>();
-		this.enabledFilters = new HashSet<EnabledFilter>();
+		this.enabledFilters = new HashMap<String, EnabledFilter>();
 		this.roles = new HashSet<Role>();
 		
 		// We have to start with one role, the owner role
@@ -248,7 +252,7 @@ public class MailingList implements Serializable, Comparable
 	/** 
 	 * @return all plugins enabled on this list
 	 */
-	public Set<EnabledFilter> getEnabledFilters() { return this.enabledFilters; }
+	public Map<String, EnabledFilter> getEnabledFilters() { return this.enabledFilters; }
 
 	/** 
 	 * @return all roles available for this list

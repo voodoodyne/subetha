@@ -13,6 +13,7 @@ body {
 
 #bodyText {
   margin: 0mm 5mm 0 13em;
+  text-align: left;
 }
 
 #bodyText p {

@@ -3,6 +3,13 @@
 <t:action var="filters" type="org.subethamail.web.action.GetFilters" />
 
 <trim:list title="Filters" listId="${param.listId}">
+	<p>
+		Many menu items are probably missing on this page.  This is due
+		to a JBoss <a href="http://jira.jboss.org/jira/browse/EJBTHREE-526">bug</a>.
+		It can be worked around by disabling the @SecurityDomain and @RolesAllowed
+		annotations on FilterRunnerBean.
+	</p>
+	
 	<h3>Available Filters</h3>
 	
 	<table>

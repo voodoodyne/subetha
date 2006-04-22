@@ -5,12 +5,9 @@
 
 package org.subethamail.web.action;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.lists.i.EnabledFilterData;
-import org.subethamail.core.lists.i.FilterData;
+import org.subethamail.core.lists.i.Filters;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.tagonist.propertize.Property;
@@ -27,13 +24,12 @@ public class GetFilters extends AuthAction
 
 	/** */
 	@Property Long listId;
-	@Property List<FilterData> available;
-	@Property List<EnabledFilterData> enabled;
 
 	/** */
 	public void execute() throws Exception
 	{
-		this.available = Backend.instance().getListMgr().getAvailableFilters(this.listId);
-		this.enabled = Backend.instance().getListMgr().getEnabledFilters(this.listId);
+		Filters filters = Backend.instance().getListMgr().getFilters(this.listId);
+		
+		this.getCtx().setModel(filters);
 	}
 }

@@ -10,6 +10,8 @@
 -->
 
 <jboss-app>
+	<security-domain>java:/jaas/subetha</security-domain>
+
 	<module>
 		<service>core.sar</service>
 	</module>

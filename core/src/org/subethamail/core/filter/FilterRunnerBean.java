@@ -74,7 +74,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		
 		HoldException holdException = null;
 		
-		for (EnabledFilter enabled: list.getEnabledFilters())
+		for (EnabledFilter enabled: list.getEnabledFilters().values())
 		{
 			Filter filter = this.filters.get(enabled.getClassName());
 			if (filter == null)

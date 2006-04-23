@@ -36,5 +36,9 @@ public interface MessageListener
 	 * @param from is the envelope sender in rfc822 form
 	 * @param recipient will be an accepted recipient in rfc822 form
 	 */
-	public void deliver(String from, String recipient, byte[] data); 
+	public void deliver(String from, String recipient, byte[] data);
+  // TODO(imf): Deliver will probably need to handle streams instead
+  // of byte arrays, so larger content can be handled.
+  // That, or it will need to be able to be called more than once for
+  // a single message.
 }

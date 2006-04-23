@@ -66,12 +66,14 @@ public class EnabledFilter implements Serializable, Comparable
 	
 	/**
 	 */
-	public EnabledFilter(String className)
+	public EnabledFilter(MailingList list, String className)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new EnabledFilter");
 		
+		this.list = list;
 		this.className = className;
+		this.arguments = new HashMap<String, FilterArgument>();
 	}
 	
 	/** */

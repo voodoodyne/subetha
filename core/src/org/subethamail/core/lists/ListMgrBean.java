@@ -7,6 +7,7 @@ package org.subethamail.core.lists;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,9 +34,11 @@ import org.subethamail.core.lists.i.PermissionException;
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Filter;
+import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EnabledFilter;
+import org.subethamail.entity.FilterArgument;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
@@ -235,5 +238,119 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		}
 		
 		return new Filters(available, enabled);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getFilter(java.lang.Long, java.lang.String)
+	 */
+	public EnabledFilterData getFilter(Long listId, String className) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
+		
+		Filter filt = this.filterRunner.getFilters().get(className);
+		EnabledFilter enabled = list.getEnabledFilters().get(className);
+		
+		if (enabled != null)
+		{
+			return Transmute.enabledFilter(filt, enabled);
+		}
+		else
+		{
+			// Create what looks like an enabled filter but populated with defaults
+			Map<String, Object> args = new HashMap<String, Object>();
+			
+			for (FilterParameter param: filt.getParameters())
+				args.put(param.getName(), param.getDefaultValue());
+			
+			return new EnabledFilterData(
+					className, filt.getName(), filt.getDescription(), filt.getParameters(),
+					listId, args);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#setFilter(java.lang.Long, java.lang.String, java.util.Map)
+	 */
+	public void setFilter(Long listId, String className, Map<String, Object> args) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
+		
+		Filter filt = this.filterRunner.getFilters().get(className);
+		
+		this.validateFilterArgs(filt.getParameters(), args);
+		
+		EnabledFilter enabled = list.getEnabledFilters().get(className);
+		if (enabled == null)
+		{
+			// Create it from scratch, let cascading persist work
+			enabled = new EnabledFilter(list, className);
+			list.addEnabledFilter(enabled);
+			
+			for (Map.Entry<String, Object> argEntry: args.entrySet())
+			{
+				FilterArgument farg = new FilterArgument(enabled, argEntry.getKey(), argEntry.getValue());
+				enabled.getArguments().put(argEntry.getKey(), farg);
+			}
+		}
+		else
+		{
+			// We need to synchronize the args to the enabled list.
+			
+			// First get rid of anything not in the args list, relying on
+			// cascading delete to nuke the FilterArgument entities.
+			enabled.getArguments().keySet().retainAll(args.keySet());
+			
+			// Now make sure that we have everything in args
+			for (Map.Entry<String, Object> argEntry: args.entrySet())
+			{
+				FilterArgument farg = enabled.getArguments().get(argEntry.getKey());
+				if (farg == null)
+				{
+					farg = new FilterArgument(enabled, argEntry.getKey(), argEntry.getValue());
+					enabled.getArguments().put(argEntry.getKey(), farg);
+				}
+				else
+				{
+					farg.setValue(argEntry.getValue());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Just verifies that the args are all valid params and that they
+	 * have the correct type.  Also ensure that every expected parameter
+	 * has a value.
+	 */
+	protected void validateFilterArgs(FilterParameter[] params, Map<String, Object> args)
+	{
+		if (args.size() != params.length)
+			throw new IllegalArgumentException("Expected " + params.length + " args, got " + args.size());
+		
+		for (FilterParameter param: params)
+		{
+			Object argValue = args.get(param.getName());
+			if (argValue == null)
+				throw new IllegalArgumentException("Missing parameter " + param.getName());
+
+			if (!param.getClass().equals(argValue.getClass()))
+				throw new IllegalArgumentException("Param " + param.getName() + " has class " + argValue.getClass() + " but should have class " + param.getClass());
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#disableFilter(java.lang.Long, java.lang.String)
+	 */
+	public void disableFilter(Long listId, String className) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
+		
+		// Cascading delete should take care of deleting all the objects
+		if (list.getEnabledFilters().remove(className) == null)
+			if (log.isWarnEnabled())
+				log.warn("Attempt to remove filter " + className + " which was not enabled on list " + list.getName());
 	}
 }

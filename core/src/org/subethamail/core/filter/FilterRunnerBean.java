@@ -8,14 +8,12 @@ package org.subethamail.core.filter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.security.RolesAllowed;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
-import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterRegistry;
@@ -28,8 +26,11 @@ import org.subethamail.entity.MailingList;
  * @author Jeff Schnitzer
  */
 @Service(name="FilterRunner")
-@SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
+
+// Security is disabled because of JBoss bug:  http://jira.jboss.org/jira/browse/EJBTHREE-526
+// TODO:  re-enable security on this bean when jboss bug fixed.
+//@SecurityDomain("subetha")
+//@RolesAllowed("siteAdmin")
 public class FilterRunnerBean implements FilterRunner, FilterRegistry
 {
 	/** */

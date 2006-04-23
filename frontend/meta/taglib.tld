@@ -38,4 +38,14 @@
 		<function-class>org.subethamail.web.util.TextTool</function-class>
 		<function-signature>java.lang.String exceptionMessage(java.lang.Throwable)</function-signature>
 	</function>
+	<function>
+		<name>urlEncode</name>
+		<function-class>org.subethamail.web.util.TextTool</function-class>
+		<function-signature>java.lang.String urlEncode(java.lang.String)</function-signature>
+	</function>
+	<function>
+		<name>escapeText</name>
+		<function-class>org.subethamail.web.util.TextTool</function-class>
+		<function-signature>java.lang.String escapeText(java.lang.String)</function-signature>
+	</function>
 </taglib>

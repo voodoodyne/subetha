@@ -253,6 +253,14 @@ public class MailingList implements Serializable, Comparable
 	 * @return all plugins enabled on this list
 	 */
 	public Map<String, EnabledFilter> getEnabledFilters() { return this.enabledFilters; }
+	
+	/**
+	 * Convenience method.
+	 */
+	public void addEnabledFilter(EnabledFilter filt)
+	{
+		this.enabledFilters.put(filt.getClassName(), filt);
+	}
 
 	/** 
 	 * @return all roles available for this list

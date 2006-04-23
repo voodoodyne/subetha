@@ -7,6 +7,7 @@ package org.subethamail.core.lists.i;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.Local;
@@ -119,4 +120,27 @@ public interface ListMgr
 	 * Requires Permission.EDIT_FILTERS
 	 */
 	public Filters getFilters(Long listId) throws NotFoundException, PermissionException;
+	
+	/**
+	 * Gets data for a filter on a list.  If the filter has not already
+	 * been enabled, the EnabledFilterData is populated with default values.
+	 * 
+	 * Requires Permission.EDIT_FILTERS
+	 */
+	public EnabledFilterData getFilter(Long listId, String className) throws NotFoundException, PermissionException;
+	
+	/**
+	 * Enables a filter on a list, or changes the data associated with that filter.
+	 * 
+	 * Requires Permission.EDIT_FILTERS
+	 */
+	public void setFilter(Long listId, String className, Map<String, Object> args) throws NotFoundException, PermissionException;
+	
+	/**
+	 * Disables a filter on a list.  Fails silently if filter is not enabled on the list.
+	 * All argument data is deleted.
+	 * 
+	 * Requires Permission.EDIT_FILTERS
+	 */
+	public void disableFilter(Long listId, String className) throws NotFoundException, PermissionException;
 }

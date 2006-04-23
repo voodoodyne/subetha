@@ -5,6 +5,9 @@
 
 package org.subethamail.web.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -35,6 +38,22 @@ public class TextTool
 			return msg;
 		else
 			return msg.substring(badIndex + EXCEPTION_MSG.length()).trim();
+	}
+	
+	/**
+	 * URLEncodes some text.
+	 */
+	public static String urlEncode(String orig)
+	{
+		try
+		{
+			return URLEncoder.encode(orig, "UTF-8");
+		}
+		catch (UnsupportedEncodingException ex)
+		{
+			// Should be impossible
+			throw new RuntimeException(ex);
+		}
 	}
 	
 	/**

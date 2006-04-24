@@ -10,9 +10,11 @@ import org.subethamail.smtp.session.Session;
  * To change this template use File | Settings | File Templates.
  */
 public interface Command {
-    String execute(String commandString, Session session);
+    public String execute(String commandString, Session session);
 
-    HelpMessage getHelp();
+    public HelpMessage getHelp();
 
-    String getName();
+    public String getName();
+
+    void replaceWith(Command command);
 }

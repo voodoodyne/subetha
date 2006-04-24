@@ -13,6 +13,7 @@ import org.subethamail.smtp.command.HelpCommand;
 import org.subethamail.smtp.command.VerifyCommand;
 import org.subethamail.smtp.command.ExpnCommand;
 import org.subethamail.smtp.command.VerboseCommand;
+import org.subethamail.smtp.command.CommandLogger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -38,14 +39,14 @@ public class SMTPServiceCore implements Runnable {
 
   private void initializeCommandDispatcher() {
     commandDispatcher = new CommandDispatcher(serverContext);
-    new HelloCommand(commandDispatcher);
+    new CommandLogger(new HelloCommand(commandDispatcher));
 //    new EhloCommand(commandDispatcher);
-    new MailCommand(commandDispatcher);
-    new ReceiptCommand(commandDispatcher);
+    new CommandLogger(new MailCommand(commandDispatcher));
+    new CommandLogger(new ReceiptCommand(commandDispatcher));
     new DataCommand(commandDispatcher);
     new ResetCommand(commandDispatcher);
     new NoopCommand(commandDispatcher);
-    new QuitCommand(commandDispatcher);
+    new CommandLogger(new QuitCommand(commandDispatcher));
     new HelpCommand(commandDispatcher);
     new VerifyCommand(commandDispatcher);
     new ExpnCommand(commandDispatcher);
@@ -71,6 +72,7 @@ public class SMTPServiceCore implements Runnable {
   }
 
   public void run() {
+    log.info("SMTP Server socket started.");
     while (go) {
       try {
         new SocketHandler(serverContext, serverSocket.accept());

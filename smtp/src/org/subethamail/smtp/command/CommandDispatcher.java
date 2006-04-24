@@ -9,13 +9,16 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.subethamail.smtp.command.BaseCommand;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
 public class CommandDispatcher {
-  private Map<String, BaseCommand> commands = new HashMap<String, BaseCommand>();
-  private List<BaseCommand> commandList = new ArrayList<BaseCommand>();
+  public static final Log log = LogFactory.getLog(CommandDispatcher.class);
+  private Map<String, Command> commands = new HashMap<String, Command>();
+  private List<Command> commandList = new ArrayList<Command>();
   private SMTPServerContext SMTPServerContext;
 
   public CommandDispatcher(SMTPServerContext SMTPServerContext) {
@@ -57,7 +60,7 @@ public class CommandDispatcher {
     return command;
   }
 
-  public void add(String name, BaseCommand command) throws InvalidCommandNameException {
+  public void add(String name, Command command) throws InvalidCommandNameException {
     commands.put(toKey(name), command);
     commandList.add(command);
   }
@@ -71,7 +74,7 @@ public class CommandDispatcher {
     return getCommandFromString(command).getHelp();
   }
 
-  public List<BaseCommand> getCommandList() {
+  public List<Command> getCommandList() {
     return commandList;
   }
 
@@ -81,5 +84,20 @@ public class CommandDispatcher {
 
   public SMTPServerContext getServerContext() {
     return SMTPServerContext;
+  }
+
+  public void replaceWith(Command oldCommand, Command newCommand) {
+    if (! oldCommand.getName().equals(newCommand.getName())) {
+      log.error("Attempt to replace " +
+        oldCommand.getName() + ":" + oldCommand +
+        " with " + newCommand.getName() + ":" + newCommand);
+      return;
+    }
+    ArrayList<Command> newCommandList = new ArrayList<Command>(commandList.size());
+    for (Command command : commandList) {
+        newCommandList.add(command.equals(oldCommand) ? newCommand : command);
+    }
+    commandList = newCommandList;
+    commands.put(oldCommand.getName(), newCommand);
   }
 }

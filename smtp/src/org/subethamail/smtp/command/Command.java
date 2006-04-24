@@ -58,4 +58,10 @@ public class Command {
     }
     return strings.toArray(new String[strings.size()]);
   }
+
+  protected String extractEmailAddress(String args, final int subcommandOffset) {
+    String address = args.substring(subcommandOffset).trim();
+    if (address.indexOf("<") == 0) address = address.substring(1, address.length() - 1);
+    return address;
+  }
 }

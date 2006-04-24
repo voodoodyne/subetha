@@ -47,6 +47,18 @@ public class ReceiptCommandTest extends CommandTestCase {
     assertEquals(1, session.getRecipients().size());
   }
 
+  public void testRcptWithoutWhitespace() throws Exception {
+    final SMTPServerContext serverContext = session.getServerContext();
+    serverContext.register(new DummyMessageListener());
+    serverContext.setRecipientDomainFilteringEnabled(false);
+
+    assertNull(session.getSender());
+    session.setSender("test@example.com");
+    assertEquals("250 <validuser@subethamail.org> Recipient ok.",
+        commandDispatcher.executeCommand("RCPT TO:<validuser@subethamail.org>", session));
+    assertEquals(1, session.getRecipients().size());
+  }
+
 
   public void testReceiptCommandHelp() throws Exception {
     assertEquals("214-RCPT TO: <recipient> [ <parameters> ]\n" +

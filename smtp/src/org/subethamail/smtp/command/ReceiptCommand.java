@@ -19,15 +19,13 @@ public class ReceiptCommand extends Command {
 
   @Override
   public String execute(String commandString, Session session) {
-    String[] args = getArgs(commandString);
+    String args = getArgPredicate(commandString);
     if (session.getSender() == null) {
       return "503 Need MAIL before RCPT.";
-    } else if (args.length < 3
-      || ! "TO:".equalsIgnoreCase(args[1])
-      || ! "RCPT".equalsIgnoreCase(args[0])) {
+    } else if (! args.toUpperCase().startsWith("TO:")) {
       return "501 Syntax: RCPT TO: <address>  Error in parameters: \"" + getArgPredicate(commandString) + "\"";
     } else {
-      String recipientAddress = args[2];
+      final String recipientAddress = extractEmailAddress(args, 3);
       if (session.isRecipientDomainFilteringEnabled() && ! canAcceptMailToDomain(recipientAddress)) {
         return "550 <" + recipientAddress + "> Relaying denied.";
       }

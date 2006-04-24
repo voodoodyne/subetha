@@ -25,6 +25,11 @@ public class MailCommandTest extends CommandTestCase {
     assertEquals("501 Syntax: MAIL FROM: <address>  Error in parameters: \"\"", commandDispatcher.executeCommand("MAIL", session));
   }
 
+  public void testMailWithoutWhitespace() throws Exception {
+    assertEquals("250 <validuser@subethamail.org> Sender ok.",
+        commandDispatcher.executeCommand("MAIL FROM:<validuser@subethamail.org>", session));
+    assertEquals("validuser@subethamail.org", session.getSender());
+  }
 
   public void testMailCommandHelp() throws Exception {
     assertEquals("214-MAIL FROM: <sender> [ <parameters> ]\n" +

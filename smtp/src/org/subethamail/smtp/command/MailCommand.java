@@ -2,8 +2,6 @@ package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.Session;
 
-import java.util.StringTokenizer;
-
 import org.subethamail.smtp.command.Command;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.HelpMessage;
@@ -25,15 +23,11 @@ public class MailCommand extends Command {
     if (session.getSender() != null) {
       return "503 Sender already specified.";
     } else {
-      String[] args = getArgs(commandString);
-      StringTokenizer stringTokenizer = new StringTokenizer(commandString);
-      stringTokenizer.nextToken();
-      if (args.length < 3
-        || ! "FROM:".equalsIgnoreCase(args[1])
-        || ! "MAIL".equalsIgnoreCase(args[0])) {
+      String args = getArgPredicate(commandString);
+      if (! args.toUpperCase().startsWith("FROM:")) {
         return "501 Syntax: MAIL FROM: <address>  Error in parameters: \"" + getArgPredicate(commandString) + "\"";
       }
-      final String emailAddress = args[2];
+      final String emailAddress = extractEmailAddress(args, 5);
       if (isValidEmailAddress(emailAddress)) {
         session.setSender(emailAddress);
         return "250 <" + emailAddress + "> Sender ok.";

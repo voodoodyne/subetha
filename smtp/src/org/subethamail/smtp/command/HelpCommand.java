@@ -30,7 +30,7 @@ public class HelpCommand extends Command {
   }
 
   private String getCommandMessage() {
-    return "214-This is the SubEtha SMTP Server version " + getServerVersion() + " running on " + getHostAddress() + "\n" +
+    return "214-This is the SubEthaMail SMTP Server version " + getServerVersion() + " running on " + getHostAddress() + "\n" +
         "214-Topics:\n" +
         getFormattedTopicList() +
         "214-For more info use \"HELP <topic>\".\n" +

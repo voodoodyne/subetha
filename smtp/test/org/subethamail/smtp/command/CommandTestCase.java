@@ -14,7 +14,8 @@ public abstract class CommandTestCase extends TestCase {
 
   protected void setUp() throws Exception {
   super.setUp();
-    commandDispatcher = new CommandDispatcher(new DummySMTPServerContext());
-    session = new Session("mail.example.com");
+    DummySMTPServerContext serverContext = new DummySMTPServerContext();
+    commandDispatcher = new CommandDispatcher(serverContext);
+    session = new Session(serverContext, "mail.example.com");
   }
 }

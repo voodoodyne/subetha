@@ -63,6 +63,11 @@ public class SMTPServiceCore implements Runnable {
 
   public void stop() {
     go = false;
+    try {
+      serverSocket.close();
+    } catch (IOException e) {
+      log.error("Failed to close server socket.", e);
+    }
   }
 
   public void run() {
@@ -71,8 +76,17 @@ public class SMTPServiceCore implements Runnable {
         new SocketHandler(serverContext, serverSocket.accept());
       }
       catch (IOException ioe) {
-        log.error("IOException accepting connection in SMTPServiceCore", ioe);
+        if (go) {
+          log.error("IOException accepting connection in SMTPServiceCore", ioe);
+        } // Otherwise this is just the socket complaining that it was closed while in accept.
       }
     }
+    try {
+      serverSocket.close();
+      log.info("SMTP Server socket shut down.");
+    } catch (IOException e) {
+      log.error("Failed to close server socket.", e);
+    }
+
   }
 }

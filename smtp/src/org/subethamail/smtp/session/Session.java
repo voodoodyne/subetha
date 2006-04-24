@@ -20,13 +20,16 @@ public class Session {
   private Socket socket;
   private boolean dataMode = false;
   private List<String> messageLines = new ArrayList<String>();
+  private SMTPServerContext serverContext;
 
-  public Session(String remoteHostname) {
+  public Session(SMTPServerContext serverContext, String remoteHostname) {
+    this.serverContext = serverContext;
     this.remoteHostname = remoteHostname;
   }
 
   // TODO(imf): Should probably actually pass the SocketHandler instead.
-  public Session(Socket socket) {
+  public Session(final SMTPServerContext serverContext, final Socket socket) {
+    this.serverContext = serverContext;
     this.socket = socket;
     remoteHostname = socket.getInetAddress().getCanonicalHostName();
   }
@@ -112,6 +115,10 @@ public class Session {
     return dataMode;
   }
 
+  public SMTPServerContext getServerContext() {
+    return serverContext;
+  }
+
   public String generateMessageId() {
     // TODO(imf): Implement a message ID generator here.
     return null;
@@ -135,5 +142,9 @@ public class Session {
       SMTPServerContext.deliver(sender, recipient, getMessage().getBytes());
     }
     reset();
+  }
+
+  public boolean isRecipientDomainFilteringEnabled() {
+    return serverContext.getRecipientDomainFilteringEnabled();
   }
 }

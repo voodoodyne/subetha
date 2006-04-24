@@ -25,9 +25,9 @@ public class HelpCommandTest extends CommandTestCase {
   }
 
   public void testHelp() throws Exception {
-    commandDispatcher.setServerContext(new DummySMTPServerContext("1.0a2", "example.subetha.org", 25));
+    commandDispatcher.setServerContext(new DummySMTPServerContext("1.0a2", "example.subethamail.org", 25));
 
-    String expectedOutput = "214-This is the SubEtha SMTP Server version 1.0a2 running on example.subetha.org\n" +
+    String expectedOutput = "214-This is the SubEthaMail SMTP Server version 1.0a2 running on example.subethamail.org\n" +
         "214-Topics:\n" +
         "214-    HELP\n" +
         "214-For more info use \"HELP <topic>\".\n" +

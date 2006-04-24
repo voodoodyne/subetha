@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -27,17 +26,6 @@ import org.subethamail.smtp.i.SMTPServerContext;
 import org.subethamail.smtp.server.ServerRejectedException;
 import org.subethamail.smtp.server.SMTPServiceCore;
 import org.subethamail.smtp.command.CommandDispatcher;
-import org.subethamail.smtp.command.HelloCommand;
-import org.subethamail.smtp.command.MailCommand;
-import org.subethamail.smtp.command.ReceiptCommand;
-import org.subethamail.smtp.command.DataCommand;
-import org.subethamail.smtp.command.ResetCommand;
-import org.subethamail.smtp.command.NoopCommand;
-import org.subethamail.smtp.command.QuitCommand;
-import org.subethamail.smtp.command.HelpCommand;
-import org.subethamail.smtp.command.VerifyCommand;
-import org.subethamail.smtp.command.ExpnCommand;
-import org.subethamail.smtp.command.VerboseCommand;
 
 /**
  * @author Jeff Schnitzer
@@ -61,6 +49,7 @@ public class SMTPService implements MessageListenerRegistry, SMTPManagement, SMT
   private boolean hostResolutionEnabled = true;
   private SMTPServiceCore serviceCore;
   private CommandDispatcher commandDispatcher;
+  private boolean recipientDomainFilteringEnabled = false;
 
   public SMTPService() {
     try {
@@ -97,14 +86,22 @@ public class SMTPService implements MessageListenerRegistry, SMTPManagement, SMT
     return "1.0a2";
   }
 
+
+  /**
+   * @see org.subethamail.smtp.SMTPManagement#getHostname()
+   * @return hostname
+   */
+  @PermitAll
   public String getHostname() {
     return hostname;
   }
 
+  @PermitAll
   public void setHostResolutionEnabled(boolean state) {
     hostResolutionEnabled = state;
   }
 
+  @PermitAll
   public boolean getHostResolutionEnabled() {
     return hostResolutionEnabled;
   }
@@ -189,4 +186,15 @@ public class SMTPService implements MessageListenerRegistry, SMTPManagement, SMT
   public void setCommandDispatcher(CommandDispatcher commandDispatcher) {
     this.commandDispatcher = commandDispatcher;
   }
+
+  @PermitAll
+  public void setRecipientDomainFilteringEnabled(boolean recipientDomainFilteringEnabled) {
+    this.recipientDomainFilteringEnabled = recipientDomainFilteringEnabled;
+  }
+
+  @PermitAll
+  public boolean getRecipientDomainFilteringEnabled() {
+    return recipientDomainFilteringEnabled;
+  }
+
 }

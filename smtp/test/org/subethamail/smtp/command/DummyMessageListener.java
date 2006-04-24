@@ -9,7 +9,7 @@ public class DummyMessageListener implements MessageListener {
   private String message;
 
   public boolean accept(String from, String recipient) {
-    if (recipient.equals("validuser@subetha.org")) return true;
+    if (recipient.equals("validuser@subethamail.org")) return true;
     return false;
   }
 

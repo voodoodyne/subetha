@@ -9,7 +9,7 @@ import org.subethamail.smtp.command.QuitCommand;
 public class QuitCommandTest extends CommandTestCase {
   public void testQuitCommand() throws Exception {
     assertTrue(session.isActive());
-    assertEquals("221 test.subetha.org closing connection.", commandDispatcher.executeCommand("QUIT", session));
+    assertEquals("221 test.subethamail.org closing connection.", commandDispatcher.executeCommand("QUIT", session));
     assertFalse(session.isActive());
   }
 

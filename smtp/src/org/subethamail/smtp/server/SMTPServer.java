@@ -20,6 +20,7 @@ public class SMTPServer implements SMTPServerContext {
   private List<MessageListener> listeners;
   CommandDispatcher commandDispatcher;
   private boolean hostResolutionEnabled = true;
+  private boolean recipientDomainFilteringEnabled;
 
   public SMTPServer(String hostname, int port) {
     this.hostname = hostname;
@@ -106,6 +107,10 @@ public class SMTPServer implements SMTPServerContext {
     return commandDispatcher;
   }
 
+  public void setRecipientDomainFilteringEnabled(boolean state) {
+    recipientDomainFilteringEnabled = state;
+  }
+
   public void register(MessageListener listener) {
     listeners.add(listener);
   }
@@ -143,5 +148,9 @@ public class SMTPServer implements SMTPServerContext {
 
   public boolean isHostResolutionEnabled() {
     return hostResolutionEnabled;
+  }
+
+  public boolean getRecipientDomainFilteringEnabled() {
+    return recipientDomainFilteringEnabled;
   }
 }

@@ -22,4 +22,7 @@ public interface SMTPServerContext extends MessageListener, MessageListenerRegis
   public String resolveHost(String hostname) throws IOException, ServerRejectedException;
   public void setCommandDispatcher(CommandDispatcher commandDispatcher);
   public CommandDispatcher getCommandDispatcher();
+  public void setRecipientDomainFilteringEnabled(boolean state);
+  public boolean getRecipientDomainFilteringEnabled();
+
 }

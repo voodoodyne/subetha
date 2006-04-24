@@ -28,7 +28,7 @@ public class ReceiptCommand extends Command {
       return "501 Syntax: RCPT TO: <address>  Error in parameters: \"" + getArgPredicate(commandString) + "\"";
     } else {
       String recipientAddress = args[2];
-      if (! canAcceptMailToDomain(recipientAddress)) {
+      if (session.isRecipientDomainFilteringEnabled() && ! canAcceptMailToDomain(recipientAddress)) {
         return "550 <" + recipientAddress + "> Relaying denied.";
       }
       if (isValidRecipient(recipientAddress, session)) {

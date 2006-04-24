@@ -19,6 +19,7 @@ public class DummySMTPServerContext implements SMTPServerContext {
   private List<String> validRecipientHosts; // TODO(imf): Rename this variable to something more standard and descriptive.
   private List<MessageListener> listeners;
   private CommandDispatcher commandDispatcher;
+  private boolean recipientDomainFilteringEnabled = true;
 
   public DummySMTPServerContext(String serverVersion, String hostname, int port) {
     this.serverVersion = serverVersion;
@@ -30,7 +31,7 @@ public class DummySMTPServerContext implements SMTPServerContext {
 
   public DummySMTPServerContext() {
     serverVersion = "test";
-    hostname = "test.subetha.org";
+    hostname = "test.subethamail.org";
     validRecipientHosts = new ArrayList<String>();
     listeners = new ArrayList<MessageListener>();
   }
@@ -61,7 +62,7 @@ public class DummySMTPServerContext implements SMTPServerContext {
 
   public String resolveHost(String hostname) throws IOException, ServerRejectedException {
     if (hostname.equalsIgnoreCase("remotehost.example.com")) return "remotehost.example.com/192.0.2.1";
-    if (hostname.equalsIgnoreCase("test.subetha.org")) return "test.subetha.org/192.0.3.1";
+    if (hostname.equalsIgnoreCase("test.subethamail.org")) return "test.subethamail.org/192.0.3.1";
     if (hostname.equalsIgnoreCase("spambox.blackhat.org")) {
       throw new ServerRejectedException("Traffic from your server denied access.");
     }
@@ -101,5 +102,13 @@ public class DummySMTPServerContext implements SMTPServerContext {
 
   public void setCommandDispatcher(CommandDispatcher commandDispatcher) {
     this.commandDispatcher = commandDispatcher;
+  }
+
+  public void setRecipientDomainFilteringEnabled(boolean recipientDomainFilteringEnabled) {
+    this.recipientDomainFilteringEnabled = recipientDomainFilteringEnabled;
+  }
+
+  public boolean getRecipientDomainFilteringEnabled() {
+    return recipientDomainFilteringEnabled;
   }
 }

@@ -39,7 +39,7 @@ public class HelloCommand extends Command {
         return "501 Unknown host: " + remoteHost;
       } catch (ServerRejectedException e) {
         session.quit();
-        return "221 test.subetha.org closing connection. " + e.getMessage();
+        return "221 test.subethamail.org closing connection. " + e.getMessage();
       }
     } else {
       return "503 " + remoteHost + " Duplicate HELO/EHLO";

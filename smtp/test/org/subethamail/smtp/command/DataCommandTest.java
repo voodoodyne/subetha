@@ -10,17 +10,17 @@ import org.subethamail.smtp.command.CommandTestCase;
  */
 public class DataCommandTest extends CommandTestCase {
   public void testDataCommand() throws Exception {
-    session = new DummySession("test.example.com");
+    session = new DummySession("test.example.com", new DummySMTPServerContext());
     ((DummySession) session).setMessageId("dummy-message-id");
     DummyMessageListener messageListener = new DummyMessageListener();
     commandDispatcher.getServerContext().register(messageListener);
     assertEquals("503 Need MAIL command.", commandDispatcher.executeCommand("DATA", session));
     session.setSender("test@example.com");
     assertEquals("503 Need RCPT (recipient)", commandDispatcher.executeCommand("DATA", session));
-    session.addRecipient("validuser@subetha.org");
+    session.addRecipient("validuser@subethamail.org");
     assertEquals("354 Enter mail, end with \".\" on a line by itself.", commandDispatcher.executeCommand("DATA", session));
     commandDispatcher.executeCommand("From: test@example.com", session);
-    commandDispatcher.executeCommand("To: validuser@subetha.org", session);
+    commandDispatcher.executeCommand("To: validuser@subethamail.org", session);
     commandDispatcher.executeCommand("Subject: Test Message", session);
     commandDispatcher.executeCommand("", session);
     commandDispatcher.executeCommand("Some text.", session);
@@ -30,7 +30,7 @@ public class DataCommandTest extends CommandTestCase {
     commandDispatcher.executeCommand("..Some text starting with one period.", session);
     assertEquals("250 Message ID <dummy-message-id> accepted for delivery.", commandDispatcher.executeCommand(".", session));
     assertEquals("From: test@example.com\n" +
-        "To: validuser@subetha.org\n" +
+        "To: validuser@subethamail.org\n" +
         "Subject: Test Message\n" +
         "\n" +
         "Some text.\n" +

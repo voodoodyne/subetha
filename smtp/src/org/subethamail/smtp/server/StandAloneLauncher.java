@@ -10,7 +10,7 @@ import java.io.IOException;
 public class StandAloneLauncher {
   public static void main(String[] args) throws IOException {
     SMTPServer server = new SMTPServer(args[0], Integer.parseInt(args[1]));
-    System.out.println("Starting SubEtha SMTPServer on port " + server.getPort());
+    System.out.println("Starting SubEthaMail SMTPServer on port " + server.getPort());
     server.start();
   }
 }

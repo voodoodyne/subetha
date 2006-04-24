@@ -2,6 +2,7 @@ package org.subethamail.smtp.session;
 
 import junit.framework.TestCase;
 import org.subethamail.smtp.session.Session;
+import org.subethamail.smtp.command.DummySMTPServerContext;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
@@ -29,6 +30,6 @@ public class SessionTest extends TestCase {
 
   protected void setUp() throws Exception {
   super.setUp();
-    session = new Session("foo.example.com");
+    session = new Session(new DummySMTPServerContext(), "foo.example.com");
   }
 }

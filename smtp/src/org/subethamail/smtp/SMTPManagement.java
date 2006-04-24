@@ -51,4 +51,14 @@ public interface SMTPManagement
    */
   public void setHostResolutionEnabled(boolean state);
   public boolean getHostResolutionEnabled();
+
+  /**
+   * Changes the behavior of RCPT TO: to filter or not filter based
+   * on a list of known local domains.
+   * @param state
+   */
+  public void setRecipientDomainFilteringEnabled(boolean state);
+  public boolean getRecipientDomainFilteringEnabled();
+
+
 }

@@ -11,7 +11,7 @@ public class HelloCommandTest extends CommandTest {
   public void testHelloCommand() throws Exception {
     assertEquals("501 Syntax: HELO <hostname>",
       commandDispatcher.executeCommand("HELO", session));
-    assertEquals("250 test.subetha.org Hello remotehost.example.com/192.0.2.1",
+    assertEquals("250 test.subethamail.org Hello remotehost.example.com/192.0.2.1",
       commandDispatcher.executeCommand("HELO remotehost.example.com", session));
     assertEquals("503 remotehost.example.com Duplicate HELO/EHLO",
       commandDispatcher.executeCommand("HELO remotehost.example.com", session));
@@ -19,7 +19,7 @@ public class HelloCommandTest extends CommandTest {
 
   public void testBlackholedHelo() throws Exception {
     assertTrue(session.isActive());
-    assertEquals("221 test.subetha.org closing connection. Traffic from your server denied access.",
+    assertEquals("221 test.subethamail.org closing connection. Traffic from your server denied access.",
         commandDispatcher.executeCommand("HELO spambox.blackhat.org", session));
     assertFalse(session.isActive());
   }

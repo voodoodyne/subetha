@@ -1,5 +1,5 @@
 /*
- * $Id: BlornLoginModule.java 110 2006-02-28 06:59:40Z jeff $
+ * $Id$
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/util/SimilarityLoginModule.java,v $
  */
 

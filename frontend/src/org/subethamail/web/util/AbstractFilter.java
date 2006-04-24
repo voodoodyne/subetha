@@ -1,6 +1,6 @@
 /*
- * $Id: AbstractFilter.java 86 2006-02-22 03:36:01Z jeff $
- * $URL: https://svn.infohazard.org/blorn/trunk/frontend/src/com/blorn/web/util/AbstractFilter.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.web.util;

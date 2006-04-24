@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <!--
-	$Id: build.xml 99 2006-02-25 00:55:38Z jeff $
-	$URL: https://svn.infohazard.org/blorn/trunk/smtp/build.xml $
+	$Id$
+	$URL$
 
 	Build file for the smtp service.
 	

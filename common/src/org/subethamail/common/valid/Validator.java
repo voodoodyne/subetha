@@ -1,5 +1,5 @@
 /*
- * $Id: Validator.java 105 2006-02-27 10:06:27Z jeff $
+ * $Id$
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/util/Geometry.java,v $
  */
 

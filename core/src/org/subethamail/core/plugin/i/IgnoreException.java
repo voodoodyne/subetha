@@ -1,5 +1,5 @@
 /*
- * $Id: NameAlreadyTakenException.java,v 1.1 2003/09/04 06:24:48 jeff Exp $
+ * $Id$
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/ejb/NameAlreadyTakenException.java,v $
  */
 

@@ -1,5 +1,5 @@
 /*
- * $Id: StatsUpdate.java 121 2006-03-07 09:50:09Z jeff $
+ * $Id$
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/mbean/BindStatisticsManagerMBean.java,v $
  */
 

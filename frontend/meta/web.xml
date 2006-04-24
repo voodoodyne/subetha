@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-	$Id: web.xml 86 2006-02-22 03:36:01Z jeff $
-	$URL: https://svn.infohazard.org/blorn/trunk/frontend/meta/web.xml $
+	$Id$
+	$URL$
 -->
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

@@ -1,6 +1,6 @@
 /*
- * $Id: AuthAction.java 110 2006-02-28 06:59:40Z jeff $
- * $URL: https://svn.infohazard.org/blorn/trunk/frontend/src/com/blorn/web/action/AuthAction.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.web;

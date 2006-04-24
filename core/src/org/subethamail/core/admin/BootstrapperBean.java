@@ -1,6 +1,6 @@
 /*
- * $Id: ReceptionistEJB.java 110 2006-02-28 06:59:40Z jeff $
- * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/recep/ReceptionistEJB.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.core.admin;

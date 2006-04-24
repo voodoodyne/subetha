@@ -1,6 +1,6 @@
 /*
- * $Id: Transmute.java 105 2006-02-27 10:06:27Z jeff $
- * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/util/Transmute.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.core.acct.i;

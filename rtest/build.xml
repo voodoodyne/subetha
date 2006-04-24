@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <!--
-	$Id: build.xml 86 2006-02-22 03:36:01Z jeff $
-	$URL: https://svn.infohazard.org/blorn/trunk/rtest/build.xml $
+	$Id$
+	$URL$
 
 	Build file for the junit regression tests.  Not an
 	entry point; imported by the top-level buildfile.

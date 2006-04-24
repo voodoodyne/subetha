@@ -1,6 +1,6 @@
 /*
- * $Id: DAOEJB.java 91 2006-02-23 09:41:17Z jeff $
- * $URL: https://svn.infohazard.org/blorn/trunk/entity/src/com/blorn/entity/dao/DAOEJB.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.entity.dao;

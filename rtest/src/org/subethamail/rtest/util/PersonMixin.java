@@ -1,6 +1,6 @@
 /*
- * $Id: PersonMixin.java 88 2006-02-22 13:51:08Z jeff $
- * $URL: https://svn.infohazard.org/blorn/trunk/rtest/src/com/blorn/rtest/util/PersonMixin.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.rtest.util;

@@ -1,6 +1,6 @@
 /*
- * $Id: AccountMgr.java 127 2006-03-15 02:29:11Z jeff $
- * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/acct/i/AccountMgr.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.core.queue;

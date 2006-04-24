@@ -1,6 +1,6 @@
 /*
- * $Id: PersonalEJB.java 125 2006-03-07 13:27:43Z jeff $
- * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/util/PersonalEJB.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.core.util;

@@ -1,6 +1,6 @@
 /*
- * $Id: PersonData.java 105 2006-02-27 10:06:27Z jeff $
- * $URL: https://svn.infohazard.org/blorn/trunk/core/src/com/blorn/core/blog/i/PersonData.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.plugin.blueprint;

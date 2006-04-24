@@ -6,8 +6,8 @@ DOCTYPE server
 -->
 
 <!--
-	$Id: jboss-service.xml 94 2006-02-23 20:51:49Z jeff $
-	$URL: https://svn.infohazard.org/blorn/trunk/core/meta/jboss-service.xml $
+	$Id$
+	$URL$
 -->
 
 <server>

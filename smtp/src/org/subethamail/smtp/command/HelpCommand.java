@@ -1,14 +1,14 @@
 package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.CommandException;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class HelpCommand extends Command {
+public class HelpCommand extends BaseCommand {
 
   public HelpCommand(CommandDispatcher commandDispatcher) {
     super(commandDispatcher, "HELP");

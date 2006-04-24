@@ -1,14 +1,14 @@
 package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.HelpMessage;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class QuitCommand extends Command {
+public class QuitCommand extends BaseCommand {
   public QuitCommand(CommandDispatcher commandDispatcher) {
     super(commandDispatcher, "QUIT");
     helpMessage = new HelpMessage("QUIT", "Exit the SMTP session.");

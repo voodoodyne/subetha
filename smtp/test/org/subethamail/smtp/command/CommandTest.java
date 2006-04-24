@@ -1,7 +1,7 @@
 package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.command.HelpMessage;
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.HelpCommand;
 import junit.framework.Assert;
@@ -13,14 +13,14 @@ public class CommandTest extends CommandTestCase {
   private static final HelpMessage TEST_HELP_MESSAGE = new HelpMessage("TEST", "No help for TEST.");
 
   public void testCommandRegistration() throws Exception {
-    Command command = new Command(commandDispatcher, "TEST");
+    Command command = new BaseCommand(commandDispatcher, "TEST");
     Assert.assertEquals("500 Not Implemented", commandDispatcher.executeCommand("testing testing", session));
   }
 
   public void testHelp() throws Exception {
     CommandDispatcher commandDispatcher = new CommandDispatcher(new DummySMTPServerContext());
     new HelpCommand(commandDispatcher);
-    Command command = new Command(commandDispatcher, "TEST");
+    BaseCommand command = new BaseCommand(commandDispatcher, "TEST");
     command.initHelpMessage();
     assertEquals(TEST_HELP_MESSAGE, command.getHelp());
     assertEquals(TEST_HELP_MESSAGE, commandDispatcher.getHelpMessage("TEST"));

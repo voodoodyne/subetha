@@ -1,13 +1,13 @@
 package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 import org.subethamail.smtp.command.CommandDispatcher;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class DataCommand extends Command {
+public class DataCommand extends BaseCommand {
   public DataCommand(CommandDispatcher commandDispatcher) {
     super(commandDispatcher, "DATA");
     helpMessage = new HelpMessage("DATA", "Following text is collected as the message.\n" +

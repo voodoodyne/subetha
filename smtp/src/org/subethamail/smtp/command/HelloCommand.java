@@ -6,13 +6,13 @@ import org.subethamail.smtp.server.ServerRejectedException;
 
 import java.io.IOException;
 
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 import org.subethamail.smtp.command.CommandDispatcher;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class HelloCommand extends Command {
+public class HelloCommand extends BaseCommand {
   public HelloCommand(CommandDispatcher commandDispatcher) {
     super(commandDispatcher, "HELO");
     helpMessage = new HelpMessage("HELO", "<hostname>", "Introduce yourself.");

@@ -1,14 +1,14 @@
 package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.HelpMessage;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class VerifyCommand extends Command {
+public class VerifyCommand extends BaseCommand {
   public VerifyCommand(CommandDispatcher commandDispatcher) {
     super(commandDispatcher, "VRFY");
     helpMessage = new HelpMessage("VRFY", "<recipient>", "Verify an address. To see the address to which it aliases,\n" +

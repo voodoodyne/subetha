@@ -1,14 +1,14 @@
 package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.HelpMessage;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class ReceiptCommand extends Command {
+public class ReceiptCommand extends BaseCommand {
   // TODO(imf): Split into SMTP and ESMTP versions.
   public ReceiptCommand(CommandDispatcher commandDispatcher) {
     super(commandDispatcher, "RCPT");

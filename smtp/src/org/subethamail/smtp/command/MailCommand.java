@@ -2,14 +2,14 @@ package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.Session;
 
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.HelpMessage;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class MailCommand extends Command {
+public class MailCommand extends BaseCommand {
 
   public MailCommand(CommandDispatcher commandDispatcher) {
     super(commandDispatcher, "MAIL");

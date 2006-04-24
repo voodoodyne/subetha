@@ -1,14 +1,14 @@
 package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.HelpMessage;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class VerboseCommand extends Command {
+public class VerboseCommand extends BaseCommand {
   public VerboseCommand(CommandDispatcher commandDispatcher) {
     super(commandDispatcher, "VERB");
     helpMessage =  new HelpMessage("VERB", "Go into verbose mode. This sends Oxy responses that are\n" +

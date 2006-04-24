@@ -1,13 +1,13 @@
 package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 import org.subethamail.smtp.command.CommandDispatcher;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class ExpnCommand extends Command {
+public class ExpnCommand extends BaseCommand {
   public ExpnCommand(CommandDispatcher commandDispatcher) {
     super(commandDispatcher, "EXPN");
     helpMessage = new HelpMessage("EXPN", "<recipient>",

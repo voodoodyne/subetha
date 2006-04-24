@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.subethamail.smtp.command.Command;
+import org.subethamail.smtp.command.BaseCommand;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
 public class CommandDispatcher {
-  private Map<String, Command> commands = new HashMap<String, Command>();
-  private List<Command> commandList = new ArrayList<Command>();
+  private Map<String, BaseCommand> commands = new HashMap<String, BaseCommand>();
+  private List<BaseCommand> commandList = new ArrayList<BaseCommand>();
   private SMTPServerContext SMTPServerContext;
 
   public CommandDispatcher(SMTPServerContext SMTPServerContext) {
@@ -57,7 +57,7 @@ public class CommandDispatcher {
     return command;
   }
 
-  public void add(String name, Command command) throws InvalidCommandNameException {
+  public void add(String name, BaseCommand command) throws InvalidCommandNameException {
     commands.put(toKey(name), command);
     commandList.add(command);
   }
@@ -71,7 +71,7 @@ public class CommandDispatcher {
     return getCommandFromString(command).getHelp();
   }
 
-  public List<Command> getCommandList() {
+  public List<BaseCommand> getCommandList() {
     return commandList;
   }
 

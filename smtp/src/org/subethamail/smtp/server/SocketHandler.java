@@ -35,7 +35,8 @@ class SocketHandler
     out.flush();
     String command;
     while (session.isActive()) {
-      command = (in.readLine()).trim();
+      command = (in.readLine());
+      if (command != null) command = command.trim();
       out.println(serverContext.getCommandDispatcher().executeCommand(command, session));
       out.flush();
     }

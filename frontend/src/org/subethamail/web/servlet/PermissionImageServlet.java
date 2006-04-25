@@ -51,10 +51,10 @@ public class PermissionImageServlet extends HttpServlet
 	
 	/** TODO:  figure out the img size dynamically */
 	public static final int IMG_WIDTH = 35;
-	public static final int IMG_HEIGHT = 120;
+	public static final int IMG_HEIGHT = 140;
 	
 	/** */
-	public static final double TEXT_ANGLE_RADIANS = -Math.PI/2.3;
+	public static final double TEXT_ANGLE_RADIANS = -Math.PI/2.2;
 	
 	/**
 	 */

@@ -284,13 +284,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
 		if (enabled == null)
 		{
-			// Create it from scratch, let cascading persist work
+			// Create it from scratch
 			enabled = new EnabledFilter(list, className);
+			this.dao.persist(enabled);
 			list.addEnabledFilter(enabled);
 			
 			for (Map.Entry<String, Object> argEntry: args.entrySet())
 			{
 				FilterArgument farg = new FilterArgument(enabled, argEntry.getKey(), argEntry.getValue());
+				this.dao.persist(farg);
 				enabled.getArguments().put(argEntry.getKey(), farg);
 			}
 		}
@@ -309,6 +311,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 				if (farg == null)
 				{
 					farg = new FilterArgument(enabled, argEntry.getKey(), argEntry.getValue());
+					this.dao.persist(farg);
 					enabled.getArguments().put(argEntry.getKey(), farg);
 				}
 				else
@@ -348,9 +351,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 		
-		// Cascading delete should take care of deleting all the objects
-		if (list.getEnabledFilters().remove(className) == null)
+		EnabledFilter filt = list.getEnabledFilters().remove(className);
+		if (filt == null)
+		{
 			if (log.isWarnEnabled())
 				log.warn("Attempt to remove filter " + className + " which was not enabled on list " + list.getName());
+		}
+		else
+		{
+			this.dao.remove(filt);
+		}
 	}
 }

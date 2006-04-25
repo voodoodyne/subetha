@@ -71,6 +71,7 @@ public class FilterArgument implements Serializable, Comparable
 		
 		this.filter = filter;
 		this.name = name;
+		this.value = value;
 	}
 	
 	/** */

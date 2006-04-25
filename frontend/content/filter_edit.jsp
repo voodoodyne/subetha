@@ -11,8 +11,16 @@
 		<input type="hidden" name="listId" value="${model.listId}" />
 		<input type="hidden" name="className" value="${model.className}" />
 		<table>
-			<c:forEach var="filterParam" items="${model.filter.parameters}">
-				<tr>
+			<c:forEach var="filterParam" items="${model.filter.parameters}" varStatus="loop">
+				<c:choose>
+					<c:when test="${loop.index % 2 == 0}">
+						<c:set var="color" value="a"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="color" value="b"/>
+					</c:otherwise>
+				</c:choose>
+				<tr class="${color}">
 					<th>
 						<c:out value="${filterParam.name}"/>
 					</th>
@@ -26,6 +34,7 @@
 								<%-- Booleans get checkboxes --%>
 								<input type="checkbox"
 										name="<c:out value="form:${filterParam.name}"/>"
+										value="true"
 										<c:if test="${model.form[filterParam.name]}">
 											checked="checked"
 										</c:if>
@@ -53,7 +62,7 @@
 						</c:if>
 					</td>
 				</tr>
-				<tr>
+				<tr class="${color}">
 					<td colspan="2"><c:out value="${filterParam.description}"/></td>
 				</tr>
 			</c:forEach>

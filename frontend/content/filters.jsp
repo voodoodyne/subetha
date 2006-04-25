@@ -30,7 +30,7 @@
 		</p>
 	</c:if>
 	
-	<table>
+	<table class="filters">
 		<tr>
 			<th>Action</th>
 			<th>Filter</th>

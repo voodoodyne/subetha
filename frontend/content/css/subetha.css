@@ -29,11 +29,11 @@ body {
 }
 /* end bluehaze.css overrides */
 
-.a td {
+.a td, .a th {
 	background: #f4f4f4;
 }
 
-.b td {
+.b td, .b th {
 	background: #e8e8e8;
 }
 
@@ -89,4 +89,8 @@ table.permissions th.role {
 }
 table.permissions td {
 	border: 1px solid grey;
+}
+
+table.filters td {
+	vertical-align: top;
 }

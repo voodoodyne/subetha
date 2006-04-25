@@ -26,17 +26,17 @@ public enum Permission
 	READ_ARCHIVES,
 	READ_NOTES,
 	EDIT_NOTES,
-	SEE_ADDRESSES;		// See email addresses in archives and subscription list
+	VIEW_ADDRESSES;		// See email addresses in archives and subscription list
 	
 	/** A set that contains all permissions */
 	public static final Set<Permission> ALL;
 	static
 	{
 		Set<Permission> tmp = new TreeSet<Permission>();
-		
+
 		for (Permission p: Permission.values())
 			tmp.add(p);
-		
+
 		ALL = Collections.unmodifiableSet(tmp);
 	}
 	
@@ -81,5 +81,50 @@ public enum Permission
 	public String getPretty()
 	{
 		return this.pretty;
+	}
+	
+	public String getDescription(Permission val)
+	{
+		String response;
+		switch (val)
+		{
+			case EDIT_SETTINGS:
+				response = "Member can edit mailing list settings.";
+				break;
+			case EDIT_ROLES:
+				response = "Edit the roles for members.";
+				break;
+			case EDIT_FILTERS:
+				response = "Edit the filters of a mailing list.";
+				break;
+			case APPROVE_MESSAGES:
+				response = "Approve messages to a mailing list.";
+				break;
+			case APPROVE_SUBSCRIPTIONS:
+				response = "Approve subscriptions to a mailing list.";
+				break;
+			case POST:
+				response = "Post messages to a mailing list.";
+				break;
+			case VIEW_SUBSCRIBERS:
+				response = "View subscrivers to a mailing list.";
+				break;
+			case READ_ARCHIVES:
+				response = "Read the archives of a mailing list.";
+				break;
+			case READ_NOTES:
+				response = "Read private notes about a member of a mailing list.";
+				break;
+			case EDIT_NOTES:
+				response = "Edit private notes about a member of a mailing list.";
+				break;
+			case VIEW_ADDRESSES:
+				response = "Can view the address of members of a mailing list.";
+				break;
+			default:
+				response = "Invalid permission";
+				break;
+		}
+		return response;
 	}
 }

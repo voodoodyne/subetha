@@ -26,7 +26,6 @@
 	<classpathentry kind="lib" path="core/lib/velocity-1.4.jar"/>
 	<classpathentry kind="lib" path="rtest/lib/dumbster1.6.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/tagonist.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/ejb3-persistence.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>

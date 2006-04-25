@@ -3,6 +3,7 @@ package org.subethamail.smtp.server;
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
+@SuppressWarnings("serial")
 public class ServerRejectedException extends Exception {
   public ServerRejectedException() {
   }

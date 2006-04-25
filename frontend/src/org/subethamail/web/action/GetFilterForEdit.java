@@ -5,8 +5,6 @@
 
 package org.subethamail.web.action;
 
-import java.util.HashMap;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.plugin.i.FilterParameter;

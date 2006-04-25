@@ -1,16 +1,14 @@
 package org.subethamail.smtp.command;
 
-import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.i.SMTPServerContext;
-
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
 
-import org.subethamail.smtp.command.BaseCommand;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.smtp.i.SMTPServerContext;
+import org.subethamail.smtp.session.Session;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

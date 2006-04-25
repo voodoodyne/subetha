@@ -13,6 +13,7 @@ package org.subethamail.core.acct.i;
  * 
  * @author Jeff Schnitzer
  */
+@SuppressWarnings("serial")
 public class AuthSubscribeResult extends AuthCredentials
 {
 	/** */

@@ -1,12 +1,10 @@
 package org.subethamail.smtp.command;
 
-import org.subethamail.smtp.session.Session;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
+
+import org.subethamail.smtp.session.Session;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

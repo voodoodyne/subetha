@@ -34,7 +34,6 @@ import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
-import org.subethamail.entity.Role;
 
 /**
  * Implementation of the Archiver interface.

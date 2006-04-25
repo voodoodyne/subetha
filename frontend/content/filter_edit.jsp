@@ -7,7 +7,7 @@
 	
 	<p><c:out value="${model.filter.description}"/></p>
 
-	<form action="filter_save.jsp" method="post">
+	<form action="filter_save.jsp" method="post" class="form-inline">
 		<input type="hidden" name="listId" value="${model.listId}" />
 		<input type="hidden" name="className" value="${model.className}" />
 		<table>
@@ -68,5 +68,9 @@
 			</c:forEach>
 		</table>
 		<input type="submit" value="Save"/>
+	</form>
+	<form action="filters.jsp" method="post" class="form-inline">
+		<input type="hidden" name="listId" value="${model.listId}" />
+		<input type="submit" value="Cancel"/>
 	</form>
 </trim:list>

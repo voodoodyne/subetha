@@ -8,7 +8,7 @@
 
 <trim:list title="Edit Role: ${model.name}" listId="${model.listId}">
 
-	<form action="<c:url value="/role_save.jsp"/>" method="post">
+	<form action="<c:url value="/role_save.jsp"/>" method="post" class="form-inline">
 		<input type="hidden" name="roleId" value="${model.roleId}" />
 		
 		<table>
@@ -44,7 +44,11 @@
 				</c:forEach>
 			</tr>
 		</table>
-		<input type="submit" value="Save Changes" />
+		<input type="submit" value="Save" />
+	</form>
+	<form action="<c:url value="/roles.jsp"/>" method="post" class="form-inline">
+		<input type="hidden" name="listId" value="${model.listId}" />
+		<input type="submit" value="Cancel" />
 	</form>
 
 	<h3>Delete Role</h3>

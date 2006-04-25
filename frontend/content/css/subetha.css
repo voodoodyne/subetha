@@ -12,22 +12,26 @@ body {
 }
 
 #bodyText {
-  margin: 0mm 5mm 0 13em;
-  text-align: left;
+	margin: 0mm 5mm 0 13em;
+	text-align: left;
 }
 
 #bodyText p {
-  padding-bottom: 0ex;
+	padding-bottom: 0ex;
 }
 
 .sideBox {
-  margin-top: 0mm;
+	margin-top: 0mm;
 }
 
 .sideBox a, .sideBox a:hover, .sideBox span {
-  line-height: .75em;
+	line-height: .75em;
 }
 /* end bluehaze.css overrides */
+
+.form-inline {
+	display: inline
+}
 
 .a td, .a th {
 	background: #f4f4f4;
@@ -38,7 +42,7 @@ body {
 }
 
 h2 {
-  font-size: 135%;
+	font-size: 135%;
 }
 
 form th {

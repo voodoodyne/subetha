@@ -335,8 +335,8 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			if (argValue == null)
 				throw new IllegalArgumentException("Missing parameter " + param.getName());
 
-			if (!param.getClass().equals(argValue.getClass()))
-				throw new IllegalArgumentException("Param " + param.getName() + " has class " + argValue.getClass() + " but should have class " + param.getClass());
+			if (!param.getType().equals(argValue.getClass()))
+				throw new IllegalArgumentException("Param " + param.getName() + " has class " + argValue.getClass() + " but should have class " + param.getType());
 		}
 	}
 

@@ -13,7 +13,6 @@ import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.FilterSave.Model;
 import org.subethamail.web.action.auth.AuthAction;
-import org.subethamail.web.util.EnumUtils;
 
 /**
  * Pre-populates a model for FilterSave.  This is a very peculiar

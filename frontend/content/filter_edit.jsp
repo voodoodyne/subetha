@@ -24,9 +24,22 @@
 						<c:choose>
 							<c:when test="${filterParam.type.name == 'java.lang.Boolean'}">
 								<%-- Booleans get checkboxes --%>
+								<input type="checkbox"
+										name="<c:out value="form:${filterParam.name}"/>"
+										<c:if test="${model.form[filterParam.name]}">
+											checked="checked"
+										</c:if>
+								/>
 							</c:when>
 							<c:when test="${!empty model.enumValues[filterParam.name]}">
 								<%-- Enums will have enumValues and thus get checkboxes --%>
+								<select name="<c:out value="form:${filterParam.name}"/>">
+									<c:forEach var="enumValue" items="${model.enumValues[filterParam.name]}">
+										<option value="<c:out value="${enumValue}"/>"
+											<c:if test="${enumValue == model.form[filterParam.name]}">selected="selected"</c:if>
+										><c:out value="${enumValue}"/></option>
+									</c:forEach>
+								</select>
 							</c:when>
 							<c:otherwise>
 								<%-- Everything else we treat as text --%>

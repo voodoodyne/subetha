@@ -36,8 +36,16 @@
 			<th>Filter</th>
 			<th>Parameters</th>
 		</tr>
-		<c:forEach var="filter" items="${filters.enabled}">
-			<tr>
+		<c:forEach var="filter" items="${filters.enabled}" varStatus="loop">
+			<c:choose>
+				<c:when test="${loop.index % 2 == 0}">
+					<c:set var="color" value="a"/>
+				</c:when>
+				<c:otherwise>
+					<c:set var="color" value="b"/>
+				</c:otherwise>
+			</c:choose>
+			<tr class="${color}">
 				<td>
 					<form action="filter_edit.jsp" method="get">
 						<input type="hidden" name="listId" value="${param.listId}" />

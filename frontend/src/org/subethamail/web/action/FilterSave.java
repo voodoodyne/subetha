@@ -17,7 +17,6 @@ import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
-import org.subethamail.web.util.EnumUtils;
 import org.tagonist.propertize.Property;
 
 /**
@@ -77,12 +76,10 @@ public class FilterSave extends AuthAction
 			
 			for (FilterParameter filtParam: this.filter.getParameters())
 			{
-				if (Enum.class.isAssignableFrom(filtParam.getClass()))
-				{
-					Enum[] values = EnumUtils.getValues(filtParam.getClass());
-					
+				Enum[] values = (Enum[])filtParam.getType().getEnumConstants();
+				
+				if (values != null)
 					this.enumValues.put(filtParam.getName(), values);
-				}
 			}
 		}
 	}
@@ -118,11 +115,22 @@ public class FilterSave extends AuthAction
 				{
 					args.put(param.getName(), Converter.valueOf(stringValue, param.getType()));
 				}
+				catch (NumberFormatException ex)
+				{
+					model.setError(param.getName(), "Must be a number");
+				}
 				catch (Exception ex)
 				{
 					// TODO:  make these error messages a little prettier.
-					model.setError(param.getName(), ex.getMessage());
+					model.setError(param.getName(), ex.toString());
 				}
+			}
+			else
+			{
+				// Special case; unchecked checkboxes don't come back with the form
+				// data.  So assume any boolean values are false.
+				if (param.getType().equals(Boolean.class) || param.getType().equals(Boolean.TYPE))
+					args.put(param.getName(), Boolean.FALSE);
 			}
 		}
 		

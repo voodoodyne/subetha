@@ -25,6 +25,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 
@@ -147,8 +148,9 @@ public class MailingList implements Serializable, Comparable
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+	@OrderBy(value="name")
 	Set<Role> roles;
-	
+
 	/**
 	 */
 	public MailingList() {}

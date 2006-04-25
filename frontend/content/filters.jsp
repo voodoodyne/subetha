@@ -55,7 +55,7 @@
 					<form action="filter_delete.jsp" method="get">
 						<input type="hidden" name="listId" value="${param.listId}" />
 						<input type="hidden" name="className" value="${filter.className}" />
-						<input type="submit" value="Remove" style="width:5em" />
+						<input type="submit" value="Disable" style="width:5em" onclick="return confirm('Are you sure you want to disable this filter?');" />
 					</form>
 				</td>
 				<td>

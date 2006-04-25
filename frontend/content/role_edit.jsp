@@ -56,7 +56,7 @@
 	<form action="<c:url value="/role_delete.jsp"/>" method="post">
 		<input type="hidden" name="deleteRoleId" value="${model.roleId}" />
 		<p>
-			<input type="submit" value="Delete" />
+			<input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this role?');" />
 			this role, converting any participating subscribers to
 			
 			<select name="convertToRoleId">

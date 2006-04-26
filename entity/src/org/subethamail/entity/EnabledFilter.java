@@ -88,6 +88,12 @@ public class EnabledFilter implements Serializable, Comparable
 	/** */
 	public Map<String, FilterArgument> getArguments() { return this.arguments; }
 	
+	/** Convenience method */
+	public void addArgument(FilterArgument arg)
+	{
+		this.arguments.put(arg.getName(), arg);
+	}
+	
 	/**
 	 * Builds a nice map of the key/values 
 	 */

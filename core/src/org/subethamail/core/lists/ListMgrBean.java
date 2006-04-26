@@ -8,6 +8,8 @@ package org.subethamail.core.lists;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -279,8 +281,6 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		
 		Filter filt = this.filterRunner.getFilters().get(className);
 		
-		this.validateFilterArgs(filt.getParameters(), args);
-		
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
 		if (enabled == null)
 		{
@@ -289,60 +289,66 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			this.dao.persist(enabled);
 			list.addEnabledFilter(enabled);
 			
-			for (Map.Entry<String, Object> argEntry: args.entrySet())
+			for (FilterParameter param: filt.getParameters())
 			{
-				FilterArgument farg = new FilterArgument(enabled, argEntry.getKey(), argEntry.getValue());
+				Object value = args.get(filt.getName());
+				if (value == null)
+					value = param.getDefaultValue();
+				
+				if (!param.getType().equals(value.getClass()))
+					throw new IllegalArgumentException("Param " + param.getName() + " has class " + value.getClass() + " but should have class " + param.getType());
+					
+				FilterArgument farg = new FilterArgument(enabled, param.getName(), value);
 				this.dao.persist(farg);
-				enabled.getArguments().put(argEntry.getKey(), farg);
+				enabled.addArgument(farg);
 			}
 		}
 		else
 		{
 			// We need to synchronize the args to the enabled list.
 			
-			// First get rid of anything not in the args list, relying on
-			// cascading delete to nuke the FilterArgument entities.
-			enabled.getArguments().keySet().retainAll(args.keySet());
+			// First get rid of anything already enabled but not in the paramNames
+			// We'll need a convenient set of filter params
+			Set<String> paramNames = new HashSet<String>();
+			for (FilterParameter param: filt.getParameters())
+				paramNames.add(param.getName());
 			
-			// Now make sure that we have everything in args
-			for (Map.Entry<String, Object> argEntry: args.entrySet())
+			Iterator<FilterArgument> enabledArgsIt = enabled.getArguments().values().iterator();
+			while (enabledArgsIt.hasNext())
 			{
-				FilterArgument farg = enabled.getArguments().get(argEntry.getKey());
+				FilterArgument arg = enabledArgsIt.next();
+				if (!paramNames.contains(arg.getName()))
+				{
+					this.dao.remove(arg);
+					enabledArgsIt.remove();
+				}
+			}
+			
+			// Now add back in everything that is in the official list
+			for (FilterParameter param: filt.getParameters())
+			{
+				Object value = args.get(param.getName());
+				if (value == null)
+					value = param.getDefaultValue();
+				
+				if (!param.getType().equals(value.getClass()))
+					throw new IllegalArgumentException("Param " + param.getName() + " has class " + value.getClass() + " but should have class " + param.getType());
+					
+				FilterArgument farg = enabled.getArguments().get(param.getName());
 				if (farg == null)
 				{
-					farg = new FilterArgument(enabled, argEntry.getKey(), argEntry.getValue());
+					farg = new FilterArgument(enabled, param.getName(), value);
 					this.dao.persist(farg);
-					enabled.getArguments().put(argEntry.getKey(), farg);
+					enabled.addArgument(farg);
 				}
 				else
 				{
-					farg.setValue(argEntry.getValue());
+					farg.setValue(value);
 				}
 			}
 		}
 	}
 	
-	/**
-	 * Just verifies that the args are all valid params and that they
-	 * have the correct type.  Also ensure that every expected parameter
-	 * has a value.
-	 */
-	protected void validateFilterArgs(FilterParameter[] params, Map<String, Object> args)
-	{
-		if (args.size() != params.length)
-			throw new IllegalArgumentException("Expected " + params.length + " args, got " + args.size());
-		
-		for (FilterParameter param: params)
-		{
-			Object argValue = args.get(param.getName());
-			if (argValue == null)
-				throw new IllegalArgumentException("Missing parameter " + param.getName());
-
-			if (!param.getType().equals(argValue.getClass()))
-				throw new IllegalArgumentException("Param " + param.getName() + " has class " + argValue.getClass() + " but should have class " + param.getType());
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#disableFilter(java.lang.Long, java.lang.String)

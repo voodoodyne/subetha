@@ -131,6 +131,9 @@ public interface ListMgr
 	
 	/**
 	 * Enables a filter on a list, or changes the data associated with that filter.
+	 * If a FilterParameter is missing from args, it will be assigned its default
+	 * value.  If an unrecognized FilterParameter is found in args, it is silently
+	 * ignored.
 	 * 
 	 * Requires Permission.EDIT_FILTERS
 	 */

@@ -14,7 +14,7 @@ import org.subethamail.web.action.auth.AuthAction;
 import org.tagonist.propertize.Property;
 
 /**
- * Subscribes an anonymous (not logged in) user to a mailing list.
+ * Changes a user's name.
  * 
  * @author Jon Stevens
  */

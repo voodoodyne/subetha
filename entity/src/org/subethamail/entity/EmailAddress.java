@@ -6,6 +6,7 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +34,9 @@ import org.subethamail.common.valid.Validator;
  * One consequence is that you never change email addresses;
  * you add new ones and delete old ones. 
  * 
+ * Email addresses track their bounce count so we know when
+ * to disable them.
+ * 
  * @author Jeff Schnitzer
  */
 @Entity
@@ -42,6 +46,12 @@ public class EmailAddress implements Serializable, Comparable
 {
 	/** */
 	@Transient private static Log log = LogFactory.getLog(EmailAddress.class);
+	
+	/**
+	 * We only increment or decrement once for this period, in millis.
+	 * One day. 
+	 */
+	@Transient public static final long BOUNCE_IGNORE_PERIOD = 1000 * 60 * 60 * 24; 
 	
 	/** */
 	@Id
@@ -60,6 +70,12 @@ public class EmailAddress implements Serializable, Comparable
 	 */
 	@Column(nullable=false)
 	int bounces;
+	
+	@Column(nullable=true)
+	Date lastBounceIncrement;
+	
+	@Column(nullable=true)
+	Date lastBounceDecrement;
 	
 	/**
 	 */
@@ -108,20 +124,36 @@ public class EmailAddress implements Serializable, Comparable
 	public int getBounces() { return this.bounces; }
 
 	/**
-	 * When a bounce occurs, it increments the count by 2.
+	 * When a bounce occurs, it increments the count by 2.  Only
+	 * do this once per day.
 	 */
 	public void bounceIncrement()
 	{
-		this.bounces += 2;
+		if (this.lastBounceIncrement == null
+				|| System.currentTimeMillis() >
+					(this.lastBounceIncrement.getTime() + BOUNCE_IGNORE_PERIOD))
+		{
+			this.bounces += 2;
+			this.lastBounceIncrement = new Date();
+		}
 	}
 	
 	/**
 	 * When mail goes out, the bounce count should decay slightly.
+	 * Only do this once per day.
 	 */
 	public void bounceDecay()
 	{
 		if (this.bounces > 0)
-			this.bounces--;
+		{
+			if (this.lastBounceDecrement == null
+					|| System.currentTimeMillis() >
+						(this.lastBounceDecrement.getTime() + BOUNCE_IGNORE_PERIOD))
+			{
+				this.bounces--;
+				this.lastBounceDecrement = new Date();
+			}
+		}
 	}
 	
 	/** */

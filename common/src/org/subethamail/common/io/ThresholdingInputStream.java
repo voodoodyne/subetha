@@ -17,7 +17,7 @@ import java.io.InputStream;
 abstract public class ThresholdingInputStream extends InputStream
 {
 	/** */
-	InputStream base;
+	protected InputStream input;
 	
 	/** Max number of bytes to read */
 	int threshold;
@@ -29,7 +29,7 @@ abstract public class ThresholdingInputStream extends InputStream
 	 */
 	public ThresholdingInputStream(InputStream base, int thresholdBytes)
 	{
-		this.base = base;
+		this.input = base;
 		this.threshold = thresholdBytes;
 	}
 
@@ -39,7 +39,7 @@ abstract public class ThresholdingInputStream extends InputStream
 	@Override
 	public int available() throws IOException
 	{
-		return this.base.available();
+		return this.input.available();
 	}
 
 	/* (non-Javadoc)
@@ -48,7 +48,7 @@ abstract public class ThresholdingInputStream extends InputStream
 	@Override
 	public void close() throws IOException
 	{
-		this.base.close();
+		this.input.close();
 	}
 
 	/* (non-Javadoc)
@@ -57,7 +57,7 @@ abstract public class ThresholdingInputStream extends InputStream
 	@Override
 	public void mark(int readlimit)
 	{
-		this.base.mark(readlimit);
+		this.input.mark(readlimit);
 	}
 
 	/* (non-Javadoc)
@@ -66,7 +66,7 @@ abstract public class ThresholdingInputStream extends InputStream
 	@Override
 	public boolean markSupported()
 	{
-		return this.base.markSupported();
+		return this.input.markSupported();
 	}
 
 	/* (non-Javadoc)
@@ -77,7 +77,7 @@ abstract public class ThresholdingInputStream extends InputStream
 	{
 		this.checkThreshold(1);
 		
-		int result = this.base.read();
+		int result = this.input.read();
 		
 		this.countRead++;
 		
@@ -92,7 +92,7 @@ abstract public class ThresholdingInputStream extends InputStream
 	{
 		this.checkThreshold(len);
 		
-		int result = this.base.read(b, off, len);
+		int result = this.input.read(b, off, len);
 		
 		if (result > 0)
 			this.countRead += result;
@@ -108,7 +108,7 @@ abstract public class ThresholdingInputStream extends InputStream
 	{
 		this.checkThreshold(b.length);
 		
-		int result = this.base.read(b);
+		int result = this.input.read(b);
 		
 		if (result > 0)
 			this.countRead += result;
@@ -122,7 +122,7 @@ abstract public class ThresholdingInputStream extends InputStream
 	@Override
 	public void reset() throws IOException
 	{
-		this.base.reset();
+		this.input.reset();
 		
 		this.countRead = 0;
 	}
@@ -133,7 +133,7 @@ abstract public class ThresholdingInputStream extends InputStream
 	@Override
 	public long skip(long n) throws IOException
 	{
-		return this.base.skip(n);
+		return this.input.skip(n);
 	}
 
 	/**

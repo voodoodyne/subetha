@@ -79,7 +79,7 @@ public class InjectorBean implements Injector, InjectorRemote
 	 * tends to go up as bounces occur and tends to go down when bounces do
 	 * not occur.
 	 */
-	public static final long MAX_BOUNCE_THRESHOLD = 20;
+	public static final long MAX_BOUNCE_THRESHOLD = 7;
 
 	/** */
 	@EJB DAO dao;

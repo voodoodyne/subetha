@@ -16,7 +16,7 @@ import org.tagonist.propertize.Property;
 /**
  * Subscribes an anonymous (not logged in) user to a mailing list.
  * 
- * @author Jeff Schnitzer
+ * @author Jon Stevens
  */
 public class UserChangeName extends AuthAction 
 {

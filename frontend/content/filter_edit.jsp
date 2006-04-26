@@ -7,7 +7,7 @@
 	
 	<p><c:out value="${model.filter.description}"/></p>
 
-	<form action="filter_save.jsp" method="post" class="form-inline">
+	<form action="<c:url value="/filter_save.jsp"/>" method="post" class="form-inline">
 		<input type="hidden" name="listId" value="${model.listId}" />
 		<input type="hidden" name="className" value="${model.className}" />
 		<table>
@@ -55,6 +55,7 @@
 								<textarea 
 									name="<c:out value="form:${filterParam.name}"/>" 
 									rows="${filterParam.textLines}"
+									cols="60"
 								><c:out value="${model.form[filterParam.name]}"/></textarea>
 							</c:when>
 							<c:otherwise>
@@ -76,7 +77,7 @@
 		</table>
 		<input type="submit" value="Save"/>
 	</form>
-	<form action="filters.jsp" method="post" class="form-inline">
+	<form action="<c:url value="/filters.jsp"/>" method="post" class="form-inline">
 		<input type="hidden" name="listId" value="${model.listId}" />
 		<input type="submit" value="Cancel"/>
 	</form>

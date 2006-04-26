@@ -113,7 +113,7 @@ public class ReplyToFilter extends GenericFilter implements Lifecycle
 		}
 		catch(MessagingException ae)
 		{
-			// TODO: log this?
+			throw new RuntimeException(ae);
 		}
 	}
 }

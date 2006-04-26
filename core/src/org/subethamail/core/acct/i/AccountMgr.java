@@ -30,6 +30,11 @@ public interface AccountMgr
 	public Self getSelf();
 	
 	/**
+	 * Updates name
+	 */
+	public void setName(String newName);
+	
+	/**
 	 * Updates password
 	 * 
 	 * @param oldPassword The current password

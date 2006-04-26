@@ -96,7 +96,17 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 				Transmute.subscriptions(me.getSubscriptions().values())
 			);
 	}
-	
+
+	/**
+	 * @see AccountMgr#setName(String)
+	 */
+	public void setName(String newName)
+	{
+		log.debug("Setting name");
+		Person me = this.getMe();
+		me.setName(newName);
+	}
+
 	/**
 	 * @see AccountMgr#setPassword(String, String)
 	 */
@@ -114,7 +124,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		
 		return true;
 	}
-
 
 	/**
 	 * @see AccountMgr#addEmailRequest(String)

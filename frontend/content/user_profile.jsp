@@ -12,7 +12,15 @@
 	<table>
 		<tr>
 			<td><strong>Name</strong></td>
-			<td><input type="text" name="name" value="<c:out value="${me.name}"/>"></td>
+			<td
+				<c:if test="${!empty model.errors.name}">
+					class="error"
+				</c:if>			
+			><input type="text" name="name" value="<c:out value="${me.name}"/>">
+				<c:if test="${!empty model.errors.name}">
+					<p class="error"><c:out value="${model.errors.name}"/></p>
+				</c:if>
+			</td>
 		</tr>
 		<tr>
 			<td><input type="submit" value="Save" /></td>

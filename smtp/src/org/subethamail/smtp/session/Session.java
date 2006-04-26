@@ -1,10 +1,11 @@
 package org.subethamail.smtp.session;
 
-import org.subethamail.smtp.i.SMTPServerContext;
-
-import java.util.List;
-import java.util.ArrayList;
+import java.io.ByteArrayInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.subethamail.smtp.i.SMTPServerContext;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
@@ -139,7 +140,12 @@ public class Session {
 
   public void flush(SMTPServerContext SMTPServerContext) {
     for (String recipient : recipients) {
-      SMTPServerContext.deliver(sender, recipient, getMessage().getBytes());
+      try {
+        SMTPServerContext.deliver(sender, recipient, new ByteArrayInputStream(getMessage().getBytes()));
+      }
+      catch (Exception ex) {
+        // TODO ?
+      }
     }
     reset();
   }

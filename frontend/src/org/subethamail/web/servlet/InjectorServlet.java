@@ -5,6 +5,7 @@
 
 package org.subethamail.web.servlet;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.mail.MessagingException;
@@ -69,7 +70,7 @@ public class InjectorServlet extends HttpServlet
 		{
 			Security.associateCredentials(new SimplePrincipal(authName), authPass);
 			
-			if (!Backend.instance().getInjector().inject(from, recipient, message.getBytes()))
+			if (!Backend.instance().getInjector().inject(from, recipient, new ByteArrayInputStream(message.getBytes())))
 				response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
 		}
 		catch (MessagingException ex)

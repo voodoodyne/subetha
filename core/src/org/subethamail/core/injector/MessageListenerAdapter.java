@@ -5,15 +5,20 @@
 
 package org.subethamail.core.injector;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.io.LimitExceededException;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
 import org.subethamail.smtp.i.MessageListener;
 import org.subethamail.smtp.i.MessageListenerRegistry;
+import org.subethamail.smtp.i.TooMuchDataException;
 
 /**
  * This acts as an SMTP listener and injects any interesting messages
@@ -63,19 +68,23 @@ public class MessageListenerAdapter implements MessageListener, Lifecycle
 	}
 
 	/**
-	 * @see MessageListener#deliver(String, String, byte[])
+	 * @see MessageListener#deliver(String, String, InputStream)
 	 */
-	public void deliver(String from, String recipient, byte[] data)
+	public void deliver(String from, String recipient, InputStream input) throws TooMuchDataException, IOException
 	{
 		try
 		{
-			if (!this.injector.inject(from, recipient, data))
+			if (!this.injector.inject(from, recipient, input))
 				throw new RuntimeException("Data no longer wanted");
 		}
 		catch (MessagingException ex)
 		{
 			// Problem parsing the data
 			throw new RuntimeException(ex);
+		}
+		catch (LimitExceededException ex)
+		{
+			throw new TooMuchDataException();
 		}
 	}
 }

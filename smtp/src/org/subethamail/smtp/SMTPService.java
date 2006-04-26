@@ -5,13 +5,14 @@
 
 package org.subethamail.smtp;
 
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -20,12 +21,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.i.MessageListener;
 import org.subethamail.smtp.i.MessageListenerRegistry;
 import org.subethamail.smtp.i.SMTPServerContext;
-import org.subethamail.smtp.server.ServerRejectedException;
 import org.subethamail.smtp.server.SMTPServiceCore;
-import org.subethamail.smtp.command.CommandDispatcher;
+import org.subethamail.smtp.server.ServerRejectedException;
 
 /**
  * @author Jeff Schnitzer
@@ -175,7 +176,7 @@ public class SMTPService implements MessageListenerRegistry, SMTPManagement, SMT
     return false;
   }
 
-  public void deliver(String from, String recipient, byte[] data) {
+  public void deliver(String from, String recipient, InputStream data) throws IOException {
     for (MessageListener messageListener : listeners.keySet()) {
       if (messageListener.accept(from, recipient)) {
         messageListener.deliver(from, recipient, data);

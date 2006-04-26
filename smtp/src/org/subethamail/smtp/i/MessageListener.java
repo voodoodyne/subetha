@@ -5,6 +5,9 @@
 
 package org.subethamail.smtp.i;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
  * Objects which want access to messages received with SMTP should
  * implement this interface and register themselves with the
@@ -30,15 +33,16 @@ public interface MessageListener
 	public boolean accept(String from, String recipient);
 	
 	/** 
-	 * When a message arrives, this method will be called once for
+	 * When a message arrives, this method will be called for
 	 * every recipient this listener accepted.
 	 * 
 	 * @param from is the envelope sender in rfc822 form
 	 * @param recipient will be an accepted recipient in rfc822 form
+	 * @param data will be the smtp data stream, stripped of any extra '.' chars
+	 * 
+	 * @throws TooMuchDataException if the listener can't handle that much data.
+	 *  An error will be reported to the client.
+	 * @throws IOException if there is an IO error reading the input data.
 	 */
-	public void deliver(String from, String recipient, byte[] data);
-  // TODO(imf): Deliver will probably need to handle streams instead
-  // of byte arrays, so larger content can be handled.
-  // That, or it will need to be able to be called more than once for
-  // a single message.
+	public void deliver(String from, String recipient, InputStream data) throws TooMuchDataException, IOException;
 }

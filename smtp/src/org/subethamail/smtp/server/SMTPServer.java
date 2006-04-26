@@ -1,14 +1,26 @@
 package org.subethamail.smtp.server;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.subethamail.smtp.command.CommandDispatcher;
+import org.subethamail.smtp.command.DataCommand;
+import org.subethamail.smtp.command.ExpnCommand;
+import org.subethamail.smtp.command.HelloCommand;
+import org.subethamail.smtp.command.HelpCommand;
+import org.subethamail.smtp.command.MailCommand;
+import org.subethamail.smtp.command.NoopCommand;
+import org.subethamail.smtp.command.QuitCommand;
+import org.subethamail.smtp.command.ReceiptCommand;
+import org.subethamail.smtp.command.ResetCommand;
+import org.subethamail.smtp.command.VerboseCommand;
+import org.subethamail.smtp.command.VerifyCommand;
 import org.subethamail.smtp.i.MessageListener;
 import org.subethamail.smtp.i.SMTPServerContext;
-import org.subethamail.smtp.command.*;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.net.ServerSocket;
-import java.net.InetAddress;
-import java.io.IOException;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
@@ -126,7 +138,7 @@ public class SMTPServer implements SMTPServerContext {
     return false;
   }
 
-  public void deliver(String from, String recipient, byte[] data) {
+  public void deliver(String from, String recipient, InputStream data) throws IOException {
     for (MessageListener messageListener : listeners) {
       if (messageListener.accept(from, recipient)) {
         messageListener.deliver(from, recipient, data);

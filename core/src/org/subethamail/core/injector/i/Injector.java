@@ -5,6 +5,9 @@
 
 package org.subethamail.core.injector.i;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import javax.ejb.Local;
 import javax.mail.MessagingException;
 
@@ -39,6 +42,7 @@ public interface Injector
 	 * 
 	 * @throws MessagingException if the message data or toAddress could not be parsed.
 	 */
-	public boolean inject(String fromAddress, String toAddress, byte[] mailData) throws MessagingException;
+	public boolean inject(String fromAddress, String toAddress, InputStream mailData) throws MessagingException, IOException;
+	
 }
 

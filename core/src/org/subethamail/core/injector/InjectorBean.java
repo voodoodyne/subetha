@@ -5,6 +5,8 @@
 
 package org.subethamail.core.injector;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.common.io.LimitingInputStream;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
 import org.subethamail.core.filter.FilterRunner;
@@ -55,6 +58,13 @@ public class InjectorBean implements Injector, InjectorRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(InjectorBean.class);
+	
+	/**
+	 * We bounce injected messages larger than this amount, in bytes.
+	 * Must be hardcoded because JavaMail creates a byte[] representation,
+	 * and we don't want huge files taking down our JVM.  
+	 */
+	public static final int MAX_MESSAGE_BYTES = 1000 * 1000 * 10;
 	
 	/**
 	 * The oldest bounce message we are willing to consider valid.  This
@@ -112,7 +122,7 @@ public class InjectorBean implements Injector, InjectorRemote
 	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, byte[])
 	 */
 //	@WebMethod
-	public boolean inject(String fromAddress, String toAddress, byte[] mailData) throws MessagingException
+	public boolean inject(String fromAddress, String toAddress, InputStream mailData) throws MessagingException, IOException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Injecting message sent to " + toAddress);
@@ -143,6 +153,7 @@ public class InjectorBean implements Injector, InjectorRemote
 			log.debug("Message is for list: " + toList);
 
 		// Parse up the message
+		mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
 		
 		// Make sure we have a unique message id

@@ -36,7 +36,7 @@ public class PaginateModel
 	/**
 	 * Must be called during action execution
 	 */
-	protected void setTotalCount(int value)
+	public void setTotalCount(int value)
 	{
 		this.totalCount = value;
 	}

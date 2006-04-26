@@ -1,14 +1,20 @@
 <%@include file="/inc/top_standard.jspf" %>
 
-<t:action var="data" type="org.subethamail.web.action.GetSubscribers" />
+<t:action var="model" type="org.subethamail.web.action.GetSubscribers" />
 
 <trim:list title="Subscribers" listId="${param.listId}">
 
 		<c:choose>
-			<c:when test="${empty data}">
+			<c:when test="${empty model.subscriberData}">
 				<p>There are no subscribers to this list.</p>
 			</c:when>
 		<c:otherwise>
+		
+			<form action="<c:url value="/list_subscribers.jsp"/>" method="get">
+				<input type="hidden" name="listId" value="<c:out value="${param.listId}" />" />
+				Filter: <input type="text" name="query" value="<c:out value="${param.query}" />" />
+			</form>
+
 			<table class="sort-table" id="lists-table">
 			<thead>
 				<tr>
@@ -18,7 +24,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="p" items="${data}" varStatus="loop">
+				<c:forEach var="p" items="${model.subscriberData}" varStatus="loop">
 					<c:choose>
 						<c:when test="${loop.index % 2 == 0}">
 							<c:set var="color" value="a"/>
@@ -54,8 +60,11 @@ var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "
 st1.onsort = st1.tableRowColors;
 </script>
 
+			<c:url var="queryURL" value="/list_subscribers.jsp">
+				<c:param name="query" value="${model.query}"/>
+			</c:url>
+			<se:searchPaginator url="${queryURL}&" model="${model}"/>
+
 		</c:otherwise>
 	</c:choose>
-	
-	
 </trim:list>

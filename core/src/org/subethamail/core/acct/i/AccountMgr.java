@@ -37,6 +37,13 @@ public interface AccountMgr
 	/**
 	 * Updates password
 	 * 
+	 * @param newPassword The new password
+	 */
+	public void setPassword(String newPassword);
+
+	/**
+	 * Updates password
+	 * 
 	 * @param oldPassword The current password
 	 * @param newPassword The new password
 	 * 

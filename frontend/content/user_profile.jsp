@@ -35,6 +35,9 @@
 	</p>
 	
 	<form action="<c:url value="/user_changepassword.jsp"/>" method="post">
+	<c:if test="${!empty model.errors.password}">
+		<p class="error"><c:out value="${model.errors.password}"/></p>
+	</c:if>
 	<table>
 		<tr>
 			<td><strong>Password</strong></td>

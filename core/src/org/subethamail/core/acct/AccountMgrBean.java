@@ -108,6 +108,17 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	}
 
 	/**
+	 * @see AccountMgr#setPassword(String)
+	 */
+	public void setPassword(String newPassword)
+	{	
+		log.debug("Setting password");
+		
+		Person me = this.getMe();
+		me.setPassword(newPassword);
+	}
+
+	/**
 	 * @see AccountMgr#setPassword(String, String)
 	 */
 	public boolean setPassword(String oldPassword, String newPassword)

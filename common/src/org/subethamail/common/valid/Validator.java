@@ -25,6 +25,7 @@ public class Validator
 	
 	// Person
 	public static final int MAX_PERSON_PASSWORD = 80;
+	public static final int MIN_PERSON_PASSWORD = 3;
 	public static final int MAX_PERSON_NAME = 80;
 	
 	// EmailAddress

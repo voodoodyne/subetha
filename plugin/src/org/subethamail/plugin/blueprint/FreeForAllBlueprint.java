@@ -74,7 +74,7 @@ public class FreeForAllBlueprint extends AbstractBlueprint implements Lifecycle
 			perms.add(Permission.READ_ARCHIVES);
 			perms.add(Permission.VIEW_ADDRESSES);
 			perms.add(Permission.VIEW_SUBSCRIBERS);
-			Long roleId = listMgr.addRole(listId, "Subscriber", perms);
+			Long roleId = listMgr.addRole(listId, "Everyone", perms);
 			
 			listMgr.setDefaultRole(listId, roleId);
 			listMgr.setAnonymousRole(listId, roleId);

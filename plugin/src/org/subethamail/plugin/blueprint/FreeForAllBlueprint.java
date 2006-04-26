@@ -26,6 +26,7 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  * Creates an announce-only list. 
  * 
  * @author Jeff Schnitzer
+ * @author Jon Stevens
  */
 @Service
 @SecurityDomain("subetha")

@@ -5,10 +5,20 @@
 
 package org.subethamail.plugin.blueprint;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.NotFoundException;
+import org.subethamail.common.Permission;
+import org.subethamail.core.lists.i.ListMgr;
+import org.subethamail.core.lists.i.PermissionException;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
 
@@ -16,6 +26,7 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  * Creates an announce-only list. 
  * 
  * @author Jeff Schnitzer
+ * @author Jon Stevens
  */
 @Service
 @SecurityDomain("subetha")
@@ -23,6 +34,21 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
 public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycle
 //TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {
+	@EJB ListMgr listMgr;
+
+	public void start() throws Exception
+	{
+		super.start();
+
+		if (this.listMgr != null)
+			throw new RuntimeException("JBoss fixed, this code can be removed now");
+		else
+		{
+			Context ctx = new InitialContext();
+			this.listMgr = (ListMgr)ctx.lookup("subetha/ListMgr/local");
+		}		
+	}
+
 	/** */
 	public String getName()
 	{
@@ -33,13 +59,43 @@ public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycl
 	public String getDescription()
 	{
 		return 
-			"Create a list which allows only moderators to post.  Normal" +
-			" users are not allowd to view the subscriber list.";
+			"Create a list which allows only moderators to post and view the subscriber list. " +
+			"Subscribers can read the archives. Messages reply to the Sender.";
 	}
 	
 	/** */
 	public void configureMailingList(Long listId)
 	{
-		// TODO
+		try
+		{
+			// Subscriber
+			Set<Permission> perms = new HashSet<Permission>();
+			perms.add(Permission.READ_ARCHIVES);
+			Long roleId = listMgr.addRole(listId, "Subscriber", perms);
+			listMgr.setDefaultRole(listId, roleId);
+
+			// Guest
+			perms = new HashSet<Permission>();
+			roleId = listMgr.addRole(listId, "Guest", perms);
+			listMgr.setAnonymousRole(listId, roleId);
+
+			// Moderator
+			perms = new HashSet<Permission>();
+			perms.add(Permission.POST);
+			perms.add(Permission.READ_ARCHIVES);
+			perms.add(Permission.VIEW_ADDRESSES);
+			perms.add(Permission.VIEW_SUBSCRIBERS);
+			perms.add(Permission.APPROVE_MESSAGES);
+			perms.add(Permission.APPROVE_SUBSCRIPTIONS);
+			listMgr.addRole(listId, "Moderator", perms);
+		}
+		catch(PermissionException pe)
+		{
+			// TOOD: Log this?
+		}
+		catch(NotFoundException nfe)
+		{
+			// TOOD: Log this?
+		}
 	}
 }

@@ -296,7 +296,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 					value = param.getDefaultValue();
 				
 				if (!param.getType().equals(value.getClass()))
-					throw new IllegalArgumentException("Param " + param.getName() + " has class " + value.getClass() + " but should have class " + param.getType());
+					throw new IllegalArgumentException("Param " + param.getName() + " has " + value.getClass() + " but should have " + param.getType());
 					
 				FilterArgument farg = new FilterArgument(enabled, param.getName(), value);
 				this.dao.persist(farg);

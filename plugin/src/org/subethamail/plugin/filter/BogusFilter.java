@@ -65,6 +65,13 @@ public class BogusFilter extends GenericFilter implements Lifecycle
 				"This is a single Character.",
 				Character.class,
 				'm'
+			),
+		new FilterParameterImpl(
+				"TextArea",
+				"This is a text area.",
+				String.class,
+				"",
+				10
 			)
 	};
 

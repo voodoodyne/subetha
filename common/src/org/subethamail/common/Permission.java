@@ -16,18 +16,18 @@ import java.util.TreeSet;
  */
 public enum Permission
 {
-	EDIT_SETTINGS,
-	EDIT_ROLES,
-	EDIT_FILTERS,
-	APPROVE_MESSAGES,
-	APPROVE_SUBSCRIPTIONS,
-	POST,
-	VIEW_SUBSCRIBERS,
-	READ_ARCHIVES,
-	READ_NOTES,
-	EDIT_NOTES,
-	VIEW_ADDRESSES;		// See email addresses in archives and subscription list
-	
+	EDIT_SETTINGS("Edit the name, description, and major configuration options of the list."),
+	EDIT_ROLES("Edit and reassign roles and permissions.  This should not be granted to non-owners."),
+	EDIT_FILTERS("Add, remove, and change the properties of mail filters."),
+	APPROVE_MESSAGES("Approve messages which have been held for administrative approval."),
+	APPROVE_SUBSCRIPTIONS("Approve subscription requests."),
+	POST("Post messages to a mailing list, either by emailing the list address or from the archives."),
+	VIEW_SUBSCRIBERS("View the list of subscribers to the mailing list."),
+	READ_ARCHIVES("Read and search the archives of the mailing list."),
+	READ_NOTES("Read administrative notes that have been placed on subscribers."),
+	EDIT_NOTES("Create and edit administrative notes for subscribers."),
+	VIEW_ADDRESSES("See the real email addresses of members in the archives and subscriber list.");
+
 	/** A set that contains all permissions */
 	public static final Set<Permission> ALL;
 	static
@@ -42,13 +42,17 @@ public enum Permission
 	
 	/** */
 	private String pretty;
+	private String description;
 	
 	/** 
 	 * Makes the pretty form which is mixed case and converts
 	 * underscores to spaces.
 	 */
-	private Permission()
+	private Permission(String description)
 	{
+		this.description = description;
+		
+		// Now set up the pretty
 		String original = this.toString();
 		StringBuffer buf = new StringBuffer(original.length());
 		
@@ -83,48 +87,8 @@ public enum Permission
 		return this.pretty;
 	}
 	
-	public String getDescription(Permission val)
+	public String getDescription()
 	{
-		String response;
-		switch (val)
-		{
-			case EDIT_SETTINGS:
-				response = "Member can edit mailing list settings.";
-				break;
-			case EDIT_ROLES:
-				response = "Edit the roles for members.";
-				break;
-			case EDIT_FILTERS:
-				response = "Edit the filters of a mailing list.";
-				break;
-			case APPROVE_MESSAGES:
-				response = "Approve messages to a mailing list.";
-				break;
-			case APPROVE_SUBSCRIPTIONS:
-				response = "Approve subscriptions to a mailing list.";
-				break;
-			case POST:
-				response = "Post messages to a mailing list.";
-				break;
-			case VIEW_SUBSCRIBERS:
-				response = "View subscrivers to a mailing list.";
-				break;
-			case READ_ARCHIVES:
-				response = "Read the archives of a mailing list.";
-				break;
-			case READ_NOTES:
-				response = "Read private notes about a member of a mailing list.";
-				break;
-			case EDIT_NOTES:
-				response = "Edit private notes about a member of a mailing list.";
-				break;
-			case VIEW_ADDRESSES:
-				response = "Can view the address of members of a mailing list.";
-				break;
-			default:
-				response = "Invalid permission";
-				break;
-		}
-		return response;
+		return this.description;
 	}
 }

@@ -46,7 +46,7 @@ public class BogusFilter extends GenericFilter implements Lifecycle
 				"Length",
 				"This is a Long parameter.",
 				Long.class,
-				100
+				100L
 			),
 		new FilterParameterImpl(
 				"Color",
@@ -65,6 +65,13 @@ public class BogusFilter extends GenericFilter implements Lifecycle
 				"This is a single Character.",
 				Character.class,
 				'm'
+			),
+		new FilterParameterImpl(
+				"Area",
+				"Lots of text.",
+				String.class,
+				"foo\nbar",
+				5
 			),
 		new FilterParameterImpl(
 				"TextArea",

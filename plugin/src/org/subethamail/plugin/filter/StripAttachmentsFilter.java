@@ -44,7 +44,7 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 		new FilterParameterImpl(
 				"Threshold in K",
 				"Strip all attachments larger than this size, in kilobytes.  A value of 0 will strip all attachments.",
-				Long.class,
+				Integer.class,
 				100
 			)
 	};

@@ -28,6 +28,11 @@ public class FilterParameterImpl implements FilterParameter
 		this.description = description;
 		this.type = type;
 		this.defaultValue = defaultValue;
+		
+		if (this.defaultValue != null && !this.defaultValue.getClass().equals(type))
+			throw new IllegalArgumentException("Type mismatch for parameter " + name
+					+ "; type is " + type.getName() + " but default value has type "
+					+ defaultValue.getClass().getName());
 	}
 
 	/** */

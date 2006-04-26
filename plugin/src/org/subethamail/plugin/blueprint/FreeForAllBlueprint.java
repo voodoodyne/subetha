@@ -82,11 +82,11 @@ public class FreeForAllBlueprint extends AbstractBlueprint implements Lifecycle
 		}
 		catch(NotFoundException nfe)
 		{
-			// TODO: log this exception?
+			throw new RuntimeException(nfe);
 		}
-		catch(PermissionException nfe)
+		catch(PermissionException pe)
 		{
-			// TODO: log this exception?
+			throw new RuntimeException(pe);
 		}
 		
 	}

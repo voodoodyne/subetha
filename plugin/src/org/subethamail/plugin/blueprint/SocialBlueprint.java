@@ -78,13 +78,13 @@ public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
 		{
 			listMgr.setFilter(listId, ReplyToFilter.class.getName(), args);
 		}
-		catch (NotFoundException e)
+		catch (NotFoundException nfe)
 		{
-			// TODO Auto-generated catch block
+			throw new RuntimeException(nfe);
 		}
-		catch (PermissionException e)
+		catch (PermissionException pe)
 		{
-			// TODO Auto-generated catch block
+			throw new RuntimeException(pe);
 		}
 		
 		// Setup Roles
@@ -114,11 +114,11 @@ public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
 		}
 		catch(PermissionException pe)
 		{
-			// TOOD: Log this?
+			throw new RuntimeException(pe);
 		}
 		catch(NotFoundException nfe)
 		{
-			// TOOD: Log this?
+			throw new RuntimeException(nfe);
 		}
 		
 	}

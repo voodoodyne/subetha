@@ -91,11 +91,11 @@ public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycl
 		}
 		catch(PermissionException pe)
 		{
-			// TOOD: Log this?
+			throw new RuntimeException(pe);
 		}
 		catch(NotFoundException nfe)
 		{
-			// TOOD: Log this?
+			throw new RuntimeException(nfe);
 		}
 	}
 }

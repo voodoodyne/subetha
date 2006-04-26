@@ -5,10 +5,20 @@
 
 package org.subethamail.plugin.blueprint;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.NotFoundException;
+import org.subethamail.common.Permission;
+import org.subethamail.core.lists.i.ListMgr;
+import org.subethamail.core.lists.i.PermissionException;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
 
@@ -23,6 +33,21 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
 public class FreeForAllBlueprint extends AbstractBlueprint implements Lifecycle
 //TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {
+	@EJB ListMgr listMgr;
+
+	public void start() throws Exception
+	{
+		super.start();
+
+		if (this.listMgr != null)
+			throw new RuntimeException("JBoss fixed, this code can be removed now");
+		else
+		{
+			Context ctx = new InitialContext();
+			this.listMgr = (ListMgr)ctx.lookup("subetha/ListMgr/local");
+		}		
+	}
+
 	/** */
 	public String getName()
 	{
@@ -39,9 +64,29 @@ public class FreeForAllBlueprint extends AbstractBlueprint implements Lifecycle
 			" environment.";
 	}
 	
-	/** */
+	/**	 */
 	public void configureMailingList(Long listId)
 	{
-		// TODO
+		try
+		{
+			Set<Permission> perms = new HashSet<Permission>();
+			perms.add(Permission.POST);
+			perms.add(Permission.READ_ARCHIVES);
+			perms.add(Permission.VIEW_ADDRESSES);
+			perms.add(Permission.VIEW_SUBSCRIBERS);
+			Long roleId = listMgr.addRole(listId, "Subscriber", perms);
+			
+			listMgr.setDefaultRole(listId, roleId);
+			listMgr.setAnonymousRole(listId, roleId);
+		}
+		catch(NotFoundException nfe)
+		{
+			// TODO: log this exception?
+		}
+		catch(PermissionException nfe)
+		{
+			// TODO: log this exception?
+		}
+		
 	}
 }

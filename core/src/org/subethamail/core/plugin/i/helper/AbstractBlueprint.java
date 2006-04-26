@@ -35,7 +35,7 @@ abstract public class AbstractBlueprint implements Blueprint, Lifecycle
 	public void start() throws Exception
 	{
 		if (this.registry != null)
-			throw new RuntimeException("JBoss fixed, code can be removed now");
+			throw new RuntimeException("JBoss fixed, this code can be removed now");
 		else
 		{
 			Context ctx = new InitialContext();

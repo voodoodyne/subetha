@@ -43,4 +43,13 @@ public interface FilterParameter
 	 * is an allowable "no default".
 	 */
 	public Object getDefaultValue();
+	
+	/**
+	 * If (and only if) type is java.lang.String, this method will
+	 * be called to determine the size of the textarea in the
+	 * editing UI.  If 1, this will produce a one-line text
+	 * input field.  Otherwise it will produce a textarea with
+	 * the number of lines specified.
+	 */
+	public int getTextLines();
 }

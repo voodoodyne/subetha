@@ -19,6 +19,7 @@ public class FilterParameterImpl implements FilterParameter
 	String description;
 	Class type;
 	Object defaultValue;
+	int textLines;
 	
 	/** */
 	public FilterParameterImpl(String name, String description, Class type, Object defaultValue)
@@ -27,6 +28,14 @@ public class FilterParameterImpl implements FilterParameter
 		this.description = description;
 		this.type = type;
 		this.defaultValue = defaultValue;
+	}
+
+	/** */
+	public FilterParameterImpl(String name, String description, Class type, Object defaultValue, int textLines)
+	{
+		this(name, description, type, defaultValue);
+		
+		this.textLines = textLines;
 	}
 
 	/**
@@ -44,4 +53,11 @@ public class FilterParameterImpl implements FilterParameter
 	/**
 	 */
 	public Object getDefaultValue() { return this.defaultValue; }
+
+	/**
+	 */
+	public int getTextLines()
+	{
+		return this.textLines;
+	}
 }

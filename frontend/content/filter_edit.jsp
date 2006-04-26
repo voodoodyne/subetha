@@ -50,8 +50,15 @@
 									</c:forEach>
 								</select>
 							</c:when>
+							<c:when test="${filterParam.textLines > 1}">
+								<%-- Treat as textarea --%>
+								<textarea 
+									name="<c:out value="form:${filterParam.name}"/>" 
+									rows="${filterParam.textLines}"
+								><c:out value="${model.form[filterParam.name]}"/></textarea>
+							</c:when>
 							<c:otherwise>
-								<%-- Everything else we treat as text --%>
+								<%-- Everything else we treat as one-line text --%>
 								<input type="text"
 									name="<c:out value="form:${filterParam.name}"/>"
 									value="<c:out value="${model.form[filterParam.name]}"/>" />

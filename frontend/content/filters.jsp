@@ -9,7 +9,7 @@
 		<c:forEach var="filter" items="${filters.available}">
 			<tr>
 				<td>
-					<form action="<c:url value="/filter_edit.jsp"/>" method="post">
+					<form action="<c:url value="/filter_edit.jsp"/>" method="get">
 						<input type="hidden" name="listId" value="${param.listId}" />
 						<input type="hidden" name="className" value="${filter.className}" />
 						<input type="submit" value="Enable" />
@@ -47,12 +47,12 @@
 			</c:choose>
 			<tr class="${color}">
 				<td>
-					<form action="<c:url value="/filter_edit.jsp"/>" method="post">
+					<form action="<c:url value="/filter_edit.jsp"/>" method="get">
 						<input type="hidden" name="listId" value="${param.listId}" />
 						<input type="hidden" name="className" value="${filter.className}" />
 						<input type="submit" value="Edit" style="width:5em" />
 					</form>
-					<form action="<c:url value="/filter_delete.jsp"/>" method="post">
+					<form action="<c:url value="/filter_delete.jsp"/>" method="get">
 						<input type="hidden" name="listId" value="${param.listId}" />
 						<input type="hidden" name="className" value="${filter.className}" />
 						<input type="submit" value="Disable" style="width:5em" onclick="return confirm('Are you sure you want to disable this filter?');" />

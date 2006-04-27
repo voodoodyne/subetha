@@ -12,7 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
-import org.subethamail.core.plugin.i.Filter;
+import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.HoldException;
@@ -75,10 +75,10 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 	}
 
 	/**
-	 * @see Filter#onInject(FilterContext)
+	 * @see Filter#onInject(SubEthaMessage, FilterContext)
 	 */
 	@Override
-	public void onInject(FilterContext ctx) throws IgnoreException, HoldException, MessagingException
+	public void onInject(SubEthaMessage msg, FilterContext ctx) throws IgnoreException, HoldException, MessagingException
 	{
 		// TODO:  implement this.
 		log.debug("onInject()");

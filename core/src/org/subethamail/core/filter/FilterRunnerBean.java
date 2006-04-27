@@ -9,17 +9,19 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
+import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterRegistry;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.entity.EnabledFilter;
+import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 
 /**
@@ -64,15 +66,13 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	}
 
 	/**
-	 * @see FilterRunner#onInject(MimeMessage, MailingList)
+	 * @see FilterRunner#onInject(SubEthaMessage, MailingList)
 	 */
-	public void onInject(MimeMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException
+	public void onInject(SubEthaMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Running onInject filters for list '" + list.getName() + "' on message: " + msg.getSubject());
 
-		// TODO:  factor in global plugins
-		
 		HoldException holdException = null;
 		
 		for (EnabledFilter enabled: list.getEnabledFilters().values())
@@ -92,7 +92,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 					if (log.isDebugEnabled())
 						log.debug("Running filter " + filter);
 					
-					filter.onInject(ctx);
+					filter.onInject(msg, ctx);
 				}
 				catch (HoldException ex)
 				{
@@ -108,40 +108,32 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	}
 
 	/**
-	 * @see FilterRunner#onSendBeforeAttaching(MimeMessage)
+	 * @see FilterRunner#onSend(SubEthaMessage, Mail)
 	 */
-	public void onSendBeforeAttaching(MimeMessage msg, MailingList list) throws IgnoreException
+	public void onSend(SubEthaMessage msg, Mail mail) throws IgnoreException, MessagingException
 	{
-		try
-		{
-			onInject(msg, list);
-		}
-		catch (HoldException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (MessagingException e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
+		MailingList list = mail.getList();
+		
+		if (log.isDebugEnabled())
+			log.debug("Running onSend filters for list '" + list.getName() + "' on message: " + msg.getSubject());
 
-	/**
-	 * @see FilterRunner#onSendAfterAttaching(MimeMessage)
-	 */
-	public void onSendAfterAttaching(MimeMessage msg, MailingList list) throws IgnoreException
-	{
-		try
+		for (EnabledFilter enabled: list.getEnabledFilters().values())
 		{
-			onInject(msg, list);
-		}
-		catch (HoldException e)
-		{
-			throw new RuntimeException(e);
-		}
-		catch (MessagingException e)
-		{
-			throw new RuntimeException(e);
+			Filter filter = this.filters.get(enabled.getClassName());
+			if (filter == null)
+			{
+				// Log and ignore
+				this.logUnregisteredFilterError(enabled, list);
+			}
+			else
+			{
+				SendFilterContext ctx = new SendFilterContextImpl(enabled, filter, msg, mail);
+				
+				if (log.isDebugEnabled())
+					log.debug("Running filter " + filter);
+				
+				filter.onSend(msg, ctx);
+			}
 		}
 	}
 	

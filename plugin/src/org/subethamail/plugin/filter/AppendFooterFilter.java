@@ -7,6 +7,7 @@ package org.subethamail.plugin.filter;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.mail.MessagingException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
@@ -14,11 +15,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.plugin.i.Filter;
-import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.core.plugin.i.helper.FilterParameterImpl;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
@@ -109,10 +111,10 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 	}
 
 	/**
-	 * @see Filter#onSendAfterAttaching(FilterContext)
+	 * @see Filter#onSend(SubEthaMessage, SendFilterContext)
 	 */
 	@Override
-	public void onSendAfterAttaching(FilterContext ctx) throws IgnoreException
+	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException
 	{
 		log.debug("AppendFooterFilter: onSendAfterAttaching()");
 

@@ -9,11 +9,13 @@ import java.util.Map;
 
 import javax.ejb.Local;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
+import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
+import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 
 /**
@@ -29,24 +31,18 @@ public interface FilterRunner
 
 	/**
 	 * Runs the message through all the filters associated with the list.
+	 * Note that the Mail does not exist yet.
 	 * 
-	 * @see Filter#onInject(MimeMessage)
+	 * @see Filter#onInject(SubEthaMessage, FilterContext)
 	 */
-	public void onInject(MimeMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException;
+	public void onInject(SubEthaMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException;
 	
 	/**
 	 * Runs the message through all the filters associated with the list.
 	 * 
-	 * @see Filter#onSendBeforeAttaching(MimeMessage)
+	 * @see Filter#onSend(SubEthaMessage, FilterContext)
 	 */
-	public void onSendBeforeAttaching(MimeMessage msg, MailingList list) throws IgnoreException;
-	
-	/**
-	 * Runs the message through all the filters associated with the list.
-	 * 
-	 * @see Filter#onSendAfterAttaching(MimeMessage)
-	 */
-	public void onSendAfterAttaching(MimeMessage msg, MailingList list) throws IgnoreException;
+	public void onSend(SubEthaMessage msg, Mail mail) throws IgnoreException, MessagingException;
 	
 	/**
 	 * @return all the available filters.

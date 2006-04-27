@@ -7,11 +7,13 @@ package org.subethamail.core.plugin.i.helper;
 
 import javax.mail.MessagingException;
 
+import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.plugin.i.SendFilterContext;
 
 /**
  * Trivial filter implementation that has no parameters and does
@@ -31,23 +33,16 @@ public abstract class GenericFilter extends AbstractFilter
 	}
 	
 	/**
-	 * @see Filter#onInject(FilterContext)
+	 * @see Filter#onInject(SubEthaMessage, FilterContext)
 	 */
-	public void onInject(FilterContext ctx) throws IgnoreException, HoldException, MessagingException
+	public void onInject(SubEthaMessage msg, FilterContext ctx) throws IgnoreException, HoldException, MessagingException
 	{
 	}
 	
 	/**
-	 * @see Filter#onSendBeforeAttaching(FilterContext)
+	 * @see Filter#onSend(SubEthaMessage, SendFilterContext)
 	 */
-	public void onSendBeforeAttaching(FilterContext ctx) throws IgnoreException
-	{
-	}
-	
-	/**
-	 * @see Filter#onSendAfterAttaching(FilterContext)
-	 */
-	public void onSendAfterAttaching(FilterContext ctx) throws IgnoreException
+	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException
 	{
 	}
 }

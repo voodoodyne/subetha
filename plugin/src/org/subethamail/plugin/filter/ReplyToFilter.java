@@ -14,10 +14,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
-import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.core.plugin.i.helper.FilterParameterImpl;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
@@ -83,12 +84,12 @@ public class ReplyToFilter extends GenericFilter implements Lifecycle
 	}
 
 	/**
-	 * @see Filter#onSendAfterAttaching(FilterContext)
+	 * @see Filter#onSend(SubEthaMessage, SendFilterContext)
 	 */
 	@Override
-	public void onSendAfterAttaching(FilterContext ctx) throws IgnoreException
+	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException
 	{
-		log.debug("ReplyToFilter: onSendAfterAttaching()");
+		log.debug("ReplyToFilter: onSend()");
 
 		InternetAddress addr = new InternetAddress();
 
@@ -98,21 +99,14 @@ public class ReplyToFilter extends GenericFilter implements Lifecycle
 		// if nothing is selected, then default to reply to the list.
 		if (replyToList.booleanValue() || emailAddress == null || emailAddress.length() == 0)
 		{
-			addr.setAddress(ctx.getListData().getEmail());
+			addr.setAddress(ctx.getList().getEmail());
 		}
 		else
 		{
 			addr.setAddress(emailAddress);
 		}
 
-		try
-		{
-			Address[] addrs = {addr};
-			ctx.getMimeMessage().setReplyTo(addrs);
-		}
-		catch(MessagingException ae)
-		{
-			throw new RuntimeException(ae);
-		}
+		Address[] addrs = {addr};
+		msg.setReplyTo(addrs);
 	}
 }

@@ -8,11 +8,11 @@ package org.subethamail.core.filter;
 import java.io.StringWriter;
 import java.util.Map;
 
-import javax.mail.internet.MimeMessage;
-
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.ListData;
+import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.util.Transmute;
@@ -32,12 +32,12 @@ class FilterContextImpl implements FilterContext
 	/** */
 	EnabledFilter enabledFilter;
 	Filter filter;
-	MimeMessage msg;
+	SubEthaMessage msg;
 	ListData listData;
 	
 	/** 
 	 */
-	public FilterContextImpl(EnabledFilter enabledFilter, Filter filter, MimeMessage msg)
+	public FilterContextImpl(EnabledFilter enabledFilter, Filter filter, SubEthaMessage msg)
 	{
 		this.enabledFilter = enabledFilter;
 		this.filter = filter;
@@ -45,9 +45,9 @@ class FilterContextImpl implements FilterContext
 	}
 	
 	/**
-	 * @see FilterContext#getListData()
+	 * @see FilterContext#getList()
 	 */
-	public ListData getListData()
+	public ListData getList()
 	{
 		// internally cache the object for speed
 		if (this.listData == null)
@@ -58,14 +58,6 @@ class FilterContextImpl implements FilterContext
 		return this.listData;
 	}
 	
-	/**
-	 * @see FilterContext#getMimeMessage()
-	 */
-	public MimeMessage getMimeMessage()
-	{
-		return this.msg;
-	}
-
 	/**
 	 * @see FilterContext#getArgument(String)
 	 */
@@ -84,14 +76,16 @@ class FilterContextImpl implements FilterContext
 	public String expand(String template, Map<String, Object> context)
 	{
 		VelocityContext vctx = new VelocityContext();
-	    for (Map.Entry<String, Object> e : context.entrySet())
+		
+	    for (Map.Entry<String, Object> e: context.entrySet())
 	    {
 	    	if (e.getKey().equals("mail") || e.getKey().equals("list"))
 	    		continue;
 	    	vctx.put(e.getKey(),e.getValue());
 	    }
+	    
 	    vctx.put("mail", this.msg);
-	    vctx.put("list", this.getListData());
+	    vctx.put("list", this.getList());
 
 	    StringWriter writer = new StringWriter(4096);
 		try
@@ -104,5 +98,25 @@ class FilterContextImpl implements FilterContext
 		}
 
 		return writer.toString();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.FilterContext#getMailId()
+	 */
+	public Long getMailId()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.FilterContext#getThreadRoot()
+	 */
+	public MailSummary getThreadRoot()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

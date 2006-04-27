@@ -82,7 +82,7 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 			
 			try
 			{
-				this.filterRunner.onSendBeforeAttaching(msg, mail.getList());
+				this.filterRunner.onSend(msg, mail);
 				
 				this.detacher.attach(msg);
 				

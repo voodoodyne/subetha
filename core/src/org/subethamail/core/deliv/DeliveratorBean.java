@@ -24,6 +24,7 @@ import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.deliv.i.DeliveratorRemote;
 import org.subethamail.core.filter.FilterRunner;
+import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.Mail;
@@ -46,6 +47,7 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 	@EJB DAO dao;
 	@EJB FilterRunner filterRunner;
 	@EJB Encryptor encryptor;
+	@EJB Detacher detacher;
 	
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
@@ -80,7 +82,9 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 			
 			try
 			{
-				this.filterRunner.onSendAfterAttaching(msg, mail.getList());
+				this.filterRunner.onSendBeforeAttaching(msg, mail.getList());
+				
+				this.detacher.attach(msg);
 				
 				Transport.send(msg, new Address[] { destination });
 				

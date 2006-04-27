@@ -86,6 +86,7 @@ public class InjectorBean implements Injector, InjectorRemote
 	@EJB Queuer queuer;
 	@EJB FilterRunner filterRunner;
 	@EJB Encryptor encryptor;
+	@EJB Detacher detacher;
 	
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
@@ -210,6 +211,10 @@ public class InjectorBean implements Injector, InjectorRemote
 
 		Mail mail = new Mail(fromAddy, msg, toList, hold);
 		this.dao.persist(mail);
+		
+		// Convert all binary attachments to references and then set the content
+		this.detacher.detach(msg, mail);
+		mail.setContent(msg);
 		
 		if (mail.getHold() != null)
 		{

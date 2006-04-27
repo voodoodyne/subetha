@@ -203,4 +203,13 @@ public class SubEthaMessage extends SMTPMessage
 			log.debug("Didn't know what to do with content " + content);
 		}
 	}
+	
+	/**
+	 * Stupidly, saveChanges() resaves even if nothing has changed.
+	 */
+	public void saveIfNecessary() throws MessagingException
+	{
+		if (!this.saved)
+			this.saveChanges();
+	}
 }

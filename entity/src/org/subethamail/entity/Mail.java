@@ -7,6 +7,7 @@ package org.subethamail.entity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +46,7 @@ import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Table;
 import org.hibernate.validator.Email;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.common.io.SimpleByteArrayOutputStream;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -171,6 +173,12 @@ public class Mail implements Serializable, Comparable
 	public Mail() {}
 	
 	/**
+	 * Creates a new Mail object.  DOES NOT SET THE CONTENT.
+	 * 
+	 * Content must be set separately because the detacher requires the mail object
+	 * to exist before it can create Attachment objects, and the assigned content
+	 * must contain the newly created ids of the attachments.
+	 * 
 	 * @param holdFor can be null which means none required
 	 */
 	public Mail(InternetAddress from, SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
@@ -182,17 +190,7 @@ public class Mail implements Serializable, Comparable
 		this.list = list;
 		this.hold = holdFor;
 		
-		byte[] raw;
-		try
-		{
-			ByteArrayOutputStream tmpStream = new ByteArrayOutputStream();
-			msg.writeTo(tmpStream);
-			raw = tmpStream.toByteArray();
-		}
-		catch (IOException ex) { throw new EJBException(ex); }
-		
 		// These are validated normally.
-		this.setContent(raw);
 		this.setSubject(msg.getSubject());
 		this.setMessageId(msg.getMessageID());
 		this.setFrom(from.toString());
@@ -211,6 +209,36 @@ public class Mail implements Serializable, Comparable
 	public void setContent(byte[] value)
 	{
 		this.content = value;
+	}
+	
+	/**
+	 * Convenience method
+	 */
+	public void setContent(SubEthaMessage msg) throws MessagingException
+	{
+		byte[] raw;
+		
+		msg.saveIfNecessary();
+		int size = msg.getSize();
+
+		try
+		{
+			if (size < 0)
+			{
+				ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
+				msg.writeTo(tmpStream);
+				raw = tmpStream.toByteArray();
+			}
+			else
+			{
+				raw = new byte[size];
+				OutputStream tmpStream = new SimpleByteArrayOutputStream(raw);
+				msg.writeTo(tmpStream);
+			}
+		}
+		catch (IOException ex) { throw new EJBException(ex); }
+		
+		this.setContent(raw);
 	}
 
 	/**

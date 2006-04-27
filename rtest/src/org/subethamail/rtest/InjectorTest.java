@@ -5,6 +5,8 @@
 
 package org.subethamail.rtest;
 
+import java.io.ByteArrayInputStream;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
@@ -71,7 +73,7 @@ public class InjectorTest extends SubEthaTestCase
 		
 		byte[] rawMsg = this.createMessage(this.person1.getAddress(), this.ml.getAddress());
 		
-		this.injector.inject(this.person1.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
+		this.injector.inject(this.person1.getAddress().getAddress(), this.ml.getEmail(), new ByteArrayInputStream(rawMsg));
 		
 		Thread.sleep(1000);
 		
@@ -90,7 +92,7 @@ public class InjectorTest extends SubEthaTestCase
 		
 		byte[] rawMsg = this.createMessage(this.person1.getAddress(), this.ml.getAddress());
 		
-		this.injector.inject(this.person1.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
+		this.injector.inject(this.person1.getAddress().getAddress(), this.ml.getEmail(), new ByteArrayInputStream(rawMsg));
 		
 		Thread.sleep(1000);
 		

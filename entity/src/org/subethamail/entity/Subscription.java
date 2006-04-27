@@ -36,8 +36,8 @@ import org.subethamail.common.valid.Validator;
 		hints={
 			// We want to writable and caching is pointless
 		}
-	),
-	/*
+	)
+	/* ,
 	@NamedQuery(
 			name="SearchSubscribers", 
 			query="from Subscription s, MailingList l where s.listId = l.id and s.person.",

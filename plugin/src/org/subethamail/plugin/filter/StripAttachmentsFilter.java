@@ -7,7 +7,6 @@ package org.subethamail.plugin.filter;
 
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -76,10 +75,10 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 	}
 
 	/**
-	 * @see Filter#onInject(MimeMessage, FilterContext)
+	 * @see Filter#onInject(FilterContext)
 	 */
 	@Override
-	public void onInject(MimeMessage msg, FilterContext ctx) throws IgnoreException, HoldException, MessagingException
+	public void onInject(FilterContext ctx) throws IgnoreException, HoldException, MessagingException
 	{
 		// TODO:  implement this.
 		log.debug("onInject()");

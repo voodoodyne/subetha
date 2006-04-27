@@ -7,6 +7,8 @@ package org.subethamail.core.plugin.i;
 
 import java.util.Map;
 
+import javax.mail.internet.MimeMessage;
+
 import org.subethamail.core.lists.i.ListData;
 
 
@@ -23,6 +25,11 @@ public interface FilterContext
 	 * @return the data about a mailing list
 	 */
 	public ListData getListData();	
+	
+	/**
+	 * Get the current message being processed
+	 */
+	public MimeMessage getMimeMessage();	
 	
 	/**
 	 * This method will use Velocity to process data using the passed in objects

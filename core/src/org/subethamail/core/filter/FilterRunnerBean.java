@@ -85,14 +85,14 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 			}
 			else
 			{
-				FilterContext ctx = new FilterContextImpl(enabled, filter);
+				FilterContext ctx = new FilterContextImpl(enabled, filter, msg);
 				
 				try
 				{
 					if (log.isDebugEnabled())
 						log.debug("Running filter " + filter);
 					
-					filter.onInject(msg, ctx);
+					filter.onInject(ctx);
 				}
 				catch (HoldException ex)
 				{
@@ -112,7 +112,18 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	 */
 	public void onSendBeforeAttaching(MimeMessage msg, MailingList list) throws IgnoreException
 	{
-		//TODO
+		try
+		{
+			onInject(msg, list);
+		}
+		catch (HoldException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch (MessagingException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -120,7 +131,18 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	 */
 	public void onSendAfterAttaching(MimeMessage msg, MailingList list) throws IgnoreException
 	{
-		//TODO
+		try
+		{
+			onInject(msg, list);
+		}
+		catch (HoldException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch (MessagingException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**

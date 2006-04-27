@@ -6,7 +6,6 @@
 package org.subethamail.core.plugin.i.helper;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
@@ -32,23 +31,23 @@ public abstract class GenericFilter extends AbstractFilter
 	}
 	
 	/**
-	 * @see Filter#onInject(MimeMessage, FilterContext)
+	 * @see Filter#onInject(FilterContext)
 	 */
-	public void onInject(MimeMessage msg, FilterContext ctx) throws IgnoreException, HoldException, MessagingException
+	public void onInject(FilterContext ctx) throws IgnoreException, HoldException, MessagingException
 	{
 	}
 	
 	/**
-	 * @see Filter#onSendBeforeAttaching(MimeMessage, FilterContext)
+	 * @see Filter#onSendBeforeAttaching(FilterContext)
 	 */
-	public void onSendBeforeAttaching(MimeMessage msg, FilterContext ctx) throws IgnoreException
+	public void onSendBeforeAttaching(FilterContext ctx) throws IgnoreException
 	{
 	}
 	
 	/**
-	 * @see Filter#onSendAfterAttaching(MimeMessage, FilterContext)
+	 * @see Filter#onSendAfterAttaching(FilterContext)
 	 */
-	public void onSendAfterAttaching(MimeMessage msg, FilterContext ctx) throws IgnoreException
+	public void onSendAfterAttaching(FilterContext ctx) throws IgnoreException
 	{
 	}
 }

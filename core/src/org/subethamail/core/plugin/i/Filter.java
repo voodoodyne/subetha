@@ -6,7 +6,6 @@
 package org.subethamail.core.plugin.i;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 /**
  * Interface that mail filters must implement.  Mail filters get
@@ -45,7 +44,7 @@ public interface Filter
 	 *  or if for any reason message receipt should be aborted.  Halts execution
 	 *  of the filter stack.
 	 */
-	public void onInject(MimeMessage msg, FilterContext ctx) throws IgnoreException, HoldException, MessagingException;
+	public void onInject(FilterContext ctx) throws IgnoreException, HoldException, MessagingException;
 	
 	/**
 	 * Allows filter to manipulate the message as it is being sent outbound.  This
@@ -56,7 +55,7 @@ public interface Filter
 	 * @throws IgnoreException if the message should not be sent.  Halts execution
 	 *  of the filter stack.
 	 */
-	public void onSendBeforeAttaching(MimeMessage msg, FilterContext ctx) throws IgnoreException;
+	public void onSendBeforeAttaching(FilterContext ctx) throws IgnoreException;
 	
 	/**
 	 * Allows filter to manipulate the message as it is being sent outbound.  This
@@ -66,5 +65,5 @@ public interface Filter
 	 * @throws IgnoreException if the message should not be sent.  Halts execution
 	 *  of the filter stack.
 	 */
-	public void onSendAfterAttaching(MimeMessage msg, FilterContext ctx) throws IgnoreException;
+	public void onSendAfterAttaching(FilterContext ctx) throws IgnoreException;
 }

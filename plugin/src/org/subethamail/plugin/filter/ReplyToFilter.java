@@ -9,7 +9,6 @@ import javax.annotation.security.RunAs;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -84,10 +83,10 @@ public class ReplyToFilter extends GenericFilter implements Lifecycle
 	}
 
 	/**
-	 * @see Filter#onSendAfterAttaching(MimeMessage, FilterContext)
+	 * @see Filter#onSendAfterAttaching(FilterContext)
 	 */
 	@Override
-	public void onSendAfterAttaching(MimeMessage msg, FilterContext ctx) throws IgnoreException
+	public void onSendAfterAttaching(FilterContext ctx) throws IgnoreException
 	{
 		log.debug("ReplyToFilter: onSendAfterAttaching()");
 
@@ -109,7 +108,7 @@ public class ReplyToFilter extends GenericFilter implements Lifecycle
 		try
 		{
 			Address[] addrs = {addr};
-			msg.setReplyTo(addrs);
+			ctx.getMimeMessage().setReplyTo(addrs);
 		}
 		catch(MessagingException ae)
 		{

@@ -7,7 +7,6 @@ package org.subethamail.plugin.filter;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
-import javax.mail.internet.MimeMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
@@ -110,10 +109,10 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 	}
 
 	/**
-	 * @see Filter#onSendAfterAttaching(MimeMessage, FilterContext)
+	 * @see Filter#onSendAfterAttaching(FilterContext)
 	 */
 	@Override
-	public void onSendAfterAttaching(MimeMessage msg, FilterContext ctx) throws IgnoreException
+	public void onSendAfterAttaching(FilterContext ctx) throws IgnoreException
 	{
 		log.debug("AppendFooterFilter: onSendAfterAttaching()");
 

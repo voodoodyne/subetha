@@ -7,6 +7,8 @@ package org.subethamail.core.filter;
 
 import java.util.Map;
 
+import javax.mail.internet.MimeMessage;
+
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
@@ -26,17 +28,19 @@ class FilterContextImpl implements FilterContext
 	/** */
 	EnabledFilter enabledFilter;
 	Filter filter;
-	
+	MimeMessage msg;
+
 	/** 
 	 */
-	public FilterContextImpl(EnabledFilter enabledFilter, Filter filter)
+	public FilterContextImpl(EnabledFilter enabledFilter, Filter filter, MimeMessage msg)
 	{
 		this.enabledFilter = enabledFilter;
 		this.filter = filter;
+		this.msg = msg;
 	}
 	
 	/**
-	 * @see FilterContext#getListData(String)
+	 * @see FilterContext#getListData()
 	 */
 	public ListData getListData()
 	{
@@ -44,6 +48,14 @@ class FilterContextImpl implements FilterContext
 		return Transmute.mailingList(ml);
 	}
 	
+	/**
+	 * @see FilterContext#getMimeMessage()
+	 */
+	public MimeMessage getMimeMessage()
+	{
+		return this.msg;
+	}
+
 	/**
 	 * @see FilterContext#getArgument(String)
 	 */

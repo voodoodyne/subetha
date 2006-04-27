@@ -102,4 +102,25 @@
 		<input type="submit" value="Add Role" />
 	</form>
 
+	<h3>Permissions Key</h3>
+	<table>
+		<tr>
+			<th>Permission</th>
+			<th>Description</th>
+		</tr>
+	<c:forEach var="perm" items="${backend.allPermissions}" varStatus="loop">
+		<c:choose>
+			<c:when test="${loop.index % 2 == 0}">
+				<c:set var="color" value="a"/>
+			</c:when>
+			<c:otherwise>
+				<c:set var="color" value="b"/>
+			</c:otherwise>
+		</c:choose>
+		<tr class="${color}">
+			<td><c:out value="${perm.pretty}" /></td>
+			<td><c:out value="${perm.description}" /></td>
+		</tr>
+	</c:forEach>
+	</table>
 </trim:list>

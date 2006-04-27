@@ -88,7 +88,7 @@ public class BogusFilter extends GenericFilter implements Lifecycle
 	 */
 	public String getName()
 	{
-		return "Bogus Filter";
+		return "Bogus";
 	}
 
 	/*

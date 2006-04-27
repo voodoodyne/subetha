@@ -63,7 +63,7 @@ public class ReplyToFilter extends GenericFilter implements Lifecycle
 	 */
 	public String getName()
 	{
-		return "Reply-To Filter";
+		return "Reply-To";
 	}
 
 	/*

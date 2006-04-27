@@ -89,7 +89,7 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 	 */
 	public String getName()
 	{
-		return "AppendFooter Filter";
+		return "Append Footer";
 	}
 
 	/*

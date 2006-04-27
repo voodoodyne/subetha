@@ -33,7 +33,7 @@ public interface FilterContext
 	
 	/**
 	 * This method will use Velocity to process data using the passed in objects
-	 * for the context. By default, two objects (MailSummary and ListData) 
+	 * for the context. By default, two objects (MimeMessage and ListData) 
 	 * are made available as $mail and $list. If you try to pass in a context
 	 * with those names, they will be ignored.
 	 *

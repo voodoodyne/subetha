@@ -5,10 +5,15 @@
 
 package org.subethamail.core.filter;
 
+import java.util.Map;
+
+import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
+import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.FilterArgument;
+import org.subethamail.entity.MailingList;
 
 
 /**
@@ -31,21 +36,14 @@ class FilterContextImpl implements FilterContext
 	}
 	
 	/**
-	 * @see FilterContext#getListAddress()
+	 * @see FilterContext#getListData(String)
 	 */
-	public String getListAddress()
+	public ListData getListData()
 	{
-		return this.enabledFilter.getList().getEmail();
+		MailingList ml = this.enabledFilter.getList();
+		return Transmute.mailingList(ml);
 	}
-
-	/**
-	 * @see FilterContext#getListURL()
-	 */
-	public String getListURL()
-	{
-		return this.enabledFilter.getList().getUrl();
-	}
-
+	
 	/**
 	 * @see FilterContext#getArgument(String)
 	 */
@@ -58,4 +56,11 @@ class FilterContextImpl implements FilterContext
 			return arg.getValue();
 	}
 
+	/**
+	 * @see FilterContext#expand(String)
+	 */
+	public String expand(String data, Map<String, Object> context)
+	{
+		return "";
+	}
 }

@@ -5,6 +5,10 @@
 
 package org.subethamail.core.plugin.i;
 
+import java.util.Map;
+
+import org.subethamail.core.lists.i.ListData;
+
 
 /**
  * Context for filter execution, providing information from the container
@@ -14,12 +18,22 @@ package org.subethamail.core.plugin.i;
  */
 public interface FilterContext
 {
-	/** */
-	public String getListAddress();
+	/**
+	 * Get the data about a mailing list.
+	 * @return the data about a mailing list
+	 */
+	public ListData getListData();	
 	
-	/** */
-	public String getListURL();
-	
+	/**
+	 * This method will use Velocity to process data using the passed in objects
+	 * for the context. By default, two objects (MailSummary and ListData) 
+	 * are made available as $mail and $list. If you try to pass in a context
+	 * with those names, they will be ignored.
+	 *
+	 * @return the expanded string.
+	 */
+	public String expand(String data, Map<String, Object> context);
+
 	/**
 	 * @return the correctly-typed value of the named parameter. 
 	 */

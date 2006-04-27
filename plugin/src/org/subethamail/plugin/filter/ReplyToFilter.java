@@ -99,7 +99,7 @@ public class ReplyToFilter extends GenericFilter implements Lifecycle
 		// if nothing is selected, then default to reply to the list.
 		if (replyToList.booleanValue() || emailAddress == null || emailAddress.length() == 0)
 		{
-			addr.setAddress(ctx.getListAddress());
+			addr.setAddress(ctx.getListData().getEmail());
 		}
 		else
 		{

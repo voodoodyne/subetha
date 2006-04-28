@@ -40,6 +40,13 @@
 										</c:if>
 								/>
 							</c:when>
+							<c:when test="${filterParam.type.name == 'java.lang.Character'}">
+								<%-- Character gets a input text size=3 maxlength=1 --%>
+								<input type="text"
+									name="<c:out value="form:${filterParam.name}"/>"
+									value="<c:out value="${model.form[filterParam.name]}"/>"
+									size="3" maxlength="1" />
+							</c:when>
 							<c:when test="${!empty model.enumValues[filterParam.name]}">
 								<%-- Enums will have enumValues and thus get checkboxes --%>
 								<select name="<c:out value="form:${filterParam.name}"/>">

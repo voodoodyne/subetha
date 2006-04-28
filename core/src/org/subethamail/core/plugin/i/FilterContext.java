@@ -26,18 +26,6 @@ public interface FilterContext
 	public ListData getList();	
 	
 	/**
-	 * @return the id of the current mail being processed.
-	 */
-	public Long getMailId();
-	
-	/**
-	 * @return the entire thread hierarchy (as it exists in the server so far)
-	 *  in the form of MailSummary objects.  The current mail will be in this
-	 *  tree.
-	 */
-	public MailSummary getThreadRoot();
-	
-	/**
 	 * This method will use Velocity to process data using the passed in objects
 	 * for the context. By default, two objects (SubEthaMessage and ListData) 
 	 * are made available as $mail and $list. If you try to pass in a context

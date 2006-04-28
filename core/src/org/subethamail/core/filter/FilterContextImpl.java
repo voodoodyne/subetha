@@ -99,24 +99,4 @@ class FilterContextImpl implements FilterContext
 
 		return writer.toString();
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.plugin.i.FilterContext#getMailId()
-	 */
-	public Long getMailId()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.plugin.i.FilterContext#getThreadRoot()
-	 */
-	public MailSummary getThreadRoot()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

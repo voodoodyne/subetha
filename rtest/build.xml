@@ -17,6 +17,10 @@
 	<property name="rtest.javasrc.dir" location="${rtest.basedir}/src" />
 	<property name="rtest.lib.dir" location="${rtest.basedir}/lib" />
 
+	<!-- Hack to get rid of Eclipse ant warnings -->
+	<property name="jboss.dir" location="" />
+	<import file="../build.xml" />
+	<import file="../core/build.xml" />
 	
 	<path id="rtest.classpath">
 		<fileset dir="${rtest.lib.dir}">

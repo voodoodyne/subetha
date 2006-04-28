@@ -14,7 +14,10 @@
 	<property name="appmain.meta.dir" location="${appmain.basedir}/meta" />
 
 	<property name="build.appmain.ear.file" location="${build.dir}/${name}.ear" />
-	
+
+	<!-- Hack to get rid of Eclipse ant warnings -->
+	<import file="../core/build.xml" />
+
 	<target name="appmain-ear" depends="core-all, frontend-war, entity-ejb-jar, plugin-sar, smtp-jar">
 		<ear destfile="${build.appmain.ear.file}" appxml="${appmain.meta.dir}/application.xml">
 			<metainf dir="${appmain.meta.dir}">

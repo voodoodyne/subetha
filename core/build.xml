@@ -22,6 +22,9 @@
 	<property name="core.meta.dir" location="${core.basedir}/meta" />
 	<property name="core.lib.dir" location="${core.basedir}/lib" />
 
+	<!-- Hack to get rid of Eclipse ant warnings -->
+	<import file="../build.xml" />
+	
 	<!-- used to build the core interfaces -->
 	<path id="core.i.classpath">
 		<path refid="master.classpath" />

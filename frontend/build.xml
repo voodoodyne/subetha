@@ -18,7 +18,11 @@
 	<property name="frontend.meta.dir" location="${frontend.basedir}/meta" />
 	<property name="frontend.lib.dir" location="${frontend.basedir}/lib" />
 	<property name="frontend.content.dir" location="${frontend.basedir}/content" />
-		
+
+	<!-- Hack to get rid of Eclipse ant warnings -->
+	<property name="jboss.dir" location="" />
+	<import file="../core/build.xml" />
+
 	<path id="frontend.classpath">
 		<pathelement location="${build.core.ejbclient.file}" />
 		

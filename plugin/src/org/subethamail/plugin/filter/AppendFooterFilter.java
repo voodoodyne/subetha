@@ -5,6 +5,8 @@
 
 package org.subethamail.plugin.filter;
 
+import java.io.IOException;
+
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
@@ -66,22 +68,7 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 		{
 			Context ctx = new InitialContext();
 			this.listMgr = (ListMgr)ctx.lookup("subetha/ListMgr/local");
-		}		
-/*		
-		try
-		{
-			Velocity.setProperty(Velocity.RESOURCE_LOADER, "cp");
-			Velocity.setProperty("cp.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-			Velocity.setProperty("cp.resource.loader.cache", "true");
-			Velocity.setProperty("cp.resource.loader.modificationCheckInterval ", "0");
-			Velocity.init();
 		}
-		catch (Exception ex)
-		{
-			log.fatal("Unable to initialize Velocity", ex);
-			throw new RuntimeException(ex);
-		}
-*/
 	}
 	
 	/*
@@ -117,8 +104,19 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException
 	{
 		log.debug("AppendFooterFilter: onSendAfterAttaching()");
-
 		
-
+		Object obj;
+		try
+		{
+			obj = msg.getContent();
+			if (obj instanceof String)
+			{
+				ctx.expand((String)obj);
+			}
+			msg.setContent(obj, "text/ascii");
+		}
+		catch (IOException e)
+		{
+		}
 	}
 }

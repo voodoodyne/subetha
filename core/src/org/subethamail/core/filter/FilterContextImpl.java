@@ -70,19 +70,30 @@ class FilterContextImpl implements FilterContext
 	}
 
 	/**
+	 * @see FilterContext#expand(String)
+	 */
+	public String expand(String template)
+	{
+		return this.expand(template, null);
+	}
+
+	/**
 	 * @see FilterContext#expand(String, Map<String, Object> context)
 	 */
 	public String expand(String template, Map<String, Object> context)
 	{
 		VelocityContext vctx = new VelocityContext();
 		
-	    for (Map.Entry<String, Object> e: context.entrySet())
-	    {
-	    	if (e.getKey().equals("mail") || e.getKey().equals("list"))
-	    		continue;
-	    	vctx.put(e.getKey(),e.getValue());
-	    }
-	    
+		if (context != null)
+		{
+		    for (Map.Entry<String, Object> e: context.entrySet())
+		    {
+		    	if (e.getKey().equals("mail") || e.getKey().equals("list"))
+		    		continue;
+		    	vctx.put(e.getKey(),e.getValue());
+		    }
+		}
+		
 	    vctx.put("mail", this.msg);
 	    vctx.put("list", this.getList());
 

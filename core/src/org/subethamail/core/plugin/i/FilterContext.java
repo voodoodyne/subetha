@@ -23,7 +23,17 @@ public interface FilterContext
 	 * @return the data about a mailing list
 	 */
 	public ListData getList();	
-	
+
+	/**
+	 * This method will use Velocity to process data using the passed in objects
+	 * for the context. By default, two objects (SubEthaMessage and ListData) 
+	 * are made available as $mail and $list. If you try to pass in a context
+	 * with those names, they will be ignored.
+	 *
+	 * @return the expanded string.
+	 */
+	public String expand(String data);
+
 	/**
 	 * This method will use Velocity to process data using the passed in objects
 	 * for the context. By default, two objects (SubEthaMessage and ListData) 
@@ -33,7 +43,7 @@ public interface FilterContext
 	 * @return the expanded string.
 	 */
 	public String expand(String data, Map<String, Object> context);
-
+	
 	/**
 	 * @return the correctly-typed value of the named parameter. 
 	 */

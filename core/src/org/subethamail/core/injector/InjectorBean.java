@@ -5,6 +5,7 @@
 
 package org.subethamail.core.injector;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
@@ -123,6 +124,15 @@ public class InjectorBean implements Injector, InjectorRemote
 	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, byte[])
 	 */
 //	@WebMethod
+	public boolean inject(String fromAddress, String toAddress, byte[] mailData) throws MessagingException, IOException
+	{
+		return this.inject(fromAddress, toAddress, new ByteArrayInputStream(mailData));
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, byte[])
+	 */
 	public boolean inject(String fromAddress, String toAddress, InputStream mailData) throws MessagingException, IOException
 	{
 		if (log.isDebugEnabled())

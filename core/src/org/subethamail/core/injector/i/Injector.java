@@ -43,6 +43,11 @@ public interface Injector
 	 * @throws MessagingException if the message data or toAddress could not be parsed.
 	 */
 	public boolean inject(String fromAddress, String toAddress, InputStream mailData) throws MessagingException, IOException;
-	
+
+	/**
+	 * Convenience method for remote clients.  Most inputStream implementations
+	 * are not serializable.
+	 */
+	public boolean inject(String fromAddress, String toAddress, byte[] mailData) throws MessagingException, IOException;
 }
 

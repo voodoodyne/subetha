@@ -104,8 +104,8 @@ public class Mail implements Serializable, Comparable
 	@GeneratedValue
 	Long id;
 	
-	/** */
-	@Column(nullable=false, length=Validator.MAX_MAIL_CONTENT)
+	/** Nullable because content is set after object persistence */
+	@Column(nullable=true, length=Validator.MAX_MAIL_CONTENT)
 	byte[] content;
 	
 	/** Message id might not exist */
@@ -216,25 +216,15 @@ public class Mail implements Serializable, Comparable
 	 */
 	public void setContent(SubEthaMessage msg) throws MessagingException
 	{
+		// TODO:  optimize this to do less memory copying
+		
 		byte[] raw;
 		
-		msg.saveIfNecessary();
-		int size = msg.getSize();
-
 		try
 		{
-			if (size < 0)
-			{
-				ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
-				msg.writeTo(tmpStream);
-				raw = tmpStream.toByteArray();
-			}
-			else
-			{
-				raw = new byte[size];
-				OutputStream tmpStream = new SimpleByteArrayOutputStream(raw);
-				msg.writeTo(tmpStream);
-			}
+			ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
+			msg.writeTo(tmpStream);
+			raw = tmpStream.toByteArray();
 		}
 		catch (IOException ex) { throw new EJBException(ex); }
 		

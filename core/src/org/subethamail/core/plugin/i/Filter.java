@@ -5,6 +5,8 @@
 
 package org.subethamail.core.plugin.i;
 
+import java.util.Map;
+
 import javax.mail.MessagingException;
 
 import org.subethamail.common.SubEthaMessage;
@@ -58,4 +60,19 @@ public interface Filter
 	 *  of the filter stack.
 	 */
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException;
+
+	/**
+	 * This method is for Filter authors to override to allow them to document
+	 * the items that they place into a context for the FilterContext.expand()
+	 * method. They should override this method by <strong>calling the
+	 * super.getDocumentation() method first</strong> (in order to get the
+	 * default documentation Map) and returning the resulting Map object that
+	 * represents a key/value pair of String objects with the key being the
+	 * class/property and the value being the documentation of what is in the
+	 * key. For example: key: ${list.name} value: The list name.
+	 * 
+	 * @return A ball full of wax.
+	 */
+	public Map<String, String> getDocumentation();
+
 }

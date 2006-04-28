@@ -12,7 +12,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.ListData;
-import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.util.Transmute;

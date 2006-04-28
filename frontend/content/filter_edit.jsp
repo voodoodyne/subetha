@@ -75,7 +75,7 @@
 						<c:out value="${filterParam.description}"/>
 						<c:if test="${filterParam.expanded}">
 							<c:set var="hasExpansion" value="true" />
-							<strong>Variables will be expanded.</strong>
+							<strong>Variables will be expanded. See below for the documentation of the variables.</strong>
 						</c:if>
 					</td>
 				</tr>
@@ -95,29 +95,23 @@
 		
 		<table>
 			<tr>
-				<th>\${list.name}</th>
-				<td>The name of this mailing list.</td>
+				<th>Variable</th>
+				<th>Description</th>
 			</tr>
-			<tr>
-				<th>\${list.description}</th>
-				<td>The description of this mailing list.</td>
-			</tr>
-			<tr>
-				<th>\${list.email}</th>
-				<td>The email address of this mailing list.</td>
-			</tr>
-			<tr>
-				<th>\${list.url}</th>
-				<td>The url of this mailing list.</td>
-			</tr>
-			<tr>
-				<th>\${list.id}</th>
-				<td>The numeric id of this mailing list.</td>
-			</tr>
-			<tr>
-				<th>\${mail.subject}</th>
-				<td>The mail subject.</td>
-			</tr>
+			<c:forEach var="docs" items="${model.filter.documenation}" varStatus="loop">
+				<c:choose>
+					<c:when test="${loop.index % 2 == 0}">
+						<c:set var="color" value="a"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="color" value="b"/>
+					</c:otherwise>
+				</c:choose>
+				<tr class="${color}">
+					<th><c:out value="${docs.key}"/></th>
+					<td><c:out value="${docs.value}"/></td>
+				</tr>			
+			</c:forEach>			
 		</table>
 	</c:if>
 </trim:list>

@@ -8,7 +8,6 @@ package org.subethamail.core.plugin.i;
 import java.util.Map;
 
 import org.subethamail.core.lists.i.ListData;
-import org.subethamail.core.lists.i.MailSummary;
 
 
 /**

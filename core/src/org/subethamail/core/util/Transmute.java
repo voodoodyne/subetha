@@ -295,7 +295,8 @@ public class Transmute
 				filter.getDescription(),
 				filter.getParameters(),
 				enabled.getList().getId(),
-				enabled.getArgumentMap());
+				enabled.getArgumentMap(),
+				filter.getDocumentation());
 	}
 
 }

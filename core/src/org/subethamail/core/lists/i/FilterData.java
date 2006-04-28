@@ -23,7 +23,7 @@ public class FilterData implements Serializable
 	String name;
 	String description;
 	FilterParameter[] parameters;
-	
+
 	/**
 	 */
 	public FilterData(String className, String name, String description, FilterParameter[] parameters)
@@ -57,5 +57,4 @@ public class FilterData implements Serializable
 	{
 		return this.parameters;
 	}
-
 }

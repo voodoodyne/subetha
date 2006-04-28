@@ -5,6 +5,8 @@
 
 package org.subethamail.plugin.filter;
 
+import java.util.Map;
+
 import javax.annotation.security.RunAs;
 
 import org.apache.commons.logging.Log;
@@ -107,5 +109,13 @@ public class BogusFilter extends GenericFilter implements Lifecycle
 	public FilterParameter[] getParameters()
 	{
 		return PARAM_DEFS;
+	}
+	
+	@Override
+	public Map<String, String> getDocumentation()
+	{
+		Map<String, String> map = super.getDocumentation();
+		map.put ("${foo.bar}", "Class foo, method bar.");
+		return map;
 	}
 }

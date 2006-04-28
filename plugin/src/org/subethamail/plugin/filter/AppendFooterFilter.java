@@ -47,9 +47,9 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 		new FilterParameterImpl(
 				"Footer",
 				"The footer text which is appended to the bottom of the email body.",
-				String.class,
 				"",
-				20
+				20,
+				true
 			)
 	};
 

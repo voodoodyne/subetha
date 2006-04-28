@@ -52,4 +52,14 @@ public interface FilterParameter
 	 * the number of lines specified.
 	 */
 	public int getTextLines();
+	
+	/**
+	 * Indicates to the UI that the property should be expanded with
+	 * velocity macros.  The filter is responsible for calling the
+	 * FilterContext.expand() method.  This just causes the UI to
+	 * display some helpful text.
+	 * 
+	 * Only has meaning for java.lang.String parameters.
+	 */
+	public boolean isExpanded();
 }

@@ -28,6 +28,7 @@ public class BogusFilter extends GenericFilter implements Lifecycle
 //TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(BogusFilter.class);
 	
 	/** */
@@ -69,16 +70,16 @@ public class BogusFilter extends GenericFilter implements Lifecycle
 		new FilterParameterImpl(
 				"Area",
 				"Lots of text.",
-				String.class,
 				"foo\nbar",
-				5
+				5,
+				true
 			),
 		new FilterParameterImpl(
 				"TextArea",
 				"This is a text area.",
-				String.class,
 				"",
-				10
+				10,
+				false
 			)
 	};
 

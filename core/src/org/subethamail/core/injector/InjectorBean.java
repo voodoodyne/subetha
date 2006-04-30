@@ -387,13 +387,31 @@ public class InjectorBean implements Injector, InjectorRemote
 		
 		//
 		// STEP THREE:  Find anyone looking for us as a parent and insert us in
-		// their thread ancestry.
+		// their thread ancestry.  Watch out for loops.
 		//
 		List<Mail> descendants = this.dao.findMailWantingParent(mail.getList().getId(), mail.getMessageId());
-		for (Mail descendant: descendants)
+		outer: for (Mail descendant: descendants)
 		{
 			if (log.isDebugEnabled())
 				log.debug("Replacing parent of " + descendant);
+			
+			// Check for a loop
+			Mail checkForLoop = descendant;
+			while (checkForLoop != null)
+			{
+				if (checkForLoop == mail)
+				{
+					if (log.isWarnEnabled())
+						log.warn("Found a mail loop, parent=" + mail + ", child=" + descendant);
+					
+					// Ignore this link and remove the wanted rerference
+					descendant.getWantedReference().remove(mail.getMessageId());
+
+					continue outer;
+				}
+				
+				checkForLoop = checkForLoop.getParent();
+			}
 			
 			// Remove from the old parent
 			Mail oldParent = descendant.getParent();

@@ -7,7 +7,6 @@ package org.subethamail.entity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +45,6 @@ import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Table;
 import org.hibernate.validator.Email;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.common.io.SimpleByteArrayOutputStream;
 import org.subethamail.common.valid.Validator;
 
 /**

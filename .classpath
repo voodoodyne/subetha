@@ -13,7 +13,7 @@
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jboss-j2ee.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jbosssx.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/mail.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/activation.jar"/>
+	<classpathentry sourcepath="/J2EESRC_HOME/activation/src/java" kind="var" path="JBOSS_HOME/server/default/lib/activation.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-annotations-ejb3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3x.jar"/>

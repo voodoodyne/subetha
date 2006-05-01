@@ -5,6 +5,8 @@
 
 package org.subethamail.core.deliv;
 
+import java.io.IOException;
+
 import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
@@ -80,23 +82,25 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 			byte[] token = this.encryptor.encryptString(sub.getDeliverTo().getId());
 			msg.setEnvelopeFrom(VERPAddress.encodeVERP(mail.getList().getEmail(), token));
 			
-			try
-			{
-				this.filterRunner.onSend(msg, mail);
-				
-				this.detacher.attach(msg);
-				
-				Transport.send(msg, new Address[] { destination });
-				
-				sub.getDeliverTo().bounceDecay();
-			}
-			catch (IgnoreException ex)
-			{
-				if (log.isDebugEnabled())
-					log.debug("Ignoring mail " + mail, ex);
-			}
+			this.filterRunner.onSend(msg, mail);
+			
+			this.detacher.attach(msg);
+			
+			Transport.send(msg, new Address[] { destination });
+			
+			sub.getDeliverTo().bounceDecay();
+		}
+		catch (IgnoreException ex)
+		{
+			if (log.isDebugEnabled())
+				log.debug("Ignoring mail " + mail, ex);
 		}
 		catch (MessagingException ex)
+		{
+			log.error("Error delivering mailId " + mailId + " to personId " + personId, ex);
+			throw new RuntimeException(ex);
+		}
+		catch (IOException ex)
 		{
 			log.error("Error delivering mailId " + mailId + " to personId " + personId, ex);
 			throw new RuntimeException(ex);

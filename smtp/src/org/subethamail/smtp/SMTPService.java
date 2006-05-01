@@ -29,6 +29,7 @@ import org.subethamail.smtp.server.SMTPServiceCore;
 import org.subethamail.smtp.server.ServerRejectedException;
 
 /**
+ * @author Ian McFarland
  * @author Jeff Schnitzer
  */
 @Service(name="SMTPService", objectName="subetha:service=SMTP")

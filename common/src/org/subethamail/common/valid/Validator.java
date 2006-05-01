@@ -51,10 +51,14 @@ public class Validator
 	public static final int MAX_SUBSCRIPTION_NOTE = 4096;
 	
 	// Mail
-	public static final int MAX_MAIL_CONTENT = 1024 * 1024;	// 1M enough?
+	public static final int MAX_MAIL_CONTENT = 1024 * 1024 * 1024;	// 1G
 	public static final int MAX_MAIL_MESSAGE_ID = 255;
 	public static final int MAX_MAIL_SUBJECT = 4096;
 	public static final int MAX_MAIL_FROM = 4096;
+	
+	// Attachment
+	public static final int MAX_ATTACHMENT_CONTENT_TYPE = 255;
+	public static final int MAX_ATTACHMENT_CONTENT = 1024 * 1024 * 1024;	// 1G
 	
 	/**
 	 * Normalizes an email address to a canonical form - the domain

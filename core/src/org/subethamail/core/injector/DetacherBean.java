@@ -5,16 +5,25 @@
 
 package org.subethamail.core.injector;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Blob;
+
+import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import javax.mail.Multipart;
+import javax.mail.Part;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.lob.BlobImpl;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Mail;
+import org.subethamail.entity.dao.DAO;
 
 /**
  * @author Jeff Schnitzer
@@ -27,25 +36,70 @@ public class DetacherBean implements Detacher
 {
 	/** */
 	private static Log log = LogFactory.getLog(DetacherBean.class);
+	
+	/** 
+	 * The name of the header for detached attachment references.  The
+	 * value will be the numeric id of the attachment. 
+	 */
+	public static String HDR_ATTACHMENT_REF = "X-SubEtha-Attachment";
+	
+	/** */
+	@EJB DAO dao;
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.injector.i.Detacher#detach(javax.mail.internet.MimeMessage, org.subethamail.entity.Mail)
+	 * @see org.subethamail.core.injector.Detacher#detach(javax.mail.Part, org.subethamail.entity.Mail)
 	 */
-	public void detach(MimeMessage msg, Mail ownerMail) throws MessagingException
+	public void detach(Part part, Mail ownerMail) throws MessagingException, IOException
 	{
-		// TODO Auto-generated method stub
+		if (log.isDebugEnabled())
+			log.debug("Detaching " + part + " of type " + part.getContentType());
 		
+		Object content = part.getContent();
+
+		if (content instanceof Multipart)
+		{
+			if (log.isDebugEnabled())
+				log.debug("Content is multipart");
+			
+			Multipart multi = (Multipart)content;
+			
+			for (int i=0; i<multi.getCount(); i++)
+				this.detach(multi.getBodyPart(i), ownerMail);
+		}
+		else if (content instanceof Part)
+		{
+			if (log.isDebugEnabled())
+				log.debug("Content is part, probably a message");
+			
+			this.detach((Part)content, ownerMail);
+		}
+		else if (part.getContentType().startsWith("text/"))
+		{
+			// Text parts can stay, but we don't want anyone faking references
+			part.removeHeader(HDR_ATTACHMENT_REF);
+		}
+		else
+		{
+			// We need to detach it
+			InputStream input = part.getDataHandler().getInputStream();
+			Blob blobby = new BlobImpl(input, input.available());
+			
+			Attachment attach = new Attachment(ownerMail, blobby, part.getContentType());
+			this.dao.persist(attach);
+			ownerMail.getAttachments().add(attach);
+			
+			part.setHeader(HDR_ATTACHMENT_REF, attach.getId().toString());
+			part.setText(attach.getId().toString());
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.injector.i.Detacher#attach(javax.mail.internet.MimeMessage)
+	 * @see org.subethamail.core.injector.Detacher#attach(javax.mail.Part)
 	 */
-	public void attach(MimeMessage msg) throws MessagingException
+	public void attach(Part part) throws MessagingException, IOException
 	{
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

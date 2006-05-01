@@ -145,6 +145,11 @@ public class Mail implements Serializable, Comparable
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	SortedSet<Mail> replies;
 	
+	/** */
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="mail")
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+	Set<Attachment> attachments;
+	
 	/** 
 	 * This represents a list of references we are more interested
 	 * in using as our parent than what we have currently.  The first
@@ -188,10 +193,13 @@ public class Mail implements Serializable, Comparable
 		this.list = list;
 		this.hold = holdFor;
 		
-		// These are validated normally.
-		this.setSubject(msg.getSubject());
-		this.setMessageId(msg.getMessageID());
-		this.setFrom(from.toString());
+		this.subject = msg.getSubject();
+		if (this.subject == null)
+			this.subject = "";
+		
+		this.messageId = msg.getMessageID();
+		this.from = from.toString();
+		
 		this.setFromNormal(from.getAddress());
 	}
 	
@@ -346,6 +354,9 @@ public class Mail implements Serializable, Comparable
 	{
 		this.wantedReference = value;
 	}
+	
+	/** */
+	public Set<Attachment> getAttachments() { return this.attachments; }
 
 	/**
 	 * Natural sort order is based on creation date

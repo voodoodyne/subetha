@@ -5,9 +5,11 @@
 
 package org.subethamail.core.injector;
 
+import java.io.IOException;
+
 import javax.ejb.Local;
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import javax.mail.Part;
 
 import org.subethamail.entity.Mail;
 
@@ -31,16 +33,17 @@ public interface Detacher
 	/**
 	 * Removes attachments from the mime message, stores the attachments
 	 * as blobs, and substitutes in a special content type that indicates
-	 * a link back to the database object. 
+	 * a link back to the database object.  Recursively descends the mime
+	 * tree.
 	 */
-	public void detach(MimeMessage msg, Mail ownerMail) throws MessagingException;
+	public void detach(Part part, Mail ownerMail) throws MessagingException, IOException;
 	
 	/** 
 	 * Looks through the mime message for any of the special indicator
 	 * link attachments and replaces them with the actual binary content
-	 * of the attachment.
+	 * of the attachment.  Recursively descends the mime tree.
 	 */
-	public void attach(MimeMessage msg) throws MessagingException;
+	public void attach(Part part) throws MessagingException, IOException;
 	
 }
 

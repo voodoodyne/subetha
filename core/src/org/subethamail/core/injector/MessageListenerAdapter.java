@@ -11,11 +11,20 @@ import java.io.InputStream;
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.jboss.annotation.ejb.Depends;
+import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.io.LimitExceededException;
+import org.subethamail.core.admin.BootstrapperBean;
+import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
+import org.subethamail.entity.dao.DAO;
 import org.subethamail.smtp.i.MessageListener;
 import org.subethamail.smtp.i.MessageListenerRegistry;
 import org.subethamail.smtp.i.TooMuchDataException;
@@ -26,10 +35,19 @@ import org.subethamail.smtp.i.TooMuchDataException;
  * 
  * @author Jeff Schnitzer
  */
+@Service(objectName="subetha:service=MessageListenerAdapter")
+// This depends annotation can be removed when JBoss fixes dependency bug.
+@Depends({
+	"jboss.j2ee:ear=subetha.ear,jar=core.jar,name=Injector,service=EJB3",
+	"subetha:service=SMTP"
+})
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
 public class MessageListenerAdapter implements MessageListener, Lifecycle
 {
+	/** */
+	private static Log log = LogFactory.getLog(MessageListenerAdapter.class);
+	
 	/**
 	 */
 	@EJB MessageListenerRegistry registry;
@@ -40,6 +58,15 @@ public class MessageListenerAdapter implements MessageListener, Lifecycle
 	 */
 	public void start() throws Exception
 	{
+		if (this.registry != null)
+			throw new RuntimeException("JBoss fixed, code can be removed now");
+		else
+		{
+			Context ctx = new InitialContext();
+			this.registry = (MessageListenerRegistry)ctx.lookup("subetha/SMTPService/local");
+			this.injector = (Injector)ctx.lookup(Injector.JNDI_NAME);
+		}
+		
 		this.registry.register(this);
 	}
 	
@@ -58,7 +85,7 @@ public class MessageListenerAdapter implements MessageListener, Lifecycle
 	{
 		try
 		{
-			return this.injector.accept(from);
+			return this.injector.accept(recipient);
 		}
 		catch (MessagingException ex)
 		{
@@ -75,16 +102,32 @@ public class MessageListenerAdapter implements MessageListener, Lifecycle
 		try
 		{
 			if (!this.injector.inject(from, recipient, input))
+			{
+				if (log.isWarnEnabled())
+					log.warn("Accepted data no longer wanted for " + recipient);
+				
 				throw new RuntimeException("Data no longer wanted");
+			}
 		}
 		catch (MessagingException ex)
 		{
+			if (log.isWarnEnabled())
+				log.warn("Trouble parsing input data", ex);
+			
 			// Problem parsing the data
 			throw new RuntimeException(ex);
 		}
 		catch (LimitExceededException ex)
 		{
+			if (log.isWarnEnabled())
+				log.warn("Too much input data", ex);
+			
 			throw new TooMuchDataException();
+		}
+		catch (RuntimeException ex)
+		{
+			log.error("Some kind of error", ex);
+			throw ex;
 		}
 	}
 }

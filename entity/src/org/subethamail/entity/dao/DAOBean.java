@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.valid.Validator;
+import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
@@ -321,6 +322,23 @@ public class DAOBean implements DAO
 		q.setParameter("roleId", roleId);
 		
 		return q.getResultList();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findAttachment(java.lang.Long)
+	 */
+	public Attachment findAttachment(Long attachmentId) throws NotFoundException
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding Attachment with id " + attachmentId);
+		
+		Attachment a = this.em.find(Attachment.class, attachmentId);
+		
+		if (a == null)
+			throw new NotFoundException("No attachment " + attachmentId);
+		else
+			return a;
 	}
 
 }

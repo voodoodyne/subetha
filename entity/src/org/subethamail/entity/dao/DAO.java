@@ -13,6 +13,7 @@ import javax.mail.internet.InternetAddress;
 import javax.persistence.LockModeType;
 
 import org.subethamail.common.NotFoundException;
+import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
@@ -152,4 +153,9 @@ public interface DAO
 	 *  in writable form.
 	 */
 	public List<Subscription> findSubscriptionsByRole(Long roleId);
+
+	/**
+	 * @return the specified attachment.
+	 */
+	public Attachment findAttachment(Long attachmentId) throws NotFoundException;
 }

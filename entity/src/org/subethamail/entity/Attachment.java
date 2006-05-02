@@ -5,8 +5,10 @@
 
 package org.subethamail.entity;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.Blob;
+import java.sql.SQLException;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -80,6 +82,21 @@ public class Attachment implements Serializable
 
 	/** */
 	public Blob getContent() { return this.content; }
+	
+	/**
+	 * Convenience method
+	 */
+	public InputStream getContentStream()
+	{
+		try
+		{
+			return this.content.getBinaryStream();
+		}
+		catch (SQLException ex)
+		{
+			throw new RuntimeException(ex);
+		}
+	}
 	
 	/** */
 	public String getContentType() { return this.contentType; }

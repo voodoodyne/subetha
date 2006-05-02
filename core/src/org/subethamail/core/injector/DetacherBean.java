@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
 
+import javax.activation.DataHandler;
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
@@ -21,6 +22,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.lob.BlobImpl;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.NotFoundException;
+import org.subethamail.common.io.TrivialDataSource;
 import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.dao.DAO;
@@ -100,6 +103,56 @@ public class DetacherBean implements Detacher
 	 */
 	public void attach(Part part) throws MessagingException, IOException
 	{
+		if (log.isDebugEnabled())
+			log.debug("Reattaching " + part + " of type " + part.getContentType());
+		
+		Object content = part.getContent();
+
+		if (content instanceof Multipart)
+		{
+			if (log.isDebugEnabled())
+				log.debug("Content is multipart");
+			
+			Multipart multi = (Multipart)content;
+			
+			for (int i=0; i<multi.getCount(); i++)
+				this.attach(multi.getBodyPart(i));
+		}
+		else if (content instanceof Part)
+		{
+			if (log.isDebugEnabled())
+				log.debug("Content is part, probably a message");
+			
+			this.attach((Part)content);
+		}
+		else
+		{
+			// Look for special header which means we must reattach.
+			String[] headers = part.getHeader(HDR_ATTACHMENT_REF);
+			if (headers != null && headers.length > 0)
+			{
+				// There should only be one
+				Long attachmentId = Long.parseLong(headers[0]);
+				
+				try
+				{
+					Attachment att = this.dao.findAttachment(attachmentId);
+					
+					part.removeHeader(HDR_ATTACHMENT_REF);
+					part.setDataHandler(
+							new DataHandler(
+									new TrivialDataSource(
+											att.getContentStream(),
+											att.getContentType())));
+				}
+				catch (NotFoundException ex)
+				{
+					// Log an error and otherwise leave the mime part as-is.
+					if (log.isErrorEnabled())
+						log.error("Missing referenced attachment " + attachmentId);
+				}
+			}
+		}
 	}
 	
 }

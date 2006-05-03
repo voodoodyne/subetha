@@ -88,6 +88,9 @@
 		<copy file="${build.appmain.ear.file}" todir="${deploy.dir}" />
 	</target>
 	
+	<target name="cleandeploy" depends="clean, deploy">
+	</target>
+	
 	<target name="touchapp">
 		<basename property="build.appmain.ear.basename" file="${build.appmain.ear.file}" />
 		<touch file="${deploy.dir}/${build.appmain.ear.basename}" />

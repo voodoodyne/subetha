@@ -79,8 +79,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		MailingList list = this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
 
-		Set<Subscription> listSubscriptions = list.getSubscriptions();
-		return Transmute.subscribers(listSubscriptions);
+		return Transmute.subscribers(list.getSubscriptions());
 	}
 
 	/*

@@ -29,5 +29,6 @@
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/ejb3-persistence.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>
+	<classpathentry kind="src" path="smtp/test"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

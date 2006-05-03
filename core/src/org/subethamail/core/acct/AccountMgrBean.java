@@ -80,18 +80,10 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		
 		Person me = this.getMe();
 		
-		String[] addresses = new String[me.getEmailAddresses().size()];
-		int i = 0;
-		for (EmailAddress addy: me.getEmailAddresses().values())
-		{
-			addresses[i] = addy.getId();
-			i++;
-		}
-		
 		return new Self(
 				me.getId(),
 				me.getName(),
-				addresses,
+				me.getEmailArray(),
 				me.isSiteAdmin(),
 				Transmute.subscriptions(me.getSubscriptions().values())
 			);

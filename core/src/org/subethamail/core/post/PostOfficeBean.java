@@ -31,6 +31,7 @@ import org.subethamail.core.post.i.MailType;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.dao.DAO;
 
 /**
@@ -218,5 +219,25 @@ public class PostOfficeBean implements PostOffice
 		vctx.put("person", me);
 		
 		this.sendMail(MailType.CONFIRM_EMAIL, vctx, email);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.post.PostOffice#sendYourSubscriptionHeldNotice(org.subethamail.entity.SubscriptionHold)
+	 */
+	public void sendYourSubscriptionHeldNotice(SubscriptionHold hold)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.post.PostOffice#sendModeratorSubscriptionHeldNotice(org.subethamail.entity.Person, org.subethamail.entity.SubscriptionHold)
+	 */
+	public void sendModeratorSubscriptionHeldNotice(Person person, SubscriptionHold hold)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

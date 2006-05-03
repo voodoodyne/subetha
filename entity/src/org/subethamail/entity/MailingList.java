@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -116,6 +118,10 @@ public class MailingList implements Serializable, Comparable
 	@Column(nullable=false, length=Validator.MAX_LIST_DESCRIPTION)
 	String description;
 	
+	/** Hold subs for moderator approval */
+	@Column(nullable=false)
+	boolean subscriptionHeld;
+	
 	//
 	// TODO:  set these two columns back to nullable=false when
 	// this hibernate bug is fixed:
@@ -133,8 +139,8 @@ public class MailingList implements Serializable, Comparable
 	@JoinColumn(name="anonymousRoleId", nullable=true)
 	Role anonymousRole;
 	
-	/** */
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
+	/** targetEntity is needed because of inheritance chain */
+	@OneToMany(targetEntity=Subscription.class, cascade=CascadeType.ALL, mappedBy="list")
 	@Sort(type=SortType.COMPARATOR, comparator=SubscriptionComparator.class)
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	SortedSet<Subscription> subscriptions;
@@ -244,6 +250,15 @@ public class MailingList implements Serializable, Comparable
 			log.debug("Setting description of " + this + " to " + value);
 		
 		this.description = value;
+	}
+	
+	/**
+	 */
+	public boolean isSubscriptionHeld() { return this.subscriptionHeld; }
+	
+	public void setSubscriptionHeld(boolean value)
+	{
+		this.subscriptionHeld = value;
 	}
 	
 	/** 

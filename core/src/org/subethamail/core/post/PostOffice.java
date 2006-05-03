@@ -10,6 +10,7 @@ import javax.ejb.Local;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.SubscriptionHold;
 
 /**
  * Sends outbound email with a variety of templates.
@@ -57,5 +58,13 @@ public interface PostOffice
 	 * any account that may exist at that address) into the person.
 	 */
 	public void sendAddEmailToken(Person me, String email, String token);
+
+	/**
+	 */
+	public void sendYourSubscriptionHeldNotice(SubscriptionHold hold);
+
+	/**
+	 */
+	public void sendModeratorSubscriptionHeldNotice(Person person, SubscriptionHold hold);
 	
 }

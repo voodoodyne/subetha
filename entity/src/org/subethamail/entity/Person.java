@@ -171,6 +171,23 @@ public class Person implements Serializable, Comparable
 		return this.emailAddresses.get(email);
 	}
 	
+	/**
+	 * Convenience method
+	 */
+	public String[] getEmailArray()
+	{
+		String[] addresses = new String[this.emailAddresses.size()];
+		
+		int i = 0;
+		for (EmailAddress addy: this.emailAddresses.values())
+		{
+			addresses[i] = addy.getId();
+			i++;
+		}
+		
+		return addresses;
+	}
+	
 	/** 
 	 * @return all the subscriptions associated with this person
 	 */

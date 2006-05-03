@@ -96,7 +96,7 @@ public class Transmute
 				raw.getDescription());
 	}
 
-	/** */
+	/** Does not add held subscriptions */
 	public static List<SubscriberData> subscribers(Collection<Subscription> subscriptions)
 	{
 		List<SubscriberData> result = new ArrayList<SubscriberData>(subscriptions.size());
@@ -116,7 +116,7 @@ public class Transmute
 		return new SubscriberData(
 				raw.getPerson().getId(),
 				raw.getPerson().getName(),
-				raw.getEmailAddresses(),
+				raw.getPerson().getEmailArray(),
 				raw.getRole().getName(),
 				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null);
 	}

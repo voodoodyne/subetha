@@ -18,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
@@ -30,6 +31,7 @@ import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
+import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.dao.DAO;
 
 /**
@@ -225,17 +227,34 @@ public class AdminBean implements Admin, AdminRemote
 		}
 		else
 		{
-			// TODO:  maybe we need a subscription hold?
+			if (list.isSubscriptionHeld())
+			{
+				SubscriptionHold hold = new SubscriptionHold(who, list, deliverTo);
+				this.dao.persist(hold);
+				
+				// Send mail to person who requested subscription
+				this.postOffice.sendYourSubscriptionHeldNotice(hold);
+				
+				// Send mail to anyone that can approve
+				for (Subscription maybeModerator: list.getSubscriptions())
+					if (maybeModerator.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS))
+						this.postOffice.sendModeratorSubscriptionHeldNotice(maybeModerator.getPerson(), hold);
+				
+				return SubscribeResult.HELD;
+			}
+			else
+			{
+				sub = new Subscription(who, list, deliverTo, list.getDefaultRole());
+				
+				this.dao.persist(sub);
+				
+				who.addSubscription(sub);
+				list.getSubscriptions().add(sub);
+				
+				this.postOffice.sendSubscribed(list, who, deliverTo);
 			
-			sub = new Subscription(who, list, deliverTo, list.getDefaultRole());
-			this.dao.persist(sub);
-			
-			who.addSubscription(sub);
-			list.getSubscriptions().add(sub);
-			
-			this.postOffice.sendSubscribed(list, who, deliverTo);
-			
-			return SubscribeResult.OK;
+				return SubscribeResult.OK;
+			}
 		}
 	}
 

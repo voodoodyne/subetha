@@ -34,6 +34,7 @@ import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
+import org.subethamail.entity.SubscriptionHold;
 
 
 
@@ -297,6 +298,33 @@ public class Transmute
 				enabled.getList().getId(),
 				enabled.getArgumentMap(),
 				filter.getDocumentation());
+	}
+
+	/**
+	 */
+	public static List<SubscriberData> heldSubscriptions(Collection<SubscriptionHold> rawColl)
+	{
+		List<SubscriberData> result = new ArrayList<SubscriberData>(rawColl.size());
+		
+		for (SubscriptionHold raw: rawColl)
+			result.add(heldSubscription(raw));
+		
+		return result;
+	}
+
+	/**
+	 */
+	public static SubscriberData heldSubscription(SubscriptionHold raw)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+	
+		return new SubscriberData(
+				raw.getPerson().getId(),
+				raw.getPerson().getName(),
+				raw.getPerson().getEmailArray(),
+				null,
+				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null);
 	}
 
 }

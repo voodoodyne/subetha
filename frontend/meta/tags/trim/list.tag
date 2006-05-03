@@ -60,14 +60,14 @@
 			</c:if>
 			
 			<c:if test="${perms.APPROVE_SUBSCRIPTIONS}">
-				<c:url var="listHeldSubsUrl" value="/list_held_subs.jsp">
+				<c:url var="listHeldSubsUrl" value="/held_subs.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
 				<a href="${listHeldSubsUrl}">&rsaquo; Held Subscrip</a>
 			</c:if>
 				
 			<c:if test="${perms.APPROVE_MESSAGES}">
-				<c:url var="listHeldMsgsUrl" value="/list_held_msgs.jsp">
+				<c:url var="listHeldMsgsUrl" value="/held_msgs.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
 				<a href="${listHeldMsgsUrl}">&rsaquo; Held Messages</a>

@@ -146,4 +146,11 @@ public interface ListMgr
 	 * Requires Permission.EDIT_FILTERS
 	 */
 	public void disableFilter(Long listId, String className) throws NotFoundException, PermissionException;
+	
+	/**
+	 * @return all the held subscriptions on the list.  Note the roleName is always null.
+	 * 
+	 * Requires Permission.APPROVE_SUBSCRIPTIONS
+	 */
+	public List<SubscriberData> getHeldSubscriptions(Long listId) throws NotFoundException, PermissionException;
 }

@@ -367,4 +367,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			this.dao.remove(filt);
 		}
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getHeldSubscriptions(java.lang.Long)
+	 */
+	public List<SubscriberData> getHeldSubscriptions(Long listId) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
+		
+		return Transmute.heldSubscriptions(list.getSubscriptionHolds());
+	}
 }

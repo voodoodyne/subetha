@@ -139,11 +139,17 @@ public class MailingList implements Serializable, Comparable
 	@JoinColumn(name="anonymousRoleId", nullable=true)
 	Role anonymousRole;
 	
-	/** targetEntity is needed because of inheritance chain */
-	@OneToMany(targetEntity=Subscription.class, cascade=CascadeType.ALL, mappedBy="list")
+	/** */
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@Sort(type=SortType.COMPARATOR, comparator=SubscriptionComparator.class)
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	SortedSet<Subscription> subscriptions;
+	
+	/** */
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
+	@OrderBy(value="dateCreated")
+	//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)	// caching unnecessary
+	Set<SubscriptionHold> subscriptionHolds;
 	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
@@ -178,6 +184,7 @@ public class MailingList implements Serializable, Comparable
 		this.subscriptions = new TreeSet<Subscription>();
 		this.enabledFilters = new HashMap<String, EnabledFilter>();
 		this.roles = new HashSet<Role>();
+		this.subscriptionHolds = new HashSet<SubscriptionHold>();
 		
 		// We have to start with one role, the owner role
 		Role owner = new Role(this);
@@ -265,6 +272,11 @@ public class MailingList implements Serializable, Comparable
 	 * @return all the subscriptions associated with this list
 	 */
 	public Set<Subscription> getSubscriptions() { return this.subscriptions; }
+	
+	/** 
+	 * @return all the held subscriptions
+	 */
+	public Set<SubscriptionHold> getSubscriptionHolds() { return this.subscriptionHolds; }
 	
 	/** 
 	 * @return all plugins enabled on this list

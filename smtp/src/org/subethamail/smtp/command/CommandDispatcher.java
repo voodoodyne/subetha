@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.smtp.i.SMTPServerContext;
+import org.subethamail.smtp.server.SMTPServerContext;
 import org.subethamail.smtp.session.Session;
 
 /**

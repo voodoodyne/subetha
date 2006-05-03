@@ -24,7 +24,7 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.i.MessageListener;
 import org.subethamail.smtp.i.MessageListenerRegistry;
-import org.subethamail.smtp.i.SMTPServerContext;
+import org.subethamail.smtp.server.SMTPServerContext;
 import org.subethamail.smtp.server.SMTPServiceCore;
 import org.subethamail.smtp.server.ServerRejectedException;
 

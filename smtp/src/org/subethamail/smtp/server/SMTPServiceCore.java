@@ -1,6 +1,5 @@
 package org.subethamail.smtp.server;
 
-import org.subethamail.smtp.i.SMTPServerContext;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.HelloCommand;
 import org.subethamail.smtp.command.MailCommand;

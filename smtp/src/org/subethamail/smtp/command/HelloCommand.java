@@ -1,7 +1,7 @@
 package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.i.SMTPServerContext;
+import org.subethamail.smtp.server.SMTPServerContext;
 import org.subethamail.smtp.server.ServerRejectedException;
 
 import java.io.IOException;

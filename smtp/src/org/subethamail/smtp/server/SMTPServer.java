@@ -20,7 +20,6 @@ import org.subethamail.smtp.command.ResetCommand;
 import org.subethamail.smtp.command.VerboseCommand;
 import org.subethamail.smtp.command.VerifyCommand;
 import org.subethamail.smtp.i.MessageListener;
-import org.subethamail.smtp.i.SMTPServerContext;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

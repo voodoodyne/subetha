@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.util.Date;
 
 import org.subethamail.smtp.server.ServerRejectedException;
-import org.subethamail.smtp.i.SMTPServerContext;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
@@ -36,9 +35,16 @@ class SocketHandler
     String command;
     while (session.isActive()) {
       command = (in.readLine());
-      if (command != null) command = command.trim();
-      out.println(serverContext.getCommandDispatcher().executeCommand(command, session));
-      out.flush();
+      if (command == null) 
+      {
+    	  session.quit(); 
+      }
+      else
+      {
+	      command = command.trim();
+	      out.println(serverContext.getCommandDispatcher().executeCommand(command, session));
+	      out.flush();
+      }
     }
     in.close();
     out.close();

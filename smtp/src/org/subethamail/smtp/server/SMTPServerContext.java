@@ -1,8 +1,7 @@
-package org.subethamail.smtp.i;
+package org.subethamail.smtp.server;
 
 import org.subethamail.smtp.i.MessageListenerRegistry;
 import org.subethamail.smtp.i.MessageListener;
-import org.subethamail.smtp.server.ServerRejectedException;
 import org.subethamail.smtp.command.CommandDispatcher;
 
 import java.util.List;

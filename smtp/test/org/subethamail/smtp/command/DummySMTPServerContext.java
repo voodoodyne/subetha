@@ -5,8 +5,10 @@ import org.subethamail.smtp.i.MessageListener;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.subethamail.smtp.i.SMTPServerContext;
+import org.subethamail.smtp.i.TooMuchDataException;
 import org.subethamail.smtp.server.ServerRejectedException;
 
 /**
@@ -88,7 +90,7 @@ public class DummySMTPServerContext implements SMTPServerContext {
     return false;
   }
 
-  public void deliver(String from, String recipient, byte[] data) {
+  public void deliver(String from, String recipient, InputStream data) throws TooMuchDataException, IOException {
     for (MessageListener messageListener : listeners) {
       if (messageListener.accept(from, recipient)) {
         messageListener.deliver(from, recipient, data);

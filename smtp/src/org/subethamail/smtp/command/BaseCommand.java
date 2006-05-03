@@ -30,7 +30,7 @@ public class BaseCommand implements Command {
   }
 
   public String execute(String commandString, Session session) {
-    return "500 Not Implemented";
+    return "502 Not Implemented";
   }
 
   public HelpMessage getHelp() {

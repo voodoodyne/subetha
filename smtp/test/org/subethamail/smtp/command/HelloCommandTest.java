@@ -7,7 +7,7 @@ import org.subethamail.smtp.command.HelloCommand;
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class HelloCommandTest extends CommandTest {
+public class HelloCommandTest extends CommandTestCase {
   public void testHelloCommand() throws Exception {
     assertEquals("501 Syntax: HELO <hostname>",
       commandDispatcher.executeCommand("HELO", session));
@@ -21,6 +21,7 @@ public class HelloCommandTest extends CommandTest {
     assertTrue(session.isActive());
     assertEquals("221 test.subethamail.org closing connection. Traffic from your server denied access.",
         commandDispatcher.executeCommand("HELO spambox.blackhat.org", session));
+    // TODO(imf): Fix termination behavior to conform to RFC 2821
     assertFalse(session.isActive());
   }
 

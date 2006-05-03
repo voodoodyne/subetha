@@ -14,7 +14,7 @@ public class CommandTest extends CommandTestCase {
 
   public void testCommandRegistration() throws Exception {
     Command command = new BaseCommand(commandDispatcher, "TEST");
-    Assert.assertEquals("500 Not Implemented", commandDispatcher.executeCommand("testing testing", session));
+    Assert.assertEquals("502 Not Implemented", commandDispatcher.executeCommand("testing testing", session));
   }
 
   public void testHelp() throws Exception {

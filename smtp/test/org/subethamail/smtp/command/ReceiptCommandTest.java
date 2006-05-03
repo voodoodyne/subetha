@@ -4,7 +4,7 @@ import org.subethamail.smtp.command.CommandTestCase;
 import org.subethamail.smtp.command.DummyMessageListener;
 import org.subethamail.smtp.command.DummySMTPServerContext;
 import org.subethamail.smtp.command.ReceiptCommand;
-import org.subethamail.smtp.i.SMTPServerContext;
+import org.subethamail.smtp.server.SMTPServerContext;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

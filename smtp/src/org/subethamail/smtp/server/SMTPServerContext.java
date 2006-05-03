@@ -1,11 +1,11 @@
 package org.subethamail.smtp.server;
 
-import org.subethamail.smtp.i.MessageListenerRegistry;
-import org.subethamail.smtp.i.MessageListener;
-import org.subethamail.smtp.command.CommandDispatcher;
-
-import java.util.List;
 import java.io.IOException;
+import java.util.List;
+
+import org.subethamail.smtp.command.CommandDispatcher;
+import org.subethamail.smtp.i.MessageListener;
+import org.subethamail.smtp.i.MessageListenerRegistry;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

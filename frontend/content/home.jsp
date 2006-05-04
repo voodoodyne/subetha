@@ -51,6 +51,11 @@
 					<td><input type="text" name="email" value="" /></td>
 					<td><input type="submit" value="Add" style="width: 5em" /></td>
 				</tr>
+				<c:if test="${!empty model.errors.email}">
+				<tr>
+					<td><p class="error"><c:out value="${model.errors.email}"/></p></td>
+				</tr>
+				</c:if>
 			</form>
 		</tbody>
 	</table>

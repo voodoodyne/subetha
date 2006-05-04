@@ -42,8 +42,9 @@ class SocketHandler
       else
       {
 	      command = command.trim();
-	      out.println(serverContext.getCommandDispatcher().executeCommand(command, session));
-	      out.flush();
+	      out.print(serverContext.getCommandDispatcher().executeCommand(command, session));
+        out.print("\r\n");
+        out.flush();
       }
     }
     in.close();

@@ -71,7 +71,7 @@ public class SMTPServiceCore implements Runnable {
   }
 
   public void run() {
-    log.info("SMTP Server socket started.");
+    log.info("SMTP Server socket started on port " + serverContext.getPort());
     while (go) {
       try {
         new SocketHandler(serverContext, serverSocket.accept());

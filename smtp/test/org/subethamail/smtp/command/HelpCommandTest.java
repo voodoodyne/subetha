@@ -27,15 +27,15 @@ public class HelpCommandTest extends CommandTestCase {
   public void testHelp() throws Exception {
     commandDispatcher.setServerContext(new DummySMTPServerContext("1.0a2", "example.subethamail.org", 25));
 
-    String expectedOutput = "214-This is the SubEthaMail SMTP Server version 1.0a2 running on example.subethamail.org\n" +
-        "214-Topics:\n" +
-        "214-    HELP\n" +
-        "214-For more info use \"HELP <topic>\".\n" +
-        "214-For more information about this server, visit:\n" +
-        "214-    http://subetha.tigris.org\n" +
-        "214-To report bugs in the implementation, send email to:\n" +
-        "214-    issues@subetha.tigris.org\n" +
-        "214-For local information send email to Postmaster at your site.\n" +
+    String expectedOutput = "214-This is the SubEthaMail SMTP Server version 1.0a2 running on example.subethamail.org\r\n" +
+        "214-Topics:\r\n" +
+        "214-    HELP\r\n" +
+        "214-For more info use \"HELP <topic>\".\r\n" +
+        "214-For more information about this server, visit:\r\n" +
+        "214-    http://subetha.tigris.org\r\n" +
+        "214-To report bugs in the implementation, send email to:\r\n" +
+        "214-    issues@subetha.tigris.org\r\n" +
+        "214-For local information send email to Postmaster at your site.\r\n" +
         "214 End of HELP info";
     assertEquals(expectedOutput, commandDispatcher.executeCommand("HELP", session));
   }
@@ -45,9 +45,9 @@ public class HelpCommandTest extends CommandTestCase {
   }
 
   public void testHelpTopicListing() throws Exception {
-    assertEquals("214-    HELP\n", helpCommand.getFormattedTopicList());
+    assertEquals("214-    HELP\r\n", helpCommand.getFormattedTopicList());
     new NoopCommand(commandDispatcher);
-    assertEquals("214-    HELP    NOOP\n", helpCommand.getFormattedTopicList());
+    assertEquals("214-    HELP    NOOP\r\n", helpCommand.getFormattedTopicList());
   }
 
   protected void setUp() throws Exception {

@@ -30,15 +30,15 @@ public class HelpCommand extends BaseCommand {
   }
 
   private String getCommandMessage() {
-    return "214-This is the SubEthaMail SMTP Server version " + getServerVersion() + " running on " + getHostAddress() + "\n" +
-        "214-Topics:\n" +
+    return "214-This is the SubEthaMail SMTP Server version " + getServerVersion() + " running on " + getHostAddress() + "\r\n" +
+        "214-Topics:\r\n" +
         getFormattedTopicList() +
-        "214-For more info use \"HELP <topic>\".\n" +
-        "214-For more information about this server, visit:\n" +
-        "214-    http://subetha.tigris.org\n" +
-        "214-To report bugs in the implementation, send email to:\n" +
-        "214-    issues@subetha.tigris.org\n" +
-        "214-For local information send email to Postmaster at your site.\n" +
+        "214-For more info use \"HELP <topic>\".\r\n" +
+        "214-For more information about this server, visit:\r\n" +
+        "214-    http://subetha.tigris.org\r\n" +
+        "214-To report bugs in the implementation, send email to:\r\n" +
+        "214-    issues@subetha.tigris.org\r\n" +
+        "214-For local information send email to Postmaster at your site.\r\n" +
         "214 End of HELP info";
   }
 
@@ -55,12 +55,13 @@ public class HelpCommand extends BaseCommand {
     StringBuilder sb = new StringBuilder();
     for (Command command : commandDispatcher.getCommandList()) {
       if (index++ % 5 == 0) {
-        sb.append("\n214-");
+        sb.append("\r\n214-");
       }
       sb.append("    ").append(command.getName());
     }
     sb.deleteCharAt(0);
-    sb.append('\n');
+    sb.deleteCharAt(0);
+    sb.append("\r\n");
     return sb.toString();
   }
 

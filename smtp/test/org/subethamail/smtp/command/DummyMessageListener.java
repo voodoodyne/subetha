@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
@@ -20,7 +22,17 @@ public class DummyMessageListener implements MessageListener {
   }
 
   public void deliver(String from, String recipient, InputStream data) throws TooMuchDataException, IOException {
-    throw new TooMuchDataException("I can't take any data yet.");
+    BufferedReader in = new BufferedReader(new InputStreamReader(data));
+    StringBuilder buffer = new StringBuilder();
+    String line;
+    while ((line = in.readLine()) != null) {
+      buffer.append(line);
+      buffer.append("\n");
+    }
+    message = buffer.toString();
+    if (message.length() > 1024)
+    // TODO(imf): Add test for TooMuchDataException being thrown.
+      throw new TooMuchDataException("Message greater than 1K characters (Hardcoded limit for testing)");
   }
 
 //  public void deliver(String from, String recipient, byte[] data) {

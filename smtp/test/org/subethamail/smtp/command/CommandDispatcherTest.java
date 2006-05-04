@@ -29,7 +29,7 @@ public class CommandDispatcherTest extends CommandTestCase {
 
   public void testCommandDispatcher() throws Exception {
     new HelloCommand(commandDispatcher);
-    new ExtendedHelloCommand(commandDispatcher);
+//    new ExtendedHelloCommand(commandDispatcher);
     new MailCommand(commandDispatcher);
     new ReceiptCommand(commandDispatcher);
     new DataCommand(commandDispatcher);

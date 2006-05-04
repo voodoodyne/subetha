@@ -1,15 +1,13 @@
 package org.subethamail.smtp.server;
 
-import org.subethamail.smtp.session.Session;
-
-import java.net.Socket;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Date;
 
-import org.subethamail.smtp.server.ServerRejectedException;
+import org.subethamail.smtp.session.Session;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

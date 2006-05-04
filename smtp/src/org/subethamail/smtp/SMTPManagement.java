@@ -5,10 +5,10 @@
 
 package org.subethamail.smtp;
 
+import java.io.IOException;
+
 import org.jboss.annotation.ejb.Management;
 import org.subethamail.smtp.server.ServerRejectedException;
-
-import java.io.IOException;
 
 /**
  * JMX Management interface for the SMTPService.  The start() and

@@ -1,9 +1,5 @@
 package org.subethamail.smtp.command;
 
-import org.subethamail.smtp.command.HelpMessage;
-import org.subethamail.smtp.command.BaseCommand;
-import org.subethamail.smtp.command.CommandDispatcher;
-import org.subethamail.smtp.command.HelpCommand;
 import junit.framework.Assert;
 
 /**

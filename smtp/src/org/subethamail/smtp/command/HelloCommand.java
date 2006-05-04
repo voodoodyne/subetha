@@ -1,13 +1,10 @@
 package org.subethamail.smtp.command;
 
-import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.server.SMTPServerContext;
-import org.subethamail.smtp.server.ServerRejectedException;
-
 import java.io.IOException;
 
-import org.subethamail.smtp.command.BaseCommand;
-import org.subethamail.smtp.command.CommandDispatcher;
+import org.subethamail.smtp.server.SMTPServerContext;
+import org.subethamail.smtp.server.ServerRejectedException;
+import org.subethamail.smtp.session.Session;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

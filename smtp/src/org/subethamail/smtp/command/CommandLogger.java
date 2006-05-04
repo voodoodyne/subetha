@@ -1,8 +1,8 @@
 package org.subethamail.smtp.command;
 
-import org.subethamail.smtp.session.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.smtp.session.Session;
 
 /**
  * Created by IntelliJ IDEA.

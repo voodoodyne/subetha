@@ -1,23 +1,23 @@
 package org.subethamail.smtp.server;
 
-import org.subethamail.smtp.command.CommandDispatcher;
-import org.subethamail.smtp.command.HelloCommand;
-import org.subethamail.smtp.command.MailCommand;
-import org.subethamail.smtp.command.ReceiptCommand;
-import org.subethamail.smtp.command.DataCommand;
-import org.subethamail.smtp.command.ResetCommand;
-import org.subethamail.smtp.command.NoopCommand;
-import org.subethamail.smtp.command.QuitCommand;
-import org.subethamail.smtp.command.HelpCommand;
-import org.subethamail.smtp.command.VerifyCommand;
-import org.subethamail.smtp.command.ExpnCommand;
-import org.subethamail.smtp.command.VerboseCommand;
-import org.subethamail.smtp.command.CommandLogger;
+import java.io.IOException;
+import java.net.ServerSocket;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-import java.net.ServerSocket;
-import java.io.IOException;
+import org.subethamail.smtp.command.CommandDispatcher;
+import org.subethamail.smtp.command.CommandLogger;
+import org.subethamail.smtp.command.DataCommand;
+import org.subethamail.smtp.command.ExpnCommand;
+import org.subethamail.smtp.command.HelloCommand;
+import org.subethamail.smtp.command.HelpCommand;
+import org.subethamail.smtp.command.MailCommand;
+import org.subethamail.smtp.command.NoopCommand;
+import org.subethamail.smtp.command.QuitCommand;
+import org.subethamail.smtp.command.ReceiptCommand;
+import org.subethamail.smtp.command.ResetCommand;
+import org.subethamail.smtp.command.VerboseCommand;
+import org.subethamail.smtp.command.VerifyCommand;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

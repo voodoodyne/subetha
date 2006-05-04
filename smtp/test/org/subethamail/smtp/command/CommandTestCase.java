@@ -1,8 +1,8 @@
 package org.subethamail.smtp.command;
 
 import junit.framework.TestCase;
+
 import org.subethamail.smtp.session.Session;
-import org.subethamail.smtp.command.CommandDispatcher;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

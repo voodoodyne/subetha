@@ -1,7 +1,6 @@
 package org.subethamail.smtp.command;
 
 import junit.framework.TestCase;
-import org.subethamail.smtp.command.HelpMessage;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

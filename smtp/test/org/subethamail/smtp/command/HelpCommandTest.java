@@ -1,9 +1,5 @@
 package org.subethamail.smtp.command;
 
-import org.subethamail.smtp.command.CommandTestCase;
-import org.subethamail.smtp.command.DummySMTPServerContext;
-import org.subethamail.smtp.command.HelpCommand;
-import org.subethamail.smtp.command.NoopCommand;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

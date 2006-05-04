@@ -1,14 +1,12 @@
 package org.subethamail.smtp.command;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.subethamail.smtp.i.MessageListener;
 import org.subethamail.smtp.i.TooMuchDataException;
-
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

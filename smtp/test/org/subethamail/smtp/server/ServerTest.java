@@ -1,8 +1,8 @@
 package org.subethamail.smtp.server;
 
 import junit.framework.TestCase;
+
 import org.subethamail.testing.HasExternalDependency;
-import org.subethamail.smtp.server.SMTPServer;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

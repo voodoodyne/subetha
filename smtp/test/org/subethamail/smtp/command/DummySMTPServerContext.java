@@ -1,12 +1,11 @@
 package org.subethamail.smtp.command;
 
-import org.subethamail.smtp.i.MessageListener;
-
-import java.util.List;
-import java.util.ArrayList;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.subethamail.smtp.i.MessageListener;
 import org.subethamail.smtp.i.TooMuchDataException;
 import org.subethamail.smtp.server.SMTPServerContext;
 import org.subethamail.smtp.server.ServerRejectedException;

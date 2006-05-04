@@ -1,7 +1,5 @@
 package org.subethamail.smtp.command;
 
-import org.subethamail.smtp.command.CommandTestCase;
-import org.subethamail.smtp.command.MailCommand;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

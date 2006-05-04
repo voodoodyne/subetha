@@ -1,7 +1,7 @@
 package org.subethamail.smtp.session;
 
 import junit.framework.TestCase;
-import org.subethamail.smtp.session.Session;
+
 import org.subethamail.smtp.command.DummySMTPServerContext;
 
 /**

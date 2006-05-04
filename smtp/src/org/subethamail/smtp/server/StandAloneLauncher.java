@@ -1,7 +1,5 @@
 package org.subethamail.smtp.server;
 
-import org.subethamail.smtp.server.SMTPServer;
-
 import java.io.IOException;
 
 /**

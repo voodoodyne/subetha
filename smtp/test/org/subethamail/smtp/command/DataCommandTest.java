@@ -1,9 +1,6 @@
 package org.subethamail.smtp.command;
 
 import org.subethamail.smtp.session.DummySession;
-import org.subethamail.smtp.command.ResetCommand;
-import org.subethamail.smtp.command.DataCommand;
-import org.subethamail.smtp.command.CommandTestCase;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

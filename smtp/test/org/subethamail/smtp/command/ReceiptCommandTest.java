@@ -1,9 +1,5 @@
 package org.subethamail.smtp.command;
 
-import org.subethamail.smtp.command.CommandTestCase;
-import org.subethamail.smtp.command.DummyMessageListener;
-import org.subethamail.smtp.command.DummySMTPServerContext;
-import org.subethamail.smtp.command.ReceiptCommand;
 import org.subethamail.smtp.server.SMTPServerContext;
 
 /**

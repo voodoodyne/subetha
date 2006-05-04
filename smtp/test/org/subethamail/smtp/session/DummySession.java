@@ -1,7 +1,6 @@
 package org.subethamail.smtp.session;
 
 import org.subethamail.smtp.server.SMTPServerContext;
-import org.subethamail.smtp.session.Session;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

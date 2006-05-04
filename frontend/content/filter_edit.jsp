@@ -81,8 +81,27 @@
 					<td colspan="2">
 						<c:out value="${filterParam.description}"/>
 						<c:if test="${filterParam.expanded}">
-							<c:set var="hasExpansion" value="true" />
-							<strong>Variables will be expanded. See below for the documentation of the variables.</strong>
+							<h3>Variable Expansion</h3>
+							<table>
+								<tr>
+									<th>Variable</th>
+									<th>Description</th>
+								</tr>
+								<c:forEach var="docs" items="${filterParam.documentation}" varStatus="loop">
+									<c:choose>
+										<c:when test="${loop.index % 2 == 0}">
+											<c:set var="color" value="a"/>
+										</c:when>
+										<c:otherwise>
+											<c:set var="color" value="b"/>
+										</c:otherwise>
+									</c:choose>
+									<tr class="${color}">
+										<th><c:out value="${docs.key}"/></th>
+										<td><c:out value="${docs.value}"/></td>
+									</tr>			
+								</c:forEach>			
+							</table>
 						</c:if>
 					</td>
 				</tr>
@@ -95,30 +114,4 @@
 		<input type="submit" value="Cancel"/>
 	</form>
 	
-	<c:if test="${hasExpansion}">
-		<h3>Variable Expansion</h3>
-		
-		<p>The following variables will be expanded in designated fields:</p>
-		
-		<table>
-			<tr>
-				<th>Variable</th>
-				<th>Description</th>
-			</tr>
-			<c:forEach var="docs" items="${model.filter.documenation}" varStatus="loop">
-				<c:choose>
-					<c:when test="${loop.index % 2 == 0}">
-						<c:set var="color" value="a"/>
-					</c:when>
-					<c:otherwise>
-						<c:set var="color" value="b"/>
-					</c:otherwise>
-				</c:choose>
-				<tr class="${color}">
-					<th><c:out value="${docs.key}"/></th>
-					<td><c:out value="${docs.value}"/></td>
-				</tr>			
-			</c:forEach>			
-		</table>
-	</c:if>
 </trim:list>

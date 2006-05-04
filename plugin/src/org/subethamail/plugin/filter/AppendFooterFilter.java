@@ -51,7 +51,8 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 				"The footer text which is appended to the bottom of the email body.",
 				"",
 				20,
-				true
+				true,
+				null
 			)
 	};
 

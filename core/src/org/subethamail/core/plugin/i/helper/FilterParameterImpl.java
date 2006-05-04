@@ -5,6 +5,9 @@
 
 package org.subethamail.core.plugin.i.helper;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.subethamail.core.plugin.i.FilterParameter;
 
 
@@ -21,7 +24,8 @@ public class FilterParameterImpl implements FilterParameter
 	Object defaultValue;
 	int textLines;
 	boolean expanded;
-	
+	Map<String, String> documentation;
+
 	/** */
 	public FilterParameterImpl(String name, String description, Class type, Object defaultValue)
 	{
@@ -37,14 +41,34 @@ public class FilterParameterImpl implements FilterParameter
 	}
 
 	/**
-	 * Assumes java.lang.String 
+	 * Assumes java.lang.String for the Class type
+	 * Assumes Documentation is null.
+	 * If expanded is true then the default docs will be returned.
+	 * If expanded is false, then getDocumentation() will return null.
 	 */
 	public FilterParameterImpl(String name, String description, String defaultValue, int textLines, boolean expanded)
+	{
+		this(name, description, defaultValue, textLines, expanded, null);
+	}
+
+	/**
+	 * Assumes java.lang.String for the Class type
+	 * Documentation can be null.
+	 * If expanded is true, and documentation is null, then the default docs will be returned.
+	 * If expanded is true and documention is not null, then the default docs will be appended
+	 * to the passed in documentation.
+	 * If expanded is false, then getDocumentation() will return null.
+	 */
+	public FilterParameterImpl(String name, String description, String defaultValue, int textLines, boolean expanded, Map<String, String> documentation)
 	{
 		this(name, description, String.class, defaultValue);
 		
 		this.textLines = textLines;
 		this.expanded = expanded;
+		if (this.expanded == true)
+			initDocumentation();
+		if (documentation != null)
+			this.documentation.putAll(documentation);
 	}
 
 	/*
@@ -87,5 +111,36 @@ public class FilterParameterImpl implements FilterParameter
 	public boolean isExpanded()
 	{
 		return this.expanded;
+	}
+
+	/**
+	 * 
+	 */
+	public Map<String, String> getDocumentation()
+	{
+		// we only want to init the documentation if it this
+		// parameter is marked as to be expanded.
+		if (expanded && documentation == null)
+		{
+			initDocumentation();
+		}
+		return documentation;
+	}
+
+	/**
+	 * Initializes the default set of documentation.
+	 */
+	protected void initDocumentation()
+	{
+		if (documentation == null)
+		{
+			documentation = new HashMap<String, String>();
+			documentation.put("${list.name}", "The name of this mailing list.");
+			documentation.put("${list.description}", "The description of this mailing list.");
+			documentation.put("${list.email}", "The email address of this mailing list.");
+			documentation.put("${list.url}", "The url of this mailing list.");
+			documentation.put("${list.id}", "The numeric id of this mailing list.");
+			documentation.put("${mail.subject}", "The mail subject.");		
+		}
 	}
 }

@@ -5,6 +5,8 @@
 
 package org.subethamail.core.plugin.i;
 
+import java.util.Map;
+
 
 /**
  * The definition of one parameter to a filter.
@@ -62,4 +64,15 @@ public interface FilterParameter
 	 * Only has meaning for java.lang.String parameters.
 	 */
 	public boolean isExpanded();
+
+	/**
+	 * This method returns the documentation for the items that are placed into
+	 * a context for the FilterContext.expand() method. The Map object
+	 * represents a key/value pair of String objects with the key being the
+	 * class/property and the value being the documentation of what is in the
+	 * key. For example: key: ${list.name} value: The list name.
+	 * 
+	 * @return A ball full of wax.
+	 */
+	public Map<String, String> getDocumentation();
 }

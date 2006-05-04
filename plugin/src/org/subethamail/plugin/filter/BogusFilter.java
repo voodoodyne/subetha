@@ -5,6 +5,7 @@
 
 package org.subethamail.plugin.filter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.security.RunAs;
@@ -74,14 +75,16 @@ public class BogusFilter extends GenericFilter implements Lifecycle
 				"Lots of text.",
 				"foo\nbar",
 				5,
-				true
+				true,
+				BogusFilter.getDocumentation()
 			),
 		new FilterParameterImpl(
 				"TextArea",
 				"This is a text area.",
 				"",
 				10,
-				false
+				false,
+				null
 			)
 	};
 
@@ -111,10 +114,9 @@ public class BogusFilter extends GenericFilter implements Lifecycle
 		return PARAM_DEFS;
 	}
 	
-	@Override
-	public Map<String, String> getDocumentation()
+	public static Map<String, String> getDocumentation()
 	{
-		Map<String, String> map = super.getDocumentation();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put ("${foo.bar}", "Class foo, method bar.");
 		return map;
 	}

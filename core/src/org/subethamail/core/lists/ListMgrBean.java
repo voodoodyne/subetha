@@ -266,7 +266,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			
 			return new EnabledFilterData(
 					className, filt.getName(), filt.getDescription(), filt.getParameters(),
-					listId, args, filt.getDocumentation());
+					listId, args);
 		}
 	}
 

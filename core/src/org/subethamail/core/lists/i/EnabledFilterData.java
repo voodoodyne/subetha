@@ -21,7 +21,6 @@ public class EnabledFilterData extends FilterData
 {
 	Long listId;
 	Map<String, Object> arguments;
-	Map<String, String> documentation;
 
 	/**
 	 */
@@ -31,14 +30,12 @@ public class EnabledFilterData extends FilterData
 			String description,
 			FilterParameter[] parameters,
 			Long listId,
-			Map<String, Object> arguments,
-			Map<String, String> documentation)
+			Map<String, Object> arguments)
 	{
 		super(className, name, description, parameters);
 		
 		this.listId = listId;
 		this.arguments = arguments;
-		this.documentation = documentation;
 	}
 
 	/** */
@@ -52,10 +49,4 @@ public class EnabledFilterData extends FilterData
 	{
 		return this.listId;
 	}
-
-	public Map<String, String> getDocumenation()
-	{
-		return this.documentation;
-	}
-
 }

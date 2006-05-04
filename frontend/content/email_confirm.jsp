@@ -15,18 +15,19 @@
 		<li>Click on the link embedded in the email.</li>
 		<li>Copy and paste the confirmation code into the form below.</li>
 	</ul>
-	
 	<form action="<c:url value="/email_confirm_submit.jsp"/>" method="post">
 		<table>
 			<tr>
 				<th><label for="token">Confirmation Code</label></th>
-				<td <c:if test="${model.badTokenError}">class="error"</c:if> >
-					<input id="token" name="token" value="<c:out value="${model.token}"/>" size="90" type="text"/>
+				<td <c:if test="${!empty model.errors.badtoken}">class="error"</c:if>
+					<c:if test="${!empty model.errors.token}">class="error"</c:if> >
+					<input id="token" name="token" value="<c:out value="${model.token}"/>" size="60" type="text"/>
 					
-					<c:if test="${model.badTokenError}">
-						<div class="error">
-							The code is invalid
-						</div>
+					<c:if test="${!empty model.errors.token}">
+						<div class="error"><c:out value="${model.errors.token}"/></div>
+					</c:if>
+					<c:if test="${!empty model.errors.badtoken}">
+						<div class="error"><c:out value="${model.errors.badtoken}"/></div>
 					</c:if>
 				</td>
 			</tr>

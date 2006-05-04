@@ -3,7 +3,7 @@
 <t:action var="model" type="org.subethamail.web.action.EmailAddConfirm"/>
 
 <c:choose>
-	<c:when test="${model.badTokenError}">
+	<c:when test="${!empty model.errors}">
 		<jsp:forward page="email_confirm.jsp"/>
 	</c:when>
 	<c:otherwise>

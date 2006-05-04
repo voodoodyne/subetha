@@ -47,7 +47,17 @@ public class EmailAdd extends AuthRequired
 		
 		if (model.getErrors().isEmpty())
 		{
-			Backend.instance().getAccountMgr().addEmailRequest(model.email);
+			try
+			{
+				Backend.instance().getAccountMgr().addEmailRequest(model.email);
+			}
+			catch (RuntimeException re)
+			{
+				if (re.getCause().getCause() instanceof javax.mail.SendFailedException)
+				{
+					model.setError("email", re.getMessage());
+				}
+			}
 		}
 	}
 	

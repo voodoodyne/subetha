@@ -1,6 +1,6 @@
 /*
- * $Id: FilterSave.java 174 2006-04-25 03:08:53Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/trunk/frontend/src/org/subethamail/web/action/FilterSave.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.web.action;

@@ -1,6 +1,6 @@
 /*
- * $Id: FilterContext.java 222 2006-04-27 21:47:32Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/trunk/core/src/org/subethamail/core/plugin/i/FilterContext.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.core.plugin.i;

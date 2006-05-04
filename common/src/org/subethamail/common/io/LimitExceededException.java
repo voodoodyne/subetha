@@ -1,5 +1,5 @@
 /*
- * $Id: MessageListenerRegistry.java 169 2006-04-24 08:01:03Z lhoriman $
+ * $Id$
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/mbean/BindStatisticsManagerMBean.java,v $
  */
 package org.subethamail.common.io;

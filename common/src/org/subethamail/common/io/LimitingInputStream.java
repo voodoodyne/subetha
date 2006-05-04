@@ -1,6 +1,6 @@
 /*
- * $Id: Converter.java 169 2006-04-24 08:01:03Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/trunk/common/src/org/subethamail/common/Converter.java $
+ * $Id$
+ * $URL$
  */
 package org.subethamail.common.io;
 

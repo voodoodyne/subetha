@@ -1,6 +1,6 @@
 /*
- * $Id: Injector.java 201 2006-04-26 08:07:13Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/trunk/core/src/org/subethamail/core/injector/i/Injector.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.core.injector;

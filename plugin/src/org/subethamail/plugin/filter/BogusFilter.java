@@ -1,6 +1,6 @@
 /*
- * $Id: StripAttachmentsFilter.java 169 2006-04-24 08:01:03Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/trunk/plugin/src/org/subethamail/plugin/filter/StripAttachmentsFilter.java $
+ * $Id$
+ * $URL$
  */
 
 package org.subethamail.plugin.filter;

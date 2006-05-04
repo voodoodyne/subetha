@@ -286,7 +286,7 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 	}
 	
 	/**
-	 * @see Encryptor#decryptListCheckAge(byte[], long)
+	 * @see Encryptor#decryptList(byte[], long)
 	 */
 	public List<String> decryptList(byte[] cipherText, long maxAgeMillis) throws GeneralSecurityException, ExpiredException
 	{

@@ -59,9 +59,6 @@ public class Validator
 	// Attachment
 	public static final int MAX_ATTACHMENT_CONTENT_TYPE = 255;
 	public static final int MAX_ATTACHMENT_CONTENT = 1024 * 1024 * 1024;	// 1G
-	
-	// Tokens
-	public static final int MAX_TOKEN_LENGTH = 1024; // FIXME: what is the right length?
 
 	/**
 	 * Normalizes an email address to a canonical form - the domain

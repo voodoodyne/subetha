@@ -8,7 +8,6 @@ package org.subethamail.web.action;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
-import org.subethamail.common.valid.Validator;
 import org.subethamail.core.acct.i.AuthCredentials;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.web.Backend;
@@ -29,7 +28,7 @@ public class EmailAddConfirm extends AuthAction
 	public static class Model extends ErrorMapModel
 	{
 		/** */
-		@Length(min=1, max=Validator.MAX_TOKEN_LENGTH)
+		@Length(min=1)
 		@Property String token = "";
 	}
 

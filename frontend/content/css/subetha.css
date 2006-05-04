@@ -54,7 +54,7 @@ td.error, th.error {
 	background-color: #fee;
 	border: 1px solid red;
 }
-p.error {
+div.error, p.error {
 	color: red;
 	font-weight: bold;
 }

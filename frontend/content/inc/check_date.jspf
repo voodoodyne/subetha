@@ -7,7 +7,7 @@
 <%
 Date fileDate = null;
 try {
-	SimpleDateFormat sdf = new SimpleDateFormat("y-M-d H:m:s Z");
+	SimpleDateFormat sdf = new SimpleDateFormat("'$Date$'");
 	fileDate = sdf.parse(fileDateStr);
 } catch (java.text.ParseException pe) {
 	// ignore

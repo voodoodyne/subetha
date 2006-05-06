@@ -100,7 +100,7 @@ class FilterContextImpl implements FilterContext
 	    StringWriter writer = new StringWriter(4096);
 		try
 		{
-			Velocity.mergeTemplate(template, "UTF-8", vctx, writer);
+			Velocity.evaluate(vctx, writer, "subetha", template);
 		}
 		catch (Exception e1)
 		{

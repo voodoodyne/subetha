@@ -14,12 +14,12 @@
 				</c:when>
 				
 				<c:otherwise>
-					<form action="<c:url value="/login_submit.jsp"/>" method="post">
+					<form action="<c:url value="/login_submit.jsp"/>" method="post" name="loginform">
 						<input type="hidden" name="dest" value="${auth.usefulRequestURI}" />
 						<table>
 							<tr>
 								<th>Email:</th>
-								<td><input type="text" name="email" /></td>
+								<td><input type="text" name="email"  /></td>
 							</tr>
 							<tr>
 								<th>Password:</th>
@@ -35,6 +35,11 @@
 							</tr>
 						</table>
 					</form>
+					<script type="text/javascript">
+					<!--
+					document.loginform.email.focus();
+					// -->
+					</script>
 				</c:otherwise>
 			</c:choose>
 		</div> <!-- locBar -->

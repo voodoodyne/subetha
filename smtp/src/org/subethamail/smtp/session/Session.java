@@ -4,153 +4,195 @@ import java.io.ByteArrayInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.subethamail.smtp.server.SMTPServerContext;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class Session {
-  private boolean verbose = false;
-  private boolean esmtp = false;
-  private String remoteHostname = "";
-  private String sender = null;
-  private List<String> recipients = new ArrayList<String>();
-  private boolean active = true;
-  private String declaredRemoteHostname;
-  private Socket socket;
-  private boolean dataMode = false;
-  private List<String> messageLines = new ArrayList<String>();
-  private SMTPServerContext serverContext;
+public class Session
+{
+	private boolean verbose = false;
 
-  public Session(SMTPServerContext serverContext, String remoteHostname) {
-    this.serverContext = serverContext;
-    this.remoteHostname = remoteHostname;
-  }
+	private boolean esmtp = false;
 
-  // TODO(imf): Should probably actually pass the SocketHandler instead.
-  public Session(final SMTPServerContext serverContext, final Socket socket) {
-    this.serverContext = serverContext;
-    this.socket = socket;
-    remoteHostname = socket.getInetAddress().getCanonicalHostName();
-  }
+	private String remoteHostname = "";
 
-  public void reset() {
-    verbose = false;
-    esmtp = false;
-    sender = null;
-    recipients = null;
-    messageLines.clear();
-    dataMode = false;
-  }
+	private String sender = null;
 
-  public boolean isVerbose() {
-    return verbose;
-  }
+	private List<String> recipients = new ArrayList<String>();
 
-  public void setVerbose(boolean verbose) {
-    this.verbose = verbose;
-  }
+	private boolean active = true;
 
-  public boolean isEsmtp() {
-    return esmtp;
-  }
+	private String declaredRemoteHostname;
 
-  public void setEsmtp(boolean esmtp) {
-    this.esmtp = esmtp;
-  }
+	private Socket socket;
 
-  public String getRemoteHostname() {
-    return remoteHostname;
-  }
+	private boolean dataMode = false;
 
-  public void setRemoteHostname(String remoteHostname) {
-    this.remoteHostname = remoteHostname;
-  }
+	private List<String> messageLines = new ArrayList<String>();
 
-  public String getSender() {
-    return sender;
-  }
+	private SMTPServerContext serverContext;
 
-  public void setSender(String sender) {
-    this.sender = sender;
-  }
+	public Session(SMTPServerContext serverContext, String remoteHostname)
+	{
+		this.serverContext = serverContext;
+		this.remoteHostname = remoteHostname;
+	}
 
-  public List<String> getRecipients() {
-    return recipients;
-  }
+	// TODO(imf): Should probably actually pass the SocketHandler instead.
+	public Session(final SMTPServerContext serverContext, final Socket socket)
+	{
+		this.serverContext = serverContext;
+		this.socket = socket;
+		remoteHostname = socket.getInetAddress().getCanonicalHostName();
+	}
 
-  public void addRecipient(String recipientAddress) {
-    recipients.add(recipientAddress);
-  }
+	public void reset()
+	{
+		verbose = false;
+		esmtp = false;
+		sender = null;
+		recipients = null;
+		messageLines.clear();
+		dataMode = false;
+	}
 
-  public boolean isActive() {
-    return active;
-  }
+	public boolean isVerbose()
+	{
+		return verbose;
+	}
 
-  public void quit() {
-    active = false;
-  }
+	public void setVerbose(boolean verbose)
+	{
+		this.verbose = verbose;
+	}
 
-  public String getDeclaredRemoteHostname() {
-    return declaredRemoteHostname;
-  }
+	public boolean isEsmtp()
+	{
+		return esmtp;
+	}
 
-  public void setDeclaredRemoteHostname(String declaredRemoteHostname) {
-    this.declaredRemoteHostname = declaredRemoteHostname;
-  }
+	public void setEsmtp(boolean esmtp)
+	{
+		this.esmtp = esmtp;
+	}
 
-  public Socket getSocket() {
-    return socket;
-  }
+	public String getRemoteHostname()
+	{
+		return remoteHostname;
+	}
 
-  public void setSocket(Socket socket) {
-    this.socket = socket;
-  }
+	public void setRemoteHostname(String remoteHostname)
+	{
+		this.remoteHostname = remoteHostname;
+	}
 
-  public void setDataMode(boolean dataMode) {
-    this.dataMode = dataMode;
-  }
+	public String getSender()
+	{
+		return sender;
+	}
 
-  public boolean isDataMode() {
-    return dataMode;
-  }
+	public void setSender(String sender)
+	{
+		this.sender = sender;
+	}
 
-  public SMTPServerContext getServerContext() {
-    return serverContext;
-  }
+	public List<String> getRecipients()
+	{
+		return recipients;
+	}
 
-  public String generateMessageId() {
-    // TODO(imf): Implement a message ID generator here.
-    return null;
-  }
+	public void addRecipient(String recipientAddress)
+	{
+		recipients.add(recipientAddress);
+	}
 
-  public String getMessage() {
-    StringBuilder stringBuilder = new StringBuilder();
-    for (String line : messageLines) {
-      stringBuilder.append(line);
-      stringBuilder.append("\n");
-    }
-    return stringBuilder.toString();
-  }
+	public boolean isActive()
+	{
+		return active;
+	}
 
-  public void addData(String line) {
-    messageLines.add(line);
-  }
+	public void quit()
+	{
+		active = false;
+	}
 
-  public void flush(SMTPServerContext SMTPServerContext) {
-    for (String recipient : recipients) {
-      try {
-        SMTPServerContext.deliver(sender, recipient, new ByteArrayInputStream(getMessage().getBytes()));
-      }
-      catch (Exception ex) {
-        // TODO ?
-      }
-    }
-    reset();
-  }
+	public String getDeclaredRemoteHostname()
+	{
+		return declaredRemoteHostname;
+	}
 
-  public boolean isRecipientDomainFilteringEnabled() {
-    return serverContext.getRecipientDomainFilteringEnabled();
-  }
+	public void setDeclaredRemoteHostname(String declaredRemoteHostname)
+	{
+		this.declaredRemoteHostname = declaredRemoteHostname;
+	}
+
+	public Socket getSocket()
+	{
+		return socket;
+	}
+
+	public void setSocket(Socket socket)
+	{
+		this.socket = socket;
+	}
+
+	public void setDataMode(boolean dataMode)
+	{
+		this.dataMode = dataMode;
+	}
+
+	public boolean isDataMode()
+	{
+		return dataMode;
+	}
+
+	public SMTPServerContext getServerContext()
+	{
+		return serverContext;
+	}
+
+	public String generateMessageId()
+	{
+		// TODO(imf): Implement a message ID generator here.
+		return null;
+	}
+
+	public String getMessage()
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		for (String line : messageLines)
+		{
+			stringBuilder.append(line);
+			stringBuilder.append("\n");
+		}
+		return stringBuilder.toString();
+	}
+
+	public void addData(String line)
+	{
+		messageLines.add(line);
+	}
+
+	public void flush(SMTPServerContext SMTPServerContext)
+	{
+		for (String recipient : recipients)
+		{
+			try
+			{
+				SMTPServerContext.deliver(sender, recipient,
+						new ByteArrayInputStream(getMessage().getBytes()));
+			}
+			catch (Exception ex)
+			{
+				// TODO ?
+			}
+		}
+		reset();
+	}
+
+	public boolean isRecipientDomainFilteringEnabled()
+	{
+		return serverContext.getRecipientDomainFilteringEnabled();
+	}
 }

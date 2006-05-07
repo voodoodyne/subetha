@@ -2,7 +2,6 @@ package org.subethamail.smtp.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.smtp.command.CommandDispatcher;
@@ -22,72 +21,94 @@ import org.subethamail.smtp.command.VerifyCommand;
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
-public class SMTPServiceCore implements Runnable {
-  private SMTPServerContext serverContext;
-  private boolean go = false;
-  ServerSocket serverSocket;
-  private CommandDispatcher commandDispatcher;
-  private static Log log = LogFactory.getLog(SMTPServiceCore.class);
+public class SMTPServiceCore implements Runnable
+{
+	private SMTPServerContext serverContext;
 
+	private boolean go = false;
 
-  public SMTPServiceCore(SMTPServerContext context) {
-    this.serverContext = context;
-    initializeCommandDispatcher();
-    serverContext.setCommandDispatcher(commandDispatcher);
-  }
+	ServerSocket serverSocket;
 
-  private void initializeCommandDispatcher() {
-    commandDispatcher = new CommandDispatcher(serverContext);
-    new CommandLogger(new HelloCommand(commandDispatcher));
-//    new EhloCommand(commandDispatcher);
-    new CommandLogger(new MailCommand(commandDispatcher));
-    new CommandLogger(new ReceiptCommand(commandDispatcher));
-    new DataCommand(commandDispatcher);
-    new ResetCommand(commandDispatcher);
-    new NoopCommand(commandDispatcher);
-    new CommandLogger(new QuitCommand(commandDispatcher));
-    new HelpCommand(commandDispatcher);
-    new VerifyCommand(commandDispatcher);
-    new ExpnCommand(commandDispatcher);
-    new VerboseCommand(commandDispatcher);
-//    new EtrnCommand(commandDispatcher);
-//    new DsnCommand(commandDispatcher);
-  }
+	private CommandDispatcher commandDispatcher;
 
+	private static Log log = LogFactory.getLog(SMTPServiceCore.class);
 
-  public void start() throws IOException {
-    go = true;
-    serverSocket = new ServerSocket(serverContext.getPort());
-    new Thread(this).start();
-  }
+	public SMTPServiceCore(SMTPServerContext context)
+	{
+		this.serverContext = context;
+		initializeCommandDispatcher();
+		serverContext.setCommandDispatcher(commandDispatcher);
+	}
 
-  public void stop() {
-    go = false;
-    try {
-      serverSocket.close();
-    } catch (IOException e) {
-      log.error("Failed to close server socket.", e);
-    }
-  }
+	private void initializeCommandDispatcher()
+	{
+		commandDispatcher = new CommandDispatcher(serverContext);
+		new CommandLogger(new HelloCommand(commandDispatcher));
+		// new EhloCommand(commandDispatcher);
+		new CommandLogger(new MailCommand(commandDispatcher));
+		new CommandLogger(new ReceiptCommand(commandDispatcher));
+		new DataCommand(commandDispatcher);
+		new ResetCommand(commandDispatcher);
+		new NoopCommand(commandDispatcher);
+		new CommandLogger(new QuitCommand(commandDispatcher));
+		new HelpCommand(commandDispatcher);
+		new VerifyCommand(commandDispatcher);
+		new ExpnCommand(commandDispatcher);
+		new VerboseCommand(commandDispatcher);
+		// new EtrnCommand(commandDispatcher);
+		// new DsnCommand(commandDispatcher);
+	}
 
-  public void run() {
-    log.info("SMTP Server socket started on port " + serverContext.getPort());
-    while (go) {
-      try {
-        new SocketHandler(serverContext, serverSocket.accept());
-      }
-      catch (IOException ioe) {
-        if (go) {
-          log.error("IOException accepting connection in SMTPServiceCore", ioe);
-        } // Otherwise this is just the socket complaining that it was closed while in accept.
-      }
-    }
-    try {
-      serverSocket.close();
-      log.info("SMTP Server socket shut down.");
-    } catch (IOException e) {
-      log.error("Failed to close server socket.", e);
-    }
+	public void start() throws IOException
+	{
+		go = true;
+		serverSocket = new ServerSocket(serverContext.getPort());
+		new Thread(this).start();
+	}
 
-  }
+	public void stop()
+	{
+		go = false;
+		try
+		{
+			serverSocket.close();
+		}
+		catch (IOException e)
+		{
+			log.error("Failed to close server socket.", e);
+		}
+	}
+
+	public void run()
+	{
+		log.info("SMTP Server socket started on port "
+				+ serverContext.getPort());
+		while (go)
+		{
+			try
+			{
+				new SocketHandler(serverContext, serverSocket.accept());
+			}
+			catch (IOException ioe)
+			{
+				if (go)
+				{
+					log
+							.error(
+									"IOException accepting connection in SMTPServiceCore",
+									ioe);
+				} // Otherwise this is just the socket complaining that it was
+				// closed while in accept.
+			}
+		}
+		try
+		{
+			serverSocket.close();
+			log.info("SMTP Server socket shut down.");
+		}
+		catch (IOException e)
+		{
+			log.error("Failed to close server socket.", e);
+		}
+	}
 }

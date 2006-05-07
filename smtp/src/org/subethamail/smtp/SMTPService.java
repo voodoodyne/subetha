@@ -2,7 +2,6 @@
  * $Id$
  * $URL$
  */
-
 package org.subethamail.smtp;
 
 import java.io.IOException;
@@ -13,10 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
@@ -32,171 +29,207 @@ import org.subethamail.smtp.server.ServerRejectedException;
  * @author Ian McFarland
  * @author Jeff Schnitzer
  */
-@Service(name="SMTPService", objectName="subetha:service=SMTP")
+@Service(name = "SMTPService", objectName = "subetha:service=SMTP")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class SMTPService implements MessageListenerRegistry, SMTPManagement, SMTPServerContext
+public class SMTPService implements MessageListenerRegistry, SMTPManagement,
+		SMTPServerContext
 {
-  /** */
-  private static Log log = LogFactory.getLog(SMTPService.class);
+	/** */
+	private static Log log = LogFactory.getLog(SMTPService.class);
 
-  /**
-   * There is no ConcurrentHashSet, so we make up our own by mapping the
-   * object to itself.
-   */
-  Map<MessageListener, MessageListener> listeners = new ConcurrentHashMap<MessageListener, MessageListener>();
-  private int port;
-  private String hostname;
-  private List<String> validRecipientHosts = new ArrayList<String>();
-  private boolean hostResolutionEnabled = true;
-  private SMTPServiceCore serviceCore;
-  private CommandDispatcher commandDispatcher;
-  private boolean recipientDomainFilteringEnabled = false;
+	/**
+	 * There is no ConcurrentHashSet, so we make up our own by mapping the
+	 * object to itself.
+	 */
+	Map<MessageListener, MessageListener> listeners = new ConcurrentHashMap<MessageListener, MessageListener>();
 
-  public SMTPService() {
-    try {
-      hostname = InetAddress.getLocalHost().getCanonicalHostName();
-    } catch (UnknownHostException e) {
-      hostname = "localhost";
-    }
-    port = 2500;
-  }
+	private int port;
 
-  /**
-   * @see MessageListenerRegistry#register(MessageListener)
-   */
-  public void register(MessageListener listener)
-  {
-    if (log.isInfoEnabled())
-      log.info("Registering " + listener);
+	private String hostname;
 
-    this.listeners.put(listener, listener);
-  }
+	private List<String> validRecipientHosts = new ArrayList<String>();
 
-  /**
-   * @see MessageListenerRegistry#deregister(MessageListener)
-   */
-  public void deregister(MessageListener listener)
-  {
-    if (log.isInfoEnabled())
-      log.info("De-registering " + listener);
+	private boolean hostResolutionEnabled = true;
 
-    this.listeners.remove(listener);
-  }
+	private SMTPServiceCore serviceCore;
 
-  public String getServerVersion() {
-    return "1.0a2";
-  }
+	private CommandDispatcher commandDispatcher;
 
+	private boolean recipientDomainFilteringEnabled = false;
 
-  /**
-   * @see org.subethamail.smtp.SMTPManagement#getHostname()
-   * @return hostname
-   */
-  @PermitAll
-  public String getHostname() {
-    return hostname;
-  }
+	public SMTPService()
+	{
+		try
+		{
+			hostname = InetAddress.getLocalHost().getCanonicalHostName();
+		}
+		catch (UnknownHostException e)
+		{
+			hostname = "localhost";
+		}
+		port = 2500;
+	}
 
-  @PermitAll
-  public void setHostResolutionEnabled(boolean state) {
-    hostResolutionEnabled = state;
-  }
+	/**
+	 * @see MessageListenerRegistry#register(MessageListener)
+	 */
+	public void register(MessageListener listener)
+	{
+		if (log.isInfoEnabled())
+			log.info("Registering " + listener);
+		this.listeners.put(listener, listener);
+	}
 
-  @PermitAll
-  public boolean getHostResolutionEnabled() {
-    return hostResolutionEnabled;
-  }
+	/**
+	 * @see MessageListenerRegistry#deregister(MessageListener)
+	 */
+	public void deregister(MessageListener listener)
+	{
+		if (log.isInfoEnabled())
+			log.info("De-registering " + listener);
+		this.listeners.remove(listener);
+	}
 
-  public List<String> getValidRecipientHosts() {
-    return validRecipientHosts;
-  }
+	public String getServerVersion()
+	{
+		return "1.0a2";
+	}
 
-  /**
-   * @see SMTPManagement#start()
-   */
-  @PermitAll
-  public void start() throws IOException, ServerRejectedException
-  {
-    log.info("Starting SMTP service");
-    if (serviceCore == null) {
-      serviceCore = new SMTPServiceCore(this);
-    }
-    serviceCore.start();
-  }
+	/**
+	 * @see org.subethamail.smtp.SMTPManagement#getHostname()
+	 * @return hostname
+	 */
+	@PermitAll
+	public String getHostname()
+	{
+		return hostname;
+	}
 
-  /**
-   * @see SMTPManagement#stop()
-   */
-  @PermitAll
-  public void stop()
-  {
-    log.info("Stopping SMTP service");
-    serviceCore.stop();
-  }
+	@PermitAll
+	public void setHostResolutionEnabled(boolean state)
+	{
+		hostResolutionEnabled = state;
+	}
 
-  /**
-   * @see SMTPManagement#setPort
-   * @param port
-   */
-  @PermitAll
-  public void setPort(int port) {
-    this.port = port;
-  }
+	@PermitAll
+	public boolean getHostResolutionEnabled()
+	{
+		return hostResolutionEnabled;
+	}
 
-  @PermitAll
-  public int getPort() {
-    return port;
-  }
+	public List<String> getValidRecipientHosts()
+	{
+		return validRecipientHosts;
+	}
 
-  /**
-   * see SMTPManagement#setHostname
-   * @param hostname
-   */
-  @PermitAll
-  public void setHostname(String hostname) {
-    this.hostname = hostname;
-  }
+	/**
+	 * @see SMTPManagement#start()
+	 */
+	@PermitAll
+	public void start() throws IOException, ServerRejectedException
+	{
+		log.info("Starting SMTP service");
+		if (serviceCore == null)
+		{
+			serviceCore = new SMTPServiceCore(this);
+		}
+		serviceCore.start();
+	}
 
-  public String resolveHost(String hostname) throws IOException, ServerRejectedException {
-    if (hostResolutionEnabled) {
-      return hostname.trim() + "/" + InetAddress.getByName(hostname).getHostAddress();
-    } else {
-      return hostname;
-    }
-  }
+	/**
+	 * @see SMTPManagement#stop()
+	 */
+	@PermitAll
+	public void stop()
+	{
+		log.info("Stopping SMTP service");
+		serviceCore.stop();
+	}
 
-  public CommandDispatcher getCommandDispatcher() {
-    return commandDispatcher;
-  }
+	/**
+	 * @see SMTPManagement#setPort
+	 * @param port
+	 */
+	@PermitAll
+	public void setPort(int port)
+	{
+		this.port = port;
+	}
 
-  public boolean accept(String from, String recipient) {
-    for (MessageListener messageListener : listeners.keySet()) {
-      if (messageListener.accept(from, recipient)) return true;
-    } // else
-    return false;
-  }
+	@PermitAll
+	public int getPort()
+	{
+		return port;
+	}
 
-  public void deliver(String from, String recipient, InputStream data) throws IOException {
-    for (MessageListener messageListener : listeners.keySet()) {
-      if (messageListener.accept(from, recipient)) {
-        messageListener.deliver(from, recipient, data);
-      }
-    }
-  }
+	/**
+	 * see SMTPManagement#setHostname
+	 * 
+	 * @param hostname
+	 */
+	@PermitAll
+	public void setHostname(String hostname)
+	{
+		this.hostname = hostname;
+	}
 
-  public void setCommandDispatcher(CommandDispatcher commandDispatcher) {
-    this.commandDispatcher = commandDispatcher;
-  }
+	public String resolveHost(String hostname) throws IOException,
+			ServerRejectedException
+	{
+		if (hostResolutionEnabled)
+		{
+			return hostname.trim() + "/"
+					+ InetAddress.getByName(hostname).getHostAddress();
+		}
+		else
+		{
+			return hostname;
+		}
+	}
 
-  @PermitAll
-  public void setRecipientDomainFilteringEnabled(boolean recipientDomainFilteringEnabled) {
-    this.recipientDomainFilteringEnabled = recipientDomainFilteringEnabled;
-  }
+	public CommandDispatcher getCommandDispatcher()
+	{
+		return commandDispatcher;
+	}
 
-  @PermitAll
-  public boolean getRecipientDomainFilteringEnabled() {
-    return recipientDomainFilteringEnabled;
-  }
+	public boolean accept(String from, String recipient)
+	{
+		for (MessageListener messageListener : listeners.keySet())
+		{
+			if (messageListener.accept(from, recipient))
+				return true;
+		} // else
+		return false;
+	}
 
+	public void deliver(String from, String recipient, InputStream data)
+			throws IOException
+	{
+		for (MessageListener messageListener : listeners.keySet())
+		{
+			if (messageListener.accept(from, recipient))
+			{
+				messageListener.deliver(from, recipient, data);
+			}
+		}
+	}
+
+	public void setCommandDispatcher(CommandDispatcher commandDispatcher)
+	{
+		this.commandDispatcher = commandDispatcher;
+	}
+
+	@PermitAll
+	public void setRecipientDomainFilteringEnabled(
+			boolean recipientDomainFilteringEnabled)
+	{
+		this.recipientDomainFilteringEnabled = recipientDomainFilteringEnabled;
+	}
+
+	@PermitAll
+	public boolean getRecipientDomainFilteringEnabled()
+	{
+		return recipientDomainFilteringEnabled;
+	}
 }

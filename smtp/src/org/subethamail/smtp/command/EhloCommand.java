@@ -27,51 +27,30 @@ public class EhloCommand extends BaseCommand
 		
 		// http://cr.yp.to/smtp/helo.html#helo
 		// "I recommend that they use bracketed IP addresses:"
-		remoteHost = remoteHost.replace("[", "");
-		remoteHost = remoteHost.replace("]", "");
-		
-		if (session.getDeclaredRemoteHostname() == null)
+//		If we cared about the remoteHost IP, we would deal with it here.
+//		remoteHost = remoteHost.replace("[", "");
+//		remoteHost = remoteHost.replace("]", "");
+
+//		postfix returns...
+//		250-server.host.name
+//		250-PIPELINING
+//		250-SIZE 10240000
+//		250-ETRN
+//		250 8BITMIME
+		if (!session.hasSeenHelo())
 		{
-			final SMTPServerContext SMTPServerContext = commandDispatcher
-					.getServerContext();
+			SMTPServerContext serverContext = commandDispatcher.getServerContext();
 
-//			 Not sure why we are trying to lookup the domain here, but 
-//			 Mail.app sends some random IPv6 crap, so the standard lookup stuff
-//			 doesn't really work. So, let's not bother with it and just keep
-//			 going regardless of what the HELO command receives.
-			
-//			try
-//			{
-//				final String fullyQualifiedRemoteHost = SMTPServerContext
-//						.resolveHost(remoteHost);
-//				session.setDeclaredRemoteHostname(fullyQualifiedRemoteHost);
-
-//				postfix returns...
-//				250-server.host.name
-//				250-PIPELINING
-//				250-SIZE 10240000
-//				250-ETRN
-//				250 8BITMIME
-				return new StringBuilder().append("250-")
-					.append(SMTPServerContext.getHostname())
-					.append("\r\n")
-					.append("250-PIPELINING")
-					.append("\r\n")
-					.append("250-SIZE 10240000")
-					.append("\r\n")
-					.append("250 8BITMIME")
-					.toString();
-//			}
-//			catch (IOException e)
-//			{
-//				return "501 Unknown host: " + remoteHost;
-//			}
-//			catch (ServerRejectedException e)
-//			{
-//				session.quit();
-//				return "221 " + remoteHost + " closing connection. "
-//						+ e.getMessage();
-//			}
+			session.setHasSeenHelo(true);
+			return new StringBuilder().append("250-")
+				.append(serverContext.getHostname())
+				.append("\r\n")
+				.append("250-PIPELINING")
+				.append("\r\n")
+				.append("250-SIZE 10240000")
+				.append("\r\n")
+				.append("250 8BITMIME")
+				.toString();
 		}
 		else
 		{

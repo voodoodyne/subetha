@@ -10,7 +10,7 @@
 	<form action="<c:url value="/filter_save.jsp"/>" method="post" class="form-inline">
 		<input type="hidden" name="listId" value="${model.listId}" />
 		<input type="hidden" name="className" value="${model.className}" />
-		<table>
+		<table border="1">
 			<c:forEach var="filterParam" items="${model.filter.parameters}" varStatus="loop">
 				<c:choose>
 					<c:when test="${loop.index % 2 == 0}">
@@ -75,18 +75,18 @@
 						<c:if test="${!empty model.errors[filterParam.name]}">
 							<p class="error"><c:out value="${model.errors[filterParam.name]}"/></p>
 						</c:if>
-					</td>
-				</tr>
-				<tr class="${color}">
-					<td colspan="2">
+						<br />
 						<c:out value="${filterParam.description}"/>
+
 						<c:if test="${filterParam.expanded}">
-							<h3>Variable Expansion</h3>
-							<table>
-								<tr>
-									<th>Variable</th>
-									<th>Description</th>
-								</tr>
+							<br /><br />
+							<table class="sort-table" id="lists-table">
+								<thead>
+									<tr>
+										<td>Variable</td>
+										<td>Description</td>
+									</tr>
+								</thead>
 								<c:forEach var="docs" items="${filterParam.documentation}" varStatus="loop">
 									<c:choose>
 										<c:when test="${loop.index % 2 == 0}">
@@ -103,6 +103,7 @@
 								</c:forEach>			
 							</table>
 						</c:if>
+
 					</td>
 				</tr>
 			</c:forEach>

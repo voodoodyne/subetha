@@ -42,7 +42,7 @@ public class ReceiptCommand extends BaseCommand
 			if (isValidRecipient(recipientAddress, session))
 			{
 				session.addRecipient(recipientAddress);
-				return ("250 <" + recipientAddress + "> Recipient ok.");
+				return ("250 Ok");
 			}
 			else
 			{

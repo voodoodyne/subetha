@@ -26,6 +26,7 @@ public class DataCommand extends BaseCommand
 			return "503 Need RCPT (recipient)";
 		}
 		session.setDataMode(true);
-		return "354 Enter mail, end with \".\" on a line by itself.";
+		// special case of adding \r\n cause data mode is now true
+		return "354 End data with <CR><LF>.<CR><LF>\r\n";
 	}
 }

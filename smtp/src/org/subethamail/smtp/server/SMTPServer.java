@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.DataCommand;
+import org.subethamail.smtp.command.EhloCommand;
 import org.subethamail.smtp.command.ExpnCommand;
 import org.subethamail.smtp.command.HelloCommand;
 import org.subethamail.smtp.command.HelpCommand;
@@ -55,7 +56,7 @@ public class SMTPServer implements SMTPServerContext
 	{
 		commandDispatcher = new CommandDispatcher(this);
 		new HelloCommand(commandDispatcher);
-		// new EhloCommand(commandDispatcher);
+		new EhloCommand(commandDispatcher);
 		new MailCommand(commandDispatcher);
 		new ReceiptCommand(commandDispatcher);
 		new DataCommand(commandDispatcher);

@@ -50,8 +50,7 @@ public class CommandDispatcher
 		if (".".equals(commandString))
 		{
 			session.flush(SMTPServerContext);
-			return "250 Message ID <" + getMessageId(session)
-					+ "> accepted for delivery.";
+			return "250 Ok: message passed to handler";
 		}
 		if (commandString.startsWith("."))
 		{

@@ -35,7 +35,7 @@ public class MailCommand extends BaseCommand
 			if (isValidEmailAddress(emailAddress))
 			{
 				session.setSender(emailAddress);
-				return "250 <" + emailAddress + "> Sender ok.";
+				return "250 Ok";
 				// TODO(imf): Deal with DSN commands.
 			}
 			else

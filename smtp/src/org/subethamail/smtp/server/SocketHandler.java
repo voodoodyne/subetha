@@ -82,7 +82,9 @@ class SocketHandler implements Runnable
 				command = command.trim();
 				out.print(serverContext.getCommandDispatcher().executeCommand(
 						command, session));
-				out.print("\r\n");
+				// don't add additional \r\n to output stream if we are reading data in!
+				if (!session.isDataMode())
+					out.print("\r\n");
 				out.flush();
 			}
 		}

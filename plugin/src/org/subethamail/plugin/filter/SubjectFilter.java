@@ -116,8 +116,9 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 		// do the expansion on the subjectArg
 		String expandedSubjectArg = ctx.expand(subjectArg, map);
 
-		// FIXME: find any existing expandedSubjectArg's in the subjectMsg and remove them
-		
+		// find any existing expandedSubjectArg's in the subjectMsg and remove them
+		subjectMsg = subjectMsg.replace(expandedSubjectArg, "");
+
 		// append the prefix
 		subjectMsg = expandedSubjectArg + subjectMsg;
 		

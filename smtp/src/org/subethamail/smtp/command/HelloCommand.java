@@ -1,8 +1,6 @@
 package org.subethamail.smtp.command;
 
-import java.io.IOException;
 import org.subethamail.smtp.server.SMTPServerContext;
-import org.subethamail.smtp.server.ServerRejectedException;
 import org.subethamail.smtp.session.Session;
 
 /**
@@ -36,14 +34,20 @@ public class HelloCommand extends BaseCommand
 		{
 			final SMTPServerContext SMTPServerContext = commandDispatcher
 					.getServerContext();
-			try
-			{
+// Not sure why we are trying to lookup the domain here, but 
+// Mail.app sends some random IPv6 crap, so the standard lookup stuff
+// doesn't really work. So, let's not bother with it and just keep
+// going regardless of what the HELO command receives.
+//			try
+//			{
+/*
 				final String fullyQualifiedRemoteHost = SMTPServerContext
 						.resolveHost(remoteHost);
 				session.setDeclaredRemoteHostname(fullyQualifiedRemoteHost);
+*/
 				return new StringBuilder().append("250 ")
 					.append(SMTPServerContext.getHostname()).toString();
-			}
+/*			}
 			catch (IOException e)
 			{
 				return "501 Unknown host: " + remoteHost;
@@ -54,6 +58,7 @@ public class HelloCommand extends BaseCommand
 				return "221 " + remoteHost + " closing connection. "
 						+ e.getMessage();
 			}
+*/
 		}
 		else
 		{

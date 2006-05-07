@@ -52,7 +52,7 @@ public class Session
 		verbose = false;
 		esmtp = false;
 		sender = null;
-		recipients = null;
+		recipients.clear();
 		messageLines.clear();
 		dataMode = false;
 	}

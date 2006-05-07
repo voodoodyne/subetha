@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Date;
 import org.subethamail.smtp.session.Session;
 
 /**
@@ -39,25 +38,24 @@ class SocketHandler implements Runnable
 		// TODO(imf): Refactor
 		try
 		{
-			out.print("220-" + serverContext.getHostname()
-					+ " SubEthaMail SMTP Server "
-					+ serverContext.getServerVersion() + "; " + new Date()
-					+ "\r\n");
-			try
-			{
-				out.print("220 You are "
-						+ serverContext
-								.resolveHost(session.getRemoteHostname())
-						+ "\r\n");
-			}
-			catch (IOException e)
-			{
-				session.quit();
-				out.print("221 " + serverContext.getHostname()
-						+ " closing connection. " + e.getMessage() + "\r\n");
-			}
+			out.print("220 " + serverContext.getHostname()
+					+ " ESMTP SubethaMail" + "\r\n");
+// Postfix doesn't output this, so why are we?
+//			try
+//			{
+//				out.print("220 You are "
+//						+ serverContext
+//								.resolveHost(session.getRemoteHostname())
+//						+ "\r\n");
+//			}
+//			catch (IOException e)
+//			{
+//				session.quit();
+//				out.print("221 " + serverContext.getHostname()
+//						+ " closing connection. " + e.getMessage() + "\r\n");
+//			}
 		}
-		catch (ServerRejectedException e)
+		catch (Exception e)
 		{
 			session.quit();
 			out.print("221 " + serverContext.getHostname()

@@ -9,12 +9,12 @@ import org.subethamail.smtp.session.Session;
  * @author Ian McFarland &lt;ian@neo.com&gt;
  * @author Jon Stevens
  */
-public class HelloCommand extends BaseCommand
+public class EhloCommand extends BaseCommand
 {
-	public HelloCommand(CommandDispatcher commandDispatcher)
+	public EhloCommand(CommandDispatcher commandDispatcher)
 	{
-		super(commandDispatcher, "HELO");
-		helpMessage = new HelpMessage("HELO", "<hostname>",
+		super(commandDispatcher, "EHLO");
+		helpMessage = new HelpMessage("EHLO", "<hostname>",
 				"Introduce yourself.");
 	}
 
@@ -23,7 +23,7 @@ public class HelloCommand extends BaseCommand
 		String[] args = getArgs(commandString);
 		if (args.length < 2)
 		{
-			return "501 Syntax: HELO <hostname>";
+			return "501 Syntax: EHLO <hostname>";
 		}
 		String remoteHost = args[1];
 		
@@ -41,8 +41,22 @@ public class HelloCommand extends BaseCommand
 				final String fullyQualifiedRemoteHost = SMTPServerContext
 						.resolveHost(remoteHost);
 				session.setDeclaredRemoteHostname(fullyQualifiedRemoteHost);
-				return new StringBuilder().append("250 ")
-					.append(SMTPServerContext.getHostname()).toString();
+
+//				postfix returns...
+//				250-server.host.name
+//				250-PIPELINING
+//				250-SIZE 10240000
+//				250-ETRN
+//				250 8BITMIME
+				return new StringBuilder().append("250-")
+					.append(SMTPServerContext.getHostname())
+					.append("\r\n")
+					.append("250-PIPELINING")
+					.append("\r\n")
+					.append("250-SIZE 10240000")
+					.append("\r\n")
+					.append("250 8BITMIME")
+					.toString();
 			}
 			catch (IOException e)
 			{
@@ -57,7 +71,7 @@ public class HelloCommand extends BaseCommand
 		}
 		else
 		{
-			return "503 " + remoteHost + " Duplicate HELO";
+			return "503 " + remoteHost + " Duplicate EHLO";
 		}
 	}
 }

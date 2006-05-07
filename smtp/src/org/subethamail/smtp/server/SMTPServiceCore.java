@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.subethamail.smtp.command.CommandDispatcher;
 import org.subethamail.smtp.command.CommandLogger;
 import org.subethamail.smtp.command.DataCommand;
+import org.subethamail.smtp.command.EhloCommand;
 import org.subethamail.smtp.command.ExpnCommand;
 import org.subethamail.smtp.command.HelloCommand;
 import org.subethamail.smtp.command.HelpCommand;
@@ -44,7 +45,7 @@ public class SMTPServiceCore implements Runnable
 	{
 		commandDispatcher = new CommandDispatcher(serverContext);
 		new CommandLogger(new HelloCommand(commandDispatcher));
-		// new EhloCommand(commandDispatcher);
+		new EhloCommand(commandDispatcher);
 		new CommandLogger(new MailCommand(commandDispatcher));
 		new CommandLogger(new ReceiptCommand(commandDispatcher));
 		new DataCommand(commandDispatcher);

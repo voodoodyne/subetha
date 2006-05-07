@@ -23,7 +23,7 @@ public class Session
 
 	private boolean active = true;
 
-	private String declaredRemoteHostname;
+	private boolean hasSeenHelo = false;
 
 	private Socket socket;
 
@@ -117,14 +117,14 @@ public class Session
 		active = false;
 	}
 
-	public String getDeclaredRemoteHostname()
+	public boolean hasSeenHelo()
 	{
-		return declaredRemoteHostname;
+		return hasSeenHelo;
 	}
 
-	public void setDeclaredRemoteHostname(String declaredRemoteHostname)
+	public void setHasSeenHelo(boolean hasSeenHelo)
 	{
-		this.declaredRemoteHostname = declaredRemoteHostname;
+		this.hasSeenHelo = hasSeenHelo;
 	}
 
 	public Socket getSocket()

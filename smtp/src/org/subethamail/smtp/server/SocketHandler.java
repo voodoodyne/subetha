@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import org.subethamail.smtp.session.Session;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
@@ -22,6 +24,8 @@ class SocketHandler implements Runnable
 
 	private PrintWriter out;
 
+	private static Log log = LogFactory.getLog(SocketHandler.class);
+
 	public SocketHandler(SMTPServerContext serverContext, Socket aSocket)
 			throws IOException
 	{
@@ -30,6 +34,7 @@ class SocketHandler implements Runnable
 		session = new Session(serverContext, socket);
 		out = new PrintWriter(socket.getOutputStream());
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		log.info("Connected to client from " + socket.getInetAddress());
 		new Thread(this).start();
 	}
 

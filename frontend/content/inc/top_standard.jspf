@@ -1,3 +1,3 @@
+<%@ page language="java" contentType="text/html;charset=UTF-8"%>
 <%@include file="taglibs.jspf" %>
-
 <t:action var="auth" type="org.subethamail.web.action.auth.AutoLogin"/>

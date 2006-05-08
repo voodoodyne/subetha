@@ -84,7 +84,8 @@ class SocketHandler implements Runnable
 			}
 			else
 			{
-				command = command.trim();
+				// This mangles the SMTP data stream
+				//command = command.trim();
 				out.print(serverContext.getCommandDispatcher().executeCommand(
 						command, session));
 				// don't add additional \r\n to output stream if we are reading data in!

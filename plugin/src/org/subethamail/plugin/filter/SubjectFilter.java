@@ -5,12 +5,8 @@
 
 package org.subethamail.plugin.filter;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
@@ -40,32 +36,18 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 	private static Log log = LogFactory.getLog(SubjectFilter.class);
 
 	public static final String ARG_SUBJECTPREFIX = "Subject";
-	public static final String ARG_SHORTLISTNAME = "Short List Name";
 	
 	/** */
 	static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
 		new FilterParameterImpl(
 				ARG_SUBJECTPREFIX,
 				"The prefix text which is appended to the beginning of the Subject of each message sent to the list.",
-				"[${listShortName}] ",
+				"[${list.name}] ",
 				1,
 				true,
-				SubjectFilter.getDocumentation()
-			),
-		new FilterParameterImpl(
-				ARG_SHORTLISTNAME,
-				"A string which represent the list name as a short value. Available in the Subject field as ${listShortName}.",
-				String.class,
-				""
+				null
 			)
 	};
-
-	protected static Map<String, String> getDocumentation()
-	{
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("${listShortName}", "The short name of the list. Defined in the Short List Name field.");
-		return map;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -100,21 +82,16 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 	public void onInject(SubEthaMessage msg, FilterContext ctx) 
 		throws IgnoreException, HoldException, MessagingException
 	{
-		log.debug("SubjectFilter: onInject()");
+		log.debug("Subject Filter: onInject()");
 		
 		// get the parameter arguments
-		String shortListName = (String) ctx.getArgument(ARG_SHORTLISTNAME);
 		String subjectArg = (String) ctx.getArgument(ARG_SUBJECTPREFIX);
 
 		// get the subject for the message
 		String subjectMsg = msg.getSubject();
 
-		// put listShortName into the context
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("listShortName", shortListName);
-
 		// do the expansion on the subjectArg
-		String expandedSubjectArg = ctx.expand(subjectArg, map);
+		String expandedSubjectArg = ctx.expand(subjectArg);
 
 		// find any existing expandedSubjectArg's in the subjectMsg and remove them
 		subjectMsg = subjectMsg.replace(expandedSubjectArg, "");

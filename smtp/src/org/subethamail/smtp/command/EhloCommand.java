@@ -44,10 +44,11 @@ public class EhloCommand extends BaseCommand
 			session.setHasSeenHelo(true);
 			return new StringBuilder().append("250-")
 				.append(serverContext.getHostname())
-				.append("\r\n")
-				.append("250-PIPELINING")
-				.append("\r\n")
-				.append("250-SIZE 10240000")
+//  We don't understand the SIZE or PIPELINING options, so don't tell people we do.
+//				.append("\r\n")
+//				.append("250-PIPELINING")
+//				.append("\r\n")
+//				.append("250-SIZE 10240000")
 				.append("\r\n")
 				.append("250 8BITMIME")
 				.toString();

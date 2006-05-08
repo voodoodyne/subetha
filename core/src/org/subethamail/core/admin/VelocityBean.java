@@ -9,7 +9,6 @@ import javax.annotation.security.RunAs;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.app.Velocity;
-import org.jboss.annotation.ejb.Depends;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 
@@ -21,8 +20,6 @@ import org.jboss.annotation.security.SecurityDomain;
  * @author Jon Stevens
  */
 @Service(objectName="subetha:service=Velocity")
-// This depends annotation can be removed when JBoss fixes dependency bug.
-@Depends("jboss.j2ee:ear=subetha.ear,jar=entity.jar,name=DAO,service=EJB3")
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
 public class VelocityBean implements VelocityManagement

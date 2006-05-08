@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.smtp.server.SMTPServerContext;
 import org.subethamail.smtp.session.Session;
+import org.subethamail.smtp.i.TooMuchDataException;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
@@ -20,11 +23,11 @@ public class CommandDispatcher
 
 	private List<Command> commandList = new ArrayList<Command>();
 
-	private SMTPServerContext SMTPServerContext;
+	private SMTPServerContext smtpServerContext;
 
 	public CommandDispatcher(SMTPServerContext SMTPServerContext)
 	{
-		this.SMTPServerContext = SMTPServerContext;
+		this.smtpServerContext = SMTPServerContext;
 	}
 
 	public String executeCommand(String commandString, Session session)
@@ -49,7 +52,18 @@ public class CommandDispatcher
 	{
 		if (".".equals(commandString))
 		{
-			session.flush(SMTPServerContext);
+			try
+			{
+				session.flush(smtpServerContext);
+			}
+			catch (TooMuchDataException e)
+			{
+				return "552 Too much mail data.";
+			}
+			catch (IOException e)
+			{
+				return "554 Transaction failed.";
+			}
 			return "250 Ok: message passed to handler";
 		}
 		if (commandString.startsWith("."))
@@ -104,12 +118,12 @@ public class CommandDispatcher
 
 	public void setServerContext(SMTPServerContext SMTPServer)
 	{
-		this.SMTPServerContext = SMTPServer;
+		this.smtpServerContext = SMTPServer;
 	}
 
 	public SMTPServerContext getServerContext()
 	{
-		return SMTPServerContext;
+		return smtpServerContext;
 	}
 
 	public void replaceWith(Command oldCommand, Command newCommand)

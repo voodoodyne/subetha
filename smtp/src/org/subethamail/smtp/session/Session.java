@@ -1,10 +1,12 @@
 package org.subethamail.smtp.session;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import org.subethamail.smtp.server.SMTPServerContext;
+import org.subethamail.smtp.i.TooMuchDataException;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
@@ -174,19 +176,12 @@ public class Session
 		messageLines.add(line);
 	}
 
-	public void flush(SMTPServerContext SMTPServerContext)
+	public void flush(SMTPServerContext smtpServerContext) throws TooMuchDataException, IOException
 	{
 		for (String recipient : recipients)
 		{
-			try
-			{
-				SMTPServerContext.deliver(sender, recipient,
-						new ByteArrayInputStream(getMessage().getBytes()));
-			}
-			catch (Exception ex)
-			{
-				// TODO ?
-			}
+			smtpServerContext.deliver(sender, recipient,
+				new ByteArrayInputStream(getMessage().getBytes()));
 		}
 		reset();
 	}

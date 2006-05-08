@@ -38,6 +38,10 @@ public class VelocityBean implements VelocityManagement
 			Velocity.setProperty("cp.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
 			Velocity.setProperty("cp.resource.loader.cache", "true");
 			Velocity.setProperty("cp.resource.loader.modificationCheckInterval ", "0");
+			Velocity.setProperty("input.encoding", "UTF-8");
+			Velocity.setProperty("output.encoding", "UTF-8");
+			// Very busy servers should increase this value. Default: 20
+			// Velocity.setProperty("velocity.pool.size", "20");
 			Velocity.init();
 			log.debug("Velocity initialized!");
 		}

@@ -36,7 +36,7 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 	private static Log log = LogFactory.getLog(SubjectFilter.class);
 
 	public static final String ARG_SUBJECTPREFIX = "Subject";
-	
+
 	/** */
 	static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
 		new FilterParameterImpl(

@@ -7,7 +7,6 @@ package org.subethamail.core.filter;
 
 import java.io.StringWriter;
 import java.util.Map;
-
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.subethamail.common.SubEthaMessage;

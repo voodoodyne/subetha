@@ -6,9 +6,7 @@
 package org.subethamail.core.post;
 
 import java.io.StringWriter;
-
 import javax.annotation.EJB;
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
@@ -20,7 +18,6 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
@@ -52,27 +49,6 @@ public class PostOfficeBean implements PostOffice
 
 	/** */
 	@EJB DAO dao;
-	
-	/**
-	 * Simply initialize the Velocity engine
-	 */
-	@PostConstruct
-	public void init()
-	{
-		try
-		{
-			Velocity.setProperty(Velocity.RESOURCE_LOADER, "cp");
-			Velocity.setProperty("cp.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-			Velocity.setProperty("cp.resource.loader.cache", "true");
-			Velocity.setProperty("cp.resource.loader.modificationCheckInterval ", "0");
-			Velocity.init();
-		}
-		catch (Exception ex)
-		{
-			log.fatal("Unable to initialize Velocity", ex);
-			throw new RuntimeException(ex);
-		}
-	}
 	
 	/**
 	 * Does the work of sending an email using a velocity template.

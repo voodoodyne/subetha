@@ -290,7 +290,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			
 			for (FilterParameter param: filt.getParameters())
 			{
-				Object value = args.get(filt.getName());
+				Object value = args.get(param.getName());
 				if (value == null)
 					value = param.getDefaultValue();
 				

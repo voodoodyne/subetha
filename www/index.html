@@ -1,15 +1,15 @@
 <html>
 <head>
- <style type="text/css">
-/* <![CDATA[ */ 
-@import "http://www.tigris.org/branding/css/tigris.css"; 
-@import "http://www.tigris.org/branding/css/inst.css"; 
-/*  ]]> */
- </style>
-  <link rel="stylesheet" type="text/css" href="http://www.tigris.org/branding/css/print.css" media="print" />
-<script src="http://www.tigris.org/branding/scripts/tigris.js" type="text/javascript">
-</script>
- <title>SubEtha Mailing List Manager</title>
+	<title>SubEtha Mailing List Manager</title>
+	<style type="text/css">
+		/* <![CDATA[ */ 
+		@import "http://www.tigris.org/branding/css/tigris.css"; 
+		@import "http://www.tigris.org/branding/css/inst.css"; 
+		/*  ]]> */
+	</style>
+	<link rel="stylesheet" type="text/css" href="http://www.tigris.org/branding/css/print.css" media="print" />
+	<script src="http://www.tigris.org/branding/scripts/tigris.js" type="text/javascript">
+	</script>
 </head>
 <body>
 	<p>
@@ -22,6 +22,8 @@
 		<li>Very easy installation on Windows and Unix platforms</li>
 		<li>A user-friendly web interface for all configuration management</li>
 		<li>Virtual domains (ie list@foo.com and list@bar.com are separate lists)</li>
+		<li>Intelligent attachment handling; attachments can be removed from
+			delivered mail and replaced with a download link to the archives.</li>
 		<li>Pluggable message processing filters which can arbitrarily modify
 			the inbound and outbound message streams.  Example filters include
 			attachment stripping, header munging, spam detection, and insertion
@@ -32,8 +34,9 @@
 			The set of available types is pluggable.</li>
 		<li>Users can have multiple email addresses.</li>
 		<li>Users can self-moderate messages sent from unsubscribed addresses</li>
-		<li>Searchable, threaded archives implemented with a UI that is similar
-			to forum software with access control based viewing and posting</li>
+		<li>Searchable, threaded archives</li>
+		<li>Users can reply to messages from the archives.  They can click
+			on a button and have the message resent to them normally.</li>
 		<li>Intelligent VERP bounce processing</li>
 		<li>Clusterable for nearly unlimited scalability</li>
 		<li>Easy integration with any mail transport agent (MTA)</li>
@@ -66,7 +69,13 @@
 	</ul>
 	
 	<p>
-		This project is in the implementation phase.  Its authors are:
+		This project is nearly ready for alpha testing.  See the
+		<a href="developer.html">developer documentation</a>.  Also see
+		the <a href="faq.html">FAQ</a>.
+	</p>
+	
+	<p>
+		SubEtha is written by:
 	</p>
 	<ul>
 		<li>Jeff Schnitzer</li>
@@ -80,6 +89,9 @@
 		EAR file which can be deployed into any JBoss instance.  The second, for novices,
 		is a "just-unzip-and-run" package containing standalone JBoss with SubEtha 
 		preconfgured and all unnecessary services removed.
+	</p>
+	<p>
+		Additional plans are being made for .RPM and .DEB releases.
 	</p>
 </body>
 </html>

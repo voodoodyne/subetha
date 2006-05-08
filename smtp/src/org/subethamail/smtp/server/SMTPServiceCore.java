@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.smtp.command.CommandDispatcher;
-import org.subethamail.smtp.command.CommandLogger;
 import org.subethamail.smtp.command.DataCommand;
 import org.subethamail.smtp.command.EhloCommand;
 import org.subethamail.smtp.command.ExpnCommand;

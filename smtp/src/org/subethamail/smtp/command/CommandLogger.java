@@ -34,7 +34,7 @@ public class CommandLogger implements Command
 	public String execute(String commandString, Session session)
 	{
 		String response = command.execute(commandString, session);
-		commandLog.info(commandString + "\t=> " + response);
+		commandLog.debug(commandString + "\t=> " + response);
 		return response;
 	}
 

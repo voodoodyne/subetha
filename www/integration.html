@@ -96,20 +96,34 @@
 		<ol>
 			<li>
 				<p>
-					Edit /etc/postfix/main.cf.  Add this line:
+					Edit /etc/postfix/main.cf.  Add these lines:
 				</p>
 				<pre>transport_maps = hash:/etc/postfix/transport</pre>
+				<pre>relay_domains = hash:/etc/postfix/transport</pre>
+				<p>
+					If you already have an /etc/postfix/transport, you will
+					probably need to use something different for relay_domains.
+				</p>
 			</li>
 			<li>
 				<p>
 					Edit /etc/postfix/transport.  Add this line:
 				</p>
-				<pre>lists.yourdomain.com          smtp:localhost:2500</pre>
+				<pre>lists.yourdomain.com          smtp:[127.0.0.1]:2500</pre>
 				<p>
 					You can have as many domains and subdomains relayed to
 					SubEtha as you wish.  Don't forget to set up the appropriate
 					MX records in DNS.
 				</p>
+				<p>
+					Note that the destination (in this case 127.0.0.1) must be
+					resolvable via DNS (not just /etc/hosts!) or an IP address.
+					Placing the address in brackets skips MX record resolution,
+					which is highly recommended.
+				</p>
+			</li>
+			<li>
+				Run "postmap /etc/postfix/transport".
 			</li>
 		</ol>
 		

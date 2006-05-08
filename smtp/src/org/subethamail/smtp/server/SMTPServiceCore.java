@@ -44,14 +44,19 @@ public class SMTPServiceCore implements Runnable
 	private void initializeCommandDispatcher()
 	{
 		commandDispatcher = new CommandDispatcher(serverContext);
-		new CommandLogger(new HelloCommand(commandDispatcher));
+//		new CommandLogger(new HelloCommand(commandDispatcher));
+//		new CommandLogger(new EhloCommand(commandDispatcher));
+//		new CommandLogger(new MailCommand(commandDispatcher));
+//		new CommandLogger(new ReceiptCommand(commandDispatcher));
+		new HelloCommand(commandDispatcher);
 		new EhloCommand(commandDispatcher);
-		new CommandLogger(new MailCommand(commandDispatcher));
-		new CommandLogger(new ReceiptCommand(commandDispatcher));
+		new MailCommand(commandDispatcher);
+		new ReceiptCommand(commandDispatcher);
 		new DataCommand(commandDispatcher);
 		new ResetCommand(commandDispatcher);
 		new NoopCommand(commandDispatcher);
-		new CommandLogger(new QuitCommand(commandDispatcher));
+//		new CommandLogger(new QuitCommand(commandDispatcher));
+		new QuitCommand(commandDispatcher);
 		new HelpCommand(commandDispatcher);
 		new VerifyCommand(commandDispatcher);
 		new ExpnCommand(commandDispatcher);

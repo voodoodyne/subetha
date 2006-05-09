@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -199,6 +200,8 @@ public class Mail implements Serializable, Comparable
 		this.from = from.toString();
 		
 		this.setFromNormal(from.getAddress());
+		
+		this.attachments = new HashSet<Attachment>();
 	}
 	
 	/** */

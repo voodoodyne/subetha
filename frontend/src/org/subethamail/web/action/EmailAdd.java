@@ -53,12 +53,12 @@ public class EmailAdd extends AuthRequired
 			}
 			catch (RuntimeException re)
 			{
-				if (re.getCause().getCause() instanceof javax.mail.SendFailedException)
+				Throwable e = re.getCause();
+				if (e != null && e.getCause() instanceof javax.mail.SendFailedException)
 				{
-					model.setError("email", re.getMessage());
+					model.setError("email", e.getCause().getMessage());
 				}
 			}
 		}
 	}
-	
 }

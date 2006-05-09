@@ -173,4 +173,15 @@ public interface ListMgr
 	 * Discards a subscription hold.  User is not notified.
 	 */
 	public void discardHeldSubscription(Long listId, Long personId) throws NotFoundException, PermissionException;
+
+	/**
+	 * UnSubscribes a person from a list.
+	 * 
+	 * @param listId the mailing list id
+	 * @param personId the person id
+	 *  
+	 * @throws NotFoundException if the list id or email is not valid.
+	 * @throws PermissionException needs Permission.UNSUBSCRIBE_OTHERS
+	 */
+	public void unsubscribe(Long listId, Long personId) throws NotFoundException, PermissionException;
 }

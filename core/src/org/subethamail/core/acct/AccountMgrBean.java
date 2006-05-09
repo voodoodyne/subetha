@@ -8,14 +8,12 @@ package org.subethamail.core.acct;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -280,12 +278,12 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	}
 
 	/**
-	 * @see AccountMgr#unSubscribeMe(Long)
+	 * @see AccountMgr#unsubscribeMe(Long)
 	 */
-	public void unSubscribeMe(Long listId) throws NotFoundException
+	public void unsubscribeMe(Long listId) throws NotFoundException
 	{
 		Person me = this.getMe();
-		this.admin.unsubscribe(listId, me.getId());		
+		this.admin.unsubscribe(listId, me.getId());
 	}
 
 	/**

@@ -132,7 +132,7 @@ public interface AccountMgr
 	 *  
 	 * @throws NotFoundException if the list id or email is not valid.
 	 */
-	public void unSubscribeMe(Long listId) throws NotFoundException;
+	public void unsubscribeMe(Long listId) throws NotFoundException;
 
 	/**
 	 * Requests that the user's password be sent back to them in plaintext.

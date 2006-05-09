@@ -13,13 +13,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -456,5 +454,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			this.dao.remove(hold);
 		
 		return hold;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#unsubscribe(java.lang.Long, java.lang.Long)
+	 */
+	public void unsubscribe(Long listId, Long personId) throws NotFoundException, PermissionException
+	{
+		this.getListFor(listId, Permission.UNSUBSCRIBE_OTHERS);
+		this.admin.unsubscribe(listId, personId);
 	}
 }

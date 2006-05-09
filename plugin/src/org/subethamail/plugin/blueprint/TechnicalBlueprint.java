@@ -5,16 +5,12 @@
 
 package org.subethamail.plugin.blueprint;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
@@ -23,7 +19,6 @@ import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.PermissionException;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
-import org.subethamail.plugin.filter.ReplyToFilter;
 
 /**
  * Creates a list suitable for a publicly advertised technical list.

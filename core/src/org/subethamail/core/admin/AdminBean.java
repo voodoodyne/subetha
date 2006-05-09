@@ -275,7 +275,8 @@ public class AdminBean implements Admin, AdminRemote
 	protected void unsubscribe(Long listId, Person who) throws NotFoundException
 	{
 		MailingList list = this.dao.findMailingList(listId);
-		Subscription sub = who.getSubscription(listId);
+		Subscription sub = who.getSubscriptions().remove(listId);
+		list.getSubscriptions().remove(sub);
 		this.dao.remove(sub);
 	}
 

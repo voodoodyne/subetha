@@ -27,7 +27,6 @@ public class UnSubscribeMe extends AuthRequired
 	/** */
 	public void authExecute() throws Exception
 	{
-		Backend.instance().getAccountMgr().unSubscribeMe(this.listId);
-	}
-	
+		Backend.instance().getAccountMgr().unsubscribeMe(this.listId);
+	}	
 }

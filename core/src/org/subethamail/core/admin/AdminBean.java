@@ -8,12 +8,10 @@ package org.subethamail.core.admin;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
-
 import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -262,6 +260,23 @@ public class AdminBean implements Admin, AdminRemote
 				return SubscribeResult.OK;
 			}
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#unsubscribe(java.lang.Long, Long)
+	 */
+	public void unsubscribe(Long listId, Long personId) throws NotFoundException
+	{
+		Person who = this.dao.findPerson(personId);
+		this.unsubscribe(listId, who);
+	}
+
+	protected void unsubscribe(Long listId, Person who) throws NotFoundException
+	{
+		MailingList list = this.dao.findMailingList(listId);
+		Subscription sub = who.getSubscription(listId);
+		this.dao.remove(sub);
 	}
 
 	/**

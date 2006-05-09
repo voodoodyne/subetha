@@ -278,7 +278,16 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 			}
 		}
 	}
-	
+
+	/**
+	 * @see AccountMgr#unSubscribeMe(Long)
+	 */
+	public void unSubscribeMe(Long listId) throws NotFoundException
+	{
+		Person me = this.getMe();
+		this.admin.unsubscribe(listId, me.getId());		
+	}
+
 	/**
 	 * @see Receptionist#forgotPassword(String)
 	 */

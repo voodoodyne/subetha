@@ -7,10 +7,8 @@ package org.subethamail.core.admin.i;
 
 import java.net.URL;
 import java.util.List;
-
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
-
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.SubscribeResult;
@@ -85,6 +83,16 @@ public interface Admin
 	 * @throws NotFoundException if the list id is not valid.
 	 */
 	public AuthSubscribeResult subscribe(Long listId, InternetAddress address, boolean ignoreHold) throws NotFoundException;
+
+	/**
+	 * UnSubscribes a user from a list
+	 * 
+	 * @param listId a valid listID
+	 * @param personId a valid personId
+	 *  
+	 * @throws NotFoundException if the list id or person id is not valid.
+	 */
+	public void unsubscribe(Long listId, Long personId) throws NotFoundException;
 
 	/**
 	 * Sets whether or not the person is a site admin.

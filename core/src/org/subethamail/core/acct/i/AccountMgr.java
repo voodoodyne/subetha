@@ -117,6 +117,7 @@ public interface AccountMgr
 	 * Subscribes an email address to the list, or changes the delivery
 	 * address of an existing subscription.  User must be authenticated.
 	 * 
+	 * @param listId the mailing list id
 	 * @param email must be one of the current user's email addresses,
 	 *  or null to subscribe delivery disabled.
 	 *  
@@ -124,6 +125,14 @@ public interface AccountMgr
 	 */
 	public SubscribeResult subscribeMe(Long listId, String email) throws NotFoundException;
 
+	/**
+	 * UnSubscribes a person from a list.
+	 * 
+	 * @param listId the mailing list id
+	 *  
+	 * @throws NotFoundException if the list id or email is not valid.
+	 */
+	public void unSubscribeMe(Long listId) throws NotFoundException;
 
 	/**
 	 * Requests that the user's password be sent back to them in plaintext.
@@ -133,4 +142,3 @@ public interface AccountMgr
 	 */
 	public void forgotPassword(String email) throws NotFoundException;
 }
-

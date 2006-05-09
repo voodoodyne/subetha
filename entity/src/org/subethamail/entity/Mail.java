@@ -5,10 +5,8 @@
 
 package org.subethamail.entity;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -228,9 +226,9 @@ public class Mail implements Serializable, Comparable
 		
 		try
 		{
-			OutputStream tmpStream = new BufferedOutputStream(new ByteArrayOutputStream(8192));
+			ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
 			msg.writeTo(tmpStream);
-			raw = ((ByteArrayOutputStream)tmpStream).toByteArray();
+			raw = tmpStream.toByteArray();
 		}
 		catch (IOException ex) { throw new EJBException(ex); }
 		

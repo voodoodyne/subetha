@@ -22,6 +22,7 @@ public enum Permission
 	APPROVE_MESSAGES("Approve messages which have been held for administrative approval."),
 	APPROVE_SUBSCRIPTIONS("Approve subscription requests."),
 	MASS_SUBSCRIBE("Subscribe other people to the mailing list."),
+	UNSUBSCRIBE_OTHERS("Unsubscribe other people from the mailing list."),
 	POST("Post messages to a mailing list, either by emailing the list address or from the archives."),
 	VIEW_SUBSCRIBERS("View the list of subscribers to the mailing list."),
 	READ_ARCHIVES("Read and search the archives of the mailing list."),

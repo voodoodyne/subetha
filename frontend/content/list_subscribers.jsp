@@ -1,19 +1,24 @@
 <%@include file="/inc/top_standard.jspf" %>
 
+<t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
+<%-- TODO:  figure out how to not do this twice --%>
+<c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
+
 <t:action var="model" type="org.subethamail.web.action.GetSubscribers" />
 
 <trim:list title="Subscribers" listId="${param.listId}">
 
-		<c:choose>
-			<c:when test="${empty model.subscriberData}">
-				<p>There are no subscribers to this list.</p>
-			</c:when>
+	<c:choose>
+		<c:when test="${empty model.subscriberData}">
+			<p>There are no subscribers to this list.</p>
+		</c:when>
 		<c:otherwise>
-		
+			<%--
 			<form action="<c:url value="/list_subscribers.jsp"/>" method="get">
 				<input type="hidden" name="listId" value="<c:out value="${param.listId}" />" />
 				Filter: <input type="text" name="query" value="<c:out value="${param.query}" />" />
 			</form>
+			 --%>
 
 			<table class="sort-table" id="lists-table">
 			<thead>
@@ -21,6 +26,9 @@
 					<td>Name</td>
 					<td>Addresses</td>
 					<td>Role</td>
+					<c:if test="${perms.UNSUBSCRIBE_OTHERS || perms.EDIT_ROLES}">
+						<td>Action</td>
+					</c:if>
 				</tr>
 			</thead>
 			<tbody>
@@ -50,6 +58,23 @@
 						<td>
 							<c:out value="${p.roleName}" />
 						</td>
+						<c:if test="${perms.UNSUBSCRIBE_OTHERS || perms.EDIT_ROLES}">
+							<td>
+								<c:if test="${perms.UNSUBSCRIBE_OTHERS}">
+									<form action="person_unsubscribe.jsp" method="post" style="display:inline">
+										<input type="hidden" name="subId" value="${p.subId}" />
+										<input type="submit" value="Unsubscribe" />
+									</form>
+								</c:if>
+								<c:if test="${perms.EDIT_ROLES}">
+									<form action="person_set_role.jsp" method="post" style="display:inline">
+										<input type="hidden" name="subId" value="${p.subId}" />
+										Put Role List Here
+										<input type="submit" value="Set" />
+									</form>
+								</c:if>
+							</td>
+						</c:if>
 					</tr>
 				</c:forEach>
 			</tbody>

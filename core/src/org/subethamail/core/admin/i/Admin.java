@@ -65,24 +65,26 @@ public interface Admin
 	 * 
 	 * @param email must be one of the current user's email addresses,
 	 *  or null to subscribe delivery disabled.
+	 * @param ignoreHold will bypass moderation hold for the subscriber
 	 *  
 	 * @return either OK or HELD
 	 *  
 	 * @throws NotFoundException if the list id or person id is not valid.
 	 */
-	public SubscribeResult subscribe(Long listId, Long personId, String email) throws NotFoundException;
+	public SubscribeResult subscribe(Long listId, Long personId, String email, boolean ignoreHold) throws NotFoundException;
 
 	/**
 	 * Subscribes a potentially never-before-seen user to the list.
 	 * 
 	 * @param address can be an existing email address or a new one, in which
 	 *  case a new person will be created.
+	 * @param ignoreHold will bypass moderation hold for the subscriber
 	 *  
 	 * @return either OK or HELD
 	 *  
 	 * @throws NotFoundException if the list id is not valid.
 	 */
-	public AuthSubscribeResult subscribe(Long listId, InternetAddress address) throws NotFoundException;
+	public AuthSubscribeResult subscribe(Long listId, InternetAddress address, boolean ignoreHold) throws NotFoundException;
 
 	/**
 	 * Sets whether or not the person is a site admin.

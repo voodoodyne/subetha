@@ -204,6 +204,10 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		if (log.isDebugEnabled())
 			log.debug("Requesting to subscribe " + email + " to list " + listId);
 		
+		// A null name is not allowed, but empty is ok
+		if (name == null)
+			name = "";
+		
 		MailingList mailingList = this.dao.findMailingList(listId);
 		
 		List<String> plainList = new ArrayList<String>();
@@ -243,7 +247,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 
 		InternetAddress address = Transmute.internetAddress(email, name);
 		
-		return this.admin.subscribe(listId, address);
+		return this.admin.subscribe(listId, address, false);
 	}
 
 	/**
@@ -256,7 +260,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		if (email == null)
 		{
 			// Subscribing with (or changing to) disabled delivery
-			return this.admin.subscribe(listId, me.getId(), null);
+			return this.admin.subscribe(listId, me.getId(), null, false);
 		}
 		else
 		{
@@ -270,7 +274,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 			}
 			else
 			{
-				return this.admin.subscribe(listId, me.getId(), email);
+				return this.admin.subscribe(listId, me.getId(), email, false);
 			}
 		}
 	}

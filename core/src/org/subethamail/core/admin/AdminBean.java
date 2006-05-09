@@ -172,28 +172,28 @@ public class AdminBean implements Admin, AdminRemote
 	}
 
 	/**
-	 * @see Admin#subscribe(Long, String, String)
+	 * @see Admin#subscribe(Long, InternetAddress, boolean)
 	 */
-	public AuthSubscribeResult subscribe(Long listId, InternetAddress address) throws NotFoundException
+	public AuthSubscribeResult subscribe(Long listId, InternetAddress address, boolean ignoreHold) throws NotFoundException
 	{
 		EmailAddress addy = this.establishEmailAddress(address, null);
 		
-		SubscribeResult result = this.subscribe(listId, addy.getPerson(), addy);
+		SubscribeResult result = this.subscribe(listId, addy.getPerson(), addy, ignoreHold);
 		
 		return new AuthSubscribeResult(addy.getId(), addy.getPerson().getPassword(), result, listId);
 	}
 	
 	/**
-	 * @see Admin#subscribe(Long, Long, String)
+	 * @see Admin#subscribe(Long, Long, String, boolean)
 	 */
-	public SubscribeResult subscribe(Long listId, Long personId, String email) throws NotFoundException
+	public SubscribeResult subscribe(Long listId, Long personId, String email, boolean ignoreHold) throws NotFoundException
 	{
 		Person who = this.dao.findPerson(personId);
 		
 		if (email == null)
 		{
 			// Subscribing with (or changing to) disabled delivery
-			return this.subscribe(listId, who, null);
+			return this.subscribe(listId, who, null, ignoreHold);
 		}
 		else
 		{
@@ -202,7 +202,7 @@ public class AdminBean implements Admin, AdminRemote
 			if (addy == null)
 				throw new IllegalStateException("Must be one of person's email addresses");
 			
-			return this.subscribe(listId, who, addy);
+			return this.subscribe(listId, who, addy, ignoreHold);
 		}
 	}
 	
@@ -211,8 +211,9 @@ public class AdminBean implements Admin, AdminRemote
 	 * of an existing subscriber.
 	 * 
 	 * @param deliverTo can be null to disable delivery
+	 * @param ignoreHold will subscribe even if a hold is requested
 	 */
-	protected SubscribeResult subscribe(Long listId, Person who, EmailAddress deliverTo) throws NotFoundException
+	protected SubscribeResult subscribe(Long listId, Person who, EmailAddress deliverTo, boolean ignoreHold) throws NotFoundException
 	{
 		MailingList list = this.dao.findMailingList(listId);
 		
@@ -227,7 +228,7 @@ public class AdminBean implements Admin, AdminRemote
 		}
 		else
 		{
-			if (list.isSubscriptionHeld())
+			if (!ignoreHold && list.isSubscriptionHeld())
 			{
 				SubscriptionHold hold = new SubscriptionHold(who, list, deliverTo);
 				this.dao.persist(hold);

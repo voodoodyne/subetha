@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.Local;
+import javax.mail.internet.InternetAddress;
 
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
@@ -153,4 +154,12 @@ public interface ListMgr
 	 * Requires Permission.APPROVE_SUBSCRIPTIONS
 	 */
 	public List<SubscriberData> getHeldSubscriptions(Long listId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Subscribes a mass of users to the list
+	 * 
+	 * @param invite will send invites rather than just subscribing
+	 * @param addresses are the addresses to subscribe
+	 */
+	public void massSubscribe(Long listId, boolean invite, InternetAddress[] addresses) throws NotFoundException, PermissionException;
 }

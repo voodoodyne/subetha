@@ -72,6 +72,13 @@
 				</c:url>
 				<a href="${listHeldMsgsUrl}">&rsaquo; Held Messages</a>
 			</c:if>
+				
+			<c:if test="${perms.MASS_SUBSCRIBE}">
+				<c:url var="massSubUrl" value="/subscribe_mass.jsp">
+					<c:param name="listId" value="${listId}"/>
+				</c:url>
+				<a href="${massSubUrl}">&rsaquo; Mass Subscribe</a>
+			</c:if>
 		</div> <!-- sideBox LHS -->
 	</c:if>
 	

@@ -18,12 +18,15 @@ import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
+import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
+import org.subethamail.core.acct.i.AccountMgr;
+import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.lists.i.EnabledFilterData;
 import org.subethamail.core.lists.i.FilterData;
@@ -61,6 +64,8 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	
 	/** */
 	@EJB FilterRunner filterRunner;
+	@EJB Admin admin;
+	@EJB AccountMgr accountMgr;
 
 	/*
 	 * (non-Javadoc)
@@ -377,5 +382,26 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		MailingList list = this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
 		
 		return Transmute.heldSubscriptions(list.getSubscriptionHolds());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#massSubscribe(java.lang.Long, boolean, javax.mail.internet.InternetAddress[])
+	 */
+	public void massSubscribe(Long listId, boolean invite, InternetAddress[] addresses) throws NotFoundException, PermissionException
+	{
+		// We don't need the object, but we need to check permission
+		this.getListFor(listId, Permission.MASS_SUBSCRIBE);
+		
+		if (invite)
+		{
+			for (InternetAddress addy: addresses)
+				this.accountMgr.subscribeAnonymousRequest(listId, addy.getAddress(), addy.getPersonal());
+		}
+		else
+		{
+			for (InternetAddress addy: addresses)
+				this.admin.subscribe(listId, addy, true);
+		}
 	}
 }

@@ -36,6 +36,15 @@
 					</c:if>
 				</td>
 			</tr>
+			<tr>
+				<th><label for="holdSubs">Hold Subscriptions</label></th>
+				<td>
+					<input id="holdSubs" name="holdSubs" type="checkbox" value="true"
+						<c:if test="${model.holdSubs}">checked="checked"</c:if>
+					/>
+					Subscriptions must be approved by moderators
+				</td>
+			</tr>
 		</table>
 		<input type="submit" value="Save" />
 	</form>

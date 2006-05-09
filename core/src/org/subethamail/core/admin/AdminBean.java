@@ -230,7 +230,12 @@ public class AdminBean implements Admin, AdminRemote
 		{
 			if (!ignoreHold && list.isSubscriptionHeld())
 			{
-				SubscriptionHold hold = new SubscriptionHold(who, list, deliverTo);
+				// Maybe already held, if so, replace it; email address might be new
+				SubscriptionHold hold = who.getHeldSubscriptions().remove(list.getId());
+				if (hold != null)
+					this.dao.remove(hold);
+				
+				hold = new SubscriptionHold(who, list, deliverTo);
 				this.dao.persist(hold);
 				
 				// Send mail to person who requested subscription

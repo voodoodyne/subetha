@@ -15,6 +15,7 @@
 					<td>Name</td>
 					<td>Addresses</td>
 					<td>Date</td>
+					<td>Action</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -42,7 +43,19 @@
 							</c:forEach>
 						</td>
 						<td>
-							<c:out value="${p.dateCreated}" />
+							<fmt:formatDate value="${p.dateSubscribed}" type="both" dateStyle="short" timeStyle="short" />
+						</td>
+						<td>
+							<form action="held_sub_action.jsp" method="post" style="display:inline">
+								<input type="hidden" name="listId" value="${param.listId}" />
+								<input type="hidden" name="personId" value="${p.id}" />
+								<input type="submit" name="action" value="Approve" />
+							</form>
+							<form action="held_sub_action.jsp" method="post" style="display:inline">
+								<input type="hidden" name="listId" value="${param.listId}" />
+								<input type="hidden" name="personId" value="${p.id}" />
+								<input type="submit" name="action" value="Discard" />
+							</form>
 						</td>
 					</tr>
 				</c:forEach>

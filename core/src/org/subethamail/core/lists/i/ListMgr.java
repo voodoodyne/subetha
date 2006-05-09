@@ -46,10 +46,11 @@ public interface ListMgr
 	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException, PermissionException;
 
 	/**
-	 * Sets list name and description.
+	 * Sets list name and description and whether or not subscriptions
+	 * are held for approval.
 	 * Requires Permission.EDIT_SETTINGS
 	 */
-	public void setListName(Long listId, String name, String description) throws NotFoundException, PermissionException;
+	public void setList(Long listId, String name, String description, boolean holdSubs) throws NotFoundException, PermissionException;
 	
 	/**
 	 * Gets some basic information about a mailing list. 
@@ -162,4 +163,14 @@ public interface ListMgr
 	 * @param addresses are the addresses to subscribe
 	 */
 	public void massSubscribe(Long listId, boolean invite, InternetAddress[] addresses) throws NotFoundException, PermissionException;
+
+	/**
+	 * Approves a subscription hold.  User is notified.
+	 */
+	public void approveHeldSubscription(Long listId, Long personId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Discards a subscription hold.  User is not notified.
+	 */
+	public void discardHeldSubscription(Long listId, Long personId) throws NotFoundException, PermissionException;
 }

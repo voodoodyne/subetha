@@ -37,6 +37,9 @@ public class SaveListSettings extends AuthAction
 		/** */
 		@Length(max=Validator.MAX_LIST_DESCRIPTION)
 		@Property String description = "";
+		
+		/** */
+		@Property boolean holdSubs;
 	}
 	
 	/** */
@@ -54,7 +57,7 @@ public class SaveListSettings extends AuthAction
 		
 		if (model.getErrors().isEmpty())
 		{
-			Backend.instance().getListMgr().setListName(model.listId, model.name, model.description);
+			Backend.instance().getListMgr().setList(model.listId, model.name, model.description, model.holdSubs);
 		}
 	}
 	

@@ -3,6 +3,9 @@
 <t:action var="model" type="org.subethamail.web.action.SubscribeMe"/>
 
 <c:choose>
+	<c:when test="${model.held}">
+		<jsp:forward page="subscribe_held.jsp"/>
+	</c:when>
 	<c:when test="${empty param.goto}">
 		<c:redirect url="/home.jsp" />
 	</c:when>

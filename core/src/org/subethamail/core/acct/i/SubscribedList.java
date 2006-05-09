@@ -13,22 +13,23 @@ import org.subethamail.core.lists.i.ListData;
  * @author Jon Scott Stevens
  */
 @SuppressWarnings("serial")
-public class SubscriptionData extends ListData
+public class SubscribedList extends ListData
 {
 	String roleName;
 	String deliverTo;
 		
 	/**
 	 */
-	public SubscriptionData(Long id, 
+	public SubscribedList(Long id, 
 					String email,
 					String name,
 					String url, 
 					String description,
+					boolean subscriptionHeld,
 					String roleName,
 					String deliverTo)
 	{
-		super(id, email, name, url, description);
+		super(id, email, name, url, description, subscriptionHeld);
 		this.roleName = roleName;
 		this.deliverTo = deliverTo;		
 	}

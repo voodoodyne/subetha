@@ -65,6 +65,11 @@ public class Person implements Serializable, Comparable
 	@MapKey(name="listId")
 	Map<Long, Subscription> subscriptions;
 	
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
+	//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)	// not worth caching
+	@MapKey(name="listId")
+	Map<Long, SubscriptionHold> heldSubscriptions;
+	
 	/**
 	 */
 	public Person() {}
@@ -82,6 +87,7 @@ public class Person implements Serializable, Comparable
 		
 		this.emailAddresses = new HashMap<String, EmailAddress>();
 		this.subscriptions = new HashMap<Long, Subscription>();
+		this.heldSubscriptions = new HashMap<Long, SubscriptionHold>();
 	}
 	
 	/** */
@@ -216,6 +222,11 @@ public class Person implements Serializable, Comparable
 	{
 		return this.subscriptions.get(listId);
 	}
+	
+	/**
+	 * @return (not cached) the subscription holds for this user
+	 */
+	public Map<Long, SubscriptionHold> getHeldSubscriptions() { return this.heldSubscriptions; }
 	
 	/** */
 	public Role getRoleIn(MailingList list)

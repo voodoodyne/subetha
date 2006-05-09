@@ -17,7 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.MySubscription;
-import org.subethamail.core.acct.i.SubscriptionData;
+import org.subethamail.core.acct.i.SubscribedList;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.lists.i.EnabledFilterData;
 import org.subethamail.core.lists.i.FilterData;
@@ -94,7 +94,8 @@ public class Transmute
 				raw.getEmail(),
 				raw.getName(),
 				raw.getUrl(),
-				raw.getDescription());
+				raw.getDescription(),
+				raw.isSubscriptionHeld());
 	}
 
 	/** Does not add held subscriptions */
@@ -119,7 +120,8 @@ public class Transmute
 				raw.getPerson().getName(),
 				raw.getPerson().getEmailArray(),
 				raw.getRole().getName(),
-				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null);
+				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null,
+				raw.getDateCreated());
 	}
 
 	/**
@@ -163,9 +165,9 @@ public class Transmute
 		}
 	}
 
-	public static List<SubscriptionData> subscriptions(Collection<Subscription> rawColl)
+	public static List<SubscribedList> subscriptions(Collection<Subscription> rawColl)
 	{
-		List<SubscriptionData> result = new ArrayList<SubscriptionData>(rawColl.size());
+		List<SubscribedList> result = new ArrayList<SubscribedList>(rawColl.size());
 		
 		for (Subscription raw: rawColl)
 			result.add(subscription(raw));
@@ -175,17 +177,18 @@ public class Transmute
 
 	/**
 	 */
-	public static SubscriptionData subscription(Subscription raw)
+	public static SubscribedList subscription(Subscription raw)
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
 	
-		return new SubscriptionData(
+		return new SubscribedList(
 				raw.getList().getId(),
 				raw.getList().getEmail(),
 				raw.getList().getName(),
 				raw.getList().getUrl(),
 				raw.getList().getDescription(),
+				raw.getList().isSubscriptionHeld(),
 				raw.getRole().getName(),
 				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null);
 	}
@@ -323,7 +326,8 @@ public class Transmute
 				raw.getPerson().getName(),
 				raw.getPerson().getEmailArray(),
 				null,
-				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null);
+				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null,
+				raw.getDateCreated());
 	}
 
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class Self extends PersonData
 {
-	List<SubscriptionData> subscriptions;
+	List<SubscribedList> subscriptions;
 	
 	/** */
 	boolean siteAdmin;
@@ -28,7 +28,7 @@ public class Self extends PersonData
 				String name,
 				String[] emailAddresses,
 				boolean siteAdmin,
-				List<SubscriptionData> subscriptions)
+				List<SubscribedList> subscriptions)
 	{
 		super(id, name, emailAddresses);
 		
@@ -42,7 +42,7 @@ public class Self extends PersonData
 		return this.siteAdmin;
 	}
 	
-	public List<SubscriptionData> getSubscriptions()
+	public List<SubscribedList> getSubscriptions()
 	{
 		return this.subscriptions;
 	}

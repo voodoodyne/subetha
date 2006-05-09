@@ -45,8 +45,10 @@ import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.FilterArgument;
 import org.subethamail.entity.MailingList;
+import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
+import org.subethamail.entity.SubscriptionHold;
 
 /**
  * Implementation of the AccountMgr interface.
@@ -89,14 +91,23 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#setListName(java.lang.Long, java.lang.String, java.lang.String)
+	 * @see org.subethamail.core.lists.i.ListMgr#setList(java.lang.Long, java.lang.String, java.lang.String, boolean)
 	 */
-	public void setListName(Long listId, String name, String description) throws NotFoundException, PermissionException
+	public void setList(Long listId, String name, String description, boolean holdSubs) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_SETTINGS);
 		
 		list.setName(name);
 		list.setDescription(description);
+		
+		boolean flushHolds = list.isSubscriptionHeld() && !holdSubs;
+		
+		list.setSubscriptionHeld(holdSubs);
+		
+		if (flushHolds)
+		{
+			// TODO
+		}
 	}
 
 	/*
@@ -403,5 +414,47 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			for (InternetAddress addy: addresses)
 				this.admin.subscribe(listId, addy, true);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldSubscription(java.lang.Long, java.lang.Long)
+	 */
+	public void approveHeldSubscription(Long listId, Long personId) throws NotFoundException, PermissionException
+	{
+		SubscriptionHold discarded = this.discardHeldSubcriptionInternal(listId, personId);
+		
+		if (discarded != null)
+		{
+			String deliverTo = discarded.getDeliverTo() == null ? null : discarded.getDeliverTo().getId();
+			this.admin.subscribe(listId, personId, deliverTo, true);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#discardHeldSubscription(java.lang.Long, java.lang.Long)
+	 */
+	public void discardHeldSubscription(Long listId, Long personId) throws NotFoundException, PermissionException
+	{
+		this.discardHeldSubcriptionInternal(listId, personId);
+	}
+	
+	/**
+	 * Convenient method discards the hold and returns the detached instance.
+	 * 
+	 * @return null if no hold was found
+	 */
+	protected SubscriptionHold discardHeldSubcriptionInternal(Long listId, Long personId) throws NotFoundException, PermissionException
+	{
+		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
+		
+		Person pers = this.dao.findPerson(personId);
+		
+		SubscriptionHold hold = pers.getHeldSubscriptions().remove(listId);
+		if (hold != null)
+			this.dao.remove(hold);
+		
+		return hold;
 	}
 }

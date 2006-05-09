@@ -5,6 +5,8 @@
 
 package org.subethamail.core.lists.i;
 
+import java.util.Date;
+
 import org.subethamail.core.acct.i.PersonData;
 
 /**
@@ -17,6 +19,7 @@ public class SubscriberData extends PersonData
 {	
 	String roleName;
 	String deliverTo;
+	Date dateSubscribed;
 
 	/**
 	 */
@@ -25,11 +28,13 @@ public class SubscriberData extends PersonData
 			String name,
 			String[] emailAddresses,
 			String roleName,
-			String deliverTo)
+			String deliverTo,
+			Date dateSubscribed)
 	{
 		super(id, name, emailAddresses);
 		this.roleName = roleName;
 		this.deliverTo = deliverTo;
+		this.dateSubscribed = dateSubscribed;
 	}
 	
 	/** */
@@ -41,5 +46,11 @@ public class SubscriberData extends PersonData
 	public String getDeliverTo()
 	{
 		return this.deliverTo;
+	}
+
+	/** */
+	public Date getDateSubscribed()
+	{
+		return this.dateSubscribed;
 	}
 }

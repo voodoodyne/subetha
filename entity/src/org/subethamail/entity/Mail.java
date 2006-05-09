@@ -5,14 +5,15 @@
 
 package org.subethamail.entity;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-
 import javax.ejb.EJBException;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -32,7 +33,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.QueryHint;
 import javax.persistence.Transient;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
@@ -228,9 +228,9 @@ public class Mail implements Serializable, Comparable
 		
 		try
 		{
-			ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
+			OutputStream tmpStream = new BufferedOutputStream(new ByteArrayOutputStream(8192));
 			msg.writeTo(tmpStream);
-			raw = tmpStream.toByteArray();
+			raw = ((ByteArrayOutputStream)tmpStream).toByteArray();
 		}
 		catch (IOException ex) { throw new EJBException(ex); }
 		

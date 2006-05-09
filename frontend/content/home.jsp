@@ -76,6 +76,7 @@
 					<td>List Email</td>
 					<td>Role</td>
 					<td>Deliver To</td>
+					<td>Unsubscribe</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -107,6 +108,12 @@
 						<input type="submit" value="Set" />
 					</form>
 					</td>
+					<td>
+					<form action="<c:url value="/unsubscribe_me.jsp"/>" method="post">
+						<input type="hidden" name="listId" value="<c:out value="${subs.id}"/>" />
+						<input type="submit" value="Unsubscribe" onclick="return confirm('Are you sure you want to unsubscribe from this list?');" />
+					</form>
+					</td>
 				</tr>
 				</c:forEach>
 			</tbody>
@@ -116,7 +123,7 @@
 var st = new SortableTable(document.getElementById("emails-table"), ["None", "None"]);
 st.onsort = st.tableRowColors;
 
-var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String", "None"]);
+var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String", "None", "None"]);
 st1.onsort = st1.tableRowColors;
 </script>
 

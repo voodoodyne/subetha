@@ -77,14 +77,20 @@ public class DetacherBean implements Detacher
 			
 			this.detach((Part)content, ownerMail);
 		}
-		else if (part.getContentType().startsWith("text/"))
+		else if (part.getContentType().toLowerCase().startsWith("text/"))
 		{
+			if (log.isDebugEnabled())
+				log.debug("Leaving text alone");
+			
 			// Text parts can stay, but we don't want anyone faking references
 			part.removeHeader(HDR_ATTACHMENT_REF);
 		}
 		else
 		{
 			// We need to detach it
+			if (log.isDebugEnabled())
+				log.debug("Detaching an attachment of type " + part.getContentType());
+			
 			InputStream input = part.getDataHandler().getInputStream();
 			Blob blobby = new BlobImpl(input, input.available());
 			

@@ -94,6 +94,8 @@ public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
 			Set<Permission> perms = new HashSet<Permission>();
 			perms.add(Permission.POST);
 			perms.add(Permission.READ_ARCHIVES);
+			perms.add(Permission.VIEW_ADDRESSES);
+			perms.add(Permission.VIEW_SUBSCRIBERS);
 			Long roleId = listMgr.addRole(listId, "Subscriber", perms);
 			listMgr.setDefaultRole(listId, roleId);
 			

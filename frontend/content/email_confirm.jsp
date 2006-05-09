@@ -37,6 +37,16 @@
 					<input type="submit" value="Confirm"/>
 				</td>
 			</tr>
+			<tr>
+				<th></th>
+				<td>
+				<span style="font-size:smaller">
+					Note: If you did not receive a confirmation, please click your browsers back button and resubmit your email address.
+				</span>
+				</td>
+			
+			</tr>
+			
 		</table>
 	</form>
 </trim:plain>

@@ -34,7 +34,7 @@ class SocketHandler implements Runnable
 		session = new Session(serverContext, socket);
 		out = new PrintWriter(socket.getOutputStream());
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		log.info("Connected to client from " + socket.getInetAddress());
+		log.info("Connected to SMTP client from " + socket.getInetAddress());
 		new Thread(this).start();
 	}
 

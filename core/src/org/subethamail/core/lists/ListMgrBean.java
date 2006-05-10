@@ -465,4 +465,18 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		this.getListFor(listId, Permission.UNSUBSCRIBE_OTHERS);
 		this.admin.unsubscribe(listId, personId);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#setSubscriberRole(java.lang.Long, java.lang.Long, java.lang.Long)
+	 */
+	public void setSubscriberRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException
+	{
+		this.getListFor(listId, Permission.EDIT_ROLES);
+		Person p = this.dao.findPerson(personId);
+		Subscription sub =  p.getSubscription(listId);
+		sub.setRole(this.dao.findRole(roleId));
+		
+		
+	}
 }

@@ -184,4 +184,18 @@ public interface ListMgr
 	 * @throws PermissionException needs Permission.UNSUBSCRIBE_OTHERS
 	 */
 	public void unsubscribe(Long listId, Long personId) throws NotFoundException, PermissionException;
+
+	
+	/**
+	 * Sets the role for a person for a list.
+	 * 
+	 * 
+	 * @param listId the mailist list id
+	 * @param personId the person id	
+	 * @param roleId the role that person fulfills
+	 * 
+	 * @throws NotFoundException If the list, person or role is not found.
+	 * @throws PermissionException Requires Permission.EDIT_ROLES
+	 */
+	public void setSubscriberRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException;
 }

@@ -6,6 +6,10 @@
 
 <t:action var="model" type="org.subethamail.web.action.GetSubscribers" />
 
+<t:action var="listRoles" type="org.subethamail.web.action.GetRoles">
+	<t:param name="listId" value="${param.listId}"/>
+</t:action>
+
 <trim:list title="Subscribers" listId="${param.listId}">
 
 	<c:choose>
@@ -61,16 +65,24 @@
 						<c:if test="${perms.UNSUBSCRIBE_OTHERS || perms.EDIT_ROLES}">
 							<td>
 								<c:if test="${perms.UNSUBSCRIBE_OTHERS}">
-									<form action="person_unsubscribe.jsp" method="post" style="display:inline">
-										<input type="hidden" name="subId" value="${p.subId}" />
+									<form action="<c:url value="/person_unsubscribe.jsp"/>" method="post" style="display:inline">
+										<input type="hidden" name="subId" value="${p.id}" />
+										<input type="hidden" name="listId" value="${param.listId}" />
 										<input type="submit" value="Unsubscribe" />
 									</form>
 								</c:if>
 								<c:if test="${perms.EDIT_ROLES}">
-									<form action="person_set_role.jsp" method="post" style="display:inline">
-										<input type="hidden" name="subId" value="${p.subId}" />
-										Put Role List Here
-										<input type="submit" value="Set" />
+									<form action="<c:url value="/person_set_role.jsp"/>" method="post" style="display:inline">
+										<input type="hidden" name="subId" value="${p.id}" />
+	 									<input type="hidden" name="listId" value="${param.listId}" />
+										<select name="roleId">
+											<c:forEach var="role" items="${listRoles.roles}" varStatus="loop">
+												<c:if test="${role.name != sub.roleName}">
+													<option value="${role.id}"><c:out value="${role.name}"/></option>
+												</c:if>
+											</c:forEach>
+										</select>
+										<input type="submit" value="Change" />
 									</form>
 								</c:if>
 							</td>

@@ -36,6 +36,8 @@ public class GetListSettings extends AuthAction
 		model.listId = data.getId();
 		model.name = data.getName();
 		model.description = data.getDescription();
+		model.url = data.getUrl();
+		model.email = data.getEmail();
 		model.holdSubs = data.isSubscriptionHeld();
 		
 		this.getCtx().setModel(model);

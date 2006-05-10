@@ -6,6 +6,7 @@
 package org.subethamail.core.post;
 
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
@@ -18,6 +19,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
@@ -66,7 +68,7 @@ public class PostOfficeBean implements PostOffice
 			log.fatal("Error merging " + kind.getTemplate(), ex);
 			throw new EJBException(ex);
 		}
-		
+
 		String mailSubject = (String)vctx.get("subject");
 		String mailBody = writer.toString();
 		
@@ -89,11 +91,22 @@ public class PostOfficeBean implements PostOffice
 				throw new AddressException(ex.toString());
 			}
 	
+			System.out.println("SUBJECT: " + mailSubject);
 			Message message = new MimeMessage(this.mailSession);
 			message.setRecipient(Message.RecipientType.TO, toAddress);
 			message.setFrom(fromAddress);
 			message.setReplyTo(new InternetAddress[0]);	// reply to nobody
-			message.setSubject(mailSubject);
+			try
+			{
+				// FIXME: figure out why javamail sucks so badly. setSubject
+				// is supposed to do this for us, but it isn't so we are doing
+				// it ourselves.
+				message.setSubject(MimeUtility.encodeText(mailSubject, "UTF-8", "B"));
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				// TODO Auto-generated catch block
+			}
 			message.setText(mailBody);
 	
 			Transport.send(message);

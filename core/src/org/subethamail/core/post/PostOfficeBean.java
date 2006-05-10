@@ -91,7 +91,6 @@ public class PostOfficeBean implements PostOffice
 				throw new AddressException(ex.toString());
 			}
 	
-			System.out.println("SUBJECT: " + mailSubject);
 			Message message = new MimeMessage(this.mailSession);
 			message.setRecipient(Message.RecipientType.TO, toAddress);
 			message.setFrom(fromAddress);

@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<title>SubEtha i18n Configuration</title>
+		<style type="text/css">
+			/* <![CDATA[ */ 
+			@import "http://www.tigris.org/branding/css/tigris.css"; 
+			@import "http://www.tigris.org/branding/css/inst.css"; 
+			/*  ]]> */
+		</style>
+		<link rel="stylesheet" type="text/css" href="http://www.tigris.org/branding/css/print.css" media="print" />
+		<script src="http://www.tigris.org/branding/scripts/tigris.js" type="text/javascript">
+		</script>
+	</head>
+
+	<body>
+		<h2>SubEtha i18n Configuration</h2>
+		
+		<p>
+		For now, this documentation implies MySQL as the database. These steps should be
+		done <strong>before</strong> creating the Subetha database. If these steps are followed
+		properly, then non-ascii characters sent in emails as well as saved via the web interface
+		should display properly in the web interface.
+		</p>
+
+		<ul>
+			<li>
+			Configure MySQL's default-character-set=utf8. While you are in there, you
+			should also set the storage engine to be innodb (assuming you have the MySQL
+			distribution that includes it... mysql-max). You should do this <strong>before</strong>
+			starting Subetha which by default has Hibernate create the Subetha database. This
+			ensures all of the tables are defined as utf8. InnoDB tends to be a better database
+			engine than the [sometimes] default MyISM engine.
+<pre>
+[mysqld]
+default-storage-engine=innodb
+default-character-set=utf8
+</pre>
+			</li>
+			<li>
+			Setup the subetha-ds.xml file's JDBC connection-url to include the right character encoding (utf8).
+			Note that you need to use a &amp;amp; between the paramters as defined below:
+			
+<pre>
+&lt;connection-url&gt;jdbc:mysql://localhost:3306/subetha?useUnicode=true&amp;amp;characterEncoding=utf8&lt;/connection-url&gt;
+</pre>
+			</li>
+			<li>
+			You must startup JBoss with the <strong>file.encoding</strong> system property set to 'utf8'. To do this, either set the
+			JAVA_OPTS environment variable (<strong>-Dfile.encoding="utf8"</strong>), edit the ${jboss.home}/bin/run.conf file or
+			the ${jboss.home}/bin/run.sh[bat] file and specify the -D line there.
+			</li>
+		</ul>
+	</body>
+</html>

@@ -83,8 +83,8 @@ public class BaseCommand implements Command
 	protected String extractEmailAddress(String args, final int subcommandOffset)
 	{
 		String address = args.substring(subcommandOffset).trim();
-		if (address.indexOf("<") == 0)
-			address = address.substring(1, address.length() - 1);
+		if (address.indexOf('<') == 0)
+			address = address.substring(1, address.indexOf('>'));
 		return address;
 	}
 }

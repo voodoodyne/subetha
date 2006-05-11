@@ -95,17 +95,7 @@ public class PostOfficeBean implements PostOffice
 			message.setRecipient(Message.RecipientType.TO, toAddress);
 			message.setFrom(fromAddress);
 			message.setReplyTo(new InternetAddress[0]);	// reply to nobody
-			try
-			{
-				// FIXME: figure out why javamail sucks so badly. setSubject
-				// is supposed to do this for us, but it isn't so we are doing
-				// it ourselves.
-				message.setSubject(MimeUtility.encodeText(mailSubject, "UTF-8", "B"));
-			}
-			catch (UnsupportedEncodingException e)
-			{
-				// TODO Auto-generated catch block
-			}
+			message.setSubject(mailSubject);
 			message.setText(mailBody);
 	
 			Transport.send(message);

@@ -13,42 +13,75 @@
 	</head>
 
 	<body>
-		<h2>SubEtha i18n Configuration</h2>
+		<h2>Avoiding Vogon Poetry</h2>
 		
 		<p>
-		For now, this documentation implies MySQL as the database. These steps should be
-		done <strong>before</strong> creating the Subetha database. If these steps are followed
-		properly, then non-ascii characters sent in emails as well as saved via the web interface
-		should display properly in the web interface.
+			Generally speaking, SubEtha tries to modify messages as little as possible
+			as they are passed through the system.  Hopefully this means the receiver
+			will see the message in the same encoding and character set that it was
+			sent with.  However, there are a few cases where this might not be the case:
 		</p>
-
+		
 		<ul>
+			<li>The SubEtha web interface always uses UTF-8.  All contents of
+				Mail messages will be converted to this encoding before being
+				rendered as HTML.</li>
+			<li>SubEtha allows list administrators to use plugin modules called
+				Mail Filters to arbitrarily manipulate the message stream.  When
+				a mail filter adds text or replaces text in a header, it (almost)
+				always uses the Java platform default encoding.  For example, a
+				SubjectFilter may receive a message with the subject header
+				encoded Shift-JIS, prepend "[ListName] ", and save the new header
+				encoded with UTF-8.</li>
+		</ul>
+		
+		<p>
+			If you're running all your lists in your native language, you can
+			ignore any of these settings and everything will probably work
+			fine.  However, we recommend the following, especially if you
+			plan to host lists in multiple languages:
+		</p>
+		
+		<ol>
 			<li>
-			Configure MySQL's default-character-set=utf8. While you are in there, you
-			should also set the storage engine to be innodb (assuming you have the MySQL
-			distribution that includes it... mysql-max). You should do this <strong>before</strong>
-			starting Subetha which by default has Hibernate create the Subetha database. This
-			ensures all of the tables are defined as utf8. InnoDB tends to be a better database
-			engine than the [sometimes] default MyISM engine.
-<pre>
-[mysqld]
-default-storage-engine=innodb
+				<h3>Set the JVM platform default character encoding to UTF-8</h3>
+				<p>
+					This will cause any text that SubEtha creates or modifies
+					to be encoded in the most portable form possible.
+				</p>
+				<p>
+					HOW:  In the jboss start script (look in ${jboss.dir}/bin/run.conf
+					or run.sh or run.bat), set <code>JAVA_OPTS=-Dfile.encoding=UTF-8</code>.
+				</p>
+			</li>
+			<li>
+				<h3>Make sure your database tables are UTF-8</h3>
+				<p>
+					If you want to use UTF-8, you need to store it that way.
+					Fortunately most modern databases use UTF-8 by default.
+				</p>
+				<p>
+					HOW:  This is, unfortunately, very specific to the database
+					vendor.  For MySQL, you want to include the following in your
+					my.cnf config file:
+<pre>[mysqld]
 default-character-set=utf8
 </pre>
+					Note that you must set this <strong>before</strong> you run
+					SubEtha for the first time.  SubEtha creates the database
+					schema for you, and will happily create them with the wrong
+					charset.  If you do this wrong, either manually change the
+					charset for each table or drop the database and start again.
+				</p>
 			</li>
 			<li>
-			Setup the subetha-ds.xml file's JDBC connection-url to include the right character encoding (utf8).
-			Note that you need to use a &amp;amp; between the paramters as defined below:
-			
-<pre>
-&lt;connection-url&gt;jdbc:mysql://localhost:3306/subetha?useUnicode=true&amp;amp;characterEncoding=utf8&lt;/connection-url&gt;
-</pre>
+				<h3>Use substitution filters sparingly</h3>
+				<p>
+					The more you manipulate text, the more you risk replacing
+					the original encoding of a message.  In particular, avoid
+					the Subject filter.
+				</p>
 			</li>
-			<li>
-			You must startup JBoss with the <strong>file.encoding</strong> system property set to 'UTF-8'. To do this, either set the
-			JAVA_OPTS environment variable (<strong>-Dfile.encoding="UTF-8"</strong>), edit the ${jboss.home}/bin/run.conf file or
-			the ${jboss.home}/bin/run.sh[bat] file and specify the -D line there.
-			</li>
-		</ul>
+		</ol>
 	</body>
 </html>

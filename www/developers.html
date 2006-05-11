@@ -28,9 +28,13 @@
 				a file called user.properties and edit ${jboss.dir}.
 			</li>
 			<li>
-				Edit ${jboss.dir}/server/default/deploy/mail-service.xml and make
-				sure the mail.smtp.host property value is set to your outgoing mail
-				server.  The other config parameters are irrelevant.
+				Edit ${jboss.dir}/server/default/deploy/mail-service.xml.  Set the
+				following parameters:
+				<ul>
+					<li>mail.smtp.host - the name of your outgoing smtp mail server</li>
+					<li>mail.smtp.allow8bitmime - optional, makes javamail more efficient</li>
+				</ul>
+				
 				If you wish to run unit tests, you must have these two values:
 				<ul>
 					<li>mail.smtp.host set to localhost</li>

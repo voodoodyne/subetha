@@ -95,7 +95,7 @@
 							<c:if test="${(empty model.blueprint && loop.first) || model.blueprint == blueprint.id}">checked="checked"</c:if>
 						/>
 					</th>
-					<th><c:out value="${blueprint.name}" /></th>
+					<th nowrap="nowrap"><c:out value="${blueprint.name}" /></th>
 					<td><c:out value="${blueprint.description}" /></td>
 				</tr>
 			</c:forEach>

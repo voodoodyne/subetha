@@ -70,8 +70,8 @@
 		   	return false;
 		}
 		if (document.getElementById) {
-			if {
-				var loginAnchor = document.getElementById("loginAnchor");
+			var loginAnchor = document.getElementById("loginAnchor");
+			if (loginAnchor) {
 				loginAnchor.focus();
 			}
 		}

@@ -70,7 +70,10 @@
 		   	return false;
 		}
 		if (document.getElementById) {
-			document.getElementById("loginAnchor").focus();
+			if {
+				var loginAnchor = document.getElementById("loginAnchor");
+				loginAnchor.focus();
+			}
 		}
 	-->
 	</script>

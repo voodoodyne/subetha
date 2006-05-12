@@ -5,11 +5,13 @@
 
 package org.subethamail.plugin.filter;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeUtility;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
@@ -40,6 +42,7 @@ public class ListHeaderFilter extends GenericFilter implements Lifecycle
 
 	public enum ListHeader
 	{
+		LIST_ID ("List-Id"),
 		LIST_HELP ("List-Help"),
 		LIST_UNSUBSCRIBE ("List-Unsubscribe"),
 		LIST_SUBSCRIBE ("List-Subscribe"),
@@ -105,8 +108,15 @@ public class ListHeaderFilter extends GenericFilter implements Lifecycle
 		{
 			msg.removeHeader(listHeader.getHeader());
 		}
-		
 		ListData listData = ctx.getList();
+
+		try
+		{
+			msg.setHeader("List-Id", MimeUtility.encodeText(listData.getName()) + " <" + listData.getEmail() + ">");
+		}
+		catch (UnsupportedEncodingException e)
+		{
+		}
 		msg.setHeader("List-Help", "<" + listData.getUrl() + ">");
 		msg.setHeader("List-Unsubscribe", "<" + listData.getUrl() + ">");
 		msg.setHeader("List-Subscribe", "<" + listData.getUrl() + ">");

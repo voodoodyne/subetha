@@ -5,7 +5,6 @@
 
 package org.subethamail.core.filter;
 
-import java.io.BufferedWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
@@ -98,7 +97,7 @@ class FilterContextImpl implements FilterContext
 	    vctx.put("mail", this.msg);
 	    vctx.put("list", this.getList());
 
-	    Writer writer = new BufferedWriter(new StringWriter(1024));
+	    Writer writer = new StringWriter(1024);
 		try
 		{
 			Velocity.evaluate(vctx, writer, "subetha", template);
@@ -107,7 +106,6 @@ class FilterContextImpl implements FilterContext
 		{
 			// TODO: how to handle this?
 		}
-
 		return writer.toString();
 	}
 }

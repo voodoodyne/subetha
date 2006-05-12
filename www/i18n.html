@@ -71,7 +71,8 @@ default-character-set=utf8
 					SubEtha for the first time.  SubEtha creates the database
 					schema for you, and will happily create them with the wrong
 					charset.  If you do this wrong, either manually change the
-					charset for each table or drop the database and start again.
+					charset for each table (MySQL: alter table [tablename] character set=utf8)
+					or drop the database and start again (this will delete your data!).
 				</p>
 			</li>
 			<li>
@@ -79,7 +80,8 @@ default-character-set=utf8
 				<p>
 					The more you manipulate text, the more you risk replacing
 					the original encoding of a message.  In particular, avoid
-					the Subject filter.
+					the Subject filter on lists with multiple languages being
+					supported.
 				</p>
 			</li>
 		</ol>

@@ -6,7 +6,6 @@
 package org.subethamail.core.post;
 
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
@@ -19,7 +18,6 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeUtility;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;

@@ -8,6 +8,7 @@
 		<a href="<c:url value="/site_status.jsp"/>">&rsaquo; Site Status</a>
 		<a href="<c:url value="/list_create.jsp"/>">&rsaquo; Create List</a>
 		<a href="<c:url value="/lists.jsp"/>">&rsaquo; List Lists</a>
+		<a href="<c:url value="/site_administrators.jsp"/>">&rsaquo; Administrators</a>
 	</div> <!-- sideBox LHS -->
 	
 	<div id="bodyText">

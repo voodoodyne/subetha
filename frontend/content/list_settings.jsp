@@ -1,6 +1,7 @@
 <%@include file="/inc/top_standard.jspf" %>
 
 <t:action var="model" type="org.subethamail.web.action.GetListSettings" />
+<c:set var="me" value="${backend.accountMgr.self}"/>
 
 <trim:list title="Settings" listId="${param.listId}">
 
@@ -36,38 +37,42 @@
 					</c:if>
 				</td>
 			</tr>
-			<tr>
-				<th><label for="email">List Address</label></th>
-				<td
-					<c:if test="${!empty model.errors.email}">
-						class="error"
-					</c:if>
-				>
-					<input id="email" name="email" type="text" size="60" value="${model.email}" />
-					<div>Example:  announce@somedomain.com</div>
-					<div id="email-error" style="color: red"></div>
-
-					<c:if test="${!empty model.errors.email}">
-						<p class="error"><c:out value="${model.errors.email}"/></p>
-					</c:if>
-				</td>
-			</tr>
-			<tr>
-				<th><label for="url">List URL</label></th>
-				<td
-					<c:if test="${!empty model.errors.url}">
-						class="error"
-					</c:if>
-				>
-					<input id="url" name="url" type="text" size="60" value="${model.url}" />
-					<div>Example:  http://somedomain.com<strong>/se/list/</strong>announce</div>
-					<div>The URL <strong>must</strong> contain /se/list/ after the domain</div>
-
-					<c:if test="${!empty model.errors.url}">
-						<p class="error"><c:out value="${model.errors.url}"/></p>
-					</c:if>
-				</td>
-			</tr>
+			<c:choose>
+			<c:when test="${me.siteAdmin}">
+				<tr>
+					<th><label for="email">List Address</label></th>
+					<td
+						<c:if test="${!empty model.errors.email}">
+							class="error"
+						</c:if>
+					>
+						<input id="email" name="email" type="text" size="60" value="${model.email}" />
+						<div>Example:  announce@somedomain.com</div>
+						<div id="email-error" style="color: red"></div>
+	
+						<c:if test="${!empty model.errors.email}">
+							<p class="error"><c:out value="${model.errors.email}"/></p>
+						</c:if>
+					</td>
+				</tr>
+				<tr>
+					<th><label for="url">List URL</label></th>
+					<td
+						<c:if test="${!empty model.errors.url}">
+							class="error"
+						</c:if>
+					>
+						<input id="url" name="url" type="text" size="60" value="${model.url}" />
+						<div>Example:  http://somedomain.com<strong>/se/list/</strong>announce</div>
+						<div>The URL <strong>must</strong> contain /se/list/ after the domain</div>
+	
+						<c:if test="${!empty model.errors.url}">
+							<p class="error"><c:out value="${model.errors.url}"/></p>
+						</c:if>
+					</td>
+				</tr>
+			</c:when>
+			</c:choose>
 			<tr>
 				<th><label for="holdSubs">Hold Subscriptions</label></th>
 				<td>

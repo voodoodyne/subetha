@@ -7,18 +7,21 @@
 	<classpathentry kind="src" path="common/src"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="smtp/src"/>
+	<classpathentry kind="src" path="smtp/test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/javax.servlet.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/javax.servlet.jsp.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jboss-j2ee.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jbosssx.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/mail.jar"/>
 	<classpathentry sourcepath="/J2EESRC_HOME/activation/src/java" kind="var" path="JBOSS_HOME/server/default/lib/activation.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-annotations-ejb3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3x.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/lib/jboss-common.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/lib/commons-logging.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/ejb3-persistence.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate3.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>
 	<classpathentry kind="lib" path="rtest/lib/junit.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/jstl.jar"/>
@@ -26,9 +29,6 @@
 	<classpathentry kind="lib" path="core/lib/velocity-1.4.jar"/>
 	<classpathentry kind="lib" path="rtest/lib/dumbster1.6.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/tagonist.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/ejb3-persistence.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate3.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>
-	<classpathentry kind="src" path="smtp/test"/>
+	<classpathentry sourcepath="/JAVAMAIL_SRC" kind="var" path="JBOSS_HOME/server/default/lib/mail.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

@@ -47,7 +47,7 @@ public class SubscribeMass extends AuthAction
 		
 		try
 		{
-			InternetAddress[] addresses = InternetAddress.parse(model.emails, false);
+			InternetAddress[] addresses = InternetAddress.parse(model.emails);
 			
 			Backend.instance().getListMgr().massSubscribe(model.listId, model.invite, addresses);
 		}

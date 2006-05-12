@@ -26,10 +26,12 @@
 				>
 					<textarea id="emails" name="emails" rows="10" cols="50" style="width:95%"
 					><c:out value="${model.emails}"/></textarea>
-					<small>
-					Email addresses should be space or comma separated, and may contain
-					personal names.  I.e. "Joe User" &lt;juser@nowhere.com&gt;
-					</small>
+					<div>
+						<small>
+						Email addresses should be comma separated, and may contain
+						personal names.  I.e. "Joe User" &lt;juser@nowhere.com&gt;
+						</small>
+					</div>
 					<c:if test="${!empty model.errors.emails}">
 						<p class="error"><c:out value="${model.errors.emails}"/></p>
 					</c:if>

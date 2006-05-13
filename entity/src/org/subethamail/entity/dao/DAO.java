@@ -158,4 +158,9 @@ public interface DAO
 	 * @return the specified attachment.
 	 */
 	public Attachment findAttachment(Long attachmentId) throws NotFoundException;
+
+	/**
+	 * @return all Mail for the list which has a not null HoldType
+	 */
+	public List<Mail> findMailHeld(Long listId);
 }

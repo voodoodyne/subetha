@@ -7,17 +7,20 @@ package org.subethamail.core.lists;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -33,6 +36,7 @@ import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
 import org.subethamail.core.lists.i.ListRoles;
+import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.core.lists.i.PermissionException;
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
@@ -42,6 +46,7 @@ import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.FilterArgument;
+import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
@@ -386,17 +391,6 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#getHeldSubscriptions(java.lang.Long)
-	 */
-	public List<SubscriberData> getHeldSubscriptions(Long listId) throws NotFoundException, PermissionException
-	{
-		MailingList list = this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
-		
-		return Transmute.heldSubscriptions(list.getSubscriptionHolds());
-	}
-
-	/*
-	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#massSubscribe(java.lang.Long, boolean, javax.mail.internet.InternetAddress[])
 	 */
 	public void massSubscribe(Long listId, boolean invite, InternetAddress[] addresses) throws NotFoundException, PermissionException
@@ -414,6 +408,17 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			for (InternetAddress addy: addresses)
 				this.admin.subscribe(listId, addy, true);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getHeldSubscriptions(java.lang.Long)
+	 */
+	public List<SubscriberData> getHeldSubscriptions(Long listId) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
+		
+		return Transmute.heldSubscriptions(list.getSubscriptionHolds());
 	}
 
 	/*
@@ -478,5 +483,18 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		Person p = this.dao.findPerson(personId);
 		Subscription sub =  p.getSubscription(listId);
 		sub.setRole(this.dao.findRole(roleId));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getHeldMessages(java.lang.Long)
+	 */
+	public Collection<MailHold> getHeldMessages(Long listId) throws NotFoundException, PermissionException
+	{
+		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
+		
+		List<Mail> held = this.dao.findMailHeld(listId);
+		
+		return Transmute.heldMail(held);
 	}
 }

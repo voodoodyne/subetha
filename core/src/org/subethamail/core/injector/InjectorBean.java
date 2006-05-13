@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.common.Permission;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.LimitingInputStream;
 import org.subethamail.core.admin.i.Encryptor;
@@ -192,7 +193,7 @@ public class InjectorBean implements Injector, InjectorRemote
 			if (log.isDebugEnabled())
 				log.debug("Plugin holding message", ex);
 			
-			hold = HoldType.MODERATOR;
+			hold = HoldType.HARD;
 			holdMsg = ex.getMessage();
 		}
 		
@@ -207,17 +208,17 @@ public class InjectorBean implements Injector, InjectorRemote
 				if (log.isDebugEnabled())
 					log.debug("Message author is: " + author);
 				
-				if (!author.isSubscribed(toList))
-					hold = HoldType.SELF;
+				if (!toList.getPermissionsFor(author).contains(Permission.POST))
+					hold = HoldType.SOFT;
 			}
 			catch (NotFoundException ex)
 			{
-				hold = HoldType.SELF;
+				hold = HoldType.SOFT;
 			}
 		}
 		
 		if (log.isDebugEnabled())
-			log.debug("Moderate this message:  " + hold);
+			log.debug("Hold?  " + hold);
 
 		Mail mail = new Mail(fromAddy, msg, toList, hold);
 		this.dao.persist(mail);

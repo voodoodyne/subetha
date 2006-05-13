@@ -341,4 +341,20 @@ public class DAOBean implements DAO
 			return a;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findMailHeld(java.lang.Long)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Mail> findMailHeld(Long listId)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding held mail for list " + listId);
+		
+		Query q = this.em.createNamedQuery("HeldMail");
+		q.setParameter("listId", listId);
+		
+		return q.getResultList();
+	}
+
 }

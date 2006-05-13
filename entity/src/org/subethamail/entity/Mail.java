@@ -61,13 +61,21 @@ import org.subethamail.common.valid.Validator;
 		}
 	),
 	@NamedQuery(
-			name="MailByList", 
-			query="from Mail m where m.list.id = :listId order by m.dateCreated desc",
-			hints={
-				@QueryHint(name="org.hibernate.readOnly", value="true"),
-				@QueryHint(name="org.hibernate.cacheable", value="true")
-			}
-		),
+		name="MailByList", 
+		query="from Mail m where m.list.id = :listId order by m.dateCreated desc",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
+	),
+	@NamedQuery(
+		name="HeldMail", 
+		query="from Mail m where m.list.id = :listId and m.hold is not null order by m.dateCreated desc",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
+	),
 	@NamedQuery(
 		name="WantsReferenceToMessageId", 
 		query="select m from Mail as m join fetch m.wantedReference as ref where ref = :messageId and m.list.id = :listId",
@@ -92,8 +100,8 @@ public class Mail implements Serializable, Comparable
 	 */
 	public enum HoldType
 	{
-		SELF,		// Hold for self-approval
-		MODERATOR	// Hold for list moderator to approve
+		SOFT,	// Can be flushed if msg becomes associated with someone who has Permission.POST
+		HARD	// Must be manually approved no matter what
 	}
 	
 	/** */

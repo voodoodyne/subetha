@@ -22,6 +22,7 @@ import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.lists.i.EnabledFilterData;
 import org.subethamail.core.lists.i.FilterData;
 import org.subethamail.core.lists.i.ListData;
+import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
@@ -35,6 +36,7 @@ import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
+import org.subethamail.entity.Mail.HoldType;
 
 
 
@@ -328,6 +330,33 @@ public class Transmute
 				null,
 				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null,
 				raw.getDateCreated());
+	}
+
+	/**
+	 */
+	public static Collection<MailHold> heldMail(Collection<Mail> rawColl)
+	{
+		List<MailHold> result = new ArrayList<MailHold>(rawColl.size());
+		
+		for (Mail raw: rawColl)
+			result.add(heldMail(raw));
+		
+		return result;
+	}
+
+	/**
+	 */
+	public static MailHold heldMail(Mail raw)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+	
+		return new MailHold(
+				raw.getId(),
+				raw.getSubject(),
+				raw.getFrom(),
+				raw.getDateCreated(),
+				raw.getHold() == HoldType.HARD);
 	}
 
 }

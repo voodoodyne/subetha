@@ -6,6 +6,7 @@
 package org.subethamail.core.lists.i;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -150,13 +151,6 @@ public interface ListMgr
 	public void disableFilter(Long listId, String className) throws NotFoundException, PermissionException;
 	
 	/**
-	 * @return all the held subscriptions on the list.  Note the roleName is always null.
-	 * 
-	 * Requires Permission.APPROVE_SUBSCRIPTIONS
-	 */
-	public List<SubscriberData> getHeldSubscriptions(Long listId) throws NotFoundException, PermissionException;
-
-	/**
 	 * Subscribes a mass of users to the list
 	 * 
 	 * @param invite will send invites rather than just subscribing
@@ -165,15 +159,33 @@ public interface ListMgr
 	public void massSubscribe(Long listId, boolean invite, InternetAddress[] addresses) throws NotFoundException, PermissionException;
 
 	/**
+	 * @return all the held subscriptions on the list.  Note the roleName is always null.
+	 * 
+	 * Requires Permission.APPROVE_SUBSCRIPTIONS
+	 */
+	public List<SubscriberData> getHeldSubscriptions(Long listId) throws NotFoundException, PermissionException;
+
+	/**
 	 * Approves a subscription hold.  User is notified.
+	 * 
+	 * Requires Permission.APPROVE_SUBSCRIPTIONS
 	 */
 	public void approveHeldSubscription(Long listId, Long personId) throws NotFoundException, PermissionException;
 
 	/**
 	 * Discards a subscription hold.  User is not notified.
+	 * 
+	 * Requires Permission.APPROVE_SUBSCRIPTIONS
 	 */
 	public void discardHeldSubscription(Long listId, Long personId) throws NotFoundException, PermissionException;
 
+	/**
+	 * Gets all the held messages for a mailing list.
+	 * 
+	 * Requires Permission.APPROVE_MESSAGES
+	 */
+	public Collection<MailHold> getHeldMessages(Long listId) throws NotFoundException, PermissionException;
+	
 	/**
 	 * UnSubscribes a person from a list.
 	 * 
@@ -198,4 +210,5 @@ public interface ListMgr
 	 * @throws PermissionException Requires Permission.EDIT_ROLES
 	 */
 	public void setSubscriberRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException;
+
 }

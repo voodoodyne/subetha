@@ -37,7 +37,7 @@
 							<c:url var="msgUrl" value="/archive_msg.jsp">
 								<c:param name="msgId" value="${msg.id}"/>
 							</c:url>
-							<a href="${msgUrl}">
+							<a href="${msgUrl}" target="held">
 								<c:if test="${empty msg.subject}">(no subject)</c:if><c:out value="${msg.subject}"/>
 							</a>
 						</td>

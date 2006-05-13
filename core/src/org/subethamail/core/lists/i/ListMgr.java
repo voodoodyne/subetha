@@ -16,6 +16,7 @@ import javax.mail.internet.InternetAddress;
 
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
+import org.subethamail.common.PermissionException;
 
 /**
  * Tools for querying and modifying list configurations.  Most methods
@@ -185,6 +186,20 @@ public interface ListMgr
 	 * Requires Permission.APPROVE_MESSAGES
 	 */
 	public Collection<MailHold> getHeldMessages(Long listId) throws NotFoundException, PermissionException;
+	
+	/**
+	 * Approves a held message.
+	 * @return the id of the list to which the msg was sent.
+	 * Requires Permission.APPROVE_MESSAGES
+	 */
+	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Discards a held message.
+	 * @return the id of the list to which the msg was sent.
+	 * Requires Permission.APPROVE_MESSAGES
+	 */
+	public Long discardHeldMessage(Long msgId) throws NotFoundException, PermissionException;
 	
 	/**
 	 * UnSubscribes a person from a list.

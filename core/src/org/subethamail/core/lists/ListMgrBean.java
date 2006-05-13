@@ -26,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
+import org.subethamail.common.PermissionException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.filter.FilterRunner;
@@ -37,11 +38,11 @@ import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
 import org.subethamail.core.lists.i.ListRoles;
 import org.subethamail.core.lists.i.MailHold;
-import org.subethamail.core.lists.i.PermissionException;
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
+import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EnabledFilter;
@@ -71,6 +72,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	@EJB FilterRunner filterRunner;
 	@EJB Admin admin;
 	@EJB AccountMgr accountMgr;
+	@EJB Queuer queuer;
 
 	/*
 	 * (non-Javadoc)
@@ -496,5 +498,33 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		List<Mail> held = this.dao.findMailHeld(listId);
 		
 		return Transmute.heldMail(held);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldMessage(java.lang.Long)
+	 */
+	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException
+	{
+		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
+		
+		mail.approve();
+		
+		this.queuer.queueForDelivery(mail.getId());
+		
+		return mail.getList().getId();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#discardHeldMessage(java.lang.Long)
+	 */
+	public Long discardHeldMessage(Long msgId) throws NotFoundException, PermissionException
+	{
+		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
+		
+		this.dao.remove(mail);
+		
+		return mail.getList().getId();
 	}
 }

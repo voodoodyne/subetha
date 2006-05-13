@@ -3,11 +3,10 @@
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/ejb/NameAlreadyTakenException.java,v $
  */
 
-package org.subethamail.core.lists.i;
+package org.subethamail.common;
 
 import javax.ejb.ApplicationException;
 
-import org.subethamail.common.Permission;
 
 /**
  * Thrown when a permission was needed but not available.

@@ -331,7 +331,7 @@ public class Mail implements Serializable, Comparable
 	/**
 	 * Releases a moderation hold
 	 */
-	public void release()
+	public void approve()
 	{
 		this.hold = null;
 	}

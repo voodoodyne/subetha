@@ -37,6 +37,7 @@ import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.validator.Email;
 import org.subethamail.common.Permission;
+import org.subethamail.common.PermissionException;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -359,6 +360,16 @@ public class MailingList implements Serializable, Comparable
 			return this.anonymousRole.getPermissions();
 		else
 			return pers.getPermissionsIn(this);
+	}
+	
+	/**
+	 * @param pers can be null to indicate anonymous person.  Site admins have all permissions.
+	 * @throws PermissionException if person doesn't have the permission 
+	 */
+	public void checkPermission(Person pers, Permission check) throws PermissionException
+	{
+		if (! this.getPermissionsFor(pers).contains(check))
+			throw new PermissionException(check);
 	}
 	
 	/**

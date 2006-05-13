@@ -15,7 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
-import org.subethamail.core.lists.i.PermissionException;
+import org.subethamail.common.PermissionException;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
@@ -114,8 +114,7 @@ public class PersonalBean
 	{
 		MailingList list = this.dao.findMailingList(listId);
 	
-		if (! list.getPermissionsFor(me).contains(check))
-			throw new PermissionException(check);
+		list.checkPermission(me, check);
 		
 		return list;
 	}
@@ -137,8 +136,7 @@ public class PersonalBean
 	{
 		Mail mail = this.dao.findMail(mailId);
 	
-		if (! mail.getList().getPermissionsFor(me).contains(check))
-			throw new PermissionException(check);
+		mail.getList().checkPermission(me, check);
 		
 		return mail;
 	}
@@ -150,8 +148,7 @@ public class PersonalBean
 	{
 		Role role = this.dao.findRole(roleId);
 		
-		if (! role.getList().getPermissionsFor(this.getMe()).contains(Permission.EDIT_ROLES))
-			throw new PermissionException(Permission.EDIT_ROLES);
+		role.getList().checkPermission(this.getMe(), Permission.EDIT_ROLES);
 		
 		return role;
 	}

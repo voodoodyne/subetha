@@ -35,5 +35,5 @@ public interface ListWizard
 	 * 
 	 * @param blueprint is the id of a blueprint object from getBlueprints().
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws CreateMailingListException;
+	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException;
 }

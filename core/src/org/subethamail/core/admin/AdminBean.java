@@ -8,10 +8,12 @@ package org.subethamail.core.admin;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
+
 import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -21,10 +23,13 @@ import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
-import org.subethamail.core.admin.i.CreateMailingListException;
+import org.subethamail.core.admin.i.DuplicateListDataException;
+import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.post.PostOffice;
+import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.Transmute;
+import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
@@ -80,10 +85,16 @@ public class AdminBean implements Admin, AdminRemote
 	/**
 	 * @see Admin#createMailingList(InternetAddress, URL, String, InternetAddress[])
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws CreateMailingListException
+	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException
 	{
 		// TODO:  consider whether or not we should enforce any formatting of
 		// the url here.  Seems like that's a job for the web front end?
+		
+		boolean ownerAddy = OwnerAddress.getList(address.getAddress()) != null;
+		boolean verpAddy = VERPAddress.getVERPBounce(address) != null;
+		
+		if (ownerAddy || verpAddy)
+			throw new InvalidListDataException("Address cannot be used", ownerAddy, verpAddy);
 		
 		// Make sure address and url are not duplicates
 		boolean dupAddress = false;
@@ -104,7 +115,7 @@ public class AdminBean implements Admin, AdminRemote
 		catch (NotFoundException ex) {}
 		
 		if (dupAddress || dupUrl)
-			throw new CreateMailingListException("Mailing list already exists", dupAddress, dupUrl);
+			throw new DuplicateListDataException("Mailing list already exists", dupAddress, dupUrl);
 		
 		// Then create the mailing list and attach the owners.
 		MailingList list = new MailingList(address.getAddress(), address.getPersonal(), url.toString(), description);

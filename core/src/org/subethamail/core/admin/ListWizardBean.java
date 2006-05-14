@@ -20,7 +20,8 @@ import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.BlueprintData;
-import org.subethamail.core.admin.i.CreateMailingListException;
+import org.subethamail.core.admin.i.DuplicateListDataException;
+import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.core.admin.i.ListWizardRemote;
 import org.subethamail.core.plugin.i.Blueprint;
@@ -81,7 +82,7 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 	/**
 	 * @see ListWizard#createMailingList(InternetAddress, URL, String, InternetAddress[], String)
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws CreateMailingListException
+	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
 		Blueprint blue = this.blueprints.get(blueprintId);
 

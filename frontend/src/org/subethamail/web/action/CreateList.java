@@ -15,7 +15,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
 import org.subethamail.common.valid.Validator;
-import org.subethamail.core.admin.i.CreateMailingListException;
+import org.subethamail.core.admin.i.DuplicateListDataException;
+import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
@@ -29,6 +30,7 @@ import org.tagonist.propertize.Property;
 public class CreateList extends AuthRequired 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(CreateList.class);
 	
 	/** */
@@ -118,7 +120,15 @@ public class CreateList extends AuthRequired
 			{
 				model.id = Backend.instance().getListWizard().createMailingList(listAddress, url, model.description, owners, model.blueprint);
 			}
-			catch (CreateMailingListException ex)
+			catch (InvalidListDataException ex)
+			{
+				if (ex.isOwnerAddress())
+					model.setError("email", "Addresses cannot end with -owner");
+				
+				if (ex.isVerpAddress())
+					model.setError("email", "Conflicts with the VERP address format");
+			}
+			catch (DuplicateListDataException ex)
 			{
 				if (ex.isAddressTaken())
 					model.setError("email", "That address is already in use");

@@ -7,8 +7,10 @@ package org.subethamail.core.admin.i;
 
 import java.net.URL;
 import java.util.List;
+
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.SubscribeResult;
@@ -39,10 +41,10 @@ public interface Admin
 	 * @param url is a valid list URL, including the /list/ portion.
 	 * @param description is a long description of this list
 	 * @param initialOwners is a list of email addresses.
-	 * 
-	 * @throws CreateMailingListException if the address or url are already in use.
+	 * @throws DuplicateListDataException if the address or url are already in use.
+	 * @throws InvalidListDataException if some of the list data can't be used.
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws CreateMailingListException;
+	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException;
 	
 	/**
 	 * Finds a person's id if the user exists, or creates a user account and

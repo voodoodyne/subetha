@@ -9,7 +9,7 @@ package org.subethamail.core.admin.i;
  * Thrown when a mailing list could not be created.
  */
 @SuppressWarnings("serial")
-public class CreateMailingListException extends Exception
+public class DuplicateListDataException extends Exception
 {
 	/** */
 	boolean addressTaken;
@@ -17,7 +17,7 @@ public class CreateMailingListException extends Exception
 	
 	/**
 	 */
-	public CreateMailingListException(String msg, boolean duplicateAddress, boolean duplicateUrl)
+	public DuplicateListDataException(String msg, boolean duplicateAddress, boolean duplicateUrl)
 	{
 		super(msg);
 		
@@ -27,7 +27,7 @@ public class CreateMailingListException extends Exception
 	
 	/**
 	 */
-	public CreateMailingListException(Throwable cause, boolean duplicateAddress, boolean duplicateUrl)
+	public DuplicateListDataException(Throwable cause, boolean duplicateAddress, boolean duplicateUrl)
 	{
 		super(cause);
 		

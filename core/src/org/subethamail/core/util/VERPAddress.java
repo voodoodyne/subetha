@@ -72,6 +72,10 @@ public class VERPAddress
 		int leadIndex = whole.lastIndexOf(LEAD, suffixIndex);
 		if (leadIndex < 0)
 			return null;
+		
+		// Watch out for blah-verp-bounce@foo.bar
+		if (leadIndex + LEAD.length() >= suffixIndex)
+			return null;
 
 		String email = whole.substring(0, leadIndex) + '@' + whole.substring(suffixIndex+SUFFIX.length());
 		String token62 = whole.substring(leadIndex+LEAD.length(), suffixIndex);

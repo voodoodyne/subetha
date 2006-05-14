@@ -15,20 +15,3 @@ Your message "<insertsubject>" has been held because you do not have permission 
 Your message "<insertsubject>" has been held because you do not have permission to post to the list $list.name.
 #end
 
-Welcome to your new mailing list "$list.name".  The email address for this list is:
-
-	$list.email
-
-To administer this list, visit the main list URL and log in:
-
-	$list.url
-
-You are registered on this mailing list server with the following email addresss:
-
-#foreach($personalAddress in $addy.person.emailAddresses)
-	$personalAddress.id
-#end
-
-Your password is:
-
-	$addy.person.password

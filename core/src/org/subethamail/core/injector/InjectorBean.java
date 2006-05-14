@@ -288,7 +288,7 @@ public class InjectorBean implements Injector, InjectorRemote
 	{
 		for (Subscription sub: list.getSubscriptions())
 		{
-			if (sub.getRole().isOwner())
+			if (sub.getRole().isOwner() && sub.getDeliverTo() != null)
 			{
 				Address destination = new InternetAddress(sub.getDeliverTo().getId());
 				

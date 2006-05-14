@@ -1,4 +1,4 @@
-package org.subethamail.smtp;
+package org.subethamail.smtp.server;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -8,8 +8,6 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.smtp.i.MessageListener;
-import org.subethamail.smtp.server.CommandHandler;
-import org.subethamail.smtp.server.ConnectionHandler;
 
 /**
  * Main SMTPServer class
@@ -22,7 +20,8 @@ public class SMTPServer implements Runnable
 {
 	private static Log log = LogFactory.getLog(SMTPServer.class);
 
-	private String hostname;
+	private String hostName;
+	private InetAddress bindAddress;
 	private int port;
 	private Map<MessageListener, MessageListener> listeners;
 
@@ -32,10 +31,10 @@ public class SMTPServer implements Runnable
 	private boolean go = false;
 	private Thread thread;
 
-	public SMTPServer(String hostname, int port, Map<MessageListener, MessageListener> listeners) 
+	public SMTPServer(String hostname, InetAddress bindAddress, int port, Map<MessageListener, MessageListener> listeners) 
 		throws UnknownHostException
 	{
-		this.hostname = hostname;
+		this.hostName = hostname;
 		this.port = port;
 		this.listeners = listeners;
 
@@ -45,7 +44,7 @@ public class SMTPServer implements Runnable
 	public void start()
 	{
 		if (thread != null)
-			throw new IllegalStateException("SMTPServer already started.");
+			throw new IllegalStateException("SMTPServer already started");
 
 		thread = new Thread(this, SMTPServer.class.getName());
 		thread.start();
@@ -55,7 +54,10 @@ public class SMTPServer implements Runnable
 	{
 		try
 		{
-			serverSocket = new ServerSocket(this.port, 50, InetAddress.getByName(hostname));
+			if (this.bindAddress == null)
+				serverSocket = new ServerSocket(this.port, 50);
+			else
+				serverSocket = new ServerSocket(this.port, 50, this.bindAddress);
 		}
 		catch (Exception e)
 		{
@@ -114,9 +116,9 @@ public class SMTPServer implements Runnable
 		}
 	}
 	
-	public String getHostname()
+	public String getHostName()
 	{
-		return hostname;
+		return hostName;
 	}
 
 	public String getVersion()

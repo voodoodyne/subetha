@@ -37,7 +37,7 @@ public class EhloCommand extends BaseCommand
 		if (!session.hasSeenHelo())
 		{
 			session.setHasSeenHelo(true);
-			context.sendResponse("250-" + context.getServer().getHostname() + 
+			context.sendResponse("250-" + context.getServer().getHostName() + 
 					"\r\n" + "250 8BITMIME");
 		}
 		else

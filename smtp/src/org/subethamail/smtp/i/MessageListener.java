@@ -6,7 +6,6 @@ package org.subethamail.smtp.i;
 
 import java.io.IOException;
 import java.io.InputStream;
-import org.subethamail.smtp.service.TooMuchDataException;
 
 /**
  * Objects which want access to messages received with SMTP should implement

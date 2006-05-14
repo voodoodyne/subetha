@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.smtp.SMTPServer;
 
 /**
  * The thread that handles a connection
@@ -66,7 +65,7 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		
 		try
 		{
-			this.sendResponse("220 " + server.getHostname() + " ESMTP " + server.getName());
+			this.sendResponse("220 " + server.getHostName() + " ESMTP " + server.getName());
 
 			while (session.isActive())
 			{

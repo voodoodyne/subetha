@@ -29,41 +29,23 @@ public interface SMTPManagement
 	public void stop();
 
 	/**
-	 * Sets the port the SMTP service will listen on.
-	 * 
-	 * @param port
+	 * When the SMTP server starts, it will listen on this port.
+	 */
+	public int getPort();
+	
+	/**
+	 * This can only be set on a stopped service.
 	 */
 	public void setPort(int port);
 
-	public int getPort();
-
 	/**
-	 * Sets the hostname the SMTP service will report itself to be running on.
-	 * Also sets the default accept host.
-	 * 
-	 * @param hostname
+	 * The hostname the SMTP service reports.
 	 */
-	public void setHostname(String hostname);
-
-	public String getHostname();
-
+	public String getHostName();
+	
 	/**
-	 * Turns host resolution on or off. Turn off for better performance. Turn on
-	 * for better security.
-	 * 
-	 * @param state
+	 * Sets the hostname the SMTP service reports.  If null,
+	 * one is guessed at.
 	 */
-	public void setHostResolutionEnabled(boolean state);
-
-	public boolean getHostResolutionEnabled();
-
-	/**
-	 * Changes the behavior of RCPT TO: to filter or not filter based on a list
-	 * of known local domains.
-	 * 
-	 * @param state
-	 */
-	public void setRecipientDomainFilteringEnabled(boolean state);
-
-	public boolean getRecipientDomainFilteringEnabled();
+	public void setHostName(String hostname);
 }

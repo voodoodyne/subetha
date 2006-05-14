@@ -1,10 +1,10 @@
 package org.subethamail.smtp.command;
 
 import java.io.IOException;
-import org.subethamail.smtp.SMTPServer;
 import org.subethamail.smtp.server.BaseCommand;
 import org.subethamail.smtp.server.CommandException;
 import org.subethamail.smtp.server.ConnectionContext;
+import org.subethamail.smtp.server.SMTPServer;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
@@ -43,7 +43,7 @@ public class HelpCommand extends BaseCommand
 		return "214-This is the SubEthaMail SMTP Server version "
 				+ server.getVersion()
 				+ " running on "
-				+ server.getHostname()
+				+ server.getHostName()
 				+ "\r\n"
 				+ "214-Topics:\r\n"
 				+ getFormattedTopicList()

@@ -2,7 +2,6 @@ package org.subethamail.smtp.server;
 
 import java.io.IOException;
 import java.net.Socket;
-import org.subethamail.smtp.SMTPServer;
 
 /**
  * This context is used for managing information

@@ -6,181 +6,161 @@ package org.subethamail.smtp.service;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
-import org.subethamail.smtp.SMTPServer;
 import org.subethamail.smtp.i.MessageListener;
 import org.subethamail.smtp.i.MessageListenerRegistry;
+import org.subethamail.smtp.server.SMTPServer;
 
 /**
  * @author Ian McFarland
  * @author Jeff Schnitzer
  * @author Jon Stevens
  */
-@Service(name = "SMTPService", objectName = "subetha:service=SMTP2")
+@Service(name="SMTPService", objectName="subetha:service=SMTP")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
 public class SMTPService implements SMTPManagement, MessageListenerRegistry
 {
 	/** */
 	private static Log log = LogFactory.getLog(SMTPService.class);
+	
+	/** */
+	public static final int DEFAULT_PORT = 2500;
 
 	/**
 	 * There is no ConcurrentHashSet, so we make up our own by mapping the
 	 * object to itself.
 	 */
 	private Map<MessageListener, MessageListener> listeners = new ConcurrentHashMap<MessageListener, MessageListener>();
-	private int port;
-	private String hostname;
+	
+	private int port = DEFAULT_PORT;
+	private String hostName;
+	
 	private SMTPServer smtpServer;
 
-	private List<String> validRecipientHosts = new ArrayList<String>();
-	private boolean hostResolutionEnabled = true;
-	private boolean recipientDomainFilteringEnabled = false;
-
-	/**
-	 * @see MessageListenerRegistry#register(MessageListener)
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.smtp.i.MessageListenerRegistry#register(org.subethamail.smtp.i.MessageListener)
 	 */
 	public void register(MessageListener listener)
 	{
 		if (log.isInfoEnabled())
 			log.info("Registering " + listener);
+		
 		this.listeners.put(listener, listener);
 	}
 
-	/**
-	 * @see MessageListenerRegistry#deregister(MessageListener)
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.smtp.i.MessageListenerRegistry#deregister(org.subethamail.smtp.i.MessageListener)
 	 */
 	public void deregister(MessageListener listener)
 	{
 		if (log.isInfoEnabled())
 			log.info("De-registering " + listener);
+		
 		this.listeners.remove(listener);
 	}
 
-	@PermitAll
-	public void setHostResolutionEnabled(boolean state)
-	{
-		hostResolutionEnabled = state;
-	}
-
-	@PermitAll
-	public boolean getHostResolutionEnabled()
-	{
-		return hostResolutionEnabled;
-	}
-
-	public List<String> getValidRecipientHosts()
-	{
-		return validRecipientHosts;
-	}
-
-	/**
-	 * @throws IOException 
-	 * @throws AppException 
-	 * @see SMTPManagement#start()
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.smtp.service.SMTPManagement#start()
 	 */
 	@PermitAll
 	public void start() throws IOException
 	{
-//	 FIXME: On my box, this was returning the public ip address so
-//	 hard code it to be 127.0.0.1 for now.
-//			try
-//			{
-//				hostname = InetAddress.getLocalHost().getCanonicalHostName();
-//			}
-//			catch (UnknownHostException e)
-//			{
-//				hostname = "localhost";
-//			}
-		hostname = "127.0.0.1";
-		port = 2500;
+		if (this.smtpServer != null)
+			throw new IllegalStateException("Already running");
+		
+		if (this.hostName == null)
+		{
+			try
+			{
+				this.hostName = InetAddress.getLocalHost().getCanonicalHostName();
+			}
+			catch (UnknownHostException e)
+			{
+				this.hostName = "localhost";
+			}
+		}
 
-		log.info("Starting SMTP service: " + hostname + ":" + port);
-		smtpServer = new SMTPServer(hostname, port, listeners);
+		InetAddress binding = null;
+		
+		String bindAddress = System.getProperty("jboss.bind.address");
+		if (bindAddress != null && !"0.0.0.0".equals(bindAddress))
+			binding = InetAddress.getByName(bindAddress);
+
+		log.info("Starting SMTP service: " + (binding==null ? "*" : binding) + ":" + port);
+		
+		smtpServer = new SMTPServer(hostName, binding, port, listeners);
 		smtpServer.start();
 	}
 
-	/**
-	 * @throws AppException 
-	 * @see SMTPManagement#stop()
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.smtp.service.SMTPManagement#stop()
 	 */
 	@PermitAll
 	public void stop()
 	{
 		log.info("Stopping SMTP service");
-		smtpServer.stop();
+		this.smtpServer.stop();
+		this.smtpServer = null;
 	}
 
-	/**
-	 * @see SMTPManagement#setPort
-	 * @param port
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.smtp.service.SMTPManagement#setPort(int)
 	 */
 	@PermitAll
 	public void setPort(int port)
 	{
+		if (this.smtpServer != null)
+			throw new IllegalStateException("Already running");
+		
 		this.port = port;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.smtp.service.SMTPManagement#getPort()
+	 */
 	@PermitAll
 	public int getPort()
 	{
 		return this.port;
 	}
-	
-	/**
-	 * @see SMTPManagement#setHostname
-	 * 
-	 * @param hostname
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.smtp.service.SMTPManagement#setHostName(java.lang.String)
 	 */
 	@PermitAll
-	public void setHostname(String hostname)
+	public void setHostName(String hostname)
 	{
-		this.hostname = hostname;
+		if (this.smtpServer != null)
+			throw new IllegalStateException("Already running");
+		
+		this.hostName = hostname;
 	}
 
-	/**
-	 * @see SMTPManagement#getHostname()
-	 * @return hostname
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.smtp.service.SMTPManagement#getHostName()
 	 */
 	@PermitAll
-	public String getHostname()
+	public String getHostName()
 	{
-		return hostname;
-	}
-
-	public String resolveHost(String hostname) throws IOException,
-			ServerRejectedException
-	{
-		if (hostResolutionEnabled)
-		{
-			return hostname.trim() + "/"
-					+ InetAddress.getByName(hostname).getHostAddress();
-		}
-		else
-		{
-			return hostname;
-		}
-	}
-
-	@PermitAll
-	public void setRecipientDomainFilteringEnabled(
-			boolean recipientDomainFilteringEnabled)
-	{
-		this.recipientDomainFilteringEnabled = recipientDomainFilteringEnabled;
-	}
-
-	@PermitAll
-	public boolean getRecipientDomainFilteringEnabled()
-	{
-		return recipientDomainFilteringEnabled;
+		return hostName;
 	}
 }

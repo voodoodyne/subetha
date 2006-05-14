@@ -1,10 +1,10 @@
 package org.subethamail.smtp.command;
 
 import java.io.IOException;
-import org.subethamail.smtp.SMTPServer;
 import org.subethamail.smtp.i.MessageListener;
 import org.subethamail.smtp.server.BaseCommand;
 import org.subethamail.smtp.server.ConnectionContext;
+import org.subethamail.smtp.server.SMTPServer;
 import org.subethamail.smtp.server.Session;
 
 /**

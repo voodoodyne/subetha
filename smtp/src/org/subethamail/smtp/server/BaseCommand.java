@@ -54,7 +54,8 @@ abstract public class BaseCommand implements Command
 	{
 		if (commandString == null)
 			return "";
-		return commandString.substring(4).trim().toUpperCase();
+		
+		return commandString.substring(4).trim();
 	}
 
 	public String getName()

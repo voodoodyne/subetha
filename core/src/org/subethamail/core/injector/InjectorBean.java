@@ -17,8 +17,10 @@ import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
+import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -37,6 +39,7 @@ import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.i.Queuer;
+import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
@@ -109,7 +112,14 @@ public class InjectorBean implements Injector, InjectorRemote
 		// Maybe it's a VERP bounce?
 		VERPAddress verp = VERPAddress.getVERPBounce(addy);
 		if (verp != null)
-			return true;
+			addy = new InternetAddress(verp.getEmail());	// check if this is for a list here
+		else
+		{
+			// Maybe it's an owner address?
+			String ownerList = OwnerAddress.getList(addy.getAddress());
+			if (ownerList != null)
+				addy = new InternetAddress(ownerList);
+		}
 		
 		try
 		{
@@ -152,6 +162,12 @@ public class InjectorBean implements Injector, InjectorRemote
 			return true;
 		}
 		
+		// Check for -owner mail
+		String listForOwner = OwnerAddress.getList(toAddress);
+		if (listForOwner != null)
+			toAddy = new InternetAddress(listForOwner);
+		
+		// Figure out which list this is for
 		MailingList toList;
 		try
 		{
@@ -169,6 +185,14 @@ public class InjectorBean implements Injector, InjectorRemote
 		// Parse up the message
 		mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
+		
+		// Now that we have the basic building blocks, see if we
+		// should be forwarding the mail to owners instead
+		if (listForOwner != null)
+		{
+			this.handleOwnerMail(toList, msg);
+			return true;
+		}
 		
 		// Make sure we have a unique message id
 		this.checkMessageId(toList, msg);
@@ -253,6 +277,32 @@ public class InjectorBean implements Injector, InjectorRemote
 		return true;
 	}
 	
+	/**
+	 * Forwards the message to all owners of the list.  The return
+	 * address will be VERPed.
+	 * 
+	 * @param list list whose owner(s) should receive the mail
+	 * @param msg is the message to forward
+	 */
+	private void handleOwnerMail(MailingList list, SubEthaMessage msg) throws MessagingException
+	{
+		for (Subscription sub: list.getSubscriptions())
+		{
+			if (sub.getRole().isOwner())
+			{
+				Address destination = new InternetAddress(sub.getDeliverTo().getId());
+				
+				// Set up the VERP bounce address
+				byte[] token = this.encryptor.encryptString(sub.getDeliverTo().getId());
+				msg.setEnvelopeFrom(VERPAddress.encodeVERP(list.getEmail(), token));
+				
+				Transport.send(msg, new Address[] { destination });
+				
+				sub.getDeliverTo().bounceDecay();
+			}
+		}
+	}
+
 	/**
 	 * Ensures that the message has a unique message id.
 	 */

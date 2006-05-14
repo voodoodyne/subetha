@@ -55,18 +55,25 @@ public class DataCommand extends BaseCommand
 			// 5 megs
 			DeferredFileOutputStream dfos = new DeferredFileOutputStream(1024*1024*5);
 
-			int value;
-			while ((value = dotInputStream.read()) >= 0)
+			try
 			{
-				dfos.write(value);
+				int value;
+				while ((value = dotInputStream.read()) >= 0)
+				{
+					dfos.write(value);
+				}
+	
+				for (Delivery delivery : session.getDeliveries())
+				{
+					delivery.getListener().deliver(session.getSender(), delivery.getRecipient(), dfos.getInputStream());
+				}
 			}
-
-			for (Delivery delivery : session.getDeliveries())
+			finally
 			{
-				delivery.getListener().deliver(session.getSender(), delivery.getRecipient(), dfos.getInputStream());
+				dfos.close();
 			}
 		}
 
-		context.sendResponse("200 Ok");
+		context.sendResponse("250 Ok");
 	}
 }

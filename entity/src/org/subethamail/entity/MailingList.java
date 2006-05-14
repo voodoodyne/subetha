@@ -387,6 +387,19 @@ public class MailingList implements Serializable, Comparable
 		return this.url.substring(0, pos + "/se".length()); 
 	}
 	
+	/**
+	 * @return the owner email address for this list
+	 */
+	public String getOwnerEmail()
+	{
+		int atIndex = this.email.indexOf('@');
+		
+		String box = this.email.substring(0, atIndex);
+		String remainder = this.email.substring(atIndex);
+		
+		return box + "-owner" + remainder;
+	}
+	
 	/** */
 	public String toString()
 	{

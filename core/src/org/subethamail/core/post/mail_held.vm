@@ -1,0 +1,34 @@
+## Context will contain:
+##   "addy" of type EmailAddress
+##   "list" of type MailingList
+##
+## Expects a String value "subject" to be set in the context
+##
+#set($subject = "Your mail has been held for moderation")
+#if($holdMsg)
+Your message "<insertsubject>" has been held for moderator approval.  The reason is:
+
+	$holdMsg
+#elseif($flushable)
+Your message "<insertsubject>" has been held because you do not have permission to post to the list $list.name.  You can automatically approve this message by subscribing to the list.
+#else
+Your message "<insertsubject>" has been held because you do not have permission to post to the list $list.name.
+#end
+
+Welcome to your new mailing list "$list.name".  The email address for this list is:
+
+	$list.email
+
+To administer this list, visit the main list URL and log in:
+
+	$list.url
+
+You are registered on this mailing list server with the following email addresss:
+
+#foreach($personalAddress in $addy.person.emailAddresses)
+	$personalAddress.id
+#end
+
+Your password is:
+
+	$addy.person.password

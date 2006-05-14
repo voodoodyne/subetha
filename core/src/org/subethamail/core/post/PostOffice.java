@@ -6,6 +6,7 @@
 package org.subethamail.core.post;
 
 import javax.ejb.Local;
+import javax.mail.internet.InternetAddress;
 
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
@@ -47,11 +48,10 @@ public interface PostOffice
 	/**
 	 * In the case of a forgotten password, this sends a piece of email to the
 	 * specified member with the password.
-	 * 
 	 * @param list is the context of the request, defined by which
 	 *  website we are visiting.
 	 */
-	public void sendPassword(MailingList list, EmailAddress addy);
+	public void sendPassword(EmailAddress addy, MailingList list);
 
 	/**
 	 * Sends a token to the address which will merge that address (and
@@ -60,11 +60,19 @@ public interface PostOffice
 	public void sendAddEmailToken(Person me, String email, String token);
 
 	/**
+	 * Notifies user that their subscription is held pending approval.
 	 */
 	public void sendYourSubscriptionHeldNotice(SubscriptionHold hold);
 
 	/**
+	 * Notifies the moderator that someone wants to subscribe and needs approval (or not).
 	 */
 	public void sendModeratorSubscriptionHeldNotice(Person person, SubscriptionHold hold);
+
+	/**
+	 * Sends mail to the address letting the person know that their message is
+	 * waiting for approval.
+	 */
+	public void sendPosterMailHoldNotice(String posterEmail, MailingList toList, String holdMsg);
 	
 }

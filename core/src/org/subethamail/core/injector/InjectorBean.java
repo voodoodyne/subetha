@@ -35,6 +35,7 @@ import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
@@ -89,6 +90,7 @@ public class InjectorBean implements Injector, InjectorRemote
 	@EJB FilterRunner filterRunner;
 	@EJB Encryptor encryptor;
 	@EJB Detacher detacher;
+	@EJB PostOffice postOffice;
 	
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
@@ -231,6 +233,16 @@ public class InjectorBean implements Injector, InjectorRemote
 		{
 			// Send instructions so that user can self-moderate
 			// Or send a message saying "you must wait for admin approval", use holdMsg if available
+			this.postOffice.sendPosterMailHoldNotice(fromAddy.getAddress(), toList, holdMsg);
+			
+			/*
+			for (Subscription sub: toList.getSubscriptions())
+			{
+				if (sub.getRole().getPermissions().contains(Permission.APPROVE_MESSAGES))
+					if (sub.getDeliverTo() != null)
+						this.postOffice.sendModeratorMessageHoldNotice(sub.getDeliverTo().getId(), toList, holdMsg);
+			}
+			*/
 		}
 		else
 		{

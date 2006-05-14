@@ -114,16 +114,15 @@ public class PostOfficeBean implements PostOffice
 	}
 	
 	/**
-	 * @see PostOffice#sendPassword(MailingList, EmailAddress)
+	 * @see PostOffice#sendPassword(EmailAddress, MailingList)
 	 */
-	public void sendPassword(MailingList list, EmailAddress addy)
+	public void sendPassword(EmailAddress addy, MailingList list)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Sending password for " + addy.getId());
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("addy", addy);
-		vctx.put("list", list);
 		
 		this.sendMail(MailType.FORGOT_PASSWORD, vctx, addy.getId());
 	}
@@ -215,5 +214,21 @@ public class PostOfficeBean implements PostOffice
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.post.PostOffice#sendPosterMailHoldNotice(javax.mail.internet.InternetAddress, org.subethamail.entity.MailingList, java.lang.String)
+	 */
+	public void sendPosterMailHoldNotice(String posterEmail, MailingList toList, String holdMsg)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Sending mail held notice to " + posterEmail);
+		
+		VelocityContext vctx = new VelocityContext();
+		vctx.put("list", toList);
+		vctx.put("holdMsg", holdMsg);
+		
+		this.sendMail(MailType.MAIL_HELD, vctx, posterEmail);
 	}
 }

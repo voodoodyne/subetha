@@ -8,12 +8,14 @@ package org.subethamail.core.acct;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -286,14 +288,15 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		this.admin.unsubscribe(listId, me.getId());
 	}
 
-	/**
-	 * @see Receptionist#forgotPassword(String)
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.acct.i.AccountMgr#forgotPassword(java.lang.String)
 	 */
+	@PermitAll
 	public void forgotPassword(String email) throws NotFoundException
 	{
 		EmailAddress addy = this.dao.findEmailAddress(email);
 		
-		// TODO
-		this.postOffice.sendPassword(null, null);
+		this.postOffice.sendPassword(addy, null);
 	}
 }

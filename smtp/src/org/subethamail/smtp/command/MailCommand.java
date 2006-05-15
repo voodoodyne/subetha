@@ -36,7 +36,7 @@ public class MailCommand extends BaseCommand
 						"501 Syntax: MAIL FROM: <address>  Error in parameters: \"" +
 						getArgPredicate(commandString) + "\"");
 			}
-			final String emailAddress = extractEmailAddress(args, 5);
+			String emailAddress = extractEmailAddress(args, 5);
 			if (isValidEmailAddress(emailAddress))
 			{
 				session.setSender(emailAddress);
@@ -44,7 +44,7 @@ public class MailCommand extends BaseCommand
 			}
 			else
 			{
-				context.sendResponse("553 <" + emailAddress + "> Domain name required.");
+				context.sendResponse("553 <" + emailAddress + "> Invalid email address.");
 			}
 		}
 	}

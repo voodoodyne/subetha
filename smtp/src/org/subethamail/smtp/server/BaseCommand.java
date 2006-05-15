@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;
@@ -13,9 +17,9 @@ import java.util.StringTokenizer;
  */
 abstract public class BaseCommand implements Command
 {
-	// TODO(imf): Extract commandRegistry into its own class. Inject it.
 	private String name;
 	private static Map<String, HelpMessage> helpMessageMap = new HashMap<String, HelpMessage>();
+	private static Log log = LogFactory.getLog(BaseCommand.class);
 
 	public BaseCommand(String name, String help)
 	{
@@ -65,8 +69,20 @@ abstract public class BaseCommand implements Command
 
 	protected boolean isValidEmailAddress(String address)
 	{
-		// TODO(imf): Make this more robust.
-		return address.indexOf("@") > 0;
+		boolean result = false;
+		try
+		{
+			InternetAddress[] ia = InternetAddress.parse(address, true);
+			if (ia.length == 0)
+				result = false;
+			else
+				result = true;
+		}
+		catch(AddressException ae)
+		{
+			result = false;
+		}
+		return result;
 	}
 
 	protected String[] getArgs(String commandString)
@@ -77,14 +93,16 @@ abstract public class BaseCommand implements Command
 		{
 			strings.add(stringTokenizer.nextToken());
 		}
+
 		return strings.toArray(new String[strings.size()]);
 	}
 
-	protected String extractEmailAddress(String args, final int subcommandOffset)
+	protected String extractEmailAddress(String args, int subcommandOffset)
 	{
 		String address = args.substring(subcommandOffset).trim();
 		if (address.indexOf('<') == 0)
 			address = address.substring(1, address.indexOf('>'));
+
 		return address;
 	}
 }

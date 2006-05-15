@@ -11,30 +11,10 @@
 	</c:otherwise>
 </c:choose>
 
-<trim:home title="My Profile">
+<trim:home title="Change Password">
 
-	<h1>My Profile</h1>
+	<h1>Change Password</h1>
 
-	<form action="<c:url value="/user_changename.jsp"/>" method="post">
-		<table>
-			<tr>
-				<td><strong>Name</strong></td>
-				<td
-					<c:if test="${!empty model.errors.name}">
-						class="error"
-					</c:if>			
-				>
-					<input type="text" name="name" value="<c:out value="${myName}"/>">
-					
-					<c:if test="${!empty model.errors.name}">
-						<p class="error"><c:out value="${model.errors.name}"/></p>
-					</c:if>
-				</td>
-				<td><input type="submit" value="Save" /></td>
-			</tr>
-		</table>
-	</form>
-	
 	<p>
 		To change your password, enter (and confirm) the new one below.<br />
 		For security reasons, your current password is not displayed.
@@ -55,7 +35,6 @@
 						<p class="error"><c:out value="${model.errors.password}"/></p>
 					</c:if>
 				</td>
-				<td></td>
 			</tr>
 			<tr>
 				<td><strong>Confirm</strong></td>

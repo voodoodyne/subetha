@@ -46,16 +46,6 @@
 		
 		<span class="headerTitle">SubEtha Mail</span>
 		
-		<c:if test="${auth.loggedIn}">
-			<div class="menuBar">
-				<a href="<c:url value="/home.jsp"/>" class="first">Home</a>
-				
-				<c:if test="${auth.siteAdmin}">
-					<a href="<c:url value="/site_status.jsp"/>">Site Administration</a>
-				</c:if>
-			</div> <!-- menuBar -->
-		</c:if>
-			
 	</div> <!-- header -->
 	
 	<jsp:doBody/>

@@ -11,9 +11,11 @@ import org.subethamail.smtp.command.EhloCommand;
 import org.subethamail.smtp.command.HelloCommand;
 import org.subethamail.smtp.command.HelpCommand;
 import org.subethamail.smtp.command.MailCommand;
+import org.subethamail.smtp.command.NoopCommand;
 import org.subethamail.smtp.command.QuitCommand;
 import org.subethamail.smtp.command.ReceiptCommand;
 import org.subethamail.smtp.command.ResetCommand;
+import org.subethamail.smtp.command.VerifyCommand;
 
 /**
  * This class manages execution of a SMTP command.
@@ -32,9 +34,11 @@ public class CommandHandler
 		addCommand(new HelloCommand());
 		addCommand(new HelpCommand());
 		addCommand(new MailCommand());
+		addCommand(new NoopCommand());
 		addCommand(new QuitCommand());
 		addCommand(new ReceiptCommand());
 		addCommand(new ResetCommand());
+		addCommand(new VerifyCommand());
 	}
 
 	public void addCommand(Command command)

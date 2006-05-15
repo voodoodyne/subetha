@@ -123,7 +123,7 @@ public class SMTPServer implements Runnable
 
 	public String getVersion()
 	{
-		return "1.0a1";
+		return "1.0";
 	}
 	
 	public String getName()

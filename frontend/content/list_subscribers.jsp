@@ -6,9 +6,11 @@
 
 <t:action var="model" type="org.subethamail.web.action.GetSubscribers" />
 
-<t:action var="listRoles" type="org.subethamail.web.action.GetRoles">
-	<t:param name="listId" value="${param.listId}"/>
-</t:action>
+<c:if test="${perms.EDIT_ROLES}">
+	<t:action var="listRoles" type="org.subethamail.web.action.GetRoles">
+		<t:param name="listId" value="${param.listId}"/>
+	</t:action>
+</c:if>
 
 <trim:list title="Subscribers" listId="${param.listId}">
 

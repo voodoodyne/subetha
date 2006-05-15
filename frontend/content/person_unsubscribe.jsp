@@ -2,4 +2,6 @@
 
 <t:action var="model" type="org.subethamail.web.action.ListRemoveSubscriber"/>
 
-<jsp:forward page="/list_subscribers.jsp" />
+<c:redirect url="/list_subscribers.jsp">
+	<c:param name="listId" value="${model.listId}"/>
+</c:redirect>

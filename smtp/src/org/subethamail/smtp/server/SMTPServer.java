@@ -29,12 +29,23 @@ public class SMTPServer implements Runnable
 	
 	private ServerSocket serverSocket;
 	private boolean go = false;
-	private Thread thread;
+	
+	private Thread serverThread;
+	private Thread watchdogThread;
+
+	private ThreadGroup connectionHanderGroup;
+	
+	/** 
+	 * set a hard limit on the maximum number of connections this server will accept 
+	 * once we reach this limit, the server will gracefully reject new connections.
+	 */
+	private static final int MAX_CONNECTIONS = 1000;
 
 	public SMTPServer(String hostname, InetAddress bindAddress, int port, Map<MessageListener, MessageListener> listeners) 
 		throws UnknownHostException
 	{
 		this.hostName = hostname;
+		this.bindAddress = bindAddress;
 		this.port = port;
 		this.listeners = listeners;
 
@@ -43,13 +54,33 @@ public class SMTPServer implements Runnable
 
 	public void start()
 	{
-		if (thread != null)
+		if (serverThread != null)
 			throw new IllegalStateException("SMTPServer already started");
 
-		thread = new Thread(this, SMTPServer.class.getName());
-		thread.start();
+		serverThread = new Thread(this, SMTPServer.class.getName());
+		serverThread.start();
+		
+		watchdogThread = new Watchdog(this);
+		watchdogThread.start();
 	}
 
+	public void stop()
+	{
+		go = false;
+		this.serverThread = null;
+		this.watchdogThread = null;
+
+		// force a socket close for good measure
+		try
+		{
+			if (serverSocket != null && serverSocket.isBound() && !serverSocket.isClosed())
+				serverSocket.close();
+		}
+		catch (IOException e)
+		{
+		}
+	}
+	
 	public void run()
 	{
 		try
@@ -58,6 +89,8 @@ public class SMTPServer implements Runnable
 				serverSocket = new ServerSocket(this.port, 50);
 			else
 				serverSocket = new ServerSocket(this.port, 50, this.bindAddress);
+			
+			connectionHanderGroup = new ThreadGroup(SMTPServer.class.getName() + " ConnectionHandler Group");
 		}
 		catch (Exception e)
 		{
@@ -101,21 +134,6 @@ public class SMTPServer implements Runnable
 		}
 	}
 
-	public void stop()
-	{
-		go = false;
-		this.thread = null;
-		// force a socket close for good measure
-		try
-		{
-			if (serverSocket != null && serverSocket.isBound() && !serverSocket.isClosed())
-				serverSocket.close();
-		}
-		catch (IOException e)
-		{
-		}
-	}
-	
 	public String getHostName()
 	{
 		return hostName;
@@ -128,16 +146,100 @@ public class SMTPServer implements Runnable
 	
 	public String getName()
 	{
-		return "SubethaMail Server";
+		return "SubEthaMail Server";
 	}
 
+	/**
+	 * The Listeners are what the SMTPServer delivers to.
+	 * 
+	 * @return A Map of MessageListener objects.
+	 */
 	public Map<MessageListener, MessageListener> getListeners()
 	{
 		return listeners;
 	}
 
+	/**
+	 * The CommandHandler manages handling the SMTP commands
+	 * such as QUIT, MAIL, RCPT, DATA, etc.
+	 * 
+	 * @return An instance of CommandHandler
+	 */
 	public CommandHandler getCommandHandler()
 	{
 		return this.commandHandler;
+	}
+
+	protected ThreadGroup getConnectionGroup()
+	{
+		return this.connectionHanderGroup;
+	}
+
+	public int getNumberOfConnections()
+	{
+		return this.connectionHanderGroup.activeCount();
+	}
+	
+	public boolean hasTooManyConnections()
+	{
+		return (getNumberOfConnections() >= MAX_CONNECTIONS);
+	}
+	
+	/**
+	 * A watchdog thread that makes sure that
+	 * connections don't go stale. It prevents
+	 * someone from opening up MAX_CONNECTIONS to 
+	 * the server and holding onto them for more than
+	 * 1 minute. Note: it is possible to still DoS the
+	 * server by going into data mode and just holding 
+	 * the connection there.
+	 */
+	private class Watchdog extends Thread
+	{
+		private SMTPServer server;
+		private Thread[] groupThreads = new Thread[MAX_CONNECTIONS];
+		boolean go = true;
+
+		public Watchdog(SMTPServer server)
+		{
+			super(Watchdog.class.getName());
+			this.server = server;
+		}
+
+		public void quit()
+		{
+			go = false;
+		}
+
+		public void run()
+		{
+			while(go)
+			{
+				ThreadGroup connectionGroup = this.server.getConnectionGroup();
+				connectionGroup.enumerate(this.groupThreads);
+
+				for (int i=0; i<connectionGroup.activeCount();i++)
+				{
+					ConnectionHandler aThread = ((ConnectionHandler)this.groupThreads[i]);
+					if (aThread != null)
+					{
+						long lastActiveTime = aThread.getLastActiveTime() + (1000 * 60 * 1);
+						if (lastActiveTime < System.currentTimeMillis())
+						{
+							try
+							{
+								if (!aThread.getSession().isDataMode())
+									aThread.timeout();
+							}
+							catch (IOException ioe)
+							{
+								if (log.isDebugEnabled())
+									log.debug("Lost connection to client during timeout");
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

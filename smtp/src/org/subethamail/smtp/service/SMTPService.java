@@ -80,7 +80,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	public void start() throws IOException
 	{
 		if (this.smtpServer != null)
-			throw new IllegalStateException("Already running");
+			throw new IllegalStateException("SMTPServer already running");
 		
 		if (this.hostName == null)
 		{
@@ -126,7 +126,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	public void setPort(int port)
 	{
 		if (this.smtpServer != null)
-			throw new IllegalStateException("Already running");
+			throw new IllegalStateException("SMTPServer already running");
 		
 		this.port = port;
 	}
@@ -149,7 +149,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	public void setHostName(String hostname)
 	{
 		if (this.smtpServer != null)
-			throw new IllegalStateException("Already running");
+			throw new IllegalStateException("SMTPServer already running");
 		
 		this.hostName = hostname;
 	}

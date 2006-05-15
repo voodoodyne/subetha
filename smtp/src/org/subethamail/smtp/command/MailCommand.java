@@ -41,7 +41,6 @@ public class MailCommand extends BaseCommand
 			{
 				session.setSender(emailAddress);
 				context.sendResponse("250 Ok");
-				// TODO(imf): Deal with DSN commands.
 			}
 			else
 			{

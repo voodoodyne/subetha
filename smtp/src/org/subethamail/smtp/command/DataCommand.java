@@ -33,13 +33,16 @@ public class DataCommand extends BaseCommand
 		if (session.getSender() == null)
 		{
 			context.sendResponse("503 Error: need MAIL command");
+			return;
 		}
 		else if (session.getDeliveries().size() == 0)
 		{
 			context.sendResponse("503 Error: need RCPT command");
+			return;
 		}
 
 		context.sendResponse("354 End data with <CR><LF>.<CR><LF>");
+		session.setDataMode(true);
 
 		InputStream dotInputStream = 
 			new DotUnstuffingInputStream(

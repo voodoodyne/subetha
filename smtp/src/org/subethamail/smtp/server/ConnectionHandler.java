@@ -29,11 +29,16 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 	private PrintWriter writer;
 
 	private Socket socket;
+
+	private long startTime;
+	private long lastActiveTime;
+
+	private boolean dataMode = false;
 	
 	public ConnectionHandler(SMTPServer server, Socket socket)
 		throws IOException
 	{
-		super(ConnectionHandler.class.getName());
+		super(server.getConnectionGroup(), ConnectionHandler.class.getName());
 		this.server = server;
 		this.socket = socket;
 
@@ -42,6 +47,9 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		
 		reader = new BufferedReader(new InputStreamReader(input));
 		writer = new PrintWriter(output);
+		
+		startTime = System.currentTimeMillis();
+		lastActiveTime = startTime;
 	}
 	
 	public Session getSession()
@@ -59,27 +67,42 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		return this.server;
 	}
 
-	public void run()
+	public void timeout() throws IOException
 	{
-		session = new Session();
-		
 		try
 		{
+			this.sendResponse("421 Timeout waiting for data from client.");
+		}
+		finally
+		{
+			closeConnection();
+		}
+	}
+
+	public void run()
+	{
+		if (log.isDebugEnabled())
+			log.debug("SMTP connection count: " + server.getNumberOfConnections());
+
+		session = new Session();
+		try
+		{
+			if (this.server.hasTooManyConnections())
+			{
+				if (log.isDebugEnabled())
+					log.debug("SMTP Too many connections!");
+
+				this.sendResponse("554 Transaction failed. Too many connections.");
+				return;
+			}
+
 			this.sendResponse("220 " + server.getHostName() + " ESMTP " + server.getName());
 
 			while (session.isActive())
 			{
-				String command = null;
-				command = reader.readLine();
+				String command = reader.readLine();
 				this.server.getCommandHandler().handleCommand(this, command);
-				if (command == null)
-				{
-					session.quit();
-				}
-				else
-				{
-					writer.flush();
-				}
+				lastActiveTime = System.currentTimeMillis();
 			}
 		}
 		catch (IOException e1)
@@ -88,22 +111,28 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		}
 		finally
 		{
+			closeConnection();
+		}
+	}
+
+	private void closeConnection()
+	{
+		try
+		{
 			try
 			{
-				try
-				{
-					writer.close();
-					input.close();
-				}
-				finally
-				{
-					socket.close();
-				}
+				writer.close();
+				input.close();
 			}
-			catch (IOException e)
+			finally
 			{
-				log.debug(e);
+				if (socket != null && socket.isBound() && !socket.isClosed())
+					socket.close();
 			}
+		}
+		catch (IOException e)
+		{
+			log.debug(e);
 		}
 	}
 
@@ -136,5 +165,20 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 	{
 		this.writer.print(response + "\r\n");
 		this.writer.flush();
+	}
+	
+	public long getStartTime()
+	{
+		return this.startTime;
+	}
+
+	public long getLastActiveTime()
+	{
+		return this.lastActiveTime;
+	}
+
+	public void setLastActiveTime(long lastActiveTime)
+	{
+		this.lastActiveTime = lastActiveTime;
 	}
 }

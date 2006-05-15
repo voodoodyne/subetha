@@ -1,7 +1,6 @@
 package org.subethamail.smtp.server;
 
 import java.io.IOException;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,44 +42,6 @@ public class CommandHandler
 		if (log.isDebugEnabled())
 			log.debug("Added command: " + command.getName());
 		this.commandMap.put(command.getName(), command);
-	}
-
-	public void gotConnected(ConnectionContext context)
-			throws SocketTimeoutException, IOException
-	{
-		if (log.isDebugEnabled())
-			log.debug(context.getServer().getName() + " Connection opened: "
-				+ context.getSocket().getInetAddress());
-	}
-
-	public void lostConnection(ConnectionContext context) throws IOException
-	{
-		if (log.isDebugEnabled())
-			log.debug(context.getServer().getName() + " Connection lost: "
-				+ context.getSocket().getInetAddress());
-	}
-
-	public void closingConnection(ConnectionContext context) throws IOException
-	{
-		if (log.isDebugEnabled())
-			log.debug(context.getServer().getName() + " Connection closed: "
-				+ context.getSocket().getInetAddress());
-	}
-
-	public void handleMaxAuthTry(ConnectionContext context) throws IOException
-	{
-		// TODO Auto-generated method stub
-	}
-
-	public boolean handleMaxConnection(ConnectionContext context) throws IOException
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public void handleTimeout(ConnectionContext context) throws SocketException, IOException
-	{
-		// TODO Auto-generated method stub		
 	}
 
 	public void handleCommand(ConnectionContext context, String commandString)

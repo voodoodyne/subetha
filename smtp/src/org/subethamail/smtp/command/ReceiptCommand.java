@@ -29,6 +29,7 @@ public class ReceiptCommand extends BaseCommand
 		if (session.getSender() == null)
 		{
 			context.sendResponse("503 Need MAIL before RCPT.");
+			return;
 		}
 
 		String args = getArgPredicate(commandString);
@@ -37,10 +38,11 @@ public class ReceiptCommand extends BaseCommand
 			context.sendResponse(
 					"501 Syntax: RCPT TO: <address>  Error in parameters: \""
 					+ args + "\"");
+			return;
 		}
 		else
 		{
-			final String recipientAddress = extractEmailAddress(args, 3);
+			String recipientAddress = extractEmailAddress(args, 3);
 			if (handleRecipient(recipientAddress, context))
 			{
 				context.sendResponse("250 Ok");

@@ -27,6 +27,7 @@ public class HelpCommand extends BaseCommand
 		if ("".equals(args))
 		{
 			context.sendResponse(getCommandMessage((SMTPServer)context.getServer()));
+			return;
 		}
 		try
 		{

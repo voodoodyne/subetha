@@ -8,6 +8,12 @@
 <% } else if (ExceptionUtils.causedBy(exception, org.subethamail.common.PermissionException.class)) { %>
 
 	<jsp:forward page="/error_permission.jsp" />
+
+<% } else { %>
 	
-<% } else { throw exception; } %>
+	<jsp:forward page="/error_pretty.jsp">
+		<jsp:param name="exception" value="${exception}" />
+	</jsp:forward>
+	
+<% }%>
 

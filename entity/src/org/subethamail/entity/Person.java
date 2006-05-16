@@ -165,9 +165,12 @@ public class Person implements Serializable, Comparable
 		this.emailAddresses.put(value.getId(), value);
 	}
 	
-	/** */
+	/**
+	 * Normalizes the email address first. 
+	 */
 	public EmailAddress removeEmailAddress(String email)
 	{
+		email = Validator.normalizeEmail(email);
 		return this.emailAddresses.remove(email);
 		
 	}

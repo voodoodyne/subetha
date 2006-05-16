@@ -14,7 +14,6 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
-import javax.mail.MethodNotSupportedException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -38,6 +37,7 @@ import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.Subscription;
 import org.subethamail.entity.dao.DAO;
 
 /**
@@ -184,9 +184,19 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	/**
 	 * @see AccountMgr#removeEmail(String)
 	 */
-	public void removeEmail(String email) {
+	public void removeEmail(String email)
+	{
 		Person me = this.getMe();
+		
 		EmailAddress e = me.removeEmailAddress(email);
+		
+		// Disable delivery for anything subscribed to this address
+		for (Subscription sub: me.getSubscriptions().values())
+		{
+			if (sub.getDeliverTo() == e)
+				sub.setDeliverTo(null);
+		}
+		
 		this.dao.remove(e);
 	}
 	

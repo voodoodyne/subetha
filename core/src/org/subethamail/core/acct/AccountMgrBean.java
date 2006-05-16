@@ -14,6 +14,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
+import javax.mail.MethodNotSupportedException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -179,6 +180,16 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		
 		return new AuthCredentials(email, p.getPassword());
 	}
+
+	/**
+	 * @see AccountMgr#removeEmail(String)
+	 */
+	public void removeEmail(String email) {
+		Person me = this.getMe();
+		EmailAddress e = me.removeEmailAddress(email);
+		this.dao.remove(e);
+	}
+	
 	
 	/**
 	 * @see AccountMgr#getMySubscription(Long)
@@ -298,5 +309,12 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		EmailAddress addy = this.dao.findEmailAddress(email);
 		
 		this.postOffice.sendPassword(addy, null);
+	}
+	
+	/**
+	 * @see AccountMgr#resendMessage(Long)
+	 */
+	public void resendMessage(Long msgId) throws NotFoundException{
+		//throw new MethodNotSupportedException();
 	}
 }

@@ -165,6 +165,13 @@ public class Person implements Serializable, Comparable
 		this.emailAddresses.put(value.getId(), value);
 	}
 	
+	/** */
+	public EmailAddress removeEmailAddress(String email)
+	{
+		return this.emailAddresses.remove(email);
+		
+	}
+	
 	/**
 	 * Gets the email address associated with that email, properly
 	 * normalizing before checking.

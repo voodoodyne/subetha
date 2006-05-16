@@ -75,6 +75,13 @@ public interface AccountMgr
 	public AuthCredentials addEmail(String token) throws BadTokenException, NotFoundException;
 	
 	/**
+	 * Removes the email from the Person.
+	 *  
+	 * @param newEmail must be a valid email address
+	 */
+	public void removeEmail(String newEmail);
+
+	/**
 	 * Gets some data about a mailing list.  Includes the subscriber
 	 * status (including role and permissions) of the person calling
 	 * this method.
@@ -134,6 +141,14 @@ public interface AccountMgr
 	 */
 	public void unsubscribeMe(Long listId) throws NotFoundException;
 
+	/**
+	 * Send the msg to the current user
+	 * 
+	 * @param msgId the message to send
+	 * @throws NotFoundException if either the msg or the person is not found
+	 */
+	public void resendMessage(Long msgId) throws NotFoundException;
+	
 	/**
 	 * Requests that the user's password be sent back to them in plaintext.
 	 * No access control.

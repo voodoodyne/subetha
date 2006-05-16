@@ -33,6 +33,10 @@ public class Config implements Serializable, Comparable
 	/** */
 	@Transient private static Log log = LogFactory.getLog(Config.class);
 	
+	/** Known sitewide config keys */
+	public static final String ID_SITE_POSTMASTER = "sitePostmaster";
+	public static final String ID_SITE_URL = "siteUrl";
+	
 	/** */
 	@Id
 	@Column(length=Validator.MAX_CONFIG_ID)

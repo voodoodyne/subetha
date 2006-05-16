@@ -257,7 +257,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		{
 			// Send instructions so that user can self-moderate
 			// Or send a message saying "you must wait for admin approval", use holdMsg if available
-			this.postOffice.sendPosterMailHoldNotice(fromAddy.getAddress(), toList, holdMsg);
+			this.postOffice.sendPosterMailHoldNotice(toList, fromAddy.getAddress(), mail, holdMsg);
 			
 			/*
 			for (Subscription sub: toList.getSubscriptions())

@@ -318,7 +318,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	{
 		EmailAddress addy = this.dao.findEmailAddress(email);
 		
-		this.postOffice.sendPassword(addy, null);
+		this.postOffice.sendPassword(addy);
 	}
 	
 	/**

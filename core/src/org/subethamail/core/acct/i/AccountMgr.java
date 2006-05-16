@@ -75,7 +75,8 @@ public interface AccountMgr
 	public AuthCredentials addEmail(String token) throws BadTokenException, NotFoundException;
 	
 	/**
-	 * Removes the email from the Person.
+	 * Removes the email from the Person.  Cannot be used to remove
+	 * the last address. 
 	 *  
 	 * @param newEmail must be a valid email address
 	 */

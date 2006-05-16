@@ -45,6 +45,12 @@ public class SubEthaMessage extends SMTPMessage
 	public static final String HDR_REFERENCES = "References";
 
 	/** */
+	public SubEthaMessage(Session session) throws MessagingException
+	{
+		super(session);
+	}
+	
+	/** */
 	public SubEthaMessage(Session session, InputStream is) throws MessagingException
 	{
 		super(session, is);

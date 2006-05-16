@@ -7,6 +7,7 @@ package org.subethamail.core.post;
 
 import javax.ejb.Local;
 import org.subethamail.entity.EmailAddress;
+import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.SubscriptionHold;
@@ -26,7 +27,7 @@ public interface PostOffice
 	 * Notifies the user that they are now the pround owner of a
 	 * bouncing new baby mailing list.
 	 */
-	public void sendOwnerNewMailingList(EmailAddress address, MailingList list);
+	public void sendOwnerNewMailingList(MailingList relevantList, EmailAddress address);
 		
 	/**
 	 * Sends a special token that will subscribe a user to a list.
@@ -41,15 +42,13 @@ public interface PostOffice
 	 * @param deliverTo might be null in the case of disabled delivery, in
 	 *  which case a random email address of the person gets the notice.
 	 */
-	public void sendSubscribed(MailingList list, Person who, EmailAddress deliverTo);
+	public void sendSubscribed(MailingList relevantList, Person who, EmailAddress deliverTo);
 
 	/**
 	 * In the case of a forgotten password, this sends a piece of email to the
 	 * specified member with the password.
-	 * @param list is the context of the request, defined by which
-	 *  website we are visiting.
 	 */
-	public void sendPassword(EmailAddress addy, MailingList list);
+	public void sendPassword(EmailAddress addy);
 
 	/**
 	 * Sends a token to the address which will merge that address (and
@@ -71,6 +70,6 @@ public interface PostOffice
 	 * Sends mail to the address letting the person know that their message is
 	 * waiting for approval.
 	 */
-	public void sendPosterMailHoldNotice(String posterEmail, MailingList toList, String holdMsg);
+	public void sendPosterMailHoldNotice(MailingList relevantList, String posterEmail, Mail mail, String holdMsg);
 	
 }

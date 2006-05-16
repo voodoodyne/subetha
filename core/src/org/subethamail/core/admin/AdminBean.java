@@ -135,7 +135,7 @@ public class AdminBean implements Admin, AdminRemote
 			list.getSubscriptions().add(sub);
 			ea.getPerson().addSubscription(sub);
 			
-			this.postOffice.sendOwnerNewMailingList(ea, list);
+			this.postOffice.sendOwnerNewMailingList(list, ea);
 		}
 		
 		return list.getId();
@@ -364,9 +364,15 @@ public class AdminBean implements Admin, AdminRemote
 		Person from = this.dao.findPerson(fromPersonId);
 		Person to = this.dao.findPerson(toPersonId);
 
+		if (log.isDebugEnabled())
+			log.debug("Merging " + from + " into " + to);
+			
 		// Move email addresses
 		for (EmailAddress addy: from.getEmailAddresses().values())
 		{
+			if (log.isDebugEnabled())
+				log.debug(" merging " + addy);
+			
 			addy.setPerson(to);
 			to.addEmailAddress(addy);
 		}
@@ -377,8 +383,18 @@ public class AdminBean implements Admin, AdminRemote
 		for (Subscription sub: from.getSubscriptions().values())
 		{
 			// Keep our current subscription if there is a duplicate
-			if (!to.getSubscriptions().containsKey(sub.getList().getId()))
+			if (to.getSubscriptions().containsKey(sub.getList().getId()))
 			{
+				if (log.isDebugEnabled())
+					log.debug(" abandoning duplicate " + sub);
+				
+				this.dao.remove(sub);
+			}
+			else
+			{
+				if (log.isDebugEnabled())
+					log.debug(" merging " + sub);
+				
 				sub.setPerson(to);
 				to.addSubscription(sub);
 			}
@@ -386,7 +402,45 @@ public class AdminBean implements Admin, AdminRemote
 		
 		from.getSubscriptions().clear();
 		
+		// Move held subscriptions
+		for (SubscriptionHold hold: from.getHeldSubscriptions().values())
+		{
+			Long listId = hold.getList().getId();
+			if (to.getSubscriptions().containsKey(listId) || to.getHeldSubscriptions().containsKey(listId))
+			{
+				if (log.isDebugEnabled())
+					log.debug(" abandoning obsolete or duplicate " + hold);
+				
+				this.dao.remove(hold);
+			}
+			else
+			{
+				if (log.isDebugEnabled())
+					log.debug(" merging " + hold);
+				
+				hold.setPerson(to);
+				to.addHeldSubscription(hold);
+			}
+		}
+		
+		from.getHeldSubscriptions().clear();
+		
+		// Some of those holds we might not need anymore because we were already
+		// subscribed or acquired a new subscription.
+		for (SubscriptionHold hold: to.getHeldSubscriptions().values())
+		{
+			Long listId = hold.getList().getId();
+			if (to.getSubscriptions().containsKey(listId))
+			{
+				to.getHeldSubscriptions().remove(listId);
+				this.dao.remove(hold);
+			}
+		}
+		
 		// Nuke the old person object
+		if (log.isDebugEnabled())
+			log.debug(" deleting person " + from);
+		
 		this.dao.remove(from);
 	}
 

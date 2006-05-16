@@ -1,17 +1,22 @@
 ## Context will contain:
-##   "addy" of type EmailAddress
-##   "list" of type MailingList
+##   "list" of type MailingList (the list which got the msg)
+##   "mail" of type Mail (the stored mail)
+##   "holdMsg" of type String (only if mail was a HARD hold)
+##   "email" of type String (the address of the poster)
 ##
 ## Expects a String value "subject" to be set in the context
 ##
-#set($subject = "Your mail has been held for moderation")
+#set($subject = "Your message has been held for moderation")
 #if($holdMsg)
-Your message "<insertsubject>" has been held for moderator approval.  The reason is:
+Your message "${mail.subject}" has been held for moderator approval.  The reason is:
 
-	$holdMsg
-#elseif($flushable)
-Your message "<insertsubject>" has been held because you do not have permission to post to the list $list.name.  You can automatically approve this message by subscribing to the list.
+	${holdMsg}
 #else
-Your message "<insertsubject>" has been held because you do not have permission to post to the list $list.name.
-#end
+Your message "${mail.subject}" has been held because you do not have permission to post to the list $list.name.  If you are not subscribed to this list, or subscribed to this list with a different email address, you might be able to automatically approve this message by subscribing the new address to this list.
 
+This is the subscription address of ${list.name}:
+
+	${list.url}
+
+If you are already subscribed, log in *first* with the email address you are subscribed with, *then* add the address ${email}.
+#end

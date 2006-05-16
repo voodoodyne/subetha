@@ -159,7 +159,7 @@ public class EmailAddress implements Serializable, Comparable
 	/** */
 	public String toString()
 	{
-		return this.getClass() + "{id=" + this.id + "}";
+		return this.getClass().getName() + "{id=" + this.id + "}";
 	}
 
 	/**

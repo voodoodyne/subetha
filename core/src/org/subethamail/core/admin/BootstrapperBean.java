@@ -54,6 +54,9 @@ public class BootstrapperBean implements BootstrapperManagement
 	private static final String DEFAULT_NAME = "Administrator";
 	private static final String DEFAULT_PASSWORD = "password";
 	
+	private static final String DEFAULT_SITE_POSTMASTER = "postmaster@localhost";
+	private static final String DEFAULT_SITE_URL = "{Needs Configuration - Alert SubEtha Administrator}";
+	
 	/**
 	 * The config id of a Boolean that lets us know if we've run or not.
 	 */
@@ -106,7 +109,17 @@ public class BootstrapperBean implements BootstrapperManagement
 	public void bootstrap()
 	{
 		log.debug("Bootstrapping - establishing default site administrator");
+		this.bootstrapRoot();
 		
+		log.debug("Bootstrapping - establishing default site settings");
+		this.bootstrapSiteSettings();
+	}
+	
+	/**
+	 * Sets up the root account
+	 */
+	protected void bootstrapRoot()
+	{
 		InternetAddress addy;
 		try
 		{
@@ -124,6 +137,36 @@ public class BootstrapperBean implements BootstrapperManagement
 		{
 			log.error("Impossible to establish person and then not find!", ex);
 			throw new RuntimeException(ex);
+		}
+	}
+	
+	/**
+	 * Sets up the initial site settings
+	 */
+	protected void bootstrapSiteSettings()
+	{
+		try
+		{
+			Config cfg = this.dao.findConfig(Config.ID_SITE_POSTMASTER);
+			if (cfg.getValue() == null)
+				cfg.setValue(DEFAULT_SITE_POSTMASTER);
+		}
+		catch (NotFoundException ex)
+		{
+			Config cfg = new Config(Config.ID_SITE_POSTMASTER, DEFAULT_SITE_POSTMASTER);
+			this.dao.persist(cfg);
+		}
+		
+		try
+		{
+			Config cfg = this.dao.findConfig(Config.ID_SITE_URL);
+			if (cfg.getValue() == null)
+				cfg.setValue(DEFAULT_SITE_URL);
+		}
+		catch (NotFoundException ex)
+		{
+			Config cfg = new Config(Config.ID_SITE_URL, DEFAULT_SITE_URL);
+			this.dao.persist(cfg);
 		}
 	}
 }

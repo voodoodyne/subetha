@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.acct.i.Self;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
+import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonInfoMixin;
 import org.subethamail.rtest.util.PersonMixin;
 import org.subethamail.rtest.util.Smtp;
@@ -93,9 +94,50 @@ public class EmailAddressTest extends SubEthaTestCase
 	}
 	
 	/** */
-	public void testMergeSubscription() throws Exception
+	public void testMergeSingleSubscription() throws Exception
 	{
-		// TODO
+		// Subfixture
+		PersonMixin additional = new PersonMixin(this.admin);
+		MailingListMixin list = new MailingListMixin(this.admin, additional.getAddress());
+		
+		this.admin.getAdmin().addEmail(this.pers.getId(), additional.getEmail());
+		
+		Self me = this.pers.getAccountMgr().getSelf();
+		
+		assertEquals(this.pers.getId(), me.getId());
+		assertEquals(1, me.getSubscriptions().size());
+		assertEquals(list.getId(), me.getSubscriptions().get(0).getId());
+	}
+	
+	/** */
+	public void testMergeSingleOverlappingSubscription() throws Exception
+	{
+		// Subfixture
+		PersonMixin additional = new PersonMixin(this.admin);
+		MailingListMixin list = new MailingListMixin(this.admin, additional.getAddress());
+		this.admin.getAdmin().subscribe(list.getId(), this.pers.getId(), this.pers.getEmail(), true);
+		
+		this.admin.getAdmin().addEmail(this.pers.getId(), additional.getEmail());
+		
+		Self me = this.pers.getAccountMgr().getSelf();
+		
+		assertEquals(this.pers.getId(), me.getId());
+		assertEquals(1, me.getSubscriptions().size());
+		assertEquals(list.getId(), me.getSubscriptions().get(0).getId());
+	}
+	
+	/** */
+	public void testMergeIntoSelf() throws Exception
+	{
+		MailingListMixin list = new MailingListMixin(this.admin, this.pers.getAddress());
+		
+		this.admin.getAdmin().addEmail(this.pers.getId(), this.pers.getEmail());
+		
+		Self me = this.pers.getAccountMgr().getSelf();
+		
+		assertEquals(this.pers.getId(), me.getId());
+		assertEquals(1, me.getSubscriptions().size());
+		assertEquals(list.getId(), me.getSubscriptions().get(0).getId());
 	}
 	
 	/** */

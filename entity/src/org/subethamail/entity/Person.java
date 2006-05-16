@@ -166,10 +166,14 @@ public class Person implements Serializable, Comparable
 	}
 	
 	/**
-	 * Normalizes the email address first. 
+	 * Normalizes the email address first.  Ensures that the
+	 * last email address cannot be removed.
 	 */
 	public EmailAddress removeEmailAddress(String email)
 	{
+		if (this.emailAddresses.size() <= 1)
+			throw new IllegalStateException("Cannot remove last email address");
+		
 		email = Validator.normalizeEmail(email);
 		return this.emailAddresses.remove(email);
 		
@@ -238,6 +242,14 @@ public class Person implements Serializable, Comparable
 	 */
 	public Map<Long, SubscriptionHold> getHeldSubscriptions() { return this.heldSubscriptions; }
 	
+	/**
+	 * Convenience method
+	 */
+	public void addHeldSubscription(SubscriptionHold hold)
+	{
+		this.heldSubscriptions.put(hold.getList().getId(), hold);
+	}
+	
 	/** */
 	public Role getRoleIn(MailingList list)
 	{
@@ -258,7 +270,7 @@ public class Person implements Serializable, Comparable
 	/** */
 	public String toString()
 	{
-		return "Person {id=" + this.id + ", emailAddresses=" + this.emailAddresses + "}";
+		return this.getClass().getName() + " {id=" + this.id + ", emailAddresses=" + this.emailAddresses + "}";
 	}
 
 	/**
@@ -270,5 +282,6 @@ public class Person implements Serializable, Comparable
 
 		return this.name.compareTo(other.getName());
 	}
+
 }
 

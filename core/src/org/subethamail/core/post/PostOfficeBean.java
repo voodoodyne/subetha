@@ -6,6 +6,8 @@
 package org.subethamail.core.post;
 
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+
 import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
@@ -17,17 +19,24 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
+import org.subethamail.core.util.OwnerAddress;
+import org.subethamail.core.util.VERPAddress;
+import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
+import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.dao.DAO;
 
@@ -49,56 +58,126 @@ public class PostOfficeBean implements PostOffice
 
 	/** */
 	@EJB DAO dao;
+	@EJB Encryptor encryptor;
 	
-	/**
-	 * Does the work of sending an email using a velocity template.
+	/** 
+	 * Builds a message from a velocity template, context, and some
+	 * information about sender and recipient. 
 	 */
-	protected void sendMail(MailType kind, VelocityContext vctx, String email)
+	class MessageBuilder
 	{
-		StringWriter writer = new StringWriter(4096);
+		SubEthaMessage message;
+		InternetAddress toAddress;
+		InternetAddress fromAddress;
+		String senderEmail;
 		
-		try
+		/** */
+		public MessageBuilder(MailType kind, VelocityContext vctx)
 		{
-			Velocity.mergeTemplate(kind.getTemplate(), "UTF-8", vctx, writer);
-		}
-		catch (Exception ex)
-		{
-			log.fatal("Error merging " + kind.getTemplate(), ex);
-			throw new EJBException(ex);
-		}
-
-		String mailSubject = (String)vctx.get("subject");
-		String mailBody = writer.toString();
-		
-		// If we're in debug mode, annotate the subject.
-		if (log.isDebugEnabled())
-			mailSubject = kind.toString() + " " + mailSubject;
-
-		try
-		{
-			InternetAddress toAddress = new InternetAddress(email);
-			InternetAddress fromAddress;
+			StringWriter writer = new StringWriter(4096);
+			
 			try
 			{
-				//TODO:  figure out something good for this
-				fromAddress = new InternetAddress("donotreply@nowhere.com", "Someone");
+				Velocity.mergeTemplate(kind.getTemplate(), "UTF-8", vctx, writer);
 			}
-			catch (java.io.UnsupportedEncodingException ex)
+			catch (Exception ex)
 			{
-				// Impossible
-				throw new AddressException(ex.toString());
+				log.fatal("Error merging " + kind.getTemplate(), ex);
+				throw new EJBException(ex);
 			}
-	
-			Message message = new MimeMessage(this.mailSession);
-			message.setRecipient(Message.RecipientType.TO, toAddress);
-			message.setFrom(fromAddress);
-			message.setReplyTo(new InternetAddress[0]);	// reply to nobody
-			message.setSubject(mailSubject);
-			message.setText(mailBody);
-	
-			Transport.send(message);
+
+			String mailSubject = (String)vctx.get("subject");
+			String mailBody = writer.toString();
+			
+			// If we're in debug mode, annotate the subject.
+			if (log.isDebugEnabled())
+				mailSubject = kind.toString() + " " + mailSubject;
+
+			try
+			{
+				this.message = new SubEthaMessage(mailSession);
+				this.message.setSubject(mailSubject);
+				this.message.setText(mailBody);
+			}
+			catch (MessagingException ex) { throw new RuntimeException(ex); }
 		}
-		catch (MessagingException ex) { throw new RuntimeException(ex); }
+		
+		/** */
+		public void setTo(EmailAddress to)
+		{
+			to.bounceDecay();
+			try
+			{
+				this.toAddress = new InternetAddress(to.getId(), to.getPerson().getName());
+			}
+			catch (UnsupportedEncodingException ex) { throw new RuntimeException(ex); }
+		}
+		
+		/** */
+		public void setTo(String to)
+		{
+			try
+			{
+				this.toAddress = new InternetAddress(to);
+			}
+			catch (AddressException ex) { throw new RuntimeException(ex); }
+		}
+		
+		/** Must call setTo first */
+		public void setFrom(MailingList list)
+		{
+			if (this.toAddress == null)
+				throw new IllegalStateException("Must call setTo() first");
+			
+			// Set the list owner as the pretty from field
+			String ownerAddress = OwnerAddress.makeOwner(list.getEmail());
+			try
+			{
+				this.fromAddress = new InternetAddress(ownerAddress, list.getName());
+			}
+			catch (UnsupportedEncodingException ex) { throw new RuntimeException(ex); }
+			
+			// Set up the VERP bounce address as the envelope sender
+			byte[] token = encryptor.encryptString(this.toAddress.getAddress());
+			this.senderEmail = VERPAddress.encodeVERP(list.getEmail(), token);
+		}
+		
+		/** Must call setTo first */
+		public void setFrom(String from)
+		{
+			if (this.toAddress == null)
+				throw new IllegalStateException("Must call setTo() first");
+			
+			try
+			{
+				this.fromAddress = new InternetAddress(from);
+			}
+			catch (AddressException ex) { throw new RuntimeException(ex); }
+		}
+		
+		/**
+		 * @return the message we have built.
+		 */
+		public SubEthaMessage getMessage() throws MessagingException
+		{
+			this.message.setRecipient(Message.RecipientType.TO, this.toAddress);
+			this.message.setFrom(this.fromAddress);
+			this.message.setEnvelopeFrom(this.senderEmail);
+
+			return this.message;
+		}
+		
+		/**
+		 * Sends the message through JavaMail
+		 */
+		public void send()
+		{
+			try
+			{
+				Transport.send(this.getMessage());
+			}
+			catch (MessagingException ex) { throw new RuntimeException(ex); }
+		}
 	}
 	
 	/**
@@ -114,17 +193,40 @@ public class PostOfficeBean implements PostOffice
 	}
 	
 	/**
-	 * @see PostOffice#sendPassword(EmailAddress, MailingList)
+	 * @see PostOffice#sendPassword(EmailAddress)
 	 */
-	public void sendPassword(EmailAddress addy, MailingList list)
+	public void sendPassword(EmailAddress addy)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Sending password for " + addy.getId());
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("addy", addy);
-		
-		this.sendMail(MailType.FORGOT_PASSWORD, vctx, addy.getId());
+
+		if (addy.getPerson().getSubscriptions().isEmpty())
+		{
+			String url = (String)this.dao.getConfigValue(Config.ID_SITE_URL);
+			vctx.put("url", url);
+			
+			MessageBuilder builder = new MessageBuilder(MailType.FORGOT_PASSWORD, vctx);
+			builder.setTo(addy);
+			
+			String postmaster = (String)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
+			builder.setFrom(postmaster);
+			
+			builder.send();
+		}
+		else
+		{
+			// Try a random list that the user is subscribed to.
+			Subscription sub = addy.getPerson().getSubscriptions().values().iterator().next();
+			vctx.put("url", sub.getList().getUrl());
+			
+			MessageBuilder builder = new MessageBuilder(MailType.FORGOT_PASSWORD, vctx);
+			builder.setTo(addy);
+			builder.setFrom(sub.getList());
+			builder.send();
+		}
 	}
 
 	/**
@@ -139,14 +241,17 @@ public class PostOfficeBean implements PostOffice
 		vctx.put("token", this.token(token));
 		vctx.put("email", email);
 		vctx.put("list", list);
-		
-		this.sendMail(MailType.CONFIRM_SUBSCRIBE, vctx, email);
+
+		MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_SUBSCRIBE, vctx);
+		builder.setTo(email);
+		builder.setFrom(list);
+		builder.send();
 	}
 
 	/**
 	 * @see PostOffice#sendSubscribed(MailingList, Person, EmailAddress)
 	 */
-	public void sendSubscribed(MailingList list, Person who, EmailAddress deliverTo)
+	public void sendSubscribed(MailingList relevantList, Person who, EmailAddress deliverTo)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Sending welcome to list msg to " + who);
@@ -158,26 +263,32 @@ public class PostOfficeBean implements PostOffice
 			email = who.getEmailAddresses().values().iterator().next().getId();
 		
 		VelocityContext vctx = new VelocityContext();
-		vctx.put("list", list);
+		vctx.put("list", relevantList);
 		vctx.put("person", who);
 		vctx.put("email", email);
 		
-		this.sendMail(MailType.SUBSCRIBED, vctx, email);
+		MessageBuilder builder = new MessageBuilder(MailType.SUBSCRIBED, vctx);
+		builder.setTo(email);
+		builder.setFrom(relevantList);
+		builder.send();
 	}
 
 	/**
-	 * @see PostOffice#sendOwnerNewMailingList(EmailAddress, MailingList)
+	 * @see PostOffice#sendOwnerNewMailingList(MailingList, EmailAddress)
 	 */
-	public void sendOwnerNewMailingList(EmailAddress address, MailingList list)
+	public void sendOwnerNewMailingList(MailingList relevantList, EmailAddress address)
 	{
 		if (log.isDebugEnabled())
-			log.debug("Sending notification of new mailing list " + list + " to owner " + address);
+			log.debug("Sending notification of new mailing list " + relevantList + " to owner " + address);
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("addy", address);
-		vctx.put("list", list);
+		vctx.put("list", relevantList);
 		
-		this.sendMail(MailType.NEW_MAILING_LIST, vctx, address.getId());
+		MessageBuilder builder = new MessageBuilder(MailType.NEW_MAILING_LIST, vctx);
+		builder.setTo(address);
+		builder.setFrom(relevantList);
+		builder.send();
 	}
 
 	/**
@@ -193,7 +304,30 @@ public class PostOfficeBean implements PostOffice
 		vctx.put("email", email);
 		vctx.put("person", me);
 		
-		this.sendMail(MailType.CONFIRM_EMAIL, vctx, email);
+		if (me.getSubscriptions().isEmpty())
+		{
+			String url = (String)this.dao.getConfigValue(Config.ID_SITE_URL);
+			vctx.put("url", url);
+			
+			MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
+			builder.setTo(email);
+			
+			String postmaster = (String)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
+			builder.setFrom(postmaster);
+			
+			builder.send();
+		}
+		else
+		{
+			// Try a random list that the user is subscribed to.
+			Subscription sub = me.getSubscriptions().values().iterator().next();
+			vctx.put("url", sub.getList().getUrl());
+			
+			MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
+			builder.setTo(email);
+			builder.setFrom(sub.getList());
+			builder.send();
+		}
 	}
 
 	/*
@@ -218,17 +352,22 @@ public class PostOfficeBean implements PostOffice
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.post.PostOffice#sendPosterMailHoldNotice(javax.mail.internet.InternetAddress, org.subethamail.entity.MailingList, java.lang.String)
+	 * @see org.subethamail.core.post.PostOffice#sendPosterMailHoldNotice(org.subethamail.entity.MailingList, java.lang.String, org.subethamail.entity.Mail, java.lang.String)
 	 */
-	public void sendPosterMailHoldNotice(String posterEmail, MailingList toList, String holdMsg)
+	public void sendPosterMailHoldNotice(MailingList relevantList, String posterEmail, Mail mail, String holdMsg)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Sending mail held notice to " + posterEmail);
 		
 		VelocityContext vctx = new VelocityContext();
-		vctx.put("list", toList);
+		vctx.put("list", relevantList);
+		vctx.put("mail", mail);
 		vctx.put("holdMsg", holdMsg);
+		vctx.put("email", posterEmail);
 		
-		this.sendMail(MailType.MAIL_HELD, vctx, posterEmail);
+		MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
+		builder.setTo(posterEmail);
+		builder.setFrom(relevantList);
+		builder.send();
 	}
 }

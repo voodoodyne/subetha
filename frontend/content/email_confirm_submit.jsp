@@ -4,9 +4,9 @@
 
 <c:choose>
 	<c:when test="${!empty model.errors}">
-		<jsp:forward page="email_confirm.jsp"/>
+		<jsp:forward page="/email_confirm.jsp"/>
 	</c:when>
 	<c:otherwise>
-		<c:redirect url="home.jsp" />
+		<c:redirect url="/home.jsp" />
 	</c:otherwise>
 </c:choose>

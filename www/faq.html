@@ -20,7 +20,7 @@
 			<dd>SubEtha requires JDK1.5 or later for running and development.</dd>
 			
 			<dt>What JBoss version does SubEtha require?</dt>
-			<dd>JBoss 4.0.4.CR2</dd>
+			<dd>JBoss 4.0.4GA</dd>
 
 			<dt>Does SubEtha run on other J2EE appservers?</dt>
 			<dd>
@@ -44,14 +44,16 @@
 				developers are primarily using MySQL.</dd>
 
 			<dt>Does SubEtha work with my Mail Transport Agent (eg Postfix, Sendmail, Exim, Qmail)?</dt>
-			<dd>Yes, in fact, SubEtha currently requires an external MTA.
+			<dd>Yes, in fact, SubEtha currently requires an external MTA to deliver mail.
 				The developers all use Postfix, but any MTA should work.
 				See the <a href="integration.html">integration page</a>.
 				In the future, it will be possible to use SubEtha without
 				an MTA.</dd>
 
+
 			<dt>Does SubEtha support i18n (internationalization)?</dt>
-			<dd><p>SubEtha's text strings (ie: web interface, error messages, etc.) haven't been 
+
+			<dd><p>SubEtha's text strings (ie: web interface, error messages, etc.) haven't been
 				internationalized with different languages (yet), but SubEtha should
 				pass messages through written in any language with any character
 				encoding.  There are two exceptions to this:  Email is always
@@ -64,7 +66,9 @@
 				in SubEtha</a>.</p></dd>
 				
 			<dt>My mailserver does not support 8BITMIME.</dt>
-			<dd>Edit ${jboss.dir}/server/default/deploy/mail-service.xml.
+			<dd>First off, strongly consider switching to a mail server that does.
+				It's not 1984 anymore. If that is not an option, edit 
+				${jboss.dir}/server/default/deploy/mail-service.xml.
 				Set mail.smtp.allow8bitmime=false</dd>
 		</dl>
 	</body>

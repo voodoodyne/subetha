@@ -17,13 +17,14 @@
 		<h2>Setup Instructions for Development</h2>
 		<ul>
 			<li>
-				Install JBoss 4.04CR2 using the installer.  Choose the non-clustered ejb3
+				Install <a href="http://labs.jboss.com/portal/jbossas/download">JBoss 4.04GA</a> 
+				using the installer.  Choose the non-clustered ejb3
 				install option, it boots much faster than the clustered option.  Do not
 				enable call-by-value.  You do not need to secure your JBoss if you do not
 				publicly expose your development server.
 			</li>
 			<li>
-				If you install to a directory other than the default /java/jboss-4.0.4.CR2,
+				If you install to a directory other than the default /java/jboss-VERSION,
 				you will need to set the ${jboss.dir} property.  Copy build.properties to
 				a file called user.properties and edit ${jboss.dir}.
 			</li>
@@ -32,7 +33,8 @@
 				following parameters:
 				<ul>
 					<li>mail.smtp.host - the name of your outgoing smtp mail server</li>
-					<li>mail.smtp.allow8bitmime - optional, makes javamail more efficient</li>
+					<li>mail.smtp.port - (25) the port number of your outgoing smtp mail server</li>
+					<li>mail.smtp.allow8bitmime - (true) optional, makes javamail more efficient</li>
 				</ul>
 				
 				If you wish to run unit tests, you must have these two values:
@@ -47,10 +49,14 @@
 				You can use a different RDBMS but you'll need to use a different -ds.xml file
 				than the one described below.
 			</li>
+			
 			<li>
-				If you need/want to support international character sets in Subetha, it is probably a good idea to read
-				through the <a href="i18n.html">I18N configuration documentation</a> at this point as there are 
-				steps that must be completed there before going further in this setup.
+				If you need/want to support international character sets
+				in Subetha, it is probably a good idea to read through
+				the <a href="i18n.html">I18N configuration
+				documentation</a> at this point as there are steps that
+				must be completed there before going further in this
+				setup.
 			</li>
 			<li>
 				Create the data source by creating ${jboss.dir}/server/default/deploy/subetha-ds.xml.
@@ -69,7 +75,51 @@
 				and password specified in the -ds.xml file.
 			</li>
 		</ul>
+
+		<h2>Eclipse Setup</h2>
 		
+		<p>
+		The 3 of the 4 core developers use <a href="http://eclipse.org/">Eclipse</a> as 
+		their IDE of choice. We suggest you do as well. =)
+		</p>
+		
+		<p>
+		In order to setup Eclipse, you should first make sure to install the 
+		<a href="http://subclipse.tigris.org/">Subclipse</a> plugin.
+		Once you have installed that plugin. Select
+		File->Import->Checkout projects from SVN. Select "Create a new
+		repository location". Enter the URL for SubEtha's repository:
+		http://subetha.tigris.org/svn/subetha
+		</p>
+		
+		<p>
+		Once you have the project checked out you need to define the
+		location of JBOSS_HOME in Eclipse. Select Project->Properties.
+		Java Build Path->Add Variable. Configure Variables->New and set
+		the name to JBOSS_HOME and the folder location where you
+		installed JBoss (ie: ${jboss.dir} mentioned above). 
+		Now, Eclipse should properly find all the right
+		libraries it needs.
+		</p>
+		
+		<p>
+		The next step is to build SubEtha. From the Java perspective,
+		select Window->Show View->Ant. Right click in the Ant view and Add
+		buildfiles. Then look for the top level SubEtha build file and
+		add it. Once that is done, you can double click the 'deploy'
+		target which will build SubEtha and install it in the right
+		JBoss directory location.
+		</p>
+		
+		<h2>Startup</h2>
+		<p>
+			Start up JBoss.  The default web interface is 
+			<a href="http://localhost:8080/se/">http://localhost:8080/se/</a>
+			When SubEtha runs for the first time, it creates a site administrator
+			account named <strong>root@localhost</strong>, with the password
+			<strong>password</strong>.
+		</p>
+
 		<h2>Directory Layout</h2>
 		<p>
 			The subdirectories correspond to various components:
@@ -109,7 +159,7 @@
 				JSPs and all other content, acts as a client to the core layer.
 			</li>
 			<li>
-				smtp - A simple SMTP server which allows SubEtha to receive messages
+				smtp - An SMTP server which allows SubEtha to receive messages
 				relayed by your MTA.  This simplifies MTA integration considerably.
 				This module does not depend on any SubEtha classes and could be used
 				by any project needing a receptive SMTP stack.
@@ -151,13 +201,5 @@
 			You may wish to read the <a href="coding.html">SubEtha Coding Conventions</a>.
 		</p>
 		
-		<h2>Startup</h2>
-		<p>
-			Start up JBoss.  The web interface is 
-			<a href="http://localhost:8080/se/">http://localhost:8080/se/</a>
-			When SubEtha runs for the first time, it creates a site administrator
-			account named <strong>root@localhost</strong>, with the password
-			<strong>password</strong>.
-		</p>
 	</body>
 </html>

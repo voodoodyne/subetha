@@ -10,8 +10,10 @@ import java.io.Serializable;
 import java.sql.Blob;
 import java.sql.SQLException;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -34,7 +36,7 @@ import org.subethamail.common.valid.Validator;
 @NamedQueries({
 })
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL, include="non-lazy")
 @SuppressWarnings("serial")
 public class Attachment implements Serializable
 {
@@ -52,6 +54,7 @@ public class Attachment implements Serializable
 	
 	/** */
 	@Lob
+	@Basic(fetch=FetchType.LAZY)
 	@Column(nullable=false, length=Validator.MAX_ATTACHMENT_CONTENT)
 	Blob content;
 	

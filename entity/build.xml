@@ -35,7 +35,21 @@
 		</javac>
 	</target>
 	
-	<target name="entity-ejb-jar" depends="entity-classes">
+	<target name="entity-instrument" depends="entity-classes">
+		<taskdef name="instrument"
+			classname="org.hibernate.tool.instrument.cglib.InstrumentTask">
+			<classpath refid="entity.classpath"/>
+			<classpath path="${build.entity.classes.dir}"/>
+		</taskdef>
+		
+		<instrument verbose="true">
+			<fileset dir="${build.entity.classes.dir}">
+				<include name="org/subethamail/entity/Attachment.class"/>
+			</fileset>
+		</instrument>
+	</target>
+	
+	<target name="entity-ejb-jar" depends="entity-instrument">
 		<jar jarfile="${build.entity.ejb.file}">
 			<metainf dir="${entity.meta.dir}">
 				<include name="persistence.xml"/>

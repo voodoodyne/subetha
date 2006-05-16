@@ -50,6 +50,7 @@ public class SMTPServer implements Runnable
 		this.listeners = listeners;
 
 		this.commandHandler = new CommandHandler();
+		
 	}
 
 	public void start()
@@ -61,7 +62,7 @@ public class SMTPServer implements Runnable
 		serverThread.start();
 		
 		watchdogThread = new Watchdog(this);
-		//watchdogThread.start();
+		watchdogThread.start();
 	}
 
 	public void stop()
@@ -204,6 +205,7 @@ public class SMTPServer implements Runnable
 		{
 			super(Watchdog.class.getName());
 			this.server = server;
+			setPriority(Thread.MAX_PRIORITY / 3);
 		}
 
 		public void quit()
@@ -238,6 +240,15 @@ public class SMTPServer implements Runnable
 							}
 						}
 					}
+				}
+				try
+				{
+					// go to sleep for 10 seconds.
+					sleep(1000 * 10);
+				}
+				catch (InterruptedException e)
+				{
+					// ignore
 				}
 			}
 		}

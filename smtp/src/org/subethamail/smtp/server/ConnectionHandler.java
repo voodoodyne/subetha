@@ -107,7 +107,8 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		}
 		catch (IOException e1)
 		{
-			log.debug(e1);
+			if (log.isDebugEnabled())
+				log.debug(e1);
 		}
 		finally
 		{

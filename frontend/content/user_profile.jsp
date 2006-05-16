@@ -2,6 +2,8 @@
 
 <t:action type="org.subethamail.web.action.auth.AuthRequired" />
 
+<c:set var="me" value="${backend.accountMgr.self}"/>
+
 <c:choose>
 	<c:when test="${empty model.errors.name}">	<%-- First time visiting, or possibly a pw set error --%>
 		<c:set var="myName" value="${backend.accountMgr.self.name}"/>
@@ -36,35 +38,59 @@
 	</form>
 	
 	<p>
-		To change your password, enter (and confirm) the new one below.<br />
-		For security reasons, your current password is not displayed.
+		<strong>Your email addresses:</strong>
 	</p>
 	
-	<form action="<c:url value="/user_changepassword.jsp"/>" method="post">
-		<table>
+	<table class="sort-table" id="emails-table">
+		<thead>
 			<tr>
-				<td><strong>Password</strong></td>
-				<td
-					<c:if test="${!empty model.errors.password}">
-						class="error"
-					</c:if>			
-				>
-					<input type="password" name="password" value="" />
-					
-					<c:if test="${!empty model.errors.password}">
-						<p class="error"><c:out value="${model.errors.password}"/></p>
-					</c:if>
-				</td>
-				<td></td>
+				<td>Email</td>
+				<td>Action</td>
 			</tr>
-			<tr>
-				<td><strong>Confirm</strong></td>
-				<td><input type="password" name="confirm" value="" /></td>
-			</tr>
-			<tr>
-				<td><input type="submit" value="Save" /></td>
-				<td></td>
-			</tr>
-		</table>
-	</form>	
+		</thead>
+		<tbody>
+			<c:forEach var="email" items="${me.emailAddresses}" varStatus="loop">
+				<c:choose>
+					<c:when test="${loop.index % 2 == 0}">
+						<c:set var="color" value="a"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="color" value="b"/>
+					</c:otherwise>
+				</c:choose>
+				<tr class="${color}">
+					<td><a href="mailto:<c:out value="${email}"/>"><c:out value="${email}"/></a></td>
+					<td>
+						<c:choose>
+							<c:when test="${auth.authName != email}">
+								<form action="<c:url value="/email_remove.jsp"/>" method="post">
+									<input type="hidden" name="email" value="<c:out value="${email}"/>" />
+									<input type="submit" value="Remove" style="width: 5em" />
+								</form>
+							</c:when>
+							<c:otherwise>
+								Logged In
+							</c:otherwise>
+						</c:choose>
+					</td>
+				</tr>
+			</c:forEach>
+			<form action="<c:url value="/email_add.jsp"/>" method="post">
+				<tr class="a">
+					<td><input type="text" name="email" value="" /></td>
+					<td><input type="submit" value="Add" style="width: 5em" /></td>
+				</tr>
+				<c:if test="${!empty model.errors.email}">
+				<tr>
+					<td><p class="error"><c:out value="${model.errors.email}"/></p></td>
+				</tr>
+				</c:if>
+			</form>
+		</tbody>
+	</table>
+	<script type="text/javascript">
+	var st = new SortableTable(document.getElementById("emails-table"), ["None", "None"]);
+	st.onsort = st.tableRowColors;
+	</script>
+
 </trim:home>

@@ -88,6 +88,9 @@ public class MailingList implements Serializable, Comparable
 	{
 		public int compare(Subscription s1, Subscription s2)
 		{
+			if(s1 == null || s2 == null)
+				return 0;
+			
 			int result = s1.getPerson().compareTo(s2.getPerson());
 			
 			if (result == 0)

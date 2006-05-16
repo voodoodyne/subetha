@@ -5,8 +5,7 @@
 <trim:header title="${title}">
 	<div class="sideBox LHS">
 		<div>Main Menu</div>
-		<a href="<c:url value="/home.jsp"/>">&rsaquo; My Subscriptions</a>
-		<a href="<c:url value="/user_profile.jsp"/>">&rsaquo; My Profile</a>
+		<a href="<c:url value="/home.jsp"/>">&rsaquo; Home</a>
 		<a href="<c:url value="/change_password.jsp"/>">&rsaquo; Change Password</a>
 	</div>
 

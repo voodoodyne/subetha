@@ -7,6 +7,6 @@
 		<c:redirect url="/home.jsp" />
 	</c:when>
 	<c:otherwise>
-		<jsp:forward page="/user_profile.jsp" />
+		<jsp:forward page="/home.jsp" />
 	</c:otherwise>				
 </c:choose>

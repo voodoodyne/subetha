@@ -134,11 +134,6 @@ public interface DAO
 	public Person findPerson(Long personId) throws NotFoundException;
 
 	/**
-	 * @return the identified person.
-	 */
-	public Person findPerson(String email) throws NotFoundException;
-
-	/**
 	 * @return a list of all mailing lists on the site.
 	 */
 	public List<MailingList> findAllLists();

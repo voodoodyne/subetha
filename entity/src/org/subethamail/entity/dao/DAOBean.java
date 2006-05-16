@@ -261,22 +261,6 @@ public class DAOBean implements DAO
 	}
 
 	/**
-	 * @see DAO#findPerson(Long)
-	 */
-	public Person findPerson(String email) throws NotFoundException
-	{
-		if (log.isDebugEnabled())
-			log.debug("Finding Person with email " + email);
-		
-		EmailAddress ea = this.em.find(EmailAddress.class, email);
-		
-		if (ea == null || ea.getPerson() == null)
-			throw new NotFoundException("No person with email: " + email);
-		else
-			return ea.getPerson();
-	}
-
-	/**
 	 * @see DAO#findAllLists()
 	 */
 	@SuppressWarnings("unchecked")

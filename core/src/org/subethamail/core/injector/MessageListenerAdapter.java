@@ -11,8 +11,6 @@ import java.io.InputStream;
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -55,15 +53,6 @@ public class MessageListenerAdapter implements MessageListener, Lifecycle
 	 */
 	public void start() throws Exception
 	{
-		if (this.registry != null)
-			throw new RuntimeException("JBoss fixed, code can be removed now");
-		else
-		{
-			Context ctx = new InitialContext();
-			this.registry = (MessageListenerRegistry)ctx.lookup("subetha/SMTPService/local");
-			this.injector = (Injector)ctx.lookup(Injector.JNDI_NAME);
-		}
-		
 		this.registry.register(this);
 	}
 	

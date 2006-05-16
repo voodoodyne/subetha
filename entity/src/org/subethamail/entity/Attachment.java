@@ -36,7 +36,8 @@ import org.subethamail.common.valid.Validator;
 @NamedQueries({
 })
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL, include="non-lazy")
+// Disabled caching until instrumentation problem with 4.0.4.GA resolved
+//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL, include="non-lazy")
 @SuppressWarnings("serial")
 public class Attachment implements Serializable
 {

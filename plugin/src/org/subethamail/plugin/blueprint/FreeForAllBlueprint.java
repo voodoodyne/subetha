@@ -10,8 +10,6 @@ import java.util.Set;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
@@ -39,14 +37,6 @@ public class FreeForAllBlueprint extends AbstractBlueprint implements Lifecycle
 	public void start() throws Exception
 	{
 		super.start();
-
-		if (this.listMgr != null)
-			throw new RuntimeException("JBoss fixed, this code can be removed now");
-		else
-		{
-			Context ctx = new InitialContext();
-			this.listMgr = (ListMgr)ctx.lookup("subetha/ListMgr/local");
-		}		
 	}
 
 	/** */

@@ -154,7 +154,8 @@ public class Mail implements Serializable, Comparable
 	
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="mail")
-	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+	// Disabled caching until instrumentation problem with jboss-4.0.4.GA resolved
+	//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	Set<Attachment> attachments;
 	
 	/** 

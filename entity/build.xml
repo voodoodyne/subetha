@@ -49,7 +49,8 @@
 		</instrument>
 	</target>
 	
-	<target name="entity-ejb-jar" depends="entity-instrument">
+	<!-- Disabled instrumentation until problem with 4.0.4 resolved -->
+	<target name="entity-ejb-jar" depends="entity-classes">
 		<jar jarfile="${build.entity.ejb.file}">
 			<metainf dir="${entity.meta.dir}">
 				<include name="persistence.xml"/>

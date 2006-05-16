@@ -10,8 +10,6 @@ import java.io.UnsupportedEncodingException;
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.mail.internet.InternetAddress;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -71,15 +69,6 @@ public class BootstrapperBean implements BootstrapperManagement
 	 */
 	public void start() throws Exception
 	{
-		if (this.dao != null)
-			throw new RuntimeException("JBoss fixed, code can be removed now");
-		else
-		{
-			Context ctx = new InitialContext();
-			this.dao = (DAO)ctx.lookup(DAO.JNDI_NAME);
-			this.admin = (Admin)ctx.lookup(Admin.JNDI_NAME);
-		}
-		
 		// If we haven't been bootstrapped, we need to run.
 		try
 		{

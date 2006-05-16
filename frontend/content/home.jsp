@@ -28,7 +28,7 @@
 						class="error"
 					</c:if>			
 				>
-					<input type="text" name="name" value="<c:out value="${myName}"/>">
+					<input type="text" size="35" name="name" value="<c:out value="${myName}"/>">
 					
 					<c:if test="${!empty model.errors.name}">
 						<p class="error"><c:out value="${model.errors.name}"/></p>

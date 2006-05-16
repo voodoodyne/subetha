@@ -68,14 +68,14 @@
 							<td>
 								<c:if test="${perms.UNSUBSCRIBE_OTHERS}">
 									<form action="<c:url value="/person_unsubscribe.jsp"/>" method="post" style="display:inline">
-										<input type="hidden" name="subId" value="${p.id}" />
+										<input type="hidden" name="personId" value="${p.id}" />
 										<input type="hidden" name="listId" value="${param.listId}" />
 										<input type="submit" value="Unsubscribe" />
 									</form>
 								</c:if>
 								<c:if test="${perms.EDIT_ROLES}">
 									<form action="<c:url value="/person_set_role.jsp"/>" method="post" style="display:inline">
-										<input type="hidden" name="subId" value="${p.id}" />
+										<input type="hidden" name="personId" value="${p.id}" />
 	 									<input type="hidden" name="listId" value="${param.listId}" />
 										<select name="roleId">
 											<c:forEach var="role" items="${listRoles.roles}" varStatus="loop">

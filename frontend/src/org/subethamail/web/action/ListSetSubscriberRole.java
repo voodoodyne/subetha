@@ -8,7 +8,6 @@ package org.subethamail.web.action;
 
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
-import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
 
 /**
@@ -18,33 +17,15 @@ import org.tagonist.propertize.Property;
  */
 public class ListSetSubscriberRole extends AuthRequired 
 {
-
 	/** */
-	public static class Model extends ErrorMapModel
-	{
-		/** */
-		@Property Long subId;
-		@Property Long listId;
-		@Property Long roleId;
-	}
-	
-	/** */
-	public void initialize()
-	{
-		this.getCtx().setModel(new Model());
-	}
+	@Property Long personId;
+	@Property Long listId;
+	@Property Long roleId;
 	
 	/** */
 	public void authExecute() throws Exception
 	{
-		Model model = (Model)this.getCtx().getModel();
-		
-		model.validate();
-		
-		if (model.getErrors().isEmpty())
-		{
-			Backend.instance().getListMgr().setSubscriberRole(model.listId, model.subId, model.roleId);
-		}
+		Backend.instance().getListMgr().setSubscriberRole(this.listId, this.personId, this.roleId);
 	}
 }
 

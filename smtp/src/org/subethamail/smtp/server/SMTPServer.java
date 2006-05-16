@@ -61,7 +61,7 @@ public class SMTPServer implements Runnable
 		serverThread.start();
 		
 		watchdogThread = new Watchdog(this);
-		watchdogThread.start();
+		//watchdogThread.start();
 	}
 
 	public void stop()

@@ -107,5 +107,12 @@ public interface Deliverator
 	 * involved.  The mail will be customized for the person.
 	 */
 	public void deliver(Long mailId, Long personId) throws NotFoundException;
+	
+	/**
+	 * Actually delivers a piece of mail to an email.  No queueing
+	 * involved.  The mail will be customized for the person.
+	 */
+	public void deliver(Long mailId, String email) throws NotFoundException;
+	
 }
 

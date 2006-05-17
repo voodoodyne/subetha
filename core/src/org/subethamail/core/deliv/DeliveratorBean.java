@@ -27,6 +27,7 @@ import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.util.VERPAddress;
+import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
@@ -53,40 +54,67 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 	@Resource(mappedName="java:/Mail") private Session mailSession;
 	
 	/**
+	 * @see Deliverator#deliver(Long, String)
+	 */
+	public void deliver(Long mailId, String email) throws NotFoundException
+	{
+		EmailAddress ea = this.dao.findEmailAddress(email);
+		Mail mail = this.dao.findMail(mailId);		
+		deliverTo(mail, ea);
+	}
+	
+	
+	/**
 	 * @see Deliverator#deliver(Long, Long)
 	 */
 	public void deliver(Long mailId, Long personId) throws NotFoundException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Delivering mailId " + mailId + " to personId " + personId);
-		
+
 		Mail mail = this.dao.findMail(mailId);
 		Person person = this.dao.findPerson(personId);
-		
 		Subscription sub = person.getSubscription(mail.getList().getId());
+
+		EmailAddress ea = sub.getDeliverTo();
+		
 		if (sub == null || sub.getDeliverTo() == null)
 		{
 			// User has unsubscribed or decided they don't want mail after all.
 			return;
 		}
 		
+		deliverTo(mail, ea);
+	}
+	
+	/**
+	 * Send a mail directly to an email
+	 * 
+	 * @param mailId the message to send
+	 * @param email the email to send to.
+	 * @param personId the person to send to, if there is one.
+	 * 
+	 * @throws NotFoundException if something can't be found
+	 */
+	protected void deliverTo(Mail mail, EmailAddress emailAddress) throws NotFoundException
+	{
+		if (log.isDebugEnabled())
+			log.debug("Delivering mailId " + mail.getId() + " to email " + emailAddress.getId());
+		
 		try
 		{
-			Address destination = new InternetAddress(sub.getDeliverTo().getId());
-			
+			Address destination = new InternetAddress(emailAddress.getId());
 			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
 
 			// Set up the VERP bounce address
-			byte[] token = this.encryptor.encryptString(sub.getDeliverTo().getId());
+			byte[] token = this.encryptor.encryptString(emailAddress.getId());
 			msg.setEnvelopeFrom(VERPAddress.encodeVERP(mail.getList().getEmail(), token));
-			
+
 			this.filterRunner.onSend(msg, mail);
 			
 			this.detacher.attach(msg);
 			
 			Transport.send(msg, new Address[] { destination });
 			
-			sub.getDeliverTo().bounceDecay();
+			emailAddress.bounceDecay();
 		}
 		catch (IgnoreException ex)
 		{
@@ -95,12 +123,12 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 		}
 		catch (MessagingException ex)
 		{
-			log.error("Error delivering mailId " + mailId + " to personId " + personId, ex);
+			log.error("Error delivering mailId " + mail.getId() + " to address " + emailAddress.getId(), ex);
 			throw new RuntimeException(ex);
 		}
 		catch (IOException ex)
 		{
-			log.error("Error delivering mailId " + mailId + " to personId " + personId, ex);
+			log.error("Error delivering mailId " + mail.getId() + " to address " + emailAddress.getId(), ex);
 			throw new RuntimeException(ex);
 		}
 	}

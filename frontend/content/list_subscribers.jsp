@@ -57,6 +57,20 @@
 						</td>
 						<td>
 							<c:out value="${p.roleName}" />
+							<c:if test="${perms.EDIT_ROLES}">
+								<form action="<c:url value="/person_set_role.jsp"/>" method="post" style="display:inline">
+									<input type="hidden" name="personId" value="${p.id}" />
+ 									<input type="hidden" name="listId" value="${param.listId}" />
+									<input type="submit" value="Change to ->" />
+									<select name="roleId">
+										<c:forEach var="role" items="${listRoles.roles}" varStatus="loop">
+											<c:if test="${role.name != sub.roleName}">
+												<option value="${role.id}"><c:out value="${role.name}"/></option>
+											</c:if>
+										</c:forEach>
+									</select>
+								</form>
+							</c:if>
 						</td>
 						<c:if test="${perms.UNSUBSCRIBE_OTHERS || perms.EDIT_ROLES}">
 							<td>
@@ -65,20 +79,6 @@
 										<input type="hidden" name="personId" value="${p.id}" />
 										<input type="hidden" name="listId" value="${param.listId}" />
 										<input type="submit" value="Unsubscribe" onclick="return confirm('Are you sure you want to unsubscribe this user?');"/>
-									</form>
-								</c:if>
-								<c:if test="${perms.EDIT_ROLES}">
-									<form action="<c:url value="/person_set_role.jsp"/>" method="post" style="display:inline">
-										<input type="hidden" name="personId" value="${p.id}" />
-	 									<input type="hidden" name="listId" value="${param.listId}" />
-										<select name="roleId">
-											<c:forEach var="role" items="${listRoles.roles}" varStatus="loop">
-												<c:if test="${role.name != sub.roleName}">
-													<option value="${role.id}"><c:out value="${role.name}"/></option>
-												</c:if>
-											</c:forEach>
-										</select>
-										<input type="submit" value="Change" />
 									</form>
 								</c:if>
 							</td>

@@ -82,7 +82,8 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 	public void onInject(SubEthaMessage msg, FilterContext ctx) 
 		throws IgnoreException, HoldException, MessagingException
 	{
-		log.debug("Subject Filter: onInject()");
+		if (log.isDebugEnabled())
+			log.debug("Subject Filter: onInject()");
 		
 		// get the parameter arguments
 		String subjectArg = (String) ctx.getArgument(ARG_SUBJECTPREFIX);

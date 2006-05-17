@@ -48,7 +48,8 @@ public class GetSubscribers extends AuthAction
 */
 		model.subscriberData = Backend.instance().getListMgr().getSubscribers(model.listId);
 		model.setTotalCount(model.subscriberData.size());
-
+		if (model.getSkip() > 0 && model.getCount() > 0)
+			model.subscriberData = model.subscriberData.subList(model.getSkip(), model.getSkip() + model.getCount());
 /*		
 		SearchResult result = this.getSearcher().search(model.getQuery(), model.getSkip(), model.getCount());
 */

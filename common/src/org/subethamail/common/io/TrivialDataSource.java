@@ -50,7 +50,11 @@ public class TrivialDataSource implements DataSource
 	 */
 	public String getName()
 	{
-		throw new UnsupportedOperationException();
+		// Not sure what this is for.  Probably should parse the content-type
+		// looking for the filename.  Doesn't seem to actually be used,
+		// but it can't be null.
+		// TODO:  consider implementing getName()
+		return "TODO?";
 	}
 
 	/* (non-Javadoc)

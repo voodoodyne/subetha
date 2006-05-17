@@ -122,6 +122,9 @@ public class DetacherBean implements Detacher
 			
 			Multipart multi = (Multipart)content;
 			
+			// This is necessary because of the mysterious JavaMail bug 4404733
+			part.setContent(multi);
+
 			for (int i=0; i<multi.getCount(); i++)
 				this.attach(multi.getBodyPart(i));
 		}

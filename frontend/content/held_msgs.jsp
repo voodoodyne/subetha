@@ -57,13 +57,18 @@
 						<td>
 							<form action="<c:url value="/held_msg_action.jsp" />" method="post" style="display:inline">
 								<input type="hidden" name="msgId" value="${msg.id}" />
-								<input type="submit" name="action" value="Approve" />
-								<input type="submit" name="action" value="Discard" />
+								<input type="hidden" name="action" value="Discard" />
+								<input type="submit" value="Discard" />
+							</form>
+							<form action="<c:url value="/held_msg_action.jsp" />" method="post" style="display:inline">
+								<input type="hidden" name="msgId" value="${msg.id}" />
+								<input type="hidden" name="action" value="Approve" />								
+								<input type="submit" value="Approve" />
 							</form>
 							<form action="<c:url value="/held_msg_action.jsp" />" method="post" style="display:inline">
 								<input type="hidden" name="msgId" value="${msg.id}" />
 								<input type="hidden" name="action" value="Sub_Approve"/>
-								<input type="submit" name="submit" value="Subscribe and Approve" />
+								<input type="submit" value="Subscribe and Approve" />
 							</form>
 						</td>
 					</tr>

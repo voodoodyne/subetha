@@ -62,7 +62,7 @@ import org.subethamail.common.valid.Validator;
 	),
 	@NamedQuery(
 		name="MailByList", 
-		query="from Mail m where m.list.id = :listId order by m.dateCreated desc",
+		query="from Mail m where m.list.id = :listId and m.hold is null order by m.dateCreated desc",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")

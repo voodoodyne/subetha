@@ -134,20 +134,20 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		
 		String[] idHeader = part.getHeader(DetacherBean.HDR_ATTACHMENT_REF);
 		
-		if(idHeader != null && idHeader.length >0)
+		if (idHeader != null && idHeader.length > 0)
 			id = Long.parseLong(idHeader[0]);
 
-		//not an attachment cause it isn't stored as a detached part.
-		if(id == null)
+		// not an attachment cause it isn't stored as a detached part.
+		if (id == null)
 			return null;
-		
+
 		String name = part.getFileName();
-		if(name == null || name.equals(""))
+		if (name == null || name.equals(""))
 		{
 			String contentType = part.getContentType();
 			int namestart = contentType.indexOf("name=");
 			int endnamevalue = contentType.indexOf("\"", namestart + 1);
-			name = contentType.substring(namestart +1, endnamevalue);
+			name = contentType.substring(namestart + 1, endnamevalue);
 		}
 		
 		return new AttachmentData(id, part.getContentType(), name, part.getSize());
@@ -159,8 +159,6 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	{
 		try
 		{
-
-			
 			InternetAddress addy = raw.getFromAddress();
 		
 			SubEthaMessage msg = new SubEthaMessage(this.mailSession, raw.getContent());
@@ -176,14 +174,14 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 				for (int i=0; i<multi.getCount(); i++) 
 				{
 					AttachmentData ad = makeAttachmentData(multi.getBodyPart(i));
-					if(ad != null)
+					if (ad != null)
 						attachments.add(ad);
 				}
 			}
 			else if (content instanceof Part)
 			{
 				AttachmentData ad = makeAttachmentData((Part) content);
-				if(ad != null)
+				if (ad != null)
 					attachments.add(ad);
 			}
 

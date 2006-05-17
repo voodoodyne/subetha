@@ -39,5 +39,9 @@ public class HeldMsgAction extends AuthAction
 		{
 			this.listId = Backend.instance().getListMgr().discardHeldMessage(this.msgId);
 		}
+		else if ("Sub_Approve".equals(this.action))
+		{
+			this.listId = Backend.instance().getListMgr().subscribeAndApproveHeldMessages(this.msgId);
+		}
 	}
 }

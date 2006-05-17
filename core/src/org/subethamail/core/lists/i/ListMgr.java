@@ -207,6 +207,13 @@ public interface ListMgr
 	public Long discardHeldMessage(Long msgId) throws NotFoundException, PermissionException;
 	
 	/**
+	 * Approves a held message, and subscribe the email address.
+	 * @return the id of the list to which the msg was sent.
+	 * Requires Permission.APPROVE_SUBSCRIPTIONS and Permissions.APPROVE_MESSAGES
+	 */
+	public Long subscribeAndApproveHeldMessages(Long msgId) throws NotFoundException, PermissionException;
+
+	/**
 	 * UnSubscribes a person from a list.
 	 * 
 	 * @param listId the mailing list id

@@ -70,6 +70,15 @@
 				It's not 1984 anymore. If that is not an option, edit 
 				${jboss.dir}/server/default/deploy/mail-service.xml.
 				Set mail.smtp.allow8bitmime=false</dd>
+
+			<dt>Why does SubEtha store attachments in a separate table?</dt>
+			<dd>1) they're huge, and we don't want to have to parse them when we're rendering the archive page
+				2) they need to be accessed separately as links from the archives anyways
+				3) if the msg bodies don't have attachments, it's reasonable to cache the whole msg 
+				body in the 2nd level cache (currently done)
+				4) it more easily allows the Attachments database table (which could grow to be huge)
+				to be separated out from the main system</dd>
+
 		</dl>
 	</body>
 </html>

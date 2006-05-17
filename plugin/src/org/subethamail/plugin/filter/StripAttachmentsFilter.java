@@ -6,12 +6,9 @@
 package org.subethamail.plugin.filter;
 
 import java.io.IOException;
-
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.internet.MimeMultipart;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
@@ -24,7 +21,6 @@ import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.plugin.i.helper.FilterParameterImpl;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
-
 import com.sun.org.apache.xalan.internal.xsltc.dom.Filter;
 
 /**
@@ -44,6 +40,7 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 {
 	/** */
 	private static Log log = LogFactory.getLog(StripAttachmentsFilter.class);
+	
 	public static final String ARG_MAXSIZEINKB = "Threshold in KB";
 	
 	/** */
@@ -86,7 +83,8 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 	 * @see Filter#onInject(SubEthaMessage, FilterContext)
 	 */
 	@Override
-	public void onInject(SubEthaMessage msg, FilterContext ctx) throws IgnoreException, HoldException, MessagingException
+	public void onInject(SubEthaMessage msg, FilterContext ctx)
+		throws IgnoreException, HoldException, MessagingException
 	{
 		//TODO: Add section for replacing message.
 		int maxKB = Integer.parseInt(ctx.getArgument(ARG_MAXSIZEINKB).toString());
@@ -99,22 +97,24 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 		} 
 		catch (IOException ioe) 
 		{
-			if(log.isDebugEnabled())
+			if (log.isDebugEnabled())
 				log.debug("Error getting content: " + ioe.getMessage());
 		}
 		
-		if(content instanceof MimeMultipart) 
+		if (content instanceof MimeMultipart) 
 		{
 			MimeMultipart mp = (MimeMultipart) content;
 			for (int i=0; i<mp.getCount(); i++) 
 			{
-				if(mp.getBodyPart(i).getSize() > (maxKB * 1024)) 
+				if (mp.getBodyPart(i).getSize() > (maxKB * 1024)) 
 				{
-					if(log.isDebugEnabled()) log.debug("Stripping attachement of type: " + mp.getBodyPart(i).getContentType());		
+					if (log.isDebugEnabled())
+						log.debug("Stripping attachement of type: " + mp.getBodyPart(i).getContentType());		
 					
 					boolean worked = mp.removeBodyPart(mp.getBodyPart(i));
 					
-					if(log.isDebugEnabled()) log.debug("Attachement was stripped (T/F)? " + worked);		
+					if (log.isDebugEnabled())
+						log.debug("Attachement was stripped (T/F)? " + worked);		
 				}
 			}
 			

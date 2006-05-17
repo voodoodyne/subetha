@@ -5,7 +5,7 @@
 <trim:list title="Archive" listId="${param.listId}">
 
 	<c:choose>
-		<c:when test="${empty model}">
+		<c:when test="${empty model.messages}">
 			<p>
 				There are no messages in the archive.
 			</p>

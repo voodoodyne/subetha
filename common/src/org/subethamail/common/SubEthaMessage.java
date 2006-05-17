@@ -59,6 +59,7 @@ public class SubEthaMessage extends SMTPMessage
 		// get ignored.  The modified flag does not get reliably set by
 		// the various methods that should set the fucking flag.
 		this.modified = true;
+		this.saved = false;
 	}
 	
 	/** */

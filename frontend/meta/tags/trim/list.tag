@@ -63,7 +63,7 @@
 				<c:url var="listHeldSubsUrl" value="/held_subs.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
-				<a href="${listHeldSubsUrl}">&rsaquo; Held Subscrip</a>
+				<a href="${listHeldSubsUrl}">&rsaquo; Held Subscriptions</a>
 			</c:if>
 				
 			<c:if test="${perms.APPROVE_MESSAGES}">

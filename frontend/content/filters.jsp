@@ -63,11 +63,11 @@
 					<div><c:out value="${filter.description}"/></div>
 				</td>
 				<td>
-					<table>
+					<table border="1">
 						<c:forEach var="argEntry" items="${filter.arguments}">
 							<tr>
-								<th><c:out value="${argEntry.key}"/></th>
-								<td><c:out value="${argEntry.value}"/></td>
+								<th align="left" valign="top"><c:out value="${argEntry.key}"/></th>
+								<td align="left" valign="top"><pre><c:out value="${argEntry.value}"/></pre></td>
 							</tr>
 						</c:forEach>
 					</table>

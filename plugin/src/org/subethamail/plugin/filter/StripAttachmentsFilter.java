@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.HoldException;
@@ -21,7 +22,6 @@ import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.plugin.i.helper.FilterParameterImpl;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
-import com.sun.org.apache.xalan.internal.xsltc.dom.Filter;
 
 /**
  * This filter removes all attachments greater than a certain size

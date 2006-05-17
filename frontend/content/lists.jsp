@@ -2,12 +2,12 @@
 
 <t:action type="org.subethamail.web.action.auth.AuthRequired" />
 
-<c:set var="lists" value="${backend.admin.allLists}" />
+<t:action var="model" type="org.subethamail.web.action.GetLists" />
 
 <trim:main title="All Lists">
 	<h1>All Lists</h1>
 	<c:choose>
-		<c:when test="${empty lists}">
+		<c:when test="${empty model.listData}">
 			<p>No lists have been created. You can <a href="<c:url value="/list_create.jsp"/>">create a list</a>.</p>
 		</c:when>
 		<c:otherwise>
@@ -20,7 +20,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="list" items="${lists}" varStatus="loop">
+				<c:forEach var="list" items="${model.listData}" varStatus="loop">
 					<c:choose>
 						<c:when test="${loop.index % 2 == 0}">
 							<c:set var="color" value="a"/>
@@ -51,6 +51,10 @@
 var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String"]);
 st1.onsort = st1.tableRowColors;
 </script>
+			<c:url var="queryURL" value="/lists.jsp">
+				<c:param name="query" value="${model.query}"/>
+			</c:url>
+			<se:searchPaginator url="${queryURL}&" model="${model}"/>
 
 		</c:otherwise>
 	</c:choose>

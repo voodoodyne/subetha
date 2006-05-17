@@ -470,7 +470,8 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
 		mail.getList().checkPermission(getMe(), Permission.APPROVE_SUBSCRIPTIONS);
 		
-		for (MailHold mh : this.getHeldMessages(mail.getList().getId())) {
+		for (MailHold mh : this.getHeldMessages(mail.getList().getId()))
+		{
 			if(mh.getFrom().equals(mail.getFromAddress().toString())) 
 			{
 				Mail m = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);

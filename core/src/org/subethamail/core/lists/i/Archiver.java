@@ -34,4 +34,14 @@ public interface Archiver
 	 * @return a whole lot of information about the message.
 	 */
 	public MailData getMail(Long mailId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Sends the mail to the current user.
+	 * 
+	 * @param mailId the mail to resend
+	 * @param email the email to send to
+	 * 
+	 * @throws NotFoundException if the mail cannot be found or the user is unknown
+	 */
+	public void sendTo(Long mailId, String email) throws NotFoundException;
 }

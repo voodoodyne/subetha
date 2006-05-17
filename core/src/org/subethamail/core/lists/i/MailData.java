@@ -19,7 +19,9 @@ public class MailData extends MailSummary
 	/** */
 	Long listId;
 	List<String> textParts;
+	List<AttachmentData> attachments;
 	MailSummary threadRoot;
+	
 	
 	/**
 	 */
@@ -31,12 +33,14 @@ public class MailData extends MailSummary
 			Date dateCreated,
 			List<MailSummary> replies,
 			Long listId,
-			List<String> textParts)
+			List<String> textParts,
+			List<AttachmentData> attachments)
 	{
 		super(id, subject, fromEmail, fromName, dateCreated, replies);
 		
 		this.listId = listId;
 		this.textParts = textParts;
+		this.attachments = attachments;
 	}
 
 	/**
@@ -55,6 +59,15 @@ public class MailData extends MailSummary
 		return this.textParts;
 	}
 
+	/**
+	 * 
+	 * @return the attachments
+	 */
+	public List<AttachmentData> getAttachments()
+	{
+		return this.attachments;
+	}
+	
 	/**
 	 * @return the root of the thread hierarchy in which this message
 	 *  participates.  This object will be part of the hierarchy. 

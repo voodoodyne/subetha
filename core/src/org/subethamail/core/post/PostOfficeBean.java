@@ -363,7 +363,7 @@ public class PostOfficeBean implements PostOffice
 		vctx.put("holdMsg", holdMsg);
 		vctx.put("email", posterEmail);
 		
-		MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
+		MessageBuilder builder = new MessageBuilder(MailType.MAIL_HELD, vctx);
 		builder.setTo(posterEmail);
 		builder.setFrom(relevantList);
 		builder.send();

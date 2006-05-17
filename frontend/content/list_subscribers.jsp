@@ -64,7 +64,7 @@
 									<input type="submit" value="Change to ->" />
 									<select name="roleId">
 										<c:forEach var="role" items="${listRoles.roles}" varStatus="loop">
-											<c:if test="${role.name != sub.roleName}">
+											<c:if test="${role.name != p.roleName}">
 												<option value="${role.id}"><c:out value="${role.name}"/></option>
 											</c:if>
 										</c:forEach>

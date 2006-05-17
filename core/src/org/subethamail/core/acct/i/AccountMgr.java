@@ -142,14 +142,6 @@ public interface AccountMgr
 	public void unsubscribeMe(Long listId) throws NotFoundException;
 
 	/**
-	 * Send the msg to the current user
-	 * 
-	 * @param msgId the message to send
-	 * @throws NotFoundException if either the msg or the person is not found
-	 */
-	public void resendMessage(Long msgId) throws NotFoundException;
-	
-	/**
 	 * Requests that the user's password be sent back to them in plaintext.
 	 * No access control.
 	 * 

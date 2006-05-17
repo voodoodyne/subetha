@@ -318,11 +318,4 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		
 		this.postOffice.sendPassword(addy);
 	}
-	
-	/**
-	 * @see AccountMgr#resendMessage(Long)
-	 */
-	public void resendMessage(Long msgId) throws NotFoundException{
-		//throw new MethodNotSupportedException();
-	}
 }

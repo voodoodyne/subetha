@@ -4,7 +4,7 @@
 
 <c:set var="me" value="${backend.accountMgr.self}"/>
 
-<trim:home title="SubEtha Mail">
+<trim:main title="SubEtha Mail">
 	<h1>Welcome, <c:out value="${me.name}"/></h1>
 
 <c:choose>
@@ -161,4 +161,4 @@ st1.onsort = st1.tableRowColors;
 
 		</c:otherwise>
 	</c:choose>
-</trim:home>
+</trim:main>

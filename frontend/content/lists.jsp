@@ -4,7 +4,7 @@
 
 <c:set var="lists" value="${backend.admin.allLists}" />
 
-<trim:admin title="All Lists">
+<trim:main title="All Lists">
 	<h1>All Lists</h1>
 	<c:choose>
 		<c:when test="${empty lists}">
@@ -54,6 +54,4 @@ st1.onsort = st1.tableRowColors;
 
 		</c:otherwise>
 	</c:choose>
-
-
-</trim:admin>
+</trim:main>

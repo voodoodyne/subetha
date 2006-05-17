@@ -2,7 +2,7 @@
 
 <t:action var="siteStatus" type="org.subethamail.web.action.SiteStatus" />
 
-<trim:admin title="Site Status">
+<trim:main title="Site Status">
 	<h1>Site Status</h1>
 
 	<ul>
@@ -17,4 +17,4 @@
 	
 
 
-</trim:admin>
+</trim:main>

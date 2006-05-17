@@ -9,17 +9,7 @@
 
 <c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
 
-<trim:header title="${title}">
-	<c:if test="${auth.loggedIn}">
-		<div class="sideBox LHS">
-			<div>Main Menu</div>
-			<a href="<c:url value="/home.jsp"/>">&rsaquo; Home</a>
-			<a href="<c:url value="/change_password.jsp"/>">&rsaquo; Change Password</a>
-			<c:if test="${auth.siteAdmin}">
-				<a href="<c:url value="/site_status.jsp"/>">&rsaquo; Site Administration</a>
-			</c:if>
-		</div>
-	</c:if>
+<trim:menus title="${title}">
 	<div class="sideBox LHS">
 		<div>List Menu</div>
 
@@ -97,4 +87,4 @@
 		<h2><c:out value="${title}"/></h2>
 		<jsp:doBody/>
 	</div> <!-- bodyText -->
-</trim:header>
+</trim:menus>

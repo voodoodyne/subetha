@@ -2,7 +2,7 @@
 
 <t:action type="org.subethamail.web.action.auth.AuthRequired" />
 
-<trim:admin title="Create List">
+<trim:main title="Create List">
 	<h1>Create List</h1>
 	
 	<form action="<c:url value="/list_create_submit.jsp"/>" method="post">
@@ -104,4 +104,4 @@
 		<input type="submit" value="Create List" />
 
 	</form>
-</trim:admin>
+</trim:main>

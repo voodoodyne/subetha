@@ -1,6 +1,6 @@
 <%@include file="/inc/top_standard.jspf" %>
 
-<trim:admin title="Inject Mail">
+<trim:main title="Inject Mail">
 	<h1>Inject Mail</h1>
 	
 	<p>
@@ -45,4 +45,4 @@
 		<input type="submit" value="Inject Mail" />
 	</form>
 
-</trim:admin>
+</trim:main>

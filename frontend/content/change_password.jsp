@@ -11,7 +11,7 @@
 	</c:otherwise>
 </c:choose>
 
-<trim:home title="Change Password">
+<trim:main title="Change Password">
 
 	<h1>Change Password</h1>
 
@@ -46,4 +46,4 @@
 			</tr>
 		</table>
 	</form>	
-</trim:home>
+</trim:main>

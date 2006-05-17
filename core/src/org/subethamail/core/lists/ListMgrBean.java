@@ -293,6 +293,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 
 	/*
 	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#setFilter(java.lang.Long, java.lang.String)
+	 */
+	public void setFilter(Long listId, String className) throws NotFoundException, PermissionException
+	{
+		this.setFilter(listId, className, null);
+	}
+	
+	/*
+	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setFilter(java.lang.Long, java.lang.String, java.util.Map)
 	 */
 	public void setFilter(Long listId, String className, Map<String, Object> args) throws NotFoundException, PermissionException
@@ -311,10 +320,17 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			
 			for (FilterParameter param: filt.getParameters())
 			{
-				Object value = args.get(param.getName());
-				if (value == null)
+				Object value = null;
+				if (args != null)
+				{
+					value = args.get(param.getName());
+					if (value == null)
+						value = param.getDefaultValue();
+				}
+				else
+				{
 					value = param.getDefaultValue();
-				
+				}
 				if (!param.getType().equals(value.getClass()))
 					throw new IllegalArgumentException("Param " + param.getName() + " has " + value.getClass() + " but should have " + param.getType());
 					

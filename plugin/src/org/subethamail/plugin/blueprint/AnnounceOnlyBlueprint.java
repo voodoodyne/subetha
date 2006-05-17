@@ -17,6 +17,8 @@ import org.subethamail.common.PermissionException;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
+import org.subethamail.plugin.filter.AppendFooterFilter;
+import org.subethamail.plugin.filter.ListHeaderFilter;
 
 /**
  * Creates an announce-only list. 
@@ -76,6 +78,10 @@ public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycl
 			perms.add(Permission.APPROVE_MESSAGES);
 			perms.add(Permission.APPROVE_SUBSCRIPTIONS);
 			listMgr.addRole(listId, "Moderator", perms);
+
+			// Add a couple useful footers
+			listMgr.setFilter(listId, AppendFooterFilter.class.getName());
+			listMgr.setFilter(listId, ListHeaderFilter.class.getName());
 		}
 		catch(PermissionException pe)
 		{

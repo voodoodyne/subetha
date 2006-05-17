@@ -142,6 +142,13 @@ public interface ListMgr
 	public void setFilter(Long listId, String className, Map<String, Object> args) throws NotFoundException, PermissionException;
 	
 	/**
+	 * Enables a filter on a list with default FilterParameters.
+	 * 
+	 * Requires Permission.EDIT_FILTERS
+	 */
+	public void setFilter(Long listId, String className) throws NotFoundException, PermissionException;
+
+	/**
 	 * Disables a filter on a list.  Fails silently if filter is not enabled on the list.
 	 * All argument data is deleted.
 	 * 

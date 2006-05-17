@@ -17,6 +17,9 @@ import org.subethamail.common.PermissionException;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
+import org.subethamail.plugin.filter.AppendFooterFilter;
+import org.subethamail.plugin.filter.ListHeaderFilter;
+import org.subethamail.plugin.filter.ReplyToFilter;
 
 /**
  * Creates a list suitable for a publicly advertised technical list.
@@ -49,14 +52,14 @@ public class TechnicalBlueprint extends AbstractBlueprint implements Lifecycle
 		return 
 			"Create a list suitable for public technical support.  Anyone can " +
 			" subscribe and view archives, but email addresses are hidden from" +
-			" nonsubscribers to avoid poaching by spam bots.  The subscriber list" +
-			" is only available to the list owner(s).";
+			" nonsubscribers to avoid poaching by spam bots. By default replies" +
+			" go back to the list and the subscriber list is only available to" +
+			" the list owner(s).";
 	}
 	
 	/** */
 	public void configureMailingList(Long listId)
 	{
-		// Setup Roles
 		try
 		{
 			// Subscriber
@@ -73,6 +76,11 @@ public class TechnicalBlueprint extends AbstractBlueprint implements Lifecycle
 			perms.add(Permission.VIEW_SUBSCRIBERS);
 			roleId = listMgr.addRole(listId, "Guest", perms);
 			listMgr.setAnonymousRole(listId, roleId);
+
+			// Add a couple useful footers
+			listMgr.setFilter(listId, AppendFooterFilter.class.getName());
+			listMgr.setFilter(listId, ListHeaderFilter.class.getName());
+			listMgr.setFilter(listId, ReplyToFilter.class.getName());
 		}
 		catch(PermissionException pe)
 		{

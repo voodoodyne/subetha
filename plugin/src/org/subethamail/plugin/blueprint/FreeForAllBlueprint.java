@@ -17,6 +17,8 @@ import org.subethamail.common.PermissionException;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
+import org.subethamail.plugin.filter.AppendFooterFilter;
+import org.subethamail.plugin.filter.ListHeaderFilter;
 
 /**
  * Creates an announce-only list. 
@@ -67,6 +69,10 @@ public class FreeForAllBlueprint extends AbstractBlueprint implements Lifecycle
 			
 			listMgr.setDefaultRole(listId, roleId);
 			listMgr.setAnonymousRole(listId, roleId);
+
+			// Add a couple useful footers
+			listMgr.setFilter(listId, AppendFooterFilter.class.getName());
+			listMgr.setFilter(listId, ListHeaderFilter.class.getName());
 		}
 		catch(NotFoundException nfe)
 		{

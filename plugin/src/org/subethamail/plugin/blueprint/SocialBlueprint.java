@@ -5,9 +5,7 @@
 
 package org.subethamail.plugin.blueprint;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
@@ -19,6 +17,8 @@ import org.subethamail.common.PermissionException;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
+import org.subethamail.plugin.filter.AppendFooterFilter;
+import org.subethamail.plugin.filter.ListHeaderFilter;
 import org.subethamail.plugin.filter.ReplyToFilter;
 
 /**
@@ -58,24 +58,6 @@ public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
 	/** */
 	public void configureMailingList(Long listId)
 	{
-		// Setup Filter
-		Map<String, Object> args = new HashMap<String, Object>();
-		args.put(ReplyToFilter.ARG_MAILINGLIST, true);
-		args.put(ReplyToFilter.ARG_EMAILADDRESS, "");
-		try
-		{
-			listMgr.setFilter(listId, ReplyToFilter.class.getName(), args);
-		}
-		catch (NotFoundException nfe)
-		{
-			throw new RuntimeException(nfe);
-		}
-		catch (PermissionException pe)
-		{
-			throw new RuntimeException(pe);
-		}
-		
-		// Setup Roles
 		try
 		{
 			// Subscriber
@@ -101,6 +83,11 @@ public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
 			perms.add(Permission.APPROVE_MESSAGES);
 			perms.add(Permission.APPROVE_SUBSCRIPTIONS);
 			listMgr.addRole(listId, "Moderator", perms);
+
+			// Add a couple useful footers
+			listMgr.setFilter(listId, ReplyToFilter.class.getName());
+			listMgr.setFilter(listId, AppendFooterFilter.class.getName());
+			listMgr.setFilter(listId, ListHeaderFilter.class.getName());
 		}
 		catch(PermissionException pe)
 		{

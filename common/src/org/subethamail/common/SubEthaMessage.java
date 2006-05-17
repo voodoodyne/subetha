@@ -11,13 +11,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import com.sun.mail.smtp.SMTPMessage;
 
 
@@ -51,6 +54,11 @@ public class SubEthaMessage extends SMTPMessage
 	public SubEthaMessage(Session session, InputStream is) throws MessagingException
 	{
 		super(session, is);
+		
+		// Always always assume we have been modified, otherwise changes
+		// get ignored.  The modified flag does not get reliably set by
+		// the various methods that should set the fucking flag.
+		this.modified = true;
 	}
 	
 	/** */

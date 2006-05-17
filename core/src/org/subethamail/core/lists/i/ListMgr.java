@@ -10,10 +10,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
-
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
 import org.subethamail.common.PermissionException;

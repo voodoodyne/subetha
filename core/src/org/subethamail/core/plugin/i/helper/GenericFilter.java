@@ -6,7 +6,6 @@
 package org.subethamail.core.plugin.i.helper;
 
 import javax.mail.MessagingException;
-
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;

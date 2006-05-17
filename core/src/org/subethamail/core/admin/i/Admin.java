@@ -7,10 +7,8 @@ package org.subethamail.core.admin.i;
 
 import java.net.URL;
 import java.util.List;
-
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
-
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.SubscribeResult;

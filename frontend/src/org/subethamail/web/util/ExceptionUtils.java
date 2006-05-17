@@ -7,7 +7,6 @@ package org.subethamail.web.util;
 
 import javax.servlet.ServletException;
 import javax.servlet.jsp.JspException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

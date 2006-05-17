@@ -7,11 +7,9 @@ package org.subethamail.entity.dao;
 
 import java.net.URL;
 import java.util.List;
-
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.LockModeType;
-
 import org.subethamail.common.NotFoundException;
 import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Config;

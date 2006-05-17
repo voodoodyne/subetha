@@ -6,7 +6,6 @@
 package org.subethamail.web.action.auth;
 
 import javax.security.auth.login.LoginException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.tagonist.propertize.Property;

@@ -7,7 +7,6 @@ package org.subethamail.web.action;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;

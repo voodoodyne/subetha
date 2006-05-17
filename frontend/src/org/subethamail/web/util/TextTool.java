@@ -7,7 +7,6 @@ package org.subethamail.web.util;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

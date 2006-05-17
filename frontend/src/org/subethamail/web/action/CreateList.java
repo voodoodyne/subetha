@@ -7,10 +7,8 @@ package org.subethamail.web.action;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;

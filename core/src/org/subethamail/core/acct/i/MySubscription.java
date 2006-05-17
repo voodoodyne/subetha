@@ -7,7 +7,6 @@ package org.subethamail.core.acct.i;
 
 import java.io.Serializable;
 import java.util.Set;
-
 import org.subethamail.common.Permission;
 import org.subethamail.core.lists.i.ListData;
 

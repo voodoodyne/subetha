@@ -6,7 +6,6 @@
 package org.subethamail.core.lists.i;
 
 import java.io.Serializable;
-
 import org.subethamail.core.plugin.i.FilterParameter;
 
 /**

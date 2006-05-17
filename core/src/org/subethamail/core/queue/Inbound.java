@@ -6,7 +6,6 @@
 package org.subethamail.core.queue;
 
 import javax.ejb.Local;
-
 import org.jboss.annotation.ejb.Producer;
 import org.subethamail.core.queue.i.Queuer;
 

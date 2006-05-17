@@ -6,7 +6,6 @@
 package org.subethamail.core.plugin.i;
 
 import javax.mail.MessagingException;
-
 import org.subethamail.common.SubEthaMessage;
 
 /**

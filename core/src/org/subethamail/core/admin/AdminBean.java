@@ -8,12 +8,10 @@ package org.subethamail.core.admin;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
-
 import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;

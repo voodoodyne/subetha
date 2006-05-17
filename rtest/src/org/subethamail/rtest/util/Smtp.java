@@ -6,12 +6,10 @@
 package org.subethamail.rtest.util;
 
 import java.util.Iterator;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
-
 import com.dumbster.smtp.SimpleSmtpServer;
 import com.dumbster.smtp.SmtpMessage;
 

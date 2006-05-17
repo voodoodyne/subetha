@@ -8,7 +8,6 @@ package org.subethamail.web.action;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.Converter;

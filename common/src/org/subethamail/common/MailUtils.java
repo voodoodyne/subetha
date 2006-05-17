@@ -8,7 +8,6 @@ package org.subethamail.common;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

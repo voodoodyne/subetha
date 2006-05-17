@@ -7,10 +7,8 @@ package org.subethamail.web.action;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.Email;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
-import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
 
 /**

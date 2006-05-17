@@ -6,11 +6,9 @@
 package org.subethamail.core.admin;
 
 import java.io.UnsupportedEncodingException;
-
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.mail.internet.InternetAddress;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Depends;

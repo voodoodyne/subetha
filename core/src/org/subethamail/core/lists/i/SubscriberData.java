@@ -6,7 +6,6 @@
 package org.subethamail.core.lists.i;
 
 import java.util.Date;
-
 import org.subethamail.core.acct.i.PersonData;
 
 /**

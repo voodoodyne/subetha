@@ -6,7 +6,6 @@
 package org.subethamail.core.deliv;
 
 import java.io.IOException;
-
 import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
@@ -16,7 +15,6 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;

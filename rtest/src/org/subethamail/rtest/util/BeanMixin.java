@@ -6,10 +6,8 @@
 package org.subethamail.rtest.util;
 
 import java.security.Principal;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.security.SecurityAssociation;

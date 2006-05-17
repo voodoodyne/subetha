@@ -7,9 +7,7 @@ package org.subethamail.plugin.filter;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.annotation.security.RunAs;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;

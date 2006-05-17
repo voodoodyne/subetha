@@ -6,7 +6,6 @@
 package org.subethamail.core.plugin.i;
 
 import java.util.Map;
-
 import org.subethamail.core.lists.i.ListData;
 
 

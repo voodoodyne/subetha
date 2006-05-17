@@ -7,10 +7,8 @@ package org.subethamail.plugin.blueprint;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
-
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;

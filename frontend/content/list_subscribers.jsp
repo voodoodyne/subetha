@@ -19,12 +19,6 @@
 			<p>There are no subscribers to this list.</p>
 		</c:when>
 		<c:otherwise>
-			<%--
-			<form action="<c:url value="/list_subscribers.jsp"/>" method="get">
-				<input type="hidden" name="listId" value="<c:out value="${param.listId}" />" />
-				Filter: <input type="text" name="query" value="<c:out value="${param.query}" />" />
-			</form>
-			 --%>
 
 			<table class="sort-table" id="lists-table">
 			<thead>
@@ -70,7 +64,7 @@
 									<form action="<c:url value="/person_unsubscribe.jsp"/>" method="post" style="display:inline">
 										<input type="hidden" name="personId" value="${p.id}" />
 										<input type="hidden" name="listId" value="${param.listId}" />
-										<input type="submit" value="Unsubscribe" />
+										<input type="submit" value="Unsubscribe" onclick="return confirm('Are you sure you want to unsubscribe this user?');"/>
 									</form>
 								</c:if>
 								<c:if test="${perms.EDIT_ROLES}">

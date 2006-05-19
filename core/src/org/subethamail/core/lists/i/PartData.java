@@ -11,34 +11,31 @@ package org.subethamail.core.lists.i;
  * @author Scott Hernandez
  */
 @SuppressWarnings("serial")
-public class AttachmentData
+public abstract class PartData
 {
-	Long id;
 	String contentType;
 	int contentSize;
 	String name;
 	
 	/**
 	 */
-	public AttachmentData(Long id, String type, String name, int size)
+	public PartData(String type, String name, int size)
 	{
-		this.id = id;
 		this.contentType = type;
 		this.contentSize = size;
+		this.name = name;
 	}
 	
 	public String getName() 
 	{
 		return this.name;
 	}
-	public Long getId() 
-	{
-		return this.id;
-	}
+
 	public String getContentType()
 	{
 		return this.contentType;
 	}
+
 	public int getContentSize()
 	{
 		return this.contentSize;

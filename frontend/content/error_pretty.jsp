@@ -36,15 +36,17 @@ request.setAttribute("exceptions", exceptions);
 	<h1>Exception Info:</h1>
 	
 	<div class="exceptions">
-		<c:forEach var="ex" items="${exceptions}" varStatus="Loop">
-			<div id="ex${Loop}">
-				<h1><c:out value="${ex.message}"/> </h1>
-				<br/>
-				<span style="text-size:smaller">
-					<c:forEach var="stackElement" items="${ex.stackTrace}" >
-						<c:out value="${stackElement}"/>
-					</c:forEach>
-				<span>
+		<c:forEach var="ex" items="${exceptions}">
+			<div class="exception">
+				<h2><c:out value="${ex}"/> </h2>
+				
+				<span class="stackElements">
+					<span class="stackElement" style="text-size:smaller">
+						<c:forEach var="stackElement" items="${ex.stackTrace}" >
+							<c:out value="${stackElement}"/>
+						</c:forEach>
+					<span>
+				</span>
 			</div>
 		</c:forEach>
 	</div>

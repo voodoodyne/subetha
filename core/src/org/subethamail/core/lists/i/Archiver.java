@@ -5,8 +5,11 @@
 
 package org.subethamail.core.lists.i;
 
+import java.io.OutputStream;
 import java.util.List;
+
 import javax.ejb.Local;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.PermissionException;
 
@@ -34,6 +37,28 @@ public interface Archiver
 	 * @return a whole lot of information about the message.
 	 */
 	public MailData getMail(Long mailId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Requires Permission.READ_ARCHIVES
+	 * Writes the Mail to the stream. 
+	 */
+	public void writeMessage(Long mailId, OutputStream stream) throws NotFoundException, PermissionException;
+
+	/**
+	 * Requires Permission.READ_ARCHIVES
+	 * Writes the Attachement to the stream.
+	 * @return a byte[] of the message as it would be sent to the user.
+	 */
+	public void writeAttachment(Long attachmentId, OutputStream stream) throws NotFoundException, PermissionException;
+
+	/**
+	 * 
+	 * @param attachmentId the attachment to get
+	 * @return the content type for the attachment
+	 * @throws NotFoundException if the attachement can not be found
+	 * @throws PermissionException if your permission is not enough
+	 */
+	public String getAttachmentContentType(Long attachmentId) throws NotFoundException, PermissionException;
 
 	/**
 	 * Sends the mail to the current user.

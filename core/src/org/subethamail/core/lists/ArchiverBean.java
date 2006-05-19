@@ -5,21 +5,27 @@
 
 package org.subethamail.core.lists;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
 import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -28,17 +34,23 @@ import org.subethamail.common.Permission;
 import org.subethamail.common.PermissionException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.deliv.i.Deliverator;
+import org.subethamail.core.filter.FilterRunner;
+import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.injector.DetacherBean;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ArchiverRemote;
-import org.subethamail.core.lists.i.AttachmentData;
+import org.subethamail.core.lists.i.AttachmentPartData;
+import org.subethamail.core.lists.i.InlinePartData;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.core.lists.i.MailSummary;
+import org.subethamail.core.lists.i.TextPartData;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
+import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.dao.DAO;
 
 /**
  * Implementation of the Archiver interface.
@@ -53,7 +65,10 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 {
 
 	@EJB Deliverator deliverator;
-
+	@EJB FilterRunner filterRunner;
+	@EJB Detacher detacher;
+	@EJB DAO dao;
+	
 	/** */
 	private static Log log = LogFactory.getLog(ArchiverBean.class);
 
@@ -99,7 +114,62 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		// Now generate the entire summary
 		return Transmute.mailSummaries(roots, showEmail, null);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#getMessage(java.lang.Long, OutputStream)
+	 */
+	public void writeMessage(Long mailId, OutputStream stream) throws NotFoundException, PermissionException
+	{
+		Mail mail = this.getMailFor(mailId, Permission.READ_ARCHIVES);
 
+		try 
+		{
+			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
+
+			this.filterRunner.onSend(msg, mail);
+			
+			//TODO put this back when the attacher works again...
+			//this.detacher.attach(msg);
+			
+			msg.writeTo(stream);
+		} 
+		catch (Exception e)
+		{
+			if (log.isDebugEnabled()) log.debug("error getting exception getting mail#" + mailId + "\n" + e.toString());
+		}	
+	}
+
+	public void writeAttachment(Long attachmentId, OutputStream stream) throws NotFoundException, PermissionException
+	{
+		Attachment a = this.dao.findAttachment(attachmentId);
+		a.getMail().getList().checkPermission(getMe(), Permission.READ_ARCHIVES);
+
+		Blob data = a.getContent();
+		try
+		{
+			BufferedInputStream bis = new BufferedInputStream(data.getBinaryStream());	
+
+			for (int i = 0; i < data.length(); i++)
+				stream.write(bis.read());
+		}
+		catch (SQLException sex)
+		{
+			// TODO: handle exception
+		}
+		catch (IOException ioex) 
+		{
+			// TODO: handle exception 
+		}
+	}
+	
+	public String getAttachmentContentType(Long attachmentId) throws NotFoundException, PermissionException
+	{
+		Attachment a = this.dao.findAttachment(attachmentId);
+		a.getMail().getList().checkPermission(getMe(), Permission.READ_ARCHIVES);
+		return a.getContentType();
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getMail(java.lang.Long)
@@ -126,32 +196,6 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		return data;
 	}
 
-	protected AttachmentData makeAttachmentData(Part part) throws MessagingException
-	{
-
-		Long id =  null;
-			
-		
-		String[] idHeader = part.getHeader(DetacherBean.HDR_ATTACHMENT_REF);
-		
-		if (idHeader != null && idHeader.length > 0)
-			id = Long.parseLong(idHeader[0]);
-
-		// not an attachment cause it isn't stored as a detached part.
-		if (id == null)
-			return null;
-
-		String name = part.getFileName();
-		if (name == null || name.equals(""))
-		{
-			String contentType = part.getContentType();
-			int namestart = contentType.indexOf("name=");
-			int endnamevalue = contentType.indexOf("\"", namestart + 1);
-			name = contentType.substring(namestart + 1, endnamevalue);
-		}
-		
-		return new AttachmentData(id, part.getContentType(), name, part.getSize());
-	}
 	/**
 	 * Makes the base mail data.  Doesn't set the threadRoot.
 	 */
@@ -163,28 +207,66 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		
 			SubEthaMessage msg = new SubEthaMessage(this.mailSession, raw.getContent());
 			
-			List<AttachmentData> attachments = new ArrayList<AttachmentData>();
-			
-			Object content = msg.getContent();
-			
-			if (content instanceof Multipart)
+			List<InlinePartData> inlineParts = new ArrayList<InlinePartData>();
+			List<AttachmentPartData> attachmentParts = new ArrayList<AttachmentPartData>();
+
+			for (Part part : msg.getParts()) 
 			{
-				Multipart multi = (Multipart)content;
+				Object content = part.getContent();
+
+				//content type will be wrong if it is an attachment
+				String contentType =  null;	
+
+				String[] hdrOrigContentType = part.getHeader(DetacherBean.HDR_ORIG_CONTENT_TYPE);
+				if (hdrOrigContentType != null && hdrOrigContentType.length > 0) 
+					contentType = hdrOrigContentType[0];
 				
-				for (int i=0; i<multi.getCount(); i++) 
+				if (contentType == null) contentType = part.getContentType();
+				
+				//get an id to see if it is an attachment
+				Long id =  null;	
+
+				String[] idHeader = part.getHeader(DetacherBean.HDR_ATTACHMENT_REF);
+				if (idHeader != null && idHeader.length > 0) id = Long.parseLong(idHeader[0]);
+	
+
+				//figure out the name, if there is one.
+				String name = part.getFileName();
+				if (name == null || name.equals(""))
 				{
-					AttachmentData ad = makeAttachmentData(multi.getBodyPart(i));
-					if (ad != null)
-						attachments.add(ad);
+					int namestart = contentType.indexOf("name=");
+					if(namestart > 0)
+					{
+						//add the number of chars in 'name="'
+						namestart += 6;
+						int endnamevalue = contentType.indexOf("\"", namestart);
+						name = contentType.substring(namestart, endnamevalue);
+					}
+				}
+				
+				// not an attachment cause it isn't stored as a detached part.
+				if (id == null) 
+				{
+					InlinePartData ipd;
+					if (content instanceof String)
+					{
+						ipd = new TextPartData((String)content, part.getContentType(), name, part.getSize());
+					}
+					else 
+					{
+						ipd = new InlinePartData(content, part.getContentType(), name, part.getSize());
+					}
+						
+					inlineParts.add(ipd);
+				}
+				//it has an id so it is an attachment.
+				else
+				{					
+					AttachmentPartData apd = new AttachmentPartData(id, contentType, name, part.getSize());
+					attachmentParts.add(apd);
 				}
 			}
-			else if (content instanceof Part)
-			{
-				AttachmentData ad = makeAttachmentData((Part) content);
-				if (ad != null)
-					attachments.add(ad);
-			}
-
+			
 			return new MailData(
 					raw.getId(),
 					raw.getSubject(),
@@ -193,8 +275,8 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					raw.getDateCreated(),
 					Transmute.mailSummaries(raw.getReplies(), showEmail, null),
 					raw.getList().getId(),
-					msg.getTextParts(),
-					attachments);
+					inlineParts,
+					attachmentParts);
 		}
 		catch (MessagingException ex)
 		{

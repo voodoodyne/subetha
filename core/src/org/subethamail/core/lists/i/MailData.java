@@ -5,9 +5,11 @@
 
 package org.subethamail.core.lists.i;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.Part;
 /**
  * Adds the mail body and thread root to a mail summary.
  * 
@@ -18,8 +20,9 @@ public class MailData extends MailSummary
 {
 	/** */
 	Long listId;
-	List<String> textParts;
-	List<AttachmentData> attachments;
+	List<InlinePartData> inlineParts;
+	List<TextPartData> textParts;
+	List<AttachmentPartData> attachmentParts;
 	MailSummary threadRoot;
 	
 	
@@ -33,14 +36,19 @@ public class MailData extends MailSummary
 			Date dateCreated,
 			List<MailSummary> replies,
 			Long listId,
-			List<String> textParts,
-			List<AttachmentData> attachments)
+			List<InlinePartData> inlineParts,
+			List<AttachmentPartData> attachmentParts 
+			)
 	{
 		super(id, subject, fromEmail, fromName, dateCreated, replies);
 		
 		this.listId = listId;
-		this.textParts = textParts;
-		this.attachments = attachments;
+		this.inlineParts = inlineParts;
+		this.attachmentParts = attachmentParts;
+		
+		this.textParts = new ArrayList<TextPartData>(inlineParts.size());	
+		for (InlinePartData inline : inlineParts) 
+			if (inline instanceof TextPartData) textParts.add((TextPartData)inline); 
 	}
 
 	/**
@@ -52,20 +60,27 @@ public class MailData extends MailSummary
 	}
 
 	/**
-	 * All the textual components of the message, in flattened form.
+	 * All the textual components of the message.
 	 */
-	public List<String> getTextParts()
+	public List<TextPartData> getTextParts()
 	{
 		return this.textParts;
 	}
 
 	/**
-	 * 
-	 * @return the attachments
+	 * All the inline components of the message.
 	 */
-	public List<AttachmentData> getAttachments()
+	public List<InlinePartData> getInlineParts()
 	{
-		return this.attachments;
+		return this.inlineParts;
+	}
+
+	/**
+	 * All the attachments saved outside the mail.
+	 */
+	public List<AttachmentPartData> getAttachments()
+	{
+		return this.attachmentParts;
 	}
 	
 	/**

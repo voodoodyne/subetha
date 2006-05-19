@@ -54,7 +54,6 @@ public class SubEthaMessage extends SMTPMessage
 	public SubEthaMessage(Session session, InputStream is) throws MessagingException
 	{
 		super(session, is);
-		
 		// Always always assume we have been modified, otherwise changes
 		// get ignored.  The modified flag does not get reliably set by
 		// the various methods that should set the fucking flag.
@@ -180,25 +179,22 @@ public class SubEthaMessage extends SMTPMessage
 	 * @return a flattened container of all the textual parts in this
 	 *  message.
 	 */
-	public List<String> getTextParts() throws MessagingException, IOException
+	public List<Part> getParts() throws MessagingException, IOException
 	{
-		List<String> textParts = new ArrayList<String>();
+		List<Part> parts = new ArrayList<Part>();
 		
-		getTextParts(this, textParts);
+		getParts(this, parts);
 		
-		return textParts;
+		return parts;
 	}
 	
-	/**
-	 * Recursive method for getting all text parts
-	 */
-	protected static void getTextParts(Part part, List<String> textParts) throws MessagingException, IOException
+	protected static void getParts(Part part, List<Part> parts) throws MessagingException, IOException
 	{
 		Object content = part.getContent();
-		
-		if (content instanceof String)
-		{
-			textParts.add((String)content);
+
+		if (content instanceof Part) {
+			Part contentPart = (Part) content;
+			getParts(contentPart, parts);
 		}
 		else if (content instanceof Multipart)
 		{
@@ -207,15 +203,16 @@ public class SubEthaMessage extends SMTPMessage
 			for (int i=0; i<multipartContent.getCount(); i++)
 			{
 				// Recurse
-				getTextParts(multipartContent.getBodyPart(i), textParts);
+				getParts(multipartContent.getBodyPart(i), parts);
 			}
 		}
 		else
 		{
-			log.debug("Didn't know what to do with content " + content);
+			if (log.isDebugEnabled()) log.debug("Didn't know what to do with content " + content);
+			parts.add(part);
 		}
-	}
-	
+	}	
+		
 	/**
 	 * Stupidly, saveChanges() resaves even if nothing has changed.
 	 */

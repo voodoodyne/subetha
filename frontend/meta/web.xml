@@ -65,6 +65,26 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>ArchiveServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.ArchiveServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ArchiveServlet</servlet-name>
+		<url-pattern>/message/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>AttachmentServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.AttachmentServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>AttachmentServlet</servlet-name>
+		<url-pattern>/attachment/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>PermissionImageServlet</servlet-name>
 		<servlet-class>org.subethamail.web.servlet.PermissionImageServlet</servlet-class>
 	</servlet>

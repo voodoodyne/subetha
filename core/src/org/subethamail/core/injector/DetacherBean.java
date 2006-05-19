@@ -16,6 +16,7 @@ import javax.ejb.Stateless;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
+import javax.mail.internet.MimeMultipart;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.lob.BlobImpl;
@@ -43,28 +44,36 @@ public class DetacherBean implements Detacher
 	 * value will be the numeric id of the attachment. 
 	 */
 	public static String HDR_ATTACHMENT_REF = "X-SubEtha-Attachment";
+	public static String HDR_ORIG_CONTENT_TYPE = "X-SubEtha-ContentType";
 	
 	/** */
 	@EJB DAO dao;
 
+	
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.injector.Detacher#detach(javax.mail.Part, org.subethamail.entity.Mail)
+	 * @see org.subethamail.core.injector.Detacher#detach(javax.mail.Part, Mail)
 	 */
 	public void detach(Part part, Mail ownerMail) throws MessagingException, IOException
 	{
 		if (log.isDebugEnabled())
-			log.debug("Detaching " + part + " of type " + part.getContentType());
+			log.debug("Attempting to detach " + part + " of type " + part.getContentType());
 		
 		Object content = part.getContent();
 
+		String contentType = part.getContentType();
+		if(contentType != null) contentType = contentType.toLowerCase();
+			
+		String disposition = part.getDisposition();
+		if(disposition != null) disposition = disposition.toLowerCase();
+		
 		if (content instanceof Multipart)
 		{
 			if (log.isDebugEnabled())
 				log.debug("Content is multipart");
 			
 			Multipart multi = (Multipart)content;
-			
+
 			// This is necessary because of the mysterious JavaMail bug 4404733
 			part.setContent(multi);
 			
@@ -78,13 +87,16 @@ public class DetacherBean implements Detacher
 			
 			this.detach((Part)content, ownerMail);
 		}
-		else if (part.getContentType().toLowerCase().startsWith("text/"))
+		else if (	!"attachment".equals(disposition) && 
+					(contentType != null) &&
+					contentType.startsWith("text/"))
 		{
 			if (log.isDebugEnabled())
 				log.debug("Leaving text alone");
 			
 			// Text parts can stay, but we don't want anyone faking references
 			part.removeHeader(HDR_ATTACHMENT_REF);
+			part.removeHeader(HDR_ORIG_CONTENT_TYPE);
 		}
 		else
 		{
@@ -92,15 +104,30 @@ public class DetacherBean implements Detacher
 			if (log.isDebugEnabled())
 				log.debug("Detaching an attachment of type " + part.getContentType());
 			
-			InputStream input = part.getDataHandler().getInputStream();
+			InputStream input = part.getInputStream();
 			Blob blobby = new BlobImpl(input, input.available());
 			
 			Attachment attach = new Attachment(ownerMail, blobby, part.getContentType());
 			this.dao.persist(attach);
 			ownerMail.getAttachments().add(attach);
 			
+			//save a reference to the attachment.id
 			part.setHeader(HDR_ATTACHMENT_REF, attach.getId().toString());
-			part.setText(attach.getId().toString());
+			
+			//save a copy of the orig content type in the part.
+			part.setHeader(HDR_ORIG_CONTENT_TYPE, part.getContentType());
+			
+			try 
+			{
+				part.setText(attach.getId().toString());
+			}
+			catch (NullPointerException npe)
+			{
+				if(log.isDebugEnabled()) log.debug("Ignoring NullPointerException from part.setText(Null)");
+			}
+			
+			if (log.isDebugEnabled())
+				log.debug("set part.text to null:" + part.getContent().getClass().toString());
 		}
 	}
 
@@ -111,7 +138,7 @@ public class DetacherBean implements Detacher
 	public void attach(Part part) throws MessagingException, IOException
 	{
 		if (log.isDebugEnabled())
-			log.debug("Reattaching " + part + " of type " + part.getContentType());
+			log.debug("Attempting reattachment for " + part + " of type " + part.getContentType());
 		
 		Object content = part.getContent();
 
@@ -143,12 +170,17 @@ public class DetacherBean implements Detacher
 			{
 				// There should only be one
 				Long attachmentId = Long.parseLong(headers[0]);
+
+				if (log.isDebugEnabled())
+					log.debug("Reattaching attachment " + attachmentId + " for type " + part.getContentType());
+				
 				
 				try
 				{
 					Attachment att = this.dao.findAttachment(attachmentId);
 					
 					part.removeHeader(HDR_ATTACHMENT_REF);
+					part.removeHeader(HDR_ORIG_CONTENT_TYPE);
 					part.setDataHandler(
 							new DataHandler(
 									new TrivialDataSource(

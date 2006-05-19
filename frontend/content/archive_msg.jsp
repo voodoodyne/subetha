@@ -20,6 +20,9 @@
 			</form>
 		</div>
 	</c:if>
+	<div>
+		<a href="<c:url value="/message/${msg.id}/${msg.subject}.eml"/>">View Full Message</a>
+	</div>
 	<p>
 		From
 		<span class="authorName"><c:out value="${msg.fromName}"/></span>
@@ -34,9 +37,9 @@
 	</p>
 
 	<div class="message">
-		<c:forEach var="part" items="${msg.textParts}">
+		<c:forEach var="part" items="${msg.inlineParts}">
 			<div class="messagePart">
-				<c:out value="${part}"/>
+				<c:out value="${part.contents}"/>
 			</div><br/>
 		</c:forEach>
 	</div>
@@ -46,6 +49,8 @@
 			<div class="attachment">
 				<span>Attachment Number <c:out value="${attachment.id}"/><span>
 				<c:out value="${attachment.contentType}"/>:<c:out value="${attachment.contentSize}"/> bytes
+				<a href="<c:url value="/attachment/${attachment.id}/${attachment.name}"/>">Download <c:out value="${attachment.name}" /></a>
+				
 			</div>
 			<br/>
 		</c:forEach>	

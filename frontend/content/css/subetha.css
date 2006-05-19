@@ -12,7 +12,7 @@ body {
 }
 
 #bodyText {
-	margin: 0mm 5mm 0 13em;
+	margin: 0mm 5mm 0 14em;
 	text-align: left;
 }
 
@@ -22,6 +22,7 @@ body {
 
 .sideBox {
 	margin-top: 0mm;
+	width: 12em;
 }
 
 .sideBox a, .sideBox a:hover, .sideBox span {

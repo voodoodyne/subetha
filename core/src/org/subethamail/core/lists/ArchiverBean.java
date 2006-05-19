@@ -129,8 +129,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 
 			this.filterRunner.onSend(msg, mail);
 			
-			//TODO put this back when the attacher works again...
-			//this.detacher.attach(msg);
+			this.detacher.attach(msg);
 			
 			msg.writeTo(stream);
 		} 

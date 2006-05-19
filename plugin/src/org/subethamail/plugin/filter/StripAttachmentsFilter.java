@@ -8,7 +8,9 @@ package org.subethamail.plugin.filter;
 import java.io.IOException;
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
+import javax.mail.Part;
 import javax.mail.internet.MimeMultipart;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
@@ -103,44 +105,29 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 	public void onInject(SubEthaMessage msg, FilterContext ctx)
 		throws IgnoreException, HoldException, MessagingException
 	{
-		//TODO: Add section for replacing message.
+
 		int maxKB = Integer.parseInt(ctx.getArgument(ARG_MAXSIZEINKB).toString());
 
 		String msgContent = (String) ctx.getArgument(ARG_MSG);
 		String expandedMsg = ctx.expand(msgContent);
  
-		
-		Object content = null;
-		
 		try 
 		{
-			content = msg.getContent();
-		} 
-		catch (IOException ioe) 
-		{
-			if (log.isDebugEnabled())
-				log.debug("Error getting content: " + ioe.getMessage());
-		}
-		
-		if (content instanceof MimeMultipart) 
-		{
-			MimeMultipart mp = (MimeMultipart) content;
-			for (int i=0; i<mp.getCount(); i++) 
+			for (Part p : msg.getParts())
 			{
-				if (mp.getBodyPart(i).getSize() > (maxKB * 1024)) 
+				if (p.getSize() > (maxKB * 1024)) 
 				{
 					if (log.isDebugEnabled())
-						log.debug("Stripping attachement of type: " + mp.getBodyPart(i).getContentType());		
-					
-					//boolean worked = mp.removeBodyPart(mp.getBodyPart(i));
-					mp.getBodyPart(i).setText(expandedMsg);
-					
-					if (log.isDebugEnabled())
-						log.debug("Attachement was stripped and replaced.");		
+						log.debug("Stripping attachement of type: " + p.getContentType());		
+	
+					p.setText(expandedMsg);		
 				}
 			}
-
-			msg.setContent(mp);
+		}
+		catch (IOException ioex)
+		{
+			if (log.isDebugEnabled())
+				log.debug("Error getting message parts" + ioex);					
 		}
 	}
 }

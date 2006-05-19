@@ -85,6 +85,8 @@ public class InjectorBean implements Injector, InjectorRemote
 	 */
 	public static final long MAX_BOUNCE_THRESHOLD = 7;
 
+	private static final String X_LOOP = "X-Loop";
+	
 	/** */
 	@EJB DAO dao;
 	@EJB Queuer queuer;
@@ -184,10 +186,10 @@ public class InjectorBean implements Injector, InjectorRemote
 		mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
 		
-		String xloop = msg.getHeader("X-Loop", toList.getEmail());
+		String xloop = msg.getHeader(X_LOOP, toList.getEmail());
 		
 		//if the message is looping, drop it.
-		if(xloop != null || xloop == "")
+		if (xloop != null || xloop == "")
 			return false;
 		
 		// Now that we have the basic building blocks, see if we

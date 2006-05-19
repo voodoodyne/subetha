@@ -45,15 +45,16 @@
 	</div>
 
 	<div class="attachments">
-		<c:forEach var="attachment" items="${msg.attachments}">
-			<div class="attachment">
-				<span>Attachment Number <c:out value="${attachment.id}"/><span>
-				<c:out value="${attachment.contentType}"/>:<c:out value="${attachment.contentSize}"/> bytes
-				<a href="<c:url value="/attachment/${attachment.id}/${attachment.name}"/>">Download <c:out value="${attachment.name}" /></a>
-				
-			</div>
-			<br/>
-		</c:forEach>	
+		<ul><li> Download Attachment:
+				<ul>
+				<c:forEach var="attachment" items="${msg.attachments}">
+					<li>
+					<a href="<c:url value="/attachment/${attachment.id}/${attachment.name}"/>">(<c:out value="${attachment.id}"/>) <c:out value="${attachment.name}" /></a>
+					</li>
+				</c:forEach>	
+			</ul>
+			</li>
+		</ul>
 	</div>
 	
 	<c:if test="${msg != msg.threadRoot || !empty msg.replies}">

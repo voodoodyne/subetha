@@ -42,6 +42,15 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 	private static Log log = LogFactory.getLog(StripAttachmentsFilter.class);
 	
 	public static final String ARG_MAXSIZEINKB = "Threshold in KB";
+
+	public static final String ARG_MSG = "Replace Message";
+	
+	
+	private static final String DEFAULT_MSG = 
+		"\n_______________________________________________\n" +
+		"${list.name} mailing list\n" +
+		"${list.email}\n" +
+		"${list.url}";
 	
 	/** */
 	static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
@@ -50,7 +59,15 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 				"Strip all attachments larger than this size, in kilobytes.  A value of 0 will strip all attachments.",
 				Integer.class,
 				100
-			)
+			),
+			new FilterParameterImpl(
+					ARG_MSG,
+					"The message text which replaces the attachements.",
+					DEFAULT_MSG,
+					20,
+					true,
+					null
+				)
 	};
 
 	/*
@@ -88,7 +105,11 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 	{
 		//TODO: Add section for replacing message.
 		int maxKB = Integer.parseInt(ctx.getArgument(ARG_MAXSIZEINKB).toString());
-	
+
+		String msgContent = (String) ctx.getArgument(ARG_MSG);
+		String expandedMsg = ctx.expand(msgContent);
+ 
+		
 		Object content = null;
 		
 		try 
@@ -111,13 +132,14 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 					if (log.isDebugEnabled())
 						log.debug("Stripping attachement of type: " + mp.getBodyPart(i).getContentType());		
 					
-					boolean worked = mp.removeBodyPart(mp.getBodyPart(i));
+					//boolean worked = mp.removeBodyPart(mp.getBodyPart(i));
+					mp.getBodyPart(i).setText(expandedMsg);
 					
 					if (log.isDebugEnabled())
-						log.debug("Attachement was stripped (T/F)? " + worked);		
+						log.debug("Attachement was stripped and replaced.");		
 				}
 			}
-			
+
 			msg.setContent(mp);
 		}
 	}

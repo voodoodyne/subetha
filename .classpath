@@ -29,5 +29,6 @@
 	<classpathentry kind="lib" path="rtest/lib/dumbster1.6.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/tagonist.jar"/>
 	<classpathentry sourcepath="/JAVAMAIL_SRC" kind="var" path="JBOSS_HOME/server/default/lib/mail.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

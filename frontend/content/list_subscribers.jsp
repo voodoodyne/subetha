@@ -23,8 +23,11 @@
 	<br /><br />
 	
 	<c:choose>
-		<c:when test="${empty model.subscriberData}">
+		<c:when test="${empty model.subscriberData && empty param.query}">
 			<p>There are no subscribers to this list.</p>
+		</c:when>
+		<c:when test="${empty model.subscriberData && ! empty param.query}">
+			<p>Your query did not return any results.</p>
 		</c:when>
 		<c:otherwise>
 

@@ -41,9 +41,9 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 	private static final String ARG_FOOTER = "Footer";
 	
 	private static final String DEFAULT_FOOTER = 
-		"\n_______________________________________________\n" +
-		"${list.name} mailing list\n" +
-		"${list.email}\n" +
+		"\r\n\r\n_______________________________________________\r\n" +
+		"${list.name} mailing list\r\n" +
+		"${list.email}\r\n" +
 		"${list.url}";
 
 	/** */

@@ -18,7 +18,7 @@ public enum Permission
 {
 	EDIT_SETTINGS("Edit the name, description, and major configuration options of the list."),
 	EDIT_ROLES("Edit and reassign roles and permissions.  This should not be granted to non-owners."),
-	VIEW_ROLES("View roles.  This should not be granted to non-owners."),
+	VIEW_ROLES("View roles of members on the list subscribers page."),
 	EDIT_FILTERS("Add, remove, and change the properties of mail filters."),
 	APPROVE_MESSAGES("Approve messages which have been held for administrative approval."),
 	APPROVE_SUBSCRIPTIONS("Approve subscription requests."),

@@ -184,6 +184,12 @@ public class InjectorBean implements Injector, InjectorRemote
 		mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
 		
+		String xloop = msg.getHeader("X-Loop", toList.getEmail());
+		
+		//if the message is looping, drop it.
+		if(xloop != null || xloop == "")
+			return false;
+		
 		// Now that we have the basic building blocks, see if we
 		// should be forwarding the mail to owners instead
 		if (listForOwner != null)

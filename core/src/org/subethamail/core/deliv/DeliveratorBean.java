@@ -103,7 +103,9 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 		{
 			Address destination = new InternetAddress(emailAddress.getId());
 			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
-
+			
+			msg.addHeader("X-Loop", mail.getList().getEmail());
+			
 			// Set up the VERP bounce address
 			byte[] token = this.encryptor.encryptString(emailAddress.getId());
 			msg.setEnvelopeFrom(VERPAddress.encodeVERP(mail.getList().getEmail(), token));

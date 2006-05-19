@@ -5,10 +5,18 @@
 
 package org.subethamail.web.action;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
 import org.subethamail.common.valid.Validator;
+import org.subethamail.core.admin.i.DuplicateListDataException;
+import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
@@ -40,11 +48,11 @@ public class SaveListSettings extends AuthAction
 
 		/** */
 		@Length(max=Validator.MAX_LIST_URL)
-		@Property String url = "";
+		@Property String url;	// start null
 
 		/** */
 		@Length(max=Validator.MAX_LIST_EMAIL)
-		@Property String email = "";
+		@Property String email;	// start null
 		
 		/** */
 		@Property boolean holdSubs;
@@ -65,7 +73,60 @@ public class SaveListSettings extends AuthAction
 		
 		if (model.getErrors().isEmpty())
 		{
-			Backend.instance().getListMgr().setList(model.listId, model.name, model.description, model.url, model.email, model.holdSubs);
+			// Do this part first 'cause it could fail
+			if (model.email != null || model.url != null)
+			{
+				// Check the URL
+				URL url = null;
+				try
+				{
+					url = new URL(model.url);
+				}
+				catch (MalformedURLException ex)
+				{
+					model.setError("url", ex.getMessage());
+				}
+				
+				// Check the address
+				InternetAddress listAddress = null;
+				try
+				{
+					listAddress = new InternetAddress(model.email);
+					listAddress.validate();
+					listAddress.setPersonal(model.name);
+				}
+				catch (AddressException ex)
+				{
+					model.setError("email", ex.getMessage());
+				}
+				
+				if (model.getErrors().isEmpty())
+				{
+					try
+					{
+						Backend.instance().getAdmin().setListAddresses(model.listId, listAddress, url);
+					}
+					catch (InvalidListDataException ex)
+					{
+						if (ex.isOwnerAddress())
+							model.setError("email", "Addresses cannot end with -owner");
+						
+						if (ex.isVerpAddress())
+							model.setError("email", "Conflicts with the VERP address format");
+					}
+					catch (DuplicateListDataException ex)
+					{
+						if (ex.isAddressTaken())
+							model.setError("email", "That address is already in use");
+						
+						if (ex.isUrlTaken())
+							model.setError("url", "That url is already in use");
+					}
+				}
+			}
+			
+			if (model.getErrors().isEmpty())
+				Backend.instance().getListMgr().setList(model.listId, model.name, model.description, model.holdSubs);
 		}
 	}
 	

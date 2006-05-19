@@ -44,22 +44,22 @@
 		</c:forEach>
 	</div>
 
-	<div class="attachments">
-		<ul><li> Download Attachment:
-				<ul>
+	<c:if test="${!empty msg.attachments}">
+		<div class="attachments">
+			<h3>Attachments</h3>
+			<ul>
 				<c:forEach var="attachment" items="${msg.attachments}">
 					<li>
-					<a href="<c:url value="/attachment/${attachment.id}/${attachment.name}"/>">(<c:out value="${attachment.id}"/>) <c:out value="${attachment.name}" /></a>
+						<a href="<c:url value="/attachment/${attachment.id}/${attachment.name}"/>"><c:out value="${attachment.name}" /></a>
 					</li>
 				</c:forEach>	
 			</ul>
-			</li>
-		</ul>
-	</div>
+		</div>
+	</c:if>
 	
 	<c:if test="${msg != msg.threadRoot || !empty msg.replies}">
-		<h3>Thread History</h3>
 		<div class="summaries">
+			<h3>Thread History</h3>
 			<ul>
 				<li><se:summary msg="${msg.threadRoot}" highlight="${msg}"/></li>
 			</ul>

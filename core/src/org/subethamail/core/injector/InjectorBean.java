@@ -108,7 +108,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		InternetAddress addy = new InternetAddress(toAddress);
 		
 		// Maybe it's a VERP bounce?
-		VERPAddress verp = VERPAddress.getVERPBounce(addy);
+		VERPAddress verp = VERPAddress.getVERPBounce(addy.getAddress());
 		if (verp != null)
 			addy = new InternetAddress(verp.getEmail());	// check if this is for a list here
 		else
@@ -153,7 +153,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		InternetAddress toAddy = new InternetAddress(toAddress);
 		
 		// Must check for VERP bounce
-		VERPAddress verp = VERPAddress.getVERPBounce(toAddy);
+		VERPAddress verp = VERPAddress.getVERPBounce(toAddy.getAddress());
 		if (verp != null)
 		{
 			this.handleBounce(verp);

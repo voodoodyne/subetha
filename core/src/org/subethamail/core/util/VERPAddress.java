@@ -59,16 +59,14 @@ public class VERPAddress
 	/**
 	 * @return null if the address was not a VERP'ed address.  
 	 */
-	public static VERPAddress getVERPBounce(InternetAddress addy)
+	public static VERPAddress getVERPBounce(String addy)
 	{
-		String whole = addy.getAddress();
-		
 		// Note the suffix includes the @
-		int suffixIndex = whole.indexOf(SUFFIX);
+		int suffixIndex = addy.indexOf(SUFFIX);
 		if (suffixIndex < 0)
 			return null;
 		
-		int leadIndex = whole.lastIndexOf(LEAD, suffixIndex);
+		int leadIndex = addy.lastIndexOf(LEAD, suffixIndex);
 		if (leadIndex < 0)
 			return null;
 		
@@ -76,8 +74,8 @@ public class VERPAddress
 		if (leadIndex + LEAD.length() >= suffixIndex)
 			return null;
 
-		String email = whole.substring(0, leadIndex) + '@' + whole.substring(suffixIndex+SUFFIX.length());
-		String token62 = whole.substring(leadIndex+LEAD.length(), suffixIndex);
+		String email = addy.substring(0, leadIndex) + '@' + addy.substring(suffixIndex+SUFFIX.length());
+		String token62 = addy.substring(leadIndex+LEAD.length(), suffixIndex);
 		
 		if (log.isDebugEnabled())
 			log.debug(addy + " becomes " + email + "/" + token62);

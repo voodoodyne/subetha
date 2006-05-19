@@ -5,8 +5,13 @@
 
 package org.subethamail.rtest;
 
+import java.net.URL;
+
+import javax.mail.internet.InternetAddress;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.lists.i.ListData;
@@ -77,6 +82,22 @@ public class MailingListTest extends SubEthaTestCase
 		assertEquals(ml.getUrl().toString(), data.getUrl());
 		assertEquals(ml.getDescription(), data.getDescription());
 		assertEquals(ml.getAddress().getPersonal(), data.getName());
+	}
+	
+	/** */
+	public void testChangeListAddresses() throws Exception
+	{
+		MailingListMixin ml = new MailingListMixin(this.admin, this.pers.getAddress());
+
+		InternetAddress nextAddress = new InternetAddress("foo@bar.com");
+		URL nextUrl = new URL("http://www.whatever.com/se/list/foo");
+		
+		this.admin.getAdmin().setListAddresses(ml.getId(), nextAddress, nextUrl);
+		
+		ListData data = this.admin.getListMgr().getList(ml.getId());
+		
+		assertEquals(nextAddress.getAddress(), data.getEmail());
+		assertEquals(nextUrl.toString(), data.getUrl());
 	}
 	
 	/** */

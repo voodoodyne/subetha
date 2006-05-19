@@ -10,6 +10,7 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.common.PermissionException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribeResult;
@@ -134,4 +135,10 @@ public interface Admin
 	 * @return a list of PersonData with isSiteAdmin() == true
 	 */
 	public List<PersonData> findSiteAdmins();
+	
+	/**
+	 * Sets list email address and URL.
+	 */
+	public void setListAddresses(Long listId, InternetAddress address, URL url) throws NotFoundException, DuplicateListDataException, InvalidListDataException;
+	
 }

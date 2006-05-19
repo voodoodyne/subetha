@@ -8,10 +8,12 @@ package org.subethamail.core.admin;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
+
 import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -86,35 +88,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException
 	{
-		// TODO:  consider whether or not we should enforce any formatting of
-		// the url here.  Seems like that's a job for the web front end?
-		
-		boolean ownerAddy = OwnerAddress.getList(address.getAddress()) != null;
-		boolean verpAddy = VERPAddress.getVERPBounce(address) != null;
-		
-		if (ownerAddy || verpAddy)
-			throw new InvalidListDataException("Address cannot be used", ownerAddy, verpAddy);
-		
-		// Make sure address and url are not duplicates
-		boolean dupAddress = false;
-		boolean dupUrl = false;
-		
-		try
-		{
-			this.dao.findMailingList(address);
-			dupAddress = true;
-		}
-		catch (NotFoundException ex) {}
-		
-		try
-		{
-			this.dao.findMailingList(url);
-			dupUrl = true;
-		}
-		catch (NotFoundException ex) {}
-		
-		if (dupAddress || dupUrl)
-			throw new DuplicateListDataException("Mailing list already exists", dupAddress, dupUrl);
+		this.checkListAddresses(address, url, null);
 		
 		// Then create the mailing list and attach the owners.
 		MailingList list = new MailingList(address.getAddress(), address.getPersonal(), url.toString(), description);
@@ -462,5 +436,60 @@ public class AdminBean implements Admin, AdminRemote
 	{
 		List<Person> siteAdmins = this.dao.findSiteAdmins();
 		return Transmute.people(siteAdmins);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#setListAddresses(java.lang.Long, javax.mail.internet.InternetAddress, java.net.URL)
+	 */
+	public void setListAddresses(Long listId, InternetAddress address, URL url) throws NotFoundException, DuplicateListDataException, InvalidListDataException
+	{
+		this.checkListAddresses(address, url, listId);
+		
+		MailingList list = this.dao.findMailingList(listId);
+		
+		list.setEmail(address.getAddress());
+		list.setUrl(url.toString());
+	}
+
+	/**
+	 * Checks whether or not the list addresses are ok (valid and not duplicates)
+	 * 
+	 * okListId is a list which is ok to have duplicate data for
+	 */
+	protected void checkListAddresses(InternetAddress address, URL url, Long okListId) throws DuplicateListDataException, InvalidListDataException
+	{
+		// TODO:  consider whether or not we should enforce any formatting of
+		// the url here.  Seems like that's a job for the web front end?
+		
+		boolean ownerAddy = OwnerAddress.getList(address.getAddress()) != null;
+		boolean verpAddy = VERPAddress.getVERPBounce(address.getAddress()) != null;
+		
+		if (ownerAddy || verpAddy)
+			throw new InvalidListDataException("Address cannot be used", ownerAddy, verpAddy);
+		
+		// Make sure address and url are not duplicates
+		boolean dupAddress = false;
+		boolean dupUrl = false;
+		
+		try
+		{
+			MailingList list = this.dao.findMailingList(address);
+			if (!list.getId().equals(okListId))
+				dupAddress = true;
+		}
+		catch (NotFoundException ex) {}
+		
+		try
+		{
+			MailingList list = this.dao.findMailingList(url);
+			if (!list.getId().equals(okListId))
+				dupUrl = true;
+		}
+		catch (NotFoundException ex) {}
+		
+		if (dupAddress || dupUrl)
+			throw new DuplicateListDataException("Mailing list already exists", dupAddress, dupUrl);
+		
 	}
 }

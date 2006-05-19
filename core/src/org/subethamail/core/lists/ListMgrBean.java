@@ -14,11 +14,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -94,16 +96,14 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#setList(java.lang.Long, java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean)
+	 * @see org.subethamail.core.lists.i.ListMgr#setList(java.lang.Long, java.lang.String, java.lang.String, boolean)
 	 */
-	public void setList(Long listId, String name, String description, String url, String email, boolean holdSubs) throws NotFoundException, PermissionException
+	public void setList(Long listId, String name, String description, boolean holdSubs) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_SETTINGS);
 		
 		list.setName(name);
 		list.setDescription(description);
-		list.setUrl(url);
-		list.setEmail(email);
 
 		boolean flushHolds = list.isSubscriptionHeld() && !holdSubs;
 		

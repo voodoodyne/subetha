@@ -1,7 +1,6 @@
 <%@include file="/inc/top_standard.jspf" %>
 
 <t:action var="model" type="org.subethamail.web.action.GetListSettings" />
-<c:set var="me" value="${backend.accountMgr.self}"/>
 
 <trim:list title="Settings" listId="${param.listId}">
 
@@ -37,9 +36,20 @@
 					</c:if>
 				</td>
 			</tr>
-			<c:choose>
-			<c:when test="${me.siteAdmin}">
-				<tr>
+			<tr>
+				<th><label for="holdSubs">Hold Subscriptions</label></th>
+				<td>
+					<input id="holdSubs" name="holdSubs" type="checkbox" value="true"
+						<c:if test="${model.holdSubs}">checked="checked"</c:if>
+					/>
+					Subscriptions must be approved by moderators
+				</td>
+			</tr>
+			<c:if test="${auth.siteAdmin}">
+				<tr class="b">
+					<td colspan="2" align="center">Site Administrators Only</td>
+				</tr>
+				<tr class="a">
 					<th><label for="email">List Address</label></th>
 					<td
 						<c:if test="${!empty model.errors.email}">
@@ -55,7 +65,7 @@
 						</c:if>
 					</td>
 				</tr>
-				<tr>
+				<tr class="a">
 					<th><label for="url">List URL</label></th>
 					<td
 						<c:if test="${!empty model.errors.url}">
@@ -71,17 +81,7 @@
 						</c:if>
 					</td>
 				</tr>
-			</c:when>
-			</c:choose>
-			<tr>
-				<th><label for="holdSubs">Hold Subscriptions</label></th>
-				<td>
-					<input id="holdSubs" name="holdSubs" type="checkbox" value="true"
-						<c:if test="${model.holdSubs}">checked="checked"</c:if>
-					/>
-					Subscriptions must be approved by moderators
-				</td>
-			</tr>
+			</c:if>
 		</table>
 		<input type="submit" value="Save" />
 	</form>

@@ -6,6 +6,7 @@
 package org.subethamail.core.lists.i;
 
 import java.util.Date;
+import java.util.List;
 import org.subethamail.core.acct.i.PersonData;
 
 /**
@@ -25,7 +26,7 @@ public class SubscriberData extends PersonData
 	public SubscriberData(
 			Long id,
 			String name,
-			String[] emailAddresses,
+			List<String> emailAddresses,
 			String roleName,
 			String deliverTo,
 			Date dateSubscribed)

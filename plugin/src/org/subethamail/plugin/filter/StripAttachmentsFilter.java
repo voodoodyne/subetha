@@ -9,8 +9,6 @@ import java.io.IOException;
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 import javax.mail.Part;
-import javax.mail.internet.MimeMultipart;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;

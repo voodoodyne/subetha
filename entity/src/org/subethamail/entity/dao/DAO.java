@@ -161,4 +161,9 @@ public interface DAO
 	 * @return all Mail for the list which has a not null HoldType
 	 */
 	public List<Mail> findMailHeld(Long listId);
+	
+	/**
+	 * @return all Person's who are site admins
+	 */
+	public List<Person> findSiteAdmins();
 }

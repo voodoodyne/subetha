@@ -355,4 +355,16 @@ public class DAOBean implements DAO
 		return q.getResultList();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findSiteAdmins()
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Person> findSiteAdmins()
+	{
+		log.debug("Finding all site admins.");
+
+		Query q = this.em.createNamedQuery("SiteAdmin");
+		return q.getResultList();
+	}
 }

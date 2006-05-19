@@ -18,6 +18,7 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
+import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
@@ -451,5 +452,15 @@ public class AdminBean implements Admin, AdminRemote
 		
 		// Use a query to join against the email address table and the
 		// mail table to pull out mail objects with SELF holds.
+	}
+	
+	/**
+	 * Gets a list of site administrators. It's a special role.
+	 * @return a list of PersonData with isSiteAdmin() == true
+	 */
+	public List<PersonData> findSiteAdmins()
+	{
+		List<Person> siteAdmins = this.dao.findSiteAdmins();
+		return Transmute.people(siteAdmins);
 	}
 }

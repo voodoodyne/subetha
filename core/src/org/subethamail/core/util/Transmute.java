@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.MySubscription;
+import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribedList;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.lists.i.EnabledFilterData;
@@ -118,7 +119,7 @@ public class Transmute
 		return new SubscriberData(
 				raw.getPerson().getId(),
 				raw.getPerson().getName(),
-				raw.getPerson().getEmailArray(),
+				raw.getPerson().getEmailList(),
 				raw.getRole().getName(),
 				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null,
 				raw.getDateCreated());
@@ -324,7 +325,7 @@ public class Transmute
 		return new SubscriberData(
 				raw.getPerson().getId(),
 				raw.getPerson().getName(),
-				raw.getPerson().getEmailArray(),
+				raw.getPerson().getEmailList(),
 				null,
 				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null,
 				raw.getDateCreated());
@@ -355,6 +356,30 @@ public class Transmute
 				raw.getFrom(),
 				raw.getDateCreated(),
 				raw.getHold() == HoldType.HARD);
+	}
+	
+	/**
+	 * This method converts Person objects into PersonData objects.
+	 */
+	public static List<PersonData> people(Collection<Person> persons)
+	{
+		List<PersonData> result = new ArrayList<PersonData>(persons.size());
+		for (Person person: persons)
+		{			
+			result.add(person(person));
+		}
+		return result;
+	}
+
+	/**
+	 * This method converts a Person object into a PersonData object.
+	 */
+	public static PersonData person(Person person)
+	{
+		return new PersonData(person.getId(),
+				person.getName(),
+				person.getEmailList(),
+				person.isSiteAdmin());
 	}
 
 }

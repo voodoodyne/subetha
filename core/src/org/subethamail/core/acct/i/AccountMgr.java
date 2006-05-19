@@ -148,4 +148,22 @@ public interface AccountMgr
 	 * @throws NotFoundException if no account has that email address.
 	 */
 	public void forgotPassword(String email) throws NotFoundException;
+
+	/**
+	 * Controls whether a Person is a site admin or not.
+	 * 
+	 * @param personId
+	 * @return
+	 * @throws NotFoundException
+	 */
+	public void setSiteAdmin(Long personId, boolean siteAdmin) throws NotFoundException;
+
+	/**
+	 * Controls whether a Person is a site admin or not.
+	 * 
+	 * @param email
+	 * @return
+	 * @throws NotFoundException
+	 */
+	public void setSiteAdmin(String email, boolean siteAdmin) throws NotFoundException;
 }

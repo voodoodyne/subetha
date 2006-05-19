@@ -82,7 +82,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		return new Self(
 				me.getId(),
 				me.getName(),
-				me.getEmailArray(),
+				me.getEmailList(),
 				me.isSiteAdmin(),
 				Transmute.subscriptions(me.getSubscriptions().values())
 			);
@@ -317,5 +317,21 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		EmailAddress addy = this.dao.findEmailAddress(email);
 		
 		this.postOffice.sendPassword(addy);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.acct.i.AccountMgr#setSiteAdmin(java.lang.Long, boolean)
+	 */
+	public void setSiteAdmin(Long personId, boolean siteAdmin) throws NotFoundException
+	{
+		Person person = this.dao.findPerson(personId);
+		person.setSiteAdmin(siteAdmin);
+	}
+
+	public void setSiteAdmin(String email, boolean siteAdmin) throws NotFoundException
+	{
+		EmailAddress ea = this.dao.findEmailAddress(email);
+		this.setSiteAdmin(ea.getPerson().getId(), siteAdmin);
 	}
 }

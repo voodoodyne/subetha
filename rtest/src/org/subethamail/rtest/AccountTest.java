@@ -46,8 +46,8 @@ public class AccountTest extends SubEthaTestCase
 		Self self = this.pers.getAccountMgr().getSelf();
 		assertEquals(this.pers.getId(), self.getId());
 		assertEquals(this.pers.getName(), self.getName());
-		assertEquals(1, self.getEmailAddresses().length);
-		assertEquals(this.pers.getEmail(), self.getEmailAddresses()[0]);
+		assertEquals(1, self.getEmailAddresses().size());
+		assertEquals(this.pers.getEmail(), self.getEmailAddresses().get(0));
 		assertFalse(self.isSiteAdmin());
 	}
 	

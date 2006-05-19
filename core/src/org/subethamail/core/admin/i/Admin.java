@@ -11,6 +11,7 @@ import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
+import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.lists.i.ListData;
 
@@ -127,4 +128,10 @@ public interface Admin
 	 * It might also be the case after adding a new email address.
 	 */
 	public void selfModerate(Long personId) throws NotFoundException;
+
+	/**
+	 * Gets a list of site administrators. It's a special role.
+	 * @return a list of PersonData with isSiteAdmin() == true
+	 */
+	public List<PersonData> findSiteAdmins();
 }

@@ -8,8 +8,6 @@ package org.subethamail.core.lists.i;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.mail.Part;
 /**
  * Adds the mail body and thread root to a mail summary.
  * 

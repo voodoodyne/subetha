@@ -26,7 +26,7 @@ public class Self extends PersonData
 	 */
 	public Self(Long id, 
 				String name,
-				String[] emailAddresses,
+				List<String> emailAddresses,
 				boolean siteAdmin,
 				List<SubscribedList> subscriptions)
 	{

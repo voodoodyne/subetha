@@ -6,6 +6,7 @@
 package org.subethamail.core.acct.i;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Some detail about a person.
@@ -17,17 +18,27 @@ public class PersonData implements Serializable
 {
 	protected Long id;
 	protected String name;
-	protected String[] emailAddresses;
+	protected List<String> emailAddresses;
+	protected boolean isSiteAdmin = false;
 	
-	/**
-	 */
-	public PersonData(Long id, 
-					String name,
-					String[] emailAddresses)
+	public PersonData(Long id, String name, List<String> emailAddresses)
 	{
 		this.id = id;
 		this.name = name;
 		this.emailAddresses = emailAddresses;
+	}
+
+	/**
+	 */
+	public PersonData(Long id, 
+					String name,
+					List<String> emailAddresses,
+					boolean isSiteAdmin)
+	{
+		this.id = id;
+		this.name = name;
+		this.emailAddresses = emailAddresses;
+		this.isSiteAdmin = isSiteAdmin;
 	}
 	
 	/** */
@@ -49,8 +60,18 @@ public class PersonData implements Serializable
 	}
 
 	/** */
-	public String[] getEmailAddresses()
+	public List<String> getEmailAddresses()
 	{
 		return this.emailAddresses;
+	}
+
+	public boolean isSiteAdmin()
+	{
+		return this.isSiteAdmin;
+	}
+
+	public void setSiteAdmin(boolean isSiteAdmin)
+	{
+		this.isSiteAdmin = isSiteAdmin;
 	}
 }

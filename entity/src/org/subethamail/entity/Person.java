@@ -6,7 +6,9 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -15,7 +17,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MapKey;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,6 +35,16 @@ import org.subethamail.common.valid.Validator;
  * 
  * @author Jeff Schnitzer
  */
+@NamedQueries({
+	@NamedQuery(
+		name="SiteAdmin", 
+		query="from Person where siteAdmin = true",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
+	)
+})
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
@@ -192,14 +207,14 @@ public class Person implements Serializable, Comparable
 	/**
 	 * Convenience method
 	 */
-	public String[] getEmailArray()
+	public List<String> getEmailList()
 	{
-		String[] addresses = new String[this.emailAddresses.size()];
+		List<String> addresses = new ArrayList<String>(this.emailAddresses.size());
 		
 		int i = 0;
 		for (EmailAddress addy: this.emailAddresses.values())
 		{
-			addresses[i] = addy.getId();
+			addresses.add(addy.getId());
 			i++;
 		}
 		

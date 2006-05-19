@@ -5,6 +5,7 @@
 
 package org.subethamail.web.action;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,16 +43,39 @@ public class GetSubscribers extends AuthAction
 	public void execute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();
-/*
-		if (model.query == null || model.query.trim().length() == 0)
-			return;
-*/
+
 		model.subscriberData = Backend.instance().getListMgr().getSubscribers(model.listId);
+
+		// do some basic searching. keeps the load off the database.
+		if (model.query != null && model.query.length() > 0)
+		{
+			List<SubscriberData> queryResults = new ArrayList<SubscriberData>(model.subscriberData.size());
+
+			for (SubscriberData subscriber : model.subscriberData)
+			{
+				boolean match = false;
+				for (String email : subscriber.getEmailAddresses())
+				{
+					if (email.contains(model.query))
+					{
+						queryResults.add(subscriber);
+						match = true;
+						continue;
+					}
+				}
+
+				if (!match && subscriber.getName().contains(model.query))
+				{
+					queryResults.add(subscriber);
+				}
+			}
+
+			model.subscriberData = queryResults;
+		}
+		
 		model.setTotalCount(model.subscriberData.size());
 		if (model.getSkip() > 0 && model.getCount() > 0)
 			model.subscriberData = model.subscriberData.subList(model.getSkip(), model.getSkip() + model.getCount());
-/*		
-		SearchResult result = this.getSearcher().search(model.getQuery(), model.getSkip(), model.getCount());
-*/
+		
 	}
 }

@@ -14,6 +14,14 @@
 
 <trim:list title="Subscribers" listId="${param.listId}">
 
+	<form action="<c:url value="/list_subscribers.jsp"/>" method="get" style="display:inline">
+		<input type="hidden" name="listId" value="${param.listId}" />
+		<input type="text" name="query" value="<c:out value="${param.query}" />" />
+		<input type="submit" name="submit" value="Query" />
+	</form>
+	
+	<br /><br />
+	
 	<c:choose>
 		<c:when test="${empty model.subscriberData}">
 			<p>There are no subscribers to this list.</p>

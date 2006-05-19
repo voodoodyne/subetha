@@ -25,7 +25,9 @@
 				<tr>
 					<td>Name</td>
 					<td>Addresses</td>
-					<td>Role</td>
+					<c:if test="${perms.EDIT_ROLES || perms.VIEW_ROLES}">
+						<td>Role</td>
+					</c:if>
 					<c:if test="${perms.UNSUBSCRIBE_OTHERS || perms.EDIT_ROLES}">
 						<td>Action</td>
 					</c:if>
@@ -55,6 +57,7 @@
 								></a><c:if test="${! loop.last}">, </c:if>
 							</c:forEach>
 						</td>
+						<c:if test="${perms.EDIT_ROLES || perms.VIEW_ROLES}">
 						<td>
 							<c:out value="${p.roleName}" />
 							<c:if test="${perms.EDIT_ROLES}">
@@ -72,6 +75,7 @@
 								</form>
 							</c:if>
 						</td>
+						</c:if>
 						<c:if test="${perms.UNSUBSCRIBE_OTHERS || perms.EDIT_ROLES}">
 							<td>
 								<c:if test="${perms.UNSUBSCRIBE_OTHERS}">

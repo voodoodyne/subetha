@@ -8,7 +8,7 @@
 #set($subject = "Confirm subscription to $list.name")
 Someone (hopefully you) requested to subscribe to the mailing list '$list.name'.  To confirm, you must either click on the following link:
 
-${list.urlBase}/subscribe_confirm_submit.jsp?token=$token
+${list.urlBase}subscribe_confirm_submit.jsp?token=$token
 
 *OR*
 

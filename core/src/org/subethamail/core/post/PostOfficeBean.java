@@ -218,7 +218,7 @@ public class PostOfficeBean implements PostOffice
 		{
 			// Try a random list that the user is subscribed to.
 			Subscription sub = addy.getPerson().getSubscriptions().values().iterator().next();
-			vctx.put("url", sub.getList().getUrl());
+			vctx.put("url", sub.getList().getUrlBase());
 			
 			MessageBuilder builder = new MessageBuilder(MailType.FORGOT_PASSWORD, vctx);
 			builder.setTo(addy);
@@ -319,7 +319,7 @@ public class PostOfficeBean implements PostOffice
 		{
 			// Try a random list that the user is subscribed to.
 			Subscription sub = me.getSubscriptions().values().iterator().next();
-			vctx.put("url", sub.getList().getUrl());
+			vctx.put("url", sub.getList().getUrlBase());
 			
 			MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
 			builder.setTo(email);

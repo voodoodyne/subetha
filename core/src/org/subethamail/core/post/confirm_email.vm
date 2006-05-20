@@ -2,13 +2,14 @@
 ##   "token" of type String
 ##   "email" of type String
 ##   "person" of type Person
+##   "url" of type String
 ##
 ## Expects a String value "subject" to be set in the context
 ##
 #set($subject = "Confirm additional email address")
 Someone (hopefully you) requested to add an email address to your mailing list server account.  To confirm, you must either click on the following link:
 
-${list.urlBase}/email_confirm_submit.jsp?token=$token
+${url}email_confirm_submit.jsp?token=$token
 
 *OR*
 

@@ -375,7 +375,7 @@ public class MailingList implements Serializable, Comparable
 	
 	/**
 	 * @return the context root of the SubEtha web application, determined
-	 *  from the main URL.  Does not include trailing /.
+	 *  from the main URL.  Includes trailing /.
 	 */
 	public String getUrlBase()
 	{
@@ -385,7 +385,7 @@ public class MailingList implements Serializable, Comparable
 		if (pos < 0)
 			throw new IllegalStateException("Malformed list url");
 		
-		return this.url.substring(0, pos + "/se".length()); 
+		return this.url.substring(0, pos + "/se/".length()); 
 	}
 	
 	/**

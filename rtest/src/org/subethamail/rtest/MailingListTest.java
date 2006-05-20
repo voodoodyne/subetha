@@ -18,6 +18,7 @@ import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.BeanMixin;
+import org.subethamail.rtest.util.MailingListInfoMixin;
 import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonInfoMixin;
 import org.subethamail.rtest.util.PersonMixin;
@@ -87,24 +88,24 @@ public class MailingListTest extends SubEthaTestCase
 	/** */
 	public void testChangeListAddresses() throws Exception
 	{
-		MailingListMixin ml = new MailingListMixin(this.admin, this.pers.getAddress());
-
-		InternetAddress nextAddress = new InternetAddress("foo@bar.com");
-		URL nextUrl = new URL("http://www.whichever.com/se/list/foo");
+		this.admin.getAdmin().log("Starting testChangeListAddresses()");
 		
+		MailingListMixin ml = new MailingListMixin(this.admin, this.pers.getAddress());
+		MailingListInfoMixin next = new MailingListInfoMixin();
+
 		// First just the url
-		this.admin.getAdmin().setListAddresses(ml.getId(), ml.getAddress(), nextUrl);
+		this.admin.getAdmin().setListAddresses(ml.getId(), ml.getAddress(), next.getUrl());
 		
 		ListData data = this.admin.getListMgr().getList(ml.getId());
 		assertEquals(ml.getEmail(), data.getEmail());
-		assertEquals(nextUrl.toString(), data.getUrl());
+		assertEquals(next.getUrl().toString(), data.getUrl());
 		
 		// Then just the address
-		this.admin.getAdmin().setListAddresses(ml.getId(), nextAddress, nextUrl);
+		this.admin.getAdmin().setListAddresses(ml.getId(), next.getAddress(), next.getUrl());
 		
 		data = this.admin.getListMgr().getList(ml.getId());
-		assertEquals(nextAddress.getAddress(), data.getEmail());
-		assertEquals(nextUrl.toString(), data.getUrl());
+		assertEquals(next.getEmail(), data.getEmail());
+		assertEquals(next.getUrl().toString(), data.getUrl());
 		
 		// Then both (back to original
 		this.admin.getAdmin().setListAddresses(ml.getId(), ml.getAddress(), ml.getUrl());

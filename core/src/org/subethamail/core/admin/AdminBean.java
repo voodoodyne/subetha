@@ -88,7 +88,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException
 	{
-		this.checkListAddresses(address, url, null);
+		this.checkListAddresses(address, url);
 		
 		// Then create the mailing list and attach the owners.
 		MailingList list = new MailingList(address.getAddress(), address.getPersonal(), url.toString(), description);
@@ -444,9 +444,14 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void setListAddresses(Long listId, InternetAddress address, URL url) throws NotFoundException, DuplicateListDataException, InvalidListDataException
 	{
-		this.checkListAddresses(address, url, listId);
-		
 		MailingList list = this.dao.findMailingList(listId);
+		
+		// This is a little weird but it seems to work around a hibernate bug
+		// that was tickled by doing a query by the new {email|address} prior to setting
+		// that field.  So we avoid doing queries we don't have to.
+		InternetAddress checkAddress = list.getEmail().equals(address.getAddress()) ? null : address;
+		URL checkUrl = list.getUrl().equals(url.toString()) ? null : url;
+		this.checkListAddresses(checkAddress, checkUrl);
 		
 		list.setEmail(address.getAddress());
 		list.setUrl(url.toString());
@@ -455,41 +460,44 @@ public class AdminBean implements Admin, AdminRemote
 	/**
 	 * Checks whether or not the list addresses are ok (valid and not duplicates)
 	 * 
-	 * okListId is a list which is ok to have duplicate data for
+	 * @param address can be null to skip address checking
+	 * @param url can be null to skip url checking
 	 */
-	protected void checkListAddresses(InternetAddress address, URL url, Long okListId) throws DuplicateListDataException, InvalidListDataException
+	protected void checkListAddresses(InternetAddress address, URL url) throws DuplicateListDataException, InvalidListDataException
 	{
-		// TODO:  consider whether or not we should enforce any formatting of
-		// the url here.  Seems like that's a job for the web front end?
-		
-		boolean ownerAddy = OwnerAddress.getList(address.getAddress()) != null;
-		boolean verpAddy = VERPAddress.getVERPBounce(address.getAddress()) != null;
-		
-		if (ownerAddy || verpAddy)
-			throw new InvalidListDataException("Address cannot be used", ownerAddy, verpAddy);
-		
-		// Make sure address and url are not duplicates
 		boolean dupAddress = false;
 		boolean dupUrl = false;
 		
-		try
+		if (address != null)
 		{
-			MailingList list = this.dao.findMailingList(address);
-			if (!list.getId().equals(okListId))
+			boolean ownerAddy = OwnerAddress.getList(address.getAddress()) != null;
+			boolean verpAddy = VERPAddress.getVERPBounce(address.getAddress()) != null;
+			
+			if (ownerAddy || verpAddy)
+				throw new InvalidListDataException("Address cannot be used", ownerAddy, verpAddy);
+			
+			try
+			{
+				this.dao.findMailingList(address);
 				dupAddress = true;
+			}
+			catch (NotFoundException ex) {}
 		}
-		catch (NotFoundException ex) {}
 		
-		try
+		if (url != null)
 		{
-			MailingList list = this.dao.findMailingList(url);
-			if (!list.getId().equals(okListId))
+			// TODO:  consider whether or not we should enforce any formatting of
+			// the url here.  Seems like that's a job for the web front end?
+			
+			try
+			{
+				this.dao.findMailingList(url);
 				dupUrl = true;
+			}
+			catch (NotFoundException ex) {}
 		}
-		catch (NotFoundException ex) {}
 		
 		if (dupAddress || dupUrl)
-			throw new DuplicateListDataException("Mailing list already exists", dupAddress, dupUrl);
-		
+			throw new DuplicateListDataException("Mailing list already exists", dupAddress, dupUrl);	
 	}
 }

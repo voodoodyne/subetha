@@ -5,13 +5,8 @@
 
 package org.subethamail.rtest;
 
-import java.net.URL;
-
-import javax.mail.internet.InternetAddress;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.lists.i.ListData;

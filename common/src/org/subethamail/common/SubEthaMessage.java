@@ -43,6 +43,8 @@ public class SubEthaMessage extends SMTPMessage
 	public static final String HDR_MESSAGE_ID = "Message-ID";
 	public static final String HDR_IN_REPLY_TO = "In-Reply-To";
 	public static final String HDR_REFERENCES = "References";
+	public static final String HDR_X_LOOP = "X-Loop";
+	
 
 	/** */
 	public SubEthaMessage(Session session) throws MessagingException
@@ -220,5 +222,31 @@ public class SubEthaMessage extends SMTPMessage
 	{
 		if (!this.saved)
 			this.saveChanges();
+	}
+
+	/**
+	 * Tests whether or not there is an existing x-loop header for the list email address.
+	 */
+	public boolean hasXLoop(String email) throws MessagingException
+	{
+		String[] xloops = this.getHeader(HDR_X_LOOP);
+		if (xloops != null)
+		{
+			for (String xloop: xloops)
+			{
+				if (email.equals(xloop))
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Adds an x-loop header
+	 */
+	public void addXLoop(String email) throws MessagingException
+	{
+		this.addHeader(HDR_X_LOOP, email);
 	}
 }

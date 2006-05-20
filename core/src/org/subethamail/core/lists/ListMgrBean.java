@@ -463,26 +463,19 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	
 	/**
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#subscribeAndApproveHeldMessages(java.lang.Long)
+	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldMessageAndSubscribe(java.lang.Long)
 	 */
-	public Long subscribeAndApproveHeldMessages(Long msgId) throws NotFoundException, PermissionException
+	public Long approveHeldMessageAndSubscribe(Long msgId) throws NotFoundException, PermissionException
 	{
+		// This is really just a subscribe operation, the message (and any
+		// others with the same email address) will automatically get flushed.
+
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
 		mail.getList().checkPermission(getMe(), Permission.APPROVE_SUBSCRIPTIONS);
-		
-		for (MailHold mh : this.getHeldMessages(mail.getList().getId()))
-		{
-			if(mh.getFrom().equals(mail.getFromAddress().toString())) 
-			{
-				Mail m = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
-				m.approve();
-				this.queuer.queueForDelivery(mail.getId());
-			}
-		}
 
 		this.admin.subscribe(mail.getList().getId(), mail.getFromAddress(), true);
+
 		return mail.getList().getId();
-		
 	}
 	
 	/**

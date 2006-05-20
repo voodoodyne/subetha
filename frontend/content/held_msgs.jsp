@@ -67,8 +67,8 @@
 							</form>
 							<form action="<c:url value="/held_msg_action.jsp" />" method="post" style="display:inline">
 								<input type="hidden" name="msgId" value="${msg.id}" />
-								<input type="hidden" name="action" value="Sub_Approve"/>
-								<input type="submit" value="Subscribe and Approve" />
+								<input type="hidden" name="action" value="Subscribe"/>
+								<input type="submit" value="Approve and Subscribe" />
 							</form>
 						</td>
 					</tr>

@@ -244,6 +244,9 @@ public class AdminBean implements Admin, AdminRemote
 				
 				this.postOffice.sendSubscribed(list, who, deliverTo);
 			
+				// Flush any messages that might be held prior to this subscription.
+				this.selfModerate(who.getId());
+				
 				return SubscribeResult.OK;
 			}
 		}

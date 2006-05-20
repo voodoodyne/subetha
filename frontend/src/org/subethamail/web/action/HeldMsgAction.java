@@ -22,6 +22,7 @@ public class HeldMsgAction extends AuthAction
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(HeldMsgAction.class);
 
+	/** in */
 	@Property Long msgId;
 	@Property String action;
 	
@@ -39,9 +40,9 @@ public class HeldMsgAction extends AuthAction
 		{
 			this.listId = Backend.instance().getListMgr().discardHeldMessage(this.msgId);
 		}
-		else if ("Sub_Approve".equals(this.action))
+		else if ("Subscribe".equals(this.action))
 		{
-			this.listId = Backend.instance().getListMgr().subscribeAndApproveHeldMessages(this.msgId);
+			this.listId = Backend.instance().getListMgr().approveHeldMessageAndSubscribe(this.msgId);
 		}
 	}
 }

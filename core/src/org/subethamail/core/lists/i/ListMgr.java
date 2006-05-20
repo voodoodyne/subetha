@@ -211,7 +211,7 @@ public interface ListMgr
 	 * @return the id of the list to which the msg was sent.
 	 * Requires Permission.APPROVE_SUBSCRIPTIONS and Permissions.APPROVE_MESSAGES
 	 */
-	public Long subscribeAndApproveHeldMessages(Long msgId) throws NotFoundException, PermissionException;
+	public Long approveHeldMessageAndSubscribe(Long msgId) throws NotFoundException, PermissionException;
 
 	/**
 	 * UnSubscribes a person from a list.

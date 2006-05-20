@@ -27,6 +27,15 @@ public class MailingListMixin extends MailingListInfoMixin
 	 */
 	public MailingListMixin(AdminMixin adminMixin, InternetAddress initialOwner) throws Exception
 	{
+		this(adminMixin, initialOwner, null);
+	}
+	
+	/**
+	 * @param initialOwner can be null to create an ownerless list.
+	 * @param blueprint can be null to get a nonblueprinted list. 
+	 */
+	public MailingListMixin(AdminMixin adminMixin, InternetAddress initialOwner, String blueprint) throws Exception
+	{
 		super();
 		
 		if (initialOwner == null)
@@ -34,7 +43,10 @@ public class MailingListMixin extends MailingListInfoMixin
 		else
 			this.initialOwners = new InternetAddress[] { initialOwner };
 		
-		this.id = adminMixin.getAdmin().createMailingList(this.address, this.url, this.description, this.initialOwners);
+		if (blueprint == null)
+			this.id = adminMixin.getAdmin().createMailingList(this.address, this.url, this.description, this.initialOwners);
+		else
+			this.id = adminMixin.getListWizard().createMailingList(this.address, this.url, this.description, this.initialOwners, blueprint);
 	}
 	
 	/** */

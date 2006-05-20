@@ -126,8 +126,10 @@ public interface Admin
 	 * but shouldn't be.  This might be the case immediately after merging two
 	 * accounts; messages from one might be held but the other account is valid.
 	 * It might also be the case after adding a new email address.
+	 * 
+	 * @return the number of messages that were approved
 	 */
-	public void selfModerate(Long personId) throws NotFoundException;
+	public int selfModerate(Long personId) throws NotFoundException;
 
 	/**
 	 * Gets a list of site administrators. It's a special role.

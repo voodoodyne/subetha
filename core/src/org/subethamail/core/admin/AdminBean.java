@@ -28,10 +28,12 @@ import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.post.PostOffice;
+import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
+import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
@@ -68,6 +70,7 @@ public class AdminBean implements Admin, AdminRemote
 	/** */
 	@EJB DAO dao;
 	@EJB PostOffice postOffice;
+	@EJB Queuer queuer;
 
 	/**
 	 * For generating random passwords.
@@ -420,12 +423,25 @@ public class AdminBean implements Admin, AdminRemote
 	/**
 	 * @see Admin#selfModerate(Long)
 	 */
-	public void selfModerate(Long personId) throws NotFoundException
+	public int selfModerate(Long personId) throws NotFoundException
 	{
-		//TODO
+		Person who = this.dao.findPerson(personId);
 		
-		// Use a query to join against the email address table and the
-		// mail table to pull out mail objects with SELF holds.
+		List<Mail> heldMail = this.dao.findSoftHoldsForPerson(personId);
+		
+		int count = 0;
+		
+		for (Mail held: heldMail)
+		{
+			if (held.getList().getPermissionsFor(who).contains(Permission.POST))
+			{
+				held.approve();
+				this.queuer.queueForDelivery(held.getId());
+				count++;
+			}
+		}
+		
+		return count;
 	}
 	
 	/**

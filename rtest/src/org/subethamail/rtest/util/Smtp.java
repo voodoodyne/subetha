@@ -74,6 +74,28 @@ public class Smtp
 		return result;
 	}
 	
+	/** Gets the Nth instance of the specified mail type */
+	public SmtpMessage get(MailType type, int index)
+	{
+		int count = 0;
+		
+		Iterator<SmtpMessage> it = this.iterator();
+		while (it.hasNext())
+		{
+			SmtpMessage msg = it.next();
+			
+			if (msg.getHeaderValue("Subject").startsWith(type.name()))
+			{
+				if (count == index)
+					return msg;
+				else
+					count++;
+			}
+		}
+
+		return null;
+	}
+	
 	/**
 	 * @return the number of messages of the specified type 
 	 */

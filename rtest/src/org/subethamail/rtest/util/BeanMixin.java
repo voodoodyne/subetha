@@ -6,8 +6,10 @@
 package org.subethamail.rtest.util;
 
 import java.security.Principal;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.security.SecurityAssociation;
@@ -16,6 +18,8 @@ import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AccountMgrRemote;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
+import org.subethamail.core.admin.i.ListWizard;
+import org.subethamail.core.admin.i.ListWizardRemote;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
 
@@ -36,6 +40,7 @@ public class BeanMixin
 	private Admin admin;
 	private AccountMgr accountMgr;
 	private ListMgr listMgr;
+	private ListWizard listWizard;
 	
 	
 	/** */
@@ -45,6 +50,7 @@ public class BeanMixin
 		this.admin = (Admin)ctx.lookup(AdminRemote.JNDI_NAME);
 		this.accountMgr = (AccountMgr)ctx.lookup(AccountMgrRemote.JNDI_NAME);
 		this.listMgr = (ListMgr)ctx.lookup(ListMgrRemote.JNDI_NAME);
+		this.listWizard = (ListWizard)ctx.lookup(ListWizardRemote.JNDI_NAME);
 	}
 	
 	/** If this is null, clears all credentials */
@@ -88,6 +94,14 @@ public class BeanMixin
 	/** */
 	public ListMgr getListMgr()
 	{
+		this.establish();
 		return this.listMgr;
+	}
+
+	/** */
+	public ListWizard getListWizard()
+	{
+		this.establish();
+		return this.listWizard;
 	}
 }

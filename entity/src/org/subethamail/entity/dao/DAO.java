@@ -166,4 +166,10 @@ public interface DAO
 	 * @return all Person's who are site admins
 	 */
 	public List<Person> findSiteAdmins();
+
+	/**
+	 * @return all the soft holds associated with any email address
+	 *  that the person owns.  The resulting mail objects are editable.
+	 */
+	public List<Mail> findSoftHoldsForPerson(Long personId);
 }

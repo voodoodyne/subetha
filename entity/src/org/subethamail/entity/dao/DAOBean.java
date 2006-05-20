@@ -367,4 +367,20 @@ public class DAOBean implements DAO
 		Query q = this.em.createNamedQuery("SiteAdmin");
 		return q.getResultList();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findSoftHoldsForPerson(java.lang.Long)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Mail> findSoftHoldsForPerson(Long personId)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding soft mail holds for person " + personId);
+		
+		Query q = this.em.createNamedQuery("SoftHoldsByPerson");
+		q.setParameter("personId", personId);
+		
+		return q.getResultList();
+	}
 }

@@ -81,6 +81,12 @@ import org.subethamail.common.valid.Validator;
 		query="select m from Mail as m join fetch m.wantedReference as ref where ref = :messageId and m.list.id = :listId",
 		hints={
 		}
+	),
+	@NamedQuery(
+		name="SoftHoldsByPerson", 
+		query="select m from Mail m, EmailAddress email where email.person.id = :personId and email.id = m.fromNormal and m.hold = 'SOFT'",
+		hints={
+		}
 	)
 })
 @Entity

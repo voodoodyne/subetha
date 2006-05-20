@@ -609,6 +609,6 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 
 			return queryResults;
 		}
-		return new ArrayList<ListData>();
+		return lists;
 	}
 }

@@ -375,6 +375,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 
 			return queryResults;
 		}
-		return new ArrayList<SubscriberData>();
+		return subscribers;
 	}
 }

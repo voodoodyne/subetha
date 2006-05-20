@@ -41,12 +41,29 @@ public class GetLists extends AuthAction
 	{
 		Model model = (Model)this.getCtx().getModel();
 
-		model.listData = Backend.instance().getListMgr()
-			.getListsMatchingQuery(model.query, Backend.instance().getAdmin().getAllLists());
+		model.listData = Backend.instance().getListMgr().searchLists(model.query, model.getSkip(), model.getCount());
 
-		// we are using pagination
-		model.setTotalCount(model.listData.size());
-		if (model.getSkip() > 0 && model.getCount() > 0)
-			model.listData = model.listData.subList(model.getSkip(), model.getSkip() + model.getCount());
-	}	
+		if (model.query == null || model.query.length() == 0)
+		{
+			model.setTotalCount(Backend.instance().getListMgr().countLists());
+		}
+		else
+		{
+			// If we are doing a query, then we need to find out how many results would
+			// have been returned for our query (before the limit was applied) in 
+			// order to do the pagination right.
+			//
+			// this is highly inefficient as we are doing a full table scan again.
+			// Since we know and love MySQL, it would be better to do something like this:
+			// http://www.mysqlfreaks.com/statements/101.php
+			//			SELECT SQL_CALC_FOUND_ROWS *
+			//			FROM tbl_name
+			//			WHERE id > 100 LIMIT 10;
+			//
+			//			SELECT FOUND_ROWS();
+			//
+			int size = Backend.instance().getListMgr().countLists(model.query);
+			model.setTotalCount(size);
+		}
+	}
 }

@@ -338,43 +338,29 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.acct.i.AccountMgr#getSubscribersMatchingQuery(java.lang.String, java.util.List)
+	 * @see org.subethamail.core.acct.i.AccountMgr#searchSubscribers(String, Long, int, int)
 	 */
-	public List<SubscriberData> getSubscribersMatchingQuery(String query, List<SubscriberData> subscribers)
+	public List<SubscriberData> searchSubscribers(String query, Long listId, int skip, int count)
+		throws NotFoundException
 	{
-		// FIXME: this will be replaced with letting the database do the magic.
-		if (query != null && query.length() > 0)
-		{
-			List<SubscriberData> queryResults = new ArrayList<SubscriberData>(subscribers.size());
-			String queryLower = query.toLowerCase();
+		return Transmute.subscribers(this.dao.findSubscribers(listId, query, skip, count));
+	}
 
-			for (SubscriberData subscriber : subscribers)
-			{
-				boolean match = false;
-				for (String email : subscriber.getEmailAddresses())
-				{
-					if (email.toLowerCase().contains(queryLower))
-					{
-						queryResults.add(subscriber);
-						match = true;
-						continue;
-					}
-				}
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.acct.i.AccountMgr#countSubscribers(java.lang.Long)
+	 */
+	public int countSubscribers(Long listId)
+	{
+		return this.dao.countSubscribers(listId);
+	}
 
-				String name = subscriber.getName();
-				if (name == null)
-					name = "";
-
-				name = name.toLowerCase();
-
-				if (!match && name != null && name.contains(queryLower))
-				{
-					queryResults.add(subscriber);
-				}
-			}
-
-			return queryResults;
-		}
-		return subscribers;
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.acct.i.AccountMgr#countSubscribers(java.lang.Long, java.lang.String)
+	 */
+	public int countSubscribers(Long listId, String query)
+	{
+		return this.dao.countSubscribers(listId, query);
 	}
 }

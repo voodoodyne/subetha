@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,17 +32,41 @@ import org.subethamail.common.valid.Validator;
 		hints={
 			// We want to write and caching is pointless
 		}
-	)
-	/* ,
+	),
 	@NamedQuery(
-			name="SearchSubscribers", 
-			query="from Subscription s, MailingList l where s.listId = l.id and s.person.",
+			name="CountSubscribersOnList", 
+			query="select count(*) from Subscription s, MailingList l where s.listId = l.id and l.id = :listId",
 			hints={
 				@QueryHint(name="org.hibernate.readOnly", value="true"),
 				@QueryHint(name="org.hibernate.cacheable", value="true")
 			}
 		)
-	*/
+/*		,
+	@NamedQuery(
+			name="CountSubscribersOnListQuery", 
+			query="select count(*) from Person person, MailingList list, " +
+					"Subscription sub join sub.person.emailAddresses as email " +
+					"where (sub.list.id = :listId and " +
+							"(sub.person.name like :name or " +
+							"email.id like :email)",
+			hints={
+				@QueryHint(name="org.hibernate.readOnly", value="true"),
+				@QueryHint(name="org.hibernate.cacheable", value="true")
+			}
+		),
+	@NamedQuery(
+			name="SubscribersOnListQuery", 
+			query="from Person person, MailingList list, " +
+					"Subscription sub join sub.person.emailAddresses as email " +
+					"where (sub.list.id = :listId and " +
+						"(sub.person.name like :name or " +
+						"email.id like :email)",
+			hints={
+				@QueryHint(name="org.hibernate.readOnly", value="true"),
+				@QueryHint(name="org.hibernate.cacheable", value="true")
+			}
+		)
+*/
 })
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)

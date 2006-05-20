@@ -67,7 +67,37 @@ import org.subethamail.common.valid.Validator;
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")
 		}
-	)
+	),
+	@NamedQuery(
+			name="SearchMailingLists", 
+			query="from MailingList l where (l.name like :name) or " +
+											"(l.email like :email) or" +
+											"(l.url like :url) or" +
+											"(l.description like :description)",
+			hints={
+				@QueryHint(name="org.hibernate.readOnly", value="true"),
+				@QueryHint(name="org.hibernate.cacheable", value="true")
+			}
+		),
+	@NamedQuery(
+			name="CountMailingLists", 
+			query="select count(*) from MailingList l",
+			hints={
+				@QueryHint(name="org.hibernate.readOnly", value="true"),
+				@QueryHint(name="org.hibernate.cacheable", value="true")
+			}
+		),
+	@NamedQuery(
+			name="CountMailingListsQuery", 
+			query="select count(*) from MailingList l where (l.name like :name) or " +
+											"(l.email like :email) or" +
+											"(l.url like :url) or" +
+											"(l.description like :description)",
+			hints={
+				@QueryHint(name="org.hibernate.readOnly", value="true"),
+				@QueryHint(name="org.hibernate.cacheable", value="true")
+			}
+		)
 })
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)

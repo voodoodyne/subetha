@@ -6,6 +6,7 @@
 package org.subethamail.entity.dao;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
@@ -221,7 +222,7 @@ public class DAOBean implements DAO
 	}
 
 	/**
-	 * @see DAO#findMailingListByUrl(URL)
+	 * @see DAO#findMailingList(URL)
 	 */
 	public MailingList findMailingList(URL url) throws NotFoundException
 	{
@@ -243,19 +244,42 @@ public class DAOBean implements DAO
 	}
 	
 	/**
-	 * @see DAO#findPerson(Long)
+	 * @see DAO#findMailingLists(String)
 	 */
-	public Person findPerson(Long personId) throws NotFoundException
+	@SuppressWarnings("unchecked")
+	public List<MailingList> findMailingLists(String query)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding Person with id " + personId);
-		
-		Person p = this.em.find(Person.class, personId);
-		
-		if (p == null)
-			throw new NotFoundException("No person " + personId);
+		return findMailingLists(query, -1, -1);
+	}
+	
+	/**
+	 * @see DAO#findMailingLists(String, int, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<MailingList> findMailingLists(String query, int skip, int count)
+	{
+		Query q;
+		if (query == null || query.length() == 0)
+		{
+			q = this.em.createNamedQuery("AllMailingLists");
+		}
 		else
-			return p;
+		{
+			if (log.isDebugEnabled())
+				log.debug("Finding MailingLists with query: " + query);
+
+			q = this.em.createNamedQuery("SearchMailingLists");
+			q.setParameter("name", like(query));
+			q.setParameter("email", like(query));
+			q.setParameter("url", like(query));
+			q.setParameter("description", like(query));
+		}
+		if (skip >= 0 && count >= 0)
+		{
+			q.setFirstResult(skip);
+			q.setMaxResults(count);
+		}
+		return q.getResultList();
 	}
 
 	/**
@@ -270,6 +294,52 @@ public class DAOBean implements DAO
 		Query q = this.em.createNamedQuery("AllMailingLists");
 		
 		return q.getResultList();
+	}
+
+	/**
+	 * @see DAO#countLists()
+	 */
+	public int countLists()
+	{
+		if (log.isDebugEnabled())
+			log.debug("Counting all mailing lists");
+
+		Query q = this.em.createNamedQuery("CountMailingLists");
+		Number n = (Number) q.getSingleResult();
+		return n.intValue();
+	}
+
+	/**
+	 * @see DAO#countLists(String)
+	 */
+	public int countLists(String query)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Counting mailing lists with query: " + query);
+
+		Query q = this.em.createNamedQuery("CountMailingListsQuery");
+		q.setParameter("name", like(query));
+		q.setParameter("email", like(query));
+		q.setParameter("url", like(query));
+		q.setParameter("description", like(query));
+		Number n = (Number) q.getSingleResult();
+		return n.intValue();
+	}
+
+	/**
+	 * @see DAO#findPerson(Long)
+	 */
+	public Person findPerson(Long personId) throws NotFoundException
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding Person with id " + personId);
+		
+		Person p = this.em.find(Person.class, personId);
+		
+		if (p == null)
+			throw new NotFoundException("No person " + personId);
+		else
+			return p;
 	}
 
 	/**
@@ -366,6 +436,86 @@ public class DAOBean implements DAO
 
 		Query q = this.em.createNamedQuery("SiteAdmin");
 		return q.getResultList();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#countSubscribers(java.lang.Long)
+	 */
+	public int countSubscribers(Long listId)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Counting subscribers of list: " + listId);
+
+		Query q = this.em.createNamedQuery("CountSubscribersOnList");
+		q.setParameter("listId", listId);
+		Number n = (Number) q.getSingleResult();
+		return n.intValue();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#countSubscribers(java.lang.Long, java.lang.String)
+	 */
+	public int countSubscribers(Long listId, String query)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Counting subscribers on list: " + listId + " with query: " + query);
+
+		Query q = this.em.createNamedQuery("CountSubscribersOnListQuery");
+		q.setParameter("listId", listId);
+		q.setParameter("name", like(query));
+		q.setParameter("email", like(query));
+		q.setParameter("note", like(query));
+		Number n = (Number) q.getSingleResult();
+		return n.intValue();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findSubscribers(java.lang.Long, java.lang.String, int, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Subscription> findSubscribers(Long listId, String query, int skip, int count)
+		throws NotFoundException
+	{
+		Query q;
+		if (query == null || query.length() == 0)
+		{
+			MailingList list = this.findMailingList(listId);
+			return new ArrayList(list.getSubscriptions());
+		}
+		else
+		{
+			q = this.em.createNamedQuery("SubscribersOnListQuery");
+			q.setParameter("listId", listId);
+			q.setParameter("name", like(query));
+			q.setParameter("email", like(query));
+			q.setParameter("note", like(query));
+		}
+		
+		if (skip >=0 && count >=0)
+		{
+			q.setFirstResult(skip);
+			q.setMaxResults(count);
+		}
+		return q.getResultList();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findSubscribers(java.lang.Long, java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Subscription> findSubscribers(Long listId, String query)
+		throws NotFoundException
+	{
+		return findSubscribers(listId, query, -1, -1);
+	}
+
+	private final String like(String query)
+	{
+		return "%" + query + "%";
 	}
 
 	/*

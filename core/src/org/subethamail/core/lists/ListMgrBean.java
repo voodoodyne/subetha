@@ -561,47 +561,37 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#getListsMatchingQuery(java.lang.String, java.util.List)
+	 * @see org.subethamail.core.lists.i.ListMgr#searchLists(java.lang.String, int, int)
 	 */
-	public List<ListData> getListsMatchingQuery(String query, List<ListData> lists)
+	public List<ListData> searchLists(String query, int skip, int count)
 	{
-		// FIXME: this is going to be implemented in the database at some point
-		if (query != null && query.length() > 0)
-		{
-			List<ListData> queryResults = new ArrayList<ListData>(lists.size());
-			String queryLower = query.toLowerCase();
+		return Transmute.mailingLists(this.dao.findMailingLists(query, skip, count));
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#searchLists(java.lang.String)
+	 */
+	public List<ListData> searchLists(String query)
+	{
+		return Transmute.mailingLists(this.dao.findMailingLists(query));
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#countLists()
+	 */
+	public int countLists()
+	{
+		return this.dao.countLists();
+	}
 
-			for (ListData list : lists)
-			{
-				String name = list.getName();
-				if (name == null)
-					name = "";
-				String desc = list.getDescription();
-				if (desc == null)
-					desc = "";
-				String url = list.getUrl();
-				if (url == null)
-					url = "";
-				String email = list.getEmail();
-				if (email == null)
-					email = "";
-				
-				name = name.toLowerCase();
-				desc = desc.toLowerCase();
-				url = url.toLowerCase();
-				email = email.toLowerCase();
-				
-				if (name.contains(queryLower) ||
-					desc.contains(queryLower) ||
-					url.contains(queryLower) ||
-					email.contains(queryLower))
-				{
-					queryResults.add(list);
-				}
-			}
-
-			return queryResults;
-		}
-		return lists;
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#countLists(String)
+	 */
+	public int countLists(String query)
+	{
+		return this.dao.countLists(query);
 	}
 }

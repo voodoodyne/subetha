@@ -244,5 +244,23 @@ public interface ListMgr
 	 * @param lists
 	 * @return
 	 */
-	public List<ListData> getListsMatchingQuery(String query, List<ListData> lists);
+	public List<ListData> searchLists(String query, int skip, int count);
+
+	/**
+	 * Gets a list of lists matching a String query
+	 * @return
+	 */
+	public List<ListData> searchLists(String query);
+
+	/**
+	 * Get the total number of lists in the system.
+	 * @return
+	 */
+	public int countLists();
+
+	/**
+	 * Get the total number of lists which match the query.
+	 * @return
+	 */
+	public int countLists(String query);
 }

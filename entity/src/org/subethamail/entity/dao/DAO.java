@@ -127,6 +127,22 @@ public interface DAO
 	public MailingList findMailingList(URL url) throws NotFoundException;
 
 	/**
+	 * Finds a mailing list with the specified query.
+	 * @param query
+	 * @param skip
+	 * @param count
+	 * @return
+	 */
+	public List<MailingList> findMailingLists(String query, int skip, int count);
+
+	/**
+	 * Finds a mailing list with the specified query.
+	 * @param query
+	 * @return
+	 */
+	public List<MailingList> findMailingLists(String query);
+
+	/**
 	 * @return the identified person.
 	 */
 	public Person findPerson(Long personId) throws NotFoundException;
@@ -166,6 +182,36 @@ public interface DAO
 	 * @return all Person's who are site admins
 	 */
 	public List<Person> findSiteAdmins();
+	
+	/**
+	 * @return the total number of lists on this server
+	 */
+	public int countLists();
+
+	/**
+	 * @return the total number of lists on this server based on the string query
+	 */
+	public int countLists(String query);
+	
+	/**
+	 * @return the number of subscribers on a list
+	 */
+	public int countSubscribers(Long listId);
+	
+	/**
+	 * @return the number of subscribers on a list based on a String query
+	 */
+	public int countSubscribers(Long listId, String query);
+
+	/**
+	 * @return limit the number of subscribers on a list based on a String query
+	 */
+	public List<Subscription> findSubscribers(Long listId, String query, int skip, int count) throws NotFoundException;
+
+	/**
+	 * @return the number of subscribers on a list based on a String query
+	 */
+	public List<Subscription> findSubscribers(Long listId, String query) throws NotFoundException;
 
 	/**
 	 * @return all the soft holds associated with any email address

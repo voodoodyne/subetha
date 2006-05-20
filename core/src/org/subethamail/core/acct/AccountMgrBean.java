@@ -28,6 +28,7 @@ import org.subethamail.core.acct.i.Self;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
+import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.util.Base62;
 import org.subethamail.core.util.PersonalBean;
@@ -333,5 +334,47 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	{
 		EmailAddress ea = this.dao.findEmailAddress(email);
 		this.setSiteAdmin(ea.getPerson().getId(), siteAdmin);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.acct.i.AccountMgr#getSubscribersMatchingQuery(java.lang.String, java.util.List)
+	 */
+	public List<SubscriberData> getSubscribersMatchingQuery(String query, List<SubscriberData> subscribers)
+	{
+		// FIXME: this will be replaced with letting the database do the magic.
+		if (query != null && query.length() > 0)
+		{
+			List<SubscriberData> queryResults = new ArrayList<SubscriberData>(subscribers.size());
+			String queryLower = query.toLowerCase();
+
+			for (SubscriberData subscriber : subscribers)
+			{
+				boolean match = false;
+				for (String email : subscriber.getEmailAddresses())
+				{
+					if (email.toLowerCase().contains(queryLower))
+					{
+						queryResults.add(subscriber);
+						match = true;
+						continue;
+					}
+				}
+
+				String name = subscriber.getName();
+				if (name == null)
+					name = "";
+
+				name = name.toLowerCase();
+
+				if (!match && name != null && name.contains(queryLower))
+				{
+					queryResults.add(subscriber);
+				}
+			}
+
+			return queryResults;
+		}
+		return new ArrayList<SubscriberData>();
 	}
 }

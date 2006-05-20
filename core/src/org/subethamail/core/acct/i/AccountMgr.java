@@ -5,8 +5,10 @@
 
 package org.subethamail.core.acct.i;
 
+import java.util.List;
 import javax.ejb.Local;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.lists.i.SubscriberData;
 
 
 /**
@@ -166,4 +168,11 @@ public interface AccountMgr
 	 * @throws NotFoundException
 	 */
 	public void setSiteAdmin(String email, boolean siteAdmin) throws NotFoundException;
+
+	/**
+	 * Gets a list of Subscribers that match a given String query.
+	 * @param query
+	 * @return
+	 */
+	public List<SubscriberData> getSubscribersMatchingQuery(String query, List<SubscriberData> subscribers);
 }

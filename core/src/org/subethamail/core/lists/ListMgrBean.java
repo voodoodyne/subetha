@@ -55,7 +55,7 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 
 /**
- * Implementation of the AccountMgr interface.
+ * Implementation of the ListMgr interface.
  * 
  * @author Jeff Schnitzer
  */
@@ -564,5 +564,51 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		this.dao.remove(mail);
 		
 		return mail.getList().getId();
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getListsMatchingQuery(java.lang.String, java.util.List)
+	 */
+	public List<ListData> getListsMatchingQuery(String query, List<ListData> lists)
+	{
+		// FIXME: this is going to be implemented in the database at some point
+		if (query != null && query.length() > 0)
+		{
+			List<ListData> queryResults = new ArrayList<ListData>(lists.size());
+			String queryLower = query.toLowerCase();
+
+			for (ListData list : lists)
+			{
+				String name = list.getName();
+				if (name == null)
+					name = "";
+				String desc = list.getDescription();
+				if (desc == null)
+					desc = "";
+				String url = list.getUrl();
+				if (url == null)
+					url = "";
+				String email = list.getEmail();
+				if (email == null)
+					email = "";
+				
+				name = name.toLowerCase();
+				desc = desc.toLowerCase();
+				url = url.toLowerCase();
+				email = email.toLowerCase();
+				
+				if (name.contains(queryLower) ||
+					desc.contains(queryLower) ||
+					url.contains(queryLower) ||
+					email.contains(queryLower))
+				{
+					queryResults.add(list);
+				}
+			}
+
+			return queryResults;
+		}
+		return new ArrayList<ListData>();
 	}
 }

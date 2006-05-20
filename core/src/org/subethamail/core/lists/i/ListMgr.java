@@ -238,4 +238,11 @@ public interface ListMgr
 	 */
 	public void setSubscriberRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException;
 
+	/**
+	 * Gets a list of lists matching a String query
+	 * @param query
+	 * @param lists
+	 * @return
+	 */
+	public List<ListData> getListsMatchingQuery(String query, List<ListData> lists);
 }

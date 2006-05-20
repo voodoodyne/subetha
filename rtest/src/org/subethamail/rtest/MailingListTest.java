@@ -90,14 +90,28 @@ public class MailingListTest extends SubEthaTestCase
 		MailingListMixin ml = new MailingListMixin(this.admin, this.pers.getAddress());
 
 		InternetAddress nextAddress = new InternetAddress("foo@bar.com");
-		URL nextUrl = new URL("http://www.whatever.com/se/list/foo");
+		URL nextUrl = new URL("http://www.whichever.com/se/list/foo");
 		
-		this.admin.getAdmin().setListAddresses(ml.getId(), nextAddress, nextUrl);
+		// First just the url
+		this.admin.getAdmin().setListAddresses(ml.getId(), ml.getAddress(), nextUrl);
 		
 		ListData data = this.admin.getListMgr().getList(ml.getId());
+		assertEquals(ml.getEmail(), data.getEmail());
+		assertEquals(nextUrl.toString(), data.getUrl());
 		
+		// Then just the address
+		this.admin.getAdmin().setListAddresses(ml.getId(), nextAddress, nextUrl);
+		
+		data = this.admin.getListMgr().getList(ml.getId());
 		assertEquals(nextAddress.getAddress(), data.getEmail());
 		assertEquals(nextUrl.toString(), data.getUrl());
+		
+		// Then both (back to original
+		this.admin.getAdmin().setListAddresses(ml.getId(), ml.getAddress(), ml.getUrl());
+		
+		data = this.admin.getListMgr().getList(ml.getId());
+		assertEquals(ml.getEmail(), data.getEmail());
+		assertEquals(ml.getUrl().toString(), data.getUrl());
 	}
 	
 	/** */

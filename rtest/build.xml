@@ -73,7 +73,9 @@
 	</target>
 
 	<target name="junit" depends="rtest-jar">
-		<junit printsummary="yes">
+		<junit printsummary="yes" showoutput="yes" fork="yes">
+			<jvmarg value="-Dlog4j.configuration=file:${rtest.basedir}/log4j.properties"/>
+			
 			<classpath refid="rtest.run.classpath"/>
 			
 			<syspropertyset>
@@ -91,7 +93,9 @@
 	</target>
 
 	<target name="junit-special" depends="rtest-jar">
-		<junit printsummary="yes" fork="yes">
+		<junit printsummary="true" showoutput="true" fork="true">
+			<jvmarg value="-Dlog4j.configuration=file:${rtest.basedir}/log4j.properties"/>
+			
 			<classpath refid="rtest.run.classpath"/>
 			
 			<syspropertyset>
@@ -109,7 +113,8 @@
 	</target>
 	
 	<target name="junit-debug" depends="rtest-jar">
-		<junit printsummary="yes" fork="yes">
+		<junit printsummary="yes" showoutput="yes" fork="yes">
+			<jvmarg value="-Dlog4j.configuration=file:${rtest.basedir}/log4j.properties"/>
 			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8001"/>
 			<!-- <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8001"/> -->
 

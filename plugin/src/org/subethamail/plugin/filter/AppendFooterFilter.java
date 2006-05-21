@@ -41,9 +41,9 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 	private static final String ARG_FOOTER = "Footer";
 	
 	private static final String DEFAULT_FOOTER = 
-		"\r\n\r\n_______________________________________________\r\n" +
-		"${list.name} mailing list\r\n" +
-		"${list.email}\r\n" +
+		"_______________________________________________\n" +
+		"${list.name} mailing list\n" +
+		"${list.email}\n" +
 		"${list.url}";
 
 	/** */
@@ -104,7 +104,7 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 		try
 		{
 			String footerContent = (String) ctx.getArgument(ARG_FOOTER);
-			String expandedFooter = ctx.expand(footerContent);
+			String expandedFooter = "\n" + ctx.expand(footerContent);
 
 			Object obj = msg.getContent();
 			if (obj instanceof String)

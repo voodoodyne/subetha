@@ -44,7 +44,16 @@ public class SubEthaMessage extends SMTPMessage
 	public static final String HDR_IN_REPLY_TO = "In-Reply-To";
 	public static final String HDR_REFERENCES = "References";
 	public static final String HDR_X_LOOP = "X-Loop";
+
+	/** 
+	 * The name of the header for detached attachment references.  The
+	 * value will be the numeric id of the attachment. 
+	 */
+	public static final String HDR_ATTACHMENT_REF = "X-SubEtha-Attachment";
 	
+	// Cache of parts, this will optimize having to walk 
+	// the message tree after non-changing events
+	private List<Part> partsCache = null;
 
 	/** */
 	public SubEthaMessage(Session session) throws MessagingException
@@ -183,11 +192,14 @@ public class SubEthaMessage extends SMTPMessage
 	 */
 	public List<Part> getParts() throws MessagingException, IOException
 	{
-		List<Part> parts = new ArrayList<Part>();
-		
-		getParts(this, parts);
-		
-		return parts;
+		if(partsCache == null)
+		{
+			partsCache = new ArrayList<Part>();
+			
+			getParts(this, this.partsCache);
+		}
+			
+		return partsCache;
 	}
 	
 	protected static void getParts(Part part, List<Part> parts) throws MessagingException, IOException
@@ -216,12 +228,29 @@ public class SubEthaMessage extends SMTPMessage
 	}	
 		
 	/**
-	 * Stupidly, saveChanges() resaves even if nothing has changed.
+	 * Call this if you make any changes to the message, or its parts.
 	 */
-	public void saveIfNecessary() throws MessagingException
+	public void save() throws MessagingException
 	{
 		if (!this.saved)
 			this.saveChanges();
+		
+		try {
+			Object contents = this.getContent();
+			if (contents instanceof Multipart)
+			{
+				//this is dumb, but it is a javamail bug.
+				Multipart mp = (Multipart) contents;
+				this.setContent(mp);
+	
+				//reset the cache
+				this.partsCache = null;
+			}
+		}
+		catch(IOException ioex)
+		{
+			//do nothing...
+		}
 	}
 
 	/**

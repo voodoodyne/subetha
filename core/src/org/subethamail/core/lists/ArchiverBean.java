@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
 import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
@@ -23,6 +24,7 @@ import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -33,7 +35,6 @@ import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
-import org.subethamail.core.injector.DetacherBean;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ArchiverRemote;
 import org.subethamail.core.lists.i.AttachmentPartData;
@@ -195,7 +196,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	/**
 	 * Makes the base mail data.  Doesn't set the threadRoot.
 	 */
-	protected MailData makeMailData(Mail raw, boolean showEmail)
+	protected MailData makeMailData(Mail raw, boolean showEmail) throws NotFoundException
 	{
 		try
 		{
@@ -209,22 +210,14 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 			for (Part part : msg.getParts()) 
 			{
 				Object content = part.getContent();
-
-				//content type will be wrong if it is an attachment
-				String contentType =  null;	
-
-				String[] hdrOrigContentType = part.getHeader(DetacherBean.HDR_ORIG_CONTENT_TYPE);
-				if (hdrOrigContentType != null && hdrOrigContentType.length > 0) 
-					contentType = hdrOrigContentType[0];
-				
-				if (contentType == null) contentType = part.getContentType();
 				
 				//get an id to see if it is an attachment
 				Long id =  null;	
 
-				String[] idHeader = part.getHeader(DetacherBean.HDR_ATTACHMENT_REF);
+				String[] idHeader = part.getHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
 				if (idHeader != null && idHeader.length > 0) id = Long.parseLong(idHeader[0]);
 	
+				String contentType = (id == null || id.equals("")) ? part.getContentType() : this.dao.findAttachment(id).getContentType();
 
 				//figure out the name, if there is one.
 				String name = part.getFileName();

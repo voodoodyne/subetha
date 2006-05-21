@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.lob.BlobImpl;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.TrivialDataSource;
 import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Mail;
@@ -37,13 +38,6 @@ public class DetacherBean implements Detacher
 {
 	/** */
 	private static Log log = LogFactory.getLog(DetacherBean.class);
-	
-	/** 
-	 * The name of the header for detached attachment references.  The
-	 * value will be the numeric id of the attachment. 
-	 */
-	public static String HDR_ATTACHMENT_REF = "X-SubEtha-Attachment";
-	public static String HDR_ORIG_CONTENT_TYPE = "X-SubEtha-ContentType";
 	
 	/** */
 	@EJB DAO dao;
@@ -94,8 +88,7 @@ public class DetacherBean implements Detacher
 				log.debug("Leaving text alone");
 			
 			// Text parts can stay, but we don't want anyone faking references
-			part.removeHeader(HDR_ATTACHMENT_REF);
-			part.removeHeader(HDR_ORIG_CONTENT_TYPE);
+			part.removeHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
 		}
 		else
 		{
@@ -111,10 +104,7 @@ public class DetacherBean implements Detacher
 			ownerMail.getAttachments().add(attach);
 			
 			//save a reference to the attachment.id
-			part.setHeader(HDR_ATTACHMENT_REF, attach.getId().toString());
-			
-			//save a copy of the orig content type in the part.
-			part.setHeader(HDR_ORIG_CONTENT_TYPE, part.getContentType());
+			part.setHeader(SubEthaMessage.HDR_ATTACHMENT_REF, attach.getId().toString());
 			
 			try 
 			{
@@ -164,7 +154,7 @@ public class DetacherBean implements Detacher
 		else
 		{
 			// Look for special header which means we must reattach.
-			String[] headers = part.getHeader(HDR_ATTACHMENT_REF);
+			String[] headers = part.getHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
 			if (headers != null && headers.length > 0)
 			{
 				// There should only be one
@@ -178,8 +168,7 @@ public class DetacherBean implements Detacher
 				{
 					Attachment att = this.dao.findAttachment(attachmentId);
 					
-					part.removeHeader(HDR_ATTACHMENT_REF);
-					part.removeHeader(HDR_ORIG_CONTENT_TYPE);
+					part.removeHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
 					part.setDataHandler(
 							new DataHandler(
 									new TrivialDataSource(

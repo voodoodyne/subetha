@@ -73,19 +73,19 @@ public class BootstrapperBean implements BootstrapperManagement
 			Config cfg = this.dao.findConfig(BOOTSTRAPPED_CONFIG_ID);
 			
 			// Might as well sanity check it
-			Boolean value = (Boolean)cfg.getValue();
+			String value = (String)cfg.getValue();
 			
-			if (value == null || value == false)
+			if (value == null || value.length() == 0)
 			{
 				this.bootstrap();
-				cfg.setValue(Boolean.TRUE);
+				cfg.setValue("1.0");
 			}
 		}
 		catch (NotFoundException ex)
 		{
 			this.bootstrap();
 			
-			Config cfg = new Config(BOOTSTRAPPED_CONFIG_ID, Boolean.TRUE);
+			Config cfg = new Config(BOOTSTRAPPED_CONFIG_ID, "1.0");
 			this.dao.persist(cfg);
 		}
 	}

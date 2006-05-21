@@ -151,47 +151,4 @@ public interface AccountMgr
 	 */
 	public void forgotPassword(String email) throws NotFoundException;
 
-	/**
-	 * Controls whether a Person is a site admin or not.
-	 * 
-	 * @param personId
-	 * @return
-	 * @throws NotFoundException
-	 */
-	public void setSiteAdmin(Long personId, boolean siteAdmin) throws NotFoundException;
-
-	/**
-	 * Controls whether a Person is a site admin or not.
-	 * 
-	 * @param email
-	 * @return
-	 * @throws NotFoundException
-	 */
-	public void setSiteAdmin(String email, boolean siteAdmin) throws NotFoundException;
-
-	/**
-	 * Gets a list of Subscribers on a list that match a given String query.
-	 * @param query
-	 * @param listId
-	 * @param skip
-	 * @param count
-	 * @return
-	 */
-	public List<SubscriberData> searchSubscribers(String query, Long listId, int skip, int count)
-		throws NotFoundException;
-
-	/**
-	 * Gets the number of Subscribers on a list
-	 * @param listId
-	 * @return
-	 */
-	public int countSubscribers(Long listId);
-
-	/**
-	 * Gets the number of Subscribers on a list for a given query
-	 * @param listId
-	 * @param query
-	 * @return
-	 */
-	public int countSubscribers(Long listId, String query);
 }

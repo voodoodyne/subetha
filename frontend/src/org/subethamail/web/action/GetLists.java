@@ -6,20 +6,24 @@
 package org.subethamail.web.action;
 
 import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.web.Backend;
-import org.subethamail.web.action.auth.AuthAction;
+import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.PaginateModel;
 import org.tagonist.propertize.Property;
 
 /**
- * Gets all lists (paginated).
+ * Searches all lists for a query term (if provided), or
+ * just gets basic list if no term provided.  Results
+ * are paginated.
  * 
  * @author Jon Stevens
+ * @author Jeff Schnitzer
  */
-public class GetLists extends AuthAction 
+public class GetLists extends AuthRequired 
 {
 	/** */
 	private static Log log = LogFactory.getLog(GetLists.class);
@@ -27,8 +31,8 @@ public class GetLists extends AuthAction
 	public static class Model extends PaginateModel
 	{
 		/** */
-		@Property String query;
-		@Property List<ListData> listData;
+		@Property String query = "";
+		@Property List<ListData> lists;
 	}
 	
 	public void initialize()
@@ -37,18 +41,20 @@ public class GetLists extends AuthAction
 	}
 
 	/** */
-	public void execute() throws Exception
+	public void authExecute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();
-
-		model.listData = Backend.instance().getListMgr().searchLists(model.query, model.getSkip(), model.getCount());
-
-		if (model.query == null || model.query.length() == 0)
+		
+		if (model.query.trim().length() == 0)
 		{
-			model.setTotalCount(Backend.instance().getListMgr().countLists());
+			model.lists = Backend.instance().getAdmin().getLists(model.getSkip(), model.getCount());
+			model.setTotalCount(Backend.instance().getAdmin().countLists());
 		}
 		else
 		{
+			model.lists = Backend.instance().getAdmin().searchLists(model.query, model.getSkip(), model.getCount());
+			model.setTotalCount(Backend.instance().getAdmin().countLists(model.query));
+			
 			// If we are doing a query, then we need to find out how many results would
 			// have been returned for our query (before the limit was applied) in 
 			// order to do the pagination right.
@@ -62,8 +68,6 @@ public class GetLists extends AuthAction
 			//
 			//			SELECT FOUND_ROWS();
 			//
-			int size = Backend.instance().getListMgr().countLists(model.query);
-			model.setTotalCount(size);
 		}
 	}
 }

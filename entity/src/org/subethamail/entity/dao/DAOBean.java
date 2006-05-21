@@ -276,55 +276,45 @@ public class DAOBean implements DAO
 		}
 	}
 	
-	/**
-	 * @see DAO#findMailingLists(String)
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findMailingLists(int, int)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<MailingList> findMailingLists(String query)
+	public List<MailingList> findMailingLists(int skip, int count)
 	{
-		return findMailingLists(query, -1, -1);
+		Query q = this.em.createNamedQuery("AllMailingLists");
+		
+		if (skip >= 0)
+			q.setFirstResult(skip);
+		
+		if (count >= 0)
+			q.setMaxResults(count);
+		
+		return q.getResultList();
 	}
 	
-	/**
-	 * @see DAO#findMailingLists(String, int, int)
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findMailingLists(java.lang.String, int, int)
 	 */
 	@SuppressWarnings("unchecked")
 	public List<MailingList> findMailingLists(String query, int skip, int count)
 	{
-		Query q;
-		if (query == null || query.length() == 0)
-		{
-			q = this.em.createNamedQuery("AllMailingLists");
-		}
-		else
-		{
-			if (log.isDebugEnabled())
-				log.debug("Finding MailingLists with query: " + query);
-
-			q = this.em.createNamedQuery("SearchMailingLists");
-			q.setParameter("name", like(query));
-			q.setParameter("email", like(query));
-			q.setParameter("url", like(query));
-			q.setParameter("description", like(query));
-		}
-		if (skip >= 0 && count >= 0)
-		{
-			q.setFirstResult(skip);
-			q.setMaxResults(count);
-		}
-		return q.getResultList();
-	}
-
-	/**
-	 * @see DAO#findAllLists()
-	 */
-	@SuppressWarnings("unchecked")
-	public List<MailingList> findAllLists()
-	{
 		if (log.isDebugEnabled())
-			log.debug("Finding all mailing lists");
+			log.debug("Finding MailingLists with query: " + query);
+
+		Query q = this.em.createNamedQuery("SearchMailingLists");
+		q.setParameter("name", like(query));
+		q.setParameter("email", like(query));
+		q.setParameter("url", like(query));
+		q.setParameter("description", like(query));
 		
-		Query q = this.em.createNamedQuery("AllMailingLists");
+		if (skip >= 0)
+			q.setFirstResult(skip);
+		
+		if (count >= 0)
+			q.setMaxResults(count);
 		
 		return q.getResultList();
 	}
@@ -499,9 +489,28 @@ public class DAOBean implements DAO
 		q.setParameter("listId", listId);
 		q.setParameter("name", like(query));
 		q.setParameter("email", like(query));
-		q.setParameter("note", like(query));
+		//q.setParameter("note", like(query));
 		Number n = (Number) q.getSingleResult();
 		return n.intValue();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#findSubscribers(java.lang.Long, int, int)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Subscription> findSubscribers(Long listId, int skip, int count)
+	{
+		Query q = this.em.createNamedQuery("SubscribersOnList");
+		q.setParameter("listId", listId);
+		
+		if (skip >= 0)
+			q.setFirstResult(skip);
+		
+		if (count >= 0)
+			q.setMaxResults(count);
+		
+		return q.getResultList();
 	}
 
 	/*
@@ -510,42 +519,23 @@ public class DAOBean implements DAO
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Subscription> findSubscribers(Long listId, String query, int skip, int count)
-		throws NotFoundException
 	{
-		Query q;
-		if (query == null || query.length() == 0)
-		{
-			MailingList list = this.findMailingList(listId);
-			return new ArrayList(list.getSubscriptions());
-		}
-		else
-		{
-			q = this.em.createNamedQuery("SubscribersOnListQuery");
-			q.setParameter("listId", listId);
-			q.setParameter("name", like(query));
-			q.setParameter("email", like(query));
-			q.setParameter("note", like(query));
-		}
+		Query q = this.em.createNamedQuery("SubscribersOnListQuery");
+		q.setParameter("listId", listId);
+		q.setParameter("name", like(query));
+		q.setParameter("email", like(query));
+		//q.setParameter("note", like(query));
 		
-		if (skip >=0 && count >=0)
-		{
+		if (skip >= 0)
 			q.setFirstResult(skip);
+		
+		if (count >= 0)
 			q.setMaxResults(count);
-		}
+		
 		return q.getResultList();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.entity.dao.DAO#findSubscribers(java.lang.Long, java.lang.String)
-	 */
-	@SuppressWarnings("unchecked")
-	public List<Subscription> findSubscribers(Long listId, String query)
-		throws NotFoundException
-	{
-		return findSubscribers(listId, query, -1, -1);
-	}
-
+	/** Helper method makes "like" queries possible */
 	private final String like(String query)
 	{
 		return "%" + query + "%";

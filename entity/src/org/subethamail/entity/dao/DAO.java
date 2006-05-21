@@ -7,9 +7,11 @@ package org.subethamail.entity.dao;
 
 import java.net.URL;
 import java.util.List;
+
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.LockModeType;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Config;
@@ -135,28 +137,22 @@ public interface DAO
 	/**
 	 * Finds a mailing list with the specified query.
 	 * @param query
-	 * @param skip
-	 * @param count
-	 * @return
+	 * @param skip can be -1 for no skip
+	 * @param count can be -1 for no limit
 	 */
 	public List<MailingList> findMailingLists(String query, int skip, int count);
 
 	/**
-	 * Finds a mailing list with the specified query.
-	 * @param query
-	 * @return
+	 * Finds all mailing lists
+	 * @param skip can be -1 for no skip
+	 * @param count can be -1 for no limit
 	 */
-	public List<MailingList> findMailingLists(String query);
+	public List<MailingList> findMailingLists(int skip, int count);
 
 	/**
 	 * @return the identified person.
 	 */
 	public Person findPerson(Long personId) throws NotFoundException;
-
-	/**
-	 * @return a list of all mailing lists on the site.
-	 */
-	public List<MailingList> findAllLists();
 
 	/**
 	 * @return all the threads for the list
@@ -210,14 +206,20 @@ public interface DAO
 	public int countSubscribers(Long listId, String query);
 
 	/**
-	 * @return limit the number of subscribers on a list based on a String query
+	 * @param skip can be -1 for no skip
+	 * @param count can be -1 for no limit
+	 * 
+	 * @return the paginated list of subscibers
 	 */
-	public List<Subscription> findSubscribers(Long listId, String query, int skip, int count) throws NotFoundException;
+	public List<Subscription> findSubscribers(Long listId, int skip, int count);
 
 	/**
-	 * @return the number of subscribers on a list based on a String query
+	 * @param skip can be -1 for no skip
+	 * @param count can be -1 for no limit
+	 * 
+	 * @return limit the number of subscribers on a list based on a String query
 	 */
-	public List<Subscription> findSubscribers(Long listId, String query) throws NotFoundException;
+	public List<Subscription> findSubscribers(Long listId, String query, int skip, int count);
 
 	/**
 	 * @return all the soft holds associated with any email address

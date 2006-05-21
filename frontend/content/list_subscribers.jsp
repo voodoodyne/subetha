@@ -17,16 +17,16 @@
 	<form action="<c:url value="/list_subscribers.jsp"/>" method="get" style="display:inline">
 		<input type="hidden" name="listId" value="${param.listId}" />
 		<input type="text" name="query" value="<c:out value="${param.query}" />" />
-		<input type="submit" name="submit" value="Query" />
+		<input type="submit" value="Search" />
 	</form>
 	
 	<br /><br />
 	
 	<c:choose>
-		<c:when test="${empty model.subscriberData && empty param.query}">
+		<c:when test="${empty model.subscribers && empty param.query}">
 			<p>There are no subscribers to this list.</p>
 		</c:when>
-		<c:when test="${empty model.subscriberData && ! empty param.query}">
+		<c:when test="${empty model.subscribers && ! empty param.query}">
 			<p>Your query did not return any results.</p>
 		</c:when>
 		<c:otherwise>
@@ -45,7 +45,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="p" items="${model.subscriberData}" varStatus="loop">
+				<c:forEach var="p" items="${model.subscribers}" varStatus="loop">
 					<c:choose>
 						<c:when test="${loop.index % 2 == 0}">
 							<c:set var="color" value="a"/>

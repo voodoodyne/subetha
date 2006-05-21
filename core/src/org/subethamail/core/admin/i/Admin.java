@@ -7,8 +7,10 @@ package org.subethamail.core.admin.i;
 
 import java.net.URL;
 import java.util.List;
+
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
@@ -101,11 +103,11 @@ public interface Admin
 	public void setSiteAdmin(Long personId, boolean value) throws NotFoundException;
 	
 	/**
-	 * TODO:  this (and the UI) should probably be paginated.
+	 * Controls whether a Person is a site admin or not.
 	 * 
-	 * @return some information about all the lists on the site.
+	 * @throws NotFoundException if nobody has that email address
 	 */
-	public List<ListData> getAllLists();
+	public void setSiteAdmin(String email, boolean siteAdmin) throws NotFoundException;
 
 	/**
 	 * Adds an email address to an existing account.  If the email address
@@ -135,13 +137,38 @@ public interface Admin
 	 * Gets a list of site administrators. It's a special role.
 	 * @return a list of PersonData with isSiteAdmin() == true
 	 */
-	public List<PersonData> findSiteAdmins();
+	public List<PersonData> getSiteAdmins();
 	
 	/**
 	 * Sets list email address and URL.
 	 */
 	public void setListAddresses(Long listId, InternetAddress address, URL url) throws NotFoundException, DuplicateListDataException, InvalidListDataException;
 	
+	/**
+	 * Gets a list of all the lists on the system.
+	 */
+	public List<ListData> getLists(int skip, int count);
+
+	/**
+	 * Gets a list of lists matching a String query
+	 */
+	public List<ListData> searchLists(String query, int skip, int count);
+
+	/**
+	 * Get the total number of lists in the system.
+	 */
+	public int countLists();
+
+	/**
+	 * Get the total number of lists which match the query.
+	 */
+	public int countLists(String query);
+	
+	/**
+	 * @return some useful administrative information about the site
+	 */
+	public SiteStatus getSiteStatus();
+
 	/**
 	 * Gets the site wide configuration data.
 	 */

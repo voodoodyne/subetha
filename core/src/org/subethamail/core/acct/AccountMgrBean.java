@@ -319,48 +319,4 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		
 		this.postOffice.sendPassword(addy);
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.acct.i.AccountMgr#setSiteAdmin(java.lang.Long, boolean)
-	 */
-	public void setSiteAdmin(Long personId, boolean siteAdmin) throws NotFoundException
-	{
-		Person person = this.dao.findPerson(personId);
-		person.setSiteAdmin(siteAdmin);
-	}
-
-	public void setSiteAdmin(String email, boolean siteAdmin) throws NotFoundException
-	{
-		EmailAddress ea = this.dao.findEmailAddress(email);
-		this.setSiteAdmin(ea.getPerson().getId(), siteAdmin);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.acct.i.AccountMgr#searchSubscribers(String, Long, int, int)
-	 */
-	public List<SubscriberData> searchSubscribers(String query, Long listId, int skip, int count)
-		throws NotFoundException
-	{
-		return Transmute.subscribers(this.dao.findSubscribers(listId, query, skip, count));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.acct.i.AccountMgr#countSubscribers(java.lang.Long)
-	 */
-	public int countSubscribers(Long listId)
-	{
-		return this.dao.countSubscribers(listId);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.acct.i.AccountMgr#countSubscribers(java.lang.Long, java.lang.String)
-	 */
-	public int countSubscribers(Long listId, String query)
-	{
-		return this.dao.countSubscribers(listId, query);
-	}
 }

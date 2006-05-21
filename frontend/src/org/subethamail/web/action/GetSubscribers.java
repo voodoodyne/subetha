@@ -15,22 +15,23 @@ import org.subethamail.web.model.PaginateModel;
 import org.tagonist.propertize.Property;
 
 /**
- * Gets data about a mailing list and the current user.
- * Model becomes a MySubscription.
+ * Gets a list of subscribers to the list
  * 
  * @author Jeff Schnitzer
+ * @author Jon Stevens
  */
 public class GetSubscribers extends AuthAction 
 {
 	/** */
 	private static Log log = LogFactory.getLog(GetMySubscription.class);
 
+	/** */
 	public static class Model extends PaginateModel
 	{
 		/** */
 		@Property Long listId;
-		@Property String query;
-		@Property List<SubscriberData> subscriberData;
+		@Property String query = "";
+		@Property List<SubscriberData> subscribers;
 	}
 
 	public void initialize()
@@ -42,32 +43,17 @@ public class GetSubscribers extends AuthAction
 	public void execute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();
-
-		// Backend.instance().getListMgr().getSubscribers(model.listId)
-		model.subscriberData = Backend.instance().getAccountMgr()
-			.searchSubscribers(model.query, model.listId, model.getSkip(), model.getCount());
-
-		if (model.query == null || model.query.length() == 0)
+		
+		if (model.query.trim().length() == 0)
 		{
-			model.setTotalCount(Backend.instance().getAccountMgr().countSubscribers(model.listId));
+			model.subscribers = Backend.instance().getListMgr().getSubscribers(model.listId, model.getSkip(), model.getCount());
+			model.setTotalCount(Backend.instance().getListMgr().countSubscribers(model.listId));
 		}
 		else
 		{
-			// If we are doing a query, then we need to find out how many results would
-			// have been returned for our query (before the limit was applied) in 
-			// order to do the pagination right.
-			//
-			// this is highly inefficient as we are doing a full table scan again.
-			// Since we know and love MySQL, it would be better to do something like this:
-			// http://www.mysqlfreaks.com/statements/101.php
-			//			SELECT SQL_CALC_FOUND_ROWS *
-			//			FROM tbl_name
-			//			WHERE id > 100 LIMIT 10;
-			//
-			//			SELECT FOUND_ROWS();
-			//
-			int size = Backend.instance().getAccountMgr().countSubscribers(model.listId, model.query);
-			model.setTotalCount(size);
+			model.subscribers = Backend.instance().getListMgr().searchSubscribers(model.listId, model.query, model.getSkip(), model.getCount());
+			model.setTotalCount(Backend.instance().getListMgr().countSubscribers(model.listId, model.query));
+			// See the comment in GetLists
 		}
 	}
 }

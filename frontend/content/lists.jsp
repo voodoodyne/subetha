@@ -7,18 +7,18 @@
 <trim:main title="All Lists">
 	<h1>All Lists</h1>
 
-	<form action="<c:url value="/lists.jsp"/>" method="get" style="display:inline">
+	<form action="<c:url value="/lists_search.jsp"/>" method="get" style="display:inline">
 		<input type="text" name="query" value="<c:out value="${param.query}" />" />
-		<input type="submit" name="submit" value="Query" />
+		<input type="submit" value="Search" />
 	</form>
 	
 	<br /><br />
 
 	<c:choose>
-		<c:when test="${empty model.listData && empty param.query}">
+		<c:when test="${empty model.lists && empty param.query}">
 			<p>No lists have been created. You can <a href="<c:url value="/list_create.jsp"/>">create a list</a>.</p>
 		</c:when>
-		<c:when test="${empty model.listData && ! empty param.query}">
+		<c:when test="${empty model.lists && ! empty param.query}">
 			<p>Your query did not return any results.</p>
 		</c:when>
 		<c:otherwise>
@@ -31,7 +31,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="list" items="${model.listData}" varStatus="loop">
+				<c:forEach var="list" items="${model.lists}" varStatus="loop">
 					<c:choose>
 						<c:when test="${loop.index % 2 == 0}">
 							<c:set var="color" value="a"/>

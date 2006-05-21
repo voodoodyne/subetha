@@ -85,17 +85,6 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#getSubscribers(java.lang.Long)
-	 */
-	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException, PermissionException
-	{
-		MailingList list = this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
-
-		return Transmute.subscribers(list.getSubscriptions());
-	}
-
-	/*
-	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setList(java.lang.Long, java.lang.String, java.lang.String, boolean)
 	 */
 	public void setList(Long listId, String name, String description, boolean holdSubs) throws NotFoundException, PermissionException
@@ -561,37 +550,45 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#searchLists(java.lang.String, int, int)
+	 * @see org.subethamail.core.lists.i.ListMgr#getSubscribers(java.lang.Long, int, int)
 	 */
-	public List<ListData> searchLists(String query, int skip, int count)
+	public List<SubscriberData> getSubscribers(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
-		return Transmute.mailingLists(this.dao.findMailingLists(query, skip, count));
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#searchLists(java.lang.String)
-	 */
-	public List<ListData> searchLists(String query)
-	{
-		return Transmute.mailingLists(this.dao.findMailingLists(query));
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#countLists()
-	 */
-	public int countLists()
-	{
-		return this.dao.countLists();
+		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
+
+		return Transmute.subscribers(this.dao.findSubscribers(listId, skip, count));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#countLists(String)
+	 * @see org.subethamail.core.lists.i.ListMgr#searchSubscribers(java.lang.Long, java.lang.String, int, int)
 	 */
-	public int countLists(String query)
+	public List<SubscriberData> searchSubscribers(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException
 	{
-		return this.dao.countLists(query);
+		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
+		
+		return Transmute.subscribers(this.dao.findSubscribers(listId, query, skip, count));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#countSubscribers(java.lang.Long)
+	 */
+	public int countSubscribers(Long listId) throws NotFoundException, PermissionException
+	{
+		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
+		
+		return this.dao.countSubscribers(listId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#countSubscribers(java.lang.Long, java.lang.String)
+	 */
+	public int countSubscribers(Long listId, String query) throws NotFoundException, PermissionException
+	{
+		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
+		
+		return this.dao.countSubscribers(listId, query);
 	}
 }

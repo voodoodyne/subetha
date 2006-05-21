@@ -5,11 +5,10 @@
 
 package org.subethamail.web.action;
 
-import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.validator.Email;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
@@ -19,6 +18,7 @@ import org.tagonist.propertize.Property;
  * Adds a site admin.
  * 
  * @author Jon Stevens
+ * @author Jeff Schnitzer
  */
 public class AdminAdd extends AuthRequired 
 {
@@ -28,6 +28,7 @@ public class AdminAdd extends AuthRequired
 
 	public class Model extends ErrorMapModel
 	{
+		@Email
 		@Property String email;
 	}
 	
@@ -44,15 +45,19 @@ public class AdminAdd extends AuthRequired
 		
 		if (log.isDebugEnabled())
 			log.debug("Adding site admin: " + model.email);
+		
+		model.validate();
 
-		List<PersonData> admins = Backend.instance().getAdmin().findSiteAdmins();
-		try
+		if (model.getErrors().isEmpty())
 		{
-			Backend.instance().getAccountMgr().setSiteAdmin(model.email, true);
-		}
-		catch (NotFoundException nfe)
-		{
-			model.setError("email", "Could not find email address.");
+			try
+			{
+				Backend.instance().getAdmin().setSiteAdmin(model.email, true);
+			}
+			catch (NotFoundException nfe)
+			{
+				model.setError("email", "Could not find email address.");
+			}
 		}
 	}
 }

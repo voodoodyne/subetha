@@ -38,14 +38,6 @@ public interface ListMgr
 	public Long lookup(URL url) throws NotFoundException;
 	
 	/**
-	 * Retrieves all the subscribers for a MailingList
-	 * Requires Permission.VIEW_SUBSCRIBERS.
-	 * 
-	 * @throws NotFoundException if the list id is not valid.
-	 */
-	public List<SubscriberData> getSubscribers(Long listId) throws NotFoundException, PermissionException;
-
-	/**
 	 * Sets list name and description and whether or not subscriptions
 	 * are held for approval.
 	 * Requires Permission.EDIT_SETTINGS
@@ -239,28 +231,28 @@ public interface ListMgr
 	public void setSubscriberRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException;
 
 	/**
-	 * Gets a list of lists matching a String query
-	 * @param query
-	 * @param lists
-	 * @return
+	 * Retrieves all the subscribers for a MailingList
+	 * Requires Permission.VIEW_SUBSCRIBERS.
+	 * 
+	 * @throws NotFoundException if the list id is not valid.
 	 */
-	public List<ListData> searchLists(String query, int skip, int count);
+	public List<SubscriberData> getSubscribers(Long listId, int skip, int count) throws NotFoundException, PermissionException;
 
 	/**
-	 * Gets a list of lists matching a String query
-	 * @return
+	 * Gets a list of Subscribers on a list that match a given String query.
+	 * Requires Permission.VIEW_SUBSCRIBERS
 	 */
-	public List<ListData> searchLists(String query);
+	public List<SubscriberData> searchSubscribers(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException;
 
 	/**
-	 * Get the total number of lists in the system.
-	 * @return
+	 * Gets the number of Subscribers on a list
+	 * Requires Permission.VIEW_SUBSCRIBERS
 	 */
-	public int countLists();
+	public int countSubscribers(Long listId) throws NotFoundException, PermissionException;
 
 	/**
-	 * Get the total number of lists which match the query.
-	 * @return
+	 * Gets the number of Subscribers on a list for a given query
+	 * Requires Permission.VIEW_SUBSCRIBERS
 	 */
-	public int countLists(String query);
+	public int countSubscribers(Long listId, String query) throws NotFoundException, PermissionException;
 }

@@ -25,6 +25,7 @@ import org.subethamail.core.admin.i.AdminRemote;
 import org.subethamail.core.admin.i.ConfigData;
 import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
+import org.subethamail.core.admin.i.SiteStatus;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.i.Queuer;
@@ -287,8 +288,9 @@ public class AdminBean implements Admin, AdminRemote
 		return gen.toString();
 	}
 
-	/**
-	 * @see Admin#setSiteAdmin(Long, boolean)
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#setSiteAdmin(java.lang.Long, boolean)
 	 */
 	public void setSiteAdmin(Long personId, boolean value) throws NotFoundException
 	{
@@ -296,13 +298,14 @@ public class AdminBean implements Admin, AdminRemote
 		p.setSiteAdmin(value);
 	}
 
-	/**
-	 * @see Admin#getAllLists()
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#setSiteAdmin(java.lang.String, boolean)
 	 */
-	public List<ListData> getAllLists()
+	public void setSiteAdmin(String email, boolean siteAdmin) throws NotFoundException
 	{
-		log.debug("Getting data for all lists");
-		return Transmute.mailingLists(this.dao.findAllLists());
+		EmailAddress ea = this.dao.findEmailAddress(email);
+		ea.getPerson().setSiteAdmin(siteAdmin);
 	}
 
 	/**
@@ -447,11 +450,11 @@ public class AdminBean implements Admin, AdminRemote
 		return count;
 	}
 	
-	/**
-	 * Gets a list of site administrators. It's a special role.
-	 * @return a list of PersonData with isSiteAdmin() == true
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#getSiteAdmins()
 	 */
-	public List<PersonData> findSiteAdmins()
+	public List<PersonData> getSiteAdmins()
 	{
 		List<Person> siteAdmins = this.dao.findSiteAdmins();
 		return Transmute.people(siteAdmins);
@@ -518,6 +521,54 @@ public class AdminBean implements Admin, AdminRemote
 		
 		if (dupAddress || dupUrl)
 			throw new DuplicateListDataException("Mailing list already exists", dupAddress, dupUrl);	
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#getLists(int, int)
+	 */
+	public List<ListData> getLists(int skip, int count)
+	{
+		return Transmute.mailingLists(this.dao.findMailingLists(skip, count));
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#searchLists(java.lang.String, int, int)
+	 */
+	public List<ListData> searchLists(String query, int skip, int count)
+	{
+		return Transmute.mailingLists(this.dao.findMailingLists(query, skip, count));
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#countLists()
+	 */
+	public int countLists()
+	{
+		return this.dao.countLists();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#countLists(java.lang.String)
+	 */
+	public int countLists(String query)
+	{
+		return this.dao.countLists(query);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#getSiteStatus()
+	 */
+	public SiteStatus getSiteStatus()
+	{
+		return new SiteStatus(
+				System.getProperty("file.encoding"),
+				this.countLists()
+			);
 	}
 	
 	/*

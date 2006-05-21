@@ -34,39 +34,43 @@ import org.subethamail.common.valid.Validator;
 		}
 	),
 	@NamedQuery(
-			name="CountSubscribersOnList", 
-			query="select count(*) from Subscription s, MailingList l where s.listId = l.id and l.id = :listId",
-			hints={
-				@QueryHint(name="org.hibernate.readOnly", value="true"),
-				@QueryHint(name="org.hibernate.cacheable", value="true")
-			}
-		)
-/*		,
+		name="CountSubscribersOnList", 
+		query="select count(*) from Subscription s where s.listId = :listId",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
+	),
+	@NamedQuery(
+		name="SubscribersOnList", 
+		query="from Subscription sub where sub.list.id = :listId",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
+	),
 	@NamedQuery(
 			name="CountSubscribersOnListQuery", 
-			query="select count(*) from Person person, MailingList list, " +
-					"Subscription sub join sub.person.emailAddresses as email " +
-					"where (sub.list.id = :listId and " +
-							"(sub.person.name like :name or " +
-							"email.id like :email)",
+			query="select count(*) from Subscription sub " +
+					"join sub.person.emailAddresses as email " +
+					"where sub.list.id = :listId and " +
+					"(sub.person.name like :name or email.id like :email)",
 			hints={
 				@QueryHint(name="org.hibernate.readOnly", value="true"),
 				@QueryHint(name="org.hibernate.cacheable", value="true")
 			}
 		),
 	@NamedQuery(
-			name="SubscribersOnListQuery", 
-			query="from Person person, MailingList list, " +
-					"Subscription sub join sub.person.emailAddresses as email " +
-					"where (sub.list.id = :listId and " +
-						"(sub.person.name like :name or " +
-						"email.id like :email)",
-			hints={
-				@QueryHint(name="org.hibernate.readOnly", value="true"),
-				@QueryHint(name="org.hibernate.cacheable", value="true")
-			}
-		)
-*/
+		name="SubscribersOnListQuery", 
+		query="select sub from Subscription sub " +
+				"join sub.person.emailAddresses as email " +
+				"where sub.list.id = :listId and " +
+				"(sub.person.name like :name or email.id like :email)",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
+	)
 })
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)

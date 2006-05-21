@@ -74,6 +74,12 @@ public interface DAO
 	public Object getConfigValue(String id);
 
 	/**
+	 * @return a list of all of the site wide Config objects
+	 *  that we can find.
+	 */
+	public List<Config> getConfig();
+	
+	/**
 	 * Finds an email address with the specified address.
 	 */
 	public EmailAddress findEmailAddress(String email) throws NotFoundException;

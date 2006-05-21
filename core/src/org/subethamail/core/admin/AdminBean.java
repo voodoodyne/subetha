@@ -8,12 +8,10 @@ package org.subethamail.core.admin;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
-
 import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -24,6 +22,7 @@ import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
+import org.subethamail.core.admin.i.ConfigData;
 import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.core.lists.i.ListData;
@@ -32,6 +31,7 @@ import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.core.util.VERPAddress;
+import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
@@ -518,5 +518,34 @@ public class AdminBean implements Admin, AdminRemote
 		
 		if (dupAddress || dupUrl)
 			throw new DuplicateListDataException("Mailing list already exists", dupAddress, dupUrl);	
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#getConfigData()
+	 */
+	public List<ConfigData> getSiteConfig()
+	{
+		return Transmute.configurations(this.dao.getConfig());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#saveConfig(org.subethamail.core.admin.i.ConfigData)
+	 */
+	public void saveConfig(ConfigData configData)
+	{
+		try
+		{
+			Config oldConfig = this.dao.findConfig(configData.getId());
+			oldConfig.setValue(configData.getValue());
+			this.dao.persist(oldConfig);
+			
+		}
+		catch (NotFoundException e)
+		{
+			Config newConfig = new Config(configData.getId(), configData.getValue());
+			this.dao.persist(newConfig);
+		}
 	}
 }

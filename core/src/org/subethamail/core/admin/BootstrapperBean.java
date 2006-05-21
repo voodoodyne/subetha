@@ -134,25 +134,25 @@ public class BootstrapperBean implements BootstrapperManagement
 	{
 		try
 		{
-			Config cfg = this.dao.findConfig(Config.ID_SITE_POSTMASTER);
+			Config cfg = this.dao.findConfig(Config.ConfigKey.ID_SITE_POSTMASTER.getKey());
 			if (cfg.getValue() == null)
 				cfg.setValue(DEFAULT_SITE_POSTMASTER);
 		}
 		catch (NotFoundException ex)
 		{
-			Config cfg = new Config(Config.ID_SITE_POSTMASTER, DEFAULT_SITE_POSTMASTER);
+			Config cfg = new Config(Config.ConfigKey.ID_SITE_POSTMASTER.getKey(), DEFAULT_SITE_POSTMASTER);
 			this.dao.persist(cfg);
 		}
 		
 		try
 		{
-			Config cfg = this.dao.findConfig(Config.ID_SITE_URL);
+			Config cfg = this.dao.findConfig(Config.ConfigKey.ID_SITE_URL.getKey());
 			if (cfg.getValue() == null)
 				cfg.setValue(DEFAULT_SITE_URL);
 		}
 		catch (NotFoundException ex)
 		{
-			Config cfg = new Config(Config.ID_SITE_URL, DEFAULT_SITE_URL);
+			Config cfg = new Config(Config.ConfigKey.ID_SITE_URL.getKey(), DEFAULT_SITE_URL);
 			this.dao.persist(cfg);
 		}
 	}

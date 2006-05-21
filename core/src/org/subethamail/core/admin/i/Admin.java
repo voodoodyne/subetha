@@ -142,4 +142,20 @@ public interface Admin
 	 */
 	public void setListAddresses(Long listId, InternetAddress address, URL url) throws NotFoundException, DuplicateListDataException, InvalidListDataException;
 	
+	/**
+	 * Gets the site wide configuration data.
+	 */
+	public List<ConfigData> getSiteConfig();
+
+	/**
+	 * Persists a ConfigData object. If the config key
+	 * doesn't already exist, then a new row will be created
+	 * in the database. NOTE: it isn't a good idea to use
+	 * this to create new configuration because the keys
+	 * are hard coded in Config.ConfigKey's. Only save
+	 * existing keys.
+	 * 
+	 * @param configData
+	 */
+	public void saveConfig(ConfigData configData);
 }

@@ -18,6 +18,7 @@ import org.subethamail.core.acct.i.MySubscription;
 import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribedList;
 import org.subethamail.core.admin.i.BlueprintData;
+import org.subethamail.core.admin.i.ConfigData;
 import org.subethamail.core.lists.i.EnabledFilterData;
 import org.subethamail.core.lists.i.FilterData;
 import org.subethamail.core.lists.i.ListData;
@@ -27,6 +28,7 @@ import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.core.plugin.i.Filter;
+import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.Mail;
@@ -44,6 +46,7 @@ import org.subethamail.entity.Mail.HoldType;
  * objects and public interface value objects. 
  * 
  * @author Jeff Schnitzer
+ * @author Jon Stevens
  */
 public class Transmute
 {
@@ -384,4 +387,27 @@ public class Transmute
 				person.isSiteAdmin());
 	}
 
+	/**
+	 * This method converts a Config object into a ConfigData object.
+	 * 
+	 * @param config
+	 * @return
+	 */
+	public static List<ConfigData> configurations(Collection<Config> config)
+	{
+		List<ConfigData> result = new ArrayList<ConfigData>(config.size());
+		for (Config cfg: config)
+		{			
+			result.add(config(cfg));
+		}
+		return result;		
+	}
+
+	/**
+	 * This method converts a Person object into a PersonData object.
+	 */
+	public static ConfigData config(Config config)
+	{
+		return new ConfigData(config.getId(), config.getConfigKey(config.getId()).getDescription(), config.getValue());
+	}
 }

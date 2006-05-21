@@ -53,6 +53,8 @@ public class BootstrapperBean implements BootstrapperManagement
 	private static final String DEFAULT_SITE_POSTMASTER = "postmaster@localhost";
 	private static final String DEFAULT_SITE_URL = "{Needs Configuration - Alert SubEtha Administrator}";
 	
+	private static final String VERSION_ID = "1";
+	
 	/**
 	 * The config id of a Boolean that lets us know if we've run or not.
 	 */
@@ -78,14 +80,14 @@ public class BootstrapperBean implements BootstrapperManagement
 			if (value == null || value.length() == 0)
 			{
 				this.bootstrap();
-				cfg.setValue("1.0");
+				cfg.setValue(VERSION_ID);
 			}
 		}
 		catch (NotFoundException ex)
 		{
 			this.bootstrap();
 			
-			Config cfg = new Config(BOOTSTRAPPED_CONFIG_ID, "1.0");
+			Config cfg = new Config(BOOTSTRAPPED_CONFIG_ID, VERSION_ID);
 			this.dao.persist(cfg);
 		}
 	}

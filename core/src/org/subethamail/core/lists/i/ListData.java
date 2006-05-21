@@ -21,13 +21,15 @@ public class ListData implements Serializable
 	String url;
 	String description;
 	boolean subscriptionHeld;
+	String urlBase;
 	
 	/**
 	 */
 	public ListData(Long id, 
 					String email,
 					String name,
-					String url, 
+					String url,
+					String urlBase,
 					String description,
 					boolean subscriptionHeld)
 	{
@@ -37,6 +39,7 @@ public class ListData implements Serializable
 		this.url = url;
 		this.description = description;
 		this.subscriptionHeld = subscriptionHeld;
+		this.urlBase = urlBase;
 	}
 	
 	/** */
@@ -73,6 +76,13 @@ public class ListData implements Serializable
 	public String getUrl()
 	{
 		return this.url;
+	}
+	
+	/** */
+	public String getUrlBase()
+	{
+		return this.urlBase;
+
 	}
 
 	/** */

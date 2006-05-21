@@ -235,7 +235,8 @@ public class SubEthaMessage extends SMTPMessage
 		if (!this.saved)
 			this.saveChanges();
 		
-		try {
+		try
+		{
 			Object contents = this.getContent();
 			if (contents instanceof Multipart)
 			{

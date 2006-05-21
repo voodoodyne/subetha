@@ -7,10 +7,9 @@
 
 	<ul>
 		<li>System Encoding (file.encoding):<strong> <c:out value="${siteStatus.systemEncoding}"/></strong></li>
-		<li>Lists: <strong><c:out value="${fn:length(siteStatus.lists)}"/></strong></li>
+		<li>Number of lists: <strong><c:out value="${siteStatus.numberOfLists}"/></strong></li>
 		<li>Number of accounts</li>
 		<li>Nubmer of email messages archived</li>
-		<li>A list of all site administrators?</li>
 		<li>Some information about the cluster which we can get
 			from the JMX systems</li>	
 	</ul>

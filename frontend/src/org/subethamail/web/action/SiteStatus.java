@@ -5,10 +5,8 @@
 
 package org.subethamail.web.action;
 
-import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.lists.i.ListData;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.tagonist.propertize.Property;
@@ -29,7 +27,7 @@ public class SiteStatus extends AuthAction
 	String systemEncoding = System.getProperty("file.encoding");
 	
 	@Property
-	List<ListData> lists = Backend.instance().getAdmin().getAllLists();
+	int numberOfLists = Backend.instance().getListMgr().countLists();
 	
 	/** */
 	public void execute() throws Exception

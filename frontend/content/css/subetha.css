@@ -25,20 +25,20 @@ body {
 	width: 12em;
 }
 
-.sideBox a, .sideBox a:hover, .sideBox span {
+.sideBox a,.sideBox a:hover,.sideBox span {
 	line-height: .75em;
 }
-/* end bluehaze.css overrides */
 
+/* end bluehaze.css overrides */
 .form-inline {
 	display: inline
 }
 
-.a td, .a th {
+.a td,.a th {
 	background: #f4f4f4;
 }
 
-.b td, .b th {
+.b td,.b th {
 	background: #e8e8e8;
 }
 
@@ -51,11 +51,12 @@ form th {
 	vertical-align: top;
 }
 
-td.error, th.error {
+td.error,th.error {
 	background-color: #fee;
 	border: 1px solid red;
 }
-div.error, p.error {
+
+div.error,p.error {
 	color: red;
 	font-weight: bold;
 }
@@ -76,9 +77,6 @@ div.error, p.error {
 .summaries {
 }
 
-.message {
-}
-
 table.permissions {
 	text-align: center;
 	margin-bottom: 5px;
@@ -95,7 +93,19 @@ table.permissions th.role {
 table.permissions td {
 	border: 1px solid grey;
 }
-
 table.filters td {
 	vertical-align: top;
 }
+
+/* Message Archive Styles */
+.message {
+}
+span.authorName {
+}
+div.sendTo {
+}
+.messagePart {
+font-size:larger
+}
+.attachments {
+}/* End Message Archives Styles */

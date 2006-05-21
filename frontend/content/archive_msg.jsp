@@ -39,7 +39,9 @@
 	<div class="message">
 		<c:forEach var="part" items="${msg.inlineParts}">
 			<div class="messagePart">
+			<pre>
 				<c:out value="${part.contents}"/>
+			</pre>
 			</div><br/>
 		</c:forEach>
 	</div>

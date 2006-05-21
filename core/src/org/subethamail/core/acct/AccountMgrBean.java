@@ -8,12 +8,14 @@ package org.subethamail.core.acct;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
@@ -28,7 +30,6 @@ import org.subethamail.core.acct.i.Self;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
-import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.util.Base62;
 import org.subethamail.core.util.PersonalBean;

@@ -5,10 +5,9 @@
 
 package org.subethamail.core.acct.i;
 
-import java.util.List;
 import javax.ejb.Local;
+
 import org.subethamail.common.NotFoundException;
-import org.subethamail.core.lists.i.SubscriberData;
 
 
 /**

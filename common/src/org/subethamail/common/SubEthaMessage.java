@@ -192,7 +192,7 @@ public class SubEthaMessage extends SMTPMessage
 	 */
 	public List<Part> getParts() throws MessagingException, IOException
 	{
-		if(partsCache == null)
+		if (partsCache == null)
 		{
 			partsCache = new ArrayList<Part>();
 			

@@ -6,9 +6,11 @@
 package org.subethamail.plugin.filter;
 
 import java.io.IOException;
+
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 import javax.mail.Part;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
@@ -47,10 +49,7 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 	
 	
 	private static final String DEFAULT_MSG = 
-		"\n_______________________________________________\n" +
-		"${list.name} mailing list\n" +
-		"${list.email}\n" +
-		"${list.url}";
+		"\n Attachment Removed";
 	
 	/** */
 	static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
@@ -121,6 +120,7 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 					p.setText(expandedMsg);		
 				}
 			}
+			msg.save();
 		}
 		catch (IOException ioex)
 		{

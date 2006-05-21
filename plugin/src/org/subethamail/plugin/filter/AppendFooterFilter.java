@@ -118,13 +118,13 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 
 				MimeBodyPart part = new MimeBodyPart();
 				part.setText(expandedFooter);
-				tmp.addBodyPart(part, tmp.getCount());
-				msg.setContent(tmp);
+				tmp.addBodyPart(part);
+				msg.save();
 			}
 			else
 			{
 				if (log.isDebugEnabled())
-					log.debug("Don't know type of content for message");
+					log.debug("Don't know type of content for message and can't append a footer! ;type=" + obj.getClass().toString());
 			}
 		}
 		catch (IOException e)

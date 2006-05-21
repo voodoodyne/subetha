@@ -78,6 +78,7 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 					p.removeHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
 				}
 			}
+		msg.save();
 		}
 		catch (IOException ioex)
 		{

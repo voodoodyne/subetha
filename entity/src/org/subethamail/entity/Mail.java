@@ -13,7 +13,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
+
 import javax.ejb.EJBException;
+import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -32,6 +34,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.QueryHint;
 import javax.persistence.Transient;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
@@ -84,7 +87,7 @@ import org.subethamail.common.valid.Validator;
 	),
 	@NamedQuery(
 		name="SoftHoldsByPerson", 
-		query="select m from Mail m, EmailAddress email where email.person.id = :personId and email.id = m.fromNormal and m.hold = 'SOFT'",
+		query="select m from Mail m, EmailAddress email where email.person.id = :personId and email.id = m.envelopeSender and m.hold = 'SOFT'",
 		hints={
 		}
 	)
@@ -127,16 +130,16 @@ public class Mail implements Serializable, Comparable
 	@Column(nullable=false, length=Validator.MAX_MAIL_SUBJECT)
 	String subject;
 	
-	/** rfc222-style, should be taken from the envelope sender */
+	/** rfc222-style, taken from the msg From: header */
 	@Email
 	@Column(name="fromField", nullable=true, length=Validator.MAX_MAIL_FROM)
 	String from;
 	
-	/** normalized to box@domain.tld (no "personal" part) */
+	/** normalized with lowercase domain */
 	@Email
-	@Column(nullable=true, length=Validator.MAX_MAIL_FROM)
-	@Index(name="mailFromNormalIndex")
-	String fromNormal;
+	@Column(nullable=false, length=Validator.MAX_MAIL_FROM)
+	@Index(name="mailEnvelopeSenderIndex")
+	String envelopeSender;
 	
 	/** Date the entity was created, not from header fields */
 	@Column(nullable=false)
@@ -198,7 +201,7 @@ public class Mail implements Serializable, Comparable
 	 * 
 	 * @param holdFor can be null which means none required
 	 */
-	public Mail(InternetAddress from, SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
+	public Mail(InternetAddress envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mail");
@@ -212,9 +215,12 @@ public class Mail implements Serializable, Comparable
 			this.subject = "";
 		
 		this.messageId = msg.getMessageID();
-		this.from = from.toString();
 		
-		this.setFromNormal(from.getAddress());
+		Address[] froms = msg.getFrom();
+		if (froms != null && froms.length > 1)
+			this.from = froms[0].toString();
+		
+		this.setEnvelopeSender(envelopeSender.getAddress());
 		
 		this.attachments = new HashSet<Attachment>();
 	}
@@ -275,10 +281,17 @@ public class Mail implements Serializable, Comparable
 	}
 
 	/**
-	 * @return an rfc222-compilant address list, comma separated.  It will
-	 * be parseable with InternetAddress.parse().
+	 * @return a single rfc222-compilant address.  It will
+	 * be parseable with InternetAddress.parse().  Defaults to
+	 * the envelope sender if there was no From header.
 	 */
-	public String getFrom() { return this.from; }
+	public String getFrom()
+	{
+		if (this.from != null)
+			return this.from;
+		else
+			return this.envelopeSender;
+	}
 	
 	/**
 	 * @param value can be null.
@@ -312,20 +325,20 @@ public class Mail implements Serializable, Comparable
 	 *
 	 * @see Validator#normalizeEmail(String)
 	 */
-	public String getFromNormal() { return this.fromNormal; }
+	public String getEnvelopeSender() { return this.envelopeSender; }
 	
 	/**
 	 * @param value does not need to be normalized already; it
-	 *  will be normalized in this method.  Null is ok.
+	 *  will be normalized in this method.
 	 */
-	public void setFromNormal(String value)
+	public void setEnvelopeSender(String value)
 	{
 		value = Validator.normalizeEmail(value);
 
 		if (log.isDebugEnabled())
-			log.debug("Setting fromNormal of " + this + " to " + value);
+			log.debug("Setting envelopeSender of " + this + " to " + value);
 		
-		this.fromNormal = value;
+		this.envelopeSender = value;
 	}
 	
 	/** Note no setter; this is the date the mail came into the system */

@@ -144,36 +144,42 @@ public class InjectorBean implements Injector, InjectorRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, byte[])
 	 */
-	public boolean inject(String fromAddress, String toAddress, InputStream mailData) throws MessagingException, IOException
+	public boolean inject(String envelopeSender, String envelopeRecipient, InputStream mailData) throws MessagingException, IOException
 	{
 		if (log.isDebugEnabled())
-			log.debug("Injecting message sent to " + toAddress);
+			log.debug("Injecting message sent to " + envelopeRecipient);
 		
-		InternetAddress fromAddy = new InternetAddress(fromAddress);
-		InternetAddress toAddy = new InternetAddress(toAddress);
+		InternetAddress senderAddy = new InternetAddress(envelopeSender);
+		InternetAddress recipientAddy = new InternetAddress(envelopeRecipient);
 		
-		// Must check for VERP bounce
-		VERPAddress verp = VERPAddress.getVERPBounce(toAddy.getAddress());
-		if (verp != null)
+		// Immediately check to see if the envelope sender is a verp address.  If it is,
+		// convert it into an -owner address.  This magic allows lists to subscribe to lists.
+		VERPAddress senderVerp = VERPAddress.getVERPBounce(senderAddy.getAddress());
+		if (senderVerp != null)
+			senderAddy = new InternetAddress(OwnerAddress.makeOwner(senderAddy.getAddress()));
+		
+		// Must check for recipient VERP bounce
+		VERPAddress recipientVerp = VERPAddress.getVERPBounce(recipientAddy.getAddress());
+		if (recipientVerp != null)
 		{
-			this.handleBounce(verp);
+			this.handleBounce(recipientVerp);
 			return true;
 		}
 		
 		// Check for -owner mail
-		String listForOwner = OwnerAddress.getList(toAddress);
+		String listForOwner = OwnerAddress.getList(envelopeRecipient);
 		if (listForOwner != null)
-			toAddy = new InternetAddress(listForOwner);
+			recipientAddy = new InternetAddress(listForOwner);
 		
 		// Figure out which list this is for
 		MailingList toList;
 		try
 		{
-			toList = this.dao.findMailingList(toAddy);
+			toList = this.dao.findMailingList(recipientAddy);
 		}
 		catch (NotFoundException ex)
 		{
-			log.error("Unknown destination: " + toAddy);
+			log.error("Unknown destination: " + recipientAddy);
 			return false;
 		}
 		
@@ -232,7 +238,7 @@ public class InjectorBean implements Injector, InjectorRemote
 			// Figure out who sent it, if we know
 			try
 			{
-				Person author = this.dao.findEmailAddress(fromAddy.getAddress()).getPerson();
+				Person author = this.dao.findEmailAddress(senderAddy.getAddress()).getPerson();
 				
 				if (log.isDebugEnabled())
 					log.debug("Message author is: " + author);
@@ -249,7 +255,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		if (log.isDebugEnabled())
 			log.debug("Hold?  " + hold);
 
-		Mail mail = new Mail(fromAddy, msg, toList, hold);
+		Mail mail = new Mail(senderAddy, msg, toList, hold);
 		this.dao.persist(mail);
 		
 		// Convert all binary attachments to references and then set the content
@@ -260,7 +266,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		{
 			// Send instructions so that user can self-moderate
 			// Or send a message saying "you must wait for admin approval", use holdMsg if available
-			this.postOffice.sendPosterMailHoldNotice(toList, fromAddy.getAddress(), mail, holdMsg);
+			this.postOffice.sendPosterMailHoldNotice(toList, senderAddy.getAddress(), mail, holdMsg);
 			
 			/*
 			for (Subscription sub: toList.getSubscriptions())

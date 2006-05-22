@@ -475,7 +475,7 @@ public class DAOBean implements DAO
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.entity.dao.DAO#countPeople()
+	 * @see org.subethamail.entity.dao.DAO#countPerson()
 	 */
 	public int countPerson()
 	{

@@ -482,7 +482,7 @@ public class DAOBean implements DAO
 		if (log.isDebugEnabled())
 			log.debug("Counting all people");
 
-		Query q = this.em.createNamedQuery("CountPeople");
+		Query q = this.em.createNamedQuery("CountPerson");
 		Number n = (Number) q.getSingleResult();
 		return n.intValue();
 	}

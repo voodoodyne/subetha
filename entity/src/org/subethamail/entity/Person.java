@@ -47,7 +47,7 @@ import org.subethamail.common.valid.Validator;
 		}
 	),
 	@NamedQuery(
-			name="CountPeople", 
+			name="CountPerson", 
 			query="select count(*) from Person",
 			hints={
 				@QueryHint(name="org.hibernate.readOnly", value="true"),

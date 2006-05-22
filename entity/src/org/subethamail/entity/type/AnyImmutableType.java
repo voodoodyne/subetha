@@ -6,6 +6,7 @@
 package org.subethamail.entity.type;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
@@ -25,8 +26,12 @@ import org.hibernate.usertype.UserType;
  * <ul>
  *   <li>The type must be immutable.</li>
  *   <li>The type must implement a toString() method.</li>
- *   <li>The type must have a public static valueOf(String) method that
- *       will convert the String back into the object type.</li>
+ *   <li>The type must have one of (in order of preference):
+ *     <ol>
+ *       <li>A public static valueOf(String) method that will
+ *           convert the String back into the object type.</li>
+ *       <li>A constructor which takes a String.</li>
+ *     </ol>
  *   <li>The object must be serializable.</li>
  * </ul>
  * 
@@ -132,9 +137,16 @@ public class AnyImmutableType implements UserType
 			}
 			else
 			{
-				Method m = clazz.getMethod("valueOf", String.class);
-				
-				return m.invoke(null, value);
+				try
+				{
+					Method m = clazz.getMethod("valueOf", String.class);
+					return m.invoke(null, value);
+				}
+				catch (NoSuchMethodException ex)
+				{
+					Constructor c = clazz.getConstructor(String.class);
+					return c.newInstance(value);
+				}
 			}
 		}
 		catch (ClassNotFoundException ex)
@@ -143,11 +155,15 @@ public class AnyImmutableType implements UserType
 		}
 		catch (NoSuchMethodException ex)
 		{
-			throw new HibernateException("Class " + type + " does not have a valueOf(String) method", ex); 
+			throw new HibernateException("Class " + type + " does not have a valueOf(String) method or a constructor(String)", ex); 
 		}
 		catch (InvocationTargetException ex)
 		{
 			throw new HibernateException(type + ".valueOf(\"" + value + "\") threw an exception:  " + ex.getCause(), ex); 
+		}
+		catch (InstantiationException ex)
+		{
+			throw new HibernateException(type + "(\"" + value + "\") threw an exception:  " + ex.getCause(), ex); 
 		}
 		catch (IllegalAccessException ex)
 		{

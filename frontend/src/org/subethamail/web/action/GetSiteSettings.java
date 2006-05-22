@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.admin.i.ConfigData;
-import org.subethamail.entity.Config;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
@@ -47,7 +46,8 @@ public class GetSiteSettings extends AuthAction
 		
 		for (ConfigData cd : model.configData)
 		{
-			if (cd.getId().equals(Config.ConfigKey.ID_SITE_URL.getKey()))
+			// FIXME: get key string correctly.
+			if (cd.getId().equals("siteUrl"))
 			{
 				model.siteUrl = cd.getValue().toString();
 				break;

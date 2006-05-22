@@ -77,17 +77,18 @@ public class CreateList extends AuthRequired
 		
 		// Check the URL
 		URL url = null;
-		
-		if(!SiteUtils.isValidListUrl(model.url)) model.setError("url", "Invalid list url!");
-		
 		try
 		{
 			url = new URL(model.url);
+			
+			if(!SiteUtils.isValidListUrl(url))
+				model.setError("url", "List url must contain " + SiteUtils.LIST_SERVLET_PATH);
 		}
 		catch (MalformedURLException ex)
 		{
 			model.setError("url", ex.getMessage());
 		}
+		
 		
 		// Check the address
 		InternetAddress listAddress = null;

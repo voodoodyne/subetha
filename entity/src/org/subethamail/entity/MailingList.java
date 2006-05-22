@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +28,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.QueryHint;
 import javax.persistence.Transient;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
@@ -270,6 +272,9 @@ public class MailingList implements Serializable, Comparable
 		if (value == null || value.length() > Validator.MAX_LIST_URL)
 			throw new IllegalArgumentException("Invalid url");
 
+		if (!SiteUtils.isValidListUrl(value))
+			throw new IllegalArgumentException("Invalid url");
+		
 		if (log.isDebugEnabled())
 			log.debug("Setting url of " + this + " to " + value);
 		
@@ -410,10 +415,14 @@ public class MailingList implements Serializable, Comparable
 	 */
 	public String getUrlBase()
 	{
-		if (!SiteUtils.isValidListUrl(this.url))
-			throw new IllegalStateException("Malformed list url");
+		// Maybe this should be replaced with creating a URL and
+		// then replacing the path with WEBAPP_CONTEXT_PATH... but
+		// that's relatively quite expensive.
 		
-		int pos = this.url.indexOf(SiteUtils.URL_PATH_LIST);		
+		int pos = this.url.indexOf(SiteUtils.WEBAPP_CONTEXT_PATH);
+		if (pos < 0)
+			throw new IllegalStateException("Malformed list url");
+
 		return this.url.substring(0, pos + "/se/".length()); 
 	}
 	

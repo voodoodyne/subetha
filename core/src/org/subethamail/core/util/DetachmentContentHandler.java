@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 public class DetachmentContentHandler implements DataContentHandler
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(DetachmentContentHandler.class);
 
 	/*

@@ -100,11 +100,11 @@
 			varStatus="loop">
 			<tr>
 				<th><input type="radio" name="blueprint"
-					value="${blueprint.id}"
+					value="${blueprint.id}" id="blueprint${blueprint.id}"
 					<c:if test="${(empty model.blueprint && loop.first) || model.blueprint == blueprint.id}">checked="checked"</c:if> />
 				</th>
-				<th nowrap="nowrap"><c:out value="${blueprint.name}" /></th>
-				<td><c:out value="${blueprint.description}" /></td>
+				<th nowrap="nowrap"><label for="blueprint${blueprint.id}"><c:out value="${blueprint.name}" /></label></th>
+				<td><label for="blueprint${blueprint.id}"><c:out value="${blueprint.description}" /></label></td>
 			</tr>
 		</c:forEach>
 	</table>

@@ -5,7 +5,6 @@
 
 package org.subethamail.web.servlet;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 
 import javax.annotation.EJB;
@@ -51,8 +50,7 @@ public class AttachmentServlet extends HttpServlet
 		try
 		{
 			response.setContentType(Backend.instance().getArchiver().getAttachmentContentType(attachmentId));
-			BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
-			Backend.instance().getArchiver().writeAttachment(attachmentId, bos);
+			Backend.instance().getArchiver().writeAttachment(attachmentId, response.getOutputStream());
 		}
 		catch (PermissionException pex)
 		{

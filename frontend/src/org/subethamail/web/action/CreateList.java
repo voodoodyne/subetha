@@ -83,7 +83,7 @@ public class CreateList extends AuthRequired
 		{
 			url = new URL(model.url);
 			
-			if(!SiteUtils.isValidListUrl(url))
+			if (!SiteUtils.isValidListUrl(url))
 				model.setError("url", "List url must contain " + SiteUtils.LIST_SERVLET_PATH);
 		}
 		catch (MalformedURLException ex)

@@ -46,6 +46,7 @@ public class TrivialDataSource implements DataSource
 	 */
 	public InputStream getInputStream() throws IOException
 	{
+		this.input.reset();
 		return this.input;
 	}
 

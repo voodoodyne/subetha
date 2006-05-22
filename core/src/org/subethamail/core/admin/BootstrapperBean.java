@@ -6,9 +6,11 @@
 package org.subethamail.core.admin;
 
 import java.io.UnsupportedEncodingException;
+
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Depends;
@@ -53,7 +55,7 @@ public class BootstrapperBean implements BootstrapperManagement
 	private static final String DEFAULT_SITE_POSTMASTER = "postmaster@localhost";
 	private static final String DEFAULT_SITE_URL = "{Needs Configuration - Alert SubEtha Administrator}";
 	
-	private static final String VERSION_ID = "1";
+	private static final Integer VERSION_ID = 1;
 	
 	/**
 	 * The config id of a Boolean that lets us know if we've run or not.
@@ -75,9 +77,9 @@ public class BootstrapperBean implements BootstrapperManagement
 			Config cfg = this.dao.findConfig(BOOTSTRAPPED_CONFIG_ID);
 			
 			// Might as well sanity check it
-			String value = (String)cfg.getValue();
+			Integer value = (Integer)cfg.getValue();
 			
-			if (value == null || value.length() == 0)
+			if (value == null)
 			{
 				this.bootstrap();
 				cfg.setValue(VERSION_ID);

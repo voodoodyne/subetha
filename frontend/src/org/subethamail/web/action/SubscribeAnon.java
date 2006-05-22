@@ -23,6 +23,7 @@ import org.tagonist.propertize.Property;
 public class SubscribeAnon extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(SubscribeAnon.class);
 	
 	/** */

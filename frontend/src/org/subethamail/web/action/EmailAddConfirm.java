@@ -23,6 +23,7 @@ import org.tagonist.propertize.Property;
 public class EmailAddConfirm extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(EmailAddConfirm.class);
 	
 	public static class Model extends ErrorMapModel

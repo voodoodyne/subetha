@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 public class Samples
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(Samples.class);
 
 	/**

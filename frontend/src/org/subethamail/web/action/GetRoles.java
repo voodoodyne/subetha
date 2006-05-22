@@ -20,6 +20,7 @@ import org.tagonist.propertize.Property;
 public class GetRoles extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(GetRoles.class);
 
 	/** */

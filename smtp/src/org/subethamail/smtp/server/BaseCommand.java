@@ -21,6 +21,7 @@ abstract public class BaseCommand implements Command
 {
 	private String name;
 	private static Map<String, HelpMessage> helpMessageMap = new HashMap<String, HelpMessage>();
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(BaseCommand.class);
 
 	public BaseCommand(String name, String help)

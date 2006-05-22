@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 public class CollectionTool 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(CollectionTool.class);
 	
 	/**

@@ -26,6 +26,7 @@ import org.tagonist.propertize.Property;
 public class GetLists extends AuthRequired 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(GetLists.class);
 	
 	public static class Model extends PaginateModel

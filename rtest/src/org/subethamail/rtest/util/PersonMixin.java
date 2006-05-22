@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 public class PersonMixin extends PersonInfoMixin
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(PersonMixin.class);
 
 	Long id;

@@ -22,6 +22,7 @@ import org.tagonist.propertize.Property;
 public class EmailAdd extends AuthRequired 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(EmailAdd.class);
 	
 	/** */

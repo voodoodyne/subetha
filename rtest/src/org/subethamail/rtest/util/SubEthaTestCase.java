@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 public class SubEthaTestCase extends TestCase
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(SubEthaTestCase.class);
 
 	/** */

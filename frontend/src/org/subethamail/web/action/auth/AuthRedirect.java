@@ -20,6 +20,7 @@ import org.tagonist.RedirectException;
 public class AuthRedirect extends AutoLogin 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(AuthRedirect.class);
 	
 	/**

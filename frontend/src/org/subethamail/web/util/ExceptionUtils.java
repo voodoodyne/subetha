@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 public class ExceptionUtils
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(ExceptionUtils.class);
 	
 	/**

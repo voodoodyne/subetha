@@ -22,6 +22,7 @@ import org.tagonist.propertize.Property;
 public class ForgotPassword extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(ForgotPassword.class);
 	
 	/** */

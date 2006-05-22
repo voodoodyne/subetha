@@ -23,6 +23,7 @@ import org.tagonist.propertize.Property;
 public class GetSiteSettings extends AuthAction
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(GetSiteSettings.class);
 
 	public static class Model extends ErrorMapModel

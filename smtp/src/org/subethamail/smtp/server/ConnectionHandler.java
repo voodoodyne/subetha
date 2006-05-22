@@ -34,6 +34,7 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 	private long startTime;
 	private long lastActiveTime;
 
+	@SuppressWarnings("unused")
 	private boolean dataMode = false;
 	
 	public ConnectionHandler(SMTPServer server, Socket socket)

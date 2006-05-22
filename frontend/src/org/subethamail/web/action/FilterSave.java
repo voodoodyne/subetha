@@ -37,6 +37,7 @@ import org.tagonist.propertize.Property;
 public class FilterSave extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(FilterSave.class);
 	
 	/** All the dynamic form data field names start with this */

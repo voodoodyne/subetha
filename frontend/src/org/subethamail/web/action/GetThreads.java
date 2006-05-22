@@ -23,6 +23,7 @@ import org.tagonist.propertize.Property;
 public class GetThreads extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(GetThreads.class);
 
 	public static class Model extends PaginateModel

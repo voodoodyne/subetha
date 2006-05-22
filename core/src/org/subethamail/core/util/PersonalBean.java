@@ -39,6 +39,7 @@ import org.subethamail.entity.dao.DAO;
 public class PersonalBean
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(PersonalBean.class);
 
 	/** */

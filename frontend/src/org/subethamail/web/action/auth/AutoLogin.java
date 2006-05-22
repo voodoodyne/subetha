@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 public class AutoLogin extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(AutoLogin.class);
 	
 	/**

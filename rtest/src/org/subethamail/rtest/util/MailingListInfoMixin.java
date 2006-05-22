@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 public class MailingListInfoMixin
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(MailingListInfoMixin.class);
 
 	String email;

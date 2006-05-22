@@ -19,6 +19,7 @@ import org.tagonist.propertize.Property;
 public class RoleDelete extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(RoleDelete.class);
 
 	/** The role to delete */

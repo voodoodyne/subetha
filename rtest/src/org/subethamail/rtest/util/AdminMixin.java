@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 public class AdminMixin extends BeanMixin
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(AdminMixin.class);
 
 	/** */

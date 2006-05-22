@@ -28,6 +28,7 @@ import org.subethamail.common.Permission;
 public class PermissionWrapper implements Map<String, Boolean>
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(PermissionWrapper.class);
 	
 	/** */

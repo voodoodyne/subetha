@@ -24,6 +24,7 @@ import com.dumbster.smtp.SmtpMessage;
 public class Smtp
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(Smtp.class);
 	
 	/** The port we use for dumbster */

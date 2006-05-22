@@ -30,6 +30,7 @@ import org.tagonist.propertize.Property;
 public class SaveListSettings extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(SaveListSettings.class);
 	
 	/** */

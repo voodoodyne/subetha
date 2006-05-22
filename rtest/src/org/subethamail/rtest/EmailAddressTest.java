@@ -27,6 +27,7 @@ import org.subethamail.rtest.util.SubEthaTestCase;
 public class EmailAddressTest extends SubEthaTestCase
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(EmailAddressTest.class);
 
 	/** */

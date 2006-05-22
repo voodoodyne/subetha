@@ -19,6 +19,7 @@ import org.tagonist.propertize.Property;
 public class UnSubscribeMe extends AuthRequired 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(UnSubscribeMe.class);
 	
 	/** */

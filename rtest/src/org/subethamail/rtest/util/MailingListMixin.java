@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 public class MailingListMixin extends MailingListInfoMixin
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(MailingListMixin.class);
 
 	Long id;

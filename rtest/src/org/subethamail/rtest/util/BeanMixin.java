@@ -35,6 +35,7 @@ import org.subethamail.core.lists.i.ListMgrRemote;
 public class BeanMixin
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(BeanMixin.class);
 
 	private Admin admin;

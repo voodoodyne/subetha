@@ -21,6 +21,7 @@ import org.tagonist.propertize.Property;
 public class GetRoleForEdit extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(GetRoleForEdit.class);
 	
 	/** */

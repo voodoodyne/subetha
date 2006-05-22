@@ -47,6 +47,7 @@ import org.hibernate.usertype.UserType;
 public class AnyImmutableType implements UserType
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(AnyImmutableType.class);
 
 	private static final int[] SQL_TYPES = new int[] {

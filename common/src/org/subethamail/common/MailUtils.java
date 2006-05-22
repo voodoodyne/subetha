@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 public class MailUtils
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(MailUtils.class);
 	
 	/**

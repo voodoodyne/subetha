@@ -22,6 +22,7 @@ import org.subethamail.web.action.auth.AuthAction;
 public class SaveSiteSettings extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(SaveSiteSettings.class);
 		
 	/** */

@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 public class SiteUtils
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(SiteUtils.class);
 
 	/** Base context path for the subetha webapp */

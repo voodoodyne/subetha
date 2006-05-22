@@ -19,6 +19,7 @@ import org.tagonist.propertize.Property;
 public class GetMessage extends AuthAction 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(GetMessage.class);
 
 	/** */

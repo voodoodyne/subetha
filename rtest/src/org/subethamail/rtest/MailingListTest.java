@@ -28,6 +28,7 @@ import org.subethamail.rtest.util.SubEthaTestCase;
 public class MailingListTest extends SubEthaTestCase
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(MailingListTest.class);
 
 	/** */

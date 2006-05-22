@@ -27,6 +27,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class SubscriptionHold extends SubscriptionBase
 {
 	/** */
+	@SuppressWarnings("unused")
 	@Transient private static Log log = LogFactory.getLog(SubscriptionHold.class);
 	
 	/**

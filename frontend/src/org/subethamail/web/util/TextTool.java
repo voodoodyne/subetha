@@ -20,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 public class TextTool 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(TextTool.class);
 	
 	/** What we want to delete from exception messages */

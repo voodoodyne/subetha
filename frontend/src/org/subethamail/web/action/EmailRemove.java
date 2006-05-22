@@ -20,6 +20,7 @@ import org.tagonist.propertize.Property;
 public class EmailRemove extends AuthRequired 
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(EmailRemove.class);
 	
 	@Property String email = "";

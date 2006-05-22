@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 public class PersonInfoMixin extends BeanMixin
 {
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(PersonInfoMixin.class);
 
 	String email;

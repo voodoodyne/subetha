@@ -7,6 +7,7 @@ package org.subethamail.plugin.filter;
 
 import java.io.IOException;
 
+import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 import javax.mail.Part;
@@ -15,7 +16,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.MailUtils;
+import org.subethamail.common.NotFoundException;
+import org.subethamail.common.PermissionException;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.SendFilterContext;
@@ -38,6 +43,8 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 {
 	/** */
 	private static Log log = LogFactory.getLog(LeaveAttachmentsOnServerFilter.class);
+	
+	@EJB Archiver archiver;
 	
 	/*
 	 * (non-Javadoc)
@@ -69,14 +76,36 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 		{
 			for (Part p : msg.getParts())
 			{
+				Long id = null;
 				// Look for special header which means we must reattach.
-				String[] headers = p.getHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
-				if (headers != null && headers.length > 0)
+				String[] idHeader = p.getHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
+				if (idHeader != null && idHeader.length > 0) 
+					id = Long.parseLong(idHeader[0]);
+				
+				String contentType = null;
+				try 
 				{
-					//TODO: Added attachment name in here after the id, like /attachment/id/name
-					p.setText("<a href=\"" + ctx.getList().getUrlBase() + "attachement/" + headers[0] +  "\"> download attachement "  + headers[0] +  "</a>");
-					p.removeHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
+					contentType = archiver.getAttachmentContentType(id);
 				}
+				catch (PermissionException pex)
+				{
+					//do nothing
+				}
+				catch (NotFoundException nfex)
+				{
+					//do nothing
+				}
+				
+				if (id != null)
+				{
+					p.setText("<a href=\"" + ctx.getList().getUrlBase() + "attachement/" + id +  "\"> download attachement "  + id + "/" + MailUtils.getNameFromContentType(contentType) +   "</a>");
+				}
+				else
+				{
+					p.setText("Attachment not found!");
+				}
+
+				p.removeHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
 			}
 		msg.save();
 		}

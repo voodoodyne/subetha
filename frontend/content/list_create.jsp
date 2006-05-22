@@ -1,7 +1,7 @@
 <%@include file="/inc/top_standard.jspf"%>
 
 <t:action type="org.subethamail.web.action.auth.AuthRequired" />
-<t:action var="siteSettings" type="org.subethamail.web.action.GetSiteSettings" />
+<c:set var="siteStatus" value="${backend.admin.siteStatus}" />
 
 <trim:main title="Create List">
 	<h1>Create List</h1>
@@ -60,7 +60,7 @@
 			</c:if>
 			
 			<c:if test="${empty model.url}">		
-				<input id="url" name="url" type="text" size="60" value="${siteSettings.siteUrl}list/" />
+				<input id="url" name="url" type="text" size="60" value="${siteStatus.defaultSiteUrl}list/" />
 			</c:if>
 			
 			<div>Example: http://somedomain.com<strong>/se/list/</strong>announce</div>

@@ -38,7 +38,7 @@ public class Config implements Serializable, Comparable
 	public static enum ConfigKey
 	{
 		ID_SITE_POSTMASTER("sitePostmaster", "The postmaster email address for the site.", String.class.getName()),
-		ID_SITE_URL("siteUrl", "The global url for the site.", String.class.getName());
+		ID_SITE_URL("siteUrl", "The global url for the site. (http://host:port/se/)", String.class.getName());
 
 		/** A set that contains all permissions */
 		public static final Set<ConfigKey> ALL;

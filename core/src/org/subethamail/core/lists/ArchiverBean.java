@@ -138,6 +138,10 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		}	
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#writeAttachment(java.lang.Long, java.io.OutputStream)
+	 */
 	public void writeAttachment(Long attachmentId, OutputStream stream) throws NotFoundException, PermissionException
 	{
 		Attachment a = this.dao.findAttachment(attachmentId);
@@ -148,19 +152,24 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		{
 			BufferedInputStream bis = new BufferedInputStream(data.getBinaryStream());	
 
-			for (int i = 0; i < data.length(); i++)
-				stream.write(bis.read());
+			int stuff;
+			while ((stuff = bis.read()) >= 0)
+				stream.write(stuff);
 		}
-		catch (SQLException sex)
+		catch (SQLException ex)
 		{
-			// TODO: handle exception
+			throw new RuntimeException(ex);
 		}
-		catch (IOException ioex) 
+		catch (IOException ex) 
 		{
-			// TODO: handle exception 
+			throw new RuntimeException(ex);
 		}
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#getAttachmentContentType(java.lang.Long)
+	 */
 	public String getAttachmentContentType(Long attachmentId) throws NotFoundException, PermissionException
 	{
 		Attachment a = this.dao.findAttachment(attachmentId);

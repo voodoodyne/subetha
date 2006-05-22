@@ -1,14 +1,17 @@
 /***************************************************************
  * Local stylesheet extensions
  ***************************************************************/
-
-/* start bluehaze.css overrides */
+	/* start bluehaze.css overrides */
 table {
 	border-collapse: collapse;
 }
 
 body {
 	font-size: 0.8em;
+}
+
+legend {
+	font-size: 135%;
 }
 
 #bodyText {
@@ -75,37 +78,50 @@ div.error,p.error {
 }
 
 .summaries {
+	
 }
 
 table.permissions {
 	text-align: center;
 	margin-bottom: 5px;
 }
+
 table.permissions th {
 	vertical-align: bottom;
 	text-align: left;
 }
+
 table.permissions th.role {
 	font-weight: normal;
 	padding-right: 5px;
 	text-align: right;
 }
+
 table.permissions td {
 	border: 1px solid grey;
 }
+
 table.filters td {
 	vertical-align: top;
 }
 
 /* Message Archive Styles */
 .message {
+	
 }
+
 span.authorName {
+	
 }
+
 div.sendTo {
+	
 }
+
 .messagePart {
-font-size:larger
+	font-size: larger
 }
+
 .attachments {
-}/* End Message Archives Styles */
+	
+} /* End Message Archives Styles */

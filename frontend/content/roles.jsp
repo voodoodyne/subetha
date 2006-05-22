@@ -6,100 +6,104 @@
 
 	<form action="<c:url value="/role_set_special.jsp"/>" method="post">
 		<input type="hidden" name="listId" value="${param.listId}" />
-		<p>
-			The default role for new subscribers is
-			<select name="defaultRoleId">
-				<c:forEach var="role" items="${list.roles}">
-					<option value="<c:out value="${role.id}"/>"
-						<c:if test="${role.id == list.defaultRole.id}">selected="selected"</c:if>
-					><c:out value="${role.name}"/></option>
-				</c:forEach>
-			</select><input type="submit" value="Set" />
-		</p>
+		<fieldset>
+			<legend>New Subscribers</legend>
+				The default role for new subscribers is:<br/>
+				<select name="defaultRoleId">
+					<c:forEach var="role" items="${list.roles}">
+						<option value="<c:out value="${role.id}"/>"
+							<c:if test="${role.id == list.defaultRole.id}">selected="selected"</c:if>
+						><c:out value="${role.name}"/></option>
+					</c:forEach>
+				</select><input type="submit" value="Set" />
+		</fieldset>
 	</form>
 
 	<form action="<c:url value="/role_set_special.jsp"/>" method="post">
 		<input type="hidden" name="listId" value="${param.listId}" />
-		<p>
-			The role for anonymous (not logged in) users is
-			<select name="anonymousRoleId">
-				<c:forEach var="role" items="${list.roles}">
-					<option value="<c:out value="${role.id}"/>"
-						<c:if test="${role.id == list.anonymousRole.id}">selected="selected"</c:if>
-					><c:out value="${role.name}"/></option>
-				</c:forEach>
-			</select><input type="submit" value="Set" />
-		</p>
+		<fieldset>
+			<legend>Anonymous</legend>
+				The role for anonymous (not logged in) users is: <br/>
+				<select name="anonymousRoleId">
+					<c:forEach var="role" items="${list.roles}">
+						<option value="<c:out value="${role.id}"/>"
+							<c:if test="${role.id == list.anonymousRole.id}">selected="selected"</c:if>
+						><c:out value="${role.name}"/></option>
+					</c:forEach>
+				</select><input type="submit" value="Set" />
+		</fieldset>
 	</form>
-	
-	<table class="permissions">
-		<tr>
-			<th>Role</th>
-			<c:forEach var="perm" items="${backend.allPermissions}">
-				<th style="writing-mode: tb-rl">
-					<img src="<c:url value="/perm_img?perm=${perm}"/>" alt="<c:out value="${perm.pretty}"/>" />
-				</th>
-			</c:forEach>
-		</tr>
-		<c:forEach var="role" items="${list.roles}">
-			<tr>
-				<th class="role">
-					<c:choose>
-						<c:when test="${role.owner}">
-							<em><c:out value="${role.name}"/></em>
-						</c:when>
-						<c:otherwise>
-							<c:url var="roleEditUrl" value="/role_edit.jsp">
-								<c:param name="roleId" value="${role.id}" />
-							</c:url>
-							<a href="${roleEditUrl}">
-								<c:out value="${role.name}"/>
-							</a>
-						</c:otherwise>
-					</c:choose>
-				</th>
-				<c:forEach var="perm" items="${backend.allPermissions}">
-					<td>
-						<c:if test="${f:contains(role.permissions, perm)}">
-							<img src="<c:url value="/img/check.gif"/>" alt="Yes" />
-						</c:if>
-					</td>
+	<fieldset>	<legend>Current Permissions</legend>
+			<table class="permissions">
+				<tr>
+					<th>Role</th>
+					<c:forEach var="perm" items="${backend.allPermissions}">
+						<th style="writing-mode: tb-rl">
+							<img src="<c:url value="/perm_img?perm=${perm}"/>" alt="<c:out value="${perm.pretty}"/>" />
+						</th>
+					</c:forEach>
+				</tr>
+				<c:forEach var="role" items="${list.roles}">
+					<tr>
+						<th class="role">
+							<c:choose>
+								<c:when test="${role.owner}">
+									<em><c:out value="${role.name}"/></em>
+								</c:when>
+								<c:otherwise>
+									<c:url var="roleEditUrl" value="/role_edit.jsp">
+										<c:param name="roleId" value="${role.id}" />
+									</c:url>
+									<a href="${roleEditUrl}">
+										<c:out value="${role.name}"/>
+									</a>
+								</c:otherwise>
+							</c:choose>
+						</th>
+						<c:forEach var="perm" items="${backend.allPermissions}">
+							<td>
+								<c:if test="${f:contains(role.permissions, perm)}">
+									<img src="<c:url value="/img/check.gif"/>" alt="Yes" />
+								</c:if>
+							</td>
+						</c:forEach>
+					</tr>
 				</c:forEach>
-			</tr>
-		</c:forEach>
-	</table>
+			</table>
+	</fieldset>	
 	
-	<h3>Add Role</h3>
-
 	<form action="<c:url value="/role_save.jsp"/>" method="post">
-		<input type="hidden" name="listId" value="${param.listId}" />
-		<table class="permissions">
-			<tr>
-				<th>Name</th>
-				<c:forEach var="perm" items="${backend.allPermissions}">
-					<th style="writing-mode: tb-rl">
-						<img src="<c:url value="/perm_img?perm=${perm}"/>" alt="<c:out value="${perm.pretty}"/>" />
+		<fieldset> <legend>Add Role</legend>
+	
+			<input type="hidden" name="listId" value="${param.listId}" />
+			<table class="permissions">
+				<tr>
+					<th>Name</th>
+					<c:forEach var="perm" items="${backend.allPermissions}">
+						<th style="writing-mode: tb-rl">
+							<label for="perm${perm}"><img src="<c:url value="/perm_img?perm=${perm}"/>" alt="<c:out value="${perm.pretty}"/>" /></label>
+						</th>
+					</c:forEach>
+				</tr>
+				<tr>
+					<th class="role <c:if test="${!empty model.errors.name}">error</c:if>">
+						<input name="name" value="${model.name}" type="text" />
+						
+						<c:if test="${!empty model.errors.name}">
+							<p class="error"><c:out value="${model.errors.name}"/></p>
+						</c:if>
 					</th>
-				</c:forEach>
-			</tr>
-			<tr>
-				<th class="role <c:if test="${!empty model.errors.name}">error</c:if>">
-					<input name="name" value="${model.name}" type="text" />
-					
-					<c:if test="${!empty model.errors.name}">
-						<p class="error"><c:out value="${model.errors.name}"/></p>
-					</c:if>
-				</th>
-				<c:forEach var="perm" items="${backend.allPermissions}">
-					<td>
-						<input type="checkbox" name="permissions" value="${perm}"
-							<c:if test="${f:contains(model.realPermissions, perm)}">checked="checked"</c:if>
-						/>
-					</td>
-				</c:forEach>
-			</tr>
-		</table>
-		<input type="submit" value="Add Role" />
+					<c:forEach var="perm" items="${backend.allPermissions}">
+						<td>
+							<input type="checkbox" name="permissions" value="${perm}" id="perm${perm}"
+								<c:if test="${f:contains(model.realPermissions, perm)}">checked="checked"</c:if>
+							/>
+						</td>
+					</c:forEach>
+				</tr>
+			</table>
+			<input type="submit" value="Add Role" />
+		</fieldset>
 	</form>
 
 	<h3>Permissions Key</h3>

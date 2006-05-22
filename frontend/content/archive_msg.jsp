@@ -4,25 +4,34 @@
 
 
 <trim:list title="${msg.fromName}" listId="${msg.listId}">
+	<table>
+		<tr>
+			<td>
+				<a href="<c:url value="/message/${msg.id}/${msg.listId}-${msg.id}.eml"/>">View Message Source</a> 
+				<div style="font-size:smaller"> Note: To download, just click "save link as", 
+					or view the message source and save the resulting page.
+				</div>
+			</td>
+			<td>
+			<c:if test="${auth.loggedIn}">
+				<form action="<c:url value="/archive_msg_resend.jsp"/>" method="post" style="display:inline">
+					<fieldset><legend>Send Mail</legend>
+					<label for="email"><span style="font-size:smaller">Send this message to: </span></label>
+					
+					<input type="hidden" name="msgId" value="${msg.id}" />
+					<select name="email">
+						<c:forEach var="email" items="${backend.accountMgr.self.emailAddresses}" varStatus="loop">
+							<option value="<c:out value="${email}"/>"><c:out value="${email}"/></option>
+						</c:forEach>
+					</select>
+					<input type="submit" value="Send" />
+					</fieldset>
+				</form> 
+			</c:if>
+			</td>
+		</tr>
+	</table>
 	
-	<c:if test="${auth.loggedIn}">		
-		<div class="sendTo">
-			<form action="<c:url value="/archive_msg_resend.jsp"/>" method="post" style="display:inline">
-				<span style="font-size:smaller">Send this message to: </span>
-				
-				<input type="hidden" name="msgId" value="${msg.id}" />
-				<select name="email">
-				<c:forEach var="email" items="${backend.accountMgr.self.emailAddresses}" varStatus="loop">
-					<option value="<c:out value="${email}"/>"><c:out value="${email}"/></option>
-				</c:forEach>
-				</select>
-				<input type="submit" value="Send" />
-			</form>
-		</div>
-	</c:if>
-	<div>
-		<a href="<c:url value="/message/${msg.id}/${msg.subject}.eml"/>">View Full Message</a>
-	</div>
 	<p>
 		From
 		<span class="authorName"><c:out value="${msg.fromName}"/></span>
@@ -37,12 +46,26 @@
 	</p>
 
 	<div class="message">
-		<c:forEach var="part" items="${msg.inlineParts}">
+		<c:forEach var="part" items="${msg.textParts}">
 			<div class="messagePart">
 				<pre><c:out value="${part.contents}"/></pre>
 			</div>
 		</c:forEach>
 	</div>
+
+
+	<c:if test="${!empty msg.inlineParts}">
+		<div class="inlineParts" style="display:hidden">
+			<h3>Inline Parts</h3>
+			<div style="text-size:smaller">These parts are dropped for now. They are things in the message which may not be displayed.</div>
+			<br/>
+			<c:forEach var="part" items="${msg.inlineParts}">
+				<span class="inlinePart">
+					<c:out value="${part}"/>
+				</span>, 
+			</c:forEach>
+		</div>
+	</c:if>
 
 	<c:if test="${!empty msg.attachments}">
 		<div class="attachments">

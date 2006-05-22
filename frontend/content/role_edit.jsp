@@ -9,6 +9,8 @@
 <trim:list title="Edit Role: ${model.name}" listId="${model.listId}">
 
 	<form action="<c:url value="/role_save.jsp"/>" method="post" class="form-inline">
+		<fieldset> <legend><c:out value="${model.name}"/></legend>
+
 		<input type="hidden" name="roleId" value="${model.roleId}" />
 		
 		<table>
@@ -30,14 +32,14 @@
 			<tr>
 				<c:forEach var="perm" items="${backend.allPermissions}">
 					<th style="writing-mode: tb-rl">
-						<img src="<c:url value="/perm_img?perm=${perm}"/>" alt="<c:out value="${perm.pretty}"/>" />
+						<label for="perm${perm}"><img src="<c:url value="/perm_img?perm=${perm}"/>" alt="<c:out value="${perm.pretty}"/>" /></label>
 					</th>
 				</c:forEach>
 			</tr>
 			<tr>
 				<c:forEach var="perm" items="${backend.allPermissions}">
 					<td>
-						<input type="checkbox" name="permissions" value="${perm}"
+						<input type="checkbox" name="permissions" value="${perm}" id="perm${perm}"
 							<c:if test="${f:contains(model.realPermissions, perm)}">checked="checked"</c:if>
 						/>
 					</td>

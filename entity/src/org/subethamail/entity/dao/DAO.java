@@ -76,6 +76,11 @@ public interface DAO
 	public Object getConfigValue(String id);
 
 	/**
+	 * Creates or updates the config entity with the specified value.
+	 */
+	public void setConfigValue(String id, Object value);
+
+	/**
 	 * @return a list of all of the site wide Config objects
 	 *  that we can find.
 	 */

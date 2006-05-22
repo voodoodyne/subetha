@@ -91,8 +91,9 @@ public class DAOBean implements DAO
 			return c;
 	}
 
-	/**
-	 * @see DAO#getConfigValue(String)
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#getConfigValue(java.lang.String)
 	 */
 	public Object getConfigValue(String id)
 	{
@@ -104,6 +105,24 @@ public class DAOBean implements DAO
 			return c.getValue();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#setConfigValue(java.lang.String, java.lang.Object)
+	 */
+	public void setConfigValue(String id, Object value)
+	{
+		try
+		{
+			Config cfg = this.findConfig(id);
+			cfg.setValue(value);
+		}
+		catch (NotFoundException ex)
+		{
+			Config cfg = new Config(id, value);
+			this.em.persist(cfg);
+		}
+	}
+	
 	/**
 	 * @see org.subethamail.entity.dao.DAO#getConfig()
 	 */

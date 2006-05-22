@@ -6,9 +6,11 @@
 package org.subethamail.core.injector;
 
 import java.io.IOException;
+
 import javax.ejb.Local;
 import javax.mail.MessagingException;
 import javax.mail.Part;
+
 import org.subethamail.entity.Mail;
 
 /**

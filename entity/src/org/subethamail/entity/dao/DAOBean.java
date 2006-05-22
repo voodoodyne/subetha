@@ -8,6 +8,7 @@ package org.subethamail.entity.dao;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.EntityManager;
@@ -15,6 +16,7 @@ import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;

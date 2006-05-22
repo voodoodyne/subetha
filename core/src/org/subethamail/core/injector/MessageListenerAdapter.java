@@ -7,9 +7,11 @@ package org.subethamail.core.injector;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Depends;

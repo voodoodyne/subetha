@@ -7,11 +7,13 @@ package org.subethamail.web.servlet;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
 import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.jboss.security.SimplePrincipal;
 import org.subethamail.web.Backend;
 import org.subethamail.web.security.Security;

@@ -2,6 +2,7 @@ package org.subethamail.smtp.command;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import org.subethamail.common.io.DeferredFileOutputStream;
 import org.subethamail.smtp.server.BaseCommand;
 import org.subethamail.smtp.server.CharTerminatedInputStream;

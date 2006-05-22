@@ -7,11 +7,13 @@ package org.subethamail.core.util;
 
 import java.security.acl.Group;
 import java.util.Arrays;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.security.SimpleGroup;

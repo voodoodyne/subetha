@@ -7,6 +7,7 @@ package org.subethamail.web.action;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.web.Backend;

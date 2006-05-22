@@ -7,6 +7,7 @@ package org.subethamail.core.plugin.i.helper;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.subethamail.core.plugin.i.FilterParameter;
 
 

@@ -9,9 +9,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;

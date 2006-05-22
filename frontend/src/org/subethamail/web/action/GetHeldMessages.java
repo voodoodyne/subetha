@@ -6,6 +6,7 @@
 package org.subethamail.web.action;
 
 import java.util.Collection;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.lists.i.MailHold;

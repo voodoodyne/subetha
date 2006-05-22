@@ -7,8 +7,10 @@ package org.subethamail.rtest;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.injector.i.Injector;
@@ -17,6 +19,7 @@ import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonMixin;
 import org.subethamail.rtest.util.SubEthaTestCase;
+
 import com.dumbster.smtp.SmtpMessage;
 
 /**

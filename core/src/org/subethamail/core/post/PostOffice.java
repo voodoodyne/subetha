@@ -6,6 +6,7 @@
 package org.subethamail.core.post;
 
 import javax.ejb.Local;
+
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;

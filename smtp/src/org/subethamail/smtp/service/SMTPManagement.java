@@ -5,7 +5,9 @@
 package org.subethamail.smtp.service;
 
 import java.io.IOException;
+
 import javax.ejb.Local;
+
 import org.jboss.annotation.ejb.Management;
 
 /**

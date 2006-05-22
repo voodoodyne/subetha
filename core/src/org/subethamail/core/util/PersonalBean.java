@@ -6,9 +6,11 @@
 package org.subethamail.core.util;
 
 import java.security.Principal;
+
 import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;

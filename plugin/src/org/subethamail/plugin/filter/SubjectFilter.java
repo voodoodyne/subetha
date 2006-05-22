@@ -7,6 +7,7 @@ package org.subethamail.plugin.filter;
 
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;

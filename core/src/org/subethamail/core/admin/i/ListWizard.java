@@ -7,6 +7,7 @@ package org.subethamail.core.admin.i;
 
 import java.net.URL;
 import java.util.List;
+
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 

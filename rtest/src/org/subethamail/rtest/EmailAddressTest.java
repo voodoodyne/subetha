@@ -7,6 +7,7 @@ package org.subethamail.rtest;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.acct.i.Self;

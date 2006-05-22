@@ -7,12 +7,14 @@ package org.subethamail.web.servlet;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+
 import javax.annotation.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.PermissionException;
 import org.subethamail.core.lists.i.Archiver;

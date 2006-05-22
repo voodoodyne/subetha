@@ -7,6 +7,7 @@ package org.subethamail.core.plugin.i.helper;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterRegistry;

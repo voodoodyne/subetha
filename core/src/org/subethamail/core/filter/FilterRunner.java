@@ -6,8 +6,10 @@
 package org.subethamail.core.filter;
 
 import java.util.Map;
+
 import javax.ejb.Local;
 import javax.mail.MessagingException;
+
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;

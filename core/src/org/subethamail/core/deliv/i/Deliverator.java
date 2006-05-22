@@ -6,6 +6,7 @@
 package org.subethamail.core.deliv.i;
 
 import javax.ejb.Local;
+
 import org.subethamail.common.NotFoundException;
 
 /**

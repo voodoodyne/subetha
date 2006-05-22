@@ -9,10 +9,12 @@ package org.subethamail.web.action.auth;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.Cookie;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.security.auth.callback.UsernamePasswordHandler;

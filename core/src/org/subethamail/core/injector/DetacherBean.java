@@ -8,6 +8,7 @@ package org.subethamail.core.injector;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+
 import javax.activation.DataHandler;
 import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
@@ -16,6 +17,7 @@ import javax.ejb.Stateless;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.lob.BlobImpl;

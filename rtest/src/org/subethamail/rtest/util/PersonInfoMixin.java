@@ -6,6 +6,7 @@
 package org.subethamail.rtest.util;
 
 import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

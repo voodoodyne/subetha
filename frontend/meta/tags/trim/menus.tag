@@ -15,7 +15,6 @@
 		<div class="sideBox LHS">
 			<div>Site Admin Menu</div>
 			<a href="<c:url value="/site_status.jsp"/>">&rsaquo; Site Status</a>
-			<a href="<c:url value="/site_settings.jsp"/>">&rsaquo; Site Settings</a>
 			<a href="<c:url value="/list_create.jsp"/>">&rsaquo; Create List</a>
 			<a href="<c:url value="/lists.jsp"/>">&rsaquo; List Lists</a>
 			<a href="<c:url value="/admins.jsp"/>">&rsaquo; Administrators</a>

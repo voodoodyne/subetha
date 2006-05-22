@@ -567,12 +567,14 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public SiteStatus getSiteStatus()
 	{
-		// TODO
+		URL siteUrl = (URL) this.dao.getConfigValue(Config.ID_SITE_URL);
+		InternetAddress sitePostmaster = (InternetAddress) this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
+
 		return new SiteStatus(
 				System.getProperty("file.encoding"),
 				this.countLists(),
-				null,
-				null
+				siteUrl,
+				sitePostmaster
 			);
 	}
 	
@@ -582,8 +584,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void setDefaultSiteUrl(URL url)
 	{
-		// TODO Auto-generated method stub
-		
+		this.dao.setConfigValue(Config.ID_SITE_URL, url);
 	}
 
 	/*
@@ -592,19 +593,9 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void setPostmaster(InternetAddress address)
 	{
-		// TODO Auto-generated method stub
-		
+		this.dao.setConfigValue(Config.ID_SITE_POSTMASTER, address);
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.admin.i.Admin#getConfigData()
-	 */
-	public List<ConfigData> getSiteConfig()
-	{
-		return Transmute.configurations(this.dao.getConfig());
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#saveConfig(org.subethamail.core.admin.i.ConfigData)

@@ -6,7 +6,6 @@
 package org.subethamail.entity.dao;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -123,39 +122,6 @@ public class DAOBean implements DAO
 		}
 	}
 	
-	/**
-	 * @see org.subethamail.entity.dao.DAO#getConfig()
-	 */
-	public List<Config> getConfig()
-	{
-		List<Config> config = new ArrayList<Config>(Config.ConfigKey.ALL.size());
-		for(Config.ConfigKey cfgKey : Config.ConfigKey.ALL)
-		{
-			try
-			{
-				if (log.isDebugEnabled())
-					log.debug("Getting key: " + cfgKey + " value: " + findConfig(cfgKey.getKey()));
-				config.add(findConfig(cfgKey.getKey()));
-			}
-			catch (NotFoundException e)
-			{
-				// It's ok, let's create it as an empty value.
-				try
-				{
-					if (log.isDebugEnabled())
-						log.debug("New config key: " + cfgKey.getKey());
-					Config newConfig = new Config(cfgKey.getKey(), cfgKey.getType().newInstance());
-					config.add(newConfig);
-				}
-				catch (Exception bad)
-				{
-					log.debug("Could not create missing key.", bad);
-				}
-			}
-		}
-		return config;
-	}
-
 	/**
 	 * @see DAO#findEmailAddress(String)
 	 */

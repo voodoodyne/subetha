@@ -6,9 +6,6 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,75 +32,9 @@ public class Config implements Serializable, Comparable
 {
 	/** */
 	@Transient private static Log log = LogFactory.getLog(Config.class);
-	
-	/** Known sitewide config keys */	
-	public static enum ConfigKey
-	{
-		ID_SITE_POSTMASTER("sitePostmaster", "The postmaster email address for the site.", String.class.getName()),
-		ID_SITE_URL("siteUrl", "The global url for the site. (http://host:port/se/)", String.class.getName());
 
-		/** A set that contains all permissions */
-		public static final Set<ConfigKey> ALL;
-		static
-		{
-			Set<ConfigKey> tmp = new TreeSet<ConfigKey>();
-
-			for (ConfigKey p: ConfigKey.values())
-				tmp.add(p);
-
-			ALL = Collections.unmodifiableSet(tmp);
-		}
-
-		private String key;
-		private String description;
-		private String type;
-		private Class typeCache = null;
-		
-		private ConfigKey(String key, String description, String type)
-		{
-			this.key = key;
-			this.description = description;
-			this.type = type;
-		}
-		
-		public Class getType() throws ClassNotFoundException
-		{
-			if (this.typeCache == null)
-			{
-				this.typeCache = Class.forName(this.type);
-			}
-			return this.typeCache;
-		}
-
-		public String getKey()
-		{
-			return this.key;
-		}
-
-		public String getDescription()
-		{
-			return this.description;
-		}
-
-		public static ConfigKey getConfigKey(String key)
-		{
-			ConfigKey result = null;
-			for(ConfigKey aKey: ALL)
-			{
-				if (aKey.getKey().equals(key))
-				{
-					result = aKey;
-					continue;
-				}
-			}
-			return result;
-		}
-
-		public String getDescription(String key)
-		{
-			return this.description;
-		}
-	}
+	public static final String ID_SITE_POSTMASTER = "sitePostmaster";
+	public static final String ID_SITE_URL = "siteUrl";
 
 	/** */
 	@Id
@@ -144,11 +75,6 @@ public class Config implements Serializable, Comparable
 	public void setValue(Object val)
 	{
 		this.value = val;
-	}
-
-	public ConfigKey getConfigKey(String key)
-	{
-		return ConfigKey.getConfigKey(key);
 	}
 
 	/** */

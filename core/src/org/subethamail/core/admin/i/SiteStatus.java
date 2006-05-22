@@ -6,6 +6,9 @@
 package org.subethamail.core.admin.i;
 
 import java.io.Serializable;
+import java.net.URL;
+
+import javax.mail.internet.InternetAddress;
 
 /**
  * Some random information about the site.
@@ -20,11 +23,11 @@ public class SiteStatus implements Serializable
 	int listCount;
 	
 	/** Some site config params */
-	String defaultSiteUrl;
-	String postmasterEmail;
+	URL defaultSiteUrl;
+	InternetAddress postmasterEmail;
 	
 	/** */
-	public SiteStatus(String encoding, int listCount, String defaultSiteUrl, String postmasterEmail)
+	public SiteStatus(String encoding, int listCount, URL defaultSiteUrl, InternetAddress postmasterEmail)
 	{
 		this.defaultCharset = encoding;
 		this.listCount = listCount;
@@ -46,13 +49,13 @@ public class SiteStatus implements Serializable
 	}
 
 	/** */
-	public String getDefaultSiteUrl()
+	public URL getDefaultSiteUrl()
 	{
 		return this.defaultSiteUrl;
 	}
 
 	/** */
-	public String getPostmasterEmail()
+	public InternetAddress getPostmasterEmail()
 	{
 		return this.postmasterEmail;
 	}

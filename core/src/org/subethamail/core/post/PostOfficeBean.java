@@ -205,13 +205,13 @@ public class PostOfficeBean implements PostOffice
 
 		if (addy.getPerson().getSubscriptions().isEmpty())
 		{
-			String url = (String)this.dao.getConfigValue(Config.ConfigKey.ID_SITE_URL.getKey());
+			String url = (String)this.dao.getConfigValue(Config.ID_SITE_URL);
 			vctx.put("url", url);
 			
 			MessageBuilder builder = new MessageBuilder(MailType.FORGOT_PASSWORD, vctx);
 			builder.setTo(addy);
 			
-			String postmaster = (String)this.dao.getConfigValue(Config.ConfigKey.ID_SITE_POSTMASTER.getKey());
+			String postmaster = (String)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
 			builder.setFrom(postmaster);
 			
 			builder.send();
@@ -306,13 +306,13 @@ public class PostOfficeBean implements PostOffice
 		
 		if (me.getSubscriptions().isEmpty())
 		{
-			String url = (String)this.dao.getConfigValue(Config.ConfigKey.ID_SITE_URL.getKey());
+			String url = (String)this.dao.getConfigValue(Config.ID_SITE_URL);
 			vctx.put("url", url);
 			
 			MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
 			builder.setTo(email);
 			
-			String postmaster = (String)this.dao.getConfigValue(Config.ConfigKey.ID_SITE_POSTMASTER.getKey());
+			String postmaster = (String)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
 			builder.setFrom(postmaster);
 			
 			builder.send();

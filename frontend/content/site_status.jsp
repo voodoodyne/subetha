@@ -15,4 +15,13 @@
 		<li>Some information about the cluster which we can get
 			from the JMX systems</li>	
 	</ul>
+	
+	<h3>Site Config</h3>
+	<ul>
+		<li>Postmaster email: <strong><c:out value="${siteStatus.postmasterEmail}"/></strong></li>
+		<li>Default site url: <strong><c:out value="${siteStatus.defaultSiteUrl}"/></strong></li>
+	</ul>
+	<form action="<c:url value="/site_status_edit.jsp"/>" method="get" class="form-inline">
+		<input type="submit" name="submit" value="Edit" />
+	</form>
 </trim:main>

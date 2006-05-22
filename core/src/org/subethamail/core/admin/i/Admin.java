@@ -178,23 +178,4 @@ public interface Admin
 	 * Sets the address of the site postmaster.
 	 */
 	public void setPostmaster(InternetAddress address);
-	
-	/**
-	 * Gets the site wide configuration data.
-	 */
-	@Deprecated
-	public List<ConfigData> getSiteConfig();
-
-	/**
-	 * Persists a ConfigData object. If the config key
-	 * doesn't already exist, then a new row will be created
-	 * in the database. NOTE: it isn't a good idea to use
-	 * this to create new configuration because the keys
-	 * are hard coded in Config.ConfigKey's. Only save
-	 * existing keys.
-	 * 
-	 * @param configData
-	 */
-	@Deprecated
-	public void saveConfig(ConfigData configData);
 }

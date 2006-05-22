@@ -78,6 +78,11 @@
 
 	<target name="core-ejb-jar" depends="core-classes">
 		<jar jarfile="${build.core.ejb.file}">
+			<metainf dir="${core.meta.dir}">
+				<include name="mailcap"/>
+				<include name="mime.types"/>
+			</metainf>
+			
 			<fileset dir="${build.core.classes.dir}"/>
 			
 			<fileset dir="${core.javasrc.dir}">

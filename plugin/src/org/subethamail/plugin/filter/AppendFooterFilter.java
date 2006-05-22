@@ -108,31 +108,32 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 			String footerContent = (String) ctx.getArgument(ARG_FOOTER);
 			String expandedFooter = "\n" + ctx.expand(footerContent);
 
-			Object obj = msg.getContent();
-			if (obj instanceof String)
+			String contentType = msg.getContentType().toLowerCase();
+			
+			if (contentType.startsWith("text/plain"))
 			{
-				String tmp = (String)obj + expandedFooter;
-				msg.setText(tmp);
+				String text = (String)msg.getContent();
+				msg.setText(text + expandedFooter);
 			}
-			else if (obj instanceof MimeMultipart)
+			else if (contentType.startsWith("multipart/"))
 			{
-				MimeMultipart tmp = (MimeMultipart)obj;
+				MimeMultipart multi = (MimeMultipart)msg.getContent();
 
 				MimeBodyPart part = new MimeBodyPart();
 				part.setText(expandedFooter);
-				tmp.addBodyPart(part);
+				multi.addBodyPart(part);
+				
 				msg.save();
 			}
 			else
 			{
 				if (log.isDebugEnabled())
-					log.debug("Don't know type of content for message and can't append a footer! ;type=" + obj.getClass().toString());
+					log.debug("Can't append a footer for type " + contentType);
 			}
 		}
-		catch (IOException e)
+		catch (IOException ex)
 		{
-			if (log.isDebugEnabled())
-				log.debug(e);
+			throw new RuntimeException(ex);
 		}
 	}
 }

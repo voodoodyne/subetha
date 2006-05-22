@@ -83,7 +83,7 @@ public class ListHeaderFilter extends GenericFilter implements Lifecycle
 	 */
 	public String getName()
 	{
-		return "List Headers";
+		return "Add List Headers";
 	}
 
 	/*

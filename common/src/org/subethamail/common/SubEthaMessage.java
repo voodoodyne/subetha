@@ -44,12 +44,19 @@ public class SubEthaMessage extends SMTPMessage
 	public static final String HDR_IN_REPLY_TO = "In-Reply-To";
 	public static final String HDR_REFERENCES = "References";
 	public static final String HDR_X_LOOP = "X-Loop";
+	public static final String HDR_CONTENT_TYPE = "Content-Type";
 
-	/** 
-	 * The name of the header for detached attachment references.  The
-	 * value will be the numeric id of the attachment. 
+	/**
+	 * Header for parts that have been detached; holds the original
+	 * content type.
 	 */
-	public static final String HDR_ATTACHMENT_REF = "X-SubEtha-Attachment";
+	public static final String HDR_ORIGINAL_CONTENT_TYPE = "X-Original-Content-Type";
+	
+	/** 
+	 * The mime type for detached attachments.  The content will be
+	 * the attachment id as an ascii string. 
+	 */
+	public static final String DETACHMENT_MIME_TYPE = "application/subetha-detachment";
 	
 	// Cache of parts, this will optimize having to walk 
 	// the message tree after non-changing events
@@ -202,6 +209,7 @@ public class SubEthaMessage extends SMTPMessage
 		return partsCache;
 	}
 	
+	/** */
 	protected static void getParts(Part part, List<Part> parts) throws MessagingException, IOException
 	{
 		Object content = part.getContent();
@@ -232,9 +240,6 @@ public class SubEthaMessage extends SMTPMessage
 	 */
 	public void save() throws MessagingException
 	{
-		if (!this.saved)
-			this.saveChanges();
-		
 		try
 		{
 			Object contents = this.getContent();
@@ -248,10 +253,14 @@ public class SubEthaMessage extends SMTPMessage
 				this.partsCache = null;
 			}
 		}
-		catch(IOException ioex)
+		catch (IOException ex)
 		{
-			//do nothing...
+			throw new RuntimeException(ex);
 		}
+		
+		if (!this.saved)
+			this.saveChanges();
+		
 	}
 
 	/**

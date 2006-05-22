@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import javax.ejb.Local;
 import javax.mail.MessagingException;
-import javax.mail.Part;
+import javax.mail.internet.MimePart;
 
 import org.subethamail.entity.Mail;
 
@@ -36,14 +36,14 @@ public interface Detacher
 	 * a link back to the database object.  Recursively descends the mime
 	 * tree.
 	 */
-	public void detach(Part part, Mail ownerMail) throws MessagingException, IOException;
+	public void detach(MimePart part, Mail ownerMail) throws MessagingException, IOException;
 	
 	/** 
 	 * Looks through the mime message for any of the special indicator
 	 * link attachments and replaces them with the actual binary content
 	 * of the attachment.  Recursively descends the mime tree.
 	 */
-	public void attach(Part part) throws MessagingException, IOException;
+	public void attach(MimePart part) throws MessagingException, IOException;
 	
 }
 

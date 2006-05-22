@@ -217,28 +217,27 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 			List<InlinePartData> inlineParts = new ArrayList<InlinePartData>();
 			List<AttachmentPartData> attachmentParts = new ArrayList<AttachmentPartData>();
 
-			for (Part part : msg.getParts()) 
+			for (Part part: msg.getParts()) 
 			{
-				Object content = part.getContent();
-				
-				//get an id to see if it is an attachment
-				Long id =  null;	
-
-				String[] idHeader = part.getHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
-				if (idHeader != null && idHeader.length > 0) id = Long.parseLong(idHeader[0]);
-	
-				String contentType = (id == null || id.equals("")) ? part.getContentType() : this.dao.findAttachment(id).getContentType();
-
-				//figure out the name, if there is one.
-				String name = part.getFileName();
-				if (name == null || name.equals(""))
+				if (part.getContentType().startsWith(SubEthaMessage.DETACHMENT_MIME_TYPE))
 				{
-					name = MailUtils.getNameFromContentType(contentType);
+					String contentType = part.getHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE)[0];
+					part.setHeader(SubEthaMessage.HDR_CONTENT_TYPE, contentType);
+					
+					// Since we set the content type, this should work
+					String name = part.getFileName();
+					
+					Long id = (Long)part.getContent();
+					
+					AttachmentPartData apd = new AttachmentPartData(id, contentType, name, part.getSize());
+					attachmentParts.add(apd);
 				}
-				
-				// not an attachment cause it isn't stored as a detached part.
-				if (id == null) 
+				else
 				{
+					// not an attachment cause it isn't stored as a detached part.
+					Object content = part.getContent();
+					String name = part.getFileName();
+					
 					InlinePartData ipd;
 					if (content instanceof String)
 					{
@@ -250,12 +249,6 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					}
 						
 					inlineParts.add(ipd);
-				}
-				//it has an id so it is an attachment.
-				else
-				{					
-					AttachmentPartData apd = new AttachmentPartData(id, contentType, name, part.getSize());
-					attachmentParts.add(apd);
 				}
 			}
 			

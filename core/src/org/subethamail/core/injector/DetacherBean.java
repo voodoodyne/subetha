@@ -17,6 +17,8 @@ import javax.ejb.Stateless;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimePart;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,146 +45,134 @@ public class DetacherBean implements Detacher
 	
 	/** */
 	@EJB DAO dao;
-
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.injector.Detacher#detach(javax.mail.Part, Mail)
+	 * @see org.subethamail.core.injector.Detacher#detach(javax.mail.internet.MimePart, org.subethamail.entity.Mail)
 	 */
-	public void detach(Part part, Mail ownerMail) throws MessagingException, IOException
+	public void detach(MimePart part, Mail ownerMail) throws MessagingException, IOException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Attempting to detach " + part + " of type " + part.getContentType());
-		
-		Object content = part.getContent();
 
-		String contentType = part.getContentType();
-		if(contentType != null) contentType = contentType.toLowerCase();
-			
-		String disposition = part.getDisposition();
-		if(disposition != null) disposition = disposition.toLowerCase();
+		String contentType = part.getContentType().toLowerCase();
 		
-		if (content instanceof Multipart)
+		if (contentType.startsWith("multipart/"))
 		{
 			if (log.isDebugEnabled())
 				log.debug("Content is multipart");
 			
-			Multipart multi = (Multipart)content;
-
+			Multipart multi = (Multipart)part.getContent();
+			
 			// This is necessary because of the mysterious JavaMail bug 4404733
 			part.setContent(multi);
 			
 			for (int i=0; i<multi.getCount(); i++)
-				this.detach(multi.getBodyPart(i), ownerMail);
+				this.detach((MimeBodyPart)multi.getBodyPart(i), ownerMail);
 		}
-		else if (content instanceof Part)
-		{
-			if (log.isDebugEnabled())
-				log.debug("Content is part, probably a message");
-			
-			this.detach((Part)content, ownerMail);
-		}
-		else if (	!"attachment".equals(disposition) && 
-					(contentType != null) &&
-					contentType.startsWith("text/"))
+		else if (contentType.startsWith("text/") && !Part.ATTACHMENT.equals(part.getDisposition()))
 		{
 			if (log.isDebugEnabled())
 				log.debug("Leaving text alone");
-			
-			// Text parts can stay, but we don't want anyone faking references
-			part.removeHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
 		}
 		else
 		{
-			// We need to detach it
-			if (log.isDebugEnabled())
-				log.debug("Detaching an attachment of type " + part.getContentType());
+			// It would be better if we could do this by knowing which
+			// mime types produce Part
+			Object content = part.getContent();
 			
-			InputStream input = part.getInputStream();
-			Blob blobby = new BlobImpl(input, input.available());
-			
-			Attachment attach = new Attachment(ownerMail, blobby, part.getContentType());
-			this.dao.persist(attach);
-			ownerMail.getAttachments().add(attach);
-			
-			//save a reference to the attachment.id
-			part.setHeader(SubEthaMessage.HDR_ATTACHMENT_REF, attach.getId().toString());
-			
-			try 
+			if (content instanceof MimePart)
 			{
-				part.setText(attach.getId().toString());
+				if (log.isDebugEnabled())
+					log.debug("Content " + contentType + " is part, probably a message");
+				
+				this.detach((MimePart)content, ownerMail);
 			}
-			catch (NullPointerException npe)
+			else
 			{
-				if(log.isDebugEnabled()) log.debug("Ignoring NullPointerException from part.setText(Null)");
+				// Actually detach the sucka
+				if (log.isDebugEnabled())
+					log.debug("Detaching an attachment of type " + contentType);
+				
+				InputStream input = part.getInputStream();
+				Blob blobby = new BlobImpl(input, input.available());
+				
+				Attachment attach = new Attachment(ownerMail, blobby, contentType);
+				this.dao.persist(attach);
+				ownerMail.getAttachments().add(attach);
+				
+				part.setContent(attach.getId(), SubEthaMessage.DETACHMENT_MIME_TYPE);
+				
+				part.setHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE, contentType);
 			}
-			
-			if (log.isDebugEnabled())
-				log.debug("set part.text to null:" + part.getContent().getClass().toString());
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.injector.Detacher#attach(javax.mail.Part)
+	 * @see org.subethamail.core.injector.Detacher#attach(javax.mail.internet.MimePart)
 	 */
-	public void attach(Part part) throws MessagingException, IOException
+	public void attach(MimePart part) throws MessagingException, IOException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Attempting reattachment for " + part + " of type " + part.getContentType());
-		
-		Object content = part.getContent();
 
-		if (content instanceof Multipart)
+		String contentType = part.getContentType().toLowerCase();
+		
+		if (contentType.startsWith("multipart/"))
 		{
 			if (log.isDebugEnabled())
 				log.debug("Content is multipart");
 			
-			Multipart multi = (Multipart)content;
+			Multipart multi = (Multipart)part.getContent();
 			
 			// This is necessary because of the mysterious JavaMail bug 4404733
 			part.setContent(multi);
 
 			for (int i=0; i<multi.getCount(); i++)
-				this.attach(multi.getBodyPart(i));
+				this.attach((MimePart)multi.getBodyPart(i));
 		}
-		else if (content instanceof Part)
+		else if (contentType.startsWith(SubEthaMessage.DETACHMENT_MIME_TYPE))
 		{
+			Long attachmentId = (Long)part.getContent();
+
 			if (log.isDebugEnabled())
-				log.debug("Content is part, probably a message");
-			
-			this.attach((Part)content);
+				log.debug("Reattaching attachment " + attachmentId + " for type " + contentType);
+
+			try
+			{
+				Attachment att = this.dao.findAttachment(attachmentId);
+				
+				part.setDataHandler(
+						new DataHandler(
+								new TrivialDataSource(
+										att.getContentStream(),
+										att.getContentType())));
+				
+				part.removeHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE);
+			}
+			catch (NotFoundException ex)
+			{
+				// Log an error and otherwise leave the mime part as-is.
+				if (log.isErrorEnabled())
+					log.error("Missing referenced attachment " + attachmentId);
+			}
 		}
 		else
 		{
-			// Look for special header which means we must reattach.
-			String[] headers = part.getHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
-			if (headers != null && headers.length > 0)
+			Object content = part.getContent();
+			
+			if (content instanceof MimePart)
 			{
-				// There should only be one
-				Long attachmentId = Long.parseLong(headers[0]);
-
 				if (log.isDebugEnabled())
-					log.debug("Reattaching attachment " + attachmentId + " for type " + part.getContentType());
+					log.debug("Content " + contentType + " is part, probably a message");
 				
-				
-				try
-				{
-					Attachment att = this.dao.findAttachment(attachmentId);
-					
-					part.removeHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
-					part.setDataHandler(
-							new DataHandler(
-									new TrivialDataSource(
-											att.getContentStream(),
-											att.getContentType())));
-				}
-				catch (NotFoundException ex)
-				{
-					// Log an error and otherwise leave the mime part as-is.
-					if (log.isErrorEnabled())
-						log.error("Missing referenced attachment " + attachmentId);
-				}
+				this.attach((MimePart)content);
+			}
+			else
+			{
+				if (log.isDebugEnabled())
+					log.debug("Ignoring part of type " + contentType);
 			}
 		}
 	}

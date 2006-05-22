@@ -106,6 +106,9 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 			Address destination = new InternetAddress(emailAddress.getId());
 			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
 			
+			if (log.isDebugEnabled())
+				log.debug("Delivering msg of contentType " + msg.getContentType());
+			
 			// Add an X-Loop header to prevent mail loops, the other
 			// end is tested on injection.
 			msg.addXLoop(mail.getList().getEmail());

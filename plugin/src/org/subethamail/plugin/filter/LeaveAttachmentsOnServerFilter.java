@@ -55,7 +55,7 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 	 */
 	public String getName()
 	{
-		return "Leave attachments on server";
+		return "Leave Attachments on Server";
 	}
 
 	/*
@@ -65,7 +65,7 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 	 */
 	public String getDescription()
 	{
-		return "Send out links to the attachments instead of including them.";
+		return "Replace attachments in messages with a URL to a download page in the archives.";
 	}
 
 	/**
@@ -74,48 +74,30 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 	@Override
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws MessagingException
 	{
-
 		try
 		{
-			for (Part p : msg.getParts())
+			for (Part part: msg.getParts())
 			{
-				Long id = null;
-				// Look for special header which means we must reattach.
-				String[] idHeader = p.getHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
-				if (idHeader != null && idHeader.length > 0) id = Long.parseLong(idHeader[0]);
-
-				if (id != null)
+				if (part.getContentType().startsWith(SubEthaMessage.DETACHMENT_MIME_TYPE))
 				{
-					String contentType = "";
-					try
-					{
-						contentType = archiver.getAttachmentContentType(id);
-					}
-					catch (PermissionException pex)
-					{
-						// do nothing
-					}
-					catch (NotFoundException nfex)
-					{
-						// do nothing
-					}
-
+					Long id = (Long)part.getContent();
+					String contentType = part.getHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE)[0];
+					
 					String name = MailUtils.getNameFromContentType(contentType);
-					p.setText("<a href=\"" + ctx.getList().getUrlBase() + "attachment/" + id + "/"
-							+ name + "\"> download " + name + "</a>");
-				}
-				else
-				{
-					p.setText("Attachment not found!");
+					part.setText(
+							"<a href=\"" + ctx.getList().getUrlBase() + "attachment/"
+							+ id + "/" + name + "\"> download " + name + "</a>");
 				}
 
-				p.removeHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
+				part.removeHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE);
 			}
+			
 			msg.save();
 		}
 		catch (IOException ioex)
 		{
-			if (log.isDebugEnabled()) log.debug("Error getting message parts" + ioex);
+			if (log.isDebugEnabled())
+				log.debug("Error getting message parts", ioex);
 		}
 	}
 }

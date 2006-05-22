@@ -130,8 +130,11 @@ public class Mail implements Serializable, Comparable
 	@Column(nullable=false, length=Validator.MAX_MAIL_SUBJECT)
 	String subject;
 	
-	/** rfc222-style, taken from the msg From: header */
-	@Email
+	/**
+	 * rfc222-style, taken from the msg From: header
+	 * Don't try to use hibernate email validator, it doesn't understand
+	 * the rfc222 style with personal names. 
+	 */
 	@Column(name="fromField", nullable=true, length=Validator.MAX_MAIL_FROM)
 	String from;
 	

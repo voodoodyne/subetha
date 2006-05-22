@@ -31,7 +31,7 @@ request.setAttribute("exceptions", exceptions);
 
 %>
 
-<trim:plain title="Ooopppsss....">
+<trim:plain title="Something Bad Happened">
 
 	<h1>Exception Info:</h1>
 	
@@ -40,13 +40,12 @@ request.setAttribute("exceptions", exceptions);
 			<div class="exception">
 				<h2><c:out value="${ex}"/> </h2>
 				
-				<span class="stackElements">
-					<span class="stackElement" style="text-size:smaller">
-						<c:forEach var="stackElement" items="${ex.stackTrace}" >
-							<c:out value="${stackElement}"/>
-						</c:forEach>
-					<span>
-				</span>
+				<div class="stackElements">
+					<div class="stackElement">
+<pre><c:forEach var="stackElement" items="${ex.stackTrace}" >    <c:out value="${stackElement}"/>
+</c:forEach></pre>
+					</div>
+				</div>
 			</div>
 		</c:forEach>
 	</div>

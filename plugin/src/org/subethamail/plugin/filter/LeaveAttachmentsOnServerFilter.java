@@ -28,26 +28,29 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
 
 /**
- * This filter removes all attachments greater than a certain size
- * immediately upon message injection.  The attachments are never
- * stored.  The attachment can optionally be replaced with a message
- * indicating what action was taken.  
+ * This filter removes all attachments greater than a certain size immediately
+ * upon message injection. The attachments are never stored. The attachment can
+ * optionally be replaced with a message indicating what action was taken.
  * 
  * @author Scott Hernandez
  */
+
 @Service
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
+// TODO: remove the implements clause when
+// http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lifecycle
-//TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {
 	/** */
 	private static Log log = LogFactory.getLog(LeaveAttachmentsOnServerFilter.class);
-	
-	@EJB Archiver archiver;
-	
+
+	@EJB
+	Archiver archiver;
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.subethamail.core.plugin.i.Filter#getName()
 	 */
 	public String getName()
@@ -57,48 +60,49 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.subethamail.core.plugin.i.Filter#getDescription()
 	 */
 	public String getDescription()
 	{
 		return "Send out links to the attachments instead of including them.";
 	}
-	
+
 	/**
 	 * @see Filter#onSend(SubEthaMessage, FilterContext)
 	 */
 	@Override
-	public void onSend(SubEthaMessage msg, SendFilterContext ctx)
-		throws MessagingException
+	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws MessagingException
 	{
 
-		try 
+		try
 		{
 			for (Part p : msg.getParts())
 			{
 				Long id = null;
 				// Look for special header which means we must reattach.
 				String[] idHeader = p.getHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
-				if (idHeader != null && idHeader.length > 0) 
-					id = Long.parseLong(idHeader[0]);
-				
-				String contentType = null;
-				try 
-				{
-					contentType = archiver.getAttachmentContentType(id);
-				}
-				catch (PermissionException pex)
-				{
-					//do nothing
-				}
-				catch (NotFoundException nfex)
-				{
-					//do nothing
-				}
-				
+				if (idHeader != null && idHeader.length > 0) id = Long.parseLong(idHeader[0]);
+
 				if (id != null)
 				{
-					p.setText("<a href=\"" + ctx.getList().getUrlBase() + "attachement/" + id +  "\"> download attachement "  + id + "/" + MailUtils.getNameFromContentType(contentType) +   "</a>");
+					String contentType = "";
+					try
+					{
+						contentType = archiver.getAttachmentContentType(id);
+					}
+					catch (PermissionException pex)
+					{
+						// do nothing
+					}
+					catch (NotFoundException nfex)
+					{
+						// do nothing
+					}
+
+					String name = MailUtils.getNameFromContentType(contentType);
+					p.setText("<a href=\"" + ctx.getList().getUrlBase() + "attachment/" + id + "/"
+							+ name + "\"> download " + name + "</a>");
 				}
 				else
 				{
@@ -107,12 +111,11 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 
 				p.removeHeader(SubEthaMessage.HDR_ATTACHMENT_REF);
 			}
-		msg.save();
+			msg.save();
 		}
 		catch (IOException ioex)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Error getting message parts" + ioex);					
+			if (log.isDebugEnabled()) log.debug("Error getting message parts" + ioex);
 		}
 	}
 }

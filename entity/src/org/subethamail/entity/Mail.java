@@ -217,7 +217,7 @@ public class Mail implements Serializable, Comparable
 		this.messageId = msg.getMessageID();
 		
 		Address[] froms = msg.getFrom();
-		if (froms != null && froms.length > 1)
+		if (froms != null && froms.length > 0)
 			this.from = froms[0].toString();
 		
 		this.setEnvelopeSender(envelopeSender.getAddress());

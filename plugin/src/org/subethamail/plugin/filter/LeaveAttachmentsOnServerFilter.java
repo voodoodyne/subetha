@@ -84,9 +84,9 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 					String contentType = part.getHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE)[0];
 					
 					String name = MailUtils.getNameFromContentType(contentType);
-					part.setText(
-							"<a href=\"" + ctx.getList().getUrlBase() + "attachment/"
-							+ id + "/" + name + "\"> download " + name + "</a>");
+					String attachmentUrl = ctx.getList().getUrlBase() + "attachment/" + id + "/" + name ;
+					part.setText("This attachment was left behind at the server: " + attachmentUrl +
+							"  <a href=\"" + attachmentUrl + "\">Download " + name + "</a>");
 				}
 
 				part.removeHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE);

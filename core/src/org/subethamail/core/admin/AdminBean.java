@@ -573,8 +573,10 @@ public class AdminBean implements Admin, AdminRemote
 		return new SiteStatus(
 				System.getProperty("file.encoding"),
 				this.countLists(),
+				this.dao.countPerson(),
+				this.dao.countMail(),
 				siteUrl,
-				sitePostmaster
+				sitePostmaster				
 			);
 	}
 	

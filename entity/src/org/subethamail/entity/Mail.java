@@ -90,6 +90,14 @@ import org.subethamail.common.valid.Validator;
 		query="select m from Mail m, EmailAddress email where email.person.id = :personId and email.id = m.envelopeSender and m.hold = 'SOFT'",
 		hints={
 		}
+	),
+	@NamedQuery(
+			name="CountMail", 
+			query="select count(*) from Mail",
+			hints={
+				@QueryHint(name="org.hibernate.readOnly", value="true"),
+				@QueryHint(name="org.hibernate.cacheable", value="true")
+			}
 	)
 })
 @Entity

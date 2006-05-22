@@ -193,7 +193,17 @@ public interface DAO
 	 * @return the total number of lists on this server based on the string query
 	 */
 	public int countLists(String query);
-	
+
+	/**
+	 * @return the total number of mail's on the server.
+	 */
+	public int countMail();
+
+	/**
+	 * @return the total number of Person's on this server.
+	 */
+	public int countPerson();
+
 	/**
 	 * @return the number of subscribers on a list
 	 */

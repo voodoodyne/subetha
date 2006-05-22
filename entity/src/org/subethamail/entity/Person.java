@@ -45,6 +45,14 @@ import org.subethamail.common.valid.Validator;
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")
 		}
+	),
+	@NamedQuery(
+			name="CountPeople", 
+			query="select count(*) from Person",
+			hints={
+				@QueryHint(name="org.hibernate.readOnly", value="true"),
+				@QueryHint(name="org.hibernate.cacheable", value="true")
+			}
 	)
 })
 @Entity

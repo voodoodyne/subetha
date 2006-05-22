@@ -10,10 +10,8 @@
 	<ul>
 		<li>System Encoding (file.encoding):<strong> <c:out value="${siteStatus.defaultCharset}"/></strong></li>
 		<li>Number of lists: <strong><c:out value="${siteStatus.listCount}"/></strong></li>
-		<li>Number of accounts</li>
-		<li>Nubmer of email messages archived</li>
-		<li>Some information about the cluster which we can get
-			from the JMX systems</li>	
+		<li>Number of accounts: <strong><c:out value="${siteStatus.personCount}"/></strong></li>
+		<li>Nubmer of email messages archived: <strong><c:out value="${siteStatus.mailCount}"/></strong></li>
 	</ul>
 	
 	<h3>Site Config</h3>

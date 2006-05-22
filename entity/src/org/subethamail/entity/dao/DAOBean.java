@@ -463,6 +463,30 @@ public class DAOBean implements DAO
 		return n.intValue();
 	}
 
+	public int countMail()
+	{
+		if (log.isDebugEnabled())
+			log.debug("Counting all mail");
+
+		Query q = this.em.createNamedQuery("CountMail");
+		Number n = (Number) q.getSingleResult();
+		return n.intValue();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#countPeople()
+	 */
+	public int countPerson()
+	{
+		if (log.isDebugEnabled())
+			log.debug("Counting all people");
+
+		Query q = this.em.createNamedQuery("CountPeople");
+		Number n = (Number) q.getSingleResult();
+		return n.intValue();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.entity.dao.DAO#countSubscribers(java.lang.Long, java.lang.String)

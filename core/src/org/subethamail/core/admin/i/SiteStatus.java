@@ -21,16 +21,21 @@ public class SiteStatus implements Serializable
 	/** */
 	String defaultCharset;
 	int listCount;
+	int personCount;
+	int mailCount;
 	
 	/** Some site config params */
 	URL defaultSiteUrl;
 	InternetAddress postmasterEmail;
 	
 	/** */
-	public SiteStatus(String encoding, int listCount, URL defaultSiteUrl, InternetAddress postmasterEmail)
+	public SiteStatus(String encoding, int listCount, int personCount, int mailCount,
+						URL defaultSiteUrl, InternetAddress postmasterEmail)
 	{
 		this.defaultCharset = encoding;
 		this.listCount = listCount;
+		this.personCount = personCount;
+		this.mailCount = mailCount;
 		
 		this.defaultSiteUrl = defaultSiteUrl;
 		this.postmasterEmail = postmasterEmail;
@@ -46,6 +51,18 @@ public class SiteStatus implements Serializable
 	public int getListCount()
 	{
 		return this.listCount;
+	}
+
+	/** */
+	public int getPersonCount()
+	{
+		return this.personCount;
+	}
+
+	/** */
+	public int getMailCount()
+	{
+		return this.mailCount;
 	}
 
 	/** */

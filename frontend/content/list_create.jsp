@@ -34,7 +34,7 @@
 			</c:if></td>
 		</tr>
 		<tr>
-			<th><label for="address">List Address</label></th>
+			<th><label for="email">List Address</label></th>
 			<td
 				<c:if test="${!empty model.errors.email}">
 						class="error"

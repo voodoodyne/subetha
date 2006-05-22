@@ -168,10 +168,21 @@ public interface Admin
 	 * @return some useful administrative information about the site
 	 */
 	public SiteStatus getSiteStatus();
-
+	
+	/**
+	 * Sets the default site url.
+	 */
+	public void setDefaultSiteUrl(URL url);
+	
+	/**
+	 * Sets the address of the site postmaster.
+	 */
+	public void setPostmaster(InternetAddress address);
+	
 	/**
 	 * Gets the site wide configuration data.
 	 */
+	@Deprecated
 	public List<ConfigData> getSiteConfig();
 
 	/**
@@ -184,5 +195,6 @@ public interface Admin
 	 * 
 	 * @param configData
 	 */
+	@Deprecated
 	public void saveConfig(ConfigData configData);
 }

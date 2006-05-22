@@ -567,10 +567,33 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public SiteStatus getSiteStatus()
 	{
+		// TODO
 		return new SiteStatus(
 				System.getProperty("file.encoding"),
-				this.countLists()
+				this.countLists(),
+				null,
+				null
 			);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#setDefaultSiteUrl(java.net.URL)
+	 */
+	public void setDefaultSiteUrl(URL url)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#setPostmaster(javax.mail.internet.InternetAddress)
+	 */
+	public void setPostmaster(InternetAddress address)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/*

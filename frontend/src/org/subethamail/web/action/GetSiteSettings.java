@@ -28,6 +28,7 @@ public class GetSiteSettings extends AuthAction
 	{
 		/** */
 		@Property List<ConfigData> configData;
+		@Property String siteUrl;
 	}
 
 	public void initialize()
@@ -41,5 +42,15 @@ public class GetSiteSettings extends AuthAction
 		Model model = (Model)this.getCtx().getModel();
 		
 		model.configData = Backend.instance().getAdmin().getSiteConfig();
+		
+		for (ConfigData cd : model.configData)
+		{
+			//TODO: don't use this string here, use the key when it is accessible.
+			if(cd.getId().equals("siteUrl"))
+			{
+				model.siteUrl = cd.getValue().toString();
+				break;
+			}
+		}
 	}
 }

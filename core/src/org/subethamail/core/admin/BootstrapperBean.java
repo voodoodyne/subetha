@@ -52,7 +52,7 @@ public class BootstrapperBean implements BootstrapperManagement
 	private static final String DEFAULT_NAME = "Administrator";
 	private static final String DEFAULT_PASSWORD = "password";
 	
-	private static final String DEFAULT_SITE_POSTMASTER = "postmaster@localhost";
+	private static final String DEFAULT_SITE_POSTMASTER = "\"Please Change\" <postmaster@nowhere>";
 	private static final String DEFAULT_SITE_URL = "{Needs Configuration - Alert SubEtha Administrator}";
 	
 	private static final Integer VERSION_ID = 1;

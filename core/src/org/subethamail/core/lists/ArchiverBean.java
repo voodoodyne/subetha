@@ -28,6 +28,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
 import org.subethamail.common.PermissionException;
@@ -223,14 +224,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 				String name = part.getFileName();
 				if (name == null || name.equals(""))
 				{
-					int namestart = contentType.indexOf("name=");
-					if(namestart > 0)
-					{
-						//add the number of chars in 'name="'
-						namestart += 6;
-						int endnamevalue = contentType.indexOf("\"", namestart);
-						name = contentType.substring(namestart, endnamevalue);
-					}
+					name = MailUtils.getNameFromContentType(contentType);
 				}
 				
 				// not an attachment cause it isn't stored as a detached part.

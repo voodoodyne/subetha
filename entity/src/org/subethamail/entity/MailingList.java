@@ -36,6 +36,7 @@ import org.hibernate.annotations.SortType;
 import org.hibernate.validator.Email;
 import org.subethamail.common.Permission;
 import org.subethamail.common.PermissionException;
+import org.subethamail.common.SiteUtils;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -409,12 +410,10 @@ public class MailingList implements Serializable, Comparable
 	 */
 	public String getUrlBase()
 	{
-		//TODO:  make this a constant somewhere
-		
-		int pos = this.url.indexOf("/se/list/");
-		if (pos < 0)
+		if (!SiteUtils.isValidListUrl(this.url))
 			throw new IllegalStateException("Malformed list url");
 		
+		int pos = this.url.indexOf(SiteUtils.URL_PATH_LIST);		
 		return this.url.substring(0, pos + "/se/".length()); 
 	}
 	

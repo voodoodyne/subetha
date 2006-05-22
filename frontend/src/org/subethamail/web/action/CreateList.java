@@ -12,6 +12,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
+import org.subethamail.common.SiteUtils;
 import org.subethamail.common.valid.Validator;
 import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
@@ -76,6 +77,9 @@ public class CreateList extends AuthRequired
 		
 		// Check the URL
 		URL url = null;
+		
+		if(!SiteUtils.isValidListUrl(model.url)) model.setError("url", "Invalid list url!");
+		
 		try
 		{
 			url = new URL(model.url);

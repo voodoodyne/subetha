@@ -6,6 +6,8 @@
 package org.subethamail.core.admin;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
@@ -52,8 +54,25 @@ public class BootstrapperBean implements BootstrapperManagement
 	private static final String DEFAULT_NAME = "Administrator";
 	private static final String DEFAULT_PASSWORD = "password";
 	
-	private static final String DEFAULT_SITE_POSTMASTER = "\"Please Change\" <postmaster@nowhere>";
-	private static final String DEFAULT_SITE_URL = "{Needs Configuration - Alert SubEtha Administrator}";
+	private static final InternetAddress DEFAULT_SITE_POSTMASTER;
+	static
+	{
+		try
+		{
+			DEFAULT_SITE_POSTMASTER = new InternetAddress("postmaster@needsconfiguration", "Needs Configuration");
+		}
+		catch (UnsupportedEncodingException ex) { throw new RuntimeException(ex); }
+	}
+	
+	private static final URL DEFAULT_SITE_URL;
+	static
+	{
+		try
+		{
+			DEFAULT_SITE_URL = new URL("http://needsconfiguration/se/");
+		}
+		catch (MalformedURLException ex) { throw new RuntimeException(ex); }
+	}
 	
 	private static final Integer VERSION_ID = 1;
 	

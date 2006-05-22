@@ -1,6 +1,7 @@
 <%@include file="/inc/top_standard.jspf"%>
 
 <t:action type="org.subethamail.web.action.auth.AuthRequired" />
+<t:action var="siteSettings" type="org.subethamail.web.action.GetSiteSettings" />
 
 <trim:main title="Create List">
 	<h1>Create List</h1>
@@ -53,7 +54,15 @@
 				<c:if test="${!empty model.errors.url}">
 						class="error"
 					</c:if>>
-			<input id="url" name="url" type="text" size="60" value="${model.url}" />
+			
+			<c:if test="${!empty model.url}">		
+				<input id="url" name="url" type="text" size="60" value="${model.url}" />
+			</c:if>
+			
+			<c:if test="${empty model.url}">		
+				<input id="url" name="url" type="text" size="60" value="${siteSettings.siteUrl}list/" />
+			</c:if>
+			
 			<div>Example: http://somedomain.com<strong>/se/list/</strong>announce</div>
 			<div>The URL <strong>must</strong> contain /se/list/ after the
 			domain</div>

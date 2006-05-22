@@ -7,7 +7,7 @@
 <trim:main title="All Lists">
 	<h1>All Lists</h1>
 
-	<form action="<c:url value="/lists_search.jsp"/>" method="get" style="display:inline">
+	<form action="<c:url value="/lists.jsp"/>" method="get" style="display:inline">
 		<input type="text" name="query" value="<c:out value="${param.query}" />" />
 		<input type="submit" value="Search" />
 	</form>

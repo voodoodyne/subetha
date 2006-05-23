@@ -81,6 +81,11 @@ div.error,p.error {
 	
 }
 
+pre.message {
+ padding-left: 1em;
+ font-size: 1.4em;
+}
+
 table.permissions {
 	text-align: center;
 	margin-bottom: 5px;

@@ -47,30 +47,32 @@
 			</tr>
 		</table>
 		<input type="submit" value="Save" />
-		</fieldset>
 	</form>
 	<form action="<c:url value="/roles.jsp"/>" method="post" class="form-inline">
 		<input type="hidden" name="listId" value="${model.listId}" />
 		<input type="submit" value="Cancel" />
 	</form>
+	</fieldset>
 
-	<h3>Delete Role</h3>
+	<fieldset>
+	<legend>Delete Role</legend>
 
-	<form action="<c:url value="/role_delete.jsp"/>" method="post">
-		<input type="hidden" name="deleteRoleId" value="${model.roleId}" />
-		<p>
-			<input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this role?');" />
-			this role, converting any participating subscribers to
-			
-			<select name="convertToRoleId">
-				<c:forEach var="convertRole" items="${list.roles}">
-					<c:if test="${convertRole.id != model.roleId}">
-						<option value="<c:out value="${convertRole.id}"/>">
-							<c:out value="${convertRole.name}"/>
-						</option>
-					</c:if>
-				</c:forEach>
-			</select>
-		</p>
-	</form>
+		<form action="<c:url value="/role_delete.jsp"/>" method="post">
+			<input type="hidden" name="deleteRoleId" value="${model.roleId}" />
+			<p>
+				<input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this role?');" />
+				this role, converting any participating subscribers to
+				
+				<select name="convertToRoleId">
+					<c:forEach var="convertRole" items="${list.roles}">
+						<c:if test="${convertRole.id != model.roleId}">
+							<option value="<c:out value="${convertRole.id}"/>">
+								<c:out value="${convertRole.name}"/>
+							</option>
+						</c:if>
+					</c:forEach>
+				</select>
+			</p>
+		</form>
+	</fieldset>
 </trim:list>

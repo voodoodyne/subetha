@@ -2,10 +2,14 @@
 
 <t:action var="model" type="org.subethamail.web.action.GetListSettings" />
 
-<trim:list title="Settings" listId="${param.listId}">
+<trim:list title="List Settings" listId="${param.listId}">
 
 	<form action="<c:url value="/list_settings_submit.jsp"/>" method="post">
 		<input type="hidden" name="listId" value="${param.listId}" />
+
+	<fieldset>
+		<legend>General Settings</legend>
+		
 		<table>
 			<tr>
 				<th><label for="name">Short Name</label></th>
@@ -45,44 +49,49 @@
 					Subscriptions must be approved by moderators
 				</td>
 			</tr>
-			<c:if test="${auth.siteAdmin}">
-				<tr class="b">
-					<td colspan="2" align="center">Site Administrators Only</td>
-				</tr>
-				<tr class="a">
-					<th><label for="email">List Address</label></th>
-					<td
-						<c:if test="${!empty model.errors.email}">
-							class="error"
-						</c:if>
-					>
-						<input id="email" name="email" type="text" size="60" value="${model.email}" />
-						<div>Example:  announce@somedomain.com</div>
-						<div id="email-error" style="color: red"></div>
-	
-						<c:if test="${!empty model.errors.email}">
-							<p class="error"><c:out value="${model.errors.email}"/></p>
-						</c:if>
-					</td>
-				</tr>
-				<tr class="a">
-					<th><label for="url">List URL</label></th>
-					<td
-						<c:if test="${!empty model.errors.url}">
-							class="error"
-						</c:if>
-					>
-						<input id="url" name="url" type="text" size="60" value="${model.url}" />
-						<div>Example:  http://somedomain.com<strong>/se/list/</strong>announce</div>
-						<div>The URL <strong>must</strong> contain /se/list/ after the domain</div>
-	
-						<c:if test="${!empty model.errors.url}">
-							<p class="error"><c:out value="${model.errors.url}"/></p>
-						</c:if>
-					</td>
-				</tr>
-			</c:if>
 		</table>
+		</fieldset>
+
+		<c:if test="${auth.siteAdmin}">
+		<fieldset>
+		<legend>Site Administrators Only</legend>
+		<table>
+			<tr>
+				<th><label for="email">List Address</label></th>
+				<td
+					<c:if test="${!empty model.errors.email}">
+						class="error"
+					</c:if>
+				>
+					<input id="email" name="email" type="text" size="60" value="${model.email}" />
+					<div>Example:  announce@somedomain.com</div>
+					<div id="email-error" style="color: red"></div>
+
+					<c:if test="${!empty model.errors.email}">
+						<p class="error"><c:out value="${model.errors.email}"/></p>
+					</c:if>
+				</td>
+			</tr>
+			<tr>
+				<th><label for="url">List URL</label></th>
+				<td
+					<c:if test="${!empty model.errors.url}">
+						class="error"
+					</c:if>
+				>
+					<input id="url" name="url" type="text" size="60" value="${model.url}" />
+					<div>Example:  http://somedomain.com<strong>/se/list/</strong>announce</div>
+					<div>The URL <strong>must</strong> contain /se/list/ after the domain</div>
+
+					<c:if test="${!empty model.errors.url}">
+						<p class="error"><c:out value="${model.errors.url}"/></p>
+					</c:if>
+				</td>
+			</tr>
+		</table>
+		</fieldset>
+		</c:if>
+
 		<input type="submit" value="Save" />
 	</form>
 

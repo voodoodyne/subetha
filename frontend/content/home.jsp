@@ -16,9 +16,8 @@
 	</c:otherwise>
 </c:choose>
 
-	<p>
-		<strong>Your name:</strong>
-	</p>
+	<fieldset>
+		<legend>Your name</legend>
 
 	<form action="<c:url value="/user_changename.jsp"/>" method="post">
 		<table>
@@ -38,11 +37,12 @@
 			</tr>
 		</table>
 	</form>
-	
-	<p>
-		<strong>Your email addresses:</strong>
-	</p>
-	
+
+	</fieldset>
+
+	<fieldset>
+		<legend>Your email addresses</legend>
+
 	<table class="sort-table" id="emails-table">
 		<thead>
 			<tr>
@@ -94,10 +94,10 @@
 	var st = new SortableTable(document.getElementById("emails-table"), ["None", "None"]);
 	st.onsort = st.tableRowColors;
 	</script>
-	
-	<p>
-		<strong>Your subscriptions:</strong>
-	</p>
+	</fieldset>
+		
+	<fieldset>
+		<legend>Your subscriptions</legend>
 	
 	<c:choose>
 		<c:when test="${empty me.subscriptions}">
@@ -158,7 +158,9 @@
 var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String", "None", "None"]);
 st1.onsort = st1.tableRowColors;
 </script>
-
+		
 		</c:otherwise>
 	</c:choose>
+	</fieldset>
+
 </trim:main>

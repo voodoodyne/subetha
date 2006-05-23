@@ -48,16 +48,13 @@
 				</select>
 				<input type="submit" value="Subscribe" />
 			</form>
-			<p>
-				Maybe the interface should allow them to subscribe an additional
-				email address too?  It would automatically add the address to the
-				current account.
-			</p>
 		</c:when>
 		<c:otherwise>
 			<p>
 				If you are already subscribed, you may log in to be presented
-				with additional options.  Use the form at the top of the page.
+				with additional options. Use the form at the top of the page. 
+				Otherwise, please enter your name and email address below to
+				subscribe to the list.
 			</p>
 			<form action="<c:url value="/subscribe_anon.jsp"/>" method="post">
 				<input type="hidden" name="listId" value="${sub.list.id}" />

@@ -1,9 +1,9 @@
 <%@include file="/inc/top_standard.jspf" %>
 
 <trim:list title="Mass Subscribe" listId="${param.listId}">
-	<p>
-		Enter a list of email addresses.
-	</p>
+
+	<fieldset>
+	<legend>Enter a list of email addresses</legend>
 
 	<form action="<c:url value="/subscribe_mass_submit.jsp"/>" method="post">
 		<input type="hidden" name="listId" value="${param.listId}" />
@@ -40,5 +40,6 @@
 		</table>
 		<input type="submit" value="Subscribe" />
 	</form>
+	</fieldset>
 
 </trim:list>

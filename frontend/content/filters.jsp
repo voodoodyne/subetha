@@ -3,7 +3,8 @@
 <t:action var="filters" type="org.subethamail.web.action.GetFilters" />
 
 <trim:list title="Filters" listId="${param.listId}">
-	<h3>Available Filters</h3>
+	<fieldset>
+	<legend>Available Filters</legend>
 	
 	<table>
 		<c:forEach var="filter" items="${filters.available}">
@@ -20,9 +21,10 @@
 			</tr>
 		</c:forEach>
 	</table>
-	
-	
-	<h3>Enabled Filters</h3>
+	</fieldset>
+
+	<fieldset>
+	<legend>Enabled Filters</legend>
 
 	<c:if test="${empty filters.enabled}">
 		<p>
@@ -77,7 +79,8 @@
 				</tr>
 			</c:forEach>
 		</table>
-
 	</c:if>
+	</fieldset>
+
 
 </trim:list>

@@ -457,6 +457,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		
 		// Intermission - we can now set the mail's parent and wantedReference
 		mail.setParent(parent);
+		parent.getReplies().add(mail);
 		mail.setWantedReference(wantedReference);
 		
 		//

@@ -5,6 +5,9 @@
 
 package org.subethamail.plugin.filter;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 
@@ -37,7 +40,8 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 	private static Log log = LogFactory.getLog(SubjectFilter.class);
 
 	public static final String ARG_SUBJECTPREFIX = "Subject";
-
+	public static final Pattern pattern = Pattern.compile("((RE|AW|SV)(\\[\\d+\\])*:\\s*)+", Pattern.CASE_INSENSITIVE);
+	
 	/** */
 	static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
 		new FilterParameterImpl(
@@ -89,17 +93,26 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 		// get the parameter arguments
 		String subjectArg = (String) ctx.getArgument(ARG_SUBJECTPREFIX);
 
-		// get the subject for the message
-		String subjectMsg = msg.getSubject();
-
 		// do the expansion on the subjectArg
 		String expandedSubjectArg = ctx.expand(subjectArg);
+
+		// get the subject for the message
+		String subjectMsg = msg.getSubject();
 
 		// find any existing expandedSubjectArg's in the subjectMsg and remove them
 		subjectMsg = subjectMsg.replace(expandedSubjectArg, "");
 
-		// append the prefix
-		subjectMsg = expandedSubjectArg + subjectMsg;
+		// remove all duplicate Re: stuff.
+		Matcher matcher = pattern.matcher(subjectMsg);
+		if (matcher.find())
+		{
+			subjectMsg = subjectMsg.substring(matcher.end());
+			subjectMsg = "Re: " + expandedSubjectArg + subjectMsg;
+		}
+		else
+		{
+			subjectMsg = expandedSubjectArg + subjectMsg;
+		}
 		
 		// set the subject on the message
 		msg.setSubject(subjectMsg);

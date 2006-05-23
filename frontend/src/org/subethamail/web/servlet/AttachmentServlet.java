@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.PermissionException;
 import org.subethamail.core.lists.i.Archiver;
@@ -49,7 +50,10 @@ public class AttachmentServlet extends HttpServlet
 		
 		try
 		{
-			response.setContentType(Backend.instance().getArchiver().getAttachmentContentType(attachmentId));
+			String contentType = Backend.instance().getArchiver().getAttachmentContentType(attachmentId);
+			String name = MailUtils.getNameFromContentType(contentType);
+			response.setContentType(contentType);
+			response.setHeader("Content-Disposition", " attachment; filename=\"" + name + "\"");
 			Backend.instance().getArchiver().writeAttachment(attachmentId, response.getOutputStream());
 		}
 		catch (PermissionException pex)

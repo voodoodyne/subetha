@@ -456,8 +456,12 @@ public class InjectorBean implements Injector, InjectorRemote
 			log.debug("Found thread ancestor " + parent);
 		
 		// Intermission - we can now set the mail's parent and wantedReference
-		mail.setParent(parent);
-		parent.getReplies().add(mail);
+		if (parent != null)
+		{
+			mail.setParent(parent);
+			parent.getReplies().add(mail);
+		}
+		
 		mail.setWantedReference(wantedReference);
 		
 		//

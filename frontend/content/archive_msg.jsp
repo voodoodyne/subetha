@@ -15,16 +15,26 @@
 			<td>
 			<c:if test="${auth.loggedIn}">
 				<form action="<c:url value="/archive_msg_resend.jsp"/>" method="post" style="display:inline">
-					<fieldset><legend>Send Mail</legend>
-					<label for="email"><span style="font-size:smaller">Send this message to: </span></label>
-					
 					<input type="hidden" name="msgId" value="${msg.id}" />
-					<select name="email">
-						<c:forEach var="email" items="${backend.accountMgr.self.emailAddresses}" varStatus="loop">
-							<option value="<c:out value="${email}"/>"><c:out value="${email}"/></option>
-						</c:forEach>
-					</select>
-					<input type="submit" value="Send" />
+					
+					<fieldset><legend>Send Mail</legend>
+						<label for="email"><span style="font-size:smaller">Send this message to: </span></label>
+						
+						<c:set var="emailAddresses" value="${backend.accountMgr.self.emailAddresses}"/>
+						<c:choose>
+							<c:when test="${fn:length(emailAddresses) == 1}">
+								<input type="hidden" name="email" value="${emailAddresses[0]}"/>
+								<strong><c:out value="${emailAddresses[0]}"/></strong>
+							</c:when>
+							<c:otherwise>
+								<select name="email">
+									<c:forEach var="email" items="${emailAddresses}" varStatus="loop">
+										<option value="<c:out value="${email}"/>"><c:out value="${email}"/></option>
+									</c:forEach>
+								</select>
+							</c:otherwise>
+						</c:choose>
+						<input type="submit" value="Send" />
 					</fieldset>
 				</form> 
 			</c:if>

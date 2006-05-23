@@ -24,7 +24,6 @@ import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
-import org.subethamail.core.admin.i.ConfigData;
 import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.core.admin.i.SiteStatus;
@@ -470,9 +469,6 @@ public class AdminBean implements Admin, AdminRemote
 	{
 		MailingList list = this.dao.findMailingList(listId);
 		
-		// This is a little weird but it seems to work around a hibernate bug
-		// that was tickled by doing a query by the new {email|address} prior to setting
-		// that field.  So we avoid doing queries we don't have to.
 		InternetAddress checkAddress = list.getEmail().equals(address.getAddress()) ? null : address;
 		URL checkUrl = list.getUrl().equals(url.toString()) ? null : url;
 		this.checkListAddresses(checkAddress, checkUrl);
@@ -567,16 +563,13 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public SiteStatus getSiteStatus()
 	{
-		URL siteUrl = (URL) this.dao.getConfigValue(Config.ID_SITE_URL);
-		InternetAddress sitePostmaster = (InternetAddress) this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
-
 		return new SiteStatus(
 				System.getProperty("file.encoding"),
 				this.countLists(),
 				this.dao.countPerson(),
 				this.dao.countMail(),
-				siteUrl,
-				sitePostmaster				
+				(URL)this.dao.getConfigValue(Config.ID_SITE_URL),
+				(InternetAddress)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER)				
 			);
 	}
 	
@@ -596,25 +589,5 @@ public class AdminBean implements Admin, AdminRemote
 	public void setPostmaster(InternetAddress address)
 	{
 		this.dao.setConfigValue(Config.ID_SITE_POSTMASTER, address);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.admin.i.Admin#saveConfig(org.subethamail.core.admin.i.ConfigData)
-	 */
-	public void saveConfig(ConfigData configData)
-	{
-		try
-		{
-			Config oldConfig = this.dao.findConfig(configData.getId());
-			oldConfig.setValue(configData.getValue());
-			this.dao.persist(oldConfig);
-			
-		}
-		catch (NotFoundException e)
-		{
-			Config newConfig = new Config(configData.getId(), configData.getValue());
-			this.dao.persist(newConfig);
-		}
 	}
 }

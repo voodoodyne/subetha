@@ -81,7 +81,7 @@ public class ModerationTest extends SubEthaTestCase
 		assertEquals(1, msgs.size());
 		MailHold msg = msgs.iterator().next();
 		assertFalse(msg.isHard());
-		assertEquals(this.pers2.getEmail(), msg.getFrom());
+		assertEquals(this.pers2.getAddress().toString(), msg.getFrom());
 		
 		this.admin.getListMgr().discardHeldMessage(msg.getId());
 	}

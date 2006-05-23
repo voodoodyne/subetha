@@ -7,6 +7,7 @@ package org.subethamail.core.post;
 
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 
 import javax.annotation.EJB;
 import javax.annotation.Resource;
@@ -306,14 +307,14 @@ public class PostOfficeBean implements PostOffice
 		
 		if (me.getSubscriptions().isEmpty())
 		{
-			String url = (String)this.dao.getConfigValue(Config.ID_SITE_URL);
-			vctx.put("url", url);
+			URL url = (URL)this.dao.getConfigValue(Config.ID_SITE_URL);
+			vctx.put("url", url.toString());
 			
 			MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
 			builder.setTo(email);
 			
-			String postmaster = (String)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
-			builder.setFrom(postmaster);
+			InternetAddress postmaster = (InternetAddress)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
+			builder.setFrom(postmaster.toString());
 			
 			builder.send();
 		}

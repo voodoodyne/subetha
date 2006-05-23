@@ -214,7 +214,7 @@ public class MailingList implements Serializable, Comparable
 		this.setDescription(description);
 		
 		// Make sure collections start empty
-		this.subscriptions = new TreeSet<Subscription>();
+		this.subscriptions = new TreeSet<Subscription>(new SubscriptionComparator());
 		this.enabledFilters = new HashMap<String, EnabledFilter>();
 		this.roles = new HashSet<Role>();
 		this.subscriptionHolds = new HashSet<SubscriptionHold>();

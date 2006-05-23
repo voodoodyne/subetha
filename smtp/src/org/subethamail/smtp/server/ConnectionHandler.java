@@ -107,6 +107,16 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		}
 		catch (IOException e1)
 		{
+			try
+			{
+				// primarily if things fail during the MessageListener.deliver(), then try
+				// to send a temporary failure back so that the server will try to resend 
+				// the message later.
+				this.sendResponse("450 Problem attempting to execute commands. Please try again later.");
+			}
+			catch (IOException e)
+			{
+			}
 			if (log.isDebugEnabled())
 				log.debug(e1);
 		}

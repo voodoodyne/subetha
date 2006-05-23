@@ -9,6 +9,10 @@
 
 	<jsp:forward page="/error_permission.jsp" />
 
+<% } else if (ExceptionUtils.causedBy(exception, java.lang.SecurityException.class)) { %>
+
+	<jsp:forward page="/error_jboss_needs_vote.jsp" />
+
 <% } else { %>
 	
 	<jsp:forward page="/error_pretty.jsp">

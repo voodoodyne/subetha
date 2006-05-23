@@ -94,16 +94,37 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		list.setName(name);
 		list.setDescription(description);
 
-		boolean flushHolds = list.isSubscriptionHeld() && !holdSubs;
+		this.setHoldSubscriptions(list, holdSubs);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#setHoldSubscriptions(java.lang.Long, boolean)
+	 */
+	public void setHoldSubscriptions(Long listId, boolean value) throws NotFoundException, PermissionException
+	{
+		MailingList list = this.getListFor(listId, Permission.EDIT_SETTINGS);
 		
-		list.setSubscriptionHeld(holdSubs);
+		this.setHoldSubscriptions(list, value);
+	}
+	
+	/**
+	 * Convenience method.  Consider whether this method should
+	 * flush existing subscription holds. 
+	 */
+	private void setHoldSubscriptions(MailingList list, boolean value)
+	{
+		boolean flushHolds = list.isSubscriptionHeld() && !value;
+		
+		list.setSubscriptionHeld(value);
 		
 		if (flushHolds)
 		{
-			// TODO
+			// Flush all subscription holds?  Maybe it's better just
+			// to leave them in the queue for the administrator.
 		}
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getList(java.lang.Long)
@@ -591,4 +612,5 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		
 		return this.dao.countSubscribers(listId, query);
 	}
+
 }

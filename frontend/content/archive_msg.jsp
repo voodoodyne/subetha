@@ -3,7 +3,7 @@
 <t:action var="msg" type="org.subethamail.web.action.GetMessage" />
 
 
-<trim:list title="${msg.fromName}" listId="${msg.listId}">
+<trim:list title="${msg.subject}" listId="${msg.listId}">
 	<table>
 		<tr>
 			<td>

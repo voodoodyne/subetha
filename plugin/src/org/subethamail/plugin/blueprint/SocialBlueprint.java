@@ -62,6 +62,8 @@ public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
 	{
 		try
 		{
+			listMgr.setHoldSubscriptions(listId, true);
+			
 			// Subscriber
 			Set<Permission> perms = new HashSet<Permission>();
 			perms.add(Permission.POST);

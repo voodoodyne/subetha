@@ -47,6 +47,12 @@ public interface ListMgr
 	public void setList(Long listId, String name, String description, boolean holdSubs) throws NotFoundException, PermissionException;
 	
 	/**
+	 * Changes whether or not a list holds subscriptions
+	 * Requires Permission.EDIT_SETTINGS
+	 */
+	public void setHoldSubscriptions(Long listId, boolean value) throws NotFoundException, PermissionException;
+	
+	/**
 	 * Gets some basic information about a mailing list. 
 	 * No permissions necessary.
 	 */
@@ -218,10 +224,8 @@ public interface ListMgr
 	 */
 	public void unsubscribe(Long listId, Long personId) throws NotFoundException, PermissionException;
 
-	
 	/**
 	 * Sets the role for a person for a list.
-	 * 
 	 * 
 	 * @param listId the mailist list id
 	 * @param personId the person id	

@@ -75,7 +75,6 @@ public class TechnicalBlueprint extends AbstractBlueprint implements Lifecycle
 			// Guest
 			perms = new HashSet<Permission>();
 			perms.add(Permission.READ_ARCHIVES);
-			perms.add(Permission.VIEW_SUBSCRIBERS);
 			roleId = listMgr.addRole(listId, "Guest", perms);
 			listMgr.setAnonymousRole(listId, roleId);
 

@@ -17,8 +17,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.MailUtils;
-import org.subethamail.common.NotFoundException;
-import org.subethamail.common.PermissionException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.plugin.i.Filter;
@@ -85,8 +83,8 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 					
 					String name = MailUtils.getNameFromContentType(contentType);
 					String attachmentUrl = ctx.getList().getUrlBase() + "attachment/" + id + "/" + name ;
-					part.setText("This attachment was left behind at the server: " + attachmentUrl +
-							"  <a href=\"" + attachmentUrl + "\">Download " + name + "</a>");
+					part.setText("This attachment was left behind at the server:\n\n" + attachmentUrl);
+					part.removeHeader(SubEthaMessage.HDR_CONTENT_DISPOSITION);
 				}
 
 				part.removeHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE);

@@ -47,6 +47,7 @@
 			</tr>
 		</table>
 		<input type="submit" value="Save" />
+		</fieldset>
 	</form>
 	<form action="<c:url value="/roles.jsp"/>" method="post" class="form-inline">
 		<input type="hidden" name="listId" value="${model.listId}" />

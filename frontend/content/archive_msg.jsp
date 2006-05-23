@@ -53,20 +53,6 @@
 		</c:forEach>
 	</div>
 
-
-	<c:if test="${!empty msg.inlineParts}">
-		<div class="inlineParts" style="display:hidden">
-			<h3>Inline Parts</h3>
-			<div style="text-size:smaller">These parts are dropped for now. They are things in the message which may not be displayed.</div>
-			<br/>
-			<c:forEach var="part" items="${msg.inlineParts}">
-				<span class="inlinePart">
-					<c:out value="${part}"/>
-				</span>, 
-			</c:forEach>
-		</div>
-	</c:if>
-
 	<c:if test="${!empty msg.attachments}">
 		<div class="attachments">
 			<h3>Attachments</h3>

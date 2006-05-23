@@ -14,7 +14,7 @@
 				</c:when>
 				
 				<c:otherwise>
-					<form action="<c:url value="/login_submit.jsp"/>" method="post" name="loginform">
+					<form action="<c:url value="/login_submit.jsp"/>" method="post" id="loginform">
 						<input type="hidden" name="dest" value="${auth.usefulRequestURI}" />
 						<table>
 							<tr>
@@ -37,7 +37,7 @@
 					</form>
 					<script type="text/javascript">
 					<!--
-					document.loginform.email.focus();
+					document.getElementById('loginform').email.focus();
 					// -->
 					</script>
 				</c:otherwise>

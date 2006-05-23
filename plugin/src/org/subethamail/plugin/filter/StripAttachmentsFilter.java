@@ -84,7 +84,7 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 	 */
 	public String getDescription()
 	{
-		return "Eliminates attachments larger than a certain size.";
+		return "Eliminates attachments larger than a certain size on incoming mail. These attachments will be lost forever.";
 	}
 	
 	/**

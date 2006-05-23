@@ -44,14 +44,14 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		this.server = server;
 		this.socket = socket;
 
-		input = socket.getInputStream();
-		output = socket.getOutputStream();
+		this.startTime = System.currentTimeMillis();
+		this.lastActiveTime = this.startTime;
 		
-		reader = new BufferedReader(new InputStreamReader(input));
-		writer = new PrintWriter(output);
+		this.input = new LastActiveInputStream(socket.getInputStream(), this);
+		this.output = socket.getOutputStream();
 		
-		startTime = System.currentTimeMillis();
-		lastActiveTime = startTime;
+		this.reader = new BufferedReader(new InputStreamReader(this.input));
+		this.writer = new PrintWriter(this.output);
 	}
 	
 	public Session getSession()
@@ -86,13 +86,12 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		if (log.isDebugEnabled())
 			log.debug("SMTP connection count: " + server.getNumberOfConnections());
 
-		session = new Session();
+		this.session = new Session();
 		try
 		{
 			if (this.server.hasTooManyConnections())
 			{
-				if (log.isDebugEnabled())
-					log.debug("SMTP Too many connections!");
+				log.debug("SMTP Too many connections!");
 
 				this.sendResponse("554 Transaction failed. Too many connections.");
 				return;
@@ -102,8 +101,7 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 
 			while (session.isActive())
 			{
-				String command = reader.readLine();
-				this.server.getCommandHandler().handleCommand(this, command);
+				this.server.getCommandHandler().handleCommand(this, this.reader.readLine());
 				lastActiveTime = System.currentTimeMillis();
 			}
 		}
@@ -180,8 +178,8 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		return this.lastActiveTime;
 	}
 
-	public void setLastActiveTime(long lastActiveTime)
+	public void refreshLastActiveTime()
 	{
-		this.lastActiveTime = lastActiveTime;
+		this.lastActiveTime = System.currentTimeMillis();
 	}
 }

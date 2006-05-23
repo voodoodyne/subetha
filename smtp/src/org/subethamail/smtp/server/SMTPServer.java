@@ -56,27 +56,27 @@ public class SMTPServer implements Runnable
 
 	public void start()
 	{
-		if (serverThread != null)
+		if (this.serverThread != null)
 			throw new IllegalStateException("SMTPServer already started");
 
-		serverThread = new Thread(this, SMTPServer.class.getName());
-		serverThread.start();
+		this.serverThread = new Thread(this, SMTPServer.class.getName());
+		this.serverThread.start();
 		
-		watchdogThread = new Watchdog(this);
-		watchdogThread.start();
+		this.watchdogThread = new Watchdog(this);
+		this.watchdogThread.start();
 	}
 
 	public void stop()
 	{
-		go = false;
+		this.go = false;
 		this.serverThread = null;
 		this.watchdogThread = null;
 
 		// force a socket close for good measure
 		try
 		{
-			if (serverSocket != null && serverSocket.isBound() && !serverSocket.isClosed())
-				serverSocket.close();
+			if (this.serverSocket != null && this.serverSocket.isBound() && !this.serverSocket.isClosed())
+				this.serverSocket.close();
 		}
 		catch (IOException e)
 		{
@@ -88,19 +88,19 @@ public class SMTPServer implements Runnable
 		try
 		{
 			if (this.bindAddress == null)
-				serverSocket = new ServerSocket(this.port, 50);
+				this.serverSocket = new ServerSocket(this.port, 50);
 			else
-				serverSocket = new ServerSocket(this.port, 50, this.bindAddress);
+				this.serverSocket = new ServerSocket(this.port, 50, this.bindAddress);
 			
-			connectionHanderGroup = new ThreadGroup(SMTPServer.class.getName() + " ConnectionHandler Group");
+			this.connectionHanderGroup = new ThreadGroup(SMTPServer.class.getName() + " ConnectionHandler Group");
 		}
 		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
 
-		go = true;
-		while (go)
+		this.go = true;
+		while (this.go)
 		{
 			try
 			{
@@ -126,8 +126,8 @@ public class SMTPServer implements Runnable
 
 		try
 		{
-			if (serverSocket != null && serverSocket.isBound() && !serverSocket.isClosed())
-				serverSocket.close();
+			if (this.serverSocket != null && this.serverSocket.isBound() && !this.serverSocket.isClosed())
+				this.serverSocket.close();
 			log.info("SMTP Server socket shut down.");
 		}
 		catch (IOException e)
@@ -138,7 +138,7 @@ public class SMTPServer implements Runnable
 
 	public String getHostName()
 	{
-		return hostName;
+		return this.hostName;
 	}
 
 	public String getVersion()
@@ -158,7 +158,7 @@ public class SMTPServer implements Runnable
 	 */
 	public Map<MessageListener, MessageListener> getListeners()
 	{
-		return listeners;
+		return this.listeners;
 	}
 
 	/**
@@ -192,15 +192,13 @@ public class SMTPServer implements Runnable
 	 * connections don't go stale. It prevents
 	 * someone from opening up MAX_CONNECTIONS to 
 	 * the server and holding onto them for more than
-	 * 1 minute. Note: it is possible to still DoS the
-	 * server by going into data mode and just holding 
-	 * the connection there.
+	 * 1 minute.
 	 */
 	private class Watchdog extends Thread
 	{
 		private SMTPServer server;
 		private Thread[] groupThreads = new Thread[MAX_CONNECTIONS];
-		boolean go = true;
+		private boolean go = true;
 
 		public Watchdog(SMTPServer server)
 		{
@@ -216,7 +214,7 @@ public class SMTPServer implements Runnable
 
 		public void run()
 		{
-			while(go)
+			while (go)
 			{
 				ThreadGroup connectionGroup = this.server.getConnectionGroup();
 				connectionGroup.enumerate(this.groupThreads);
@@ -226,18 +224,17 @@ public class SMTPServer implements Runnable
 					ConnectionHandler aThread = ((ConnectionHandler)this.groupThreads[i]);
 					if (aThread != null)
 					{
+						// one minute timeout
 						long lastActiveTime = aThread.getLastActiveTime() + (1000 * 60 * 1);
 						if (lastActiveTime < System.currentTimeMillis())
 						{
 							try
 							{
-								if (!aThread.getSession().isDataMode())
-									aThread.timeout();
+								aThread.timeout();
 							}
 							catch (IOException ioe)
 							{
-								if (log.isDebugEnabled())
-									log.debug("Lost connection to client during timeout");
+								log.debug("Lost connection to client during timeout");
 							}
 						}
 					}

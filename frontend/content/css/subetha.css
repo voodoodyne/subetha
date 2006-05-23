@@ -1,7 +1,8 @@
 /***************************************************************
  * Local stylesheet extensions
  ***************************************************************/
-	/* start bluehaze.css overrides */
+
+/* start bluehaze.css overrides */
 table {
 	border-collapse: collapse;
 }
@@ -11,7 +12,7 @@ body {
 }
 
 legend {
-	font-size: 135%;
+	font-size: 1.2em;
 }
 
 #bodyText {

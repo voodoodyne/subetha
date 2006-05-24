@@ -7,10 +7,9 @@
 	<table>
 		<tr>
 			<td>
-				<a href="<c:url value="/message/${msg.id}/${msg.listId}-${msg.id}.eml"/>">View Message Source</a> 
-				<div style="font-size:smaller"> Note: To download, just click "save link as", 
-					or view the message source and save the resulting page.
-				</div>
+				<a href="<c:url value="/message/${msg.id}/download/${msg.listId}-${msg.id}.eml"/>">Download Message</a>/ 
+				<a href="<c:url value="/message/${msg.id}/view/${msg.listId}-${msg.id}.eml"/>">View Message</a> 
+
 			</td>
 			<td>
 			<c:if test="${auth.loggedIn}">

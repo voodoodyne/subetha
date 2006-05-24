@@ -49,7 +49,7 @@
 		
 		<ul>
 			<li>Inject the method from a script</li>
-			<li>Relay into SubEtha via SMTP</li>
+			<li>Relay into SubEtha via SMTP (preferred!)</li>
 		</ul>
 		
 		<p>
@@ -67,14 +67,15 @@
 			up.  SubEtha has a simple SMTP stack (by default running on port
 			2500) which accepts messages and "does the right thing" with whatever
 			it receives.  This SMTP stack is not (yet) robust enough to be
-			internet-facing, but it will happily speak to your friendly local
+			internet-facing (because it lacks things like authentication and 
+			spam control), but it will happily speak to your friendly local
 			MTA in it's native tongue.
 		</p>
 		
 		<p>
-			In either case, your MTA must be instructed WHICH mail should be
-			delivered to SubEtha (as opposed to local mailboxes).  The options
-			here vary by MTA.
+			In either case, your MTA must be instructed <string>which</strong>
+			mail should be delivered to SubEtha (as opposed to local mailboxes).  
+			The options here vary by MTA.
 		</p>
 		
 		<a name="postfix"></a>
@@ -117,7 +118,7 @@
 				</p>
 				<p>
 					Note that the destination (in this case 127.0.0.1) must be
-					resolvable via DNS (not just /etc/hosts!) or an IP address.
+					resolvable via DNS (not just /etc/hosts!) or as an IP address.
 					Placing the address in brackets skips MX record resolution,
 					which is highly recommended.
 				</p>
@@ -129,7 +130,14 @@
 		
 		<h3>Postfix User Mapping</h3>
 		<p>
-			TBD, after we implement the postfix tcp: map provider.
+			TBD, after we implement the 
+			<a href="http://www.postfix.org/tcp_table.5.html">Postfix tcp: map 
+			provider</a>. It is worthy to note that this functionality is
+			not required to allow SubEtha to work today. It is an optimization
+			which will allow us to determine if SubEtha should accept email
+			from Postfix. Thus, it would be possible to just 'transport' 
+			all email for your domains to SubEtha and SubEtha could decide which 
+			emails it wants to accept before it is tranported.
 		</p>
 		
 		<a name="sendmail"></a>

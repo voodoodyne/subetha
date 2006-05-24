@@ -232,7 +232,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					
 					// just in case we are working with something that isn't
 					// C-D: attachment; filename=""
-					if (name == null || name.equals(""))
+					if (name == null || name.length() == 0)
 						name = MailUtils.getNameFromContentType(contentType);
 					
 					Long id = (Long) part.getContent();
@@ -250,7 +250,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					
 					// just in case we are working with something that isn't
 					// C-D: attachment; filename=""
-					if (name == null || name.equals(""))
+					if (name == null || name.length() == 0)
 						name = MailUtils.getNameFromContentType(contentType);
 					
 					InlinePartData ipd;

@@ -33,6 +33,11 @@ request.setAttribute("exceptions", exceptions);
 
 <trim:plain title="Something Bad Happened">
 
+	<center>
+	<img src="<c:url value="/img/nurse.jpg" />" />
+	<p><small>Images &copy; <a href="http://www.JulianCash.com/photo_use.html">Julian Cash</A> 2003</small></p>
+	</center>	
+
 	<h1>Exception Info:</h1>
 	
 	<div class="exceptions">

@@ -67,8 +67,8 @@ import org.subethamail.common.valid.Validator;
 		name="MailByList", 
 		query="from Mail m where m.list.id = :listId and m.hold is null order by m.dateCreated desc",
 		hints={
-			@QueryHint(name="org.hibernate.readOnly", value="true"),
-			@QueryHint(name="org.hibernate.cacheable", value="true")
+			@QueryHint(name="org.hibernate.readOnly", value="true")/*,
+			@QueryHint(name="org.hibernate.cacheable", value="true")*/
 		}
 	),
 	@NamedQuery(
@@ -407,13 +407,18 @@ public class Mail implements Serializable, Comparable
 	public Set<Attachment> getAttachments() { return this.attachments; }
 
 	/**
-	 * Natural sort order is based on creation date
+	 * Natural sort order is based on creation date, but we need
+	 * to make sure that we don't return equal if we aren't.
 	 */
 	public int compareTo(Object arg0)
 	{
 		Mail other = (Mail)arg0;
 
-		return this.dateCreated.compareTo(other.getDateCreated());
+		int result = this.dateCreated.compareTo(other.getDateCreated());
+		if (result == 0)
+			return this.id.compareTo(other.id);
+		else
+			return result;
 	}
 }
 

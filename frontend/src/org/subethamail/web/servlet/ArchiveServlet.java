@@ -46,8 +46,6 @@ public class ArchiveServlet extends HttpServlet
 		String[] pathSplit = request.getPathInfo().split("/");
 
 		String tmpId = (pathSplit.length > 1) ? pathSplit[1] : null;
-		// String downloadFilename = (pathSplit.length > 2) ? pathSplit[2] : null;
-
 		String mode = (pathSplit.length > 2) ? pathSplit[2] : null;
 
 		msgId = Long.parseLong(tmpId);

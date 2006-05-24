@@ -421,18 +421,39 @@ public class DAOBean implements DAO
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.entity.dao.DAO#findMailHeld(java.lang.Long)
+	 * @see org.subethamail.entity.dao.DAO#findMailHeld(java.lang.Long, int, int)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Mail> findMailHeld(Long listId)
+	public List<Mail> findMailHeld(Long listId, int skip, int count)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Finding held mail for list " + listId);
-		
+
 		Query q = this.em.createNamedQuery("HeldMail");
 		q.setParameter("listId", listId);
+		if (skip >= 0)
+			q.setFirstResult(skip);
+		
+		if (count >= 0)
+			q.setMaxResults(count);
 		
 		return q.getResultList();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#countMailHeld(java.lang.Long)
+	 */
+	public int countHeldMessages(Long listId)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Counting held mail for list " + listId);
+
+		Query q = this.em.createNamedQuery("HeldMailCount");
+		q.setParameter("listId", listId);		
+
+		Number n = (Number) q.getSingleResult();
+		return n.intValue();
 	}
 
 	/*

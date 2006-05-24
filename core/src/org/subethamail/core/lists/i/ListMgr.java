@@ -190,7 +190,7 @@ public interface ListMgr
 	 * 
 	 * Requires Permission.APPROVE_MESSAGES
 	 */
-	public Collection<MailHold> getHeldMessages(Long listId) throws NotFoundException, PermissionException;
+	public Collection<MailHold> getHeldMessages(Long listId, int skip, int count) throws NotFoundException, PermissionException;
 	
 	/**
 	 * Approves a held message.
@@ -261,4 +261,10 @@ public interface ListMgr
 	 * Requires Permission.VIEW_SUBSCRIBERS
 	 */
 	public int countSubscribers(Long listId, String query) throws NotFoundException, PermissionException;
+
+	/**
+	 * Gets the number of messages on a list in a held state.
+	 * Requires Permission.APPROVE_SUBSCRIPTIONS
+	 */
+	public int countHeldMessages(Long listId) throws NotFoundException, PermissionException;
 }

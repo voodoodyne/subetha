@@ -1,14 +1,15 @@
 <%@include file="/inc/top_standard.jspf" %>
 
-<t:action var="holds" type="org.subethamail.web.action.GetHeldMessages" />
+<t:action var="model" type="org.subethamail.web.action.GetHeldMessages" />
 
 <trim:list title="Held Messages" listId="${param.listId}">
 	<c:choose>
-		<c:when test="${empty holds}">
+		<c:when test="${empty model.holds}">
 			<p>There are no held messages to this list.</p>
 		</c:when>
 		
 		<c:otherwise>
+
 			<table class="sort-table" id="lists-table">
 			<thead>
 				<tr>
@@ -20,7 +21,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="msg" items="${holds}" varStatus="loop">
+				<c:forEach var="msg" items="${model.holds}" varStatus="loop">
 					<c:choose>
 						<c:when test="${loop.index % 2 == 0}">
 							<c:set var="color" value="a"/>
@@ -47,10 +48,10 @@
 						<td>
 							<c:choose>
 								<c:when test="${msg.hard}">
-									<div class="error">HARD</div>
+									<div class="error">Hard</div>
 								</c:when>
 								<c:otherwise>
-									SOFT
+									Soft
 								</c:otherwise>
 							</c:choose>
 						</td>
@@ -80,6 +81,31 @@
 var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String"]);
 st1.onsort = st1.tableRowColors;
 </script>
+
+			<c:url var="pagurl" value="/held_msgs.jsp" />
+			<se:searchPaginator url="${pagurl}&" model="${model}"/>
+
+		<br /><br /><br />
+
+		<table class="sort-table">
+			<thead>
+			<tr>
+				<td>Hold Type</td>
+				<td>Description</td>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td>Soft</td>
+				<td>Can be approved by the poster if they have permission 
+					to post messages to the list.</td>
+			</tr>
+			<tr>
+				<td>Hard</td>
+				<td>Must be manually approved by the moderator no matter what.</td>
+			</tr>
+			</tbody>
+		</table>
 
 		</c:otherwise>
 	</c:choose>

@@ -530,15 +530,26 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#getHeldMessages(java.lang.Long)
+	 * @see org.subethamail.core.lists.i.ListMgr#getHeldMessages(java.lang.Long, int, int)
 	 */
-	public Collection<MailHold> getHeldMessages(Long listId) throws NotFoundException, PermissionException
+	public Collection<MailHold> getHeldMessages(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
 		
-		List<Mail> held = this.dao.findMailHeld(listId);
+		List<Mail> held = this.dao.findMailHeld(listId, skip, count);
 		
 		return Transmute.heldMail(held);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#countHeldMessages(java.lang.Long)
+	 */
+	public int countHeldMessages(Long listId) throws NotFoundException, PermissionException
+	{
+		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
+		
+		return this.dao.countHeldMessages(listId);
 	}
 
 	/*

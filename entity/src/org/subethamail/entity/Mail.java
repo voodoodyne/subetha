@@ -80,6 +80,14 @@ import org.subethamail.common.valid.Validator;
 		}
 	),
 	@NamedQuery(
+			name="HeldMailCount", 
+			query="select count(*) from Mail m where m.list.id = :listId and m.hold is not null order by m.dateCreated desc",
+			hints={
+				@QueryHint(name="org.hibernate.readOnly", value="true"),
+				@QueryHint(name="org.hibernate.cacheable", value="true")
+			}
+	),
+	@NamedQuery(
 		name="WantsReferenceToMessageId", 
 		query="select m from Mail as m join fetch m.wantedReference as ref where ref = :messageId and m.list.id = :listId",
 		hints={

@@ -177,7 +177,7 @@ public interface DAO
 	/**
 	 * @return all Mail for the list which has a not null HoldType
 	 */
-	public List<Mail> findMailHeld(Long listId);
+	public List<Mail> findMailHeld(Long listId, int skip, int count);
 	
 	/**
 	 * @return all Person's who are site admins
@@ -203,6 +203,11 @@ public interface DAO
 	 * @return the total number of Person's on this server.
 	 */
 	public int countPerson();
+
+	/**
+	 * @return the number of messages in a held state on a list.
+	 */
+	public int countHeldMessages(Long listId);
 
 	/**
 	 * @return the number of subscribers on a list

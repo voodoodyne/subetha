@@ -12,12 +12,14 @@ import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
+import org.subethamail.web.model.PaginateModel;
 import org.tagonist.propertize.Property;
 
 /**
- * Gets the (unpaginated) list of held messages.
+ * Gets the list of held messages.
  * 
  * @author Jeff Schnitzer
+ * @author Jon Stevens
  */
 public class GetHeldMessages extends AuthAction 
 {
@@ -25,14 +27,24 @@ public class GetHeldMessages extends AuthAction
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(GetMySubscription.class);
 
-	/** */
-	@Property Long listId;
+	public static class Model extends PaginateModel
+	{
+		/** */
+		@Property Long listId;
+		@Property Collection<MailHold> holds;
+	}
+
+	public void initialize()
+	{
+		this.getCtx().setModel(new Model());
+	}
 
 	/** */
 	public void execute() throws Exception
 	{
-		Collection<MailHold> data = Backend.instance().getListMgr().getHeldMessages(this.listId);
+		Model model = (Model)this.getCtx().getModel();
 
-		this.getCtx().setModel(data);
+		model.holds = Backend.instance().getListMgr().getHeldMessages(model.listId, model.getSkip(), model.getCount());
+		model.setTotalCount(Backend.instance().getListMgr().countHeldMessages(model.listId));
 	}
 }

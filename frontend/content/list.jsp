@@ -70,7 +70,7 @@
 						<c:url var="listHeldSubsUrl" value="/held_subs.jsp">
 							<c:param name="listId" value="${param.listId}"/>
 						</c:url>
-						There are <a href="${listHeldSubsUrl}"><c:out value="${fn:length(heldSubs)}"/> held subscriptions waiting...</a>
+						There are <a href="${listHeldSubsUrl}"> ??? held subscriptions waiting...</a>
 						<ul>
 							<c:forEach var="sub" items="${heldSubs}" varStatus="loop">
 								<li><c:out value="${sub}"/></li>
@@ -88,7 +88,7 @@
 						<c:url var="listHeldMsgsUrl" value="/held_msgs.jsp">
 							<c:param name="listId" value="${param.listId}"/>
 						</c:url>
-						There are <a href="${listHeldMsgsUrl}"><c:out value="${fn:length(heldMsgs)}"/> held messsages waiting.</a>.
+						There are <a href="${listHeldMsgsUrl}"> ??? held messsages waiting.</a>.
 						<ul>
 							<c:forEach var="msg" items="${heldMsgs}" varStatus="loop">
 								<li><c:out value="${msg.subject}"/></li>

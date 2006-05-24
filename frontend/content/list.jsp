@@ -5,6 +5,7 @@
 </c:if>
 
 <t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
+<t:action var="list" type="org.subethamail.web.action.GetListSettings" />
 
 <trim:list title="List Overview" listId="${param.listId}">
 	
@@ -12,6 +13,9 @@
 	
 	<c:choose>
 		<c:when test="${sub.subscribed}">
+			<c:set var="role" value="${sub.role}"/>
+			<c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
+			
 			<form action="<c:url value="/subscribe_me.jsp"/>" method="post">
 				<input type="hidden" name="listId" value="${sub.list.id}" />
 				<input type="hidden" name="goto" value="/list.jsp?listId=${sub.list.id}" />
@@ -34,7 +38,65 @@
 						</c:forEach>
 					</select><input type="submit" value="Change" />
 				</p>
+				<fieldset>	<legend>Your Permissions</legend>
+					<table class="permissions" align="center">
+						<tr>
+							<c:forEach var="perm" items="${backend.allPermissions}">
+								<th style="writing-mode: tb-rl">
+									<img src="<c:url value="/perm_img?perm=${perm}"/>" alt="<c:out value="${perm.pretty}"/>" />
+								</th>
+							</c:forEach>
+						</tr>
+						<tr>
+							<c:forEach var="perm" items="${backend.allPermissions}">
+								<td>
+									<c:if test="${f:contains(role.permissions, perm)}">
+										<img src="<c:url value="/img/check.gif"/>" alt="Yes" />
+									</c:if>
+								</td>
+							</c:forEach>
+						</tr>
+					</table>
+				</fieldset>	
+				
 			</form>
+			
+			<fieldset><legend>Tasks</legend>
+				
+				<c:if test="${perms.APPROVE_SUBSCRIPTIONS}">
+					<t:action var="heldSubs" type="org.subethamail.web.action.GetHeldSubscriptions" />
+					<c:if test="${!empty heldSubs}">
+						<h2>Held Subscriptions</h2>
+						<c:url var="listHeldSubsUrl" value="/held_subs.jsp">
+							<c:param name="listId" value="${param.listId}"/>
+						</c:url>
+						There are <a href="${listHeldSubsUrl}"><c:out value="${fn:length(heldSubs)}"/> held subscriptions waiting...</a>
+						<ul>
+							<c:forEach var="sub" items="${heldSubs}" varStatus="loop">
+								<li><c:out value="${sub}"/></li>
+							</c:forEach>>
+						</ul>
+					</c:if>
+				</c:if>
+				
+				<br/>
+				
+				<c:if test="${perms.APPROVE_MESSAGES}">
+					<t:action var="heldMsgs" type="org.subethamail.web.action.GetHeldMessages" />
+					<c:if test="${!empty heldMsgs}">
+						<h2>Held Messages</h2>
+						<c:url var="listHeldMsgsUrl" value="/held_msgs.jsp">
+							<c:param name="listId" value="${param.listId}"/>
+						</c:url>
+						There are <a href="${listHeldMsgsUrl}"><c:out value="${fn:length(heldMsgs)}"/> held messsages waiting.</a>.
+						<ul>
+							<c:forEach var="msg" items="${heldMsgs}" varStatus="loop">
+								<li><c:out value="${msg.subject}"/></li>
+							</c:forEach>
+						</ul>
+					</c:if>
+				</c:if>
+			</fieldset>
 		</c:when>
 		<c:when test="${auth.loggedIn}">
 			<form action="<c:url value="/subscribe_me.jsp"/>" method="post">

@@ -9,7 +9,7 @@
 
 <trim:list title="List Overview" listId="${param.listId}">
 	
-	<p><c:out value="${sub.list.description}" /></p>
+	<h3><c:out value="${sub.list.description}" /></h3>
 	
 	<c:choose>
 		<c:when test="${sub.subscribed}">
@@ -38,6 +38,7 @@
 						</c:forEach>
 					</select><input type="submit" value="Change" />
 				</p>
+				<%-- JMS: I really don't like this.  Removing before public build, then we can discuss.
 				<fieldset>	<legend>Your Permissions</legend>
 					<table class="permissions">
 						<tr>
@@ -58,9 +59,11 @@
 						</tr>
 					</table>
 				</fieldset>	
-				
+				--%>
 			</form>
 			
+			<%-- Removed 'cause it's broken.  Scott, make sure the Tasks section doesn't
+			     show up if there are no tasks
 			<fieldset><legend>Tasks</legend>
 				
 				<c:if test="${perms.APPROVE_SUBSCRIPTIONS}">
@@ -97,6 +100,7 @@
 					</c:if>
 				</c:if>
 			</fieldset>
+			--%>
 		</c:when>
 		<c:when test="${auth.loggedIn}">
 			<form action="<c:url value="/subscribe_me.jsp"/>" method="post">

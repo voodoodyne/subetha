@@ -124,7 +124,7 @@ public class Transmute
 				raw.getPerson().getId(),
 				raw.getPerson().getName(),
 				raw.getPerson().getEmailList(),
-				raw.getRole().getName(),
+				Transmute.role(raw.getRole()),
 				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null,
 				raw.getDateCreated());
 	}
@@ -151,7 +151,7 @@ public class Transmute
 				(deliverTo == null) ? null : deliverTo.getId(),
 				(rawSub != null),
 				role.isOwner(),
-				role.getName(),
+				role(role),
 				perms);
 	}
 	

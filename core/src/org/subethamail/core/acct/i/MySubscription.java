@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.subethamail.common.Permission;
 import org.subethamail.core.lists.i.ListData;
+import org.subethamail.core.lists.i.RoleData;
 
 
 /**
@@ -26,7 +27,7 @@ public class MySubscription implements Serializable
 	String deliverTo;
 	boolean subscribed;
 	boolean owner;
-	String roleName;
+	RoleData role;
 	Set<Permission> perms;
 	
 	/**
@@ -36,14 +37,14 @@ public class MySubscription implements Serializable
 					String deliverTo,
 					boolean subscribed,
 					boolean owner,
-					String roleName,
+					RoleData role,
 					Set<Permission> permissions)
 	{
 		this.list = list;
 		this.deliverTo = deliverTo;
 		this.subscribed = subscribed;
 		this.owner = owner;
-		this.roleName = roleName;
+		this.role = role;
 		this.perms = permissions;
 	}
 
@@ -56,9 +57,15 @@ public class MySubscription implements Serializable
 	/** The name of the role of the subscription */
 	public String getRoleName()
 	{
-		return this.roleName;
+		return this.role.getName();
 	}
-
+	
+	/** The role of the subscription */
+	public RoleData getRole()
+	{
+		return this.role;
+	}
+	
 	/**
 	 * The email address that mail gets delivered to, or null if no
 	 * delivery is enabled.  Will also be null if user is not subscribed. 

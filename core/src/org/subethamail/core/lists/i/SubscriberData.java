@@ -13,27 +13,28 @@ import org.subethamail.core.acct.i.PersonData;
 /**
  * Some detail about a subscriber.
  *
+ * @author Scott Hernandez
  * @author Jon Scott Stevens
  */
 @SuppressWarnings("serial")
 public class SubscriberData extends PersonData
 {	
-	String roleName;
+	RoleData role;
 	String deliverTo;
 	Date dateSubscribed;
-
+	
 	/**
 	 */
 	public SubscriberData(
 			Long id,
 			String name,
 			List<String> emailAddresses,
-			String roleName,
+			RoleData role,
 			String deliverTo,
 			Date dateSubscribed)
 	{
 		super(id, name, emailAddresses);
-		this.roleName = roleName;
+		this.role = role;
 		this.deliverTo = deliverTo;
 		this.dateSubscribed = dateSubscribed;
 	}
@@ -41,7 +42,12 @@ public class SubscriberData extends PersonData
 	/** */
 	public String getRoleName()
 	{
-		return this.roleName;
+		return this.role.getName();
+	}
+	
+	public RoleData getRole() 
+	{
+		return this.role;
 	}
 
 	public String getDeliverTo()

@@ -6,9 +6,11 @@
 package org.subethamail.plugin.filter;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 
@@ -43,8 +45,7 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 	/** */
 	private static Log log = LogFactory.getLog(LeaveAttachmentsOnServerFilter.class);
 
-	@EJB
-	Archiver archiver;
+	@EJB Archiver archiver;
 
 	/*
 	 * (non-Javadoc)
@@ -81,14 +82,19 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 					Long id = (Long)part.getContent();
 					String contentType = part.getHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE)[0];
 					
+					// remove all headers
+					for (Enumeration<Header> e = part.getAllHeaders(); e.hasMoreElements();)
+					{
+						Header header = e.nextElement();
+						part.removeHeader(header.getName());
+					}
+					
 					String name = MailUtils.getNameFromContentType(contentType);
 					String attachmentUrl = ctx.getList().getUrlBase() + "attachment/" + id + "/" + name ;
+					
 					part.setText("This attachment was left behind at the server:\n     " + attachmentUrl + "\n");
-
-					part.removeHeader(SubEthaMessage.HDR_CONTENT_DISPOSITION);
+					part.setDisposition(Part.INLINE);
 				}
-
-				part.removeHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE);
 			}
 			
 			msg.save();

@@ -6,8 +6,10 @@
 package org.subethamail.plugin.filter;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.annotation.security.RunAs;
+import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 
@@ -116,6 +118,13 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 				{
 					if (log.isDebugEnabled())
 						log.debug("Stripping attachement of type: " + p.getContentType());		
+
+					//remove all headers
+					for (Enumeration<Header> e = p.getAllHeaders(); e.hasMoreElements();)
+					{
+						Header header = e.nextElement();
+						p.removeHeader(header.getName());
+					}
 	
 					p.setText(expandedMsg);		
 				}

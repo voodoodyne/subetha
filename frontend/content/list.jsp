@@ -39,7 +39,7 @@
 					</select><input type="submit" value="Change" />
 				</p>
 				<fieldset>	<legend>Your Permissions</legend>
-					<table class="permissions" align="center">
+					<table class="permissions">
 						<tr>
 							<c:forEach var="perm" items="${backend.allPermissions}">
 								<th style="writing-mode: tb-rl">

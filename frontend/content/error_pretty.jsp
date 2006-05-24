@@ -31,7 +31,7 @@ request.setAttribute("exceptions", exceptions);
 
 %>
 
-<trim:plain title="Something Bad Happened">
+<trim:plain title="We've been bad...">
 
 	<center>
 	<img src="<c:url value="/img/nurse.jpg" />" />

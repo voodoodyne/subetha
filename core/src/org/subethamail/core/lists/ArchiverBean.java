@@ -28,6 +28,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
 import org.subethamail.common.PermissionException;
@@ -54,6 +55,7 @@ import org.subethamail.entity.dao.DAO;
  * Implementation of the Archiver interface.
  * 
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
 @Stateless(name="Archiver")
 @SecurityDomain("subetha")
@@ -218,24 +220,38 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 
 			for (Part part: msg.getParts()) 
 			{
-				if (part.getContentType().startsWith(SubEthaMessage.DETACHMENT_MIME_TYPE))
+				String contentType = part.getContentType();
+				if (contentType.startsWith(SubEthaMessage.DETACHMENT_MIME_TYPE))
 				{
-					String contentType = part.getHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE)[0];
+					//we need the orig Content-Type before the message was munged
+					contentType = part.getHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE)[0];
+					//put back the orig Content-Type
 					part.setHeader(SubEthaMessage.HDR_CONTENT_TYPE, contentType);
-					
-					// Since we set the content type, this should work
+
 					String name = part.getFileName();
 					
-					Long id = (Long)part.getContent();
+					// just in case we are working with something that isn't
+					// C-D: attachment; filename=""
+					if (name == null || name.equals(""))
+						name = MailUtils.getNameFromContentType(contentType);
 					
-					AttachmentPartData apd = new AttachmentPartData(id, contentType, name, part.getSize());
+					Long id = (Long) part.getContent();
+					
+					//TODO: Set the correct size. This should be the size of the Attachment.content (Blob)
+					AttachmentPartData apd = new AttachmentPartData(id, contentType, name, 0);
 					attachmentParts.add(apd);
 				}
 				else
 				{
 					// not an attachment cause it isn't stored as a detached part.
 					Object content = part.getContent();
+
 					String name = part.getFileName();
+					
+					// just in case we are working with something that isn't
+					// C-D: attachment; filename=""
+					if (name == null || name.equals(""))
+						name = MailUtils.getNameFromContentType(contentType);
 					
 					InlinePartData ipd;
 					if (content instanceof String)
@@ -246,7 +262,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					{
 						ipd = new InlinePartData(content, part.getContentType(), name, part.getSize());
 					}
-						
+
 					inlineParts.add(ipd);
 				}
 			}

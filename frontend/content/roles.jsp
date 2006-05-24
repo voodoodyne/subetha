@@ -33,7 +33,7 @@
 				</select><input type="submit" value="Set" />
 		</fieldset>
 	</form>
-	<fieldset>	<legend>Current Permissions</legend>
+	<fieldset>	<legend>Current Role Permissions</legend>
 			<table class="permissions">
 				<tr>
 					<th>Role</th>

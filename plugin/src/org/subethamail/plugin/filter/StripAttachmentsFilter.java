@@ -101,6 +101,7 @@ public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 	 * @see Filter#onInject(SubEthaMessage, FilterContext)
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void onInject(SubEthaMessage msg, FilterContext ctx)
 		throws IgnoreException, HoldException, MessagingException
 	{

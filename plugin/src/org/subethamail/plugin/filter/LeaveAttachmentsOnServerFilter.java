@@ -71,6 +71,7 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 	 * @see Filter#onSend(SubEthaMessage, FilterContext)
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws MessagingException
 	{
 		try

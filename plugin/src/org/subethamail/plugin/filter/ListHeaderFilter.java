@@ -123,9 +123,7 @@ public class ListHeaderFilter extends GenericFilter implements Lifecycle
 		msg.setHeader("List-Unsubscribe", "<" + listData.getUrl() + ">");
 		msg.setHeader("List-Subscribe", "<" + listData.getUrl() + ">");
 		msg.setHeader("List-Post", "<mailto:" + listData.getEmail() + ">");
-		// TODO: this should be much more properly generated
-		msg.setHeader("List-Owner", "<mailto:" + listData.getEmail().replace("@", "-owner@") + ">");
-		// TODO: Need to have a way to figure out the URL to the archives.
-//		msg.setHeader("List-Archive", "<" + listData. + "> (Web Archive)");
+		msg.setHeader("List-Owner", "<mailto:" + listData.getOwnerEmail() + ">");
+		msg.setHeader("List-Archive", "<" + listData.getUrlBase() + "archive.jsp?listId=" + listData.getId() + "> (Web Archive)");
 	}
 }

@@ -11,8 +11,25 @@ import org.apache.commons.logging.LogFactory;
 import org.subethamail.smtp.i.MessageListener;
 
 /**
- * Main SMTPServer class
+ * Main SMTPServer class. This class starts opens a ServerSocket and
+ * when a new connection comes in, it attaches that to a new
+ * instance of the ConnectionHandler class.
+ * 
+ * The ConnectionHandler then parses the incoming SMTP stream and
+ * hands off the processing to the CommandHandler which will execute
+ * the appropriate SMTP command class.
+ *  
+ * This class also manages a watchdog thread which will timeout 
+ * stale connections.
  *
+ * In order to instantiate a new server, one must pass in a Map of
+ * MessageListeners. These listener classes are executed during the
+ * RCPT TO: (MessageListener.accept()) phase and after the CRLF.CRLF
+ * data phase (MessageListener.deliver()). This way, the server itself
+ * is not responsible for dealing with the actual SMTP data and that
+ * aspect is essentially handed off to other tools to deal with.
+ * This is unlike every other Java SMTP server on the net.
+ * 
  * @author Jon Stevens
  * @author Ian McFarland &lt;ian@neo.com&gt;
  */
@@ -39,9 +56,29 @@ public class SMTPServer implements Runnable
 	/** 
 	 * set a hard limit on the maximum number of connections this server will accept 
 	 * once we reach this limit, the server will gracefully reject new connections.
+	 * Default is 1000.
 	 */
-	private static final int MAX_CONNECTIONS = 1000;
+	private int maxConnections = 1000;
 
+	/**
+	 * The timeout for waiting for data on a connection is one minute: 1000 * 60 * 1
+	 */
+	private int connectionTimeout = 1000 * 60 * 1;
+
+	/**
+	 * The maximal number of recipients that this server accepts per message delivery request.
+	 */
+	private int maxRecipients = 1000;
+	
+	/**
+	 * The main SMTPServer constructor.
+	 * 
+	 * @param hostname
+	 * @param bindAddress
+	 * @param port
+	 * @param listeners
+	 * @throws UnknownHostException
+	 */
 	public SMTPServer(String hostname, InetAddress bindAddress, int port, Map<MessageListener, MessageListener> listeners) 
 		throws UnknownHostException
 	{
@@ -50,10 +87,13 @@ public class SMTPServer implements Runnable
 		this.port = port;
 		this.listeners = listeners;
 
-		this.commandHandler = new CommandHandler();
-		
+		this.commandHandler = new CommandHandler();		
 	}
 
+	/**
+	 * Call this method to get things rolling after instantiating
+	 * the SMTPServer.
+	 */
 	public void start()
 	{
 		if (this.serverThread != null)
@@ -66,6 +106,9 @@ public class SMTPServer implements Runnable
 		this.watchdogThread.start();
 	}
 
+	/**
+	 * Shut things down gracefully.
+	 */
 	public void stop()
 	{
 		this.go = false;
@@ -82,7 +125,10 @@ public class SMTPServer implements Runnable
 		{
 		}
 	}
-	
+
+	/**
+	 * This method is called by this thread when it starts up.
+	 */
 	public void run()
 	{
 		try
@@ -117,7 +163,7 @@ public class SMTPServer implements Runnable
 //				20:34:50,624 ERROR [STDERR]     at java.net.ServerSocket.accept(ServerSocket.java:421)
 //				20:34:50,624 ERROR [STDERR]     at org.subethamail.smtp2.SMTPServer.run(SMTPServer.java:92)
 //				20:34:50,624 ERROR [STDERR]     at java.lang.Thread.run(Thread.java:613)
-				if (go)
+				if (this.go)
 				{
 					log.error(ioe.toString());
 				}
@@ -149,6 +195,11 @@ public class SMTPServer implements Runnable
 	public String getName()
 	{
 		return "SubEthaMail Server";
+	}
+
+	public String getNameVersion()
+	{
+		return getName() + " v" + getVersion();
 	}
 
 	/**
@@ -184,9 +235,39 @@ public class SMTPServer implements Runnable
 	
 	public boolean hasTooManyConnections()
 	{
-		return (getNumberOfConnections() >= MAX_CONNECTIONS);
+		return (getNumberOfConnections() >= maxConnections);
 	}
 	
+	public int getMaxConnections()
+	{
+		return this.maxConnections;
+	}
+
+	public void setMaxConnections(int maxConnections)
+	{
+		this.maxConnections = maxConnections;
+	}
+
+	public int getConnectionTimeout()
+	{
+		return this.connectionTimeout;
+	}
+
+	public void setConnectionTimeout(int connectionTimeout)
+	{
+		this.connectionTimeout = connectionTimeout;
+	}
+
+	public int getMaxRecipients()
+	{
+		return this.maxRecipients;
+	}
+
+	public void setMaxRecipients(int maxRecipients)
+	{
+		this.maxRecipients = maxRecipients;
+	}
+
 	/**
 	 * A watchdog thread that makes sure that
 	 * connections don't go stale. It prevents
@@ -197,8 +278,8 @@ public class SMTPServer implements Runnable
 	private class Watchdog extends Thread
 	{
 		private SMTPServer server;
-		private Thread[] groupThreads = new Thread[MAX_CONNECTIONS];
-		private boolean go = true;
+		private Thread[] groupThreads = new Thread[maxConnections];
+		private boolean run = true;
 
 		public Watchdog(SMTPServer server)
 		{
@@ -209,12 +290,12 @@ public class SMTPServer implements Runnable
 
 		public void quit()
 		{
-			go = false;
+			this.run = false;
 		}
 
 		public void run()
 		{
-			while (go)
+			while (this.run)
 			{
 				ThreadGroup connectionGroup = this.server.getConnectionGroup();
 				connectionGroup.enumerate(this.groupThreads);
@@ -225,7 +306,7 @@ public class SMTPServer implements Runnable
 					if (aThread != null)
 					{
 						// one minute timeout
-						long lastActiveTime = aThread.getLastActiveTime() + (1000 * 60 * 1);
+						long lastActiveTime = aThread.getLastActiveTime() + (this.server.connectionTimeout);
 						if (lastActiveTime < System.currentTimeMillis())
 						{
 							try

@@ -1,8 +1,10 @@
-package org.subethamail.smtp.server;
+package org.subethamail.smtp.server.io;
 
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import org.subethamail.smtp.server.ConnectionHandler;
 
 /**
  * This is an input stream filter that updates the last active time

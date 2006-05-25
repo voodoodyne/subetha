@@ -70,7 +70,7 @@ public class CommandHandler
 		String key = toKey(commandString);
 		if (key != null)
 		{
-			command = commandMap.get(key);
+			command = this.commandMap.get(key);
 		}
 		if (command == null)
 		{

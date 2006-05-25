@@ -14,12 +14,10 @@ import org.subethamail.smtp.server.Session;
  */
 public class ReceiptCommand extends BaseCommand
 {
-	// TODO(imf): Split into SMTP and ESMTP versions.
 	public ReceiptCommand()
 	{
 		super("RCPT",
-				"Specifies the recipient. Can be used any number of times.\n"
-						+ "Parameters are ESMTP extensions. See \"HELP DSN\" for details.",
+				"Specifies the recipient. Can be used any number of times.",
 				"TO: <recipient> [ <parameters> ]");
 	}
 
@@ -30,6 +28,11 @@ public class ReceiptCommand extends BaseCommand
 		if (session.getSender() == null)
 		{
 			context.sendResponse("503 Need MAIL before RCPT.");
+			return;
+		}
+		else if (session.getDeliveries().size() >= context.getServer().getMaxRecipients())
+		{
+			context.sendResponse("452 Error: too many recipients");
 			return;
 		}
 
@@ -55,6 +58,15 @@ public class ReceiptCommand extends BaseCommand
 		}
 	}
 
+	/**
+	 * Loops through all of the MessageListeners and executes the accept()
+	 * method on them. If true, then the MessageListener is added to the session
+	 * for later delivery() after the DATA has been received.
+	 * 
+	 * @param recipientAddress
+	 * @param context
+	 * @return false if the recipientAddress is unknown.
+	 */
 	private boolean handleRecipient(String recipientAddress, ConnectionContext context)
 	{
 		Session session = context.getSession();

@@ -5,11 +5,11 @@ import java.io.InputStream;
 
 import org.subethamail.common.io.DeferredFileOutputStream;
 import org.subethamail.smtp.server.BaseCommand;
-import org.subethamail.smtp.server.CharTerminatedInputStream;
 import org.subethamail.smtp.server.ConnectionContext;
-import org.subethamail.smtp.server.DotUnstuffingInputStream;
 import org.subethamail.smtp.server.Session;
 import org.subethamail.smtp.server.Session.Delivery;
+import org.subethamail.smtp.server.io.CharTerminatedInputStream;
+import org.subethamail.smtp.server.io.DotUnstuffingInputStream;
 
 /**
  * @author Ian McFarland &lt;ian@neo.com&gt;

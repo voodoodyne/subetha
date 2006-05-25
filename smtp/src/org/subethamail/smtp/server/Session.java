@@ -7,7 +7,8 @@ import org.subethamail.smtp.i.MessageListener;
 
 /**
  * A sesssion describes events which happen during a
- * SMTP session.
+ * SMTP session. It keeps track of all of the MessageListeners
+ * that are going to be responsible for attempting a delivery.
  * 
  * @author Ian McFarland &lt;ian@neo.com&gt;
  * @author Jon Stevens
@@ -38,39 +39,39 @@ public class Session
 
 		public MessageListener getListener()
 		{
-			return listener;
+			return this.listener;
 		}
 
 		public String getRecipient()
 		{
-			return recipient;
+			return this.recipient;
 		}
 	}
 
 	public boolean isActive()
 	{
-		return active;
+		return this.active;
 	}
 
 	public void quit()
 	{
-		active = false;
+		this.active = false;
 	}
 
 	public void addListener(MessageListener messageListener, String recipient)
 	{
 		Delivery delivery = new Delivery(messageListener, recipient);
-		deliveries.add(delivery);
+		this.deliveries.add(delivery);
 	}
 
 	public List<Delivery> getDeliveries()
 	{
-		return deliveries;
+		return this.deliveries;
 	}
 
 	public String getSender()
 	{
-		return sender;
+		return this.sender;
 	}
 
 	public void setSender(String sender)
@@ -80,7 +81,7 @@ public class Session
 
 	public boolean hasSeenHelo()
 	{
-		return hasSeenHelo;
+		return this.hasSeenHelo;
 	}
 
 	public void setHasSeenHelo(boolean hasSeenHelo)

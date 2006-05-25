@@ -10,9 +10,12 @@ import java.net.Socket;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.smtp.server.io.LastActiveInputStream;
 
 /**
- * The thread that handles a connection
+ * The thread that handles a connection. This class
+ * passes most of it's responsibilities off to the
+ * CommandHandler.
  * 
  * @author Jon Stevens
  */
@@ -84,7 +87,7 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 	public void run()
 	{
 		if (log.isDebugEnabled())
-			log.debug("SMTP connection count: " + server.getNumberOfConnections());
+			log.debug("SMTP connection count: " + this.server.getNumberOfConnections());
 
 		this.session = new Session();
 		try
@@ -97,7 +100,7 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 				return;
 			}
 
-			this.sendResponse("220 " + server.getHostName() + " ESMTP " + server.getName());
+			this.sendResponse("220 " + this.server.getHostName() + " ESMTP " + this.server.getName());
 
 			while (session.isActive())
 			{
@@ -132,13 +135,12 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		{
 			try
 			{
-				writer.close();
-				input.close();
+				this.writer.close();
+				this.input.close();
 			}
 			finally
 			{
-				if (socket != null && socket.isBound() && !socket.isClosed())
-					socket.close();
+				closeSocket();
 			}
 		}
 		catch (IOException e)
@@ -150,6 +152,12 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 	public Socket getSocket()
 	{
 		return this.socket;
+	}
+
+	private void closeSocket() throws IOException
+	{
+		if (this.socket != null && this.socket.isBound() && !this.socket.isClosed())
+			this.socket.close();
 	}
 
 	public InputStream getInput()

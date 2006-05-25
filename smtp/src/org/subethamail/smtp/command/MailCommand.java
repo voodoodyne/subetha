@@ -15,8 +15,7 @@ public class MailCommand extends BaseCommand
 	public MailCommand()
 	{
 		super("MAIL", 
-				"Specifies the sender. Parameters are ESMTP extensions.\n"
-					+ "See \"HELP DSN\" for details.",
+				"Specifies the sender.",
 				"FROM: <sender> [ <parameters> ]");
 	}
 

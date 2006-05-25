@@ -15,7 +15,7 @@
  * permissions and limitations under the License.                      *
  ***********************************************************************/
 
-package org.subethamail.smtp.server;
+package org.subethamail.smtp.server.io;
 
 import java.io.FilterInputStream;
 import java.io.IOException;

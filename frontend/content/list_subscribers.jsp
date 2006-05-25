@@ -38,6 +38,7 @@
 					<td>Addresses</td>
 					<c:if test="${perms.EDIT_ROLES || perms.VIEW_ROLES}">
 						<td>Role</td>
+						<td></td>
 					</c:if>
 					<c:if test="${perms.UNSUBSCRIBE_OTHERS || perms.EDIT_ROLES}">
 						<td>Action</td>
@@ -71,6 +72,8 @@
 						<c:if test="${perms.EDIT_ROLES || perms.VIEW_ROLES}">
 						<td>
 							<c:out value="${p.roleName}" />
+						</td>
+						<td>
 							<c:if test="${perms.EDIT_ROLES}">
 								<form action="<c:url value="/person_set_role.jsp"/>" method="post" style="display:inline">
 									<input type="hidden" name="personId" value="${p.id}" />

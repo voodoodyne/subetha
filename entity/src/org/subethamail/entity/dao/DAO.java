@@ -159,6 +159,11 @@ public interface DAO
 	public List<Mail> findMailByList(Long listId, int start, int count);
 
 	/**
+	 * @return all of the mail on a list
+	 */
+	public int countMailByList(Long listId);
+
+	/**
 	 * @return the role
 	 */
 	public Role findRole(Long roleId) throws NotFoundException;

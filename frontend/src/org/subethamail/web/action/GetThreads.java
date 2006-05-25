@@ -44,9 +44,7 @@ public class GetThreads extends AuthAction
 	{
 		Model model = (Model)this.getCtx().getModel();
 
-		model.messages = Backend.instance().getArchiver().getThreads(model.listId);
-		model.setTotalCount(model.messages.size());
-		if (model.getSkip() > 0 && model.getCount() > 0)
-			model.messages = model.messages.subList(model.getSkip(), model.getSkip() + model.getCount());
+		model.messages = Backend.instance().getArchiver().getThreads(model.listId, model.getSkip(), model.getCount());
+		model.setTotalCount(Backend.instance().getArchiver().countMailByList(model.listId));
 	}
 }

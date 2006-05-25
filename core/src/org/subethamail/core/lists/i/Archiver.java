@@ -29,8 +29,13 @@ public interface Archiver
 	 * 
 	 * @return a list of threads in the archive.  Most recent thread is at the top.
 	 */
-	public List<MailSummary> getThreads(Long listId) throws NotFoundException, PermissionException;
+	public List<MailSummary> getThreads(Long listId, int skip, int count) throws NotFoundException, PermissionException;
 	
+	/**
+	 * @return the number of messages on a list.
+	 */
+	public int countMailByList(Long listId);
+
 	/**
 	 * Requires Permission.READ_ARCHIVES
 	 * 

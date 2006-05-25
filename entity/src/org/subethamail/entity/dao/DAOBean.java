@@ -356,17 +356,37 @@ public class DAOBean implements DAO
 	 * @see DAO#findMailByList(Long, int, int)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Mail> findMailByList(Long listId, int start, int count)
+	public List<Mail> findMailByList(Long listId, int skip, int count)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Finding all mail for list " + listId);
 		
 		Query q = this.em.createNamedQuery("MailByList");
 		q.setParameter("listId", listId);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
+
+		if (skip >= 0)
+			q.setFirstResult(skip);
 		
+		if (count >= 0)
+			q.setMaxResults(count);
+
 		return q.getResultList();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.entity.dao.DAO#countMailByList(java.lang.Long)
+	 */
+	public int countMailByList(Long listId)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Counting all mail for list " + listId);
+		
+		Query q = this.em.createNamedQuery("CountMailByList");
+		q.setParameter("listId", listId);
+
+		Number n = (Number) q.getSingleResult();
+		return n.intValue();
 	}
 
 	/*

@@ -88,14 +88,14 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getThreads(java.lang.Long)
 	 */
-	public List<MailSummary> getThreads(Long listId) throws NotFoundException, PermissionException
+	public List<MailSummary> getThreads(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
 		
 		// Are we allowed to view archives?
 		MailingList list = this.getListFor(listId, Permission.READ_ARCHIVES, me);
 		
-		List<Mail> mails = this.dao.findMailByList(listId, 0, 100000);
+		List<Mail> mails = this.dao.findMailByList(listId, skip, count);
 		
 		// This is fun.  Assemble the thread relationships.
 		SortedSet<Mail> roots = new TreeSet<Mail>();
@@ -114,7 +114,16 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		// Now generate the entire summary
 		return Transmute.mailSummaries(roots, showEmail, null);
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#countMailByList(java.lang.Long)
+	 */
+	public int countMailByList(Long listId)
+	{
+		return this.dao.countMailByList(listId);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getMessage(java.lang.Long, OutputStream)

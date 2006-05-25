@@ -77,7 +77,7 @@ public class ModerationTest extends SubEthaTestCase
 		Thread.sleep(1000);
 		assertEquals(1, this.smtp.count(MailType.MAIL_HELD));
 		
-		Collection<MailHold> msgs = this.admin.getListMgr().getHeldMessages(this.ml.getId());
+		Collection<MailHold> msgs = this.admin.getListMgr().getHeldMessages(this.ml.getId(), -1, -1);
 		assertEquals(1, msgs.size());
 		MailHold msg = msgs.iterator().next();
 		assertFalse(msg.isHard());
@@ -91,7 +91,7 @@ public class ModerationTest extends SubEthaTestCase
 	{
 		this.injector.inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
 		
-		Collection<MailHold> msgs = this.admin.getListMgr().getHeldMessages(this.ml.getId());
+		Collection<MailHold> msgs = this.admin.getListMgr().getHeldMessages(this.ml.getId(), -1, -1);
 		MailHold msg = msgs.iterator().next();
 		
 		this.admin.getListMgr().approveHeldMessage(msg.getId());

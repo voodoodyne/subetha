@@ -46,9 +46,9 @@ public class MailingListMixin extends MailingListInfoMixin
 			this.initialOwners = new InternetAddress[] { initialOwner };
 		
 		if (blueprint == null)
-			this.id = adminMixin.getAdmin().createMailingList(this.address, this.url, this.description, this.initialOwners);
+			this.id = adminMixin.getAdmin().createMailingList(this.address, this.url, this.description, this.welcomeMessage, this.initialOwners);
 		else
-			this.id = adminMixin.getListWizard().createMailingList(this.address, this.url, this.description, this.initialOwners, blueprint);
+			this.id = adminMixin.getListWizard().createMailingList(this.address, this.url, this.description, this.welcomeMessage, this.initialOwners, blueprint);
 	}
 	
 	/** */

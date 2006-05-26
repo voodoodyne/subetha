@@ -44,7 +44,7 @@ public interface ListMgr
 	 * are held for approval.
 	 * Requires Permission.EDIT_SETTINGS
 	 */
-	public void setList(Long listId, String name, String description, boolean holdSubs) throws NotFoundException, PermissionException;
+	public void setList(Long listId, String name, String description, String welcomeMessage, boolean holdSubs) throws NotFoundException, PermissionException;
 	
 	/**
 	 * Changes whether or not a list holds subscriptions

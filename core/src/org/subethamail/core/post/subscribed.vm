@@ -23,3 +23,8 @@ You are registered on this mailing list server with the following email addresss
 Your password is:
 
 	$person.password
+	
+#if ($list.welcomeMessage)
+--------------------------------------------------------------------------
+$list.welcomeMessage
+#end

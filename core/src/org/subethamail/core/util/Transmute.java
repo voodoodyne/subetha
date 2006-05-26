@@ -100,6 +100,7 @@ public class Transmute
 				raw.getUrl(),
 				raw.getUrlBase(),
 				raw.getDescription(),
+				raw.getWelcomeMessage(),
 				raw.getOwnerEmail(),
 				raw.isSubscriptionHeld());
 	}
@@ -195,6 +196,7 @@ public class Transmute
 				raw.getList().getUrl(),
 				raw.getList().getUrlBase(),
 				raw.getList().getDescription(),
+				raw.getList().getWelcomeMessage(),
 				raw.getList().getOwnerEmail(),
 				raw.getList().isSubscriptionHeld(),
 				raw.getRole().getName(),

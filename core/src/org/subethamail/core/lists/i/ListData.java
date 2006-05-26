@@ -20,6 +20,7 @@ public class ListData implements Serializable
 	String name;
 	String url;
 	String description;
+	String welcomeMessage;
 	boolean subscriptionHeld;
 	String urlBase;
 	String ownerEmail;
@@ -32,6 +33,7 @@ public class ListData implements Serializable
 					String url,
 					String urlBase,
 					String description,
+					String welcomeMessage,
 					String ownerEmail,
 					boolean subscriptionHeld)
 	{
@@ -40,6 +42,7 @@ public class ListData implements Serializable
 		this.name = name;
 		this.url = url;
 		this.description = description;
+		this.welcomeMessage = welcomeMessage;
 		this.subscriptionHeld = subscriptionHeld;
 		this.urlBase = urlBase;
 		this.ownerEmail = ownerEmail;
@@ -67,6 +70,11 @@ public class ListData implements Serializable
 	public String getDescription()
 	{
 		return this.description;
+	}
+
+	public String getWelcomeMessage()
+	{
+		return this.welcomeMessage;
 	}
 
 	/** */

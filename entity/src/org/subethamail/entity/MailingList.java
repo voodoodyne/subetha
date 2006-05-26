@@ -155,6 +155,9 @@ public class MailingList implements Serializable, Comparable
 	@Column(nullable=false)
 	boolean subscriptionHeld;
 	
+	@Column(nullable=true, length=Validator.MAX_LIST_WELCOME_MESSAGE)
+	String welcomeMessage;
+	
 	//
 	// TODO:  set these two columns back to nullable=false when
 	// this hibernate bug is fixed:
@@ -202,7 +205,7 @@ public class MailingList implements Serializable, Comparable
 	
 	/**
 	 */
-	public MailingList(String email, String name, String url, String description)
+	public MailingList(String email, String name, String url, String description, String welcomeMessage)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mailing list");
@@ -212,6 +215,7 @@ public class MailingList implements Serializable, Comparable
 		this.setName(name);
 		this.setUrl(url);
 		this.setDescription(description);
+		this.setWelcomeMessage(welcomeMessage);
 		
 		// Make sure collections start empty
 		this.subscriptions = new TreeSet<Subscription>(new SubscriptionComparator());
@@ -295,6 +299,19 @@ public class MailingList implements Serializable, Comparable
 		this.description = value;
 	}
 	
+	public String getWelcomeMessage()
+	{
+		return this.welcomeMessage;
+	}
+
+	public void setWelcomeMessage(String welcomeMessage)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Setting welcomeMessage of " + this + " to " + welcomeMessage);
+
+		this.welcomeMessage = welcomeMessage;
+	}
+
 	/**
 	 */
 	public boolean isSubscriptionHeld() { return this.subscriptionHeld; }

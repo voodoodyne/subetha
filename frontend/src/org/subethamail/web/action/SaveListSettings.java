@@ -48,13 +48,17 @@ public class SaveListSettings extends AuthAction
 		@Property String description = "";
 
 		/** */
+		@Length(max=Validator.MAX_LIST_WELCOME_MESSAGE)
+		@Property String welcomeMessage = "";
+
+		/** */
 		@Length(max=Validator.MAX_LIST_URL)
 		@Property String url;	// start null
 
 		/** */
 		@Length(max=Validator.MAX_LIST_EMAIL)
 		@Property String email;	// start null
-		
+
 		/** */
 		@Property boolean holdSubs;
 	}
@@ -127,7 +131,8 @@ public class SaveListSettings extends AuthAction
 			}
 			
 			if (model.getErrors().isEmpty())
-				Backend.instance().getListMgr().setList(model.listId, model.name, model.description, model.holdSubs);
+				Backend.instance().getListMgr()
+					.setList(model.listId, model.name, model.description, model.welcomeMessage, model.holdSubs);
 		}
 	}
 	

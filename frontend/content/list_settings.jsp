@@ -41,7 +41,22 @@
 				</td>
 			</tr>
 			<tr>
-				<th><label for="holdSubs">Hold Subscriptions</label></th>
+				<td><label for="description">Welcome Message</label></td>
+				<td
+					<c:if test="${!empty model.errors.welcomeMessage}">
+						class="error"
+					</c:if>
+				>
+					<textarea id="welcomeMessage" name="welcomeMessage" rows="5" cols="60" style="width:95%"
+					><c:out value="${model.welcomeMessage}"/></textarea>
+					
+					<c:if test="${!empty model.errors.welcomeMessage}">
+						<p class="error"><c:out value="${model.errors.welcomeMessage}"/></p>
+					</c:if>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="holdSubs">Hold Subscriptions</label></td>
 				<td>
 					<input id="holdSubs" name="holdSubs" type="checkbox" value="true"
 						<c:if test="${model.holdSubs}">checked="checked"</c:if>

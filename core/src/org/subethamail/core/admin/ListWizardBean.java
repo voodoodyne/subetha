@@ -82,14 +82,14 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 	/**
 	 * @see ListWizard#createMailingList(InternetAddress, URL, String, InternetAddress[], String)
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
+	public Long createMailingList(InternetAddress address, URL url, String description, String welcomeMessage, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
 		Blueprint blue = this.blueprints.get(blueprintId);
 
 		if (blue == null)
 			throw new IllegalStateException("Blueprint does not exist");
 		
-		Long listId = this.admin.createMailingList(address, url, description, initialOwners);
+		Long listId = this.admin.createMailingList(address, url, description, welcomeMessage, initialOwners);
 		
 		blue.configureMailingList(listId);
 		

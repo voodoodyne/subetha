@@ -36,6 +36,7 @@ public class Validator
 	public static final int MAX_LIST_NAME = 255;
 	public static final int MAX_LIST_URL = 255;
 	public static final int MAX_LIST_DESCRIPTION = 4096;
+	public static final int MAX_LIST_WELCOME_MESSAGE = 4096;
 	
 	// Role
 	public static final int MAX_ROLE_NAME = 50;

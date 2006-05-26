@@ -85,15 +85,16 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#setList(java.lang.Long, java.lang.String, java.lang.String, boolean)
+	 * @see org.subethamail.core.lists.i.ListMgr#setList(java.lang.Long, java.lang.String, java.lang.String, java.lang.String, boolean)
 	 */
-	public void setList(Long listId, String name, String description, boolean holdSubs) throws NotFoundException, PermissionException
+	public void setList(Long listId, String name, String description, String welcomeMessage, boolean holdSubs) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_SETTINGS);
 		
 		list.setName(name);
 		list.setDescription(description);
-
+		list.setWelcomeMessage(welcomeMessage);
+		
 		this.setHoldSubscriptions(list, holdSubs);
 	}
 

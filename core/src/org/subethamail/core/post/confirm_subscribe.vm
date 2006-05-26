@@ -6,14 +6,21 @@
 ## Expects a String value "subject" to be set in the context
 ##
 #set($subject = "Confirm subscription to $list.name")
-Someone (hopefully you) requested to subscribe to the mailing list '$list.name'.  To confirm, you must either click on the following link:
+Someone (hopefully you) requested to subscribe to the mailing list '$list.name'.
+To confirm, you must either click on the following link:
 
 ${list.urlBase}subscribe_confirm_submit.jsp?token=$token
 
 *OR*
 
-Copy and paste the following confirmation code into the appropriate field on the confirmation page:
+Copy and paste the following confirmation code into the appropriate field on 
+the confirmation page:
 
 $token
 
 If you did not make this request, simply ignore this message.
+
+#if ($list.welcomeMessage)
+--------------------------------------------------------------------------
+$list.welcomeMessage
+#end

@@ -41,11 +41,12 @@ public interface Admin
 	 * @param address contains both the email address and the short textual name of the list
 	 * @param url is a valid list URL, including the /list/ portion.
 	 * @param description is a long description of this list
+	 * @param welcomeMessage is a custom list specific welcome message sent to new users when they subscribe
 	 * @param initialOwners is a list of email addresses.
 	 * @throws DuplicateListDataException if the address or url are already in use.
 	 * @throws InvalidListDataException if some of the list data can't be used.
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException;
+	public Long createMailingList(InternetAddress address, URL url, String description, String welcomeMessage, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException;
 	
 	/**
 	 * Finds a person's id if the user exists, or creates a user account and

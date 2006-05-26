@@ -26,6 +26,7 @@ public class MailingListInfoMixin
 	InternetAddress address;
 	URL url;
 	String description;
+	String welcomeMessage;
 	
 	/** */
 	public MailingListInfoMixin() throws Exception
@@ -41,6 +42,7 @@ public class MailingListInfoMixin
 		this.url = new URL("http://localhost:8080/se/list/" + baseEmail);
 		this.address = new InternetAddress(this.email, this.name);
 		this.description = "Test list description";
+		this.welcomeMessage = "Test list welcome message";
 	}
 	
 	/** */
@@ -48,4 +50,9 @@ public class MailingListInfoMixin
 	public URL getUrl() { return this.url; }
 	public InternetAddress getAddress() { return this.address; }
 	public String getDescription() { return this.description; }
+
+	public String getWelcomeMessage()
+	{
+		return this.welcomeMessage;
+	}
 }

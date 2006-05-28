@@ -19,8 +19,7 @@ public class TextPartData extends InlinePartData
 	{
 		super(contents, type, name, size);
 		
-		if(size == 0 || size == -1)
-			this.contentSize = contents.length() * Character.SIZE;
+		if (size == 0 || size == -1) this.contentSize = contents.length() * Character.SIZE;
 
 		this.contents = contents;
 	}

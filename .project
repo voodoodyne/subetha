@@ -14,4 +14,31 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>jboss-config</name>
+			<type>2</type>
+			<location>JBOSS_HOME/server/default/conf</location>
+		</link>
+		<link>
+			<name>jboss-log</name>
+			<type>2</type>
+			<location>JBOSS_HOME/server/default/log</location>
+		</link>
+		<link>
+			<name>jboss-tmp</name>
+			<type>2</type>
+			<location>JBOSS_HOME/server/default/tmp</location>
+		</link>
+		<link>
+			<name>jboss-deploy</name>
+			<type>2</type>
+			<location>JBOSS_HOME/server/default/deploy</location>
+		</link>
+		<link>
+			<name>jboss-work</name>
+			<type>2</type>
+			<location>JBOSS_HOME/server/default/work</location>
+		</link>
+	</linkedResources>
 </projectDescription>

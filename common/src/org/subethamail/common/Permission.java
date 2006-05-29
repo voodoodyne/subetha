@@ -37,7 +37,7 @@ public enum Permission
 	{
 		Set<Permission> tmp = new TreeSet<Permission>();
 
-		for (Permission p: Permission.values())
+		for (Permission p : Permission.values())
 			tmp.add(p);
 
 		ALL = Collections.unmodifiableSet(tmp);

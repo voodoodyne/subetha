@@ -24,6 +24,9 @@ public class Converter
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(Converter.class);
 	
+	/** default constructor keeps util class from being created. */
+	private Converter() {}
+	
 	/**
 	 * Converts from the String version to a native object 
 	 * of type clazz by calling the static valueOf(String) method.

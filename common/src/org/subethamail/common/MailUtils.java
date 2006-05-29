@@ -25,6 +25,9 @@ public class MailUtils
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(MailUtils.class);
+
+	/** default constructor prevents util class from being created. */
+	private MailUtils() {}
 	
 	/**
 	 * Assumes that the contentType contains a name header in 
@@ -39,30 +42,30 @@ public class MailUtils
 	 */
 	public static String getNameFromContentType(String contentType) 
 	{
-		//null contentType results an exception
+		// null contentType results an exception
 		if (contentType == null) throw new IllegalArgumentException();
-		
-		//figure out the name, if there is one.
+
+		// figure out the name, if there is one.
 		String name = "";
 		int namestart = contentType.indexOf("name=");
-		if(namestart > 0)
+		if (namestart > 0)
 		{
-			//add the number of chars in 'name='
-			namestart += 5;
+			// add the number of chars in 'name='
+			namestart += "name=".length();
 			int endnamevalue = contentType.indexOf("\"", namestart + 1);
-			
-			//we have a quoted value
-			if(endnamevalue > namestart) return contentType.substring(namestart + 1, endnamevalue);
-			
+
+			// we have a quoted value
+			if (endnamevalue > namestart) return contentType.substring(namestart + 1, endnamevalue);
+
 			endnamevalue = contentType.indexOf(";", namestart);
-			
-			//we have a ; ended value
-			if(endnamevalue > namestart) return contentType.substring(namestart, endnamevalue);
+
+			// we have a ; ended value
+			if (endnamevalue > namestart) return contentType.substring(namestart, endnamevalue);
 
 			endnamevalue = contentType.indexOf("\n", namestart);
-			
-			//we have a newline ended value, maybe with whitespace
-			if(endnamevalue > namestart) return contentType.substring(namestart, endnamevalue).trim();
+
+			// we have a newline ended value, maybe with whitespace
+			if (endnamevalue > namestart) return contentType.substring(namestart, endnamevalue).trim();
 		}
 		
 		return name;	

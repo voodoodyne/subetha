@@ -29,6 +29,9 @@ public class SiteUtils
 	
 	/** Path to the list servlet */
 	public static final String LIST_SERVLET_PATH = WEBAPP_CONTEXT_PATH + "list/";
+
+	/** default constructor prevents util class from being created. */
+	private SiteUtils() {}
 	
 	/** 
 	 * Make sure that the list servlet path is the first thing after the domain.

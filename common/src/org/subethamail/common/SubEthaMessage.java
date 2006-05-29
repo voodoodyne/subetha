@@ -215,8 +215,9 @@ public class SubEthaMessage extends SMTPMessage
 	{
 		Object content = part.getContent();
 
-		if (content instanceof Part) {
-			Part contentPart = (Part) content;
+		if (content instanceof Part)
+		{
+			Part contentPart = (Part)content;
 			getParts(contentPart, parts);
 		}
 		else if (content instanceof Multipart)

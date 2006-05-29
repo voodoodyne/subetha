@@ -61,6 +61,9 @@ public class Validator
 	public static final int MAX_ATTACHMENT_CONTENT_TYPE = 255;
 	public static final int MAX_ATTACHMENT_CONTENT = 1024 * 1024 * 1024;	// 1G
 
+	/** default constructor prevents util class from being created. */
+	private Validator() {}
+
 	/**
 	 * Normalizes an email address to a canonical form - the domain
 	 * name is lowercased but the user part is left case sensitive.
@@ -91,32 +94,38 @@ public class Validator
 		if (email == null || email.length() == 0)
 			return false;
 		
-		if (email.length() > MAX_EMAIL_ADDRESS){
+		if (email.length() > MAX_EMAIL_ADDRESS)
+		{
 			if (log.isDebugEnabled()) log.debug("Email too long: " + email);
 			return false;
 		}
 		
 		int indexOfAt = email.indexOf('@');
 
-		if (indexOfAt < 1){	// must have @ and must not be 1st char
+		if (indexOfAt < 1)
+		{ 
+			// must have @ and must not be 1st char
 			if (log.isDebugEnabled()) log.debug("@ is first char: " + email);
 			return false;
 		}
 
 		String site = email.substring(indexOfAt + 1);
 
-		if (site.indexOf('@') >= 0){
+		if (site.indexOf('@') >= 0)
+		{
 			if (log.isDebugEnabled()) log.debug("@ missing: " + email);
 			return false;
 		}
 
-		if (site.startsWith(".") || site.endsWith(".")){
+		if (site.startsWith(".") || site.endsWith("."))
+		{
 			if (log.isDebugEnabled()) log.debug("cannot start or end with '.': " + email);
 			return false;
 		}
 
 		// Make sure we don't have a one-letter TLD
-		if (site.length() - 2 > 0 && site.charAt(site.length() - 2) == '.'){
+		if (site.length() - 2 > 0 && site.charAt(site.length() - 2) == '.')
+		{
 			if (log.isDebugEnabled()) log.debug("TLD too short:" + email);
 			return false;
 		}

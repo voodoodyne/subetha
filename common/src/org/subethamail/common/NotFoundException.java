@@ -5,9 +5,8 @@
 
 package org.subethamail.common;
 
-/**
- * Generically indicates that something wasn't found (ie, an entity)
- */
+/** Generically indicates that something wasn't found (ie, an entity).
+ **/
 @SuppressWarnings("serial")
 public class NotFoundException extends Exception
 {

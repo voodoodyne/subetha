@@ -91,7 +91,7 @@ class FilterContextImpl implements FilterContext
 		    {
 		    	if (e.getKey().equals("mail") || e.getKey().equals("list"))
 		    		continue;
-		    	vctx.put(e.getKey(),e.getValue());
+		    	vctx.put(e.getKey(), e.getValue());
 		    }
 		}
 		

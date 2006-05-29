@@ -23,6 +23,9 @@ public class Base62
 {
 	/** */
 	private static Log log = LogFactory.getLog(Base62.class);
+
+	/** default constructor prevents util class from being created. */
+	private Base62() {}
 	
 	/**
 	 * Encodes bytes as a Base62 string.

@@ -28,6 +28,9 @@ public class OwnerAddress
 	/** This is the suffix of all VERP'd addresses, plus the '@' */
 	public static final String SUFFIX = "-owner@";
 	
+	/** default constructor prevents util class from being created. */
+	private OwnerAddress() {}
+
 	/**
 	 * @return null if the address was not an owner address  
 	 */

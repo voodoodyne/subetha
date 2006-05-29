@@ -83,11 +83,11 @@ public class TechnicalBlueprint extends AbstractBlueprint implements Lifecycle
 			listMgr.setFilter(listId, ListHeaderFilter.class.getName());
 			listMgr.setFilter(listId, ReplyToFilter.class.getName());
 		}
-		catch(PermissionException pe)
+		catch (PermissionException pe)
 		{
 			throw new RuntimeException(pe);
 		}
-		catch(NotFoundException nfe)
+		catch (NotFoundException nfe)
 		{
 			throw new RuntimeException(nfe);
 		}

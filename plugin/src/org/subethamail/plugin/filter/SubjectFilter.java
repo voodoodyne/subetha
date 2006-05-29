@@ -40,7 +40,7 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 	private static Log log = LogFactory.getLog(SubjectFilter.class);
 
 	public static final String ARG_SUBJECTPREFIX = "Subject";
-	public static final Pattern pattern = Pattern.compile("((RE|AW|SV)(\\[\\d+\\])*:\\s*)+", Pattern.CASE_INSENSITIVE);
+	public static final Pattern SUBJECT_PATTERN = Pattern.compile("((RE|AW|SV)(\\[\\d+\\])*:\\s*)+", Pattern.CASE_INSENSITIVE);
 	
 	/** */
 	static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
@@ -103,7 +103,7 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 		subjectMsg = subjectMsg.replace(expandedSubjectArg, "");
 
 		// remove all duplicate Re: stuff.
-		Matcher matcher = pattern.matcher(subjectMsg);
+		Matcher matcher = SUBJECT_PATTERN.matcher(subjectMsg);
 		if (matcher.find())
 		{
 			subjectMsg = subjectMsg.substring(matcher.end());

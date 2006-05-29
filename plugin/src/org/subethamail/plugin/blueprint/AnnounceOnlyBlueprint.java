@@ -86,11 +86,11 @@ public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycl
 			listMgr.setFilter(listId, AppendFooterFilter.class.getName());
 			listMgr.setFilter(listId, ListHeaderFilter.class.getName());
 		}
-		catch(PermissionException pe)
+		catch (PermissionException pe)
 		{
 			throw new RuntimeException(pe);
 		}
-		catch(NotFoundException nfe)
+		catch (NotFoundException nfe)
 		{
 			throw new RuntimeException(nfe);
 		}

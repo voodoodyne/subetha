@@ -39,7 +39,9 @@ public class GetHeldMessages extends AuthAction
 		this.getCtx().setModel(new Model());
 	}
 
-	/** */
+	/**
+	 * @throws Exception 
+	 **/
 	public void execute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();

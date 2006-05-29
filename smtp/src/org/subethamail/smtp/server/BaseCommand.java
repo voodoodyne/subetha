@@ -81,7 +81,7 @@ abstract public class BaseCommand implements Command
 			else
 				result = true;
 		}
-		catch(AddressException ae)
+		catch (AddressException ae)
 		{
 			result = false;
 		}

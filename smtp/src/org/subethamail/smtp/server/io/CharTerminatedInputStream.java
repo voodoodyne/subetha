@@ -38,13 +38,13 @@ public class CharTerminatedInputStream
     /**
      * The terminating character array
      */
-    private int match[];
+    private int[] match;
 
     /**
      * An array containing the last N characters read from the stream, where
      * N is the length of the terminating character array
      */
-    private int buffer[];
+    private int[] buffer;
 
     /**
      * The number of bytes that have been read that have not been placed

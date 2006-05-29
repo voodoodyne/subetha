@@ -300,7 +300,7 @@ public class SMTPServer implements Runnable
 				ThreadGroup connectionGroup = this.server.getConnectionGroup();
 				connectionGroup.enumerate(this.groupThreads);
 
-				for (int i=0; i<connectionGroup.activeCount();i++)
+				for (int i=0; i<connectionGroup.activeCount(); i++)
 				{
 					ConnectionHandler aThread = ((ConnectionHandler)this.groupThreads[i]);
 					if (aThread != null)

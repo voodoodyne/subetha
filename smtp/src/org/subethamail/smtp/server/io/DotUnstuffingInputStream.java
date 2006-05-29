@@ -31,12 +31,10 @@ public class DotUnstuffingInputStream extends FilterInputStream {
      * This allows the stream to detect '\r\n' sequences even
      * when they occur across read boundaries.
      */
-    protected int last[] = new int[2];
+    protected int[] last = {-1, -1};
 
     public DotUnstuffingInputStream(InputStream in) {
         super(in);
-        last[0] = -1;
-        last[1] = -1;
     }
 
     /**

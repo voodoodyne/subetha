@@ -102,7 +102,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 
 		log.info("Starting SMTP service: " + (binding==null ? "*" : binding) + ":" + port);
 		
-		smtpServer = new SMTPServer(hostName, binding, port, listeners);
+		smtpServer = new SMTPServer(hostName, binding, port, listeners.values());
 		smtpServer.start();
 	}
 

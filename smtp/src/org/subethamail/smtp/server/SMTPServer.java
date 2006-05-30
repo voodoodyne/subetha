@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
-import java.util.Map;
+import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,7 +22,7 @@ import org.subethamail.smtp.i.MessageListener;
  * This class also manages a watchdog thread which will timeout 
  * stale connections.
  *
- * In order to instantiate a new server, one must pass in a Map of
+ * In order to instantiate a new server, one must pass in a Set of
  * MessageListeners. These listener classes are executed during the
  * RCPT TO: (MessageListener.accept()) phase and after the CRLF.CRLF
  * data phase (MessageListener.deliver()). This way, the server itself
@@ -41,7 +41,7 @@ public class SMTPServer implements Runnable
 	private String hostName;
 	private InetAddress bindAddress;
 	private int port;
-	private Map<MessageListener, MessageListener> listeners;
+	private Collection<MessageListener> listeners;
 
 	private CommandHandler commandHandler;
 	
@@ -79,7 +79,7 @@ public class SMTPServer implements Runnable
 	 * @param listeners
 	 * @throws UnknownHostException
 	 */
-	public SMTPServer(String hostname, InetAddress bindAddress, int port, Map<MessageListener, MessageListener> listeners) 
+	public SMTPServer(String hostname, InetAddress bindAddress, int port, Collection<MessageListener> listeners) 
 		throws UnknownHostException
 	{
 		this.hostName = hostname;
@@ -204,10 +204,8 @@ public class SMTPServer implements Runnable
 
 	/**
 	 * The Listeners are what the SMTPServer delivers to.
-	 * 
-	 * @return A Map of MessageListener objects.
 	 */
-	public Map<MessageListener, MessageListener> getListeners()
+	public Collection<MessageListener> getListeners()
 	{
 		return this.listeners;
 	}

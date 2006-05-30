@@ -72,7 +72,7 @@ public class ReceiptCommand extends BaseCommand
 		Session session = context.getSession();
 		boolean addedListener = false;
 
-		for (MessageListener listener : ((SMTPServer)context.getServer()).getListeners().values())
+		for (MessageListener listener : ((SMTPServer)context.getServer()).getListeners())
 		{
 			if (listener.accept(session.getSender(), recipientAddress))
 			{

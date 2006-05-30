@@ -112,6 +112,32 @@
 		target which will build SubEtha and install it in the right
 		JBoss directory location.
 		</p>
+
+		<h3>Suggested Eclipse Plugins</h3>
+		<p>
+		<ul>
+			<li>
+				<strong>Check Style</strong>: <a href="http://eclipse-cs.sourceforge.net/">http://eclipse-cs.sourceforge.net/</a>
+			</li>
+			<li>
+				<strong>Subclipse</strong>: <a href="http://subclipse.tigris.org/">http://subclipse.tigris.org/</a>
+			</li>		
+		</ul>
+		</p>
+
+		<h3>Linked Resources(Optional)</h3>
+		<p>
+		You can also setup Linked Resource support in eclipse so that you can edit 
+		the deployed files in JBoss. These folders can also allow direct editing 
+		(in eclipse) of jboss configuration files. To do this, please add a 
+		JBOSS_HOME variable to the workspace linked resources properties. The linked
+		folder in eclipse are named "jboss-X" where X points to the server/default/X.
+		</p>
+		
+		<p><strong>Note:</strong> You will need to refresh the linked folders each time
+		you deploy. JBoss creates a new folder in deploy/tmp each time the ear is unpacked.
+		</p>
+
 		
 		<h2>Startup</h2>
 		<p>

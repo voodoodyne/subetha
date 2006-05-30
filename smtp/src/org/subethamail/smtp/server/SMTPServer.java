@@ -88,6 +88,8 @@ public class SMTPServer implements Runnable
 		this.listeners = listeners;
 
 		this.commandHandler = new CommandHandler();		
+
+		this.connectionHanderGroup = new ThreadGroup(SMTPServer.class.getName() + " ConnectionHandler Group");
 	}
 
 	/**
@@ -98,10 +100,10 @@ public class SMTPServer implements Runnable
 	{
 		if (this.serverThread != null)
 			throw new IllegalStateException("SMTPServer already started");
-
+		
 		this.serverThread = new Thread(this, SMTPServer.class.getName());
 		this.serverThread.start();
-		
+
 		this.watchdogThread = new Watchdog(this);
 		this.watchdogThread.start();
 	}
@@ -137,8 +139,6 @@ public class SMTPServer implements Runnable
 				this.serverSocket = new ServerSocket(this.port, 50);
 			else
 				this.serverSocket = new ServerSocket(this.port, 50, this.bindAddress);
-			
-			this.connectionHanderGroup = new ThreadGroup(SMTPServer.class.getName() + " ConnectionHandler Group");
 		}
 		catch (Exception e)
 		{

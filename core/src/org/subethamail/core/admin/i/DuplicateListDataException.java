@@ -5,10 +5,13 @@
 
 package org.subethamail.core.admin.i;
 
+import javax.ejb.ApplicationException;
+
 /**
  * Thrown when a mailing list could not be created.
  */
 @SuppressWarnings("serial")
+@ApplicationException(rollback=true)
 public class DuplicateListDataException extends Exception
 {
 	/** */

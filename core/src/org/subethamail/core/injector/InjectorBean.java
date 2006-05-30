@@ -148,31 +148,48 @@ public class InjectorBean implements Injector, InjectorRemote
 	 */
 	public boolean inject(String envelopeSender, String envelopeRecipient, InputStream mailData) throws MessagingException, IOException
 	{
+		return inject(envelopeSender, envelopeRecipient, mailData, false, false, true, true);
+	}
+
+	/*
+	 *  (non-Javadoc)
+	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, java.io.InputStream, boolean, boolean, boolean)
+	 */
+	public boolean inject(String envelopeSender, String envelopeRecipient, InputStream mailData, boolean ignoreVerp, boolean ignoreSoftHolds, boolean ignoreDuplicates, boolean queueForDelivery) throws MessagingException, IOException
+	{
 		if (log.isDebugEnabled())
 			log.debug("Injecting message sent to " + envelopeRecipient);
-		
+
 		InternetAddress senderAddy = new InternetAddress(envelopeSender);
 		InternetAddress recipientAddy = new InternetAddress(envelopeRecipient);
-		
-		// Immediately check to see if the envelope sender is a verp address.  If it is,
-		// convert it into an -owner address.  This magic allows lists to subscribe to lists.
-		VERPAddress senderVerp = VERPAddress.getVERPBounce(senderAddy.getAddress());
-		if (senderVerp != null)
-			senderAddy = new InternetAddress(OwnerAddress.makeOwner(senderAddy.getAddress()));
-		
-		// Must check for recipient VERP bounce
-		VERPAddress recipientVerp = VERPAddress.getVERPBounce(recipientAddy.getAddress());
-		if (recipientVerp != null)
+
+		if (ignoreVerp)
 		{
-			this.handleBounce(recipientVerp);
-			return true;
+			
+			// Immediately check to see if the envelope sender is a verp address.  If it is,
+			// convert it into an -owner address.  This magic allows lists to subscribe to lists.
+			VERPAddress senderVerp = VERPAddress.getVERPBounce(senderAddy.getAddress());
+			if (senderVerp != null)
+				senderAddy = new InternetAddress(OwnerAddress.makeOwner(senderAddy.getAddress()));
+			
+			// Must check for recipient VERP bounce
+			VERPAddress recipientVerp = VERPAddress.getVERPBounce(recipientAddy.getAddress());
+			if (recipientVerp != null)
+			{
+				this.handleBounce(recipientVerp);
+				return true;
+			}
 		}
 		
-		// Check for -owner mail
-		String listForOwner = OwnerAddress.getList(envelopeRecipient);
-		if (listForOwner != null)
-			recipientAddy = new InternetAddress(listForOwner);
+		String listForOwner = null;
 		
+		if (ignoreSoftHolds)
+		{
+			// Check for -owner mail
+			listForOwner = OwnerAddress.getList(envelopeRecipient);
+			if (listForOwner != null)
+				recipientAddy = new InternetAddress(listForOwner);
+		}
 		// Figure out which list this is for
 		MailingList toList;
 		try
@@ -197,17 +214,29 @@ public class InjectorBean implements Injector, InjectorRemote
 		if (msg.hasXLoop(toList.getEmail()))
 			return true;
 		
-		// Now that we have the basic building blocks, see if we
-		// should be forwarding the mail to owners instead
-		if (listForOwner != null)
+		if (ignoreSoftHolds)
 		{
-			this.handleOwnerMail(toList, msg);
-			return true;
+			// Now that we have the basic building blocks, see if we
+			// should be forwarding the mail to owners instead
+			if (listForOwner != null)
+			{
+				this.handleOwnerMail(toList, msg);
+				return true;
+			}
 		}
-		
-		// Make sure we have a unique message id
-		this.checkMessageId(toList, msg);
-		
+
+		// Check to see if the message is a duplicate.
+		if(this.isDuplicateMessage(toList, msg)) 
+		{
+			// Are we dropping duplicates? 
+			if(!ignoreDuplicates)
+				return true;
+			
+			// We have a message in the list already (duplicate), give this 
+			// one a new MessageID, and let it through
+			msg.replaceMessageID();
+		}
+
 		// If it stays null, no moderation required
 		HoldType hold = null;
 		String holdMsg = null;
@@ -235,7 +264,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		}
 		
 		// Find out if the message should be held for moderation
-		if (hold == null)
+		if (hold == null && !ignoreSoftHolds)
 		{
 			// Figure out who sent it, if we know
 			try
@@ -282,7 +311,9 @@ public class InjectorBean implements Injector, InjectorRemote
 		else
 		{
 			this.threadMail(mail, msg);
-			this.queuer.queueForDelivery(mail.getId());
+			
+			if(queueForDelivery)
+				this.queuer.queueForDelivery(mail.getId());
 		}
 		
 		return true;
@@ -314,26 +345,24 @@ public class InjectorBean implements Injector, InjectorRemote
 		}
 	}
 
-	/**
-	 * Ensures that the message has a unique message id.
-	 */
-	protected void checkMessageId(MailingList list, SubEthaMessage msg) throws MessagingException
+	protected boolean isDuplicateMessage(MailingList list, SubEthaMessage msg) throws MessagingException
 	{
 		String messageId = msg.getMessageID();
 		
-		if (messageId == null)
-		{
-			msg.replaceMessageID();
-		}
-		else
+		if (messageId != null)
 		{
 			try
 			{
 				this.dao.findMailByMessageId(list.getId(), messageId);
-				msg.replaceMessageID();
+				return true;
 			}
-			catch (NotFoundException ex) {}
+			catch (NotFoundException ex) 
+			{
+				return false;
+			}
 		}
+
+		return true;
 	}
 
 	/**

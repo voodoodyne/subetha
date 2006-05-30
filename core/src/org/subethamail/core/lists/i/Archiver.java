@@ -5,11 +5,13 @@
 
 package org.subethamail.core.lists.i;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
 import javax.ejb.Local;
 
+import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.PermissionException;
 
@@ -74,4 +76,14 @@ public interface Archiver
 	 * @throws NotFoundException if the mail cannot be found or the user is unknown
 	 */
 	public void sendTo(Long mailId, String email) throws NotFoundException;
+	
+	/**
+	 * Imports messages into a List.
+	 * 
+	 * @param listId the list to insert the messages into
+	 * @param mboxStream the mbox stream to read messages from
+	 * @throws NotFoundException if the list is not found
+	 * @throws PermissionException if the user has not IMPORT_MESSAGES permissions
+	 */
+	public void importMessages(Long listId, InputStream mboxStream) throws NotFoundException, PermissionException, ImportMessagesException;
 }

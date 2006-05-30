@@ -6,7 +6,10 @@
 package org.subethamail.core.lists;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -28,6 +31,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
@@ -36,10 +40,13 @@ import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
+import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ArchiverRemote;
 import org.subethamail.core.lists.i.AttachmentPartData;
 import org.subethamail.core.lists.i.InlinePartData;
+import org.subethamail.core.lists.i.ListData;
+import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.TextPartData;
@@ -50,6 +57,8 @@ import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.dao.DAO;
+
+import com.sun.mail.util.LineInputStream;
 
 /**
  * Implementation of the Archiver interface.
@@ -68,6 +77,9 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	@EJB FilterRunner filterRunner;
 	@EJB Detacher detacher;
 	@EJB DAO dao;
+	@EJB ListMgr listManager;
+	@EJB Injector injector;
+
 	
 	/** */
 	private static Log log = LogFactory.getLog(ArchiverBean.class);
@@ -213,6 +225,63 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		return data;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#importMessages(Long, InputStream)
+	 */
+	public void importMessages(Long listId, InputStream mboxStream) throws NotFoundException, PermissionException, ImportMessagesException
+	{
+
+		MailingList list = dao.findMailingList(listId);
+
+		list.checkPermission(getMe(), Permission.IMPORT_MESSAGES);
+		
+		try 
+		{
+		    LineInputStream in = new LineInputStream(mboxStream);
+			String line = null;
+			String fromLine = null;
+			String envelopeSender = null;
+			ByteArrayOutputStream buf = null;
+	
+			for (line = in.readLine(); line != null; line = in.readLine())
+			{
+				if (line.indexOf("From ") == 0)
+				{
+					if (buf != null)
+					{
+						byte[] bytes = buf.toByteArray();
+						ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
+						injector.inject(envelopeSender, list.getEmail(), bin, true, true, false, false);
+					}
+					fromLine = line;
+					envelopeSender = MailUtils.getMboxFrom(fromLine);
+					buf = new ByteArrayOutputStream();
+				}
+				else if (buf != null)
+				{
+					byte[] bytes = MailUtils.decodeMboxFrom(line).getBytes();
+					buf.write(bytes, 0, bytes.length);
+					buf.write(10); // LF
+				}
+			}
+			if (buf != null)
+			{
+				byte[] bytes = buf.toByteArray();
+				ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
+				injector.inject(envelopeSender, list.getEmail(), bin, true, true, false, false);
+			}
+		}
+		catch(IOException ex)
+		{
+			throw new ImportMessagesException(ex);
+		}
+		catch(MessagingException ex)
+		{
+			throw new ImportMessagesException(ex);
+		}
+	}
+	
 	/**
 	 * Makes the base mail data.  Doesn't set the threadRoot.
 	 */

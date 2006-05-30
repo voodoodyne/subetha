@@ -79,6 +79,14 @@
 				</c:url>
 				<a href="${massSubUrl}">&rsaquo; Mass Subscribe</a>
 			</c:if>
+			
+			<c:if test="${perms.IMPORT_MESSAGES}">
+				<c:url var="importMsgsUrl" value="/import_messages.jsp">
+					<c:param name="listId" value="${listId}"/>
+				</c:url>
+				<a href="${importMsgsUrl}">&rsaquo; Import</a>
+			</c:if>
+			
 		</div> <!-- sideBox LHS -->
 	</c:if>
 	

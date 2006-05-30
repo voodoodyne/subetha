@@ -29,7 +29,8 @@ public enum Permission
 	READ_ARCHIVES("Read and search the archives of the mailing list."),
 	READ_NOTES("Read administrative notes that have been placed on subscribers."),
 	EDIT_NOTES("Create and edit administrative notes for subscribers."),
-	VIEW_ADDRESSES("See the real email addresses of members in the archives and subscriber list.");
+	VIEW_ADDRESSES("See the real email addresses of members in the archives and subscriber list."),
+	IMPORT_MESSAGES("Import messages for a list. This allow direct recording of messages into the archives with no delivery.");
 
 	/** A set that contains all permissions */
 	public static final Set<Permission> ALL;

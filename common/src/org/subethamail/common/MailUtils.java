@@ -28,6 +28,49 @@ public class MailUtils
 
 	/** default constructor prevents util class from being created. */
 	private MailUtils() {}
+
+	/**
+	 * Returns the specified line with any From_ line encoding removed.
+	 */
+	public static String decodeMboxFrom(String line)
+	{
+		if (line != null)
+		{
+			int len = line.length();
+			for (int i = 0; i < (len - 5); i++)
+			{
+				char c = line.charAt(i);
+				if (i > 0
+						&& (c == 'F' && line.charAt(i + 1) == 'r' && line.charAt(i + 2) == 'o'
+								&& line.charAt(i + 3) == 'm' && line.charAt(i + 4) == ' '))
+					return line.substring(1);
+				if (c != '>') break;
+			}
+		}
+		return line;
+	}
+
+	/**
+	 * Returns the email address in the From_ line.
+	 */
+	public static String getMboxFrom(String line)
+	{
+		String prettyLine = decodeMboxFrom(line);
+		String[] parts = prettyLine.split(" ");
+		if (prettyLine.indexOf('@')>0)
+		{
+			return parts[1];
+		}
+		
+		for (int i = 0; i < parts.length; i++)
+		{
+			String s = parts[i];
+			if("at".equals(s))
+				return parts[i-1] + "@" + parts[i+1];
+		}
+		
+		return null;
+	}
 	
 	/**
 	 * Assumes that the contentType contains a name header in 

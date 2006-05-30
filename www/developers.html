@@ -127,13 +127,17 @@
 
 		<h3>Linked Resources(Optional)</h3>
 		<p>
-		You can also setup Linked Resource support in eclipse so that you can edit 
-		the deployed files in JBoss. These folders can also allow direct editing 
-		(in eclipse) of jboss configuration files. To do this, please add a 
-		JBOSS_HOME variable to the workspace linked resources properties. The linked
-		folder in eclipse are named "jboss-X" where X points to the server/default/X.
+			You can also setup Linked Resource support in eclipse so that you can
+			edit the deployed files in JBoss. These folders can also allow direct
+			editing (in eclipse) of jboss configuration files. To do this, please
+			add a JBOSS_HOME variable to the workspace linked resources properties.
+			These setting can be found at Window -> Preferences under the General :
+			Workspace : Linked Resources section. Select New from the dialog and
+			specify a name of JBOSS_HOME to the jboss home folder. The linked
+			folders in the project are named "jboss-X", where X points to the
+			server/default/X folder.
 		</p>
-		
+			
 		<p><strong>Note:</strong> You will need to refresh the linked folders each time
 		you deploy. JBoss creates a new folder in deploy/tmp each time the ear is unpacked.
 		</p>

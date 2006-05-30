@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.ejb.EJBException;
 import javax.mail.Address;
@@ -249,6 +250,7 @@ public class Mail implements Serializable, Comparable
 		
 		this.setEnvelopeSender(envelopeSender.getAddress());
 		
+		this.replies = new TreeSet<Mail>();
 		this.attachments = new HashSet<Attachment>();
 	}
 	

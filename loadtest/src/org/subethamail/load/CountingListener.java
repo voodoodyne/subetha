@@ -5,6 +5,7 @@
 
 package org.subethamail.load;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -41,6 +42,9 @@ public class CountingListener implements MessageListener
 	/** Indicate we have one more */
 	public void deliver(String from, String recipient, InputStream data) throws TooMuchDataException, IOException
 	{
+		// A little extra buffering can't hurt
+		data = new BufferedInputStream(data);
+		
 		// Read the whole stream
 		while (data.read() >= 0)
 			;	// do nothing

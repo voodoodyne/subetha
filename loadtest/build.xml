@@ -87,5 +87,21 @@
 			</classpath>
 		</java>
 	</target>
+	
+	<target name="loadgen-attach" depends="loadtest-jar">
+		<java classname="org.subethamail.load.LoadGenerator">
+			<arg value="jeff-lt@infohazard.org"/>
+			<arg value="load@infohazard.org"/>
+			<arg value="/tmp/attachment.dat"/>
+			
+			<syspropertyset>
+				<propertyref prefix="java.naming" />
+			</syspropertyset>
+						
+			<classpath>
+				<path refid="loadtest.run.classpath" />
+			</classpath>
+		</java>
+	</target>
 </project>
 

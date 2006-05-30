@@ -1,5 +1,6 @@
 package org.subethamail.smtp.command;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -45,14 +46,15 @@ public class DataCommand extends BaseCommand
 		context.sendResponse("354 End data with <CR><LF>.<CR><LF>");
 		session.setDataMode(true);
 
-		InputStream dotInputStream = 
-			new DotUnstuffingInputStream(
-					new CharTerminatedInputStream(context.getConnection().getInput(), SMTP_TERMINATOR));
+		InputStream stream = context.getConnection().getInput();
+		stream = new BufferedInputStream(stream);
+		stream = new CharTerminatedInputStream(stream, SMTP_TERMINATOR);
+		stream = new DotUnstuffingInputStream(stream);
 
 		if (session.getDeliveries().size() == 1)
 		{
 			Delivery delivery = session.getDeliveries().get(0);
-			delivery.getListener().deliver(session.getSender(), delivery.getRecipient(), dotInputStream);
+			delivery.getListener().deliver(session.getSender(), delivery.getRecipient(), stream);
 		}
 		else
 		{
@@ -62,7 +64,7 @@ public class DataCommand extends BaseCommand
 			try
 			{
 				int value;
-				while ((value = dotInputStream.read()) >= 0)
+				while ((value = stream.read()) >= 0)
 				{
 					dfos.write(value);
 				}

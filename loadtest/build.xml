@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+
+<!--
+	$Id$
+	$URL$
+
+	Build file for the junit regression tests.  Not an
+	entry point; imported by the top-level buildfile.
+-->
+
+<project name="loadtest" default="junit" basedir=".">
+
+	<property name="build.loadtest.classes.dir" location="${build.dir}/loadtest-classes" />
+	<property name="build.loadtest.jar.file" location="${build.dir}/loadtest.jar" />
+	
+	<dirname property="loadtest.basedir" file="${ant.file.loadtest}"/>
+	<property name="loadtest.javasrc.dir" location="${loadtest.basedir}/src" />
+	<property name="loadtest.lib.dir" location="${loadtest.basedir}/lib" />
+
+	<!-- Hack to get rid of Eclipse ant warnings -->
+	<property name="jboss.dir" location="" />
+	<import file="../build.xml" />
+	<import file="../smtp/build.xml" />
+	
+	<path id="loadtest.classpath">
+		<!--
+		<fileset dir="${loadtest.lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+		-->
+		
+		<pathelement location="${build.smtp.api.file}" />
+		<pathelement location="${build.smtp.jar.file}" />
+		
+		<path refid="master.classpath" />
+	</path>
+
+	<path id="loadtest.run.classpath">
+		<pathelement location="${build.loadtest.jar.file}" />
+		<path refid="loadtest.classpath" />
+	</path>
+
+ 	<target name="loadtest-classes" depends="smtp-api-jar">
+		<mkdir dir="${build.loadtest.classes.dir}" />
+ 		
+		<javac srcdir="${loadtest.javasrc.dir}"
+				destdir="${build.loadtest.classes.dir}"
+				includeAntRuntime="false"
+				debug="${build.debug}"
+				deprecation="${build.deprecation}">
+			
+			<classpath refid="loadtest.classpath" />
+		</javac>
+	</target>
+
+	<!-- not necessary to do the jar packaging but why not -->
+	<target name="loadtest-jar" depends="loadtest-classes">
+		<jar jarfile="${build.loadtest.jar.file}">
+			<fileset dir="${build.loadtest.classes.dir}"/>
+		</jar>
+	</target>
+
+	<target name="loadtest" depends="loadtest-jar">
+		<java classname="org.subethamail.load.LoadTester">
+			
+			<syspropertyset>
+				<propertyref prefix="java.naming" />
+			</syspropertyset>
+						
+			<classpath>
+				<path refid="loadtest.run.classpath" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="loadgen" depends="loadtest-jar">
+		<java classname="org.subethamail.load.LoadGenerator">
+			<arg value="jeff-lt@infohazard.org"/>
+			<arg value="load@infohazard.org"/>
+			
+			<syspropertyset>
+				<propertyref prefix="java.naming" />
+			</syspropertyset>
+						
+			<classpath>
+				<path refid="loadtest.run.classpath" />
+			</classpath>
+		</java>
+	</target>
+</project>
+

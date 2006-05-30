@@ -52,6 +52,7 @@
 	<import file="plugin/build.xml"/>	
 	<import file="frontend/build.xml"/>
 	<import file="rtest/build.xml"/>
+	<import file="loadtest/build.xml"/>
 	<import file="appmain/build.xml"/>	
 	
 	<target name="usage"> 

@@ -49,6 +49,7 @@ import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Table;
 import org.hibernate.validator.Email;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.common.TimeUtils;
 import org.subethamail.common.valid.Validator;
 
 /**
@@ -235,7 +236,7 @@ public class Mail implements Serializable, Comparable
 		if (log.isDebugEnabled())
 			log.debug("Creating new mail");
 		
-		this.dateCreated = new Date();
+		this.dateCreated = new Timestamp(System.currentTimeMillis());
 		this.list = list;
 		this.hold = holdFor;
 		
@@ -425,22 +426,7 @@ public class Mail implements Serializable, Comparable
 	{
 		Mail other = (Mail)arg0;
 
-		int result = 0;
-		// TODO: Figure out a better way!
-		// Bug related to hibernate and java 1.5
-		// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=5103041
-		if (this.dateCreated instanceof Timestamp)
-		{
-			Timestamp ts = (Timestamp) this.dateCreated;
-			Timestamp otherTS = new Timestamp(other.getDateCreated().getSeconds());
-			result = ts.compareTo(otherTS);
-			if (result == 0)
-				return this.id.compareTo(other.id);
-			else 
-				return result;
-		}
-		
-		result = this.dateCreated.compareTo(other.getDateCreated());
+		int result = TimeUtils.compareDates(this.dateCreated, other.getDateCreated());
 		if (result == 0)
 			return this.id.compareTo(other.id);
 		else

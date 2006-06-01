@@ -30,7 +30,9 @@ import org.subethamail.entity.dao.DAO;
 @Consumer(
 	activationConfig={
 		@ActivationConfigProperty(propertyName="destinationType", propertyValue="javax.jms.Queue"),
-		@ActivationConfigProperty(propertyName="destination", propertyValue="queue/subetha/inbound")
+		@ActivationConfigProperty(propertyName="destination", propertyValue="queue/subetha/inbound"),
+		@ActivationConfigProperty(propertyName="minPoolSize", propertyValue="1"),
+		@ActivationConfigProperty(propertyName="maxPoolSize", propertyValue="2")
 	}
 )
 @SecurityDomain("subetha")

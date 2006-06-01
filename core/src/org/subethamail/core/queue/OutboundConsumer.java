@@ -5,6 +5,8 @@
 
 package org.subethamail.core.queue;
 
+import java.util.List;
+
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.ejb.ActivationConfigProperty;
@@ -54,6 +56,29 @@ public class OutboundConsumer implements Outbound
 			// Just log a warning and accept the JMS message
 			if (log.isWarnEnabled())
 				log.warn("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
+		}
+	}
+	
+	/**
+	 * @see Outbound#deliver(Long, List)
+	 */
+	public void deliver(Long mailId, List<Long> personIds)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Delivering mailId " + mailId + " to personIds " + personIds);
+		
+		for (Long personId: personIds)
+		{
+			try
+			{
+				this.deliverator.deliver(mailId, personId);
+			}
+			catch (NotFoundException ex)
+			{
+				// Just log a warning and accept the JMS message
+				if (log.isWarnEnabled())
+					log.warn("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
+			}
 		}
 	}
 }

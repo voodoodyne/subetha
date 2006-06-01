@@ -5,6 +5,8 @@
 
 package org.subethamail.core.queue.i;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 /**
@@ -38,5 +40,12 @@ public interface Queuer
 	 * here if the user didn't want the mail.
 	 */
 	public void queueForDelivery(Long mailId, Long personId);
+	
+	/**
+	 * Queues a mail for delivery to the specified people.  This puts
+	 * the collection of mailId,personId pairs on the outbound queue
+	 * and returns.
+	 */
+	public void queueForDelivery(Long mailId, List<Long> personIds);
 }
 

@@ -5,6 +5,9 @@
 
 package org.subethamail.core.queue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.ejb.ActivationConfigProperty;
@@ -37,6 +40,9 @@ public class InboundConsumer implements Inbound
 	/** */
 	private static Log log = LogFactory.getLog(InboundConsumer.class);
 	
+	/** Number of messages to batch in each outbound queue request */
+	static final int BATCH_SIZE = 10;
+	
 	/** */
 	@EJB Queuer queuer;
 	@EJB DAO dao;
@@ -66,12 +72,29 @@ public class InboundConsumer implements Inbound
 			return;
 		}
 		
-		// Lookup all recipients and queue the mailId, recipientId pair
+		// Lookup all recipients and queue the mailId, recipientId pairs
+		// Rather than queue them one at a time, batch them in groups of 10.
+		// This right here is the most expensive operation in the delivery
+		// chain (at least with JBossMQ), so batching dramatically reduces
+		// the number of operations.  The only downside is that at worst,
+		// 9 people could receive duplicate messages.
+		List<Long> batch = new ArrayList<Long>(BATCH_SIZE);
+		
 		for (Subscription sub: mail.getList().getSubscriptions())
 		{
 			if (sub.getDeliverTo() != null)
-				this.queuer.queueForDelivery(mailId, sub.getPerson().getId());
+				batch.add(sub.getPerson().getId());
+			
+			if (batch.size() == BATCH_SIZE)
+			{
+				this.queuer.queueForDelivery(mailId, batch);
+				batch.clear();
+			}
 		}
+		
+		// Anything left in the batch must be delivered too
+		if (!batch.isEmpty())
+			this.queuer.queueForDelivery(mailId, batch);
 	}
 }
 

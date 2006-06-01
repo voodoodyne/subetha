@@ -5,6 +5,8 @@
 
 package org.subethamail.core.queue;
 
+import java.util.List;
+
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -102,6 +104,32 @@ public class QueuerBean implements Queuer, QueuerRemote
 			try
 			{
 				outbound.deliver(mailId, personId);
+			}
+			finally
+			{
+				manager.close();
+			}
+		}
+		catch (JMSException ex) { throw new EJBException(ex); }
+	}
+	
+	/**
+	 * @see Queuer#queueForDelivery(Long, List)
+	 */
+	public void queueForDelivery(Long mailId, List<Long> personIds)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Queuing mailId " + mailId + " for delivery to personIds " + personIds);
+		
+		Outbound outbound = this.getOutbound();
+		
+		try
+		{
+			ProducerManager manager = (ProducerManager)((ProducerObject)outbound).getProducerManager();
+			manager.connect();
+			try
+			{
+				outbound.deliver(mailId, personIds);
 			}
 			finally
 			{

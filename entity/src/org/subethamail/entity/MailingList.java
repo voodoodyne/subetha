@@ -205,7 +205,7 @@ public class MailingList implements Serializable, Comparable
 	
 	/**
 	 */
-	public MailingList(String email, String name, String url, String description, String welcomeMessage)
+	public MailingList(String email, String name, String url, String description)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mailing list");
@@ -215,7 +215,6 @@ public class MailingList implements Serializable, Comparable
 		this.setName(name);
 		this.setUrl(url);
 		this.setDescription(description);
-		this.setWelcomeMessage(welcomeMessage);
 		
 		// Make sure collections start empty
 		this.subscriptions = new TreeSet<Subscription>(new SubscriptionComparator());

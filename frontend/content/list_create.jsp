@@ -76,13 +76,22 @@
 			<td
 				<c:if test="${!empty model.errors.owners}">
 						class="error"
-					</c:if>>
-			<textarea id="owners" name="owners" rows="5" cols="60"
-				style="width:95%"><c:out value="${model.owners}" /></textarea>
+				</c:if>
+			>
+				<textarea id="owners" name="owners" rows="5" cols="60" style="width:95%"
+					><c:out value="${model.owners}" /></textarea>
+				
+				<div>
+					<small>
+						Email addresses should be comma separated, and may contain
+						personal names.  I.e. "Joe User" &lt;juser@nowhere.com&gt;
+					</small>
+				</div>
 
-			<c:if test="${!empty model.errors.owners}">
-				<p class="error"><c:out value="${model.errors.owners}" /></p>
-			</c:if></td>
+				<c:if test="${!empty model.errors.owners}">
+					<p class="error"><c:out value="${model.errors.owners}" /></p>
+				</c:if>
+			</td>
 		</tr>
 	</table>
 

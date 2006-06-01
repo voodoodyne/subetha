@@ -91,12 +91,12 @@ public class AdminBean implements Admin, AdminRemote
 	/**
 	 * @see Admin#createMailingList(InternetAddress, URL, String, InternetAddress[])
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, String welcomeMessage, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException
+	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException
 	{
 		this.checkListAddresses(address, url);
 		
 		// Then create the mailing list and attach the owners.
-		MailingList list = new MailingList(address.getAddress(), address.getPersonal(), url.toString(), description, welcomeMessage);
+		MailingList list = new MailingList(address.getAddress(), address.getPersonal(), url.toString(), description);
 		this.dao.persist(list);
 		// TODO:  remove this code when http://opensource.atlassian.com/projects/hibernate/browse/HHH-1654
 		// is fixed.  This should be performed within the constructor of MailingList.

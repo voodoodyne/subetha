@@ -49,10 +49,6 @@ public class CreateList extends AuthRequired
 		@Property String description = "";
 	
 		/** */
-		@Length(max=Validator.MAX_LIST_WELCOME_MESSAGE)
-		@Property String welcomeMessage = "";
-
-		/** */
 		@Length(max=Validator.MAX_LIST_EMAIL)
 		@Property String email = "";
 	
@@ -127,7 +123,7 @@ public class CreateList extends AuthRequired
 		{
 			try
 			{
-				model.id = Backend.instance().getListWizard().createMailingList(listAddress, url, model.description, model.welcomeMessage, owners, model.blueprint);
+				model.id = Backend.instance().getListWizard().createMailingList(listAddress, url, model.description, owners, model.blueprint);
 			}
 			catch (InvalidListDataException ex)
 			{

@@ -155,7 +155,7 @@ public class MailingList implements Serializable, Comparable
 	@Column(nullable=false)
 	boolean subscriptionHeld;
 	
-	@Column(nullable=true, length=Validator.MAX_LIST_WELCOME_MESSAGE)
+	@Column(nullable=false, length=Validator.MAX_LIST_WELCOME_MESSAGE)
 	String welcomeMessage;
 	
 	//
@@ -225,6 +225,8 @@ public class MailingList implements Serializable, Comparable
 		// We have to start with one role, the owner role
 		Role owner = new Role(this);
 		this.roles.add(owner);
+		
+		this.welcomeMessage = "";
 		
 // TODO:  restore this code when hibernate bug fixed.  In the mean time,
 // the creator MUST persist the MailingList *then* set these values.

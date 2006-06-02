@@ -10,41 +10,35 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>com.atlassw.tools.eclipse.checkstyle.CheckstyleBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</nature>
 	</natures>
 	<linkedResources>
 		<link>
-			<name>jboss-config</name>
+			<name>jboss-work</name>
 			<type>2</type>
-			<location>JBOSS_HOME/server/default/conf</location>
+			<locationURI>JBOSS_HOME/server/default/work</locationURI>
 		</link>
 		<link>
 			<name>jboss-log</name>
 			<type>2</type>
-			<location>JBOSS_HOME/server/default/log</location>
-		</link>
-		<link>
-			<name>jboss-tmp</name>
-			<type>2</type>
-			<location>JBOSS_HOME/server/default/tmp</location>
+			<locationURI>JBOSS_HOME/server/default/log</locationURI>
 		</link>
 		<link>
 			<name>jboss-deploy</name>
 			<type>2</type>
-			<location>JBOSS_HOME/server/default/deploy</location>
+			<locationURI>JBOSS_HOME/server/default/deploy</locationURI>
 		</link>
 		<link>
-			<name>jboss-work</name>
+			<name>jboss-tmp</name>
 			<type>2</type>
-			<location>JBOSS_HOME/server/default/work</location>
+			<locationURI>JBOSS_HOME/server/default/tmp</locationURI>
+		</link>
+		<link>
+			<name>jboss-config</name>
+			<type>2</type>
+			<locationURI>JBOSS_HOME/server/default/conf</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

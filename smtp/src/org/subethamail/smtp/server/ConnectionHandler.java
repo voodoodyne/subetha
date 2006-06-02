@@ -1,15 +1,14 @@
 package org.subethamail.smtp.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.smtp.server.io.CRLFTerminatedReader;
 import org.subethamail.smtp.server.io.LastActiveInputStream;
 
 /**
@@ -29,16 +28,13 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 	private InputStream input;
 	private OutputStream output;
 
-	private BufferedReader reader;
+	private CRLFTerminatedReader reader;
 	private PrintWriter writer;
 
 	private Socket socket;
 
 	private long startTime;
 	private long lastActiveTime;
-
-	@SuppressWarnings("unused")
-	private boolean dataMode = false;
 	
 	public ConnectionHandler(SMTPServer server, Socket socket)
 		throws IOException
@@ -53,7 +49,7 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 		this.input = new LastActiveInputStream(socket.getInputStream(), this);
 		this.output = socket.getOutputStream();
 		
-		this.reader = new BufferedReader(new InputStreamReader(this.input));
+		this.reader = new CRLFTerminatedReader(this.input);
 		this.writer = new PrintWriter(this.output);
 	}
 	
@@ -104,8 +100,33 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 
 			while (session.isActive())
 			{
-				this.server.getCommandHandler().handleCommand(this, this.reader.readLine());
-				lastActiveTime = System.currentTimeMillis();
+				try
+				{
+					this.server.getCommandHandler().handleCommand(this, this.reader.readLine());
+					lastActiveTime = System.currentTimeMillis();
+				}
+				catch (CRLFTerminatedReader.TerminationException te)
+				{
+					String msg = "501 Syntax error at character position "
+						+ te.position()
+						+ ". CR and LF must be CRLF paired.  See RFC 2821 #2.7.1.";
+
+					log.debug(msg);
+					this.sendResponse(msg);
+
+					// if people are screwing with things, close connection
+					break;
+				}
+				catch (CRLFTerminatedReader.MaxLineLengthException mlle)
+				{
+					String msg = "501 " + mlle.getMessage();
+
+					log.debug(msg);
+					this.sendResponse(msg);
+
+					// if people are screwing with things, close connection
+					break;
+				}
 			}
 		}
 		catch (IOException e1)
@@ -168,16 +189,6 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 	public OutputStream getOutput()
 	{
 		return this.output;
-	}
-
-	public BufferedReader getReader()
-	{
-		return this.reader;
-	}
-
-	public PrintWriter getWriter()
-	{
-		return this.writer;
 	}
 
 	public void sendResponse(String response) throws IOException

@@ -2,7 +2,7 @@
  * $Id: SMTPManagement.java 273 2006-05-07 04:00:41Z jon $
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/mbean/BindStatisticsManagerMBean.java,v $
  */
-package org.subethamail.smtp.service;
+package org.subethamail.core.smtp;
 
 import java.io.IOException;
 

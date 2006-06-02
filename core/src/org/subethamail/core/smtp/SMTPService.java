@@ -2,7 +2,7 @@
  * $Id: SMTPService.java 273 2006-05-07 04:00:41Z jon $
  * $URL$
  */
-package org.subethamail.smtp.service;
+package org.subethamail.core.smtp;
 
 import java.io.IOException;
 import java.net.InetAddress;

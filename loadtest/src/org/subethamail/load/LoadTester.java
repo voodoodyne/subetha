@@ -10,7 +10,7 @@ import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.smtp.i.MessageListener;
+import org.subethamail.smtp.MessageListener;
 import org.subethamail.smtp.server.SMTPServer;
 
 /**

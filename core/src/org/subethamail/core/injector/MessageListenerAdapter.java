@@ -20,9 +20,9 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.io.LimitExceededException;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
-import org.subethamail.smtp.i.MessageListener;
-import org.subethamail.smtp.i.MessageListenerRegistry;
-import org.subethamail.smtp.i.TooMuchDataException;
+import org.subethamail.core.smtp.MessageListenerRegistry;
+import org.subethamail.smtp.MessageListener;
+import org.subethamail.smtp.TooMuchDataException;
 
 /**
  * This acts as an SMTP listener and injects any interesting messages

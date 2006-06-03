@@ -17,8 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
-import org.subethamail.smtp.i.MessageListener;
-import org.subethamail.smtp.i.MessageListenerRegistry;
+import org.subethamail.smtp.MessageListener;
 import org.subethamail.smtp.server.SMTPServer;
 
 /**

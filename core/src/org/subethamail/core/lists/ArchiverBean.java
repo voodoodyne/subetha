@@ -45,7 +45,6 @@ import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ArchiverRemote;
 import org.subethamail.core.lists.i.AttachmentPartData;
 import org.subethamail.core.lists.i.InlinePartData;
-import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.core.lists.i.MailSummary;

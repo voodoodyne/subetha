@@ -17,6 +17,10 @@
 	<property name="entity.javasrc.dir" location="${entity.basedir}/src"/>
 	<property name="entity.meta.dir" location="${entity.basedir}/meta"/>
 	
+	<!-- Hack to get rid of Eclipse ant warnings -->	
+	<property name="jboss.dir" value="" />
+	<import file="../core/build.xml" />
+
 	<path id="entity.classpath">
 		<path refid="master.classpath"/>
 	</path>

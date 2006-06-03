@@ -15,7 +15,8 @@
 
 	<property name="build.appmain.ear.file" location="${build.dir}/${name}.ear" />
 
-	<!-- Hack to get rid of Eclipse ant warnings -->
+	<!-- Hack to get rid of Eclipse ant warnings -->	
+	<property name="jboss.dir" value="" />
 	<import file="../core/build.xml" />
 
 	<target name="appmain-ear" depends="core-all, frontend-war, entity-ejb-jar, plugin-sar">

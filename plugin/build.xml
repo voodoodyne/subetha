@@ -27,7 +27,11 @@
 		<path refid="master.classpath" />
 	</path>
 
- 	<target name="plugin-classes" depends="core-ejbclient-jar">
+	<!-- Hack to get rid of Eclipse ant warnings -->	
+	<property name="jboss.dir" value="" />
+	<import file="../core/build.xml" />
+
+	<target name="plugin-classes" depends="core-ejbclient-jar">
 		<mkdir dir="${build.plugin.classes.dir}" />
  		
 		<javac srcdir="${plugin.javasrc.dir}"

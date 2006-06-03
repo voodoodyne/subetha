@@ -57,6 +57,7 @@ public class FileUploadFilter extends AbstractFilter
 	 * @throws any exception that might have been thrown during the processing of the
 	 *  upload.  The stack trace will seem a little odd.
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<FileItem> getFiles(HttpServletRequest request) throws FileUploadException
 	{
 		FileUploadException ex = (FileUploadException)request.getAttribute(ATTR_EXCEPTION);
@@ -75,6 +76,7 @@ public class FileUploadFilter extends AbstractFilter
 	 * wrap it before chaining to the next filter or servlet. Otherwise, pass
 	 * it on untouched.
 	 */
+	@SuppressWarnings("unchecked")
 	public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 		throws IOException, ServletException
 	{
@@ -139,6 +141,7 @@ public class FileUploadFilter extends AbstractFilter
 	 * Wraps the request providing a set of params as if they were the
 	 * normal servlet params.
 	 */
+	@SuppressWarnings("deprecation")
 	class RequestWrapper extends HttpServletRequestWrapper
 	{
 		/** */

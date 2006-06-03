@@ -46,7 +46,6 @@
 	</path>
 	
 	<!-- Now the rest of the imports -->
-	<import file="smtp/build.xml"/>
 	<import file="entity/build.xml"/>
 	<import file="core/build.xml"/>
 	<import file="plugin/build.xml"/>	

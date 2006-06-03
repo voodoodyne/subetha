@@ -20,7 +20,6 @@
 	<!-- Hack to get rid of Eclipse ant warnings -->
 	<property name="jboss.dir" location="" />
 	<import file="../build.xml" />
-	<import file="../smtp/build.xml" />
 	
 	<path id="loadtest.classpath">
 		<!--
@@ -40,7 +39,7 @@
 		<path refid="loadtest.classpath" />
 	</path>
 
- 	<target name="loadtest-classes" depends="smtp-api-jar">
+ 	<target name="loadtest-classes">
 		<mkdir dir="${build.loadtest.classes.dir}" />
  		
 		<javac srcdir="${loadtest.javasrc.dir}"

@@ -6,7 +6,6 @@
 	<classpathentry kind="src" path="frontend/src"/>
 	<classpathentry kind="src" path="common/src"/>
 	<classpathentry kind="src" path="rtest/src"/>
-	<classpathentry kind="src" path="smtp/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/javax.servlet.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/javax.servlet.jsp.jar"/>
@@ -31,5 +30,7 @@
 	<classpathentry sourcepath="/JAVAMAIL_SRC" kind="var" path="JBOSS_HOME/server/default/lib/mail.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/commons-fileupload-1.0.jar"/>
 	<classpathentry kind="src" path="loadtest/src"/>
+	<classpathentry kind="lib" path="core/lib/smtp-api.jar"/>
+	<classpathentry kind="lib" path="core/lib/smtp.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

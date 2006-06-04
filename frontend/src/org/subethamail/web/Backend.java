@@ -150,7 +150,8 @@ public class Backend extends HttpServlet
 	/** @return some sense of what the whole application version # is */
 	public String getVersion()
 	{
-		return Version.getSpecification();
+		Package pkg = this.getClass().getPackage();
+		return (pkg == null) ? null : pkg.getSpecificationVersion();
 	}
 	
 	/** @return all the version numbers */

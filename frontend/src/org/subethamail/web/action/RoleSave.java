@@ -5,6 +5,7 @@
 
 package org.subethamail.web.action;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,7 +56,8 @@ public class RoleSave extends AuthAction
 		@Property Set<Permission> realPermissions;
 		
 		/**
-		 * Whenever permissions is set, set realPermissions too. 
+		 * Whenever permissions is set, set realPermissions too.
+		 * This method gets called by the bean populator.
 		 */
 		public void setPermissions(String[] value)
 		{
@@ -77,18 +79,21 @@ public class RoleSave extends AuthAction
 	}
 	
 	/** */
+	@SuppressWarnings("unchecked")
 	public void execute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();
 		
 		model.validate();
 		
+		Set<Permission> perms = (model.realPermissions == null) ? Collections.EMPTY_SET : model.realPermissions;
+		
 		if (model.getErrors().isEmpty())
 		{
 			if (model.roleId != null)
-				model.listId = Backend.instance().getListMgr().setRole(model.roleId, model.name, model.realPermissions);
+				model.listId = Backend.instance().getListMgr().setRole(model.roleId, model.name, perms);
 			else
-				model.roleId = Backend.instance().getListMgr().addRole(model.listId, model.name, model.realPermissions);
+				model.roleId = Backend.instance().getListMgr().addRole(model.listId, model.name, perms);
 		}
 	}
 	

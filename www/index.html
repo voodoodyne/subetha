@@ -36,18 +36,16 @@
 		<li>Very easy installation on Windows and Unix platforms</li>
 		<li>A user-friendly web interface for all configuration management</li>
 		<li>Virtual domains (ie list@foo.com and list@bar.com are separate lists)</li>
+		<li>Users can have multiple email addresses and self-moderate messages from unknown addresses.</li>
 		<li>Intelligent attachment handling; attachments can be removed from
 			delivered mail and replaced with a download link to the archives.</li>
-		<li>Pluggable message processing filters which can arbitrarily modify
+		<li>Pluggable, configurable message processing filters which can arbitrarily modify
 			the inbound and outbound message streams.  Example filters include
 			attachment stripping, header munging, spam detection, and insertion
 			of advertising.</li>
-		<li>Filters have a dynamic web based configuration UI</li>
 		<li>Per-list role-based permissions.</li>
 		<li>One-step creation of basic list types (ie "Announce-Only List" or "Technical Support List").
 			The set of available types is pluggable.</li>
-		<li>Users can have multiple email addresses.</li>
-		<li>Users can self-moderate messages sent from unsubscribed addresses</li>
 		<li>Searchable, threaded archives</li>
 		<li>Users can reply to messages from the archives.  They can click
 			on a button and have the message resent to them normally.</li>
@@ -58,6 +56,8 @@
 		<li>International characters in emails are properly passed through
 			the system and rendered in the web interface</li>
 		<li>RESTful, bookmarkable URLs</li>
+		<li>A modular SMTP library that can be used outside SubEtha - see
+			<a href="http://subethasmtp.tigris.org/">SubEthaSMTP</a></li>
 	</ul>
 	
 	<p>
@@ -81,12 +81,15 @@
 		<li>Full text indexing using Lucene.</li>
 		<li>Using the world's simplest web framework, Tagonist.</li>
 		<li>Validating HTML form inputs with Hibernate Validation.</li>
-		<li>With the Propertizer, practically zero-effort form processing.</li>
+		<li>Zero-effort form processing with the Propertizer.</li>
 		<li>Unit testing EJB systems with JUnit.</li>
 	</ul>
 	
 	<p>
-		This project is ready for pre-alpha (read: guinea pig) testing.  See the
+		This project is 
+		<a href="http://subetha.tigris.org/project_lists.html">self-hosting</a>.
+		A 0.5 release which includes everything except fulltext searching and
+		SOAP will come shortly.  In the mean time, see the
 		<a href="developers.html">developer documentation</a>.  Also see
 		the <a href="faq.html">FAQ</a>.
 	</p>

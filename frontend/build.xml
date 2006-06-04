@@ -11,6 +11,7 @@
 <project name="frontend" default="frontend-war" basedir=".">
 
 	<property name="build.frontend.classes.dir" location="${build.dir}/frontend-classes" />
+	<property name="build.frontend.jar.file" location="${build.dir}/frontend.jar" />
 	<property name="build.frontend.war.file" location="${build.dir}/frontend.war" />
 
 	<dirname property="frontend.basedir" file="${ant.file.frontend}"/>
@@ -59,7 +60,17 @@
 		</propertize>
 	</target>
 
-	<target name="frontend-war" depends="frontend-propertize">
+	<target name="frontend-jar" depends="frontend-propertize">
+		<jar jarfile="${build.frontend.jar.file}">
+			<fileset dir="${build.frontend.classes.dir}" />
+			<manifest>
+				<attribute name="Specification-Version" value="${build.version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="frontend-war" depends="frontend-jar">
 		<war destfile="${build.frontend.war.file}" webxml="${frontend.meta.dir}/web.xml">
 			<webinf dir="${frontend.meta.dir}">
 				<exclude name="web.xml" />
@@ -67,7 +78,11 @@
 			
 			<fileset dir="${frontend.content.dir}" />
 			
-			<classes dir="${build.frontend.classes.dir}" />
+			<!--
+				Having classes in a JAR instead of naked in WAR/WEB-INF/classes
+				allows the manifest version information to work.
+			-->
+			<lib file="${build.frontend.jar.file}"/>
 
 			<lib dir="${frontend.lib.dir}">
 				<exclude name="buildonly/**"/>

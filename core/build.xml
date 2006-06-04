@@ -74,6 +74,10 @@
 	<target name="core-ejbclient-jar" depends="core-classes-i">
 		<jar jarfile="${build.core.ejbclient.file}">
 			<fileset dir="${build.core.classes.i.dir}"/>
+			<manifest>
+				<attribute name="Specification-Version" value="${build.version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
 		</jar>
 	</target>
 
@@ -89,6 +93,11 @@
 			<fileset dir="${core.javasrc.dir}">
 				<include name="**/*.vm" />
 			</fileset>
+			
+			<manifest>
+				<attribute name="Specification-Version" value="${build.version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
 		</jar>
 	</target>
 

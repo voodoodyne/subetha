@@ -56,6 +56,10 @@
 	<target name="loadtest-jar" depends="loadtest-classes">
 		<jar jarfile="${build.loadtest.jar.file}">
 			<fileset dir="${build.loadtest.classes.dir}"/>
+			<manifest>
+				<attribute name="Specification-Version" value="${build.version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
 		</jar>
 	</target>
 

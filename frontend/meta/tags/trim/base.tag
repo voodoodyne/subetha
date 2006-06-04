@@ -33,7 +33,9 @@
 			</div> <!-- footerLHS -->
 			
 			<div>
-				<a href="http://subetha.tigris.org/">SubEtha Mail</a> is free software
+				<a href="http://subetha.tigris.org/">SubEtha Mail</a>
+				<a href="<c:url value="/version.jsp"/>"><c:out value="${backend.version}"/></a>
+				is free software
 			</div>
 			
 			<div>

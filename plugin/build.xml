@@ -58,6 +58,11 @@
 			<!--
 			<fileset dir="${plugin.lib.dir}"/>
 			-->
+			
+			<manifest>
+				<attribute name="Specification-Version" value="${build.version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
 		</jar>
 	</target>
 </project>

@@ -52,13 +52,27 @@
 	<import file="frontend/build.xml"/>
 	<import file="rtest/build.xml"/>
 	<import file="loadtest/build.xml"/>
-	<import file="appmain/build.xml"/>	
+	<import file="appmain/build.xml"/>
 	
 	<target name="usage"> 
 		<echo message="  Execute 'ant -projecthelp' for build file help."/> 
 		<echo message="  Execute 'ant -help' for Ant help."/> 
 	</target> 
 	<target name="help" depends="usage"/>
+	
+	<target name="init">
+		<tstamp/>
+		<property name="build.version" value="UNVERSIONED"/>
+	</target>
+	
+	<target name="formal-build">
+		<antcall target="clean"/>
+		<input addproperty="build.version" message="Version number?" />
+		<antcall target="appmain-ear"/>
+	</target>
+	
+	<target name="formal-deploy" depends="formal-build, deploy">
+	</target>
 	
 	<target name="clean">
 		<delete dir="${build.dir}" />

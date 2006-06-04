@@ -69,6 +69,10 @@
 			<fileset dir="${rtest.javasrc.dir}">
 				<include name="**/*.msg"/>
 			</fileset>
+			<manifest>
+				<attribute name="Specification-Version" value="${build.version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
 		</jar>
 	</target>
 

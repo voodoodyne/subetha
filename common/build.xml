@@ -24,7 +24,7 @@
 		<path refid="base.classpath" />
 	</path>
 
- 	<target name="common-classes" depends="">
+ 	<target name="common-classes" depends="init">
 		<mkdir dir="${build.common.classes.dir}" />
 		<javac srcdir="${common.javasrc.dir}"
 				destdir="${build.common.classes.dir}"
@@ -38,6 +38,10 @@
 	<target name="common-jar" depends="common-classes">
 		<jar jarfile="${build.common.jar.file}">
 			<fileset dir="${build.common.classes.dir}"/>
+			<manifest>
+				<attribute name="Specification-Version" value="${build.version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
 		</jar>
 	</target>
 </project>

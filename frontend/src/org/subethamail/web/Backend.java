@@ -5,6 +5,8 @@
 
 package org.subethamail.web;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Set;
 
 import javax.naming.InitialContext;
@@ -145,4 +147,29 @@ public class Backend extends HttpServlet
 		return this.archiver;
 	}
 	
+	/** @return some sense of what the whole application version # is */
+	public String getVersion()
+	{
+		return Version.getSpecification();
+	}
+	
+	/** @return all the version numbers */
+	public Package[] getVersions()
+	{
+		Comparator<Package> cmp = new Comparator<Package>() {
+			public int compare(Package p1, Package p2)
+			{
+				if (p1.getName().startsWith("org.subethamail") && !p2.getName().startsWith("org.subethamail"))
+					return -1;
+				else if (!p1.getName().startsWith("org.subethamail") && p2.getName().startsWith("org.subethamail"))
+					return 1;
+				else
+					return p1.getName().compareTo(p2.getName());
+			}
+		};
+		
+		Package[] packages = Package.getPackages();
+		Arrays.sort(packages, cmp);
+		return packages;
+	}
 }

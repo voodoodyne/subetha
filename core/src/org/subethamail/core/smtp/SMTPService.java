@@ -43,7 +43,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	private Map<MessageListener, MessageListener> listeners = new ConcurrentHashMap<MessageListener, MessageListener>();
 	
 	private int port = DEFAULT_PORT;
-	private String hostName;
+	private String hostName = null;
 	
 	private SMTPServer smtpServer;
 
@@ -81,18 +81,6 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 		if (this.smtpServer != null)
 			throw new IllegalStateException("SMTPServer already running");
 		
-		if (this.hostName == null)
-		{
-			try
-			{
-				this.hostName = InetAddress.getLocalHost().getCanonicalHostName();
-			}
-			catch (UnknownHostException e)
-			{
-				this.hostName = "localhost";
-			}
-		}
-
 		InetAddress binding = null;
 		
 		String bindAddress = System.getProperty("jboss.bind.address");
@@ -101,8 +89,14 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 
 		log.info("Starting SMTP service: " + (binding==null ? "*" : binding) + ":" + port);
 		
-		smtpServer = new SMTPServer(hostName, binding, port, listeners.values());
-		smtpServer.start();
+		this.smtpServer = new SMTPServer(listeners.values());
+		this.smtpServer.setBindAddress(binding);
+		this.smtpServer.setPort(this.port);
+		
+		if (this.hostName != null)
+			this.smtpServer.setHostName(this.hostName);
+		
+		this.smtpServer.start();
 	}
 
 	/*
@@ -160,6 +154,6 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	@PermitAll
 	public String getHostName()
 	{
-		return hostName;
+		return this.hostName;
 	}
 }

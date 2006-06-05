@@ -9,12 +9,22 @@
 		<input type="hidden" name="listId" value="${param.listId}" />
 		<table>
 			<tr>
-				<th>Invite?</th>
+				<th>How?</th>
 				<td>
-					<input id="invite" name="invite" type="checkbox" value="true" 
-						<c:if test="${model.invite}">checked="checked"</c:if>
+					<input id="invite" name="how" type="radio" value="INVITE" 
+						<c:if test="${model.how == 'invite'}">selected="selected"</c:if>
 					/>
-					<label for="invite">Send invite instead of subscribe</label>
+					<label for="invite">Send Invite</label>
+					|
+					<input id="welcome" name="how" type="radio" value="WELCOME" 
+						<c:if test="${model.how == 'welcome'}">selected="selected"</c:if>
+					/>
+					<label for="welcome">Send Welcome Message</label>
+					|
+					<input id="silent" name="how" type="radio" value="SILENT" 
+						<c:if test="${model.how == 'silent'}">selected="selected"</c:if>
+					/>
+					<label for="silent">Silently Subscribe</label>
 				</td>
 			</tr>
 			<tr>

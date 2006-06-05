@@ -76,16 +76,16 @@ public interface Admin
 
 	/**
 	 * Subscribes a potentially never-before-seen user to the list.
-	 * 
 	 * @param address can be an existing email address or a new one, in which
 	 *  case a new person will be created.
 	 * @param ignoreHold will bypass moderation hold for the subscriber
-	 *  
+	 * @param silent if set true will not send a welcome message to a new subscriber
+	 * 
 	 * @return either OK or HELD
 	 *  
 	 * @throws NotFoundException if the list id is not valid.
 	 */
-	public AuthSubscribeResult subscribe(Long listId, InternetAddress address, boolean ignoreHold) throws NotFoundException;
+	public AuthSubscribeResult subscribe(Long listId, InternetAddress address, boolean ignoreHold, boolean silent) throws NotFoundException;
 
 	/**
 	 * UnSubscribes a user from a list

@@ -10,6 +10,7 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.core.lists.i.MassSubscribeType;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
@@ -31,7 +32,7 @@ public class SubscribeMass extends AuthAction
 	{
 		/** */
 		@Property Long listId;
-		@Property boolean invite;
+		@Property String how = "INVITE";
 		@Property String emails = "";
 	}
 	
@@ -46,11 +47,13 @@ public class SubscribeMass extends AuthAction
 	{
 		Model model = (Model)this.getCtx().getModel();
 		
+		MassSubscribeType how = MassSubscribeType.valueOf(model.how);
+		
 		try
 		{
 			InternetAddress[] addresses = InternetAddress.parse(model.emails);
 			
-			Backend.instance().getListMgr().massSubscribe(model.listId, model.invite, addresses);
+			Backend.instance().getListMgr().massSubscribe(model.listId, how, addresses);
 		}
 		catch (AddressException ex)
 		{

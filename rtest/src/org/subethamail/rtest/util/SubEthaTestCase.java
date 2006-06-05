@@ -57,12 +57,12 @@ public class SubEthaTestCase extends TestCase
 	/** */
 	protected void tearDown() throws Exception
 	{
-		super.tearDown();
-		
 		this.smtp.stop();
 		this.smtp = null;
 		
 		this.sess = null;
+		
+		super.tearDown();
 	}
 	
 	/** */

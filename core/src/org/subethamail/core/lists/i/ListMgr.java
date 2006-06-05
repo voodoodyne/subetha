@@ -159,10 +159,10 @@ public interface ListMgr
 	/**
 	 * Subscribes a mass of users to the list
 	 * 
-	 * @param invite will send invites rather than just subscribing
+	 * @param how allows some control of how the subscription happens
 	 * @param addresses are the addresses to subscribe
 	 */
-	public void massSubscribe(Long listId, boolean invite, InternetAddress[] addresses) throws NotFoundException, PermissionException;
+	public void massSubscribe(Long listId, MassSubscribeType how, InternetAddress[] addresses) throws NotFoundException, PermissionException;
 
 	/**
 	 * @return all the held subscriptions on the list.  Note the roleName is always null.

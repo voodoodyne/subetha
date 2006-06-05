@@ -38,6 +38,7 @@ import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
 import org.subethamail.core.lists.i.ListRoles;
 import org.subethamail.core.lists.i.MailHold;
+import org.subethamail.core.lists.i.MassSubscribeType;
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Filter;
@@ -418,22 +419,31 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#massSubscribe(java.lang.Long, boolean, javax.mail.internet.InternetAddress[])
+	 * @see org.subethamail.core.lists.i.ListMgr#massSubscribe(java.lang.Long, org.subethamail.core.lists.i.MassSubscribeType, javax.mail.internet.InternetAddress[])
 	 */
-	public void massSubscribe(Long listId, boolean invite, InternetAddress[] addresses) throws NotFoundException, PermissionException
+	public void massSubscribe(Long listId, MassSubscribeType how, InternetAddress[] addresses) throws NotFoundException, PermissionException
 	{
 		// We don't need the object, but we need to check permission
 		this.getListFor(listId, Permission.MASS_SUBSCRIBE);
 		
-		if (invite)
+		if (MassSubscribeType.INVITE.equals(how))
 		{
 			for (InternetAddress addy: addresses)
 				this.accountMgr.subscribeAnonymousRequest(listId, addy.getAddress(), addy.getPersonal());
 		}
-		else
+		else if (MassSubscribeType.WELCOME.equals(how))
 		{
 			for (InternetAddress addy: addresses)
-				this.admin.subscribe(listId, addy, true);
+				this.admin.subscribe(listId, addy, true, false);
+		}
+		else if (MassSubscribeType.SILENT.equals(how))
+		{
+			for (InternetAddress addy: addresses)
+				this.admin.subscribe(listId, addy, true, true);
+		}
+		else
+		{
+			throw new UnsupportedOperationException("Case not handled");
 		}
 	}
 
@@ -484,7 +494,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
 		mail.getList().checkPermission(getMe(), Permission.APPROVE_SUBSCRIPTIONS);
 
-		this.admin.subscribe(mail.getList().getId(), mail.getFromAddress(), true);
+		this.admin.subscribe(mail.getList().getId(), mail.getFromAddress(), true, false);
 
 		return mail.getList().getId();
 	}

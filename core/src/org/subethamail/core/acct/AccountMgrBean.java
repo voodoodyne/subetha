@@ -268,7 +268,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 
 		InternetAddress address = Transmute.internetAddress(email, name);
 		
-		return this.admin.subscribe(listId, address, false);
+		return this.admin.subscribe(listId, address, false, false);
 	}
 
 	/**

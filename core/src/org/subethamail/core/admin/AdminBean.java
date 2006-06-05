@@ -159,13 +159,13 @@ public class AdminBean implements Admin, AdminRemote
 	}
 
 	/**
-	 * @see Admin#subscribe(Long, InternetAddress, boolean)
+	 * @see Admin#subscribe(Long, InternetAddress, boolean, boolean)
 	 */
-	public AuthSubscribeResult subscribe(Long listId, InternetAddress address, boolean ignoreHold) throws NotFoundException
+	public AuthSubscribeResult subscribe(Long listId, InternetAddress address, boolean ignoreHold, boolean silent) throws NotFoundException
 	{
 		EmailAddress addy = this.establishEmailAddress(address, null);
 		
-		SubscribeResult result = this.subscribe(listId, addy.getPerson(), addy, ignoreHold);
+		SubscribeResult result = this.subscribe(listId, addy.getPerson(), addy, ignoreHold, silent);
 		
 		return new AuthSubscribeResult(addy.getId(), addy.getPerson().getPassword(), result, listId);
 	}
@@ -180,7 +180,7 @@ public class AdminBean implements Admin, AdminRemote
 		if (email == null)
 		{
 			// Subscribing with (or changing to) disabled delivery
-			return this.subscribe(listId, who, null, ignoreHold);
+			return this.subscribe(listId, who, null, ignoreHold, false);
 		}
 		else
 		{
@@ -189,18 +189,18 @@ public class AdminBean implements Admin, AdminRemote
 			if (addy == null)
 				throw new IllegalStateException("Must be one of person's email addresses");
 			
-			return this.subscribe(listId, who, addy, ignoreHold);
+			return this.subscribe(listId, who, addy, ignoreHold, false);
 		}
 	}
 	
 	/**
 	 * Subscribes someone to a mailing list, or changes the delivery address
 	 * of an existing subscriber.
-	 * 
 	 * @param deliverTo can be null to disable delivery
 	 * @param ignoreHold will subscribe even if a hold is requested
+	 * @param silent if true will not send a welcome message to new subscribers
 	 */
-	protected SubscribeResult subscribe(Long listId, Person who, EmailAddress deliverTo, boolean ignoreHold) throws NotFoundException
+	protected SubscribeResult subscribe(Long listId, Person who, EmailAddress deliverTo, boolean ignoreHold, boolean silent) throws NotFoundException
 	{
 		MailingList list = this.dao.findMailingList(listId);
 		
@@ -244,7 +244,8 @@ public class AdminBean implements Admin, AdminRemote
 				who.addSubscription(sub);
 				list.getSubscriptions().add(sub);
 				
-				this.postOffice.sendSubscribed(list, who, deliverTo);
+				if (!silent)
+					this.postOffice.sendSubscribed(list, who, deliverTo);
 			
 				// Flush any messages that might be held prior to this subscription.
 				this.selfModerate(who.getId());

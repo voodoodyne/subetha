@@ -57,7 +57,9 @@
 			<li>
 				<h3>Make sure your database tables are UTF-8</h3>
 				<p>
-					If you want to use UTF-8, you need to store it that way.
+					While message content is stored as-is in the database as
+					BLOBs, the Subject is also kept in a separate column for
+					performance reasons.  You'll want this to be encoded UTF-8.
 					Fortunately most modern databases use UTF-8 by default.
 				</p>
 				<p>
@@ -80,8 +82,7 @@ default-character-set=utf8
 				<p>
 					The more you manipulate text, the more you risk replacing
 					the original encoding of a message.  In particular, avoid
-					the Subject filter on lists with multiple languages being
-					supported.
+					the Subject filter on lists that converse in multiple languages.
 				</p>
 			</li>
 		</ol>

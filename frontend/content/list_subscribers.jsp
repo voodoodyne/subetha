@@ -38,9 +38,8 @@
 					<td>Addresses</td>
 					<c:if test="${perms.EDIT_ROLES || perms.VIEW_ROLES}">
 						<td>Role</td>
-						<td></td>
 					</c:if>
-					<c:if test="${perms.UNSUBSCRIBE_OTHERS || perms.EDIT_ROLES}">
+					<c:if test="${perms.UNSUBSCRIBE_OTHERS}">
 						<td>Action</td>
 					</c:if>
 				</tr>
@@ -69,28 +68,30 @@
 								></a><c:if test="${! loop.last}">, </c:if>
 							</c:forEach>
 						</td>
-						<c:if test="${perms.EDIT_ROLES || perms.VIEW_ROLES}">
-						<td>
-							<c:out value="${p.roleName}" />
-						</td>
-						<td>
-							<c:if test="${perms.EDIT_ROLES}">
+						<c:choose>
+							<c:when test="${perms.EDIT_ROLES}">
+							<td>
 								<form action="<c:url value="/person_set_role.jsp"/>" method="post" style="display:inline">
 									<input type="hidden" name="personId" value="${p.id}" />
  									<input type="hidden" name="listId" value="${param.listId}" />
-									<input type="submit" value="Change to ->" />
 									<select name="roleId">
 										<c:forEach var="role" items="${listRoles.roles}" varStatus="loop">
-											<c:if test="${role.name != p.roleName}">
-												<option value="${role.id}"><c:out value="${role.name}"/></option>
-											</c:if>
+											<option value="${role.id}"
+												<c:if test="${role.name == p.roleName}">selected="selected"</c:if>
+											><c:out value="${role.name}"/></option>
 										</c:forEach>
 									</select>
+									<input type="submit" value="Set" />
 								</form>
-							</c:if>
-						</td>
-						</c:if>
-						<c:if test="${perms.UNSUBSCRIBE_OTHERS || perms.EDIT_ROLES}">
+							</td>
+							</c:when>
+							<c:when test="${perms.VIEW_ROLES}">
+								<td>
+									<c:out value="${p.roleName}" />
+								</td>
+							</c:when>
+						</c:choose>
+						<c:if test="${perms.UNSUBSCRIBE_OTHERS}">
 							<td>
 								<c:if test="${perms.UNSUBSCRIBE_OTHERS}">
 									<form action="<c:url value="/person_unsubscribe.jsp"/>" method="post" style="display:inline">

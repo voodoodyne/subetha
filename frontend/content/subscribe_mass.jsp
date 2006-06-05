@@ -12,17 +12,17 @@
 				<th>How?</th>
 				<td>
 					<input id="invite" name="how" type="radio" value="INVITE" 
-						<c:if test="${model.how == 'invite'}">selected="selected"</c:if>
+						<c:if test="${model.how == 'INVITE' || empty model.how}">checked="checked"</c:if>
 					/>
 					<label for="invite">Send Invite</label>
 					|
 					<input id="welcome" name="how" type="radio" value="WELCOME" 
-						<c:if test="${model.how == 'welcome'}">selected="selected"</c:if>
+						<c:if test="${model.how == 'WELCOME'}">checked="checked"</c:if>
 					/>
 					<label for="welcome">Send Welcome Message</label>
 					|
 					<input id="silent" name="how" type="radio" value="SILENT" 
-						<c:if test="${model.how == 'silent'}">selected="selected"</c:if>
+						<c:if test="${model.how == 'SILENT'}">checked="checked"</c:if>
 					/>
 					<label for="silent">Silently Subscribe</label>
 				</td>
@@ -38,8 +38,9 @@
 					><c:out value="${model.emails}"/></textarea>
 					<div>
 						<small>
-						Email addresses should be comma separated, and may contain
-						personal names.  I.e. "Joe User" &lt;juser@nowhere.com&gt;
+							Email addresses should be comma separated, and may contain
+							personal names.  For example:<br/>
+							 "Joe User" &lt;juser@nowhere.com&gt;, Bob &lt;bob@nowhere.com&gt;, another@nowhere.com
 						</small>
 					</div>
 					<c:if test="${!empty model.errors.emails}">

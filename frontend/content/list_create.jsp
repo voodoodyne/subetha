@@ -84,7 +84,8 @@
 				<div>
 					<small>
 						Email addresses should be comma separated, and may contain
-						personal names.  I.e. "Joe User" &lt;juser@nowhere.com&gt;
+						personal names.  For example:<br/>
+						 "Joe User" &lt;juser@nowhere.com&gt;, Bob &lt;bob@nowhere.com&gt;, another@nowhere.com
 					</small>
 				</div>
 

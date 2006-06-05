@@ -32,7 +32,7 @@ public class SubscribeMass extends AuthAction
 	{
 		/** */
 		@Property Long listId;
-		@Property String how = "INVITE";
+		@Property String how = "";
 		@Property String emails = "";
 	}
 	

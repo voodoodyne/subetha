@@ -17,10 +17,10 @@
 		
 		<dl>
 			<dt>What JDK version does SubEtha require?</dt>
-			<dd>SubEtha requires JDK1.5 or later for running and development.</dd>
+			<dd>SubEtha requires JDK1.5 or later.</dd>
 			
 			<dt>What JBoss version does SubEtha require?</dt>
-			<dd>JBoss 4.0.4GA</dd>
+			<dd>JBoss 4.0.4.GA or (possibly) newer</dd>
 
 			<dt>Does SubEtha run on other J2EE appservers?</dt>
 			<dd>
@@ -32,8 +32,7 @@
 				<p>We view the appserver not as an operating system in which
 				users run applications, but as a large library around which
 				applications like SubEtha are built.  Users install SubEtha;
-				they should not have to care what components power it 
-				(we are ignoring political motivations of course =)).</p>
+				they should not have to care what components power it.</p>
 			</dd>
 			
 			<dt>Which databases does SubEtha support?</dt>
@@ -75,9 +74,7 @@
 			<dd>1) they're huge, and we don't want to have to parse them when we're rendering the archive page
 				2) they need to be accessed separately as links from the archives anyways
 				3) if the msg bodies don't have attachments, it's reasonable to cache the whole msg 
-				body in the 2nd level cache (currently done)
-				4) it more easily allows the Attachments database table (which could grow to be huge)
-				to be separated out from the main system</dd>
+				body in the 2nd level cache (currently done)</dd>
 
 		</dl>
 	</body>

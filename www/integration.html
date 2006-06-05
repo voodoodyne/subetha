@@ -64,16 +64,13 @@
 		<p>
 			The preferred method of injecting mail into SubEtha is to relay
 			mail into the server via SMTP.  This is usually trivial to set
-			up.  SubEtha has a simple SMTP stack (by default running on port
+			up.  SubEtha has it's own SMTP stack (by default running on port
 			2500) which accepts messages and "does the right thing" with whatever
-			it receives.  This SMTP stack is not (yet) robust enough to be
-			internet-facing (because it lacks things like authentication and 
-			spam control), but it will happily speak to your friendly local
-			MTA in it's native tongue.
+			it receives.
 		</p>
 		
 		<p>
-			In either case, your MTA must be instructed <string>which</strong>
+			In either case, your MTA must be instructed <strong>which</strong>
 			mail should be delivered to SubEtha (as opposed to local mailboxes).  
 			The options here vary by MTA.
 		</p>

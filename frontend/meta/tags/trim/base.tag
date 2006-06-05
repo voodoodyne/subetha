@@ -34,7 +34,7 @@
 			
 			<div>
 				<a href="http://subetha.tigris.org/">SubEtha Mail</a>
-				<a href="<c:url value="/version.jsp"/>"><c:out value="${backend.version}"/></a>
+				<a href="<c:url value="/version.jsp"/>"><c:out value="${applicationScope.backend.version}"/></a>
 				is free software
 			</div>
 			

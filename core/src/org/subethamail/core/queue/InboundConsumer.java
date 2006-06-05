@@ -73,30 +73,43 @@ public class InboundConsumer implements Inbound
 			
 			return;
 		}
+
+// Upon further reflection, this is actually quite dangerous.  Since
+// the message will be retried, all potential 9 prior recipients will
+// get the message redelivered on each retry.  Ouch.  We're stuck with
+// one-at-a-time processing; performance will have to come from optimizing
+// JBossMQ or switching to JBossMessaging.
+//
+//		// Lookup all recipients and queue the mailId, recipientId pairs
+//		// Rather than queue them one at a time, batch them in groups of 10.
+//		// This right here is the most expensive operation in the delivery
+//		// chain (at least with JBossMQ), so batching dramatically reduces
+//		// the number of operations.  The only downside is that at worst,
+//		// 9 people could receive duplicate messages.
+//		List<Long> batch = new ArrayList<Long>(BATCH_SIZE);
+//		
+//		for (Subscription sub: mail.getList().getSubscriptions())
+//		{
+//			if (sub.getDeliverTo() != null)
+//				batch.add(sub.getPerson().getId());
+//			
+//			if (batch.size() == BATCH_SIZE)
+//			{
+//				this.queuer.queueForDelivery(mailId, batch);
+//				batch.clear();
+//			}
+//		}
+//		
+//		// Anything left in the batch must be delivered too
+//		if (!batch.isEmpty())
+//			this.queuer.queueForDelivery(mailId, batch);
 		
-		// Lookup all recipients and queue the mailId, recipientId pairs
-		// Rather than queue them one at a time, batch them in groups of 10.
-		// This right here is the most expensive operation in the delivery
-		// chain (at least with JBossMQ), so batching dramatically reduces
-		// the number of operations.  The only downside is that at worst,
-		// 9 people could receive duplicate messages.
-		List<Long> batch = new ArrayList<Long>(BATCH_SIZE);
-		
+		// The original one-at-a-time code
 		for (Subscription sub: mail.getList().getSubscriptions())
 		{
 			if (sub.getDeliverTo() != null)
-				batch.add(sub.getPerson().getId());
-			
-			if (batch.size() == BATCH_SIZE)
-			{
-				this.queuer.queueForDelivery(mailId, batch);
-				batch.clear();
-			}
+				this.queuer.queueForDelivery(mailId, sub.getPerson().getId());
 		}
-		
-		// Anything left in the batch must be delivered too
-		if (!batch.isEmpty())
-			this.queuer.queueForDelivery(mailId, batch);
 	}
 }
 

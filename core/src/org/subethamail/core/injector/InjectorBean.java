@@ -559,9 +559,12 @@ public class InjectorBean implements Injector, InjectorRemote
 				checkForLoop = checkForLoop.getParent();
 			}
 			
-			// Remove from the old parent
-			Mail oldParent = descendant.getParent();
-			oldParent.getReplies().remove(descendant);
+			// Remove from the old parent, if exists
+			if (descendant.getParent() != null)
+			{
+				Mail oldParent = descendant.getParent();
+				oldParent.getReplies().remove(descendant);
+			}
 			
 			// Add the new parent
 			descendant.setParent(mail);

@@ -37,6 +37,7 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
 import org.subethamail.common.PermissionException;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.common.io.LimitingInputStream;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
@@ -49,12 +50,17 @@ import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.TextPartData;
+import org.subethamail.core.plugin.i.HoldException;
+import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
+import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.dao.DAO;
 
 import com.sun.mail.util.LineInputStream;
@@ -230,10 +236,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 */
 	public void importMessages(Long listId, InputStream mboxStream) throws NotFoundException, PermissionException, ImportMessagesException
 	{
-
-		MailingList list = dao.findMailingList(listId);
-
-		list.checkPermission(getMe(), Permission.IMPORT_MESSAGES);
+		MailingList list = this.getListFor(listId, Permission.IMPORT_MESSAGES);
 		
 		try 
 		{
@@ -251,8 +254,9 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					{
 						byte[] bytes = buf.toByteArray();
 						ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-						injector.inject(envelopeSender, list.getEmail(), bin, true, true, false, false);
+						this.injector.importMessage(list.getId(), envelopeSender, bin, true);
 					}
+					
 					fromLine = line;
 					envelopeSender = MailUtils.getMboxFrom(fromLine);
 					buf = new ByteArrayOutputStream();
@@ -264,18 +268,19 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					buf.write(10); // LF
 				}
 			}
+			
 			if (buf != null)
 			{
 				byte[] bytes = buf.toByteArray();
 				ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-				injector.inject(envelopeSender, list.getEmail(), bin, true, true, false, false);
+				this.injector.importMessage(list.getId(), envelopeSender, bin, true);
 			}
 		}
-		catch(IOException ex)
+		catch (IOException ex)
 		{
 			throw new ImportMessagesException(ex);
 		}
-		catch(MessagingException ex)
+		catch (MessagingException ex)
 		{
 			throw new ImportMessagesException(ex);
 		}

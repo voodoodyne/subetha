@@ -166,7 +166,9 @@ public class Mail implements Serializable, Comparable
 	String from;
 	
 	/** normalized with lowercase domain */
-	@Email
+	//@Email	
+	// The validator failed on this address: SRS0=aHFE=YF=pobox.com=fredx@bounce2.pobox.com
+	// It looks valid to me, so I can only guess that the validation pattern is broken.
 	@Column(nullable=false, length=Validator.MAX_MAIL_FROM)
 	@Index(name="mailEnvelopeSenderIndex")
 	String envelopeSender;

@@ -225,6 +225,16 @@ public class Mail implements Serializable, Comparable
 	public Mail() {}
 	
 	/**
+	 * Usually you should use this constructor
+	 * 
+	 * @see the other constructor
+	 */
+	public Mail(InternetAddress envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
+	{
+		this(envelopeSender, msg, list, holdFor, new Timestamp(System.currentTimeMillis()));
+	}
+	
+	/**
 	 * Creates a new Mail object.  DOES NOT SET THE CONTENT.
 	 * 
 	 * Content must be set separately because the detacher requires the mail object
@@ -232,13 +242,14 @@ public class Mail implements Serializable, Comparable
 	 * must contain the newly created ids of the attachments.
 	 * 
 	 * @param holdFor can be null which means none required
+	 * @param dateCreated allows the creation date to be overriden, useful for archive import
 	 */
-	public Mail(InternetAddress envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
+	public Mail(InternetAddress envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor, Date dateCreated) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mail");
 		
-		this.dateCreated = new Timestamp(System.currentTimeMillis());
+		this.dateCreated = dateCreated;
 		this.list = list;
 		this.hold = holdFor;
 		

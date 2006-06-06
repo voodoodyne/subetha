@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -37,7 +38,6 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Permission;
 import org.subethamail.common.PermissionException;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.common.io.LimitingInputStream;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
@@ -50,17 +50,12 @@ import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.TextPartData;
-import org.subethamail.core.plugin.i.HoldException;
-import org.subethamail.core.plugin.i.IgnoreException;
-import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
-import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
-import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.dao.DAO;
 
 import com.sun.mail.util.LineInputStream;
@@ -245,6 +240,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 			String fromLine = null;
 			String envelopeSender = null;
 			ByteArrayOutputStream buf = null;
+			Date fallbackDate = new Date();
 	
 			for (line = in.readLine(); line != null; line = in.readLine())
 			{
@@ -254,7 +250,9 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					{
 						byte[] bytes = buf.toByteArray();
 						ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-						this.injector.importMessage(list.getId(), envelopeSender, bin, true);
+						Date sent = this.injector.importMessage(list.getId(), envelopeSender, bin, true, fallbackDate);
+						if (sent != null)
+							fallbackDate = sent;
 					}
 					
 					fromLine = line;
@@ -273,7 +271,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 			{
 				byte[] bytes = buf.toByteArray();
 				ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-				this.injector.importMessage(list.getId(), envelopeSender, bin, true);
+				this.injector.importMessage(list.getId(), envelopeSender, bin, true, fallbackDate);
 			}
 		}
 		catch (IOException ex)

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.EJB;
@@ -291,9 +292,9 @@ public class InjectorBean implements Injector, InjectorRemote
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.injector.i.Injector#importMessage(java.lang.Long, java.lang.String, java.io.InputStream, boolean)
+	 * @see org.subethamail.core.injector.i.Injector#importMessage(java.lang.Long, java.lang.String, java.io.InputStream, boolean, java.util.Date)
 	 */
-	public void importMessage(Long listId, String envelopeSender, InputStream mailData, boolean ignoreDuplicate) throws NotFoundException, MessagingException, IOException
+	public Date importMessage(Long listId, String envelopeSender, InputStream mailData, boolean ignoreDuplicate, Date fallbackDate) throws NotFoundException, MessagingException, IOException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Importing message from " + envelopeSender + " into list " + listId);
@@ -312,7 +313,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		{
 			// Are we dropping duplicates? 
 			if (ignoreDuplicate)
-				return;
+				return msg.getSentDate();
 			else
 				msg.replaceMessageID();
 		}
@@ -330,7 +331,7 @@ public class InjectorBean implements Injector, InjectorRemote
 			if (log.isDebugEnabled())
 				log.debug("Plugin ignoring message", ex);
 			
-			return;
+			return msg.getSentDate();
 		}
 		catch (HoldException ex)
 		{
@@ -339,11 +340,12 @@ public class InjectorBean implements Injector, InjectorRemote
 			
 			hold = HoldType.HARD;
 		}
-		
-		if (log.isDebugEnabled())
-			log.debug("Hold?  " + hold);
 
-		Mail mail = new Mail(senderAddy, msg, toList, hold);
+		Date sentDate = msg.getSentDate();
+		if (sentDate == null)
+			sentDate = fallbackDate;
+				
+		Mail mail = new Mail(senderAddy, msg, toList, hold, sentDate);
 		this.dao.persist(mail);
 		
 		// Convert all binary attachments to references and then set the content
@@ -352,6 +354,8 @@ public class InjectorBean implements Injector, InjectorRemote
 		
 		if (mail.getHold() == null)
 			this.threadMail(mail, msg);
+		
+		return msg.getSentDate();
 	}
 	
 	/**

@@ -7,6 +7,7 @@ package org.subethamail.core.injector.i;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 import javax.ejb.Local;
 import javax.mail.MessagingException;
@@ -60,12 +61,17 @@ public interface Injector
 	/**
 	 * Imports of a piece of raw mail in rfc822 format into the archives
 	 * of a particular list.
+	 * 
+	 * @param ignoreDuplicate if true will skip messages whose message-id already exists
+	 * @param fallbackDate is the date to use only if a date cannot be extracted from the message headers
+	 * 
+	 * @return the sent date of the message, if one could be identified 
 	 *
 	 * @throws NotFoundException if the list id is not a valid list
 	 * @throws MessagingException if the message data or toAddress could not be parsed.
 	 * @throws IOException if there are these types of things
 	 */
-	public void importMessage(Long listId, String envelopeSender, InputStream mailData, boolean ignoreDuplicate) throws NotFoundException, MessagingException, IOException;
+	public Date importMessage(Long listId, String envelopeSender, InputStream mailData, boolean ignoreDuplicate, Date fallbackDate) throws NotFoundException, MessagingException, IOException;
 
 }
 

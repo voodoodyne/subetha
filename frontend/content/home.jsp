@@ -125,7 +125,12 @@
 					</c:otherwise>
 				</c:choose>
 				<tr class="${color}">
-					<td><a href="<c:url value="${subs.url}"/>"><c:out value="${subs.name}"/></a></td>
+					<td>
+						<c:url var="listUrl" value="/list.jsp">
+							<c:param name="listId" value="${subs.id}"/>
+						</c:url>
+						<a href="${listUrl}"><c:out value="${subs.name}"/></a>
+					</td>
 					<td><a href="mailto:<c:out value="${subs.email}"/>"><c:out value="${subs.email}"/></a></td>
 					<td><c:out value="${subs.roleName}"/></td>
 					<td>

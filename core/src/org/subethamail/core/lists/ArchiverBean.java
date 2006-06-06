@@ -229,7 +229,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#importMessages(Long, InputStream)
 	 */
-	public void importMessages(Long listId, InputStream mboxStream) throws NotFoundException, PermissionException, ImportMessagesException
+	public int importMessages(Long listId, InputStream mboxStream) throws NotFoundException, PermissionException, ImportMessagesException
 	{
 		MailingList list = this.getListFor(listId, Permission.IMPORT_MESSAGES);
 		
@@ -241,6 +241,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 			String envelopeSender = null;
 			ByteArrayOutputStream buf = null;
 			Date fallbackDate = new Date();
+			int count = 0;
 	
 			for (line = in.readLine(); line != null; line = in.readLine())
 			{
@@ -253,6 +254,8 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 						Date sent = this.injector.importMessage(list.getId(), envelopeSender, bin, true, fallbackDate);
 						if (sent != null)
 							fallbackDate = sent;
+						
+						count++;
 					}
 					
 					fromLine = line;
@@ -272,7 +275,10 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 				byte[] bytes = buf.toByteArray();
 				ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
 				this.injector.importMessage(list.getId(), envelopeSender, bin, true, fallbackDate);
+				count++;
 			}
+
+			return count;
 		}
 		catch (IOException ex)
 		{

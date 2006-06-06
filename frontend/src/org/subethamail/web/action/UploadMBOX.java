@@ -36,6 +36,8 @@ public class UploadMBOX extends AuthAction
 		@Property Long listId;
 
 		@Property List<String> messageSubjects;
+		
+		@Property int countImported;
 	}
 	
 	/** */
@@ -75,6 +77,6 @@ public class UploadMBOX extends AuthAction
 
 		FileItem file = files.get(0);
 
-		Backend.instance().getArchiver().importMessages(model.listId, file.getInputStream());
+		model.countImported = Backend.instance().getArchiver().importMessages(model.listId, file.getInputStream());
 	}	
 }

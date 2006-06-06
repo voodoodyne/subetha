@@ -9,6 +9,8 @@
 		</c:redirect>
 	</c:when>
 	<c:otherwise>
-		<jsp:forward page="/import_success.jsp" />
+		<trim:list title="Messages Imported" listId="${param.listId}">
+			<p>${model.countImported} messages imported</p>
+		</trim:list>
 	</c:otherwise>		
 </c:choose>

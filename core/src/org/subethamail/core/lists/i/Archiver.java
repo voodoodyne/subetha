@@ -82,8 +82,11 @@ public interface Archiver
 	 * 
 	 * @param listId the list to insert the messages into
 	 * @param mboxStream the mbox stream to read messages from
+	 * 
+	 * @return the number of messages imported
+	 * 
 	 * @throws NotFoundException if the list is not found
 	 * @throws PermissionException if the user has not IMPORT_MESSAGES permissions
 	 */
-	public void importMessages(Long listId, InputStream mboxStream) throws NotFoundException, PermissionException, ImportMessagesException;
+	public int importMessages(Long listId, InputStream mboxStream) throws NotFoundException, PermissionException, ImportMessagesException;
 }

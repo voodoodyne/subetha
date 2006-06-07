@@ -267,4 +267,10 @@ public interface ListMgr
 	 * Requires Permission.APPROVE_SUBSCRIPTIONS
 	 */
 	public int countHeldMessages(Long listId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Checks whether the caller prinicipal has the specified permission
+	 * on the specified list.  Does nothing else.
+	 */
+	public void checkPermission(Long listId, Permission perm) throws NotFoundException, PermissionException;
 }

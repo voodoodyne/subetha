@@ -635,4 +635,13 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		return this.dao.countSubscribers(listId, query);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#checkPermission(java.lang.Long, org.subethamail.common.Permission)
+	 */
+	public void checkPermission(Long listId, Permission perm) throws NotFoundException, PermissionException
+	{
+		this.getListFor(listId, perm);
+	}
+
 }

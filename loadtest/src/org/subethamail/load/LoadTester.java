@@ -34,7 +34,9 @@ public class LoadTester
 		Collection<MessageListener> listeners = new ArrayList<MessageListener>(1);
 		listeners.add(this.listener);
 		
-		this.server = new SMTPServer("localhost", null, 2525, listeners);
+		this.server = new SMTPServer(listeners);
+		this.server.setPort(2525);
+		this.server.setHostName("localhost");
 	}
 	
 	/** */

@@ -350,7 +350,11 @@ public class AdminBean implements Admin, AdminRemote
 
 		if (log.isDebugEnabled())
 			log.debug("Merging " + from + " into " + to);
-			
+
+		// First of all watch out for permission upgrade
+		if (from.isSiteAdmin())
+			to.setSiteAdmin(true);
+		
 		// Move email addresses
 		for (EmailAddress addy: from.getEmailAddresses().values())
 		{
@@ -367,10 +371,15 @@ public class AdminBean implements Admin, AdminRemote
 		for (Subscription sub: from.getSubscriptions().values())
 		{
 			// Keep our current subscription if there is a duplicate
-			if (to.getSubscriptions().containsKey(sub.getList().getId()))
+			Subscription toSub = to.getSubscriptions().get(sub.getList().getId());
+			if (toSub != null)
 			{
 				if (log.isDebugEnabled())
 					log.debug(" abandoning duplicate " + sub);
+				
+				// Special case - if the other was an owner role, upgrade this one too
+				if (sub.getRole().isOwner())
+					toSub.setRole(sub.getRole());
 				
 				this.dao.remove(sub);
 			}

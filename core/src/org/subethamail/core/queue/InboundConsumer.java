@@ -5,9 +5,6 @@
 
 package org.subethamail.core.queue;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.ejb.ActivationConfigProperty;

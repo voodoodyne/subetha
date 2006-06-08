@@ -47,7 +47,6 @@ import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Table;
-import org.hibernate.validator.Email;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.TimeUtils;
 import org.subethamail.common.valid.Validator;

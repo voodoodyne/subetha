@@ -20,6 +20,10 @@ pre {
  font-size: 1.1em;
 }
 
+#header {
+	height: 8em;
+}
+
 #bodyText {
 	margin: 0mm 5mm 0 14em;
 	text-align: left;
@@ -39,6 +43,52 @@ pre {
 }
 
 /* end bluehaze.css overrides */
+
+/* Forms (borrowed from trac) */
+input, textarea, select {
+	margin: 2px
+}
+input, select {
+	vertical-align: middle
+}
+input[type=button], input[type=submit], input[type=reset] {
+	background: #eee;
+	color: #222;
+	border: 1px outset #ccc;
+	padding: .1em .5em;
+}
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
+	background: #ccb;
+}
+input[type=button][disabled], input[type=submit][disabled], input[type=reset][disabled] {
+	background: #f6f6f6;
+	border-style: solid;
+	color: #999;
+}
+input[type=text], input[type=password], input.textwidget, textarea { 
+	border: 1px solid #d7d7d7
+}
+input[type=text], input[type=password], input.textwidget, textarea {
+	padding: .2em .2em; margin: 0px
+}
+input[type=text]:focus, input[type=password]:focus, input.textwidget:focus, textarea:focus {
+	border: 1px solid #886;
+}
+option {
+	border-bottom: 1px dotted #d7d7d7
+}
+fieldset {
+	border: 1px solid #d7d7d7; padding: .5em; margin: 0
+}
+fieldset.iefix { background: transparent; border: none; padding: 0; margin: 0 }
+* html fieldset.iefix { width: 98% }
+fieldset.iefix p { margin: 0 }
+legend { color: #555; padding: 0 .25em; font-size: 90%; font-weight: bold }
+label.disabled { color: #d7d7d7 }
+.buttons { margin: .5em .5em .5em 0 }
+.buttons form, .buttons form div { display: inline }
+.buttons input { margin: 1em .5em .1em 0 }
+
 .form-inline {
 	display: inline
 }

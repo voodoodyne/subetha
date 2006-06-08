@@ -69,7 +69,8 @@
 								<%-- Everything else we treat as one-line text --%>
 								<input type="text"
 									name="<c:out value="form:${filterParam.name}"/>"
-									value="<c:out value="${model.form[filterParam.name]}"/>" />
+									value="<c:out value="${model.form[filterParam.name]}"/>"
+									size="45" />
 							</c:otherwise>
 						</c:choose>
 						<c:if test="${!empty model.errors[filterParam.name]}">

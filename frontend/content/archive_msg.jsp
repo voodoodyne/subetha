@@ -7,7 +7,7 @@
 	<table>
 		<tr>
 			<td>
-				<a href="<c:url value="/message/${msg.id}/download/${msg.listId}-${msg.id}.eml"/>">Download Message</a>/ 
+				<a href="<c:url value="/message/${msg.id}/download/${msg.listId}-${msg.id}.eml"/>">Download Message</a> / 
 				<a href="<c:url value="/message/${msg.id}/view/${msg.listId}-${msg.id}.eml"/>">View Message</a> 
 
 			</td>

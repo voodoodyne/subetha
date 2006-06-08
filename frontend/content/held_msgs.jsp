@@ -97,8 +97,7 @@ st1.onsort = st1.tableRowColors;
 			<tbody>
 			<tr>
 				<td>Soft</td>
-				<td>Can be approved by the poster if they have permission 
-					to post messages to the list.</td>
+				<td>Can be self-approved by the poster.</td>
 			</tr>
 			<tr>
 				<td>Hard</td>

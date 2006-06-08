@@ -20,6 +20,7 @@ import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
 import org.subethamail.plugin.filter.AppendFooterFilter;
+import org.subethamail.plugin.filter.HoldEverythingFilter;
 import org.subethamail.plugin.filter.ListHeaderFilter;
 
 /**
@@ -52,7 +53,8 @@ public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycl
 	{
 		return 
 			"Create a list which allows only moderators to post and view the subscriber list. " +
-			"Subscribers can read the archives. Messages reply to the Sender.";
+			"All messages are held for manual approval to prevent spoofing. " +
+			"Subscribers can read the archives.";
 	}
 	
 	/** */
@@ -85,6 +87,7 @@ public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycl
 			// Add a couple useful filters
 			listMgr.setFilter(listId, AppendFooterFilter.class.getName());
 			listMgr.setFilter(listId, ListHeaderFilter.class.getName());
+			listMgr.setFilter(listId, HoldEverythingFilter.class.getName());
 		}
 		catch (PermissionException pe)
 		{

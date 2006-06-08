@@ -545,7 +545,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 */
 	public Collection<MailHold> getHeldMessages(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
-		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
+		this.getListFor(listId, Permission.APPROVE_MESSAGES);
 		
 		List<Mail> held = this.dao.findMailHeld(listId, skip, count);
 		
@@ -558,7 +558,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 */
 	public int countHeldMessages(Long listId) throws NotFoundException, PermissionException
 	{
-		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
+		this.getListFor(listId, Permission.APPROVE_MESSAGES);
 		
 		return this.dao.countHeldMessages(listId);
 	}

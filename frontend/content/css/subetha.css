@@ -44,6 +44,10 @@ pre {
 
 /* end bluehaze.css overrides */
 
+div.summaries ul {
+	list-style-type: none;
+}
+	
 /* Forms (borrowed from trac) */
 input, textarea, select {
 	margin: 2px

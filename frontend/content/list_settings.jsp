@@ -46,7 +46,7 @@
 				</td>
 			</tr>
 			<tr>
-				<th><label for="description">Welcome Message</label></th>
+				<td><label for="welcomeMessage">Welcome Message</label></td>
 				<td
 					<c:if test="${!empty model.errors.welcomeMessage}">
 						class="error"
@@ -66,7 +66,7 @@
 					<input id="holdSubs" name="holdSubs" type="checkbox" value="true"
 						<c:if test="${model.holdSubs}">checked="checked"</c:if>
 					/>
-					Subscriptions must be approved by moderators
+					<label for="holdSubs">Subscriptions must be approved by moderators</label>
 				</td>
 			</tr>
 		</table>

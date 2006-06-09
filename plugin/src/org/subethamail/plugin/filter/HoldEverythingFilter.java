@@ -35,6 +35,7 @@ public class HoldEverythingFilter extends GenericFilter implements Lifecycle
 //TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {	
 	/** */
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(HoldEverythingFilter.class);
 
 	/*

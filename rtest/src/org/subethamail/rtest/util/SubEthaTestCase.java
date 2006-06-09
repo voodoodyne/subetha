@@ -49,9 +49,9 @@ public class SubEthaTestCase extends TestCase
 	{
 		super.setUp();
 		
-		this.smtp = Smtp.start();
-		this.sess = Session.getDefaultInstance(new Properties());
-		
+		this.smtp = new Smtp();
+		this.smtp.start();
+		this.sess = Session.getDefaultInstance(new Properties());		
 	}
 	
 	/** */

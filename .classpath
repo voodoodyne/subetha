@@ -26,10 +26,10 @@
 	<classpathentry kind="lib" path="frontend/lib/jstl.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/standard.jar"/>
 	<classpathentry kind="lib" path="core/lib/velocity-1.4.jar"/>
-	<classpathentry kind="lib" path="rtest/lib/dumbster1.6.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/tagonist.jar"/>
 	<classpathentry sourcepath="/JAVAMAIL_SRC" kind="var" path="JBOSS_HOME/server/default/lib/mail.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/commons-fileupload-1.0.jar"/>
 	<classpathentry kind="lib" path="core/lib/subetha-smtp.jar"/>
+	<classpathentry kind="lib" path="rtest/lib/subetha-wiser.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

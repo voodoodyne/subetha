@@ -19,8 +19,7 @@ import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonMixin;
 import org.subethamail.rtest.util.SubEthaTestCase;
-
-import com.dumbster.smtp.SmtpMessage;
+import org.subethamail.wiser.WiserMessage;
 
 /**
  * @author Jeff Schnitzer
@@ -96,7 +95,7 @@ public class InjectorTest extends SubEthaTestCase
 		Thread.sleep(1000);
 		
 		assertEquals(2, this.smtp.size());
-		SmtpMessage msg = this.smtp.get(1);
+		WiserMessage msg = this.smtp.get(1);
 		
 		// TODO:  when dumbster provides an api, check that the envelope sender is a proper VERP address
 		

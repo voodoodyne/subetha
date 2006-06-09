@@ -5,23 +5,25 @@
 
 package org.subethamail.rtest.util;
 
+import java.io.IOException;
 import java.util.Iterator;
+
+import javax.mail.MessagingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
-
-import com.dumbster.smtp.SimpleSmtpServer;
-import com.dumbster.smtp.SmtpMessage;
+import org.subethamail.wiser.Wiser;
+import org.subethamail.wiser.WiserMessage;
 
 /**
- * A useful wrapper for Dumbster that provides some Subetha-specific
+ * A useful wrapper for Wiser that provides some Subetha-specific
  * methods.
  * 
  * @author Jeff Schnitzer
  */
-public class Smtp
+public class Smtp extends Wiser
 {
 	/** */
 	@SuppressWarnings("unused")
@@ -30,64 +32,37 @@ public class Smtp
 	/** The port we use for dumbster */
 	public static final int PORT = 2525;
 
-	/** */
-	SimpleSmtpServer server;
-	
-	/** */
-	public Smtp(SimpleSmtpServer server)
+	public Smtp()
 	{
-		this.server = server;
-	}
-	
-	/** */
-	public static Smtp start()
-	{
-		return new Smtp(SimpleSmtpServer.start(PORT));
-	}
-	
-	/** */
-	public void stop()
-	{
-		this.server.stop();
+		super();
+		this.setPort(PORT);
 	}
 
 	/** */
 	public int size()
 	{
-		return this.server.getReceivedEmailSize();
+		return super.getMessages().size();
 	}
 	
 	/** */
-	@SuppressWarnings("unchecked")
-	public Iterator<SmtpMessage> iterator()
+	public WiserMessage get(int index)
 	{
-		return this.server.getReceivedEmail();
+		return super.getMessages().get(index);
 	}
 	
-	/** */
-	public SmtpMessage get(int index)
-	{
-		Iterator<SmtpMessage> it = this.iterator();
-		
-		SmtpMessage result = it.next();
-		
-		for (int i=0; i<index; i++)
-			result = it.next();
-		
-		return result;
-	}
-	
-	/** Gets the Nth instance of the specified mail type */
-	public SmtpMessage get(MailType type, int index)
+	/** Gets the Nth instance of the specified mail type 
+	 * @throws MessagingException 
+	 */
+	public WiserMessage get(MailType type, int index) throws MessagingException
 	{
 		int count = 0;
 		
-		Iterator<SmtpMessage> it = this.iterator();
+		Iterator<WiserMessage> it = super.getMessages().iterator();
 		while (it.hasNext())
 		{
-			SmtpMessage msg = it.next();
-			
-			if (msg.getHeaderValue("Subject").startsWith(type.name()))
+			WiserMessage msg = it.next();
+
+			if (msg.getMimeMessage().getSubject().startsWith(type.name()))
 			{
 				if (count == index)
 					return msg;
@@ -101,17 +76,18 @@ public class Smtp
 	
 	/**
 	 * @return the number of messages of the specified type 
+	 * @throws MessagingException 
 	 */
-	public int count(MailType type)
+	public int count(MailType type) throws MessagingException
 	{
 		int count = 0;
 		
-		Iterator<SmtpMessage> it = this.iterator();
+		Iterator<WiserMessage> it = super.getMessages().iterator();
 		while (it.hasNext())
 		{
-			SmtpMessage msg = it.next();
+			WiserMessage msg = it.next();
 			
-			if (msg.getHeaderValue("Subject").startsWith(type.name()))
+			if (msg.getMimeMessage().getSubject().startsWith(type.name()))
 				count++;
 		}
 		
@@ -120,17 +96,18 @@ public class Smtp
 	
 	/**
 	 * @return the number of messages containing the specified subject 
+	 * @throws MessagingException 
 	 */
-	public int countSubject(String subject)
+	public int countSubject(String subject) throws MessagingException
 	{
 		int count = 0;
 		
-		Iterator<SmtpMessage> it = this.iterator();
+		Iterator<WiserMessage> it = super.getMessages().iterator();
 		while (it.hasNext())
 		{
-			SmtpMessage msg = it.next();
+			WiserMessage msg = it.next();
 			
-			if (msg.getHeaderValue("Subject").contains(subject))
+			if (msg.getMimeMessage().getSubject().contains(subject))
 				count++;
 		}
 		
@@ -139,12 +116,14 @@ public class Smtp
 	
 	/**
 	 * Gets an embedded token from a message.
+	 * @throws MessagingException 
+	 * @throws IOException 
 	 * 
 	 * @throws IllegalArgumentException if msg has no token
 	 */
-	public static String extractToken(SmtpMessage msg)
+	public static String extractToken(WiserMessage msg) throws IOException, MessagingException
 	{
-		String body = msg.getBody();
+		String body = (String) msg.getMimeMessage().getContent();
 		
 		int start = body.indexOf(Constant.DEBUG_TOKEN_BEGIN);
 		if (start < 0)

@@ -27,8 +27,8 @@
 			<include name="**/*.jar" />
 		</fileset>
 		
-		<pathelement location="${build.core.ejbclient.file}" />
-		
+		<path refid="core.classpath" />
+
 		<path refid="master.classpath" />
 	</path>
 

@@ -18,7 +18,8 @@
 	<property file="build.properties" />
 
 	<property name="build.dir" location="build" />
-	<property name="build.javadoc.dir" location="${build.dir}/api" />
+	<property name="build.javadoc.i.dir" location="${build.dir}/api-public" />
+	<property name="build.javadoc.all.dir" location="${build.dir}/api-all" />
 	
 	<property name="build.debug" value="on" />
 	<property name="build.deprecation" value="on" />
@@ -65,10 +66,11 @@
 		<property name="build.version" value="UNVERSIONED"/>
 	</target>
 	
-	<target name="formal-build">
-		<antcall target="clean"/>
+	<target name="input-version">
 		<input addproperty="build.version" message="Version number?" />
-		<antcall target="appmain-ear"/>
+	</target>
+	
+	<target name="formal-build" depends="clean, input-version, appmain-ear">
 	</target>
 	
 	<target name="formal-deploy" depends="formal-build, deploy">
@@ -78,12 +80,31 @@
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="javadoc">
-		<mkdir dir="${build.javadoc.dir}"/>
+	<target name="javadoc-i">
+		<mkdir dir="${build.javadoc.i.dir}"/>
 		
 		<!-- this classpath isn't right -->
 		<javadoc
-			destdir="${build.javadoc.dir}"
+			destdir="${build.javadoc.i.dir}"
+			packagenames="*"
+			classpathref="frontend.classpath"
+			author="true"
+			version="true"
+		>
+			<fileset dir="${common.javasrc.dir}"/>
+			
+			<fileset dir="${core.javasrc.dir}">
+				<include name="**/i/**" />
+			</fileset>
+		</javadoc>
+	</target>
+	
+	<target name="javadoc-all">
+		<mkdir dir="${build.javadoc.all.dir}"/>
+		
+		<!-- this classpath isn't right -->
+		<javadoc
+			destdir="${build.javadoc.all.dir}"
 			packagenames="*"
 			classpathref="frontend.classpath"
 			author="true"
@@ -109,5 +130,35 @@
 		<basename property="build.appmain.ear.basename" file="${build.appmain.ear.file}" />
 		<touch file="${deploy.dir}/${build.appmain.ear.basename}" />
 	</target>
+	
+	<target name="dist" depends="input-version, clean, appmain-ear, javadoc-i, javadoc-all">
+		<property name="build.dist.dir" location="${build.dir}/${ant.project.name}-${build.version}"/>
+		<property name="build.dist.zip" location="${build.dir}/${ant.project.name}-${build.version}.zip"/>
+
+		<basename property="build.javadoc.i.dir.basename" file="${build.javadoc.i.dir}" />
+		<basename property="build.javadoc.all.dir.basename" file="${build.javadoc.all.dir}" />
+		
+		<copy todir="${build.dist.dir}">
+			<fileset dir="${build.dir}">
+				<include name="${build.javadoc.i.dir.basename}/**" />
+				<include name="${build.javadoc.all.dir.basename}/**" />
+			</fileset>
+			
+			<fileset file="${build.appmain.ear.file}"/>
+			
+			<fileset dir=".">
+				<include name="LICENSE.txt" />
+				<include name="www/**" />
+			</fileset>
+		</copy>
+		
+		<dirname property="build.dist.dir.dirname" file="${build.dist.dir}" />
+		<basename property="build.dist.dir.basename" file="${build.dist.dir}" />
+		
+		<zip zipfile="${build.dist.zip}" basedir="${build.dist.dir.dirname}">
+			<include name="${build.dist.dir.basename}/**" />
+		</zip>
+	</target>
+
 </project>
 

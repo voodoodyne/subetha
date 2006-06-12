@@ -87,10 +87,32 @@
 	<p>
 		This project is 
 		<a href="http://subetha.tigris.org/project_lists.html">self-hosting</a>.
-		A 0.5 release which includes everything except fulltext searching and
-		SOAP will come shortly.  In the mean time, see the
-		<a href="developers.html">developer documentation</a>.  Also see
-		the <a href="faq.html">FAQ</a>.
+		The code is considered safe for production use, however it has not yet been
+		extensively tested in the wild.  Futhermore, there are two major features
+		missing:  Fulltext searching of the archives has not yet been implemented,
+		and the business tier has not yet been annotated for SOAP access.
+	</p>
+	
+	<p>Some useful documents:</p>
+	<ul>
+		<li><a href="project_license.html">License</a></li>
+		<li><a href="screenshots.html">Screenshots</a></li>
+		<li><a href="install.html">Install Instructions</a></li>
+		<li><a href="administration.html">Administration Guide</a></li>
+		<li><a href="developers.html">Developer Guide</a></li>
+		<li><a href="faq.html">FAQ</a></li>
+	</ul>
+	
+	<p>
+		Planned packaging options are:
+	</p>
+	<ol>
+		<li>An EAR file and instructions for deploying into JBoss.</li>
+		<li>A zip file containing JBoss preconfigured to run with SubEtha standalone.</li>
+		<li>RPM and DEB packages with fully configured JBoss/SubEtha.</li>
+	</ol>
+	<p>
+		As of the current release, only the first option is available.
 	</p>
 	
 	<p>
@@ -103,15 +125,6 @@
 		<li>Ian McFarland</li>
 	</ul>
 	
-	<p>
-		There will be two distributions.  The first, for advanced administrators, is an
-		EAR file which can be deployed into any JBoss instance.  The second, for novices,
-		is a "just-unzip-and-run" package containing standalone JBoss with SubEtha 
-		preconfgured and all unnecessary services removed.
-	</p>
-	<p>
-		Additional plans are being made for .RPM and .DEB releases.
-	</p>
 </div>
 </body>
 </html>

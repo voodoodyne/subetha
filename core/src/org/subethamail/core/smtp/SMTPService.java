@@ -43,6 +43,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	
 	private int port = DEFAULT_PORT;
 	private String hostName = null;
+	private InetAddress binding = null;
 	
 	private SMTPServer smtpServer;
 
@@ -79,8 +80,6 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	{
 		if (this.smtpServer != null)
 			throw new IllegalStateException("SMTPServer already running");
-		
-		InetAddress binding = null;
 		
 		String bindAddress = System.getProperty("jboss.bind.address");
 		if (bindAddress != null && !"0.0.0.0".equals(bindAddress))
@@ -133,6 +132,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 		return this.port;
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.service.SMTPManagement#setHostName(java.lang.String)
@@ -154,5 +154,11 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	public String getHostName()
 	{
 		return this.hostName;
+	}
+
+	@PermitAll
+	public InetAddress getBinding()
+	{
+		return this.binding;
 	}
 }

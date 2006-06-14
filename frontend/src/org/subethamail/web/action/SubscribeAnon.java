@@ -7,7 +7,6 @@ package org.subethamail.web.action;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.validator.Email;
 import org.hibernate.validator.Length;
 import org.subethamail.common.valid.Validator;
 import org.subethamail.web.Backend;
@@ -33,7 +32,6 @@ public class SubscribeAnon extends AuthAction
 		@Property Long listId;
 		
 		/** */
-		@Email
 		@Length(max=Validator.MAX_EMAIL_ADDRESS)
 		@Property String deliverTo = "";
 		

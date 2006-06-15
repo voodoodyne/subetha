@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 DOCTYPE server
-	PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
-	"http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd"
+PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+"http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd"
 -->
 
 <!--
-	$Id$
-	$URL$
+$Id$
+$URL$
 -->
 
 <server>
-	<classpath codebase="." archives="*.jar"/>
-	
-	<mbean code="org.jboss.security.auth.login.DynamicLoginConfig" name="subetha:service=DynamicLoginConfig">
-		<attribute name="AuthConfig">META-INF/server-login-config.xml</attribute>
-		
-		<!-- The service which supports dynamic processing of login-config.xml
-			configurations.
-		-->
-		<depends optional-attribute-name="LoginConfigService">
-			jboss.security:service=XMLLoginConfig
-		</depends>
-		
-		<!-- Optionally specify the security mgr service to use when
-			this service is stopped to flush the auth caches of the domains
-			registered by this service.
-		-->
-		<depends optional-attribute-name="SecurityManagerService">
-			jboss.security:service=JaasSecurityManager
-		</depends>
+	<mbean code="org.jboss.security.auth.login.DynamicLoginConfig" name="ponzi:service=LoginConfig">
+		<attribute name="PolicyConfig" serialDataType="jbxb">
+			<jaas:policy
+				xsi:schemaLocation="urn:jboss:security-config:4.1 resource:security-config_4_1.xsd"
+				xmlns:jaas="urn:jboss:security-config:4.1"
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+				
+				<jaas:application-policy name="ponzi">
+					<jaas:authentication>
+						<jaas:login-module code="org.jboss.security.auth.spi.LdapLoginModule" flag="required">
+							<jaas:module-option name="java.naming.provider.url">ldap://exchange01.mail.cnemedia.com:389</jaas:module-option>
+							<jaas:module-option name="rolesCtxDN">cn=Users,dc=mail,dc=cnemedia,dc=com</jaas:module-option>
+							<jaas:module-option name="matchOnUserDN">false</jaas:module-option>
+							<jaas:module-option name="principalDNSuffix">@exchange01.cnemedia.com</jaas:module-option>
+							<jaas:module-option name="uidAttributeID">sAMAccountName</jaas:module-option>
+							<jaas:module-option name="roleAttributeID">memberOf</jaas:module-option>
+							<jaas:module-option name="roleAttributeIsDN">true</jaas:module-option>
+							<jaas:module-option name="roleNameAttributeID">cn</jaas:module-option>
+							
+							<!-- <jaas:module-option name="unauthenticatedIdentity"></jaas:module-option> -->
+						</jaas:login-module>
+					</jaas:authentication>
+				</jaas:application-policy>
+			</jaas:policy>
+		</attribute>
+		<depends optional-attribute-name="LoginConfigService">jboss.security:service=XMLLoginConfig</depends>
+		<depends optional-attribute-name="SecurityManagerService">jboss.security:service=JaasSecurityManager</depends>
 	</mbean>
- </server>
+	
+</server>

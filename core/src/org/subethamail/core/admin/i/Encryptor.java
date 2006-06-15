@@ -14,6 +14,10 @@ import javax.ejb.Local;
  * Encrypts and decrypts strings using an internal key.  The key
  * will be randomly generated but otherwise remains constant.
  * 
+ * All methods are PermitAll but there is no Remote interface.
+ * This is because this interface gets used by (aside from core
+ * internal) the Web frontend to encrypt cookies.
+ * 
  * @author Jeff Schnitzer
  */
 @Local

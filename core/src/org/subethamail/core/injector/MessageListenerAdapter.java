@@ -10,6 +10,7 @@ import java.io.InputStream;
 
 import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.ejb.Local;
 import javax.mail.MessagingException;
 
 import org.apache.commons.logging.Log;
@@ -38,6 +39,7 @@ import org.subethamail.smtp.TooMuchDataException;
 })
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
+@Local(MessageListener.class)
 public class MessageListenerAdapter implements MessageListener, Lifecycle
 {
 	/** */

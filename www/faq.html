@@ -49,9 +49,7 @@
 				In the future, it will be possible to use SubEtha without
 				an MTA.</dd>
 
-
 			<dt>Does SubEtha support i18n (internationalization)?</dt>
-
 			<dd><p>SubEtha's text strings (ie: web interface, error messages, etc.) haven't been
 				internationalized with different languages (yet), but SubEtha should
 				pass messages through written in any language with any character
@@ -64,17 +62,21 @@
 				thorough discussion of <a href="i18n.html">internationalization issues
 				in SubEtha</a>.</p></dd>
 				
-			<dt>My mailserver does not support 8BITMIME.</dt>
-			<dd>First off, strongly consider switching to a mail server that does.
-				It's not 1984 anymore. If that is not an option, edit 
-				${jboss.dir}/server/default/deploy/mail-service.xml.
-				Set mail.smtp.allow8bitmime=false</dd>
+			<dt>What about 8bit MIME?</dt>
+			<dd>JavaMail will parse messages in 8BITMIME just fine.  However, by default,
+				JavaMail does not send mail in 8BITMIME.  This can be turned on in
+				${jboss.dir}/server/default/deploy/mail-service.xml by setting the
+				attribute mail.smtp.allow8bitmime=true.  We DO NOT recommend doing
+				this with the current version of JavaMail.  We have found at least one
+				bug whereby quoted-printable content with nonascii characters will
+				have it's header changed to "8bit" without updating the actual contents.
+				If this defect in JavaMail is corrected, this FAQ entry will change.</dd>
 
 			<dt>Why does SubEtha store attachments in a separate table?</dt>
 			<dd>1) they're huge, and we don't want to have to parse them when we're rendering the archive page
 				2) they need to be accessed separately as links from the archives anyways
-				3) if the msg bodies don't have attachments, it's reasonable to cache the whole msg 
-				body in the 2nd level cache (currently done)</dd>
+				3) message bodies without attachments are small enough to store in the
+				2nd level cache, making archive reading fast and scalable.</dd>
 
 		</dl>
 	</body>

@@ -51,7 +51,8 @@
 					<ul>
 						<li>mail.smtp.host - the name of your outgoing smtp mail server (probably "localhost")</li>
 						<li>mail.smtp.port - the port number of your outgoing smtp mail server (probably 25)</li>
-						<li>mail.smtp.allow8bitmime - set to "true" to optionally create more efficient email.  Most modern MTAs (ie Postfix) can handle this.</li>
+						<!-- JavaMail is broken with this on -->
+						<!-- <li>mail.smtp.allow8bitmime - set to "true" to optionally create more efficient email.  Most modern MTAs (ie Postfix) can handle this.</li> -->
 					</ul>
 				</li>
 				<li>

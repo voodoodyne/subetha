@@ -164,6 +164,9 @@ public class PostOfficeBean implements PostOffice
 			this.message.setRecipient(Message.RecipientType.TO, this.toAddress);
 			this.message.setFrom(this.fromAddress);
 			this.message.setEnvelopeFrom(this.senderEmail);
+			
+			// This minimizes the likelyhood of getting autoreplies
+			this.message.setHeader("Precedence", "junk");
 
 			return this.message;
 		}

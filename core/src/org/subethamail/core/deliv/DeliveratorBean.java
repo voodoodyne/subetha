@@ -113,6 +113,9 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 			// end is tested on injection.
 			msg.addXLoop(mail.getList().getEmail());
 			
+			// Precedence: list
+			msg.setHeader("Precedence", "list");
+			
 			// Set up the VERP bounce address
 			byte[] token = this.encryptor.encryptString(emailAddress.getId());
 			msg.setEnvelopeFrom(VERPAddress.encodeVERP(mail.getList().getEmail(), token));

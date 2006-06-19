@@ -49,7 +49,7 @@
 				<c:url var="listRolesUrl" value="/roles.jsp">
 					<c:param name="listId" value="${listId}"/>
 				</c:url>
-				<a href="${listRolesUrl}">&rsaquo; Roles</a>
+				<a href="${listRolesUrl}">&rsaquo; Roles/Permissions</a>
 			</c:if>
 			
 			<c:if test="${perms.EDIT_FILTERS}">

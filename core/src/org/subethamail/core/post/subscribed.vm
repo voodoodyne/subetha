@@ -1,30 +1,27 @@
 ## Context will contain:
-##   "list" of type MailingList
-##   "person" of type Person
-##   "email" of type String
+##   "sub" of type Subscription
+##   "moderator" of type EmailAddress
+##   "unsub" of type boolean is true if this was an unsubscribe
 ##
 ## Expects a String value "subject" to be set in the context
 ##
-#set($subject = "Welcome to $list.name")
-You are now subscribed to "$list.name".  The email address for this list is:
+#if($sub.person.name)
+	#set($who = $sub.person.name)
+#else
+	#set($who = "Someone")
+#end
+#if($unsub)
+	#set($action = "unsubscribed")
+#else
+	#set($action = "subscribed")
+#end
+#set($subject = "$who $action to $sub.list.name")
+${who} $action to ${sub.list.name}.  This person has the following email address(es):
 
-	$list.email
-
-To change your delivery options, visit the main list URL and log in:
-
-	$list.url
-
-You are registered on this mailing list server with the following email addresss:
-
-#foreach($personalAddress in $person.emailAddresses)
+#foreach($personalAddress in $sub.person.emailAddresses)
 	$personalAddress.id
 #end
 
-Your password is:
+The URL for this list is:
 
-	$person.password
-	
-#if ($list.welcomeMessage)
---------------------------------------------------------------------------
-$list.welcomeMessage
-#end
+	${sub.list.url}

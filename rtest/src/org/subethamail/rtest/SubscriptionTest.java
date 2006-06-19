@@ -75,7 +75,7 @@ public class SubscriptionTest extends SubEthaTestCase
 		
 		// Now should also contain a "you are subscribed" email
 		assertEquals(3, this.smtp.size());
-		assertEquals(1, this.smtp.count(MailType.SUBSCRIBED));
+		assertEquals(1, this.smtp.count(MailType.YOU_SUBSCRIBED));
 	}
 	
 	/** */
@@ -92,7 +92,7 @@ public class SubscriptionTest extends SubEthaTestCase
 		
 		// Should contain a "you are subscribed" email
 		assertEquals(2, this.smtp.size());
-		assertEquals(1, this.smtp.count(MailType.SUBSCRIBED));
+		assertEquals(1, this.smtp.count(MailType.YOU_SUBSCRIBED));
 	}
 	
 	/** */

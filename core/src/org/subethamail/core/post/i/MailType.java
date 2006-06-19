@@ -24,11 +24,12 @@ public enum MailType
 {
 	NEW_MAILING_LIST("org/subethamail/core/post/new_mailing_list.vm"),
 	CONFIRM_SUBSCRIBE("org/subethamail/core/post/confirm_subscribe.vm"),
-	SUBSCRIBED("org/subethamail/core/post/subscribed.vm"),
+	YOU_SUBSCRIBED("org/subethamail/core/post/you_subscribed.vm"),
 	FORGOT_PASSWORD("org/subethamail/core/post/forgot_password.vm"),
 	CONFIRM_EMAIL("org/subethamail/core/post/confirm_email.vm"),
 	YOUR_MAIL_HELD("org/subethamail/core/post/your_mail_held.vm"),
 	MAIL_HELD("org/subethamail/core/post/mail_held.vm"),
+	PERSON_SUBSCRIBED("org/subethamail/core/post/subscribed.vm"),
 	SUBSCRIPTION_HELD("org/subethamail/core/post/subscription_held.vm");
 
 	/** */

@@ -243,7 +243,15 @@ public class AdminBean implements Admin, AdminRemote
 				list.getSubscriptions().add(sub);
 				
 				if (!silent)
+				{
 					this.postOffice.sendSubscribed(list, who, deliverTo);
+					
+					// Notify anyone with APPROVE_SUBSCRIPTIONS
+					for (Subscription maybeNotify: list.getSubscriptions())
+						if (maybeNotify.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS)
+								&& maybeNotify.getDeliverTo() != null)
+							this.postOffice.sendModeratorSubscriptionNotice(maybeNotify.getDeliverTo(), sub, false);
+				}
 			
 				// Flush any messages that might be held prior to this subscription.
 				this.selfModerate(who.getId());
@@ -263,12 +271,21 @@ public class AdminBean implements Admin, AdminRemote
 		this.unsubscribe(listId, who);
 	}
 
+	/**
+	 * Does the work of unsubscribing someone.
+	 */
 	protected void unsubscribe(Long listId, Person who) throws NotFoundException
 	{
 		MailingList list = this.dao.findMailingList(listId);
 		Subscription sub = who.getSubscriptions().remove(listId);
 		list.getSubscriptions().remove(sub);
 		this.dao.remove(sub);
+		
+		// Notify anyone with APPROVE_SUBSCRIPTIONS
+		for (Subscription maybeNotify: list.getSubscriptions())
+			if (maybeNotify.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS)
+					&& maybeNotify.getDeliverTo() != null)
+				this.postOffice.sendModeratorSubscriptionNotice(maybeNotify.getDeliverTo(), sub, true);
 	}
 
 	/**

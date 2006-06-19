@@ -12,6 +12,7 @@ import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
+import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 
 /**
@@ -74,5 +75,12 @@ public interface PostOffice
 	 * waiting for approval.
 	 */
 	public void sendModeratorMailHoldNotice(EmailAddress moderator, MailingList relevantList, Mail mail, SubEthaMessage msg, String holdMsg);
+
+	/**
+	 * Notify the moderator that someone new subscribed or unsubscribed to the list.
+	 * 
+	 * @param unsub is true if this is an unsubscription result.
+	 */
+	public void sendModeratorSubscriptionNotice(EmailAddress moderator, Subscription sub, boolean unsub);
 	
 }

@@ -271,7 +271,7 @@ public class PostOfficeBean implements PostOffice
 		vctx.put("person", who);
 		vctx.put("email", email);
 		
-		MessageBuilder builder = new MessageBuilder(MailType.SUBSCRIBED, vctx);
+		MessageBuilder builder = new MessageBuilder(MailType.YOU_SUBSCRIBED, vctx);
 		builder.setTo(email);
 		builder.setFrom(relevantList);
 		builder.send();
@@ -394,6 +394,27 @@ public class PostOfficeBean implements PostOffice
 		MessageBuilder builder = new MessageBuilder(MailType.MAIL_HELD, vctx);
 		builder.setTo(moderator);
 		builder.setFrom(relevantList);
+		builder.send();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.post.PostOffice#sendModeratorSubscriptionNotice(org.subethamail.entity.EmailAddress, org.subethamail.entity.Subscription, boolean)
+	 */
+	public void sendModeratorSubscriptionNotice(EmailAddress moderator, Subscription sub, boolean unsub)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Sending " + (unsub ? "unsub" : "sub") + " notice for " + sub + " to " + moderator);
+		
+		VelocityContext vctx = new VelocityContext();
+		vctx.put("sub", sub);
+		vctx.put("moderator", moderator);
+		vctx.put("unsub", unsub);
+		
+		MessageBuilder builder = new MessageBuilder(MailType.PERSON_SUBSCRIBED, vctx);
+		
+		builder.setTo(moderator);
+		builder.setFrom(sub.getList());
 		builder.send();
 	}
 }

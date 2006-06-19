@@ -207,7 +207,18 @@ public class PostOfficeBean implements PostOffice
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("addy", addy);
 
-		if (addy.getPerson().getSubscriptions().isEmpty())
+		if (addy.getPerson().getSubscriptions().size() == 1)
+		{
+			// If only one list, make it appear that mail comes from there
+			Subscription sub = addy.getPerson().getSubscriptions().values().iterator().next();
+			vctx.put("url", sub.getList().getUrlBase());
+			
+			MessageBuilder builder = new MessageBuilder(MailType.FORGOT_PASSWORD, vctx);
+			builder.setTo(addy);
+			builder.setFrom(sub.getList());
+			builder.send();
+		}
+		else
 		{
 			String url = (String)this.dao.getConfigValue(Config.ID_SITE_URL);
 			vctx.put("url", url);
@@ -218,17 +229,6 @@ public class PostOfficeBean implements PostOffice
 			String postmaster = (String)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
 			builder.setFrom(postmaster);
 			
-			builder.send();
-		}
-		else
-		{
-			// Try a random list that the user is subscribed to.
-			Subscription sub = addy.getPerson().getSubscriptions().values().iterator().next();
-			vctx.put("url", sub.getList().getUrlBase());
-			
-			MessageBuilder builder = new MessageBuilder(MailType.FORGOT_PASSWORD, vctx);
-			builder.setTo(addy);
-			builder.setFrom(sub.getList());
 			builder.send();
 		}
 	}
@@ -308,7 +308,18 @@ public class PostOfficeBean implements PostOffice
 		vctx.put("email", email);
 		vctx.put("person", me);
 		
-		if (me.getSubscriptions().isEmpty())
+		if (me.getSubscriptions().size() == 1)
+		{
+			// If only one list, make it appear to come from that list
+			Subscription sub = me.getSubscriptions().values().iterator().next();
+			vctx.put("url", sub.getList().getUrlBase());
+			
+			MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
+			builder.setTo(email);
+			builder.setFrom(sub.getList());
+			builder.send();
+		}
+		else
 		{
 			URL url = (URL)this.dao.getConfigValue(Config.ID_SITE_URL);
 			vctx.put("url", url.toString());
@@ -319,17 +330,6 @@ public class PostOfficeBean implements PostOffice
 			InternetAddress postmaster = (InternetAddress)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
 			builder.setFrom(postmaster.toString());
 			
-			builder.send();
-		}
-		else
-		{
-			// Try a random list that the user is subscribed to.
-			Subscription sub = me.getSubscriptions().values().iterator().next();
-			vctx.put("url", sub.getList().getUrlBase());
-			
-			MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
-			builder.setTo(email);
-			builder.setFrom(sub.getList());
 			builder.send();
 		}
 	}

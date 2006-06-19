@@ -34,6 +34,9 @@ public class SubEthaLoginModule extends UsernamePasswordLoginModule
 	 */
 	private static Log log = LogFactory.getLog(SubEthaLoginModule.class);
 	
+	/** Must be the same as what is defined in the DynamicLoginConfig service DD */
+	public static final String UNAUTHENTICATED_IDENTITY = "-";
+	
 	/**
 	 * We need this to lookup data objects
 	 */

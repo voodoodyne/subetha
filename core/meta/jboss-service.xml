@@ -21,7 +21,7 @@ $URL$
 				<jaas:application-policy name="subetha">
 					<jaas:authentication>
 						<jaas:login-module code="org.subethamail.core.util.SubEthaLoginModule" flag="required">
-							<jaas:module-option name="unauthenticatedIdentity"></jaas:module-option>
+							<jaas:module-option name="unauthenticatedIdentity">-</jaas:module-option>
 						</jaas:login-module>
 					</jaas:authentication>
 				</jaas:application-policy>

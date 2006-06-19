@@ -54,33 +54,24 @@ public class PersonalBean
 	 */
 	protected EmailAddress getMyAddress()
 	{
-		try
+		Principal p = this.sessionContext.getCallerPrincipal();
+		
+		String name = p.getName();
+		
+		if (name == null || name.equals(SubEthaLoginModule.UNAUTHENTICATED_IDENTITY))
 		{
-			Principal p = this.sessionContext.getCallerPrincipal();
-			
-			String name = p.getName();
-			
-			if (name == null)
+			return null;
+		}
+		else
+		{
+			try
+			{
+				return this.dao.findEmailAddress(name);
+			}
+			catch (NotFoundException ex)
 			{
 				return null;
 			}
-			else		
-			{
-				try
-				{
-					return this.dao.findEmailAddress(name);
-				}
-				catch (NotFoundException ex)
-				{
-					return null;
-				}
-			}
-		}
-		catch (IllegalStateException ex)
-		{
-			// TODO:  this behavior is not exactly ejb3 spec compliant, so it
-			// might change in the future.  beware.
-			return null;
 		}
 	}
 	

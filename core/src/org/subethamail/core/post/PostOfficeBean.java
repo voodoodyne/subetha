@@ -369,8 +369,30 @@ public class PostOfficeBean implements PostOffice
 		vctx.put("holdMsg", holdMsg);
 		vctx.put("email", posterEmail);
 		
-		MessageBuilder builder = new MessageBuilder(MailType.MAIL_HELD, vctx);
+		MessageBuilder builder = new MessageBuilder(MailType.YOUR_MAIL_HELD, vctx);
 		builder.setTo(posterEmail);
+		builder.setFrom(relevantList);
+		builder.send();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.post.PostOffice#sendModeratorMailHoldNotice(org.subethamail.entity.EmailAddress, org.subethamail.entity.MailingList, org.subethamail.entity.Mail, org.subethamail.common.SubEthaMessage, java.lang.String)
+	 */
+	public void sendModeratorMailHoldNotice(EmailAddress moderator, MailingList relevantList, Mail mail, SubEthaMessage msg, String holdMsg)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Sending mail held notice to moderator " + moderator);
+		
+		VelocityContext vctx = new VelocityContext();
+		vctx.put("list", relevantList);
+		vctx.put("mail", mail);
+		vctx.put("msg", msg);
+		vctx.put("holdMsg", holdMsg);
+		vctx.put("moderator", moderator);
+		
+		MessageBuilder builder = new MessageBuilder(MailType.MAIL_HELD, vctx);
+		builder.setTo(moderator);
 		builder.setFrom(relevantList);
 		builder.send();
 	}

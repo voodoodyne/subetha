@@ -7,6 +7,7 @@ package org.subethamail.core.post;
 
 import javax.ejb.Local;
 
+import org.subethamail.common.SubEthaMessage;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
@@ -67,5 +68,11 @@ public interface PostOffice
 	 * waiting for approval.
 	 */
 	public void sendPosterMailHoldNotice(MailingList relevantList, String posterEmail, Mail mail, String holdMsg);
+	
+	/**
+	 * Sends mail to the address letting the moderator know that a message is
+	 * waiting for approval.
+	 */
+	public void sendModeratorMailHoldNotice(EmailAddress moderator, MailingList relevantList, Mail mail, SubEthaMessage msg, String holdMsg);
 	
 }

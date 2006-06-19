@@ -272,14 +272,12 @@ public class InjectorBean implements Injector, InjectorRemote
 			// Or send a message saying "you must wait for admin approval", use holdMsg if available
 			this.postOffice.sendPosterMailHoldNotice(toList, senderAddy.getAddress(), mail, holdMsg);
 			
-			/*
 			for (Subscription sub: toList.getSubscriptions())
 			{
 				if (sub.getRole().getPermissions().contains(Permission.APPROVE_MESSAGES))
 					if (sub.getDeliverTo() != null)
-						this.postOffice.sendModeratorMessageHoldNotice(sub.getDeliverTo().getId(), toList, holdMsg);
+						this.postOffice.sendModeratorMailHoldNotice(sub.getDeliverTo(), toList, mail, msg, holdMsg);
 			}
-			*/
 		}
 		else
 		{

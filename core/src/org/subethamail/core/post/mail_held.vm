@@ -2,21 +2,19 @@
 ##   "list" of type MailingList (the list which got the msg)
 ##   "mail" of type Mail (the stored mail)
 ##   "holdMsg" of type String (only if mail was a HARD hold)
-##   "email" of type String (the address of the poster)
+##   "moderator" of type EmailAddress (the address of the moderator receiving this msg)
 ##
 ## Expects a String value "subject" to be set in the context
 ##
-#set($subject = "Your message has been held for moderation")
+#set($subject = "Mail to list ${list.name} requires approval")
+An email to list ${list.name} requires your approval.
+
+Subject:  ${mail.subject}
+
 #if($holdMsg)
-Your message "${mail.subject}" has been held for moderator approval.  The reason is:
-
-	${holdMsg}
-#else
-Your message "${mail.subject}" has been held because you do not have permission to post to the list $list.name.  If you are not subscribed to this list, or subscribed to this list with a different email address, you might be able to automatically approve this message by subscribing the new address to this list.
-
-This is the subscription address of ${list.name}:
-
-	${list.url}
-
-If you are already subscribed, log in *first* with the email address you are subscribed with, *then* add the address ${email}.
+The reason:  ${holdMsg}
 #end
+
+To approve or discard the message, visit:
+
+	${list.urlBase}held_msgs.jsp?listId=${list.id}

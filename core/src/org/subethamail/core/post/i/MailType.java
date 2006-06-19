@@ -27,6 +27,7 @@ public enum MailType
 	SUBSCRIBED("org/subethamail/core/post/subscribed.vm"),
 	FORGOT_PASSWORD("org/subethamail/core/post/forgot_password.vm"),
 	CONFIRM_EMAIL("org/subethamail/core/post/confirm_email.vm"),
+	YOUR_MAIL_HELD("org/subethamail/core/post/your_mail_held.vm"),
 	MAIL_HELD("org/subethamail/core/post/mail_held.vm"),
 	SUBSCRIPTION_HELD("org/subethamail/core/post/subscription_held.vm");
 

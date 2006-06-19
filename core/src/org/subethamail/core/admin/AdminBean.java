@@ -225,13 +225,11 @@ public class AdminBean implements Admin, AdminRemote
 				hold = new SubscriptionHold(who, list, deliverTo);
 				this.dao.persist(hold);
 				
-				// Send mail to person who requested subscription
-				this.postOffice.sendYourSubscriptionHeldNotice(hold);
-				
 				// Send mail to anyone that can approve
 				for (Subscription maybeModerator: list.getSubscriptions())
-					if (maybeModerator.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS))
-						this.postOffice.sendModeratorSubscriptionHeldNotice(maybeModerator.getPerson(), hold);
+					if (maybeModerator.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS)
+							&& maybeModerator.getDeliverTo() != null)
+						this.postOffice.sendModeratorSubscriptionHeldNotice(maybeModerator.getDeliverTo(), hold);
 				
 				return SubscribeResult.HELD;
 			}

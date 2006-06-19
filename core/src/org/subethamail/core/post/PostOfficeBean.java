@@ -336,22 +336,22 @@ public class PostOfficeBean implements PostOffice
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.post.PostOffice#sendYourSubscriptionHeldNotice(org.subethamail.entity.SubscriptionHold)
+	 * @see org.subethamail.core.post.PostOffice#sendModeratorSubscriptionHeldNotice(org.subethamail.entity.EmailAddress, org.subethamail.entity.SubscriptionHold)
 	 */
-	public void sendYourSubscriptionHeldNotice(SubscriptionHold hold)
+	public void sendModeratorSubscriptionHeldNotice(EmailAddress moderator, SubscriptionHold hold)
 	{
-		// TODO Auto-generated method stub
+		if (log.isDebugEnabled())
+			log.debug("Sending sub held notice for " + hold + " to " + moderator);
 		
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.post.PostOffice#sendModeratorSubscriptionHeldNotice(org.subethamail.entity.Person, org.subethamail.entity.SubscriptionHold)
-	 */
-	public void sendModeratorSubscriptionHeldNotice(Person person, SubscriptionHold hold)
-	{
-		// TODO Auto-generated method stub
+		VelocityContext vctx = new VelocityContext();
+		vctx.put("hold", hold);
+		vctx.put("moderator", moderator);
 		
+		MessageBuilder builder = new MessageBuilder(MailType.SUBSCRIPTION_HELD, vctx);
+		
+		builder.setTo(moderator);
+		builder.setFrom(hold.getList());
+		builder.send();
 	}
 
 	/*

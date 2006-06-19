@@ -1,0 +1,22 @@
+## Context will contain:
+##   "hold" of type SubscriptionHold
+##   "moderator" of type EmailAddress
+##
+## Expects a String value "subject" to be set in the context
+##
+#set($subject = "Subscription request for $hold.list.name")
+#if($hold.person.name)
+	#set($who=$hold.person.name)
+#else
+	#set($who="Someone")
+#end
+${who} wishes to subscribe to ${hold.list.name}.  This person has the following email address(es):
+
+#foreach($personalAddress in $hold.person.emailAddresses)
+	$personalAddress.id
+#end
+
+To approve or deny the request, visit:
+
+	${hold.list.urlBase}held_subs.jsp?listId=${hold.list.id}
+

@@ -58,14 +58,9 @@ public interface PostOffice
 	public void sendAddEmailToken(Person me, String email, String token);
 
 	/**
-	 * Notifies user that their subscription is held pending approval.
-	 */
-	public void sendYourSubscriptionHeldNotice(SubscriptionHold hold);
-
-	/**
 	 * Notifies the moderator that someone wants to subscribe and needs approval (or not).
 	 */
-	public void sendModeratorSubscriptionHeldNotice(Person person, SubscriptionHold hold);
+	public void sendModeratorSubscriptionHeldNotice(EmailAddress moderator, SubscriptionHold hold);
 
 	/**
 	 * Sends mail to the address letting the person know that their message is

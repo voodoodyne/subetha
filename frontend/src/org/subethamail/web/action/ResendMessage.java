@@ -5,26 +5,25 @@
 
 package org.subethamail.web.action;
 
-import org.hibernate.validator.Email;
 import org.subethamail.web.Backend;
+import org.subethamail.web.action.auth.AuthRequired;
 import org.tagonist.propertize.Property;
 
 /**
- * Resends the message
+ * Resends the message in email.  The address must belong
+ * to the currently logged in user.
  * 
  * @author Scott Hernandez
+ * @author Jeff Schnitzer
  */
-public class ResendMessage extends GetMessage 
+public class ResendMessage extends AuthRequired 
 {
-
-	@Property
-	@Email
-	String email;
+	@Property Long msgId;
+	@Property String email;
 	
 	/** */
-	public void execute() throws Exception
+	public void authExecute() throws Exception
 	{
-		Backend.instance().getArchiver().sendTo(msgId, email);
-		super.execute();
+		Backend.instance().getArchiver().sendTo(this.msgId, this.email);
 	}
 }

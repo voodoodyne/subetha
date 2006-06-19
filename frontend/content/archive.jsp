@@ -11,9 +11,21 @@
 			</p>
 		</c:when>
 		<c:otherwise>
-			<div class="summaries">
-				<se:summaries msgs="${model.messages}"/>
-			</div>
+			<ul class="rootSummaries">
+				<c:forEach var="root" items="${model.messages}">
+					<li>
+						<se:summary msg="${root}" />
+
+						<c:if test="${!empty root.replies}">
+							<div class="nestedSummaries">
+								<ul>
+									<se:summaries msgs="${root.replies}" flat="true"/>
+								</ul>
+							</div>
+						</c:if>
+					</li>
+				</c:forEach>
+			</ul>
 
 			<c:url var="queryURL" value="/archive.jsp">
 				<c:param name="listId" value="${model.listId}"/>

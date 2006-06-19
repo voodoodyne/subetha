@@ -75,12 +75,15 @@
 		</div>
 	</c:if>
 	
-	<c:if test="${msg != msg.threadRoot || !empty msg.replies}">
-		<div class="summaries">
-			<h3>Thread History</h3>
-			<ul>
-				<li><se:summary msg="${msg.threadRoot}" highlight="${msg}"/></li>
-			</ul>
+	<c:if test="${! (msg == msg.threadRoot && empty msg.replies)}">
+		<h3>Thread History</h3>
+		<ul class="rootSummaries">
+			<li>
+				<div class="nestedSummaries">
+					<se:summaryNode msg="${msg.threadRoot}" highlight="${msg}"/>
+				</div>
+			</li>
+		</ul>
 		</div>
 	</c:if>
 </trim:list>

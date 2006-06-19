@@ -33,7 +33,3 @@
 </c:if>
 
 <span class="messageDate"><fmt:formatDate value="${msg.dateCreated}" type="both" timeStyle="short" /></span>
-
-<c:if test="${!empty msg.replies}">
-	<se:summaries msgs="${msg.replies}" highlight="${highlight}"/>
-</c:if>

@@ -44,10 +44,17 @@ pre {
 
 /* end bluehaze.css overrides */
 
-div.summaries ul {
-	list-style-type: none;
+
+/* for thread summaries */
+ul.rootSummaries {
+	list-style-type: square;
 }
 	
+div.nestedSummaries ul {
+	list-style-type: circle;
+}
+
+
 /* Forms (borrowed from trac) */
 input, textarea, select {
 	margin: 2px
@@ -135,10 +142,6 @@ div.error,p.error {
 
 .menuBar a.first {
 	border-left: none;
-}
-
-.summaries {
-	
 }
 
 table.permissions {

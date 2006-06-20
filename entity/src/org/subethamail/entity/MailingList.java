@@ -39,7 +39,7 @@ import org.hibernate.validator.Email;
 import org.subethamail.common.Permission;
 import org.subethamail.common.PermissionException;
 import org.subethamail.common.SiteUtils;
-import org.subethamail.common.valid.Validator;
+import org.subethamail.entity.i.Validator;
 
 /**
  * Entity for a single mailing list

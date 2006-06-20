@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
+import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonMixin;
@@ -66,8 +67,10 @@ public class InjectorTest extends SubEthaTestCase
 		
 		this.admin.getAdmin().log("############### Starting testTrivialInjection()");
 		
+		this.smtp.debugPrintSubjects();
+		
 		// Two "you are subscribed" msgs
-		assertEquals(2, this.smtp.size());
+		assertEquals(2, this.smtp.count(MailType.YOU_SUBSCRIBED));
 		
 		byte[] rawMsg = this.createMessage(this.person1.getAddress(), this.ml.getAddress());
 		
@@ -86,7 +89,7 @@ public class InjectorTest extends SubEthaTestCase
 		this.admin.getAdmin().log("############### Starting testHasVERP()");
 		
 		// Two "you are subscribed" msg
-		assertEquals(1, this.smtp.size());
+		assertEquals(1, this.smtp.count(MailType.YOU_SUBSCRIBED));
 		
 		byte[] rawMsg = this.createMessage(this.person1.getAddress(), this.ml.getAddress());
 		
@@ -94,10 +97,11 @@ public class InjectorTest extends SubEthaTestCase
 		
 		Thread.sleep(1000);
 		
-		assertEquals(2, this.smtp.size());
-		WiserMessage msg = this.smtp.get(1);
+		assertEquals(1, this.smtp.countSubject(TEST_SUBJECT));
+		WiserMessage msg = this.smtp.getSubject(TEST_SUBJECT, 0);
 		
-		// TODO:  when dumbster provides an api, check that the envelope sender is a proper VERP address
+		String envelopeSender = msg.getEnvelopeSender();
+		assertTrue(envelopeSender.contains("-verp-"));
 		
 		this.admin.getAdmin().log("############### Ended testHasVERP()");
 	}

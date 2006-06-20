@@ -20,6 +20,7 @@ import org.subethamail.rtest.util.PersonInfoMixin;
 import org.subethamail.rtest.util.PersonMixin;
 import org.subethamail.rtest.util.Smtp;
 import org.subethamail.rtest.util.SubEthaTestCase;
+import org.subethamail.wiser.WiserMessage;
 
 /**
  * Tests for user account manipulation.
@@ -74,8 +75,10 @@ public class SubscriptionTest extends SubEthaTestCase
 		assertEquals(SubscribeResult.OK, result.getResult());
 		
 		// Now should also contain a "you are subscribed" email
-		assertEquals(3, this.smtp.size());
+		// and a "someone subscribed" mail to moderators, which now includes the new person
+		assertEquals(5, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.YOU_SUBSCRIBED));
+		assertEquals(2, this.smtp.count(MailType.PERSON_SUBSCRIBED));	// two owners including the new person
 	}
 	
 	/** */
@@ -91,8 +94,10 @@ public class SubscriptionTest extends SubEthaTestCase
 		assertEquals(SubscribeResult.OK, result);
 		
 		// Should contain a "you are subscribed" email
-		assertEquals(2, this.smtp.size());
+		// and a "someone subscribed" mail to moderators, which now includes the new person
+		assertEquals(4, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.YOU_SUBSCRIBED));
+		assertEquals(2, this.smtp.count(MailType.PERSON_SUBSCRIBED));	// two owners including the new person
 	}
 	
 	/** */

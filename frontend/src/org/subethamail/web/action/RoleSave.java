@@ -13,7 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
 import org.subethamail.common.Permission;
-import org.subethamail.common.valid.Validator;
+import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;

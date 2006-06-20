@@ -26,7 +26,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.validator.Length;
 import org.subethamail.common.Permission;
-import org.subethamail.common.valid.Validator;
+import org.subethamail.entity.i.Validator;
 
 /**
  * A mailing list can have any number of roles which define a set of

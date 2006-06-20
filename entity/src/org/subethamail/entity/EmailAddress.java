@@ -19,7 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.subethamail.common.valid.Validator;
+import org.subethamail.entity.i.Validator;
 
 /**
  * Entity of an email address.  People can have many email

@@ -18,7 +18,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
-import org.subethamail.common.valid.Validator;
+import org.subethamail.entity.i.Validator;
 
 /**
  * Contains a sitewide config parameter, key and value.

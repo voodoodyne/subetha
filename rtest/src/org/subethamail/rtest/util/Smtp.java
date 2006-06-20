@@ -50,7 +50,8 @@ public class Smtp extends Wiser
 		return super.getMessages().get(index);
 	}
 	
-	/** Gets the Nth instance of the specified mail type 
+	/**
+	 * Gets the Nth instance of the specified mail type 
 	 * @throws MessagingException 
 	 */
 	public WiserMessage get(MailType type, int index) throws MessagingException
@@ -115,6 +116,31 @@ public class Smtp extends Wiser
 	}
 	
 	/**
+	 * Gets the Nth instance of the mail with the subject 
+	 * @throws MessagingException 
+	 */
+	public WiserMessage getSubject(String subject, int index) throws MessagingException
+	{
+		int count = 0;
+		
+		Iterator<WiserMessage> it = super.getMessages().iterator();
+		while (it.hasNext())
+		{
+			WiserMessage msg = it.next();
+
+			if (msg.getMimeMessage().getSubject().contains(subject))
+			{
+				if (count == index)
+					return msg;
+				else
+					count++;
+			}
+		}
+
+		return null;
+	}
+	
+	/**
 	 * Gets an embedded token from a message.
 	 * @throws MessagingException 
 	 * @throws IOException 
@@ -136,5 +162,19 @@ public class Smtp extends Wiser
 			throw new IllegalStateException("Missing token from email: " + body);
 		
 		return body.substring(start, end);
+	}
+	
+	/**
+	 * If debug is enabled, print subjects
+	 */
+	public void debugPrintSubjects() throws MessagingException
+	{
+		if (log.isDebugEnabled())
+		{
+			log.debug("Messages we have received:");
+			for (WiserMessage msg: this.getMessages())
+				log.debug("   Subject: " + msg.getMimeMessage().getSubject());
+		}
+		
 	}
 }

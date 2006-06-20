@@ -24,7 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.subethamail.common.valid.Validator;
+import org.subethamail.entity.i.Validator;
 
 /**
  * When a filter is added to a mailing list, one of these entities is

@@ -49,7 +49,7 @@ import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Table;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.TimeUtils;
-import org.subethamail.common.valid.Validator;
+import org.subethamail.entity.i.Validator;
 
 /**
  * Entity for a single piece of mail.

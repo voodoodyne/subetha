@@ -19,7 +19,6 @@ import javax.persistence.Query;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.common.valid.Validator;
 import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
@@ -28,6 +27,7 @@ import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
+import org.subethamail.entity.i.Validator;
 
 /**
  * @see DAO

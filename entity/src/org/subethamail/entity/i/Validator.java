@@ -3,7 +3,7 @@
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/util/Geometry.java,v $
  */
 
-package org.subethamail.common.valid;
+package org.subethamail.entity.i;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

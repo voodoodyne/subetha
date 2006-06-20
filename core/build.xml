@@ -71,9 +71,15 @@
 		</javac>
 	</target>
 
-	<target name="core-ejbclient-jar" depends="core-classes-i">
+	<target name="core-ejbclient-jar" depends="core-classes-i, entity-classes">
 		<jar jarfile="${build.core.ejbclient.file}">
 			<fileset dir="${build.core.classes.i.dir}"/>
+			
+			<!-- Put the entity /i/ classes in this package -->
+			<fileset dir="${build.entity.classes.dir}">
+				<include name="**/i/**" />
+			</fileset>
+			
 			<manifest>
 				<attribute name="Specification-Version" value="${build.version}" />
 				<attribute name="Implementation-Version" value="${TODAY}" />

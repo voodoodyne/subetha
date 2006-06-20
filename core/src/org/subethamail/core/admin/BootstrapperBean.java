@@ -15,13 +15,12 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.ejb.Depends;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Admin;
+import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Config;
-import org.subethamail.entity.dao.DAO;
 
 /**
  * This bean really is only used when run for the first time
@@ -39,11 +38,9 @@ import org.subethamail.entity.dao.DAO;
  * @author Jeff Schnitzer
  */
 @Service(objectName="subetha:service=Bootstrapper")
-// This depends annotation can be removed when JBoss fixes dependency bug.
-@Depends("jboss.j2ee:ear=subetha.ear,jar=entity.jar,name=DAO,service=EJB3")
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
-public class BootstrapperBean implements BootstrapperManagement
+public class BootstrapperBean extends EntityManipulatorBean implements BootstrapperManagement
 {
 	/** */
 	private static Log log = LogFactory.getLog(BootstrapperBean.class);
@@ -82,7 +79,6 @@ public class BootstrapperBean implements BootstrapperManagement
 	public static final String BOOTSTRAPPED_CONFIG_ID = "bootstrapped";
 	
 	/** */
-	@EJB DAO dao;
 	@EJB Admin admin;
 
 	/**
@@ -93,7 +89,7 @@ public class BootstrapperBean implements BootstrapperManagement
 		// If we haven't been bootstrapped, we need to run.
 		try
 		{
-			Config cfg = this.dao.findConfig(BOOTSTRAPPED_CONFIG_ID);
+			Config cfg = this.em.get(Config.class, BOOTSTRAPPED_CONFIG_ID);
 			
 			// Might as well sanity check it
 			Integer value = (Integer)cfg.getValue();
@@ -109,7 +105,7 @@ public class BootstrapperBean implements BootstrapperManagement
 			this.bootstrap();
 			
 			Config cfg = new Config(BOOTSTRAPPED_CONFIG_ID, VERSION_ID);
-			this.dao.persist(cfg);
+			this.em.persist(cfg);
 		}
 	}
 	
@@ -157,26 +153,26 @@ public class BootstrapperBean implements BootstrapperManagement
 	{
 		try
 		{
-			Config cfg = this.dao.findConfig(Config.ID_SITE_POSTMASTER);
+			Config cfg = this.em.get(Config.class, Config.ID_SITE_POSTMASTER);
 			if (cfg.getValue() == null)
 				cfg.setValue(DEFAULT_SITE_POSTMASTER);
 		}
 		catch (NotFoundException ex)
 		{
 			Config cfg = new Config(Config.ID_SITE_POSTMASTER, DEFAULT_SITE_POSTMASTER);
-			this.dao.persist(cfg);
+			this.em.persist(cfg);
 		}
 		
 		try
 		{
-			Config cfg = this.dao.findConfig(Config.ID_SITE_URL);
+			Config cfg = this.em.get(Config.class, Config.ID_SITE_URL);
 			if (cfg.getValue() == null)
 				cfg.setValue(DEFAULT_SITE_URL);
 		}
 		catch (NotFoundException ex)
 		{
 			Config cfg = new Config(Config.ID_SITE_URL, DEFAULT_SITE_URL);
-			this.dao.persist(cfg);
+			this.em.persist(cfg);
 		}
 	}
 }

@@ -81,7 +81,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 */
 	public Long lookup(URL url) throws NotFoundException
 	{
-		return this.dao.findMailingList(url).getId();
+		return this.em.getMailingList(url).getId();
 	}
 	
 	/*
@@ -133,7 +133,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 */
 	public ListData getList(Long listId) throws NotFoundException
 	{
-		MailingList list = this.dao.findMailingList(listId);
+		MailingList list = this.em.get(MailingList.class, listId);
 		
 		return Transmute.mailingList(list);
 	}
@@ -162,7 +162,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
 		
 		Role role = new Role(list, name, perms);
-		this.dao.persist(role);
+		this.em.persist(role);
 		
 		list.getRoles().add(role);
 		
@@ -194,7 +194,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public void setDefaultRole(Long listId, Long roleId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
-		Role role = this.dao.findRole(roleId);
+		Role role = this.em.get(Role.class, roleId);
 		
 		list.setDefaultRole(role);
 	}
@@ -206,7 +206,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public void setAnonymousRole(Long listId, Long roleId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
-		Role role = this.dao.findRole(roleId);
+		Role role = this.em.get(Role.class, roleId);
 		
 		list.setAnonymousRole(role);
 	}
@@ -239,12 +239,12 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		if (deleteRole.getList().getAnonymousRole() == deleteRole)
 			deleteRole.getList().setAnonymousRole(convertRole);
 
-		List<Subscription> subs = this.dao.findSubscriptionsByRole(deleteRole.getId());
+		List<Subscription> subs = this.em.findSubscriptionsByRole(deleteRole.getId());
 		for (Subscription sub: subs)
 			sub.setRole(convertRole);
 		
 		deleteRole.getList().getRoles().remove(deleteRole);
-		this.dao.remove(deleteRole);
+		this.em.remove(deleteRole);
 		
 		return convertRole.getList().getId();
 	}
@@ -327,7 +327,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		{
 			// Create it from scratch
 			enabled = new EnabledFilter(list, className);
-			this.dao.persist(enabled);
+			this.em.persist(enabled);
 			list.addEnabledFilter(enabled);
 			
 			for (FilterParameter param: filt.getParameters())
@@ -347,7 +347,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 					throw new IllegalArgumentException("Param " + param.getName() + " has " + value.getClass() + " but should have " + param.getType());
 					
 				FilterArgument farg = new FilterArgument(enabled, param.getName(), value);
-				this.dao.persist(farg);
+				this.em.persist(farg);
 				enabled.addArgument(farg);
 			}
 		}
@@ -367,7 +367,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 				FilterArgument arg = enabledArgsIt.next();
 				if (!paramNames.contains(arg.getName()))
 				{
-					this.dao.remove(arg);
+					this.em.remove(arg);
 					enabledArgsIt.remove();
 				}
 			}
@@ -386,7 +386,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 				if (farg == null)
 				{
 					farg = new FilterArgument(enabled, param.getName(), value);
-					this.dao.persist(farg);
+					this.em.persist(farg);
 					enabled.addArgument(farg);
 				}
 				else
@@ -413,7 +413,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		}
 		else
 		{
-			this.dao.remove(filt);
+			this.em.remove(filt);
 		}
 	}
 
@@ -508,11 +508,11 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
 		
-		Person pers = this.dao.findPerson(personId);
+		Person pers = this.em.get(Person.class, personId);
 		
 		SubscriptionHold hold = pers.getHeldSubscriptions().remove(listId);
 		if (hold != null)
-			this.dao.remove(hold);
+			this.em.remove(hold);
 		
 		return hold;
 	}
@@ -534,9 +534,9 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public void setSubscriberRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.EDIT_ROLES);
-		Person p = this.dao.findPerson(personId);
-		Subscription sub =  p.getSubscription(listId);
-		sub.setRole(this.dao.findRole(roleId));
+		Person p = this.em.get(Person.class, personId);
+		Subscription sub = p.getSubscription(listId);
+		sub.setRole(this.em.get(Role.class, roleId));
 	}
 
 	/*
@@ -547,7 +547,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		this.getListFor(listId, Permission.APPROVE_MESSAGES);
 		
-		List<Mail> held = this.dao.findMailHeld(listId, skip, count);
+		List<Mail> held = this.em.findMailHeld(listId, skip, count);
 		
 		return Transmute.heldMail(held);
 	}
@@ -560,7 +560,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		this.getListFor(listId, Permission.APPROVE_MESSAGES);
 		
-		return this.dao.countHeldMessages(listId);
+		return this.em.countHeldMessages(listId);
 	}
 
 	/*
@@ -586,7 +586,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
 		
-		this.dao.remove(mail);
+		this.em.remove(mail);
 		
 		return mail.getList().getId();
 	}
@@ -599,7 +599,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
 
-		return Transmute.subscribers(this.dao.findSubscribers(listId, skip, count));
+		return Transmute.subscribers(this.em.findSubscribers(listId, skip, count));
 	}
 
 	/*
@@ -610,7 +610,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
 		
-		return Transmute.subscribers(this.dao.findSubscribers(listId, query, skip, count));
+		return Transmute.subscribers(this.em.findSubscribers(listId, query, skip, count));
 	}
 
 	/*
@@ -621,7 +621,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
 		
-		return this.dao.countSubscribers(listId);
+		return this.em.countSubscribers(listId);
 	}
 
 	/*
@@ -632,7 +632,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
 		
-		return this.dao.countSubscribers(listId, query);
+		return this.em.countSubscribers(listId, query);
 	}
 
 	/*

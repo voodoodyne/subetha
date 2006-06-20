@@ -7,7 +7,6 @@ package org.subethamail.core.util;
 
 import java.security.Principal;
 
-import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 
@@ -19,7 +18,6 @@ import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
-import org.subethamail.entity.dao.DAO;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
@@ -36,7 +34,7 @@ import org.subethamail.entity.i.PermissionException;
  * 
  * @author Jeff Schnitzer
  */
-public class PersonalBean
+public class PersonalBean extends EntityManipulatorBean
 {
 	/** */
 	@SuppressWarnings("unused")
@@ -44,9 +42,6 @@ public class PersonalBean
 
 	/** */
 	@Resource protected SessionContext sessionContext;
-	
-	/** */
-	@EJB protected DAO dao;
 	
 	/**
 	 * Obtains my address from the security context, or null
@@ -64,14 +59,7 @@ public class PersonalBean
 		}
 		else
 		{
-			try
-			{
-				return this.dao.findEmailAddress(name);
-			}
-			catch (NotFoundException ex)
-			{
-				return null;
-			}
+			return this.em.findEmailAddress(name);
 		}
 	}
 	
@@ -104,7 +92,7 @@ public class PersonalBean
 	 */
 	protected MailingList getListFor(Long listId, Permission check, Person me) throws NotFoundException, PermissionException
 	{
-		MailingList list = this.dao.findMailingList(listId);
+		MailingList list = this.em.get(MailingList.class, listId);
 	
 		list.checkPermission(me, check);
 		
@@ -126,7 +114,7 @@ public class PersonalBean
 	 */
 	protected Mail getMailFor(Long mailId, Permission check, Person me) throws NotFoundException, PermissionException
 	{
-		Mail mail = this.dao.findMail(mailId);
+		Mail mail = this.em.get(Mail.class, mailId);
 	
 		mail.getList().checkPermission(me, check);
 		
@@ -138,7 +126,7 @@ public class PersonalBean
 	 */
 	protected Role getRoleForEdit(Long roleId) throws NotFoundException, PermissionException
 	{
-		Role role = this.dao.findRole(roleId);
+		Role role = this.em.get(Role.class, roleId);
 		
 		role.getList().checkPermission(this.getMe(), Permission.EDIT_ROLES);
 		

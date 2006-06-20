@@ -38,7 +38,6 @@ import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
-import org.subethamail.entity.dao.DAO;
 
 /**
  * Implementation of the AccountMgr interface.
@@ -67,7 +66,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	
 	/**
 	 */
-	@EJB DAO dao;
 	@EJB PostOffice postOffice;
 	@EJB Encryptor encryptor;
 	@EJB Admin admin;
@@ -176,7 +174,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 
 		this.admin.addEmail(personId, email);
 		
-		Person p = this.dao.findPerson(personId);
+		Person p = this.em.get(Person.class, personId);
 		
 		return new AuthCredentials(email, p.getPassword());
 	}
@@ -197,7 +195,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 				sub.setDeliverTo(null);
 		}
 		
-		this.dao.remove(e);
+		this.em.remove(e);
 	}
 	
 	
@@ -207,7 +205,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	@PermitAll
 	public MySubscription getMySubscription(Long listId) throws NotFoundException
 	{
-		MailingList ml = this.dao.findMailingList(listId);
+		MailingList ml = this.em.get(MailingList.class, listId);
 		Person me = this.getMe();
 			
 		return Transmute.mySubscription(me, ml);
@@ -229,7 +227,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		if (name == null)
 			name = "";
 		
-		MailingList mailingList = this.dao.findMailingList(listId);
+		MailingList mailingList = this.em.get(MailingList.class, listId);
 		
 		List<String> plainList = new ArrayList<String>();
 		plainList.add(SUBSCRIBE_TOKEN_PREFIX);
@@ -316,7 +314,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	@PermitAll
 	public void forgotPassword(String email) throws NotFoundException
 	{
-		EmailAddress addy = this.dao.findEmailAddress(email);
+		EmailAddress addy = this.em.getEmailAddress(email);
 		
 		this.postOffice.sendPassword(addy);
 	}

@@ -30,6 +30,7 @@ import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
+import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.Config;
@@ -39,7 +40,6 @@ import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
-import org.subethamail.entity.dao.DAO;
 
 /**
  * Implementation of the PostOffice interface.
@@ -49,7 +49,7 @@ import org.subethamail.entity.dao.DAO;
 @Stateless(name="PostOffice")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class PostOfficeBean implements PostOffice
+public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 {
 	/** */
 	private static Log log = LogFactory.getLog(PostOfficeBean.class);
@@ -58,7 +58,6 @@ public class PostOfficeBean implements PostOffice
 	@Resource(mappedName="java:/Mail") Session mailSession;
 
 	/** */
-	@EJB DAO dao;
 	@EJB Encryptor encryptor;
 	
 	/** 
@@ -220,13 +219,13 @@ public class PostOfficeBean implements PostOffice
 		}
 		else
 		{
-			String url = (String)this.dao.getConfigValue(Config.ID_SITE_URL);
+			String url = (String)this.em.findConfigValue(Config.ID_SITE_URL);
 			vctx.put("url", url);
 			
 			MessageBuilder builder = new MessageBuilder(MailType.FORGOT_PASSWORD, vctx);
 			builder.setTo(addy);
 			
-			String postmaster = (String)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
+			String postmaster = (String)this.em.findConfigValue(Config.ID_SITE_POSTMASTER);
 			builder.setFrom(postmaster);
 			
 			builder.send();
@@ -321,13 +320,13 @@ public class PostOfficeBean implements PostOffice
 		}
 		else
 		{
-			URL url = (URL)this.dao.getConfigValue(Config.ID_SITE_URL);
+			URL url = (URL)this.em.findConfigValue(Config.ID_SITE_URL);
 			vctx.put("url", url.toString());
 			
 			MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
 			builder.setTo(email);
 			
-			InternetAddress postmaster = (InternetAddress)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER);
+			InternetAddress postmaster = (InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER);
 			builder.setFrom(postmaster.toString());
 			
 			builder.send();

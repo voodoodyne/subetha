@@ -28,12 +28,12 @@ import org.subethamail.core.deliv.i.DeliveratorRemote;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
-import org.subethamail.entity.dao.DAO;
 
 /**
  * @author Jeff Schnitzer
@@ -41,13 +41,12 @@ import org.subethamail.entity.dao.DAO;
 @Stateless(name="Deliverator")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class DeliveratorBean implements Deliverator, DeliveratorRemote
+public class DeliveratorBean extends EntityManipulatorBean implements Deliverator, DeliveratorRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(DeliveratorBean.class);
 	
 	/** */
-	@EJB DAO dao;
 	@EJB FilterRunner filterRunner;
 	@EJB Encryptor encryptor;
 	@EJB Detacher detacher;
@@ -60,8 +59,8 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 	 */
 	public void deliver(Long mailId, String email) throws NotFoundException
 	{
-		EmailAddress ea = this.dao.findEmailAddress(email);
-		Mail mail = this.dao.findMail(mailId);		
+		EmailAddress ea = this.em.getEmailAddress(email);
+		Mail mail = this.em.get(Mail.class, mailId);		
 		deliverTo(mail, ea);
 	}
 	
@@ -72,8 +71,8 @@ public class DeliveratorBean implements Deliverator, DeliveratorRemote
 	public void deliver(Long mailId, Long personId) throws NotFoundException
 	{
 
-		Mail mail = this.dao.findMail(mailId);
-		Person person = this.dao.findPerson(personId);
+		Mail mail = this.em.get(Mail.class, mailId);
+		Person person = this.em.get(Person.class, personId);
 		Subscription sub = person.getSubscription(mail.getList().getId());
 
 		EmailAddress ea = sub.getDeliverTo();

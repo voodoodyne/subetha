@@ -20,7 +20,6 @@ import org.subethamail.rtest.util.PersonInfoMixin;
 import org.subethamail.rtest.util.PersonMixin;
 import org.subethamail.rtest.util.Smtp;
 import org.subethamail.rtest.util.SubEthaTestCase;
-import org.subethamail.wiser.WiserMessage;
 
 /**
  * Tests for user account manipulation.

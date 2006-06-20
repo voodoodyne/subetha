@@ -29,6 +29,7 @@ import org.subethamail.core.admin.i.SiteStatus;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.i.Queuer;
+import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.core.util.VERPAddress;
@@ -39,7 +40,6 @@ import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
-import org.subethamail.entity.dao.DAO;
 import org.subethamail.entity.i.Permission;
 
 /**
@@ -50,7 +50,7 @@ import org.subethamail.entity.i.Permission;
 @Stateless(name="Admin")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class AdminBean implements Admin, AdminRemote
+public class AdminBean extends EntityManipulatorBean implements Admin, AdminRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(AdminBean.class);
@@ -70,7 +70,6 @@ public class AdminBean implements Admin, AdminRemote
 	protected static final int PASSWORD_GEN_LENGTH = 6;
 	
 	/** */
-	@EJB DAO dao;
 	@EJB PostOffice postOffice;
 	@EJB Queuer queuer;
 
@@ -97,7 +96,7 @@ public class AdminBean implements Admin, AdminRemote
 		
 		// Then create the mailing list and attach the owners.
 		MailingList list = new MailingList(address.getAddress(), address.getPersonal(), url.toString(), description);
-		this.dao.persist(list);
+		this.em.persist(list);
 		// TODO:  remove this code when http://opensource.atlassian.com/projects/hibernate/browse/HHH-1654
 		// is fixed.  This should be performed within the constructor of MailingList.
 		list.setDefaultRole(list.getRoles().iterator().next());
@@ -108,7 +107,7 @@ public class AdminBean implements Admin, AdminRemote
 			EmailAddress ea = this.establishEmailAddress(ownerAddress, null);
 			Subscription sub = new Subscription(ea.getPerson(), list, ea, list.getOwnerRole());
 			
-			this.dao.persist(sub);
+			this.em.persist(sub);
 			
 			list.getSubscriptions().add(sub);
 			ea.getPerson().addSubscription(sub);
@@ -134,7 +133,7 @@ public class AdminBean implements Admin, AdminRemote
 	{
 		try
 		{
-			return this.dao.findEmailAddress(address.getAddress());
+			return this.em.getEmailAddress(address.getAddress());
 		}
 		catch (NotFoundException ex)
 		{
@@ -151,8 +150,8 @@ public class AdminBean implements Admin, AdminRemote
 			EmailAddress e = new EmailAddress(p, address.getAddress());
 			p.addEmailAddress(e);
 			
-			this.dao.persist(p);
-			this.dao.persist(e);
+			this.em.persist(p);
+			this.em.persist(e);
 			
 			return e;
 		}
@@ -175,7 +174,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public SubscribeResult subscribe(Long listId, Long personId, String email, boolean ignoreHold) throws NotFoundException
 	{
-		Person who = this.dao.findPerson(personId);
+		Person who = this.em.get(Person.class, personId);
 		
 		if (email == null)
 		{
@@ -202,7 +201,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	protected SubscribeResult subscribe(Long listId, Person who, EmailAddress deliverTo, boolean ignoreHold, boolean silent) throws NotFoundException
 	{
-		MailingList list = this.dao.findMailingList(listId);
+		MailingList list = this.em.get(MailingList.class, listId);
 		
 		Subscription sub = who.getSubscription(listId);
 		if (sub != null)
@@ -220,10 +219,10 @@ public class AdminBean implements Admin, AdminRemote
 				// Maybe already held, if so, replace it; email address might be new
 				SubscriptionHold hold = who.getHeldSubscriptions().remove(list.getId());
 				if (hold != null)
-					this.dao.remove(hold);
+					this.em.remove(hold);
 				
 				hold = new SubscriptionHold(who, list, deliverTo);
-				this.dao.persist(hold);
+				this.em.persist(hold);
 				
 				// Send mail to anyone that can approve
 				for (Subscription maybeModerator: list.getSubscriptions())
@@ -237,7 +236,7 @@ public class AdminBean implements Admin, AdminRemote
 			{
 				sub = new Subscription(who, list, deliverTo, list.getDefaultRole());
 				
-				this.dao.persist(sub);
+				this.em.persist(sub);
 				
 				who.addSubscription(sub);
 				list.getSubscriptions().add(sub);
@@ -267,7 +266,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void unsubscribe(Long listId, Long personId) throws NotFoundException
 	{
-		Person who = this.dao.findPerson(personId);
+		Person who = this.em.get(Person.class, personId);
 		this.unsubscribe(listId, who);
 	}
 
@@ -276,10 +275,10 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	protected void unsubscribe(Long listId, Person who) throws NotFoundException
 	{
-		MailingList list = this.dao.findMailingList(listId);
+		MailingList list = this.em.get(MailingList.class, listId);
 		Subscription sub = who.getSubscriptions().remove(listId);
 		list.getSubscriptions().remove(sub);
-		this.dao.remove(sub);
+		this.em.remove(sub);
 		
 		// Notify anyone with APPROVE_SUBSCRIPTIONS
 		for (Subscription maybeNotify: list.getSubscriptions())
@@ -311,7 +310,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void setSiteAdmin(Long personId, boolean value) throws NotFoundException
 	{
-		Person p = this.dao.findPerson(personId);
+		Person p = this.em.get(Person.class, personId);
 		p.setSiteAdmin(value);
 	}
 
@@ -321,7 +320,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void setSiteAdmin(String email, boolean siteAdmin) throws NotFoundException
 	{
-		EmailAddress ea = this.dao.findEmailAddress(email);
+		EmailAddress ea = this.em.getEmailAddress(email);
 		ea.getPerson().setSiteAdmin(siteAdmin);
 	}
 
@@ -330,7 +329,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void addEmail(Long personId, String email) throws NotFoundException
 	{
-		EmailAddress addy = this.dao.getEmailAddress(email);
+		EmailAddress addy = this.em.findEmailAddress(email);
 		
 		// Three cases:  either addy is null, addy is already associated with
 		// the person, or addy is already associated with someone else.
@@ -339,12 +338,12 @@ public class AdminBean implements Admin, AdminRemote
 		if (addy != null && addy.getPerson().getId().equals(personId))
 			return;
 		
-		Person who = this.dao.findPerson(personId);
+		Person who = this.em.get(Person.class, personId);
 			
 		if (addy == null)
 		{
 			addy = new EmailAddress(who, email);
-			this.dao.persist(addy);
+			this.em.persist(addy);
 			who.addEmailAddress(addy);
 		}
 		else
@@ -360,8 +359,8 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void merge(Long fromPersonId, Long toPersonId) throws NotFoundException
 	{
-		Person from = this.dao.findPerson(fromPersonId);
-		Person to = this.dao.findPerson(toPersonId);
+		Person from = this.em.get(Person.class, fromPersonId);
+		Person to = this.em.get(Person.class, toPersonId);
 
 		if (log.isDebugEnabled())
 			log.debug("Merging " + from + " into " + to);
@@ -396,7 +395,7 @@ public class AdminBean implements Admin, AdminRemote
 				if (sub.getRole().isOwner())
 					toSub.setRole(sub.getRole());
 				
-				this.dao.remove(sub);
+				this.em.remove(sub);
 			}
 			else
 			{
@@ -419,7 +418,7 @@ public class AdminBean implements Admin, AdminRemote
 				if (log.isDebugEnabled())
 					log.debug(" abandoning obsolete or duplicate " + hold);
 				
-				this.dao.remove(hold);
+				this.em.remove(hold);
 			}
 			else
 			{
@@ -441,7 +440,7 @@ public class AdminBean implements Admin, AdminRemote
 			if (to.getSubscriptions().containsKey(listId))
 			{
 				to.getHeldSubscriptions().remove(listId);
-				this.dao.remove(hold);
+				this.em.remove(hold);
 			}
 		}
 		
@@ -449,7 +448,7 @@ public class AdminBean implements Admin, AdminRemote
 		if (log.isDebugEnabled())
 			log.debug(" deleting person " + from);
 		
-		this.dao.remove(from);
+		this.em.remove(from);
 	}
 
 	/**
@@ -457,9 +456,9 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public int selfModerate(Long personId) throws NotFoundException
 	{
-		Person who = this.dao.findPerson(personId);
+		Person who = this.em.get(Person.class, personId);
 		
-		List<Mail> heldMail = this.dao.findSoftHoldsForPerson(personId);
+		List<Mail> heldMail = this.em.findSoftHoldsForPerson(personId);
 		
 		int count = 0;
 		
@@ -482,7 +481,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public List<PersonData> getSiteAdmins()
 	{
-		List<Person> siteAdmins = this.dao.findSiteAdmins();
+		List<Person> siteAdmins = this.em.findSiteAdmins();
 		return Transmute.people(siteAdmins);
 	}
 	
@@ -492,7 +491,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void setListAddresses(Long listId, InternetAddress address, URL url) throws NotFoundException, DuplicateListDataException, InvalidListDataException
 	{
-		MailingList list = this.dao.findMailingList(listId);
+		MailingList list = this.em.get(MailingList.class, listId);
 		
 		InternetAddress checkAddress = list.getEmail().equals(address.getAddress()) ? null : address;
 		URL checkUrl = list.getUrl().equals(url.toString()) ? null : url;
@@ -523,7 +522,7 @@ public class AdminBean implements Admin, AdminRemote
 			
 			try
 			{
-				this.dao.findMailingList(address);
+				this.em.getMailingList(address);
 				dupAddress = true;
 			}
 			catch (NotFoundException ex) {}
@@ -536,7 +535,7 @@ public class AdminBean implements Admin, AdminRemote
 			
 			try
 			{
-				this.dao.findMailingList(url);
+				this.em.getMailingList(url);
 				dupUrl = true;
 			}
 			catch (NotFoundException ex) {}
@@ -552,7 +551,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public List<ListData> getLists(int skip, int count)
 	{
-		return Transmute.mailingLists(this.dao.findMailingLists(skip, count));
+		return Transmute.mailingLists(this.em.findMailingLists(skip, count));
 	}
 	
 	/*
@@ -561,7 +560,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public List<ListData> searchLists(String query, int skip, int count)
 	{
-		return Transmute.mailingLists(this.dao.findMailingLists(query, skip, count));
+		return Transmute.mailingLists(this.em.findMailingLists(query, skip, count));
 	}
 	
 	/*
@@ -570,7 +569,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public int countLists()
 	{
-		return this.dao.countLists();
+		return this.em.countLists();
 	}
 
 	/*
@@ -579,7 +578,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public int countLists(String query)
 	{
-		return this.dao.countLists(query);
+		return this.em.countLists(query);
 	}
 
 	/*
@@ -591,10 +590,10 @@ public class AdminBean implements Admin, AdminRemote
 		return new SiteStatus(
 				System.getProperty("file.encoding"),
 				this.countLists(),
-				this.dao.countPerson(),
-				this.dao.countMail(),
-				(URL)this.dao.getConfigValue(Config.ID_SITE_URL),
-				(InternetAddress)this.dao.getConfigValue(Config.ID_SITE_POSTMASTER)				
+				this.em.countPeople(),
+				this.em.countMail(),
+				(URL)this.em.findConfigValue(Config.ID_SITE_URL),
+				(InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER)				
 			);
 	}
 	
@@ -604,7 +603,7 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void setDefaultSiteUrl(URL url)
 	{
-		this.dao.setConfigValue(Config.ID_SITE_URL, url);
+		this.em.setConfigValue(Config.ID_SITE_URL, url);
 	}
 
 	/*
@@ -613,6 +612,6 @@ public class AdminBean implements Admin, AdminRemote
 	 */
 	public void setPostmaster(InternetAddress address)
 	{
-		this.dao.setConfigValue(Config.ID_SITE_POSTMASTER, address);
+		this.em.setConfigValue(Config.ID_SITE_POSTMASTER, address);
 	}
 }

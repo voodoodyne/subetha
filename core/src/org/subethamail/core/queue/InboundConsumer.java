@@ -15,9 +15,9 @@ import org.jboss.annotation.ejb.Consumer;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.queue.i.Queuer;
+import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Subscription;
-import org.subethamail.entity.dao.DAO;
 
 /**
  * Consumer of the inbound queue.  This is a JBoss message-driven POJO.
@@ -34,7 +34,7 @@ import org.subethamail.entity.dao.DAO;
 )
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
-public class InboundConsumer implements Inbound
+public class InboundConsumer extends EntityManipulatorBean implements Inbound
 {
 	/** */
 	private static Log log = LogFactory.getLog(InboundConsumer.class);
@@ -44,7 +44,6 @@ public class InboundConsumer implements Inbound
 	
 	/** */
 	@EJB Queuer queuer;
-	@EJB DAO dao;
 	
 	/**
 	 * @see Inbound#deliver(Long)
@@ -57,7 +56,7 @@ public class InboundConsumer implements Inbound
 		Mail mail;
 		try
 		{
-			mail = this.dao.findMail(mailId);
+			mail = this.em.get(Mail.class, mailId);
 		}
 		catch (NotFoundException ex)
 		{

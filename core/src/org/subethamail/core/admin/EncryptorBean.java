@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -26,15 +25,14 @@ import javax.ejb.EJBException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.ejb.Depends;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.jboss.util.Base64;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
+import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Config;
-import org.subethamail.entity.dao.DAO;
 
 /**
  * Performs encryption and decryption using a constant key.  The
@@ -46,11 +44,9 @@ import org.subethamail.entity.dao.DAO;
  * @author Jeff Schnitzer
  */
 @Service(name="Encryptor", objectName="subetha:service=Encryptor")
-// This depends annotation can be removed when JBoss fixes dependency bug.
-@Depends("jboss.j2ee:ear=subetha.ear,jar=entity.jar,name=DAO,service=EJB3")
 @SecurityDomain("subetha")
 @PermitAll
-public class EncryptorBean implements Encryptor, EncryptorManagement
+public class EncryptorBean extends EntityManipulatorBean implements Encryptor, EncryptorManagement
 {
 	/** */
 	private static Log log = LogFactory.getLog(EncryptorBean.class);
@@ -77,9 +73,6 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 			IV[i] = (byte)(i+10);
 	}
 
-	/** */
-	@EJB DAO dao;
-
 	/**
 	 * @see EncryptorManagement#start()
 	 */
@@ -88,7 +81,7 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 		// If we don't already have a key, generate one
 		try
 		{
-			Config cfg = this.dao.findConfig(KEY_CONFIG_ID);
+			Config cfg = this.em.get(Config.class, KEY_CONFIG_ID);
 			
 			// Might as well sanity check it
 			String value = (String)cfg.getValue();
@@ -99,7 +92,7 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 		catch (NotFoundException ex)
 		{
 			Config cfg = new Config(KEY_CONFIG_ID, this.generateKey());
-			this.dao.persist(cfg);
+			this.em.persist(cfg);
 		}
 	}
 	
@@ -122,7 +115,7 @@ public class EncryptorBean implements Encryptor, EncryptorManagement
 	 */
 	byte[] getKey()
 	{
-		String base64 = (String)this.dao.getConfigValue(KEY_CONFIG_ID);
+		String base64 = (String)this.em.findConfigValue(KEY_CONFIG_ID);
 		return Base64.decode(base64);
 	}
 	

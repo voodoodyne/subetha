@@ -20,8 +20,8 @@ import org.jboss.security.SimpleGroup;
 import org.jboss.security.SimplePrincipal;
 import org.jboss.security.auth.spi.UsernamePasswordLoginModule;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.entity.EmailAddress;
-import org.subethamail.entity.dao.DAO;
+import org.subethamail.core.admin.JaasLogin;
+import org.subethamail.entity.Person;
 
 /**
  * Authenticates against the database
@@ -40,21 +40,21 @@ public class SubEthaLoginModule extends UsernamePasswordLoginModule
 	/**
 	 * We need this to lookup data objects
 	 */
-	protected static DAO dao;
+	protected static JaasLogin jaasLogin;
 	
-	protected static DAO getDAO()
+	protected static JaasLogin getJaasLogin()
 	{
-		if (dao == null)
+		if (jaasLogin == null)
 		{
 			try
 			{
 				Context ctx = new InitialContext();
-				dao = (DAO)ctx.lookup(DAO.JNDI_NAME);
+				jaasLogin = (JaasLogin)ctx.lookup(JaasLogin.JNDI_NAME);
 			}
 			catch (NamingException ex) { throw new RuntimeException(ex); }
 		}
 		
-		return dao; 
+		return jaasLogin; 
 	} 
 	
 	/** */
@@ -110,14 +110,14 @@ public class SubEthaLoginModule extends UsernamePasswordLoginModule
 
 		try
 		{
-			EmailAddress addy = getDAO().findEmailAddress(email);
+			Person pers = getJaasLogin().getPersonForEmail(email);
 			
-			if (addy.getPerson().isSiteAdmin())
+			if (pers.isSiteAdmin())
 				this.roles = SITE_ADMIN_ROLES;
 			else
 				this.roles = USER_ROLES;
 			
-			return addy.getPerson().getPassword();
+			return pers.getPassword();
 		}
 		catch (NotFoundException ex)
 		{

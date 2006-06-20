@@ -39,6 +39,7 @@ import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.i.Queuer;
+import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
@@ -47,7 +48,6 @@ import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.Mail.HoldType;
-import org.subethamail.entity.dao.DAO;
 import org.subethamail.entity.i.Permission;
 
 /**
@@ -61,7 +61,7 @@ import org.subethamail.entity.i.Permission;
 //		name="InjectorEndpoint", 
 //		targetNamespace="http://www.subethamila.org/injector",
 //		serviceName="InjectorService")
-public class InjectorBean implements Injector, InjectorRemote
+public class InjectorBean extends EntityManipulatorBean implements Injector, InjectorRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(InjectorBean.class);
@@ -89,7 +89,6 @@ public class InjectorBean implements Injector, InjectorRemote
 	public static final long MAX_BOUNCE_THRESHOLD = 7;
 
 	/** */
-	@EJB DAO dao;
 	@EJB Queuer queuer;
 	@EJB FilterRunner filterRunner;
 	@EJB Encryptor encryptor;
@@ -124,7 +123,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		
 		try
 		{
-			this.dao.findMailingList(addy);
+			this.em.getMailingList(addy);
 			return true;
 		}
 		catch (NotFoundException ex)
@@ -178,7 +177,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		MailingList toList;
 		try
 		{
-			toList = this.dao.findMailingList(recipientAddy);
+			toList = this.em.getMailingList(recipientAddy);
 		}
 		catch (NotFoundException ex)
 		{
@@ -242,7 +241,7 @@ public class InjectorBean implements Injector, InjectorRemote
 			// Figure out who sent it, if we know
 			try
 			{
-				Person author = this.dao.findEmailAddress(senderAddy.getAddress()).getPerson();
+				Person author = this.em.getEmailAddress(senderAddy.getAddress()).getPerson();
 				
 				if (log.isDebugEnabled())
 					log.debug("Message author is: " + author);
@@ -260,7 +259,7 @@ public class InjectorBean implements Injector, InjectorRemote
 			log.debug("Hold?  " + hold);
 
 		Mail mail = new Mail(senderAddy, msg, toList, hold);
-		this.dao.persist(mail);
+		this.em.persist(mail);
 		
 		// Convert all binary attachments to references and then set the content
 		this.detacher.detach(msg, mail);
@@ -303,7 +302,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		InternetAddress senderAddy = new InternetAddress(envelopeSender);
 
 		// Figure out which list this is for
-		MailingList toList = this.dao.findMailingList(listId);
+		MailingList toList = this.em.get(MailingList.class, listId);
 		
 		// Parse up the message
 		mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
@@ -347,7 +346,7 @@ public class InjectorBean implements Injector, InjectorRemote
 			sentDate = fallbackDate;
 				
 		Mail mail = new Mail(senderAddy, msg, toList, hold, sentDate);
-		this.dao.persist(mail);
+		this.em.persist(mail);
 		
 		// Convert all binary attachments to references and then set the content
 		this.detacher.detach(msg, mail);
@@ -396,7 +395,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		{
 			try
 			{
-				this.dao.findMailByMessageId(list.getId(), messageId);
+				this.em.getMailByMessageId(list.getId(), messageId);
 				return true;
 			}
 			catch (NotFoundException ex) 
@@ -424,7 +423,7 @@ public class InjectorBean implements Injector, InjectorRemote
 			if (log.isDebugEnabled())
 				log.debug("Bounced from " + originalEmail);
 			
-			EmailAddress found = this.dao.findEmailAddress(originalEmail);
+			EmailAddress found = this.em.getEmailAddress(originalEmail);
 			
 			found.bounceIncrement();
 			
@@ -512,7 +511,7 @@ public class InjectorBean implements Injector, InjectorRemote
 			
 			try
 			{
-				parent = this.dao.findMailByMessageId(mail.getList().getId(), candidate);
+				parent = this.em.getMailByMessageId(mail.getList().getId(), candidate);
 				
 				// Got one, eliminate anything from wantedReference that is at this
 				// level or later.  Do it from the end to make ArrayList happy.
@@ -540,7 +539,7 @@ public class InjectorBean implements Injector, InjectorRemote
 		// STEP THREE:  Find anyone looking for us as a parent and insert us in
 		// their thread ancestry.  Watch out for loops.
 		//
-		List<Mail> descendants = this.dao.findMailWantingParent(mail.getList().getId(), mail.getMessageId());
+		List<Mail> descendants = this.em.findMailWantingParent(mail.getList().getId(), mail.getMessageId());
 		outer: for (Mail descendant: descendants)
 		{
 			if (log.isDebugEnabled())

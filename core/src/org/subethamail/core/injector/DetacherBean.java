@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.sql.Blob;
 
 import javax.activation.DataHandler;
-import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
@@ -27,9 +26,9 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.TrivialDataSource;
+import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Mail;
-import org.subethamail.entity.dao.DAO;
 
 /**
  * @author Jeff Schnitzer
@@ -38,13 +37,10 @@ import org.subethamail.entity.dao.DAO;
 @SecurityDomain("subetha")
 @PermitAll
 @RunAs("siteAdmin")
-public class DetacherBean implements Detacher
+public class DetacherBean extends EntityManipulatorBean implements Detacher
 {
 	/** */
 	private static Log log = LogFactory.getLog(DetacherBean.class);
-	
-	/** */
-	@EJB DAO dao;
 	
 	/*
 	 * (non-Javadoc)
@@ -98,7 +94,7 @@ public class DetacherBean implements Detacher
 				Blob blobby = new BlobImpl(input, input.available());
 				
 				Attachment attach = new Attachment(ownerMail, blobby, contentType);
-				this.dao.persist(attach);
+				this.em.persist(attach);
 				ownerMail.getAttachments().add(attach);
 				
 				part.setContent(attach.getId(), SubEthaMessage.DETACHMENT_MIME_TYPE);
@@ -141,7 +137,7 @@ public class DetacherBean implements Detacher
 
 			try
 			{
-				Attachment att = this.dao.findAttachment(attachmentId);
+				Attachment att = this.em.get(Attachment.class, attachmentId);
 				
 				part.setDataHandler(
 						new DataHandler(

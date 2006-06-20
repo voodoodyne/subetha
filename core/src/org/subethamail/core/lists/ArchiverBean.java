@@ -54,7 +54,6 @@ import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
-import org.subethamail.entity.dao.DAO;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
@@ -76,7 +75,6 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	@EJB Deliverator deliverator;
 	@EJB FilterRunner filterRunner;
 	@EJB Detacher detacher;
-	@EJB DAO dao;
 	@EJB ListMgr listManager;
 	@EJB Injector injector;
 
@@ -107,7 +105,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		// Are we allowed to view archives?
 		MailingList list = this.getListFor(listId, Permission.READ_ARCHIVES, me);
 		
-		List<Mail> mails = this.dao.findMailByList(listId, skip, count);
+		List<Mail> mails = this.em.findMailByList(listId, skip, count);
 		
 		// This is fun.  Assemble the thread relationships.
 		SortedSet<Mail> roots = new TreeSet<Mail>();
@@ -133,7 +131,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 */
 	public int countMailByList(Long listId)
 	{
-		return this.dao.countMailByList(listId);
+		return this.em.countMailByList(listId);
 	}
 
 	/*
@@ -166,7 +164,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 */
 	public void writeAttachment(Long attachmentId, OutputStream stream) throws NotFoundException, PermissionException
 	{
-		Attachment a = this.dao.findAttachment(attachmentId);
+		Attachment a = this.em.get(Attachment.class, attachmentId);
 		a.getMail().getList().checkPermission(getMe(), Permission.READ_ARCHIVES);
 
 		Blob data = a.getContent();
@@ -194,7 +192,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 */
 	public String getAttachmentContentType(Long attachmentId) throws NotFoundException, PermissionException
 	{
-		Attachment a = this.dao.findAttachment(attachmentId);
+		Attachment a = this.em.get(Attachment.class, attachmentId);
 		a.getMail().getList().checkPermission(getMe(), Permission.READ_ARCHIVES);
 		return a.getContentType();
 	}

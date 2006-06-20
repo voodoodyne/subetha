@@ -83,7 +83,7 @@ st1.onsort = st1.tableRowColors;
 </script>
 
 			<c:url var="pagurl" value="/held_msgs.jsp" />
-			<se:searchPaginator url="${pagurl}&" model="${model}"/>
+			<se:searchPaginator url="${pagurl}?" model="${model}"/>
 
 		<br /><br /><br />
 

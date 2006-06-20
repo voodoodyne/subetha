@@ -1,0 +1,10 @@
+Package: subetha
+Version: @SUBETHA_VERSION@
+Section: web
+Priority: optional
+Architecture: all
+Essential: no
+Maintainer: Jon Stevens [jon@latchkey.com]
+Description: SubEtha is a sophisticated mailing list manager, 
+			 similar in many respects to the popular Mailman 
+			 package.

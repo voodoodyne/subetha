@@ -18,7 +18,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribeResult;
@@ -41,6 +40,7 @@ import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.dao.DAO;
+import org.subethamail.entity.i.Permission;
 
 /**
  * Implementation of the Admin interface.

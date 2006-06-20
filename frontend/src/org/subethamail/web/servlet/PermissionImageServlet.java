@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.common.Permission;
+import org.subethamail.entity.i.Permission;
 import org.subethamail.web.action.GetMessage;
 
 /**

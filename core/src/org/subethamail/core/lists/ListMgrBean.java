@@ -25,8 +25,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.common.Permission;
-import org.subethamail.common.PermissionException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.filter.FilterRunner;
@@ -54,6 +52,8 @@ import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
+import org.subethamail.entity.i.Permission;
+import org.subethamail.entity.i.PermissionException;
 
 /**
  * Implementation of the ListMgr interface.

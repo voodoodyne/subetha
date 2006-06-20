@@ -15,7 +15,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.MySubscription;
 import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribedList;
@@ -38,6 +37,7 @@ import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.Mail.HoldType;
+import org.subethamail.entity.i.Permission;
 
 
 

@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.common.PermissionException;
 import org.subethamail.core.lists.i.Archiver;
+import org.subethamail.entity.i.PermissionException;
 import org.subethamail.web.Backend;
 
 /**

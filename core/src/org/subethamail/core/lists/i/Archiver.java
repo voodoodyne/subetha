@@ -13,7 +13,7 @@ import javax.ejb.Local;
 
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.common.PermissionException;
+import org.subethamail.entity.i.PermissionException;
 
 /**
  * Tools for viewing the list archives.

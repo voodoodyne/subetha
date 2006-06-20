@@ -15,8 +15,8 @@ import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 
 import org.subethamail.common.NotFoundException;
-import org.subethamail.common.Permission;
-import org.subethamail.common.PermissionException;
+import org.subethamail.entity.i.Permission;
+import org.subethamail.entity.i.PermissionException;
 
 /**
  * Tools for querying and modifying list configurations.  Most methods

@@ -5,7 +5,7 @@
 
 	<jsp:forward page="/error_notfound.jsp" />
 	
-<% } else if (ExceptionUtils.causedBy(exception, org.subethamail.common.PermissionException.class)) { %>
+<% } else if (ExceptionUtils.causedBy(exception, org.subethamail.entity.i.PermissionException.class)) { %>
 
 	<jsp:forward page="/error_permission.jsp" />
 

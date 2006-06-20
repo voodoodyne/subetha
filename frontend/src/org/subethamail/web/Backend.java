@@ -14,7 +14,6 @@ import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import org.subethamail.common.Permission;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
@@ -22,6 +21,7 @@ import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ListMgr;
+import org.subethamail.entity.i.Permission;
 
 /**
  * Singleton which provides access to the backend EJBs.  

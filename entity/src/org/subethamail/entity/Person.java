@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.Length;
-import org.subethamail.common.Permission;
+import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.Validator;
 
 /**

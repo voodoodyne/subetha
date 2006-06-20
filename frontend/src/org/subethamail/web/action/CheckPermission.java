@@ -7,7 +7,7 @@ package org.subethamail.web.action;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.common.Permission;
+import org.subethamail.entity.i.Permission;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.tagonist.propertize.Property;

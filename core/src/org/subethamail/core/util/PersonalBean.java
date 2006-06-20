@@ -14,14 +14,14 @@ import javax.ejb.SessionContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.common.Permission;
-import org.subethamail.common.PermissionException;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
 import org.subethamail.entity.dao.DAO;
+import org.subethamail.entity.i.Permission;
+import org.subethamail.entity.i.PermissionException;
 
 /**
  * Base class for session EJBs which are called by authenticated

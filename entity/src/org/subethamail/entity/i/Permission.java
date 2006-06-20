@@ -3,7 +3,7 @@
  * $URL$
  */
 
-package org.subethamail.common;
+package org.subethamail.entity.i;
 
 import java.util.Collections;
 import java.util.Set;

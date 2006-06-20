@@ -28,6 +28,8 @@
 
 	<!-- used to build the core interfaces -->
 	<path id="core.i.classpath">
+		<pathelement location="${build.entity.classes.i.dir}"/>
+		
 		<path refid="master.classpath" />
 	</path>
 
@@ -56,7 +58,7 @@
 		</javac>
 	</target>
 
- 	<target name="core-classes-i" depends="common-jar">
+ 	<target name="core-classes-i" depends="common-jar, entity-i-classes">
 		<mkdir dir="${build.core.classes.i.dir}" />
  		
 		<javac srcdir="${core.javasrc.dir}"
@@ -71,14 +73,12 @@
 		</javac>
 	</target>
 
-	<target name="core-ejbclient-jar" depends="core-classes-i, entity-classes">
+	<target name="core-ejbclient-jar" depends="core-classes-i">
 		<jar jarfile="${build.core.ejbclient.file}">
 			<fileset dir="${build.core.classes.i.dir}"/>
 			
 			<!-- Put the entity /i/ classes in this package -->
-			<fileset dir="${build.entity.classes.dir}">
-				<include name="**/i/**" />
-			</fileset>
+			<fileset dir="${build.entity.classes.i.dir}" />
 			
 			<manifest>
 				<attribute name="Specification-Version" value="${build.version}" />

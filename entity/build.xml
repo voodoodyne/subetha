@@ -11,6 +11,7 @@
 <project name="entity" default="" basedir=".">
 	
 	<property name="build.entity.classes.dir" location="${build.dir}/entity-classes"/>
+	<property name="build.entity.classes.i.dir" location="${build.dir}/entity-i-classes"/>
 	<property name="build.entity.ejb.file" location="${build.dir}/entity.jar"/>
 	
 	<dirname property="entity.basedir" file="${ant.file.entity}"/>
@@ -25,9 +26,26 @@
 		<path refid="master.classpath"/>
 	</path>
 	
+	<target name="entity-i-classes" depends="common-jar">
+		<mkdir dir="${build.entity.classes.i.dir}"/>
+		
+		<javac 
+			srcdir="${entity.javasrc.dir}"
+			destdir="${build.entity.classes.i.dir}" 
+			includeAntRuntime="false"
+			debug="${build.debug}" 
+			deprecation="${build.deprecation}">
+			
+			<classpath refid="entity.classpath"/>
+			
+			<include name="**/i/**" />
+		</javac>
+	</target>
+	
 	<target name="entity-classes" depends="common-jar">
 		<mkdir dir="${build.entity.classes.dir}"/>
-		
+	
+		<!-- note that this includes the /i/ classes deliberately -->	
 		<javac 
 			srcdir="${entity.javasrc.dir}"
 			destdir="${build.entity.classes.dir}" 

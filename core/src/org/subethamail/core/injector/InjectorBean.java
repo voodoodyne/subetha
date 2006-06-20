@@ -28,7 +28,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.common.Permission;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.LimitingInputStream;
 import org.subethamail.core.admin.i.Encryptor;
@@ -49,6 +48,7 @@ import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.dao.DAO;
+import org.subethamail.entity.i.Permission;
 
 /**
  * @author Jeff Schnitzer

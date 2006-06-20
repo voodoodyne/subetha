@@ -35,8 +35,6 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.common.Permission;
-import org.subethamail.common.PermissionException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.filter.FilterRunner;
@@ -57,6 +55,8 @@ import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.dao.DAO;
+import org.subethamail.entity.i.Permission;
+import org.subethamail.entity.i.PermissionException;
 
 import com.sun.mail.util.LineInputStream;
 

@@ -36,9 +36,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.validator.Email;
-import org.subethamail.common.Permission;
-import org.subethamail.common.PermissionException;
 import org.subethamail.common.SiteUtils;
+import org.subethamail.entity.i.Permission;
+import org.subethamail.entity.i.PermissionException;
 import org.subethamail.entity.i.Validator;
 
 /**

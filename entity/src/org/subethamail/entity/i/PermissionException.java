@@ -3,9 +3,10 @@
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/ejb/NameAlreadyTakenException.java,v $
  */
 
-package org.subethamail.common;
+package org.subethamail.entity.i;
 
 import javax.ejb.ApplicationException;
+
 
 
 /**

@@ -127,14 +127,26 @@
 		
 		<h3>Postfix User Mapping</h3>
 		<p>
-			TBD, after we implement the 
-			<a href="http://www.postfix.org/tcp_table.5.html">Postfix tcp: map 
-			provider</a>. It is worthy to note that this functionality is
-			not required to allow SubEtha to work today. It is an optimization
-			which will allow us to determine if SubEtha should accept email
-			from Postfix. Thus, it would be possible to just 'transport' 
-			all email for your domains to SubEtha and SubEtha could decide which 
-			emails it wants to accept before it is tranported.
+			Postfix user mapping via the <a href="http://www.postfix.org/tcp_table.5.html">Postfix tcp: map 
+			provider</a> is an optimization which allows SubEtha to determine 
+			it should accept email from Postfix before attempting to transfer it to SubEtha. 
+			Thus, it is possible to just 'transport' all email for your domains to 
+			SubEtha and SubEtha can decide which emails it wants to accept before 
+			it is tranported.
+		</p>
+
+		<p>
+			In order to configure Postfix to use this feature, only a slight change is needed
+			to the documentation above. Just change the smtp: to be a tcp: and the port number to
+			2502. For example:
+		</p>
+		<pre>lists.yourdomain.com          tcp:[127.0.0.1]:2502</pre>
+
+		<p>
+			Then, Postfix will connect to our port 2502 and ask if the envelope To: is an address
+			SubEtha wants to handle. If so, then the response will be a line similar to this: 
+			smtp:[127.0.0.1]:2500. That will tell Postfix to then relay the mail to
+			that SubEtha server and the mail will go through.
 		</p>
 		
 		<a name="sendmail"></a>

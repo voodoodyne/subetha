@@ -4,4 +4,4 @@
 
 <c:redirect url="archive_msg.jsp">
 	<c:param name="msgId" value="${model.msgId}"/>
-</c:redirect>>
+</c:redirect>

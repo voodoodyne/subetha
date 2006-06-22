@@ -143,6 +143,15 @@ public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 		}
 		
 		/** Must call setTo first */
+		public void setFrom(InternetAddress from)
+		{
+			if (this.toAddress == null)
+				throw new IllegalStateException("Must call setTo() first");
+			
+			this.fromAddress = from;
+		}
+		
+		/** Must call setTo first */
 		public void setFrom(String from)
 		{
 			if (this.toAddress == null)
@@ -219,13 +228,13 @@ public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 		}
 		else
 		{
-			String url = (String)this.em.findConfigValue(Config.ID_SITE_URL);
-			vctx.put("url", url);
+			URL url = (URL)this.em.findConfigValue(Config.ID_SITE_URL);
+			vctx.put("url", url.toString());
 			
 			MessageBuilder builder = new MessageBuilder(MailType.FORGOT_PASSWORD, vctx);
 			builder.setTo(addy);
 			
-			String postmaster = (String)this.em.findConfigValue(Config.ID_SITE_POSTMASTER);
+			InternetAddress postmaster = (InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER);
 			builder.setFrom(postmaster);
 			
 			builder.send();
@@ -327,7 +336,7 @@ public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 			builder.setTo(email);
 			
 			InternetAddress postmaster = (InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER);
-			builder.setFrom(postmaster.toString());
+			builder.setFrom(postmaster);
 			
 			builder.send();
 		}

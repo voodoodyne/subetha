@@ -33,6 +33,11 @@ pre {
 	padding-bottom: 0ex;
 }
 
+.headerTitle {
+	font-size: 250%;
+	line-height: 2.5em;
+}
+
 .sideBox {
 	margin-top: 0mm;
 	width: 12em;

@@ -1,6 +1,7 @@
 <%@include file="../inc/taglibs.jspf" %>
 
 <%@ attribute name="title" required="true" %>
+<%@ attribute name="headerTitle" required="false" %>
 
 <trim:base title="${title}">
 	<!-- ###### Header ###### -->
@@ -44,7 +45,12 @@
 			</c:choose>
 		</div> <!-- locBar -->
 		
-		<span class="headerTitle">SubEtha Mail</span>
+		<span class="headerTitle">
+			<c:choose>
+				<c:when test="${empty headerTitle}">SubEtha Mail</c:when>
+				<c:otherwise><c:out value="${headerTitle}"/></c:otherwise>
+			</c:choose>
+		</span>
 		
 	</div> <!-- header -->
 	

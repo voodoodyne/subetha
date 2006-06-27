@@ -9,7 +9,7 @@
 
 <c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
 
-<trim:menus title="${title}">
+<trim:menus title="${title}" headerTitle="${sub.list.name} <${sub.list.email}>">
 	<div class="sideBox LHS">
 		<div>List Menu</div>
 
@@ -84,8 +84,7 @@
 	</c:if>
 	
 	<div id="bodyText">
-		<h1><c:out value="${sub.list.name}"/> &lt;<c:out value="${sub.list.email}"/>&gt;</h1>
-		<h2><c:out value="${title}"/></h2>
+		<h1><c:out value="${title}"/></h1>
 		<jsp:doBody/>
 	</div> <!-- bodyText -->
 </trim:menus>

@@ -1,8 +1,9 @@
 <%@include file="../inc/taglibs.jspf" %>
 
 <%@ attribute name="title" required="true" %>
+<%@ attribute name="headerTitle" required="false" %>
 
-<trim:header title="${title}">
+<trim:header title="${title}" headerTitle="${headerTitle}">
 	<c:if test="${auth.loggedIn}">
 		<div class="sideBox LHS">
 			<div>Main Menu</div>

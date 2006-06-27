@@ -5,6 +5,7 @@
 </c:if>
 
 <t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
+<c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
 
 <trim:list title="List Overview" listId="${param.listId}">
 	
@@ -22,30 +23,48 @@
 			</ul>
 		</li>
 	</ul>
-	
-	<fieldset>
-		<legend>Administration</legend>
-		<div style="float: right">
-			<form action="" method="get">
-				<input type="submit" value="Edit List Settings" />
-			</form>
-		</div>
-		<ul>
-			<li><a href="#">14</a> held messages</li>
-			<li><a href="#">3</a> held subscriptions</li>
-		</ul>
-		<table>
-			<tr>
-				<th>Welcome message for new subscribers:</th>
-				<td>blah blah blah blah</td>
-			</tr>
-			<tr>
-				<th>Require approval for new subscriptions?</th>
-				<td>Yes</td>
-			</tr>
-		</table>
-	</fieldset>
 	--%>
+	
+	<c:if test="${perms.EDIT_SETTINGS || perms.APPROVE_MESSAGES || perms.APPROVE_SUBSCRIPTIONS}">
+		<fieldset>
+			<legend>Administration</legend>
+			
+			<c:if test="${perms.EDIT_SETTINGS}">
+				<div style="float: right">
+					<form action="<c:url value="/list_settings.jsp"/>" method="get">
+						<input type="hidden" name="listId" value="${sub.list.id}" />
+						<input type="submit" value="Edit List Settings" />
+					</form>
+				</div>
+			</c:if>
+			<c:if test="${perms.APPROVE_MESSAGES || perms.APPROVE_SUBSCRIPTIONS}">
+				<ul>
+					<c:if test="${perms.APPROVE_SUBSCRIPTIONS}">
+						<c:url var="listHeldSubsUrl" value="/held_subs.jsp">
+							<c:param name="listId" value="${sub.list.id}"/>
+						</c:url>
+						<li><a href="${listHeldSubsUrl}">TODO</a> held subscriptions</li>
+					</c:if>
+					<c:if test="${perms.APPROVE_MESSAGES}">
+						<c:url var="listHeldMsgsUrl" value="/held_msgs.jsp">
+							<c:param name="listId" value="${sub.list.id}"/>
+						</c:url>
+						<li><a href="${listHeldMsgsUrl}">TODO</a> held messages</li>
+					</c:if>
+				</ul>
+			</c:if>
+			<table>
+				<tr>
+					<th>Welcome message for new subscribers:</th>
+					<td>TODO</td>
+				</tr>
+				<tr>
+					<th>Require approval for new subscriptions?</th>
+					<td>TODO</td>
+				</tr>
+			</table>
+		</fieldset>
+	</c:if>
 	
 	<c:choose>
 		<c:when test="${sub.subscribed}">

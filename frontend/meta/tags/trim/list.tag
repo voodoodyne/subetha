@@ -33,17 +33,10 @@
 		</c:if>
 	</div> <!-- sideBox LHS -->
 	
-	<c:if test="${perms.EDIT_SETTINGS || perms.EDIT_FILTERS || perms.EDIT_ROLES
+	<c:if test="${perms.EDIT_FILTERS || perms.EDIT_ROLES
 				|| perms.APPROVE_SUBSCRIPTIONS || perms.APPROVE_MESSAGES}">
 		<div class="sideBox LHS">
 			<div>List Admin Menu</div>
-			
-			<c:if test="${perms.EDIT_SETTINGS}">
-				<c:url var="listSettingsUrl" value="/list_settings.jsp">
-					<c:param name="listId" value="${listId}"/>
-				</c:url>
-				<a href="${listSettingsUrl}">&rsaquo; Settings</a>
-			</c:if>
 			
 			<c:if test="${perms.EDIT_ROLES}">
 				<c:url var="listRolesUrl" value="/roles.jsp">

@@ -152,7 +152,6 @@ public class Transmute
 				listData,
 				(deliverTo == null) ? null : deliverTo.getId(),
 				(rawSub != null),
-				role.isOwner(),
 				role(role),
 				perms);
 	}

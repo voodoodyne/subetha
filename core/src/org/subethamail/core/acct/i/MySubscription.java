@@ -26,7 +26,6 @@ public class MySubscription implements Serializable
 	ListData list;
 	String deliverTo;
 	boolean subscribed;
-	boolean owner;
 	RoleData role;
 	Set<Permission> perms;
 	
@@ -36,14 +35,12 @@ public class MySubscription implements Serializable
 					ListData list,
 					String deliverTo,
 					boolean subscribed,
-					boolean owner,
 					RoleData role,
 					Set<Permission> permissions)
 	{
 		this.list = list;
 		this.deliverTo = deliverTo;
 		this.subscribed = subscribed;
-		this.owner = owner;
 		this.role = role;
 		this.perms = permissions;
 	}
@@ -73,12 +70,6 @@ public class MySubscription implements Serializable
 	public String getDeliverTo()
 	{
 		return this.deliverTo;
-	}
-
-	/** @return whether or not the user has the special Owner role */
-	public boolean isOwner()
-	{
-		return this.owner;
 	}
 
 	/**

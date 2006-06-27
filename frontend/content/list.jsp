@@ -5,107 +5,85 @@
 </c:if>
 
 <t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
-<t:action var="list" type="org.subethamail.web.action.GetListSettings" />
 
 <trim:list title="List Overview" listId="${param.listId}">
 	
 	<h3><c:out value="${sub.list.description}" /></h3>
 	
+	<%-- This is a work in progress
+	<ul>
+		<li><a href="#">24</a> subscribers</li>
+		<li><a href="#">1324</a> archived messages</li>
+		<li>Subscription requests will be reviewed by moderators</li>
+		<li>List owners are:
+			<ul>
+				<li>Jeff Schnitzer &lt;jeff@infohazard.org&gt;</li>
+				<li>Jon Stevens &lt;jon@latchkey.com&gt;</li>
+			</ul>
+		</li>
+	</ul>
+	
+	<fieldset>
+		<legend>Administration</legend>
+		<div style="float: right">
+			<form action="" method="get">
+				<input type="submit" value="Edit List Settings" />
+			</form>
+		</div>
+		<ul>
+			<li><a href="#">14</a> held messages</li>
+			<li><a href="#">3</a> held subscriptions</li>
+		</ul>
+		<table>
+			<tr>
+				<th>Welcome message for new subscribers:</th>
+				<td>blah blah blah blah</td>
+			</tr>
+			<tr>
+				<th>Require approval for new subscriptions?</th>
+				<td>Yes</td>
+			</tr>
+		</table>
+	</fieldset>
+	--%>
+	
 	<c:choose>
 		<c:when test="${sub.subscribed}">
-			<c:set var="role" value="${sub.role}"/>
-			<c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
+			<p>
+				You are subscribed to this list.
+			</p>
 			
 			<form action="<c:url value="/subscribe_me.jsp"/>" method="post">
 				<input type="hidden" name="listId" value="${sub.list.id}" />
 				<input type="hidden" name="goto" value="/list.jsp?listId=${sub.list.id}" />
 				<p>
-					<c:choose>
-						<c:when test="${empty sub.deliverTo}">
-							You have disabled delivery of mail from this list.
-						</c:when>
-						<c:otherwise>
-							Messages from this list will be delivered to <strong><c:out value="${sub.deliverTo}"/></strong>.
-						</c:otherwise>
-					</c:choose>
-				</p>
-				<p>
-					Change to
+					Mail will be delivered to 
 					<select name="deliverTo">
 						<option value="">Disable Delivery</option>
 						<c:forEach var="email" items="${me.emailAddresses}">
-							<option value="<c:out value="${email}"/>"><c:out value="${email}"/></option>
+							<option value="<c:out value="${email}"/>"
+								<c:if test="${email == sub.deliverTo}">selected="selected"</c:if>
+							><c:out value="${email}"/></option>
 						</c:forEach>
-					</select><input type="submit" value="Change" />
+					</select><input type="submit" value="Set" />
 				</p>
-				<%-- JMS: I really don't like this.  Removing before public build, then we can discuss.
-				<fieldset>	<legend>Your Permissions</legend>
-					<table class="permissions">
-						<tr>
-							<c:forEach var="perm" items="${backend.allPermissions}">
-								<th style="writing-mode: tb-rl">
-									<img src="<c:url value="/perm_img?perm=${perm}"/>" alt="<c:out value="${perm.pretty}"/>" />
-								</th>
-							</c:forEach>
-						</tr>
-						<tr>
-							<c:forEach var="perm" items="${backend.allPermissions}">
-								<td>
-									<c:if test="${f:contains(role.permissions, perm)}">
-										<img src="<c:url value="/img/check.gif"/>" alt="Yes" />
-									</c:if>
-								</td>
-							</c:forEach>
-						</tr>
-					</table>
-				</fieldset>	
-				--%>
 			</form>
 			
-			<%-- Removed 'cause it's broken.  Scott, make sure the Tasks section doesn't
-			     show up if there are no tasks
-			<fieldset><legend>Tasks</legend>
-				
-				<c:if test="${perms.APPROVE_SUBSCRIPTIONS}">
-					<t:action var="heldSubs" type="org.subethamail.web.action.GetHeldSubscriptions" />
-					<c:if test="${!empty heldSubs}">
-						<h2>Held Subscriptions</h2>
-						<c:url var="listHeldSubsUrl" value="/held_subs.jsp">
-							<c:param name="listId" value="${param.listId}"/>
-						</c:url>
-						There are <a href="${listHeldSubsUrl}"> ??? held subscriptions waiting...</a>
-						<ul>
-							<c:forEach var="sub" items="${heldSubs}" varStatus="loop">
-								<li><c:out value="${sub}"/></li>
-							</c:forEach>>
-						</ul>
-					</c:if>
-				</c:if>
-				
-				<br/>
-				
-				<c:if test="${perms.APPROVE_MESSAGES}">
-					<t:action var="heldMsgs" type="org.subethamail.web.action.GetHeldMessages" />
-					<c:if test="${!empty heldMsgs}">
-						<h2>Held Messages</h2>
-						<c:url var="listHeldMsgsUrl" value="/held_msgs.jsp">
-							<c:param name="listId" value="${param.listId}"/>
-						</c:url>
-						There are <a href="${listHeldMsgsUrl}"> ??? held messsages waiting.</a>.
-						<ul>
-							<c:forEach var="msg" items="${heldMsgs}" varStatus="loop">
-								<li><c:out value="${msg.subject}"/></li>
-							</c:forEach>
-						</ul>
-					</c:if>
-				</c:if>
-			</fieldset>
-			--%>
+			<form action="<c:url value="/unsubscribe_me.jsp"/>" method="post">
+				<input type="hidden" name="listId" value="${sub.list.id}" />
+				<p>
+					You may <input type="submit" value="Unsubscribe" />
+				</p>
+			</form>
 		</c:when>
 		<c:when test="${auth.loggedIn}">
+			<p>
+				You are not subscribed to this list.
+			</p>
 			<form action="<c:url value="/subscribe_me.jsp"/>" method="post">
 				<input type="hidden" name="listId" value="${sub.list.id}" />
 				
+				Deliver To:
 				<select name="deliverTo">
 					<c:forEach var="email" items="${me.emailAddresses}">
 						<option value="<c:out value="${email}"/>"><c:out value="${email}"/></option>
@@ -119,8 +97,8 @@
 			<p>
 				If you are already subscribed, you may log in to be presented
 				with additional options. Use the form at the top of the page. 
-				Otherwise, please enter your name and email address below to
-				subscribe to the list.
+				Otherwise, enter your name and email address below to
+				subscribe.
 			</p>
 			<form action="<c:url value="/subscribe_anon.jsp"/>" method="post">
 				<input type="hidden" name="listId" value="${sub.list.id}" />

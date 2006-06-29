@@ -39,7 +39,7 @@ public class TcpTableServer implements Runnable
 	private boolean go = false;
 	
 	private Thread serverThread;
-	private Thread watchdogThread;
+	private Watchdog watchdog;
 
 	private ThreadGroup connectionHanderGroup;
 	
@@ -124,10 +124,12 @@ public class TcpTableServer implements Runnable
 			throw new IllegalStateException("TcpTableServer already started");
 		
 		this.serverThread = new Thread(this, TcpTableServer.class.getName());
+		this.serverThread.setDaemon(true); // should this be set?
 		this.serverThread.start();
 
-		this.watchdogThread = new Watchdog(this);
-		this.watchdogThread.start();
+		this.watchdog = new Watchdog(this);
+		this.watchdog.setDaemon(true);
+		this.watchdog.start();
 	}
 
 	/**
@@ -137,7 +139,12 @@ public class TcpTableServer implements Runnable
 	{
 		this.go = false;
 		this.serverThread = null;
-		this.watchdogThread = null;
+
+		if (this.watchdog != null)
+		{
+			this.watchdog.quit();
+			this.watchdog = null;
+		}
 
 		// force a socket close for good measure
 		try

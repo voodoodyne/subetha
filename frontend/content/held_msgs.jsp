@@ -82,8 +82,10 @@ var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "
 st1.onsort = st1.tableRowColors;
 </script>
 
-			<c:url var="pagurl" value="/held_msgs.jsp" />
-			<se:searchPaginator url="${pagurl}?" model="${model}"/>
+			<c:url var="pagurl" value="/held_msgs.jsp">
+				<c:param name="listId" value="${param.listId}"/>
+			</c:url>
+			<se:searchPaginator url="${pagurl}&" model="${model}"/>
 
 		<br /><br /><br />
 

@@ -5,12 +5,8 @@
 
 package org.subethamail.web.action.auth;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.acct.i.AccountMgr;
 import org.tagonist.ForwardException;
 
 /**
@@ -33,18 +29,6 @@ public class AuthRequired extends AutoLogin
 	public static final String LOGIN_REQUIRED_PAGE = "/login_required.jsp";
 	public static final String LOGIN_REQUIRED_MODEL_ATTR = "loginModel";
 
-	/** Thread-safe, so we should be able to cache this as static. */
-	protected static AccountMgr acctMgr;
-	static
-	{
-		try
-		{
-			InitialContext ctx = new InitialContext();
-			acctMgr = (AccountMgr)ctx.lookup(AccountMgr.JNDI_NAME);
-		}
-		catch (NamingException ex) { throw new RuntimeException(ex); }
-	}
-	
 	/**
 	 * Override this method to implement behavior. 
 	 */

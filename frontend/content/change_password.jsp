@@ -2,15 +2,6 @@
 
 <t:action type="org.subethamail.web.action.auth.AuthRequired" />
 
-<c:choose>
-	<c:when test="${empty model.errors.name}">	<%-- First time visiting, or possibly a pw set error --%>
-		<c:set var="myName" value="${backend.accountMgr.self.name}"/>
-	</c:when>
-	<c:otherwise>
-		<c:set var="myName" value="${model.name}"/>
-	</c:otherwise>
-</c:choose>
-
 <trim:main title="Change Password">
 
 	<h1>Change Password</h1>

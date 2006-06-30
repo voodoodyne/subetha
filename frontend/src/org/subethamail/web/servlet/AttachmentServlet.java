@@ -53,7 +53,12 @@ public class AttachmentServlet extends HttpServlet
 			String contentType = Backend.instance().getArchiver().getAttachmentContentType(attachmentId);
 			String name = MailUtils.getNameFromContentType(contentType);
 			response.setContentType(contentType);
-			response.setHeader("Content-Disposition", " attachment; filename=\"" + name + "\"");
+			
+			// return images inline...
+			if (contentType == null || !contentType.toLowerCase().startsWith("image")) {
+				response.setHeader("Content-Disposition", " attachment; filename=\"" + name + "\"");
+			}
+			
 			Backend.instance().getArchiver().writeAttachment(attachmentId, response.getOutputStream());
 		}
 		catch (PermissionException pex)

@@ -34,6 +34,8 @@ public interface Archiver
 	public List<MailSummary> getThreads(Long listId, int skip, int count) throws NotFoundException, PermissionException;
 	
 	/**
+	 * Required Permission.READ_ARCHIVES
+	 * 
 	 * @return the number of messages on a list.
 	 */
 	public int countMailByList(Long listId);

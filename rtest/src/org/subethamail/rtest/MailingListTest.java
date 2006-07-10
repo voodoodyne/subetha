@@ -10,6 +10,7 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.core.acct.i.MyListRelationship;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
@@ -58,11 +59,8 @@ public class MailingListTest extends SubEthaTestCase
 		assertEquals(1, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.NEW_MAILING_LIST));
 		
-		ListData data = this.nobody.getAccountMgr().getMySubscription(ml.getId()).getList();
-		assertEquals(ml.getEmail(), data.getEmail());
-		assertEquals(ml.getUrl().toString(), data.getUrl());
-		assertEquals(ml.getDescription(), data.getDescription());
-		assertEquals(ml.getAddress().getPersonal(), data.getName());
+		MyListRelationship data = this.nobody.getAccountMgr().getMyListRelationship(ml.getId());
+		assertEquals(ml.getEmail(), data.getListEmail());
 	}
 	
 	/** */
@@ -75,11 +73,8 @@ public class MailingListTest extends SubEthaTestCase
 		assertEquals(1, this.smtp.size());
 		assertEquals(1, this.smtp.count(MailType.NEW_MAILING_LIST));
 		
-		ListData data = this.nobody.getAccountMgr().getMySubscription(ml.getId()).getList();
-		assertEquals(ml.getEmail(), data.getEmail());
-		assertEquals(ml.getUrl().toString(), data.getUrl());
-		assertEquals(ml.getDescription(), data.getDescription());
-		assertEquals(ml.getAddress().getPersonal(), data.getName());
+		MyListRelationship data = this.nobody.getAccountMgr().getMyListRelationship(ml.getId());
+		assertEquals(ml.getEmail(), data.getListEmail());
 	}
 	
 	/** */

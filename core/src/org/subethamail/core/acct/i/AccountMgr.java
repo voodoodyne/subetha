@@ -83,9 +83,7 @@ public interface AccountMgr
 	public void removeEmail(String newEmail);
 
 	/**
-	 * Gets some data about a mailing list.  Includes the subscriber
-	 * status (including role and permissions) of the person calling
-	 * this method.
+	 * Gets the relationship between the caller and a list.
 	 * 
 	 * If not authenticated, subscriber status will reflect that state.
 	 * If authed as site admin, all permissions are granted no matter
@@ -93,7 +91,7 @@ public interface AccountMgr
 	 * 
 	 * No access control.
 	 */
-	public MySubscription getMySubscription(Long listId) throws NotFoundException;
+	public MyListRelationship getMyListRelationship(Long listId) throws NotFoundException;
 
 	/**
 	 * Anonymously requests to subscribe to a list.  This results in sending

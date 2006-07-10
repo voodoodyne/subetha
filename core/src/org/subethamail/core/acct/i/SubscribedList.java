@@ -26,13 +26,12 @@ public class SubscribedList extends ListData
 					String url, 
 					String urlBase, 
 					String description,
-					String welcomeMessage,
 					String ownerEmail,
 					boolean subscriptionHeld,
 					String roleName,
 					String deliverTo)
 	{
-		super(id, email, name, url, urlBase, description, welcomeMessage, ownerEmail, subscriptionHeld);
+		super(id, email, name, url, urlBase, description, null, ownerEmail, subscriptionHeld);
 		this.roleName = roleName;
 		this.deliverTo = deliverTo;		
 	}

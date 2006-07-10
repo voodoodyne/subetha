@@ -25,7 +25,7 @@ import org.subethamail.core.acct.i.AccountMgrRemote;
 import org.subethamail.core.acct.i.AuthCredentials;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.BadTokenException;
-import org.subethamail.core.acct.i.MySubscription;
+import org.subethamail.core.acct.i.MyListRelationship;
 import org.subethamail.core.acct.i.Self;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
@@ -199,16 +199,17 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	}
 	
 	
-	/**
-	 * @see AccountMgr#getMySubscription(Long)
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.acct.i.AccountMgr#getMyListRelationship(java.lang.Long)
 	 */
 	@PermitAll
-	public MySubscription getMySubscription(Long listId) throws NotFoundException
+	public MyListRelationship getMyListRelationship(Long listId) throws NotFoundException
 	{
 		MailingList ml = this.em.get(MailingList.class, listId);
 		Person me = this.getMe();
 			
-		return Transmute.mySubscription(me, ml);
+		return Transmute.myListRelationship(me, ml);
 	}
 
 	/**

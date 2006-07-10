@@ -4,26 +4,47 @@
 	<c:set var="me" value="${backend.accountMgr.self}"/>
 </c:if>
 
-<t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
-<c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
+<t:action var="myList" type="org.subethamail.web.action.GetMyListRelationship" />
+<c:set var="perms" value="${myList.perms}"/>
+	
+<t:action var="list" type="org.subethamail.web.action.GetList" />
+
+<t:action var="listStats" type="org.subethamail.web.action.GetListStats">
+	<t:param name="perms" value="${myList.rawPerms}" />
+</t:action>
 
 <trim:list title="List Overview" listId="${param.listId}">
 	
-	<h3><c:out value="${sub.list.description}" /></h3>
+	<h3><c:out value="${list.description}" /></h3>
 	
-	<%-- This is a work in progress
 	<ul>
-		<li><a href="#">24</a> subscribers</li>
-		<li><a href="#">1324</a> archived messages</li>
-		<li>Subscription requests will be reviewed by moderators</li>
+		<c:if test="${!empty listStats.subscriberCount}">
+			<c:url var="subscribersUrl" value="/list_subscribers.jsp">
+				<c:param name="listId" value="${list.id}"/>
+			</c:url>
+			<li><a href="${subscribersUrl}">${listStats.subscriberCount}</a> subscribers</li>
+		</c:if>
+		
+		<c:if test="${!empty listStats.archiveCount}">
+			<c:url var="archiveUrl" value="/archive.jsp">
+				<c:param name="listId" value="${list.id}"/>
+			</c:url>
+			<li><a href="${archiveUrl}">${listStats.archiveCount}</a> archived messages</li>
+		</c:if>
+		
+		<c:if test="${list.subscriptionHeld}">
+			<li>Subscription requests will be reviewed by moderators</li>
+		</c:if>
+
+	<%-- This is a work in progress
 		<li>List owners are:
 			<ul>
 				<li>Jeff Schnitzer &lt;jeff@infohazard.org&gt;</li>
 				<li>Jon Stevens &lt;jon@latchkey.com&gt;</li>
 			</ul>
 		</li>
-	</ul>
 	--%>
+	</ul>
 	
 	<c:if test="${perms.EDIT_SETTINGS || perms.APPROVE_MESSAGES || perms.APPROVE_SUBSCRIPTIONS}">
 		<fieldset>
@@ -32,7 +53,7 @@
 			<c:if test="${perms.EDIT_SETTINGS}">
 				<div style="float: right">
 					<form action="<c:url value="/list_settings.jsp"/>" method="get">
-						<input type="hidden" name="listId" value="${sub.list.id}" />
+						<input type="hidden" name="listId" value="${list.id}" />
 						<input type="submit" value="Edit List Settings" />
 					</form>
 				</div>
@@ -41,13 +62,13 @@
 				<ul>
 					<c:if test="${perms.APPROVE_SUBSCRIPTIONS}">
 						<c:url var="listHeldSubsUrl" value="/held_subs.jsp">
-							<c:param name="listId" value="${sub.list.id}"/>
+							<c:param name="listId" value="${list.id}"/>
 						</c:url>
 						<li><a href="${listHeldSubsUrl}">TODO</a> held subscriptions</li>
 					</c:if>
 					<c:if test="${perms.APPROVE_MESSAGES}">
 						<c:url var="listHeldMsgsUrl" value="/held_msgs.jsp">
-							<c:param name="listId" value="${sub.list.id}"/>
+							<c:param name="listId" value="${list.id}"/>
 						</c:url>
 						<li><a href="${listHeldMsgsUrl}">TODO</a> held messages</li>
 					</c:if>
@@ -67,21 +88,21 @@
 	</c:if>
 	
 	<c:choose>
-		<c:when test="${sub.subscribed}">
+		<c:when test="${myList.subscribed}">
 			<p>
 				You are subscribed to this list.
 			</p>
 			
 			<form action="<c:url value="/subscribe_me.jsp"/>" method="post">
-				<input type="hidden" name="listId" value="${sub.list.id}" />
-				<input type="hidden" name="goto" value="/list.jsp?listId=${sub.list.id}" />
+				<input type="hidden" name="listId" value="${list.id}" />
+				<input type="hidden" name="goto" value="/list.jsp?listId=${list.id}" />
 				<p>
 					Mail will be delivered to 
 					<select name="deliverTo">
 						<option value="">Disable Delivery</option>
 						<c:forEach var="email" items="${me.emailAddresses}">
 							<option value="<c:out value="${email}"/>"
-								<c:if test="${email == sub.deliverTo}">selected="selected"</c:if>
+								<c:if test="${email == myList.deliverTo}">selected="selected"</c:if>
 							><c:out value="${email}"/></option>
 						</c:forEach>
 					</select><input type="submit" value="Set" />
@@ -89,7 +110,7 @@
 			</form>
 			
 			<form action="<c:url value="/unsubscribe_me.jsp"/>" method="post">
-				<input type="hidden" name="listId" value="${sub.list.id}" />
+				<input type="hidden" name="listId" value="${list.id}" />
 				<p>
 					You may <input type="submit" value="Unsubscribe" />
 				</p>
@@ -100,7 +121,7 @@
 				You are not subscribed to this list.
 			</p>
 			<form action="<c:url value="/subscribe_me.jsp"/>" method="post">
-				<input type="hidden" name="listId" value="${sub.list.id}" />
+				<input type="hidden" name="listId" value="${list.id}" />
 				
 				Deliver To:
 				<select name="deliverTo">
@@ -120,7 +141,7 @@
 				subscribe.
 			</p>
 			<form action="<c:url value="/subscribe_anon.jsp"/>" method="post">
-				<input type="hidden" name="listId" value="${sub.list.id}" />
+				<input type="hidden" name="listId" value="${list.id}" />
 				<table>
 					<tr>
 						<th><label for="deliverTo">Your Email Address:</label></th>

@@ -23,7 +23,7 @@ public class GetHeldSubscriptions extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(GetMySubscription.class);
+	private static Log log = LogFactory.getLog(GetMyListRelationship.class);
 
 	/** */
 	@Property Long listId;

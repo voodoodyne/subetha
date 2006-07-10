@@ -1,8 +1,7 @@
 <%@include file="/inc/top_standard.jspf" %>
 
-<t:action var="sub" type="org.subethamail.web.action.GetMySubscription" />
-<%-- TODO:  figure out how to not do this twice --%>
-<c:set var="perms" value="${f:wrapPerms(sub.perms)}" />
+<t:action var="myList" type="org.subethamail.web.action.GetMyListRelationship" />
+<c:set var="perms" value="${myList.perms}" />
 
 <t:action var="model" type="org.subethamail.web.action.GetSubscribers" />
 

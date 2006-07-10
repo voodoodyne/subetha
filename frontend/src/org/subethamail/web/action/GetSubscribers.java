@@ -25,7 +25,7 @@ public class GetSubscribers extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(GetMySubscription.class);
+	private static Log log = LogFactory.getLog(GetMyListRelationship.class);
 
 	/** */
 	public static class Model extends PaginateModel

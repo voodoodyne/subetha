@@ -15,7 +15,7 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.acct.i.MySubscription;
+import org.subethamail.core.acct.i.MyListRelationship;
 import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribedList;
 import org.subethamail.core.admin.i.BlueprintData;
@@ -135,12 +135,8 @@ public class Transmute
 	 * @param rawPerson can be null
 	 * @return the status of the person for the given list. 
 	 */
-	public static MySubscription mySubscription(Person rawPerson, MailingList rawList)
+	public static MyListRelationship myListRelationship(Person rawPerson, MailingList rawList)
 	{
-		ListData listData = mailingList(rawList);
-		
-		Role role = rawList.getRoleFor(rawPerson);
-		
 		Set<Permission> perms = rawList.getPermissionsFor(rawPerson);
 
 		perms.size();	// initialize if it's a proxy
@@ -148,12 +144,13 @@ public class Transmute
 		Subscription rawSub = (rawPerson == null) ? null : rawPerson.getSubscription(rawList.getId());
 		EmailAddress deliverTo = (rawSub == null) ? null : rawSub.getDeliverTo();
 		
-		return new MySubscription(
-				listData,
-				(deliverTo == null) ? null : deliverTo.getId(),
-				(rawSub != null),
-				role(role),
-				perms);
+		return new MyListRelationship(
+				rawList.getId(),
+				rawList.getName(),
+				rawList.getEmail(),
+				perms,
+				rawSub == null,
+				deliverTo == null ? null : deliverTo.getId());
 	}
 	
 	/**
@@ -195,7 +192,6 @@ public class Transmute
 				raw.getList().getUrl(),
 				raw.getList().getUrlBase(),
 				raw.getList().getDescription(),
-				raw.getList().getWelcomeMessage(),
 				raw.getList().getOwnerEmail(),
 				raw.getList().isSubscriptionHeld(),
 				raw.getRole().getName(),

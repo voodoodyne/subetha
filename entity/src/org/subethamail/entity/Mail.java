@@ -437,9 +437,9 @@ public class Mail implements Serializable, Comparable
 	{
 		Mail other = (Mail)arg0;
 
-		int result = TimeUtils.compareDates(this.dateCreated, other.getDateCreated());
+		int result = TimeUtils.compareDates(other.getDateCreated(), this.dateCreated);
 		if (result == 0)
-			return this.id.compareTo(other.id);
+			return other.id.compareTo(this.id);
 		else
 			return result;
 	}

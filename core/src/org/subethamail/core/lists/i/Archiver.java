@@ -29,7 +29,7 @@ public interface Archiver
 	/**
 	 * Requires Permission.READ_ARCHIVES
 	 * 
-	 * @return a list of threads in the archive.  Most recent thread is at the top.
+	 * @return a list of threads in the archive.  Most recent thread is at the bottom.
 	 */
 	public List<MailSummary> getThreads(Long listId, int skip, int count) throws NotFoundException, PermissionException;
 	

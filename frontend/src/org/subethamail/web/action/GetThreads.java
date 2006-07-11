@@ -28,6 +28,11 @@ public class GetThreads extends AuthAction
 
 	public static class Model extends PaginateModel
 	{
+		public Model()
+		{
+			this.setCount(100);	// default to 100
+		}
+		
 		/** */
 		@Property Long listId;
 		@Property String query;

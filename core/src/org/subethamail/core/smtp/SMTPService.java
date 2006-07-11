@@ -20,6 +20,11 @@ import org.subethamail.smtp.MessageListener;
 import org.subethamail.smtp.server.SMTPServer;
 
 /**
+ * SubEtha's JBoss adapter for SubEthaSMTP.  The default port is 2500.  This
+ * port can be overriden by a system property:
+ * 
+ * -Dorg.subethamail.smtp.port=NNN
+ * 
  * @author Ian McFarland
  * @author Jeff Schnitzer
  * @author Jon Stevens
@@ -47,6 +52,18 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	
 	private SMTPServer smtpServer;
 
+	/**
+	 * Constructor looks for a port override via -Dorg.subethamail.smtp.port=NNN
+	 */
+	public SMTPService()
+	{
+		try
+		{
+			this.port = Integer.parseInt(System.getProperty("org.subethamail.smtp.port"));
+		}
+		catch (Throwable ignored) {}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.i.MessageListenerRegistry#register(org.subethamail.smtp.i.MessageListener)

@@ -46,12 +46,13 @@
 		</div> <!-- locBar -->
 		
 		<span class="headerTitle">
-			<c:choose>
-				<c:when test="${empty headerTitle}">SubEtha Mail</c:when>
-				<c:otherwise><c:out value="${headerTitle}"/></c:otherwise>
-			</c:choose>
+			SubEtha Mail
 		</span>
 		
+		<%-- Need to clean up the CSS for these parts --%>
+		<c:if test="${!empty headerTitle}">
+			<div class="menuBar"><c:out value="${headerTitle}"/></div>
+		</c:if>
 	</div> <!-- header -->
 	
 	<jsp:doBody/>

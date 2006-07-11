@@ -34,8 +34,12 @@ pre {
 }
 
 .headerTitle {
-	font-size: 250%;
+	font-size: 110%;
 	line-height: 2.5em;
+}
+
+.menuBar {
+	font-size: 170%;
 }
 
 .sideBox {

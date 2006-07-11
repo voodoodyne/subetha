@@ -590,7 +590,18 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		
 		return mail.getList().getId();
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#countHeldSubscriptions(java.lang.Long)
+	 */
+	public int countHeldSubscriptions(Long listId) throws NotFoundException, PermissionException
+	{
+		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
+		
+		return this.em.countHeldSubscriptions(listId);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getSubscribers(java.lang.Long, int, int)
@@ -643,5 +654,4 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		this.getListFor(listId, perm);
 	}
-
 }

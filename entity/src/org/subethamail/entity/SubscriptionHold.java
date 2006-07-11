@@ -7,6 +7,8 @@ package org.subethamail.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
@@ -20,6 +22,13 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * @author Jeff Schnitzer
  */
 @NamedQueries({
+	@NamedQuery(
+		name="HeldSubscriptionCount", 
+		query="select count(*) from SubscriptionHold h where h.list.id = :listId",
+		hints={
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
+	)
 })
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)

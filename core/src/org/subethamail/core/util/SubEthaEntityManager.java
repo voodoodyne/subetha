@@ -372,6 +372,21 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 	}
 
 	/**
+	 * @return the number of held subscriptions on the list
+	 */
+	public int countHeldSubscriptions(Long listId)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Counting held subscriptions for list " + listId);
+
+		Query q = this.createNamedQuery("HeldSubscriptionCount");
+		q.setParameter("listId", listId);		
+
+		Number n = (Number) q.getSingleResult();
+		return n.intValue();
+	}
+
+	/**
 	 * @return all Persons who are site admins
 	 */
 	@SuppressWarnings("unchecked")
@@ -506,5 +521,4 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 	{
 		return "%" + query + "%";
 	}
-
 }

@@ -34,6 +34,7 @@ public class GetListStats extends AuthAction
 	
 	@Property Integer subscriberCount;
 	@Property Integer archiveCount;
+	@Property Integer heldSubscriptionCount;
 	@Property Integer heldMessageCount;
 	
 	/** */
@@ -47,6 +48,9 @@ public class GetListStats extends AuthAction
 		
 		if (perms.contains(Permission.READ_ARCHIVES))
 			this.archiveCount = Backend.instance().getArchiver().countMailByList(this.listId);
+		
+		if (perms.contains(Permission.APPROVE_SUBSCRIPTIONS))
+			this.heldSubscriptionCount = Backend.instance().getListMgr().countHeldSubscriptions(this.listId);
 		
 		if (perms.contains(Permission.APPROVE_MESSAGES))
 			this.heldMessageCount = Backend.instance().getListMgr().countHeldMessages(this.listId);

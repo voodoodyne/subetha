@@ -18,14 +18,14 @@
 	<h3><c:out value="${list.description}" /></h3>
 	
 	<ul>
-		<c:if test="${!empty listStats.subscriberCount}">
+		<c:if test="${listStats.subscriberCount > 0}">
 			<c:url var="subscribersUrl" value="/list_subscribers.jsp">
 				<c:param name="listId" value="${list.id}"/>
 			</c:url>
 			<li><a href="${subscribersUrl}">${listStats.subscriberCount}</a> subscribers</li>
 		</c:if>
 		
-		<c:if test="${!empty listStats.archiveCount}">
+		<c:if test="${listStats.archiveCount > 0}">
 			<c:url var="archiveUrl" value="/archive.jsp">
 				<c:param name="listId" value="${list.id}"/>
 			</c:url>
@@ -58,30 +58,30 @@
 					</form>
 				</div>
 			</c:if>
-			<c:if test="${perms.APPROVE_MESSAGES || perms.APPROVE_SUBSCRIPTIONS}">
+			<c:if test="${listStats.heldSubscriptionCount > 0 || listStatus.heldMessageCount > 0}">
 				<ul>
-					<c:if test="${perms.APPROVE_SUBSCRIPTIONS}">
+					<c:if test="${listStats.heldSubscriptionCount > 0}">
 						<c:url var="listHeldSubsUrl" value="/held_subs.jsp">
 							<c:param name="listId" value="${list.id}"/>
 						</c:url>
-						<li><a href="${listHeldSubsUrl}">TODO</a> held subscriptions</li>
+						<li><a href="${listHeldSubsUrl}">${listStats.heldSubscriptionCount}</a> held subscriptions</li>
 					</c:if>
-					<c:if test="${perms.APPROVE_MESSAGES}">
+					<c:if test="${listStatus.heldMessageCount > 0}">
 						<c:url var="listHeldMsgsUrl" value="/held_msgs.jsp">
 							<c:param name="listId" value="${list.id}"/>
 						</c:url>
-						<li><a href="${listHeldMsgsUrl}">TODO</a> held messages</li>
+						<li><a href="${listHeldMsgsUrl}">${listStats.heldMessageCount}</a> held messages</li>
 					</c:if>
 				</ul>
 			</c:if>
 			<table>
 				<tr>
 					<th>Welcome message for new subscribers:</th>
-					<td>TODO</td>
+					<td><c:out value="${list.welcomeMessage}"/></td>
 				</tr>
 				<tr>
 					<th>Require approval for new subscriptions?</th>
-					<td>TODO</td>
+					<td>${list.subscriptionHeld}</td>
 				</tr>
 			</table>
 		</fieldset>

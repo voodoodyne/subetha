@@ -263,8 +263,14 @@ public interface ListMgr
 	public int countSubscribers(Long listId, String query) throws NotFoundException, PermissionException;
 
 	/**
-	 * Gets the number of messages on a list in a held state.
+	 * Gets the number of subscriptions on a list in a held state.
 	 * Requires Permission.APPROVE_SUBSCRIPTIONS
+	 */
+	public int countHeldSubscriptions(Long listId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Gets the number of messages on a list in a held state.
+	 * Requires Permission.APPROVE_MESSAGES
 	 */
 	public int countHeldMessages(Long listId) throws NotFoundException, PermissionException;
 

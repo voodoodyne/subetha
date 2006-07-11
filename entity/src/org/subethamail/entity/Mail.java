@@ -91,9 +91,8 @@ import org.subethamail.entity.i.Validator;
 	),
 	@NamedQuery(
 			name="HeldMailCount", 
-			query="select count(*) from Mail m where m.list.id = :listId and m.hold is not null order by m.dateCreated desc",
+			query="select count(*) from Mail m where m.list.id = :listId and m.hold is not null",
 			hints={
-				@QueryHint(name="org.hibernate.readOnly", value="true"),
 				@QueryHint(name="org.hibernate.cacheable", value="true")
 			}
 	),

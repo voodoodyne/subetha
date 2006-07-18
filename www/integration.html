@@ -161,7 +161,7 @@
 			domains, not individual list addresses</li>.
 			<li>
 				<p>Add these lines:</p>
-				<pre>transport_maps = tcp[127.0.0.1]:2502</pre>
+				<pre>transport_maps = tcp:[127.0.0.1]:2502</pre>
 				<pre>local_recipient_maps = proxy:unix:passwd.byname $alias_maps $transport_maps</pre>
 				<p>
 					Note that local_recipient_maps must be defined after alias_maps.

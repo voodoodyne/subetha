@@ -25,9 +25,7 @@
 		
 		<p>
 			You should be able to use any MTA with SubEtha, but the integration
-			instructions will be different for each.  Since the developers all
-			use <a href="http://www.postfix.org">Postfix</a>, that will be the
-			easiest and best documented path (for now).
+			instructions will be different for each.
 		</p>
 		
 		<ul>
@@ -81,37 +79,45 @@
 			There are two recommended ways to integrate Postfix with SubEtha.
 		</p>
 		
-		<h3>Postfix Domain Mapping</h3>
+		<h3>Manual Postfix Mapping</h3>
 		<p>
-			The easiest, and perhaps most ham-fisted way of integrating SubEtha
-			with Postfix is to tell Postfix to relay all mail for an entire
-			subdomain (or multiple subdomains) to SubEtha.  For instance, if you
-			are happy having addresses like <em>one@<strong>lists</strong>.subethamail.org</em> and
-			<em>two@<strong>lists</strong>.subethamail.org</em>, you can tell
-			Postfix to relay all mail for that subdomain to SubEtha.
+			You can manually specify which addresses Postfix will relay into SubEtha.
+			There are two types of addresses you can specify:
 		</p>
+		<ol>
+			<li>Whole domains, such that all addresses for that domain will
+			be delivered to SubEtha.  For example, all addresses at the
+			domain <em>lists.example.com</em>.</li>
+			<li>Full addresses of mailing lists.  You can cherrypick
+			specific email addresses, such as <em>announce@example.com</em></li>
+		</ol>
 		
+		<p>
+			The steps to configure Postfix:
+		</p>
 		<ol>
 			<li>
 				<p>
-					Edit /etc/postfix/main.cf.  Add these lines:
+					Edit /etc/postfix/main.cf.  Change or add these lines:
 				</p>
+				<pre>mydestination = ... example.com  # add example.com to existing line</pre>
 				<pre>transport_maps = hash:/etc/postfix/transport</pre>
-				<pre>relay_domains = hash:/etc/postfix/transport</pre>
+				<pre>local_recipient_maps = proxy:unix:passwd.byname $alias_maps $transport_maps</pre>
 				<p>
-					If you already have an /etc/postfix/transport, you will
-					probably need to use something different for relay_domains.
+					Note that local_recipient_maps must be defined after alias_maps.
 				</p>
 			</li>
 			<li>
 				<p>
-					Edit /etc/postfix/transport.  Add this line:
+					Edit /etc/postfix/transport.  Add these lines:
 				</p>
-				<pre>lists.yourdomain.com          smtp:[127.0.0.1]:2500</pre>
+				<pre>lists.example.com          smtp:[127.0.0.1]:2500</pre>
+				<pre>announce@example.com       smtp:[127.0.0.1]:2500</pre>
 				<p>
-					You can have as many domains and subdomains relayed to
-					SubEtha as you wish.  Don't forget to set up the appropriate
-					MX records in DNS.
+					This example forwards mail destined for any address @lists.example.com
+					and mail to the specific address announce@example.com along to
+					SubEtha.  You can have as many domains, subdomains, and addresses as you wish.
+					Don't forget to set up the appropriate MX records in DNS.
 				</p>
 				<p>
 					Note that the destination (in this case 127.0.0.1) must be
@@ -123,36 +129,50 @@
 			<li>
 				Run "postmap /etc/postfix/transport".
 			</li>
+			<li>
+				<strong>NOTE:</strong>  To specify full addresses like <em>announce@example.com</em>,
+				Postfix <strong>must</strong> be configured to use <strong>-</strong> as the
+				user extension separator.  This is not the postfix default.  This configuration
+				is unnecessary if whole subdomains (ie lists.example.com) are specified.  It is
+				also unnecessary if Automatic Postfix Mapping is used.
+			</li>
+			<li>
+				<strong>ALSO NOTE:</strong>  You must put all domains on which you expect to
+				run mailing lists in the <em>mydestination</em> list.
+			</li>
 		</ol>
 		
-		<h3>Postfix User Mapping</h3>
+		<h3>Automatic Postfix Mapping</h3>
 		<p>
-			To Be Described
+			This is still experimental.  It is, however, very convenient.
 		</p>
-		<!-- This is totally wrong :-(
 		<p>
-			Postfix user mapping via the <a href="http://www.postfix.org/tcp_table.5.html">Postfix tcp: map 
-			provider</a> is an optimization which allows SubEtha to determine 
-			it should accept email from Postfix before attempting to transfer it to SubEtha. 
-			Thus, it is possible to just 'transport' all email for your domains to 
-			SubEtha and SubEtha can decide which emails it wants to accept before 
-			it is tranported.
+			SubEtha provides correct values for the Postfix transport table through
+			an implementation of the <a href="http://www.postfix.org/tcp_table.5.html">Postfix tcp: map 
+			provider</a>.  This will automatically work for all addresses that SubEtha
+			wants to claim, such as mailing list addresses, mailing list owner addresses,
+			and VERPed bounce messages.
 		</p>
-
 		<p>
-			In order to configure Postfix to use this feature, only a slight change is needed
-			to the documentation above. Just change the smtp: to be a tcp: and the port number to
-			2502. For example:
+			The steps are similar to manual postfix mapping, all configured in main.cf:
 		</p>
-		<pre>lists.yourdomain.com          tcp:[127.0.0.1]:2502</pre>
-
+		<ol>
+			<li>Add any relevant domains to <em>mydestination</em>.  Only add whole
+			domains, not individual list addresses</li>.
+			<li>
+				<p>Add these lines:</p>
+				<pre>transport_maps = tcp[127.0.0.1]:2502</pre>
+				<pre>local_recipient_maps = proxy:unix:passwd.byname $alias_maps $transport_maps</pre>
+				<p>
+					Note that local_recipient_maps must be defined after alias_maps.
+				</p>
+			</li>
+		</ol>
 		<p>
-			Then, Postfix will connect to our port 2502 and ask if the envelope To: is an address
-			SubEtha wants to handle. If so, then the response will be a line similar to this: 
-			smtp:[127.0.0.1]:2500. That will tell Postfix to then relay the mail to
-			that SubEtha server and the mail will go through.
+			With this approach, /etc/postfix/transport is unnecessary.  Also, the Postfix
+			extension delimiter is irrelevant - SubEtha will correctly claim any appropriate
+			messages, causing them to be relayed into SubEtha.
 		</p>
-		-->
 		
 		<a name="sendmail"></a>
 		<h2>Sendmail</h2>

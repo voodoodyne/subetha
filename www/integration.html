@@ -101,15 +101,15 @@
 					Edit /etc/postfix/main.cf.  Change or add these lines:
 				</p>
 				<pre>mydestination = ... example.com  # add example.com to existing line</pre>
-				<pre>transport_maps = hash:/etc/postfix/transport</pre>
-				<pre>local_recipient_maps = proxy:unix:passwd.byname $alias_maps $transport_maps</pre>
+				<pre>transport_maps = hash:/etc/postfix/subetha_transport</pre>
+				<pre>local_recipient_maps = proxy:unix:passwd.byname $alias_maps hash:/etc/postfix/subetha_transport</pre>
 				<p>
 					Note that local_recipient_maps must be defined after alias_maps.
 				</p>
 			</li>
 			<li>
 				<p>
-					Edit /etc/postfix/transport.  Add these lines:
+					Edit /etc/postfix/subetha_transport.  Add these lines:
 				</p>
 				<pre>lists.example.com          smtp:[127.0.0.1]:2500</pre>
 				<pre>announce@example.com       smtp:[127.0.0.1]:2500</pre>
@@ -127,7 +127,7 @@
 				</p>
 			</li>
 			<li>
-				Run "postmap /etc/postfix/transport".
+				Run "postmap /etc/postfix/subetha_transport".
 			</li>
 			<li>
 				<strong>NOTE:</strong>  To specify full addresses like <em>announce@example.com</em>,
@@ -162,7 +162,7 @@
 			<li>
 				<p>Add these lines:</p>
 				<pre>transport_maps = tcp:[127.0.0.1]:2502</pre>
-				<pre>local_recipient_maps = proxy:unix:passwd.byname $alias_maps $transport_maps</pre>
+				<pre>local_recipient_maps = proxy:unix:passwd.byname $alias_maps tcp:[127.0.0.1]:2502</pre>
 				<p>
 					Note that local_recipient_maps must be defined after alias_maps.
 				</p>

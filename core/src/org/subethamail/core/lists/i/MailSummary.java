@@ -23,7 +23,7 @@ public class MailSummary implements Serializable
 	String subject;
 	String fromEmail;	// might be null if no permission to view
 	String fromName;
-	Date dateCreated;
+	Date sentDate;
 	List<MailSummary> replies;
 
 	/**
@@ -33,14 +33,14 @@ public class MailSummary implements Serializable
 			String subject,
 			String fromEmail,
 			String fromName,
-			Date dateCreated,
+			Date sentDate,
 			List<MailSummary> replies)
 	{
 		this.id = id;
 		this.subject = subject;
 		this.fromEmail = fromEmail;
 		this.fromName = fromName;
-		this.dateCreated = dateCreated;
+		this.sentDate = sentDate;
 		this.replies = replies;
 	}
 	
@@ -71,9 +71,9 @@ public class MailSummary implements Serializable
 	}
 
 	/** */
-	public Date getDateCreated()
+	public Date getSentDate()
 	{
-		return this.dateCreated;
+		return this.sentDate;
 	}
 
 	/** */

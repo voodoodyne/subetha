@@ -67,10 +67,10 @@ import org.subethamail.entity.i.Validator;
 	),
 	@NamedQuery(
 		name="MailByList", 
-		query="from Mail m where m.list.id = :listId and m.hold is null order by m.dateCreated desc",
+		query="from Mail m where m.list.id = :listId and m.hold is null order by m.sentDate desc",
 		hints={
-			@QueryHint(name="org.hibernate.readOnly", value="true")/*,
-			@QueryHint(name="org.hibernate.cacheable", value="true")*/
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
 		}
 	),
 	@NamedQuery(
@@ -83,18 +83,18 @@ import org.subethamail.entity.i.Validator;
 	),
 	@NamedQuery(
 		name="HeldMail", 
-		query="from Mail m where m.list.id = :listId and m.hold is not null order by m.dateCreated desc",
+		query="from Mail m where m.list.id = :listId and m.hold is not null order by m.sentDate desc",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")
 		}
 	),
 	@NamedQuery(
-			name="HeldMailCount", 
-			query="select count(*) from Mail m where m.list.id = :listId and m.hold is not null",
-			hints={
-				@QueryHint(name="org.hibernate.cacheable", value="true")
-			}
+		name="HeldMailCount", 
+		query="select count(*) from Mail m where m.list.id = :listId and m.hold is not null",
+		hints={
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
 	),
 	@NamedQuery(
 		name="WantsReferenceToMessageId", 
@@ -109,12 +109,18 @@ import org.subethamail.entity.i.Validator;
 		}
 	),
 	@NamedQuery(
-			name="CountMail", 
-			query="select count(*) from Mail",
-			hints={
-				@QueryHint(name="org.hibernate.readOnly", value="true"),
-				@QueryHint(name="org.hibernate.cacheable", value="true")
-			}
+		name="MailSince", 
+		query="select m from Mail m where m.hold is null and m.arrivalDate > :since",
+		hints={
+		}
+	),
+	@NamedQuery(
+		name="CountMail", 
+		query="select count(*) from Mail",
+		hints={
+			@QueryHint(name="org.hibernate.readOnly", value="true"),
+			@QueryHint(name="org.hibernate.cacheable", value="true")
+		}
 	)
 })
 @Entity
@@ -173,7 +179,13 @@ public class Mail implements Serializable, Comparable
 	
 	/** Date the entity was created, not from header fields */
 	@Column(nullable=false)
-	Date dateCreated;
+	@Index(name="arrivalDateIdx")
+	Date arrivalDate;
+	
+	/** Date from the header fields, or the arrivalDate if there was no header */
+	@Column(nullable=false)
+	@Index(name="sentDateIdx")
+	Date sentDate;
 	
 	/** */
 	@ManyToOne
@@ -223,13 +235,13 @@ public class Mail implements Serializable, Comparable
 	public Mail() {}
 	
 	/**
-	 * Usually you should use this constructor
+	 * Pulls the date out of the message.
 	 * 
 	 * @see the other constructor
 	 */
 	public Mail(InternetAddress envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
 	{
-		this(envelopeSender, msg, list, holdFor, new Timestamp(System.currentTimeMillis()));
+		this(envelopeSender, msg, list, holdFor, msg.getSentDate());
 	}
 	
 	/**
@@ -240,14 +252,19 @@ public class Mail implements Serializable, Comparable
 	 * must contain the newly created ids of the attachments.
 	 * 
 	 * @param holdFor can be null which means none required
-	 * @param dateCreated allows the creation date to be overriden, useful for archive import
+	 * @param sentDate is the date which should be used as the sent date.  If null, current time is chosen.
 	 */
-	public Mail(InternetAddress envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor, Date dateCreated) throws MessagingException
+	public Mail(InternetAddress envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor, Date sentDate) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mail");
 		
-		this.dateCreated = dateCreated;
+		this.arrivalDate = new Timestamp(System.currentTimeMillis());
+		
+		this.sentDate = sentDate;
+		if (this.sentDate == null)
+			this.sentDate = this.arrivalDate;
+		
 		this.list = list;
 		this.hold = holdFor;
 		
@@ -383,8 +400,16 @@ public class Mail implements Serializable, Comparable
 		this.envelopeSender = value;
 	}
 	
-	/** Note no setter; this is the date the mail came into the system */
-	public Date getDateCreated() { return this.dateCreated; }
+	/** This is the date the mail came into the system */
+	public Date getArrivalDate() { return this.arrivalDate; }
+	
+	/** This is the "natural" date of the mail, from the header */
+	public Date getSentDate() { return this.sentDate; }
+	
+	public void setSentDate(Date value)
+	{
+		this.sentDate = value;
+	}
 	
 	/**
 	 */
@@ -430,14 +455,14 @@ public class Mail implements Serializable, Comparable
 	public Set<Attachment> getAttachments() { return this.attachments; }
 
 	/**
-	 * Natural sort order is based on creation date, but we need
+	 * Natural sort order is based on sent date, but we need
 	 * to make sure that we don't return equal if we aren't.
 	 */
 	public int compareTo(Object arg0)
 	{
 		Mail other = (Mail)arg0;
 
-		int result = TimeUtils.compareDates(other.getDateCreated(), this.dateCreated);
+		int result = TimeUtils.compareDates(other.getSentDate(), this.sentDate);
 		if (result == 0)
 			return other.id.compareTo(this.id);
 		else

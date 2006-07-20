@@ -231,7 +231,7 @@ public class Transmute
 				raw.getSubject(),
 				showEmail ? addy.getAddress() : null,
 				addy.getPersonal(),
-				raw.getDateCreated(),
+				raw.getSentDate(),
 				mailSummaries(raw.getReplies(), showEmail, replacement));
 	}
 
@@ -358,7 +358,7 @@ public class Transmute
 				raw.getId(),
 				raw.getSubject(),
 				raw.getFrom(),
-				raw.getDateCreated(),
+				raw.getSentDate(),
 				raw.getHold() == HoldType.HARD);
 	}
 	

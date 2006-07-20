@@ -59,10 +59,6 @@ public class SubEthaMessage extends SMTPMessage
 	 */
 	public static final String DETACHMENT_MIME_TYPE = "application/subetha-detachment";
 	
-	// Cache of parts, this will optimize having to walk 
-	// the message tree after non-changing events
-	private List<Part> partsCache = null;
-
 	/** */
 	public SubEthaMessage(Session session) throws MessagingException
 	{
@@ -200,14 +196,11 @@ public class SubEthaMessage extends SMTPMessage
 	 */
 	public List<Part> getParts() throws MessagingException, IOException
 	{
-		if (partsCache == null)
-		{
-			partsCache = new ArrayList<Part>();
+		List<Part> parts = new ArrayList<Part>();
 			
-			getParts(this, this.partsCache);
-		}
+		getParts(this, parts);
 			
-		return partsCache;
+		return parts;
 	}
 	
 	/** */
@@ -232,7 +225,7 @@ public class SubEthaMessage extends SMTPMessage
 		}
 		else
 		{
-			if (log.isDebugEnabled()) log.debug("Didn't know what to do with content " + content);
+			// This was a content-containing part, no recursion.
 			parts.add(part);
 		}
 	}	
@@ -250,9 +243,6 @@ public class SubEthaMessage extends SMTPMessage
 				//this is dumb, but it is a javamail bug.
 				Multipart mp = (Multipart) contents;
 				this.setContent(mp);
-	
-				//reset the cache
-				this.partsCache = null;
 			}
 		}
 		catch (IOException ex)
@@ -289,5 +279,23 @@ public class SubEthaMessage extends SMTPMessage
 	public void addXLoop(String email) throws MessagingException
 	{
 		this.addHeader(HDR_X_LOOP, email);
+	}
+
+	/**
+	 * @return the text that should be indexed
+	 */
+	public String getIndexableText() throws MessagingException, IOException
+	{
+		StringBuilder buf = new StringBuilder();
+
+		for (Part part: this.getParts())
+		{
+			if (part.getContentType().toLowerCase().startsWith("text/"))
+			{
+				buf.append(part.getContent().toString());
+			}
+		}
+		
+		return buf.toString();
 	}
 }

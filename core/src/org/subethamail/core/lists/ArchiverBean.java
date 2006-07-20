@@ -356,7 +356,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					raw.getSubject(),
 					showEmail ? addy.getAddress() : null,
 					addy.getPersonal(),
-					raw.getDateCreated(),
+					raw.getSentDate(),
 					Transmute.mailSummaries(raw.getReplies(), showEmail, null),
 					raw.getList().getId(),
 					inlineParts,

@@ -6,6 +6,7 @@
 package org.subethamail.core.util;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 import javax.mail.internet.InternetAddress;
@@ -520,5 +521,20 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 	private final String like(String query)
 	{
 		return "%" + query + "%";
+	}
+	
+	/**
+	 * @return all the mail created since a particular arrival date
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Mail> findMailSince(Date when)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding mail since " + when);
+		
+		Query q = this.createNamedQuery("MailSince");
+		q.setParameter("since", when);
+		
+		return q.getResultList();
 	}
 }

@@ -31,14 +31,14 @@ public class MailData extends MailSummary
 			String subject,
 			String fromEmail,
 			String fromName,
-			Date dateCreated,
+			Date sentDate,
 			List<MailSummary> replies,
 			Long listId,
 			List<InlinePartData> inlineParts,
 			List<AttachmentPartData> attachmentParts 
 			)
 	{
-		super(id, subject, fromEmail, fromName, dateCreated, replies);
+		super(id, subject, fromEmail, fromName, sentDate, replies);
 		
 		this.listId = listId;
 		this.inlineParts = inlineParts;

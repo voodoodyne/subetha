@@ -18,7 +18,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.annotation.Resource;
-import javax.annotation.security.RunAs;
 import javax.ejb.EJBException;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -28,9 +27,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.queryParser.ParseException;
 import org.jboss.annotation.ejb.Service;
-import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.search.i.Indexer;
+import org.subethamail.core.search.i.IndexerRemote;
 import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
@@ -42,9 +41,9 @@ import org.subethamail.entity.Mail;
  * @author Jeff Schnitzer
  */
 @Service(objectName="subetha:service=Indexer")
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
-public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer
+//@SecurityDomain("subetha")
+//@RolesAllowed("siteAdmin")
+public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer, IndexerRemote
 {
 	/** */
 	@SuppressWarnings("unused")
@@ -265,8 +264,15 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	 */
 	public SimpleResult search(String queryText, int firstResult, int maxResults)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		if (log.isDebugEnabled())
+			log.debug("Searching for text " + queryText);
+		
+		try
+		{
+			return getCurrentIndex().search(queryText, firstResult, maxResults);
+		}
+		catch (IOException ex) { throw new EJBException(ex); }
+		catch (ParseException ex) { throw new EJBException(ex); }
 	}
 	
 	/**

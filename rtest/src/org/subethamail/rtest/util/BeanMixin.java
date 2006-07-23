@@ -20,8 +20,12 @@ import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
 import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.core.admin.i.ListWizardRemote;
+import org.subethamail.core.injector.i.Injector;
+import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
+import org.subethamail.core.search.i.Indexer;
+import org.subethamail.core.search.i.IndexerRemote;
 
 /**
  * This class makes it easy to obtain and use the various
@@ -42,6 +46,8 @@ public class BeanMixin
 	private AccountMgr accountMgr;
 	private ListMgr listMgr;
 	private ListWizard listWizard;
+	private Indexer indexer;
+	private Injector injector;
 	
 	
 	/** */
@@ -52,6 +58,8 @@ public class BeanMixin
 		this.accountMgr = (AccountMgr)ctx.lookup(AccountMgrRemote.JNDI_NAME);
 		this.listMgr = (ListMgr)ctx.lookup(ListMgrRemote.JNDI_NAME);
 		this.listWizard = (ListWizard)ctx.lookup(ListWizardRemote.JNDI_NAME);
+		this.indexer = (Indexer)ctx.lookup(IndexerRemote.JNDI_NAME);
+		this.injector = (Injector)ctx.lookup(InjectorRemote.JNDI_NAME);
 	}
 	
 	/** If this is null, clears all credentials */
@@ -104,5 +112,19 @@ public class BeanMixin
 	{
 		this.establish();
 		return this.listWizard;
+	}
+	
+	/** */
+	public Indexer getIndexer()
+	{
+		this.establish();
+		return this.indexer;
+	}
+	
+	/** */
+	public Injector getInjector()
+	{
+		this.establish();
+		return this.injector;
 	}
 }

@@ -76,12 +76,20 @@ public class SubEthaTestCase extends TestCase
 	 */
 	protected byte[] createMessage(InternetAddress from, InternetAddress to) throws MessagingException, IOException
 	{
+		return this.createMessage(from, to, TEST_SUBJECT, TEST_BODY);
+	}
+	
+	/**
+	 * Create the bytes of a slightly more complicated test message
+	 */
+	protected byte[] createMessage(InternetAddress from, InternetAddress to, String subject, String body) throws MessagingException, IOException
+	{
 		MimeMessage msg = new MimeMessage(this.sess);
 		
 		msg.setFrom(from);
 		msg.setRecipient(Message.RecipientType.TO, to);
-		msg.setSubject(TEST_SUBJECT);
-		msg.setText(TEST_BODY);
+		msg.setSubject(subject);
+		msg.setText(body);
 		
 		ByteArrayOutputStream buf = new ByteArrayOutputStream();
 		msg.writeTo(buf);

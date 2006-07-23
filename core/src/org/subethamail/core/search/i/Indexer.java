@@ -28,5 +28,10 @@ public interface Indexer
 	 * @param maxResults is the number of results to return.
 	 */
 	public SimpleResult search(String queryText, int firstResult, int maxResults);
+	
+	/**
+	 * Updates the index with any changes in since the last update.
+	 */
+	public void update();
 }
 

@@ -149,7 +149,7 @@ public class Transmute
 				rawList.getName(),
 				rawList.getEmail(),
 				perms,
-				rawSub == null,
+				rawSub != null,
 				deliverTo == null ? null : deliverTo.getId());
 	}
 	

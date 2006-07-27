@@ -21,9 +21,11 @@ import org.apache.lucene.index.IndexModifier;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.RangeFilter;
 import org.apache.lucene.search.Searcher;
 import org.subethamail.core.search.i.SimpleHit;
 import org.subethamail.core.search.i.SimpleResult;
@@ -136,11 +138,12 @@ public class IndexMgr
 	/**
 	 * Searches this index.
 	 */
-	public SimpleResult search(String queryText, int firstResult, int maxResults) throws IOException, ParseException
+	public SimpleResult search(Long listId, String queryText, int firstResult, int maxResults) throws IOException, ParseException
 	{
 		QueryParser parser = new MultiFieldQueryParser(SEARCH_FIELDS, ANALYZER);
 	    Query query = parser.parse(queryText);
-	    Hits hits = this.getSearcher().search(query);
+	    Filter filter = new RangeFilter(Modifier.FIELD_LIST_ID, listId.toString(), listId.toString(), true, true);
+	    Hits hits = this.getSearcher().search(query, filter);
 
 	    int total = hits.length();
 	    
@@ -161,7 +164,7 @@ public class IndexMgr
 	 */
 	SimpleHit toSearchHit(Document doc, float score)
 	{
-		String encId = doc.get(Modifier.FIELD_ID);
+		String encId = doc.get(Modifier.FIELD_MAIL_ID);
 		Long id = Long.valueOf(encId);
 
 		return new SimpleHit(id, score);

@@ -138,7 +138,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	{
 		try
 		{
-			getCurrentIndex().search("asdfasfdasfdasfdasfdasfdasfd", 0, 1);
+			getCurrentIndex().search(0L, "asdfasfdasfdasfdasfdasfdasfd", 0, 1);
 		}
 		catch (ParseException ex) { throw new EJBException(ex); }
 		catch (IOException ex)
@@ -239,7 +239,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 					try
 					{
 						SubEthaMessage msg = new SubEthaMessage(this.mailSession, m.getContent());
-						mod.indexMail(m.getId(), m.getSubject(), msg.getIndexableText());
+						mod.indexMail(m.getList().getId(), m.getId(), m.getSubject(), msg.getIndexableText());
 					}
 					catch (MessagingException ex)
 					{
@@ -260,16 +260,16 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.search.i.Indexer#search(java.lang.String, int, int)
+	 * @see org.subethamail.core.search.i.Indexer#search(java.lang.Long, java.lang.String, int, int)
 	 */
-	public SimpleResult search(String queryText, int firstResult, int maxResults)
+	public SimpleResult search(Long listId, String queryText, int firstResult, int maxResults)
 	{
 		if (log.isDebugEnabled())
-			log.debug("Searching for text " + queryText);
+			log.debug("Searching list " + listId + " for text " + queryText);
 		
 		try
 		{
-			return getCurrentIndex().search(queryText, firstResult, maxResults);
+			return getCurrentIndex().search(listId, queryText, firstResult, maxResults);
 		}
 		catch (IOException ex) { throw new EJBException(ex); }
 		catch (ParseException ex) { throw new EJBException(ex); }
@@ -289,20 +289,21 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 			ResultSet rs = null;
 			try
 			{
-				stmt = con.prepareStatement("select m.id, m.subject, m.content from Mail m");
+				stmt = con.prepareStatement("select m.listId, m.id, m.subject, m.content from Mail m");
 				rs = stmt.executeQuery();
 				
 				while (rs.next())
 				{
-					Long id = rs.getLong(1);
-					String subject = rs.getString(2);
-					Blob body = rs.getBlob(3);
+					Long listId = rs.getLong(1);
+					Long id = rs.getLong(2);
+					String subject = rs.getString(3);
+					Blob body = rs.getBlob(4);
 					
 					try
 					{
 						SubEthaMessage msg = new SubEthaMessage(this.mailSession, body.getBinaryStream());
 						
-						modifier.indexMail(id, subject, msg.getIndexableText());
+						modifier.indexMail(listId, id, subject, msg.getIndexableText());
 					}
 					catch (Exception ex)
 					{

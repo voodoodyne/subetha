@@ -22,12 +22,12 @@ public interface Indexer
 	public static final String JNDI_NAME = "subetha/IndexerBean/local";
 
 	/**
-	 * Queries the index.
+	 * Queries the index for a specific mailing list.
 	 * 
 	 * @param firstResult is the 0-based index of the first result to fetch
 	 * @param maxResults is the number of results to return.
 	 */
-	public SimpleResult search(String queryText, int firstResult, int maxResults);
+	public SimpleResult search(Long listId, String queryText, int firstResult, int maxResults);
 	
 	/**
 	 * Updates the index with any changes in since the last update.

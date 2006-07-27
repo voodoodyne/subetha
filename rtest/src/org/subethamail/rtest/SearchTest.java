@@ -55,7 +55,8 @@ public class SearchTest extends SubEthaTestCase
 	public void testNothingFound() throws Exception
 	{
 		// The email should be suitable unique
-		SimpleResult result = this.admin.getIndexer().search(this.uniqueString, 0, 5);
+		SimpleResult result = this.admin.getIndexer().search(this.ml.getId(), this.uniqueString, 0, 5);
+		assertEquals(0, result.getTotal());
 		assertEquals(0, result.getHits().size());
 	}
 	
@@ -71,9 +72,29 @@ public class SearchTest extends SubEthaTestCase
 		
 		this.admin.getIndexer().update();
 		
-		SimpleResult result = this.admin.getIndexer().search(this.uniqueString, 0, 5);
-		assert(result.getTotal() > 0);
+		SimpleResult result = this.admin.getIndexer().search(this.ml.getId(), this.uniqueString, 0, 5);
+		assertEquals(2, result.getTotal());
 		assertEquals(2, result.getHits().size());
+	}
+	
+	/** */
+	public void testListIsolation() throws Exception
+	{
+		MailingListMixin otherList = new MailingListMixin(this.admin, this.pers.getAddress());
+		
+		// Create two messages, one with subject one with body
+		byte[] rawMsg1 = this.createMessage(this.pers.getAddress(), this.ml.getAddress(), this.uniqueString, TEST_BODY);
+		byte[] rawMsg2 = this.createMessage(this.pers.getAddress(), this.ml.getAddress(), TEST_SUBJECT, this.uniqueString);
+		
+		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), this.ml.getEmail(), rawMsg1);
+		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), this.ml.getEmail(), rawMsg2);
+		
+		this.admin.getIndexer().update();
+
+		// Now search the other list
+		SimpleResult result = this.admin.getIndexer().search(otherList.getId(), this.uniqueString, 0, 5);
+		assertEquals(0, result.getTotal());
+		assertEquals(0, result.getHits().size());
 	}
 	
 	/** */

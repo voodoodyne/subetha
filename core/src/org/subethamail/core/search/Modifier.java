@@ -27,7 +27,8 @@ public class Modifier
 	private static Log log = LogFactory.getLog(Modifier.class);
 	
 	/** */
-	public static final String FIELD_ID = "id";
+	public static final String FIELD_LIST_ID = "listId";
+	public static final String FIELD_MAIL_ID = "mailId";
 	public static final String FIELD_SUBJECT = "subject";
 	public static final String FIELD_BODY = "body";
 	
@@ -49,20 +50,19 @@ public class Modifier
 	}
 	
 	/**
-	 * Indexes the message into the modifier.
+	 * Indexes a message into the modifier.
 	 */
-	void indexMail(Long id, String subject, String body) throws IOException
+	void indexMail(Long listId, Long mailId, String subject, String body) throws IOException
 	{
 		if (log.isTraceEnabled())
-			log.trace("Indexing message " + id + "/" + subject);
+			log.trace("Indexing message " + mailId + "/" + subject);
 			
 		if (subject.length() < MIN_USEFUL_FIELD_LEN && body.length() <= MIN_USEFUL_FIELD_LEN)
 			return;
 			
-		String idValue = id.toString();
-			
 		Document doc = new Document();
-		doc.add(new Field(FIELD_ID, idValue, Field.Store.YES, Field.Index.NO_NORMS));
+		doc.add(new Field(FIELD_LIST_ID, listId.toString(), Field.Store.YES, Field.Index.NO_NORMS));
+		doc.add(new Field(FIELD_MAIL_ID, mailId.toString(), Field.Store.YES, Field.Index.NO_NORMS));
 		
 		if (subject.length() >= MIN_USEFUL_FIELD_LEN)
 			doc.add(new Field(FIELD_SUBJECT, subject, Field.Store.NO, Field.Index.TOKENIZED));
@@ -81,7 +81,7 @@ public class Modifier
 		if (log.isTraceEnabled())
 			log.trace("Deleting message from index with id " + id);
 		
-		Term term = new Term(FIELD_ID, id.toString());
+		Term term = new Term(FIELD_MAIL_ID, id.toString());
 		
 		this.actual.deleteDocuments(term);
 	}

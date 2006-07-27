@@ -289,7 +289,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 			ResultSet rs = null;
 			try
 			{
-				stmt = con.prepareStatement("select m.listId, m.id, m.subject, m.content from Mail m");
+				stmt = con.prepareStatement("select m.listId, m.id, m.subject, m.content from Mail m where m.hold is null");
 				rs = stmt.executeQuery();
 				
 				while (rs.next())
@@ -298,6 +298,10 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 					Long id = rs.getLong(2);
 					String subject = rs.getString(3);
 					Blob body = rs.getBlob(4);
+					
+					// Not quite sure how this is happening, but if it does, ignore the mail.
+					if (body == null)
+						continue;
 					
 					try
 					{

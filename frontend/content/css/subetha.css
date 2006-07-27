@@ -192,4 +192,14 @@ span.authorName {
 
 .attachments {
 	
-} /* End Message Archives Styles */
+}
+
+div#searchBar {
+	text-align: center;
+}
+
+table#searchResult {
+	border: 1;
+}
+
+/* End Message Archives Styles */

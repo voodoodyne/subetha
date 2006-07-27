@@ -47,7 +47,12 @@ import org.subethamail.core.lists.i.InlinePartData;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.core.lists.i.MailSummary;
+import org.subethamail.core.lists.i.SearchHit;
+import org.subethamail.core.lists.i.SearchResult;
 import org.subethamail.core.lists.i.TextPartData;
+import org.subethamail.core.search.i.Indexer;
+import org.subethamail.core.search.i.SimpleHit;
+import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.Attachment;
@@ -77,6 +82,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	@EJB Detacher detacher;
 	@EJB ListMgr listManager;
 	@EJB Injector injector;
+	@EJB Indexer indexer;
 
 	
 	/** */
@@ -127,6 +133,40 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 
 	/*
 	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#search(java.lang.Long, java.lang.String, int, int)
+	 */
+	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException
+	{
+		Person me = this.getMe();
+		
+		// Are we allowed to view archives?
+		MailingList list = this.getListFor(listId, Permission.READ_ARCHIVES, me);
+		
+		SimpleResult simpleResult = this.indexer.search(listId, query, skip, count);
+		
+		List<SearchHit> hits = new ArrayList<SearchHit>(simpleResult.getHits().size());
+		
+		for (SimpleHit simpleHit: simpleResult.getHits())
+		{
+			Mail mail = this.em.get(Mail.class, simpleHit.getId());
+			if (mail != null)
+			{
+				hits.add(new SearchHit(
+						mail.getId(),
+						mail.getSubject(),
+						list.getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES)
+							? mail.getFromAddress().getAddress() : null,
+						mail.getFromAddress().getPersonal(),
+						mail.getSentDate(),
+						simpleHit.getScore()
+						));
+			}
+		}
+		
+		return new SearchResult(simpleResult.getTotal(), hits);
+	}
+	
+	/* (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#countMailByList(java.lang.Long)
 	 */
 	public int countMailByList(Long listId)

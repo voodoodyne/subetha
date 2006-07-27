@@ -34,6 +34,13 @@ public interface Archiver
 	public List<MailSummary> getThreads(Long listId, int skip, int count) throws NotFoundException, PermissionException;
 	
 	/**
+	 * Requires Permission.READ_ARCHIVES
+	 * 
+	 * @return a paginated list of messages that match the criteria.
+	 */
+	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException;
+	
+	/**
 	 * Required Permission.READ_ARCHIVES
 	 * 
 	 * @return the number of messages on a list.

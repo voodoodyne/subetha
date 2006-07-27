@@ -11,6 +11,16 @@
 			</p>
 		</c:when>
 		<c:otherwise>
+			<div class="searchBar">
+				<form action="<c:url value="/archive_search.jsp"/>" method="get">
+					<input type="hidden" name="listId" value="${param.listId}" />
+					
+					Search:
+					<input type="text" name="query" size="50" />
+					<input type="submit" value="Search" />
+				</form>
+			</div>
+			
 			<ul class="rootSummaries">
 				<c:forEach var="root" items="${model.messages}">
 					<li>

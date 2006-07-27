@@ -147,6 +147,7 @@
 			<fileset file="${build.appmain.ear.file}"/>
 			
 			<fileset dir=".">
+				<include name="README.html" />
 				<include name="LICENSE.txt" />
 				<include name="www/**" />
 			</fileset>

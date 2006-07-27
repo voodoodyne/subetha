@@ -52,7 +52,7 @@ public class Modifier
 	/**
 	 * Indexes a message into the modifier.
 	 */
-	void indexMail(Long listId, Long mailId, String subject, String body) throws IOException
+	void indexMail(Long listId, Long mailId, String from, String subject, String body) throws IOException
 	{
 		if (log.isTraceEnabled())
 			log.trace("Indexing message " + mailId + "/" + subject);
@@ -69,6 +69,9 @@ public class Modifier
 		
 		if (body.length() >= MIN_USEFUL_FIELD_LEN)
 			doc.add(new Field(FIELD_BODY, body, Field.Store.NO, Field.Index.TOKENIZED));
+		
+		// Add the sender address to the higher-priority Subject field
+		doc.add(new Field(FIELD_SUBJECT, from, Field.Store.NO, Field.Index.TOKENIZED));
 		
 		this.actual.addDocument(doc);
 	}

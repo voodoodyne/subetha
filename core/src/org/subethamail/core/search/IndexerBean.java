@@ -36,7 +36,10 @@ import org.subethamail.entity.Mail;
 
 /**
  * Service which manages the Lucene search index and provides a
- * low-level search API.
+ * low-level search API.  Conceptually there are two indexes, the
+ * current index (which is used for searching) and the fallow index
+ * (which is either nonexistant or in the process of being built).
+ * This allows rebuilds and searches to peacefully co-occur.
  * 
  * @author Jeff Schnitzer
  */
@@ -239,7 +242,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 					try
 					{
 						SubEthaMessage msg = new SubEthaMessage(this.mailSession, m.getContent());
-						mod.indexMail(m.getList().getId(), m.getId(), m.getSubject(), msg.getIndexableText());
+						mod.indexMail(m.getList().getId(), m.getId(), m.getFrom(), m.getSubject(), msg.getIndexableText());
 					}
 					catch (MessagingException ex)
 					{
@@ -289,15 +292,16 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 			ResultSet rs = null;
 			try
 			{
-				stmt = con.prepareStatement("select m.listId, m.id, m.subject, m.content from Mail m where m.hold is null");
+				stmt = con.prepareStatement("select m.listId, m.id, m.fromField, m.subject, m.content from Mail m where m.hold is null");
 				rs = stmt.executeQuery();
 				
 				while (rs.next())
 				{
 					Long listId = rs.getLong(1);
 					Long id = rs.getLong(2);
-					String subject = rs.getString(3);
-					Blob body = rs.getBlob(4);
+					String from = rs.getString(3);
+					String subject = rs.getString(4);
+					Blob body = rs.getBlob(5);
 					
 					// Not quite sure how this is happening, but if it does, ignore the mail.
 					if (body == null)
@@ -307,7 +311,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 					{
 						SubEthaMessage msg = new SubEthaMessage(this.mailSession, body.getBinaryStream());
 						
-						modifier.indexMail(listId, id, subject, msg.getIndexableText());
+						modifier.indexMail(listId, id, from, subject, msg.getIndexableText());
 					}
 					catch (Exception ex)
 					{

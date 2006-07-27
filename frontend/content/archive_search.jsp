@@ -8,7 +8,6 @@
 		<form action="<c:url value="/archive_search.jsp"/>" method="get">
 			<input type="hidden" name="listId" value="${param.listId}" />
 			
-			Search:
 			<input type="text" size="50" name="query" value="<c:out value="${model.query}"/>" />
 			<input type="submit" value="Search" />
 		</form>

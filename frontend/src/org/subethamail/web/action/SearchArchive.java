@@ -32,7 +32,7 @@ public class SearchArchive extends AuthAction
 	{
 		public Model()
 		{
-			this.setCount(100);	// default to 100
+			this.setCount(50);	// default to 50
 		}
 		
 		/** */

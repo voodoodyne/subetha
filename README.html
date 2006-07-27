@@ -12,6 +12,28 @@
 		
 		<h2>Changes</h2>
 		<dl>
+			<dt>0.7</dt>
+			<dd>
+				<ul>
+					<li>Implemented fulltext searching for archives.</li>
+					<li>Improved integration documentation.</li>
+					<li>More UI cleanup.</li>
+					<li>Several bugs fixed.</li>
+				</ul>
+				<p>
+					<strong>NOTE:</strong>  The database schema changed slightly.  To upgrade
+					from 0.6 or before, follow these instructions <strong>before deploying the
+					new code</strong>.
+				</p>
+				<ol>
+					<li>Shut down SubEtha.</li>
+					<li>Rename column Mail.dateCreated to Mail.sentDate.</li>
+					<li>Add column Mail.arrivalDate of same type as Mail.sentDate.</li>
+					<li>update Mail set arrivalDate = sentDate</li>
+					<li>Set Mail.arrivalDate to NOT NULL.</li>
+				</ol>
+			</dd>
+		
 			<dt>0.6</dt>
 			<dd>
 				<ul>

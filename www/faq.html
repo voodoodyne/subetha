@@ -78,6 +78,52 @@
 				3) message bodies without attachments are small enough to store in the
 				2nd level cache, making archive reading fast and scalable.</dd>
 
+			<dt>How does SubEtha compare to Mailman?</dt>
+			<dd>
+				<p>Both are open source mailing list managers.  In Mailman's favor:</p>
+				<ul>
+					<li>Mailman is a much more mature application.  SubEtha is relatively new and
+						might possibly still have bugs.</li>
+					<li>Mailman has a known performance profile.  While SubEtha should scale well,
+						there are not yet any large SubEtha installations, so performance is still
+						unproven.</li>
+					<li>Mailman has a very large user community.  SubEtha is just getting started.</li>
+					<li>Mailman stores data on a filesystem rather than using a database.  Some people
+						would view this as a disadvantage.</li>
+					<li>Mailman has a smaller memory footprint.  SubEtha requires a Java appserver.
+						However, it should be noted that Mailman's qrunner footprint is not especially
+						svelte, and JBoss can be slimmed down considerably in a low-traffic environment.</li>
+					<li>Mailman has all the little quirky configuration options that only comes from years of
+						obscure user requests and patching.</li>
+				</ul>
+				
+				<p>In SubEtha's favor:</p>
+				<ul>
+					<li>Features!  SubEtha offers virtual domains, role-based permissions, 
+						keeping attachments on the server, searchable archives, and the ability
+						for users to have multiple email addresses, among others.  The only major
+						feature present in Mailman but missing in SubEtha is digest mode.</li>
+					<li>Usability.  SubEtha works like a reasonably modern web application.
+						Mailman's interface is... antiquated.</li>
+					<li>Pluggability, automation, and integration.  You can write a wide variety of
+						plugins for SubEtha, and SubEtha exposes much of it's internal
+						machination as a public API.  You can plug in your own quirky obscure
+						behaviors without patching the core.</li>
+					<li>Theoretical scalablity.  In theory, SubEtha should easily scale into a cluster
+						of dozens of machines.  However, nobody has tried this yet - if you do,
+						we want to hear from you.</li>
+					<li>SubEtha stores data in a database rather than using the filesystem.  Some
+						people would view this as a disadvantage.</li>
+					<li>SubEtha runs on Windows.  Yeah, we know, some people would view this as a
+						disadvantage :-)</li>
+				</ul>
+				
+				<p>
+					We would like to think that SubEtha significantly raises the bar for what
+					users expect a mailing list manager to do.  However, this is new software;
+					expect a few rough edges.
+				</p>
+			</dd>
 		</dl>
 	</body>
 </html>

@@ -41,7 +41,6 @@ import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
-import org.subethamail.core.lists.i.ArchiverRemote;
 import org.subethamail.core.lists.i.AttachmentPartData;
 import org.subethamail.core.lists.i.InlinePartData;
 import org.subethamail.core.lists.i.ListMgr;
@@ -74,8 +73,10 @@ import com.sun.mail.util.LineInputStream;
 @SecurityDomain("subetha")
 @PermitAll
 @RunAs("siteAdmin")
-public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemote
+public class ArchiverBean extends PersonalBean implements Archiver
 {
+	/** */
+	private static Log log = LogFactory.getLog(ArchiverBean.class);
 
 	@EJB Deliverator deliverator;
 	@EJB FilterRunner filterRunner;
@@ -83,11 +84,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	@EJB ListMgr listManager;
 	@EJB Injector injector;
 	@EJB Indexer indexer;
-
 	
-	/** */
-	private static Log log = LogFactory.getLog(ArchiverBean.class);
-
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
 

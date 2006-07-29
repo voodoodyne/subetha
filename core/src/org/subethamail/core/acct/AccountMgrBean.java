@@ -21,7 +21,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
-import org.subethamail.core.acct.i.AccountMgrRemote;
 import org.subethamail.core.acct.i.AuthCredentials;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.BadTokenException;
@@ -48,7 +47,7 @@ import org.subethamail.entity.Subscription;
 @SecurityDomain("subetha")
 @RolesAllowed("user")
 @RunAs("siteAdmin")
-public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountMgrRemote
+public class AccountMgrBean extends PersonalBean implements AccountMgr
 {
 	/** */
 	private static Log log = LogFactory.getLog(AccountMgrBean.class);

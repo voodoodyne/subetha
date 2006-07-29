@@ -23,7 +23,6 @@ import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.core.admin.i.ListWizard;
-import org.subethamail.core.admin.i.ListWizardRemote;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.core.plugin.i.BlueprintRegistry;
 import org.subethamail.core.util.Transmute;
@@ -36,7 +35,7 @@ import org.subethamail.core.util.Transmute;
 @Service(name="ListWizard")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRegistry
+public class ListWizardBean implements ListWizard, BlueprintRegistry
 {
 	/** */
 	private static Log log = LogFactory.getLog(ListWizardBean.class);

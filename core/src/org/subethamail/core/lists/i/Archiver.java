@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.NotFoundException;
@@ -20,11 +20,11 @@ import org.subethamail.entity.i.PermissionException;
  *
  * @author Jeff Schnitzer
  */
-@Local
+@Remote
 public interface Archiver
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/Archiver/local";
+	public static final String JNDI_NAME = "subetha/Archiver/remote";
 
 	/**
 	 * Requires Permission.READ_ARCHIVES

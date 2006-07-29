@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 
-import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.mail.MessagingException;
 
 import org.subethamail.common.NotFoundException;
@@ -19,11 +19,11 @@ import org.subethamail.common.NotFoundException;
  *
  * @author Jeff Schnitzer
  */
-@Local
+@Remote
 public interface Injector
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/Injector/local";
+	public static final String JNDI_NAME = "subetha/Injector/remote";
 	
 	/**
 	 * @return true of the address is intended for us, ie, it is for

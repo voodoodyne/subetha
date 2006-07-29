@@ -21,7 +21,6 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.jboss.ejb3.mdb.ProducerManager;
 import org.jboss.ejb3.mdb.ProducerObject;
 import org.subethamail.core.queue.i.Queuer;
-import org.subethamail.core.queue.i.QueuerRemote;
 
 /**
  * @author Jeff Schnitzer
@@ -29,7 +28,7 @@ import org.subethamail.core.queue.i.QueuerRemote;
 @Stateless(name="Queuer")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class QueuerBean implements Queuer, QueuerRemote
+public class QueuerBean implements Queuer
 {
 	/** */
 	private static Log log = LogFactory.getLog(QueuerBean.class);

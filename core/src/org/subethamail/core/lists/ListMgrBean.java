@@ -33,7 +33,6 @@ import org.subethamail.core.lists.i.FilterData;
 import org.subethamail.core.lists.i.Filters;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListMgr;
-import org.subethamail.core.lists.i.ListMgrRemote;
 import org.subethamail.core.lists.i.ListRoles;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.core.lists.i.MassSubscribeType;
@@ -64,7 +63,7 @@ import org.subethamail.entity.i.PermissionException;
 @SecurityDomain("subetha")
 @PermitAll
 @RunAs("siteAdmin")
-public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
+public class ListMgrBean extends PersonalBean implements ListMgr
 {
 	/** */
 	private static Log log = LogFactory.getLog(ListMgrBean.class);

@@ -15,17 +15,11 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.security.SecurityAssociation;
 import org.jboss.security.SimplePrincipal;
 import org.subethamail.core.acct.i.AccountMgr;
-import org.subethamail.core.acct.i.AccountMgrRemote;
 import org.subethamail.core.admin.i.Admin;
-import org.subethamail.core.admin.i.AdminRemote;
 import org.subethamail.core.admin.i.ListWizard;
-import org.subethamail.core.admin.i.ListWizardRemote;
 import org.subethamail.core.injector.i.Injector;
-import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.lists.i.ListMgr;
-import org.subethamail.core.lists.i.ListMgrRemote;
 import org.subethamail.core.search.i.Indexer;
-import org.subethamail.core.search.i.IndexerRemote;
 
 /**
  * This class makes it easy to obtain and use the various
@@ -54,12 +48,12 @@ public class BeanMixin
 	public BeanMixin() throws Exception
 	{
 		Context ctx = new InitialContext();
-		this.admin = (Admin)ctx.lookup(AdminRemote.JNDI_NAME);
-		this.accountMgr = (AccountMgr)ctx.lookup(AccountMgrRemote.JNDI_NAME);
-		this.listMgr = (ListMgr)ctx.lookup(ListMgrRemote.JNDI_NAME);
-		this.listWizard = (ListWizard)ctx.lookup(ListWizardRemote.JNDI_NAME);
-		this.indexer = (Indexer)ctx.lookup(IndexerRemote.JNDI_NAME);
-		this.injector = (Injector)ctx.lookup(InjectorRemote.JNDI_NAME);
+		this.admin = (Admin)ctx.lookup(Admin.JNDI_NAME);
+		this.accountMgr = (AccountMgr)ctx.lookup(AccountMgr.JNDI_NAME);
+		this.listMgr = (ListMgr)ctx.lookup(ListMgr.JNDI_NAME);
+		this.listWizard = (ListWizard)ctx.lookup(ListWizard.JNDI_NAME);
+		this.indexer = (Indexer)ctx.lookup(Indexer.JNDI_NAME);
+		this.injector = (Injector)ctx.lookup(Injector.JNDI_NAME);
 	}
 	
 	/** If this is null, clears all credentials */

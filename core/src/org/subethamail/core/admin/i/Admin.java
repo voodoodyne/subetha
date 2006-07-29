@@ -8,7 +8,7 @@ package org.subethamail.core.admin.i;
 import java.net.URL;
 import java.util.List;
 
-import javax.ejb.Local;
+import javax.ejb.Remote;
 import javax.mail.internet.InternetAddress;
 
 import org.subethamail.common.NotFoundException;
@@ -22,11 +22,11 @@ import org.subethamail.core.lists.i.ListData;
  * 
  * @author Jeff Schnitzer
  */
-@Local
+@Remote
 public interface Admin
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/Admin/local";
+	public static final String JNDI_NAME = "subetha/Admin/remote";
 
 	/**
 	 * Puts an arbitrary string in the server log, useful for clients (especially

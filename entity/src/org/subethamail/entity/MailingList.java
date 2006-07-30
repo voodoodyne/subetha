@@ -181,10 +181,9 @@ public class MailingList implements Serializable, Comparable
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	SortedSet<Subscription> subscriptions;
 	
-	/** */
+	/** not cached */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@OrderBy(value="dateCreated")
-	//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)	// caching unnecessary
 	Set<SubscriptionHold> subscriptionHolds;
 	
 	/** */

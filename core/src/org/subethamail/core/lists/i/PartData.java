@@ -5,13 +5,15 @@
 
 package org.subethamail.core.lists.i;
 
+import java.io.Serializable;
+
 /**
  * Adds the mail body and thread root to a mail summary.
  * 
  * @author Scott Hernandez
  */
 @SuppressWarnings("serial")
-public abstract class PartData
+public abstract class PartData implements Serializable
 {
 	String contentType;
 	int contentSize;

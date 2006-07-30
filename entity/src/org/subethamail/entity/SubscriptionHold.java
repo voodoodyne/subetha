@@ -28,6 +28,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 		hints={
 			@QueryHint(name="org.hibernate.cacheable", value="true")
 		}
+	),
+	@NamedQuery(
+		name="HeldSubscriptionsOlderThan", 
+		query="select h from SubscriptionHold h where h.dateCreated < :cutoff",
+		hints={
+		}
 	)
 })
 @Entity

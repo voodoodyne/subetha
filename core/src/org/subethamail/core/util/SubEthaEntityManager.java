@@ -23,6 +23,7 @@ import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
+import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Validator;
 
 /**
@@ -534,6 +535,36 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 		
 		Query q = this.createNamedQuery("MailSince");
 		q.setParameter("since", when);
+		
+		return q.getResultList();
+	}
+
+	/**
+	 * Gets all subscriptionholds older than the specified date.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<SubscriptionHold> findHeldSubscriptionsOlderThan(Date cutoff)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding held subs older than " + cutoff);
+		
+		Query q = this.createNamedQuery("HeldSubscriptionsOlderThan");
+		q.setParameter("cutoff", cutoff);
+		
+		return q.getResultList();
+	}
+
+	/**
+	 * Gets all held mail older than a certain date.
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Mail> findHeldMailOlderThan(Date cutoff)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding held mail older than " + cutoff);
+		
+		Query q = this.createNamedQuery("HeldMailOlderThan");
+		q.setParameter("cutoff", cutoff);
 		
 		return q.getResultList();
 	}

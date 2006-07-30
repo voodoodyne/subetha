@@ -103,8 +103,14 @@ import org.subethamail.entity.i.Validator;
 		}
 	),
 	@NamedQuery(
-		name="SoftHoldsByPerson", 
+		name="SoftHoldsByPerson",
 		query="select m from Mail m, EmailAddress email where email.person.id = :personId and email.id = m.envelopeSender and m.hold = 'SOFT'",
+		hints={
+		}
+	),
+	@NamedQuery(
+		name="HeldMailOlderThan", 
+		query="select m from Mail m where m.hold is not null and m.arrivalDate < :cutoff",
 		hints={
 		}
 	),

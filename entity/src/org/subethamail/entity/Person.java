@@ -88,8 +88,8 @@ public class Person implements Serializable, Comparable
 	@MapKey(name="listId")
 	Map<Long, Subscription> subscriptions;
 	
+	/** not cached */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
-	//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)	// not worth caching
 	@MapKey(name="listId")
 	Map<Long, SubscriptionHold> heldSubscriptions;
 	

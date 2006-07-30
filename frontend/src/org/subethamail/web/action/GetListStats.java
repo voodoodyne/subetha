@@ -46,7 +46,7 @@ public class GetListStats extends AuthAction
 		if (perms.contains(Permission.VIEW_SUBSCRIBERS))
 			this.subscriberCount = Backend.instance().getListMgr().countSubscribers(this.listId);
 		
-		if (perms.contains(Permission.READ_ARCHIVES))
+		if (perms.contains(Permission.VIEW_ARCHIVES))
 			this.archiveCount = Backend.instance().getArchiver().countMailByList(this.listId);
 		
 		if (perms.contains(Permission.APPROVE_SUBSCRIPTIONS))

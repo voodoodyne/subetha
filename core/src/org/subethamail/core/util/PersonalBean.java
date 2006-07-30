@@ -18,6 +18,7 @@ import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
+import org.subethamail.entity.Subscription;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
@@ -132,4 +133,25 @@ public class PersonalBean extends EntityManipulatorBean
 		
 		return role;
 	}
+	
+	/**
+	 * Helper method throws an exception if you don't have the permission on the list
+	 * associated with the subscription.  Note that the personId is to identify the
+	 * subscription, NOT to check permissions.
+	 * 
+	 * @throws NotFoundException if person isn't subscribed to that list.
+	 */
+	protected Subscription getSubscriptionFor(Long listId, Long personId, Permission check, Person me) throws NotFoundException, PermissionException
+	{
+		Person pers = this.em.get(Person.class, personId);
+		
+		Subscription sub = pers.getSubscription(listId);
+		if (sub == null)
+			throw new NotFoundException("Person is not subscribed to that list id");
+		
+		sub.getList().checkPermission(me, check);
+
+		return sub;
+	}
+	
 }

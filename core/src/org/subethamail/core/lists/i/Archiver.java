@@ -27,41 +27,41 @@ public interface Archiver
 	public static final String JNDI_NAME = "subetha/Archiver/remote";
 
 	/**
-	 * Requires Permission.READ_ARCHIVES
+	 * Requires Permission.VIEW_ARCHIVES
 	 * 
 	 * @return a list of threads in the archive.  Most recent thread is at the bottom.
 	 */
 	public List<MailSummary> getThreads(Long listId, int skip, int count) throws NotFoundException, PermissionException;
 	
 	/**
-	 * Requires Permission.READ_ARCHIVES
+	 * Requires Permission.VIEW_ARCHIVES
 	 * 
 	 * @return a paginated list of messages that match the criteria.
 	 */
 	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException;
 	
 	/**
-	 * Required Permission.READ_ARCHIVES
+	 * Required Permission.VIEW_ARCHIVES
 	 * 
 	 * @return the number of messages on a list.
 	 */
 	public int countMailByList(Long listId);
 
 	/**
-	 * Requires Permission.READ_ARCHIVES
+	 * Requires Permission.VIEW_ARCHIVES
 	 * 
 	 * @return a whole lot of information about the message.
 	 */
 	public MailData getMail(Long mailId) throws NotFoundException, PermissionException;
 
 	/**
-	 * Requires Permission.READ_ARCHIVES
+	 * Requires Permission.VIEW_ARCHIVES
 	 * Writes the Mail to the stream. 
 	 */
 	public void writeMessage(Long mailId, OutputStream stream) throws NotFoundException, PermissionException;
 
 	/**
-	 * Requires Permission.READ_ARCHIVES
+	 * Requires Permission.VIEW_ARCHIVES
 	 * Writes the Attachement to the stream.
 	 * @return a byte[] of the message as it would be sent to the user.
 	 */

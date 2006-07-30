@@ -25,7 +25,7 @@ public class ListSetSubscriberRole extends AuthRequired
 	/** */
 	public void authExecute() throws Exception
 	{
-		Backend.instance().getListMgr().setSubscriberRole(this.listId, this.personId, this.roleId);
+		Backend.instance().getListMgr().setSubscriptionRole(this.listId, this.personId, this.roleId);
 	}
 }
 

@@ -64,7 +64,7 @@ public class FreeForAllBlueprint extends AbstractBlueprint implements Lifecycle
 		{
 			Set<Permission> perms = new HashSet<Permission>();
 			perms.add(Permission.POST);
-			perms.add(Permission.READ_ARCHIVES);
+			perms.add(Permission.VIEW_ARCHIVES);
 			perms.add(Permission.VIEW_ADDRESSES);
 			perms.add(Permission.VIEW_SUBSCRIBERS);
 			perms.add(Permission.VIEW_ROLES);

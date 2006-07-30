@@ -106,7 +106,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		Person me = this.getMe();
 		
 		// Are we allowed to view archives?
-		MailingList list = this.getListFor(listId, Permission.READ_ARCHIVES, me);
+		MailingList list = this.getListFor(listId, Permission.VIEW_ARCHIVES, me);
 		
 		List<Mail> mails = this.em.findMailByList(listId, skip, count);
 		
@@ -137,7 +137,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		Person me = this.getMe();
 		
 		// Are we allowed to view archives?
-		MailingList list = this.getListFor(listId, Permission.READ_ARCHIVES, me);
+		MailingList list = this.getListFor(listId, Permission.VIEW_ARCHIVES, me);
 		
 		SimpleResult simpleResult = this.indexer.search(listId, query, skip, count);
 		
@@ -177,7 +177,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	 */
 	public void writeMessage(Long mailId, OutputStream stream) throws NotFoundException, PermissionException
 	{
-		Mail mail = this.getMailFor(mailId, Permission.READ_ARCHIVES);
+		Mail mail = this.getMailFor(mailId, Permission.VIEW_ARCHIVES);
 
 		try 
 		{
@@ -202,7 +202,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	public void writeAttachment(Long attachmentId, OutputStream stream) throws NotFoundException, PermissionException
 	{
 		Attachment a = this.em.get(Attachment.class, attachmentId);
-		a.getMail().getList().checkPermission(getMe(), Permission.READ_ARCHIVES);
+		a.getMail().getList().checkPermission(getMe(), Permission.VIEW_ARCHIVES);
 
 		Blob data = a.getContent();
 		try
@@ -230,7 +230,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	public String getAttachmentContentType(Long attachmentId) throws NotFoundException, PermissionException
 	{
 		Attachment a = this.em.get(Attachment.class, attachmentId);
-		a.getMail().getList().checkPermission(getMe(), Permission.READ_ARCHIVES);
+		a.getMail().getList().checkPermission(getMe(), Permission.VIEW_ARCHIVES);
 		return a.getContentType();
 	}
 	
@@ -243,7 +243,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		Person me = this.getMe();
 		
 		// Are we allowed to view archives?
-		Mail mail = this.getMailFor(mailId, Permission.READ_ARCHIVES, me);
+		Mail mail = this.getMailFor(mailId, Permission.VIEW_ARCHIVES, me);
 		
 		// Figure out if we're allowed to see emails
 		boolean showEmail = mail.getList().getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES);

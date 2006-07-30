@@ -16,7 +16,7 @@
 		</c:url>
 		<a href="${listUrl}">&rsaquo; List Overview</a>
 		
-		<c:if test="${myList.perms.READ_ARCHIVES}">
+		<c:if test="${myList.perms.VIEW_ARCHIVES}">
 			<c:url var="listArchivesUrl" value="/archive.jsp">
 				<c:param name="listId" value="${listId}"/>
 			</c:url>

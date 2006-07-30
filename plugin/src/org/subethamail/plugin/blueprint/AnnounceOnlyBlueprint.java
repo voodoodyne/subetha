@@ -64,7 +64,7 @@ public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycl
 		{
 			// Subscriber
 			Set<Permission> perms = new HashSet<Permission>();
-			perms.add(Permission.READ_ARCHIVES);
+			perms.add(Permission.VIEW_ARCHIVES);
 			Long roleId = listMgr.addRole(listId, "Subscriber", perms);
 			listMgr.setDefaultRole(listId, roleId);
 
@@ -76,7 +76,7 @@ public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycl
 			// Moderator
 			perms = new HashSet<Permission>();
 			perms.add(Permission.POST);
-			perms.add(Permission.READ_ARCHIVES);
+			perms.add(Permission.VIEW_ARCHIVES);
 			perms.add(Permission.VIEW_ADDRESSES);
 			perms.add(Permission.VIEW_SUBSCRIBERS);
 			perms.add(Permission.APPROVE_MESSAGES);

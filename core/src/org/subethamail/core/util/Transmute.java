@@ -107,18 +107,18 @@ public class Transmute
 	}
 
 	/** Does not add held subscriptions */
-	public static List<SubscriberData> subscribers(Collection<Subscription> subscriptions)
+	public static List<SubscriberData> subscribers(Collection<Subscription> subscriptions, boolean showNote)
 	{
 		List<SubscriberData> result = new ArrayList<SubscriberData>(subscriptions.size());
 
 		for (Subscription subscription: subscriptions)
-			result.add(subscriber(subscription));
+			result.add(subscriber(subscription, showNote));
 		
 		return result;
 	}
 	
 	/** */
-	public static SubscriberData subscriber(Subscription raw)
+	public static SubscriberData subscriber(Subscription raw, boolean showNote)
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
@@ -129,7 +129,8 @@ public class Transmute
 				raw.getPerson().getEmailList(),
 				Transmute.role(raw.getRole()),
 				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null,
-				raw.getDateCreated());
+				raw.getDateCreated(),
+				showNote ? raw.getNote() : null);
 	}
 
 	/**
@@ -339,7 +340,8 @@ public class Transmute
 				raw.getPerson().getEmailList(),
 				null,
 				(raw.getDeliverTo() != null) ? raw.getDeliverTo().getId() : null,
-				raw.getDateCreated());
+				raw.getDateCreated(),
+				null);
 	}
 
 	/**

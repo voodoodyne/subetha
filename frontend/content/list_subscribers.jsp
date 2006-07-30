@@ -5,12 +5,6 @@
 
 <t:action var="model" type="org.subethamail.web.action.GetSubscribers" />
 
-<c:if test="${perms.EDIT_ROLES}">
-	<t:action var="listRoles" type="org.subethamail.web.action.GetRoles">
-		<t:param name="listId" value="${param.listId}"/>
-	</t:action>
-</c:if>
-
 <trim:list title="Subscribers" listId="${param.listId}">
 
 	<form action="<c:url value="/list_subscribers.jsp"/>" method="get" style="display:inline">
@@ -35,10 +29,10 @@
 				<tr>
 					<td>Name</td>
 					<td>Addresses</td>
-					<c:if test="${perms.EDIT_ROLES || perms.VIEW_ROLES}">
+					<c:if test="${perms.VIEW_ROLES}">
 						<td>Role</td>
 					</c:if>
-					<c:if test="${perms.UNSUBSCRIBE_OTHERS}">
+					<c:if test="${perms.EDIT_SUBSCRIPTIONS || perms.EDIT_ROLES || perms.EDIT_NOTES}">
 						<td>Action</td>
 					</c:if>
 				</tr>
@@ -67,32 +61,21 @@
 								></a><c:if test="${! loop.last}">, </c:if>
 							</c:forEach>
 						</td>
-						<c:choose>
-							<c:when test="${perms.EDIT_ROLES}">
+						<c:if test="${perms.VIEW_ROLES}">
 							<td>
-								<form action="<c:url value="/person_set_role.jsp"/>" method="post" style="display:inline">
-									<input type="hidden" name="personId" value="${p.id}" />
- 									<input type="hidden" name="listId" value="${param.listId}" />
-									<select name="roleId">
-										<c:forEach var="role" items="${listRoles.roles}" varStatus="loop">
-											<option value="${role.id}"
-												<c:if test="${role.name == p.roleName}">selected="selected"</c:if>
-											><c:out value="${role.name}"/></option>
-										</c:forEach>
-									</select>
-									<input type="submit" value="Set" />
-								</form>
+								<c:out value="${p.roleName}" />
 							</td>
-							</c:when>
-							<c:when test="${perms.VIEW_ROLES}">
-								<td>
-									<c:out value="${p.roleName}" />
-								</td>
-							</c:when>
-						</c:choose>
-						<c:if test="${perms.UNSUBSCRIBE_OTHERS}">
+						</c:if>
+						<c:if test="${perms.EDIT_SUBSCRIPTIONS || perms.EDIT_ROLES || perms.EDIT_NOTES}">
 							<td>
-								<c:if test="${perms.UNSUBSCRIBE_OTHERS}">
+								<c:if test="${perms.EDIT_SUBSCRIPTIONS || perms.EDIT_ROLES || perms.EDIT_NOTES}">
+									<form action="<c:url value="/subscription_edit.jsp"/>" method="get" style="display:inline">
+										<input type="hidden" name="personId" value="${p.id}" />
+										<input type="hidden" name="listId" value="${param.listId}" />
+										<input type="submit" value="Edit" />
+									</form>
+								</c:if>
+								<c:if test="${perms.EDIT_SUBSCRIPTIONS}">
 									<form action="<c:url value="/person_unsubscribe.jsp"/>" method="post" style="display:inline">
 										<input type="hidden" name="personId" value="${p.id}" />
 										<input type="hidden" name="listId" value="${param.listId}" />
@@ -102,6 +85,15 @@
 							</td>
 						</c:if>
 					</tr>
+					<c:if test="${perms.VIEW_NOTES && !empty p.note}">
+						<tr class="${color}">
+							<td colspan="4">
+								<div class="note">
+									${f:escapeText(p.note)}
+								</div>
+							</td>
+						</tr>
+					</c:if>
 				</c:forEach>
 			</tbody>
 			</table>

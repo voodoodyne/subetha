@@ -67,7 +67,7 @@ public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
 			// Subscriber
 			Set<Permission> perms = new HashSet<Permission>();
 			perms.add(Permission.POST);
-			perms.add(Permission.READ_ARCHIVES);
+			perms.add(Permission.VIEW_ARCHIVES);
 			perms.add(Permission.VIEW_ADDRESSES);
 			perms.add(Permission.VIEW_SUBSCRIBERS);
 			Long roleId = listMgr.addRole(listId, "Subscriber", perms);
@@ -81,7 +81,7 @@ public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
 			// Moderator
 			perms = new HashSet<Permission>();
 			perms.add(Permission.POST);
-			perms.add(Permission.READ_ARCHIVES);
+			perms.add(Permission.VIEW_ARCHIVES);
 			perms.add(Permission.VIEW_ADDRESSES);
 			perms.add(Permission.VIEW_SUBSCRIBERS);
 			perms.add(Permission.APPROVE_MESSAGES);

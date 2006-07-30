@@ -220,7 +220,7 @@ public interface ListMgr
 	 * @param personId the person id
 	 *  
 	 * @throws NotFoundException if the list id or email is not valid.
-	 * @throws PermissionException needs Permission.UNSUBSCRIBE_OTHERS
+	 * @throws PermissionException needs Permission.EDIT_SUBSCRIPTIONS
 	 */
 	public void unsubscribe(Long listId, Long personId) throws NotFoundException, PermissionException;
 
@@ -234,7 +234,32 @@ public interface ListMgr
 	 * @throws NotFoundException If the list, person or role is not found.
 	 * @throws PermissionException Requires Permission.EDIT_ROLES
 	 */
-	public void setSubscriberRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException;
+	public void setSubscriptionRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException;
+	
+	/**
+	 * @param deliverTo must be one of the user's email addresses.
+	 * 
+	 * @throws NotFoundException if the list or person does not exist.
+	 * @throws PermissionException if the caller does not have Permission.EDIT_SUBSCRIPTIONS.
+	 */
+	public void setSubscriptionDelivery(Long listId, Long personId, String deliverTo) throws NotFoundException, PermissionException;
+	
+	/**
+	 * @param note must be within the allowable length.
+	 * 
+	 * @throws NotFoundException if the list or person does not exist.
+	 * @throws PermissionException if the caller does not have Permission.EDIT_NOTES.
+	 */
+	public void setSubscriptionNote(Long listId, Long personId, String note) throws NotFoundException, PermissionException;
+	
+	/**
+	 * Gets information about a particular subscriber.
+	 * 
+	 * @throws NotFoundException if the list or person does not exist, or if the person is not a
+	 *  subscriber to the list.
+	 * @throws PermissionException if the caller does not have Permission.VIEW_SUBSCRIBERS
+	 */
+	public SubscriberData getSubscription(Long listId, Long personId) throws NotFoundException, PermissionException;
 
 	/**
 	 * Retrieves all the subscribers for a MailingList

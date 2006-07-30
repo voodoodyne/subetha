@@ -43,6 +43,7 @@ import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
+import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.FilterArgument;
 import org.subethamail.entity.Mail;
@@ -522,19 +523,18 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	 */
 	public void unsubscribe(Long listId, Long personId) throws NotFoundException, PermissionException
 	{
-		this.getListFor(listId, Permission.UNSUBSCRIBE_OTHERS);
+		this.getListFor(listId, Permission.EDIT_SUBSCRIPTIONS);
 		this.admin.unsubscribe(listId, personId);
 	}
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#setSubscriberRole(java.lang.Long, java.lang.Long, java.lang.Long)
+	 * @see org.subethamail.core.lists.i.ListMgr#setSubscriptionRole(java.lang.Long, java.lang.Long, java.lang.Long)
 	 */
-	public void setSubscriberRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException
+	public void setSubscriptionRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException
 	{
-		this.getListFor(listId, Permission.EDIT_ROLES);
-		Person p = this.em.get(Person.class, personId);
-		Subscription sub = p.getSubscription(listId);
+		Subscription sub = this.getSubscriptionFor(listId, personId, Permission.EDIT_ROLES, this.getMe());
+
 		sub.setRole(this.em.get(Role.class, roleId));
 	}
 
@@ -607,9 +607,13 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	 */
 	public List<SubscriberData> getSubscribers(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
-		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
+		Person me = this.getMe();
+		
+		MailingList list = this.getListFor(listId, Permission.VIEW_SUBSCRIBERS, me);
+		
+		boolean showNotes = list.getPermissionsFor(me).contains(Permission.VIEW_NOTES);
 
-		return Transmute.subscribers(this.em.findSubscribers(listId, skip, count));
+		return Transmute.subscribers(this.em.findSubscribers(listId, skip, count), showNotes);
 	}
 
 	/*
@@ -618,9 +622,13 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	 */
 	public List<SubscriberData> searchSubscribers(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException
 	{
-		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
+		Person me = this.getMe();
 		
-		return Transmute.subscribers(this.em.findSubscribers(listId, query, skip, count));
+		MailingList list = this.getListFor(listId, Permission.VIEW_SUBSCRIBERS, me);
+		
+		boolean showNotes = list.getPermissionsFor(me).contains(Permission.VIEW_NOTES);
+		
+		return Transmute.subscribers(this.em.findSubscribers(listId, query, skip, count), showNotes);
 	}
 
 	/*
@@ -652,5 +660,53 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	public void checkPermission(Long listId, Permission perm) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, perm);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#setSubscriptionDelivery(java.lang.Long, java.lang.Long, java.lang.String)
+	 */
+	public void setSubscriptionDelivery(Long listId, Long personId, String deliverTo) throws NotFoundException, PermissionException
+	{
+		Subscription sub = this.getSubscriptionFor(listId, personId, Permission.EDIT_SUBSCRIPTIONS, this.getMe());
+
+		if (deliverTo == null)
+		{
+			sub.setDeliverTo(null);
+		}
+		else
+		{
+			EmailAddress addy = sub.getPerson().getEmailAddress(deliverTo);
+			if (addy == null)
+				throw new NotFoundException("Email address does not belong to the person");
+			
+			sub.setDeliverTo(addy);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#setSubscriptionNote(java.lang.Long, java.lang.Long, java.lang.String)
+	 */
+	public void setSubscriptionNote(Long listId, Long personId, String note) throws NotFoundException, PermissionException
+	{
+		Subscription sub = this.getSubscriptionFor(listId, personId, Permission.EDIT_NOTES, this.getMe());
+		
+		sub.setNote(note.trim());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getSubscription(java.lang.Long, java.lang.Long)
+	 */
+	public SubscriberData getSubscription(Long listId, Long personId) throws NotFoundException, PermissionException
+	{
+		Person me = this.getMe();
+		
+		Subscription sub = this.getSubscriptionFor(listId, personId, Permission.VIEW_SUBSCRIBERS, me);
+		
+		boolean showNote = sub.getList().getPermissionsFor(me).contains(Permission.VIEW_NOTES);
+		
+		return Transmute.subscriber(sub, showNote);
 	}
 }

@@ -16,21 +16,21 @@ import java.util.TreeSet;
  */
 public enum Permission
 {
-	EDIT_SETTINGS("Edit the name, description, and major configuration options of the list."),
 	EDIT_ROLES("Edit and reassign roles and permissions.  This should not be granted to non-owners."),
-	VIEW_ROLES("View roles of members on the list subscribers page."),
+	EDIT_SETTINGS("Edit the name, description, and major configuration options of the list."),
 	EDIT_FILTERS("Add, remove, and change the properties of mail filters."),
-	APPROVE_MESSAGES("Approve messages which have been held for administrative approval."),
-	APPROVE_SUBSCRIPTIONS("Approve subscription requests."),
-	MASS_SUBSCRIBE("Subscribe other people to the mailing list."),
-	UNSUBSCRIBE_OTHERS("Unsubscribe other people from the mailing list."),
-	POST("Post messages to a mailing list, either by emailing the list address or from the archives."),
-	VIEW_SUBSCRIBERS("View the list of subscribers to the mailing list."),
-	READ_ARCHIVES("Read and search the archives of the mailing list."),
-	READ_NOTES("Read administrative notes that have been placed on subscribers."),
 	EDIT_NOTES("Create and edit administrative notes for subscribers."),
+	EDIT_SUBSCRIPTIONS("Change other people's delivery address or unsubscribe them from the mailing list."),
+	MASS_SUBSCRIBE("Subscribe other people to the mailing list."),
+	APPROVE_SUBSCRIPTIONS("Approve subscription requests."),
+	APPROVE_MESSAGES("Approve messages which have been held for administrative approval."),
+	IMPORT_MESSAGES("Import messages for a list. Allows direct recording of messages into the archives with no delivery."),
+	VIEW_NOTES("Read administrative notes that have been placed on subscribers."),
+	VIEW_ROLES("View roles of members on the list subscribers page."),
+	VIEW_SUBSCRIBERS("View the list of subscribers to the mailing list."),
 	VIEW_ADDRESSES("See the real email addresses of members in the archives and subscriber list."),
-	IMPORT_MESSAGES("Import messages for a list. This allow direct recording of messages into the archives with no delivery.");
+	VIEW_ARCHIVES("Read and search the archives of the mailing list."),
+	POST("Post messages to a mailing list, either by emailing the list address or from the archives.");
 
 	/** A set that contains all permissions */
 	public static final Set<Permission> ALL;

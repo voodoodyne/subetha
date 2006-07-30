@@ -203,3 +203,9 @@ table#searchResult {
 }
 
 /* End Message Archives Styles */
+
+div.note {
+	font-weight: lighter;
+	font-style: italic;
+	padding-left: 3em;
+}

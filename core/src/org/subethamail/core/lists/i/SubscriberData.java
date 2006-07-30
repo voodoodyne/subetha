@@ -22,6 +22,7 @@ public class SubscriberData extends PersonData
 	RoleData role;
 	String deliverTo;
 	Date dateSubscribed;
+	String note;	// will be null if you don't have permission to see it
 	
 	/**
 	 */
@@ -31,12 +32,14 @@ public class SubscriberData extends PersonData
 			List<String> emailAddresses,
 			RoleData role,
 			String deliverTo,
-			Date dateSubscribed)
+			Date dateSubscribed,
+			String note)
 	{
 		super(id, name, emailAddresses);
 		this.role = role;
 		this.deliverTo = deliverTo;
 		this.dateSubscribed = dateSubscribed;
+		this.note = note;
 	}
 	
 	/** */
@@ -59,5 +62,11 @@ public class SubscriberData extends PersonData
 	public Date getDateSubscribed()
 	{
 		return this.dateSubscribed;
+	}
+
+	/** will be null if caller does not have permission to view notes */
+	public String getNote()
+	{
+		return this.note;
 	}
 }

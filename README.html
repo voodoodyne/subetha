@@ -12,6 +12,23 @@
 		
 		<h2>Changes</h2>
 		<dl>
+			<dt>0.8</dt>
+			<dd>
+				<ul>
+					<li>List administrators can now edit subscriber options.</li>
+				</ul>
+				<p>
+					<strong>NOTE:</strong>  The names of some of the roles have changed.
+					You must update your database before SubEtha will function.  Shut
+					down SubEtha and run the following queries:
+				</p>
+				<ol>
+					<li>update RolePermission set perm='EDIT_SUBSCRIPTIONS' where perm='UNSUBSCRIBE_OTHERS'</li>
+					<li>update RolePermission set perm='VIEW_ARCHIVES' where perm='READ_ARCHIVES'</li>
+					<li>update RolePermission set perm='VIEW_NOTES' where perm='READ_NOTES'</li>
+				</ol>
+			</dd>
+			
 			<dt>0.7</dt>
 			<dd>
 				<ul>

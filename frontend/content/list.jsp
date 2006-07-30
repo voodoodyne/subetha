@@ -15,7 +15,7 @@
 
 <trim:list title="List Overview" listId="${param.listId}">
 	
-	<h3><c:out value="${list.description}" /></h3>
+	<h3>${f:escapeText(list.description)}</h3>
 	
 	<ul>
 		<c:if test="${listStats.subscriberCount > 0}">
@@ -76,8 +76,8 @@
 			</c:if>
 			<table>
 				<tr>
-					<th>Welcome message for new subscribers:</th>
-					<td><c:out value="${list.welcomeMessage}"/></td>
+					<th valign="top">Welcome message for new subscribers:</th>
+					<td>${f:escapeText(list.welcomeMessage)}</td>
 				</tr>
 				<tr>
 					<th>Require approval for new subscriptions?</th>

@@ -5,6 +5,7 @@
 
 package org.subethamail.core.plugin.i.helper;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,8 @@ import org.subethamail.core.plugin.i.FilterParameter;
  * 
  * @author Jeff Schnitzer
  */
-public class FilterParameterImpl implements FilterParameter
+@SuppressWarnings("serial")
+public class FilterParameterImpl implements FilterParameter, Serializable
 {
 	String name;
 	String description;

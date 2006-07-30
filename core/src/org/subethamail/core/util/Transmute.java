@@ -8,6 +8,7 @@ package org.subethamail.core.util;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -168,12 +169,18 @@ public class Transmute
 		}
 	}
 
+	/**
+	 * @return a sorted list of subscriptions
+	 */
+	@SuppressWarnings("unchecked")
 	public static List<SubscribedList> subscriptions(Collection<Subscription> rawColl)
 	{
 		List<SubscribedList> result = new ArrayList<SubscribedList>(rawColl.size());
 		
 		for (Subscription raw: rawColl)
 			result.add(subscription(raw));
+		
+		Collections.sort(result);
 		
 		return result;
 	}

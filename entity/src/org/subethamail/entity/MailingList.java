@@ -65,7 +65,7 @@ import org.subethamail.entity.i.Validator;
 	),
 	@NamedQuery(
 		name="AllMailingLists", 
-		query="from MailingList l",
+		query="from MailingList l order by l.name",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")
@@ -76,7 +76,7 @@ import org.subethamail.entity.i.Validator;
 			query="from MailingList l where (l.name like :name) or " +
 											"(l.email like :email) or" +
 											"(l.url like :url) or" +
-											"(l.description like :description)",
+											"(l.description like :description) order by l.name",
 			hints={
 				@QueryHint(name="org.hibernate.readOnly", value="true"),
 				@QueryHint(name="org.hibernate.cacheable", value="true")

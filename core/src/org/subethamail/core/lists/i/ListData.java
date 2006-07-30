@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @author Jeff Schnitzer
  */
 @SuppressWarnings("serial")
-public class ListData implements Serializable
+public class ListData implements Serializable, Comparable
 {
 	Long id;
 	String email;
@@ -105,6 +105,22 @@ public class ListData implements Serializable
 	public boolean isSubscriptionHeld()
 	{
 		return this.subscriptionHeld;
+	}
+
+	/** */
+	public int compareTo(Object o)
+	{
+		ListData other = (ListData)o;
+		
+		// Only return 0 if they are actually identical to make TreeMap happy
+		if (this.id.equals(other.id))
+			return 0;
+		
+		int result = this.name.compareTo(((ListData)o).getName());
+		if (result == 0)
+			return this.id.compareTo(other.id);
+		else
+			return result;
 	}
 
 }

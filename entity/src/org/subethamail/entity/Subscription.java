@@ -44,7 +44,7 @@ import org.subethamail.entity.i.Validator;
 	),
 	@NamedQuery(
 		name="SubscribersOnList", 
-		query="from Subscription sub where sub.list.id = :listId",
+		query="from Subscription sub where sub.list.id = :listId order by sub.person.name",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")
@@ -66,7 +66,7 @@ import org.subethamail.entity.i.Validator;
 		query="select sub from Subscription sub " +
 				"join sub.person.emailAddresses as email " +
 				"where sub.list.id = :listId and " +
-				"(sub.person.name like :name or email.id like :email)",
+				"(sub.person.name like :name or email.id like :email) order by sub.person.name",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")

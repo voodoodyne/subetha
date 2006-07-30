@@ -7,6 +7,7 @@ package org.subethamail.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ import org.subethamail.entity.i.Validator;
 @NamedQueries({
 	@NamedQuery(
 		name="SiteAdmin", 
-		query="from Person where siteAdmin = true",
+		query="from Person p where p.siteAdmin = true order by p.name",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
 			@QueryHint(name="org.hibernate.cacheable", value="true")
@@ -227,6 +228,9 @@ public class Person implements Serializable, Comparable
 			addresses.add(addy.getId());
 			i++;
 		}
+		
+		// This wouldn't be necessary if @Sort worked on Maps
+		Collections.sort(addresses);
 		
 		return addresses;
 	}

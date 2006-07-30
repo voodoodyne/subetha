@@ -7,7 +7,7 @@
 	<c:if test="${auth.loggedIn}">
 		<div class="sideBox LHS">
 			<div>Main Menu</div>
-			<a href="<c:url value="/home.jsp"/>">&rsaquo; Home</a>
+			<a href="<c:url value="/home.jsp"/>">&rsaquo; My Account</a>
 			<a href="<c:url value="/change_password.jsp"/>">&rsaquo; Change Password</a>
 		</div>
 	</c:if>

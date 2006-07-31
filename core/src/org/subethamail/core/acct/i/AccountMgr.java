@@ -5,7 +5,7 @@
 
 package org.subethamail.core.acct.i;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 import org.subethamail.common.NotFoundException;
 
@@ -18,11 +18,11 @@ import org.subethamail.common.NotFoundException;
  *
  * @author Jeff Schnitzer
  */
-@Remote
+@Local
 public interface AccountMgr
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/AccountMgr/remote";
+	public static final String JNDI_NAME = "subetha/AccountMgr/local";
 	
 	/**
 	 * @return many details about myself, including email addresses

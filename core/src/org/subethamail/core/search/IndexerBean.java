@@ -29,6 +29,7 @@ import org.apache.lucene.queryParser.ParseException;
 import org.jboss.annotation.ejb.Service;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.search.i.Indexer;
+import org.subethamail.core.search.i.IndexerRemote;
 import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
@@ -45,7 +46,7 @@ import org.subethamail.entity.Mail;
 @Service(objectName="subetha:service=Indexer")
 //@SecurityDomain("subetha")
 //@RolesAllowed("siteAdmin")
-public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer
+public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer, IndexerRemote
 {
 	/** */
 	@SuppressWarnings("unused")

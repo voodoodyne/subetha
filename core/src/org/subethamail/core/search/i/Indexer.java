@@ -5,7 +5,7 @@
 
 package org.subethamail.core.search.i;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  * Interface for indexing and searching through textual data.  This is
@@ -15,11 +15,11 @@ import javax.ejb.Remote;
  *
  * @author Jeff Schnitzer
  */
-@Remote
+@Local
 public interface Indexer
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/IndexerBean/remote";
+	public static final String JNDI_NAME = "subetha/IndexerBean/local";
 
 	/**
 	 * Queries the index for a specific mailing list.

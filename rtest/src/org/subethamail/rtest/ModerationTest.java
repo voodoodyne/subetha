@@ -16,6 +16,7 @@ import junit.framework.TestSuite;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.injector.i.Injector;
+import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
@@ -54,7 +55,7 @@ public class ModerationTest extends SubEthaTestCase
 		
 		Context ctx = new InitialContext();
 		
-		this.injector = (Injector)ctx.lookup(Injector.JNDI_NAME);
+		this.injector = (Injector)ctx.lookup(InjectorRemote.JNDI_NAME);
 		
 		this.admin = new AdminMixin();
 		this.pers = new PersonMixin(this.admin);

@@ -8,7 +8,7 @@ package org.subethamail.core.admin.i;
 import java.net.URL;
 import java.util.List;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 
 
@@ -17,11 +17,11 @@ import javax.mail.internet.InternetAddress;
  * 
  * @author Jeff Schnitzer
  */
-@Remote
+@Local
 public interface ListWizard
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/ListWizard/remote";
+	public static final String JNDI_NAME = "subetha/ListWizard/local";
 	
 	/**
 	 * @return a list of all known blueprints. 

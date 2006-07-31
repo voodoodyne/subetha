@@ -7,7 +7,7 @@ package org.subethamail.core.queue.i;
 
 import java.util.List;
 
-import javax.ejb.Remote;
+import javax.ejb.Local;
 
 /**
  * Interface for queueing mail for delivery.  There are two queues,
@@ -18,11 +18,11 @@ import javax.ejb.Remote;
  *
  * @author Jeff Schnitzer
  */
-@Remote
+@Local
 public interface Queuer
 {
 	/** */
-	public static final String JNDI_NAME = "subetha/Queuer/remote";
+	public static final String JNDI_NAME = "subetha/Queuer/local";
 
 	/**
 	 * Queues a mail for delivery to all receipients that want this

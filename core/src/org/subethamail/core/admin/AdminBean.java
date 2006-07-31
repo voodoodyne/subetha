@@ -22,6 +22,7 @@ import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
+import org.subethamail.core.admin.i.AdminRemote;
 import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.core.admin.i.SiteStatus;
@@ -49,7 +50,7 @@ import org.subethamail.entity.i.Permission;
 @Stateless(name="Admin")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class AdminBean extends EntityManipulatorBean implements Admin
+public class AdminBean extends EntityManipulatorBean implements Admin, AdminRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(AdminBean.class);

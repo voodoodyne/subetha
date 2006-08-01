@@ -66,30 +66,33 @@
 				</td>
 			</tr>
 			<c:if test="${perms.VIEW_NOTES}">
-				<th>Note:</th>
-				<td
-					<c:if test="${!empty model.errors.note}">class="error"</c:if>
-				>
-					<c:choose>
-						<c:when test="${perms.EDIT_NOTES}">
-							<textarea id="note" name="note" rows="5" cols="60" style="width:95%"
-							><c:out value="${model.note}" /></textarea> 
-						
-							<c:if test="${!empty model.errors.note}">
-								<p class="error"><c:out value="${model.errors.note}" /></p>
-							</c:if>
-						</c:when>
-						<c:otherwise>
-							<div class="note">
-								${f:escapeText(model.data.note)}
-						</c:otherwise>
-					</c:choose>
-				</td>
+				<tr>
+					<th>Note:</th>
+					<td
+						<c:if test="${!empty model.errors.note}">class="error"</c:if>
+					>
+						<c:choose>
+							<c:when test="${perms.EDIT_NOTES}">
+								<textarea id="note" name="note" rows="5" cols="60" style="width:95%"
+								><c:out value="${model.note}" /></textarea> 
+							
+								<c:if test="${!empty model.errors.note}">
+									<p class="error"><c:out value="${model.errors.note}" /></p>
+								</c:if>
+							</c:when>
+							<c:otherwise>
+								<div class="note">
+									${f:escapeText(model.data.note)}
+							</c:otherwise>
+						</c:choose>
+					</td>
+				</tr>
 			</c:if>
-			<tr>
-				<th></th>
-				<td><input type="submit" value="Save" /></td>
-			</tr>
 		</table>
+		<input type="submit" value="Save" />
+	</form>
+	<form action="<c:url value="/list_subscribers.jsp"/>" method="post">
+		<input type="hidden" name="listId" value="${param.listId}" />
+		<input type="submit" value="Cancel" />
 	</form>
 </trim:list>

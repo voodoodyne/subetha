@@ -7,6 +7,16 @@
 	<table>
 		<tr>
 			<td>
+				<div class="searchBar">
+					<form action="<c:url value="/archive_search.jsp"/>" method="get">
+						<input type="hidden" name="listId" value="${msg.listId}" />
+						
+						<input type="text" name="query" size="50" />
+						<input type="submit" value="Search" />
+					</form>
+				</div>
+			</td>
+			<td>
 				<a href="<c:url value="/message/${msg.id}/download/${msg.listId}-${msg.id}.eml"/>">Download Message</a> / 
 				<a href="<c:url value="/message/${msg.id}/view/${msg.listId}-${msg.id}.eml"/>">View Message</a> 
 

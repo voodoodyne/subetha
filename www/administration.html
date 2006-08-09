@@ -185,6 +185,33 @@
 				</li>
 			</ul>
 			
+			<h3>Bounce Processing</h3>			
+			<ul>
+				<li>SubEtha intelligently handles bounce messages using 
+					<a href="http://en.wikipedia.org/wiki/VERP">VERP</a>'d 
+					envelope senders. This removes the need to attempt to parse 
+					bounce messages from servers.</li>
+
+				<li>The envelope sender is VERP'd and thus bounces cause the bounceCount to 
+				increment faster than decrement.</li>
+
+				<li>Things work like this:
+					<ol>
+						<li>Every EmailAddress has a bounceCount.</li>
+						<li>When a mail is sent from a list to an EmailAddress, 
+							the bounceCount is decremented by one (at most once per 
+							24 hrs, even if multiple mails are sent within that 
+							period).</li>
+						<li>When a bounce is received, the bounceCount is 
+							incremented by two (at most once per 24 hrs).</li>
+						<li>The EmailAddress is removed from all lists (by setting 
+							subscription to "No Delivery") when the bounceCount 
+							reaches a threshold which is currently hard coded as 
+							7.</li>
+					</ol>
+				</li>
+			</ul>
+			
 			<h3>Programming</h3>
 			<ul>
 				<li>

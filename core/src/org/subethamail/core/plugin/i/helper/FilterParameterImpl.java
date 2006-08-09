@@ -6,8 +6,8 @@
 package org.subethamail.core.plugin.i.helper;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.subethamail.core.plugin.i.FilterParameter;
 
@@ -136,7 +136,7 @@ public class FilterParameterImpl implements FilterParameter, Serializable
 	{
 		if (documentation == null)
 		{
-			documentation = new HashMap<String, String>();
+			documentation = new TreeMap<String, String>();
 			documentation.put("${list.name}", "The name of this mailing list.");
 			documentation.put("${list.description}", "The description of this mailing list.");
 			documentation.put("${list.email}", "The email address of this mailing list.");

@@ -239,20 +239,17 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		if (hold == null)
 		{
 			// Figure out who sent it, if we know
-			try
-			{
-				Person author = this.em.getEmailAddress(senderAddy.getAddress()).getPerson();
-				
-				if (log.isDebugEnabled())
-					log.debug("Message author is: " + author);
-				
-				if (!toList.getPermissionsFor(author).contains(Permission.POST))
-					hold = HoldType.SOFT;
-			}
-			catch (NotFoundException ex)
-			{
+			Person author = null;
+			
+			EmailAddress addy = this.em.findEmailAddress(senderAddy.getAddress());
+			if (addy != null)
+				author = addy.getPerson();
+			
+			if (log.isDebugEnabled())
+				log.debug("Message author is: " + author);
+			
+			if (!toList.getPermissionsFor(author).contains(Permission.POST))
 				hold = HoldType.SOFT;
-			}
 		}
 		
 		if (log.isDebugEnabled())

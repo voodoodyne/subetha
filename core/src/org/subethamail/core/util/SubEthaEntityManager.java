@@ -101,8 +101,6 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 	/**
 	 * Finds an email address with the specified address.  Normalizes
 	 * the address properly before querying.
-	 * 
-	 * @return null if no email address associated with that address
 	 */
 	public EmailAddress getEmailAddress(String email) throws NotFoundException
 	{
@@ -114,6 +112,8 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 	/**
 	 * Finds an email address with the specified address.  Normalizes
 	 * the address properly before querying.
+	 * 
+	 * @return null if no email address associated with that address
 	 */
 	public EmailAddress findEmailAddress(String email)
 	{

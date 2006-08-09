@@ -6,6 +6,9 @@
 package org.subethamail.plugin.filter;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
@@ -42,23 +45,36 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 	
 	private static final String ARG_FOOTER = "Footer";
 	
+	private static final String ARCHIVE_MESSAGE_URL = "archive.message.url";
+
 	private static final String DEFAULT_FOOTER = 
 		"_______________________________________________\n" +
 		"${list.name} mailing list\n" +
 		"${list.email}\n" +
-		"${list.url}";
+		"${list.url}\n" +
+		"${" + ARCHIVE_MESSAGE_URL + "}";
+
 
 	/** */
-	static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
-		new FilterParameterImpl(
-				ARG_FOOTER,
-				"The footer text which is appended to the bottom of the email body.",
-				DEFAULT_FOOTER,
-				20,
-				true,
-				null
-			)
-	};
+	static FilterParameter[] PARAM_DEFS;
+
+	static
+	{
+		Map<String, String> documentation = 
+			Collections.singletonMap("${" + ARCHIVE_MESSAGE_URL + "}", 
+				"Absolute URL link to the message in the archives.");
+
+		PARAM_DEFS = new FilterParameter[] {
+				new FilterParameterImpl(
+						ARG_FOOTER,
+						"The footer text which is appended to the bottom of the email body.",
+						DEFAULT_FOOTER,
+						20,
+						true,
+						documentation
+					)
+			};
+	}
 
 	/**
 	 * @see Lifecycle#start()
@@ -106,7 +122,13 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 		try
 		{
 			String footerContent = (String) ctx.getArgument(ARG_FOOTER);
-			String expandedFooter = "\n" + ctx.expand(footerContent);
+			
+			// Add a link to the message in the archive into the context.
+			Map<String, Object> map = new HashMap<String, Object>();
+			String archiveUrl = ctx.getList().getUrlBase() + "archive_msg.jsp?msgId=" + ctx.getMailId();
+			map.put(ARCHIVE_MESSAGE_URL, archiveUrl);
+
+			String expandedFooter = "\n" + ctx.expand(footerContent, map);
 
 			String contentType = msg.getContentType().toLowerCase();
 			

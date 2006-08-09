@@ -89,8 +89,8 @@ public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 			String mailSubject = (String)vctx.get("subject");
 			String mailBody = writer.toString();
 			
-			// If we're in debug mode, annotate the subject.
-			if (log.isDebugEnabled())
+			// If in dev mode, annotate the subject for unit tests
+			if (isDeveloperMode())
 				mailSubject = kind.toString() + " " + mailSubject;
 
 			try
@@ -193,12 +193,21 @@ public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 	}
 	
 	/**
-	 * Modifies the token with debug information which can be picked out
-	 * by the unit tester.
+	 * @return true if we should annotate all outgoing messages to make
+	 *  unit tests and developers happy. 
+	 */
+	protected boolean isDeveloperMode()
+	{
+		return "true".equals(System.getProperty("org.subethamail.dev"));
+	}
+	
+	/**
+	 * Maybe modifies the token with developer information which can be picked out
+	 * by the unit tester.  Checks developer mode.
 	 */
 	protected String token(String tok)
 	{
-		if (log.isDebugEnabled())
+		if (isDeveloperMode())
 			return Constant.DEBUG_TOKEN_BEGIN + tok + Constant.DEBUG_TOKEN_END;
 		else
 			return tok;

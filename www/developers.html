@@ -214,6 +214,13 @@
 				unit tests start a mock SMTP server on this port.
 			</li>
 			<li>
+				You MUST set the system property in the JBoss JVM:
+				-Dorg.subethamail.dev=true.  This causes JBoss to annotate the
+				automated messages with flags that the unit tests can recognize.
+				Edit ${jboss.dir}/bin/run.bat (on Windows) or ${jboss.dir}/bin/run.conf
+				(Linux/Unix/MacOSX) and add this instruction to JAVA_OPTS.
+			</li>
+			<li>
 				Run <em>ant junit</em>.  All your regression tests will run.
 			</li>
 			<li>

@@ -568,4 +568,22 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 		
 		return q.getResultList();
 	}
+
+	/**
+	 * Gets the last piece of held mail sent by the person to any list.
+	 * @return null if there wasn't any.  
+	 */
+	public Mail findLastMailHeldFrom(String senderEmail)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding the last held mail from " + senderEmail);
+		
+		senderEmail = Validator.normalizeEmail(senderEmail);
+		
+		Query q = this.createNamedQuery("HeldMailFrom");
+		q.setParameter("sender", senderEmail);
+		q.setMaxResults(1);
+		
+		return (Mail)q.getSingleResult();
+	}
 }

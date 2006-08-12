@@ -87,6 +87,14 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 * not occur.
 	 */
 	public static final long MAX_BOUNCE_THRESHOLD = 7;
+	
+	/**
+	 * Minimum number of milliseconds between hold notification emails.  It might
+	 * be longer if a steady stream arrives.  The logic actually only sends a
+	 * notification if it has been more than this interval since the last message
+	 * from the user was held.  Currently 24 hours.
+	 */
+	public static final long MIN_HOLD_NOTIFICATION_INTERVAL_MILLIS = 1000 * 60 * 60 * 24;
 
 	/** */
 	@EJB Queuer queuer;
@@ -264,9 +272,17 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		
 		if (mail.getHold() != null)
 		{
-			// Send instructions so that user can self-moderate
-			// Or send a message saying "you must wait for admin approval", use holdMsg if available
-			this.postOffice.sendPosterMailHoldNotice(toList, senderAddy.getAddress(), mail, holdMsg);
+			// We don't want to send too many of these notification messages
+			// because they might cause too much backscatter from spam.  We
+			// compromise on sending at most one per time period.
+			Mail lastMail = this.em.findLastMailHeldFrom(senderAddy.getAddress());
+			if (lastMail.getArrivalDate().getTime()
+					< System.currentTimeMillis() - MIN_HOLD_NOTIFICATION_INTERVAL_MILLIS)
+			{
+				// Send instructions so that user can self-moderate
+				// Or send a message saying "you must wait for admin approval", use holdMsg if available
+				this.postOffice.sendPosterMailHoldNotice(toList, senderAddy.getAddress(), mail, holdMsg);
+			}
 			
 			if (hold == HoldType.HARD)
 			{

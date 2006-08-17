@@ -13,7 +13,7 @@
 
 <trim:list title="Edit Subscription" listId="${param.listId}">
 
-	<form action="<c:url value="/subscription_submit.jsp"/>" method="post">
+	<form action="<c:url value="/subscription_submit.jsp"/>" method="post" class="form-inline">
 		<input type="hidden" name="personId" value="${param.personId}" />
 		<input type="hidden" name="listId" value="${param.listId}" />
 		
@@ -91,7 +91,7 @@
 		</table>
 		<input type="submit" value="Save" />
 	</form>
-	<form action="<c:url value="/list_subscribers.jsp"/>" method="post">
+	<form action="<c:url value="/list_subscribers.jsp"/>" method="post" class="form-inline">
 		<input type="hidden" name="listId" value="${param.listId}" />
 		<input type="submit" value="Cancel" />
 	</form>

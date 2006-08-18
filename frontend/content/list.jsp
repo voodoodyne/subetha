@@ -146,7 +146,7 @@
 					<tr>
 						<th><label for="deliverTo">Your Email Address:</label></th>
 						<td <c:if test="${!empty model.errors.deliverTo}">class="error"</c:if> >
-							<input id="deliverTo" name="deliverTo" value="<c:out value="${model.deliverTo}"/>" type="text" size="60" />
+							<input id="deliverTo" name="deliverTo" value="<c:out value="${model.deliverTo}"/>" type="text" size="40" />
 							<c:if test="${!empty model.errors.deliverTo}">
 								<p class="error"><c:out value="${model.errors.deliverTo}"/></p>
 							</c:if>
@@ -155,7 +155,7 @@
 					<tr>
 						<th><label for="name">Your Name:</label></th>
 						<td <c:if test="${!empty model.errors.name}">class="error"</c:if> >
-							<input id="name" name="name" value="<c:out value="${model.name}"/>" type="text" size="60" />
+							<input id="name" name="name" value="<c:out value="${model.name}"/>" type="text" size="40" />
 							<c:if test="${!empty model.errors.name}">
 								<p class="error"><c:out value="${model.errors.name}"/></p>
 							</c:if>

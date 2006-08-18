@@ -6,7 +6,11 @@
 	<!-- ###### Header ###### -->
 	
 	<div id="header">
-		<span class="headerTitle">SubEtha Mail</span>
+		<span id="headerImg">
+			<img src="<c:url value="/img/logo_mock_sm.jpg" />" alt="SubEtha Mail" />
+		</span>
+		
+		<div id="headerText">SubEtha Mail</div>
 	</div> <!-- header -->
 	
 	<div id="bodyText">

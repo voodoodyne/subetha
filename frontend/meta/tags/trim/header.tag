@@ -45,13 +45,13 @@
 			</c:choose>
 		</div> <!-- locBar -->
 		
-		<span class="headerTitle">
-			SubEtha Mail
+		<span id="headerImg">
+			<img src="<c:url value="/img/logo_mock_sm.jpg" />" alt="SubEtha Mail" />
 		</span>
 		
 		<%-- Need to clean up the CSS for these parts --%>
 		<c:if test="${!empty headerTitle}">
-			<div class="menuBar"><c:out value="${headerTitle}"/></div>
+			<div id="headerText"><c:out value="${headerTitle}"/></div>
 		</c:if>
 	</div> <!-- header -->
 	

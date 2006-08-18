@@ -16,26 +16,37 @@ legend {
 }
 
 pre {
- padding-left: 1em;
- font-size: 1.1em;
+	padding-left: 1em;
+	font-size: 1.1em;
 }
 
 #header {
-	height: 8em;
+	height: 6.5em;
+	background-color: #fff;
+}
+
+#headerText {
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 150%;
 }
 
 #bodyText {
-	margin: 0mm 5mm 0 14em;
+	margin: 0px 5px 0 14em;
 	text-align: left;
 }
 
 #bodyText p {
-	padding-bottom: 0ex;
+	padding-bottom: 0px;
 }
 
-.headerTitle {
-	font-size: 110%;
-	line-height: 2.5em;
+#bodyText h1 {
+	border-top-style: solid;
+ 	border-top-width: 2px;
+ 	border-bottom-style: dotted;
+ 	background-color: #e8f0ff;
+ 	padding-top: 0.4em;
+ 	padding-left: 0.5em;
 }
 
 .menuBar {

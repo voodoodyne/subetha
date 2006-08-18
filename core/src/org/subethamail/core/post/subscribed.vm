@@ -12,11 +12,15 @@
 #end
 #if($unsub)
 	#set($action = "unsubscribed")
+	#set($tofrom = "from")
 #else
 	#set($action = "subscribed")
+	#set($tofrom = "to")
 #end
 #set($subject = "$who $action to $sub.list.name")
-${who} $action to ${sub.list.name}.  This person has the following email address(es):
+${who} $action ${tofrom} ${sub.list.name}.
+
+This person has the following email address(es):
 
 #foreach($personalAddress in $sub.person.emailAddresses)
 	$personalAddress.id

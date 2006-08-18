@@ -45,7 +45,7 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 	
 	private static final String ARG_FOOTER = "Footer";
 	
-	private static final String ARCHIVE_MESSAGE_URL = "archive.message.url";
+	private static final String ARCHIVE_MESSAGE_URL = "archiveUrl";
 
 	private static final String DEFAULT_FOOTER = 
 		"_______________________________________________\n" +

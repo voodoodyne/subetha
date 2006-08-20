@@ -71,6 +71,20 @@ public class ModerationTest extends SubEthaTestCase
 	}
 	
 	/** */
+	public void testHeldMailNotification() throws Exception
+	{
+		// Pers2 is not subscribed
+		this.injector.inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
+		Thread.sleep(1000);
+		assertEquals(1, this.smtp.count(MailType.YOUR_MAIL_HELD));
+		
+		// A second try should not produce a held notification
+		this.injector.inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
+		Thread.sleep(1000);
+		assertEquals(1, this.smtp.count(MailType.YOUR_MAIL_HELD));
+	}
+	
+	/** */
 	public void testDiscard() throws Exception
 	{
 		this.injector.inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
@@ -84,6 +98,9 @@ public class ModerationTest extends SubEthaTestCase
 		assertEquals(this.pers2.getAddress().toString(), msg.getFrom());
 		
 		this.admin.getListMgr().discardHeldMessage(msg.getId());
+		
+		msgs = this.admin.getListMgr().getHeldMessages(this.ml.getId(), -1, -1);
+		assertEquals(0, msgs.size());
 	}
 	
 	/** */

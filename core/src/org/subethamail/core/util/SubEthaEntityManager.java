@@ -571,9 +571,10 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 
 	/**
 	 * Gets the last piece of held mail sent by the person to any list.
+	 * @param excludeMailId is the id of mail that shouldn't be considered.
 	 * @return null if there wasn't any.  
 	 */
-	public Mail findLastMailHeldFrom(String senderEmail)
+	public Mail findLastMailHeldFrom(String senderEmail, Long excludeMailId)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Finding the last held mail from " + senderEmail);
@@ -582,8 +583,26 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 		
 		Query q = this.createNamedQuery("HeldMailFrom");
 		q.setParameter("sender", senderEmail);
+		q.setParameter("excluding", excludeMailId);
 		q.setMaxResults(1);
 		
 		return (Mail)q.getSingleResult();
+	}
+	
+	/**
+	 * Counts the number of held messages from an address since a particular date.
+	 */
+	public int countRecentHeldMail(String senderEmail, Date since)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Counting recent held mail from " + senderEmail);
+		
+		senderEmail = Validator.normalizeEmail(senderEmail);
+		
+		Query q = this.createNamedQuery("CountRecentHeldMailFrom");
+		q.setParameter("sender", senderEmail);
+		q.setParameter("since", since);
+		
+		return ((Number)q.getSingleResult()).intValue();
 	}
 }

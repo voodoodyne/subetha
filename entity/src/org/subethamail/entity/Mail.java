@@ -116,7 +116,13 @@ import org.subethamail.entity.i.Validator;
 	),
 	@NamedQuery(
 		name="HeldMailFrom", 
-		query="select m from Mail m where m.hold is not null and m.envelopeSender = :sender order by m.arrivalDate desc",
+		query="select m from Mail m where m.hold is not null and m.envelopeSender = :sender and m.id <> :excluding order by m.arrivalDate desc",
+		hints={
+		}
+	),
+	@NamedQuery(
+		name="CountRecentHeldMailFrom", 
+		query="select count(*) from Mail m where m.hold is not null and m.envelopeSender = :sender and m.arrivalDate > :since",
 		hints={
 		}
 	),

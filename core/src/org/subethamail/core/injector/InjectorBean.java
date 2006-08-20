@@ -275,9 +275,10 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			// We don't want to send too many of these notification messages
 			// because they might cause too much backscatter from spam.  We
 			// compromise on sending at most one per time period.
-			Mail lastMail = this.em.findLastMailHeldFrom(senderAddy.getAddress());
-			if (lastMail.getArrivalDate().getTime()
-					< System.currentTimeMillis() - MIN_HOLD_NOTIFICATION_INTERVAL_MILLIS)
+			Date cutoff = new Date(System.currentTimeMillis() - MIN_HOLD_NOTIFICATION_INTERVAL_MILLIS);
+			
+			int recentHolds = this.em.countRecentHeldMail(senderAddy.getAddress(), cutoff);
+			if (recentHolds <= 1)	// count includes the current held msg
 			{
 				// Send instructions so that user can self-moderate
 				// Or send a message saying "you must wait for admin approval", use holdMsg if available

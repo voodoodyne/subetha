@@ -63,17 +63,12 @@
 				<tr class="${color}">
 					<td><a href="mailto:<c:out value="${email}"/>"><c:out value="${email}"/></a></td>
 					<td>
-						<c:choose>
-							<c:when test="${auth.authName != email}">
-								<form action="<c:url value="/email_remove.jsp"/>" method="post">
-									<input type="hidden" name="email" value="<c:out value="${email}"/>" />
-									<input type="submit" value="Remove" style="width: 5em" />
-								</form>
-							</c:when>
-							<c:otherwise>
-								Logged In
-							</c:otherwise>
-						</c:choose>
+						<c:if test="${fn:length(me.emailAddresses) > 1}">
+							<form action="<c:url value="/email_remove.jsp"/>" method="post">
+								<input type="hidden" name="email" value="<c:out value="${email}"/>" />
+								<input type="submit" value="Remove" style="width: 5em" />
+							</form>
+						</c:if>
 					</td>
 				</tr>
 			</c:forEach>

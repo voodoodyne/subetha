@@ -8,7 +8,7 @@
 <trim:main title="Manage Site Administrators">
 	<h1>Manage Site Administrators</h1>
 
-	<p>Site Administrators have god'ish powers. Only give this power to people you trust.</p>
+	<p>Site Administrators can add, remove, and edit any mailing list.</p>
 
 	<form action="<c:url value="/admins_remove_submit.jsp"/>" method="post">
 		<input type="hidden" name="id" value="<c:out value="${person.id}" />" />

@@ -16,7 +16,7 @@
 			</thead>
 			<tbody>
 			<tr>
-				<td>Postmaster email</td>
+				<td>Postmaster Email</td>
 				<td	<c:if test="${!empty model.errors.postmasterEmail}">
 						class="error"
 					</c:if>>
@@ -25,10 +25,17 @@
 						<p class="error"><c:out value="${model.errors.postmasterEmail}" /></p>
 					</c:if>
 				</td>
-				<td>The postmaster email address for the site.<br />("Your Name" &lt;postmater@yoursite.com&gt;)</td>
+				<td>
+					<div>
+						The postmaster email address for the site.  Used only as sender address
+						for "forgot your password" and "confirm additional email address" emails
+						to users.
+					</div>
+					<div><small>Example: "Your Name" &lt;postmater@yoursite.com&gt;</small></div>
+				</td>
 			</tr>
 			<tr>
-				<td>Default site url</td>
+				<td>Default Site URL</td>
 				<td	<c:if test="${!empty model.errors.defaultSiteUrl}">
 						class="error"
 					</c:if>>
@@ -37,7 +44,12 @@
 						<p class="error"><c:out value="${model.errors.defaultSiteUrl}" /></p>
 					</c:if>
 				</td>
-				<td>The global url for the site.<br />(http://hostname:port/se/)</td>
+				<td>
+					<div>
+						The default url for the site, included in the text of
+						"forgot your password" et al emails.
+					</div>
+					<div><small>Example: http://www.example.com/se/</small></td>
 			</tr>
 			</tbody>
 		</table>

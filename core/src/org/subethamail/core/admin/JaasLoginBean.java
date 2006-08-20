@@ -11,7 +11,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.util.EntityManipulatorBean;
-import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Person;
 
 /**
@@ -31,11 +30,11 @@ public class JaasLoginBean extends EntityManipulatorBean implements JaasLogin
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.admin.JaasLogin#getPersonForEmail(java.lang.String)
+	 * @see org.subethamail.core.admin.JaasLogin#getPerson(java.lang.Long)
 	 */
-	public Person getPersonForEmail(String email) throws NotFoundException
+	public Person getPerson(Long id) throws NotFoundException
 	{
-		return this.em.get(EmailAddress.class, email).getPerson();
+		return this.em.get(Person.class, id);
 	}
 	
 }

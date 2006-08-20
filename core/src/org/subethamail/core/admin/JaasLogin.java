@@ -24,7 +24,7 @@ public interface JaasLogin
 	public static final String JNDI_NAME = "subetha/JaasLogin/local";
 
 	/**
-	 * Get the naked Person object associated with the email.] 
+	 * Get the naked Person object 
 	 */
-	public Person getPersonForEmail(String email) throws NotFoundException;
+	public Person getPerson(Long id) throws NotFoundException;
 }

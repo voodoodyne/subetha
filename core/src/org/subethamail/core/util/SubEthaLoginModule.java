@@ -35,7 +35,7 @@ public class SubEthaLoginModule extends UsernamePasswordLoginModule
 	private static Log log = LogFactory.getLog(SubEthaLoginModule.class);
 	
 	/** Must be the same as what is defined in the DynamicLoginConfig service DD */
-	public static final String UNAUTHENTICATED_IDENTITY = "-";
+	public static final Long UNAUTHENTICATED_IDENTITY = -1L;
 	
 	/**
 	 * We need this to lookup data objects
@@ -103,25 +103,26 @@ public class SubEthaLoginModule extends UsernamePasswordLoginModule
 	@Override
 	protected String getUsersPassword() throws LoginException
 	{
-		String email = this.getUsername();
+		String idStr = this.getUsername();
 		
 		if (log.isDebugEnabled())
-			log.debug("Checking password for " + email);
+			log.debug("Checking password for " + idStr);
+		
+		Long id = Long.valueOf(idStr);
 
 		try
 		{
-			Person pers = getJaasLogin().getPersonForEmail(email);
+			Person pers = getJaasLogin().getPerson(id);
 			
-			if (pers.isSiteAdmin())
-				this.roles = SITE_ADMIN_ROLES;
-			else
-				this.roles = USER_ROLES;
+			this.roles = new Group[] { new SimpleGroup("Roles") };
+			for (String role: pers.getRoles())
+				roles[0].addMember(new SimplePrincipal(role));
 			
 			return pers.getPassword();
 		}
 		catch (NotFoundException ex)
 		{
-			throw new FailedLoginException("No such user");
+			throw new FailedLoginException("No user with id " + id);
 		}
 	}
 }

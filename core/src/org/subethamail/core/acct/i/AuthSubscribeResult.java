@@ -5,6 +5,8 @@
 
 package org.subethamail.core.acct.i;
 
+import java.util.Set;
+
 
 /**
  * When a user anonymously subscribes to a list, they get back
@@ -21,9 +23,9 @@ public class AuthSubscribeResult extends AuthCredentials
 	Long listId;
 	
 	/** */
-	public AuthSubscribeResult(String email, String password, SubscribeResult result, Long listId)
+	public AuthSubscribeResult(Long id, String prettyName, String password, Set<String> roles, SubscribeResult result, Long listId)
 	{
-		super(email, password);
+		super(id, prettyName, password, roles);
 		
 		this.result = result;
 		this.listId = listId;

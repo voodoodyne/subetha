@@ -6,6 +6,7 @@
 package org.subethamail.core.acct.i;
 
 import java.io.Serializable;
+import java.util.Set;
 
 
 /**
@@ -19,25 +20,41 @@ import java.io.Serializable;
 public class AuthCredentials implements Serializable
 {
 	/** */
-	String email;
+	Long id;
+	String prettyName;
 	String password;
+	Set<String> roles;
 	
 	/** */
-	public AuthCredentials(String email, String password)
+	public AuthCredentials(Long id, String prettyName, String password, Set<String> roles)
 	{
-		this.email = email;
+		this.id = id;
+		this.prettyName = prettyName;
 		this.password = password;
+		this.roles = roles;
+	}
+	
+	/** */
+	public Long getId()
+	{
+		return this.id;
 	}
 
 	/** */
-	public String getEmail()
+	public String getPrettyName()
 	{
-		return this.email;
+		return this.prettyName;
 	}
 
 	/** */
 	public String getPassword()
 	{
 		return this.password;
+	}
+
+	/** */
+	public Set<String> getRoles()
+	{
+		return this.roles;
 	}
 }

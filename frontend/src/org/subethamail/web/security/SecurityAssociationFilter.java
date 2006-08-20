@@ -19,6 +19,11 @@ import org.subethamail.web.util.AbstractFilter;
 
 
 /**
+ * Filter which gets credentials from http context and associates them
+ * with the current thread using JBoss API.  Credentials are cleared
+ * when the request finishes.
+ * 
+ * @author Jeff Schnitzer
  */
 public class SecurityAssociationFilter extends AbstractFilter
 {
@@ -32,18 +37,25 @@ public class SecurityAssociationFilter extends AbstractFilter
 	{
 		if (log.isDebugEnabled())
 			log.debug("*** Starting filter for " + request.getRequestURI());
+
+		SecurityContext sctx = null;
 		
 		try
 		{
 			HttpSession sess = request.getSession(false);
 			if (sess != null)
-				Security.associateCredentials(sess);
+			{
+				sctx = (SecurityContext)sess.getAttribute(SecurityContext.SESSION_KEY);
+				if (sctx != null)
+					sctx.associateCredentials();
+			}
 			
 			chain.doFilter(request, response);
 		}
 		finally
 		{
-			Security.disassociateCredentials();
+			if (sctx != null)
+				sctx.disassociateCredentials();
 			
 			if (log.isDebugEnabled())
 				log.debug("*** Ending filter for " + request.getRequestURI());

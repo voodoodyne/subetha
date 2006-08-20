@@ -166,7 +166,13 @@ public class AdminBean extends EntityManipulatorBean implements Admin, AdminRemo
 		
 		SubscribeResult result = this.subscribe(listId, addy.getPerson(), addy, ignoreHold, silent);
 		
-		return new AuthSubscribeResult(addy.getId(), addy.getPerson().getPassword(), result, listId);
+		return new AuthSubscribeResult(
+				addy.getPerson().getId(),
+				addy.getId(),
+				addy.getPerson().getPassword(),
+				addy.getPerson().getRoles(),
+				result,
+				listId);
 	}
 	
 	/**

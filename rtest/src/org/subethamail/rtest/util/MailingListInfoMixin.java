@@ -11,6 +11,7 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.common.Utils;
 
 /**
  * @author Jeff Schnitzer
@@ -31,13 +32,9 @@ public class MailingListInfoMixin
 	/** */
 	public MailingListInfoMixin() throws Exception
 	{
-		String objectId = this.toString();
-		// looks like:  com.similarity.rtest.PersonInfoMixin@bb0d0d
-		objectId = objectId.substring(objectId.lastIndexOf('@') + 1);
+		String baseEmail = Utils.uniqueString();
 		
-		String baseEmail = Long.toString(System.currentTimeMillis(), 36) + objectId;
-		
-		this.name = "List Name " + objectId;	// deliberately not very unique
+		this.name = "List Name " + baseEmail;
 		this.email = baseEmail + "@localhost";
 		this.url = new URL("http://localhost:8080/se/list/" + baseEmail);
 		this.address = new InternetAddress(this.email, this.name);

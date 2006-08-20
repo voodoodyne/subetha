@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,6 +64,18 @@ public class Person implements Serializable, Comparable
 {
 	/** */
 	@Transient private static Log log = LogFactory.getLog(Person.class);
+	
+	/** */
+	static final Set<String> USER_ROLES = Collections.singleton("user");
+	static final Set<String> SITE_ADMIN_ROLES;
+	static
+	{
+		Set<String> roles = new HashSet<String>();
+		roles.add("user");
+		roles.add("siteAdmin");
+		
+		SITE_ADMIN_ROLES = Collections.unmodifiableSet(roles);
+	}
 	
 	/** */
 	@Id
@@ -292,6 +305,15 @@ public class Person implements Serializable, Comparable
 			return Permission.ALL;
 		else
 			return this.getRoleIn(list).getPermissions();
+	}
+	
+	/** @return the j2ee security roles associated with this person */
+	public Set<String> getRoles()
+	{
+		if (this.siteAdmin)
+			return SITE_ADMIN_ROLES;
+		else
+			return USER_ROLES;
 	}
 	
 	/** */

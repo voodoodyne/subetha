@@ -90,7 +90,7 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 	 * Send a mail directly to an email
 	 * 
 	 * @param mailId the message to send
-	 * @param email the email to send to.
+	 * @param prettyName the email to send to.
 	 * @param personId the person to send to, if there is one.
 	 * 
 	 * @throws NotFoundException if something can't be found

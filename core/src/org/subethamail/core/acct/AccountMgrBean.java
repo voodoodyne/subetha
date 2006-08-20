@@ -15,6 +15,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
+import javax.security.auth.login.FailedLoginException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -69,6 +70,22 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	@EJB PostOffice postOffice;
 	@EJB Encryptor encryptor;
 	@EJB Admin admin;
+	
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.acct.i.AccountMgr#authenticate(java.lang.String, java.lang.String)
+	 */
+	@PermitAll
+	public AuthCredentials authenticate(String email, String password) throws FailedLoginException
+	{
+		EmailAddress ea = this.em.findEmailAddress(email);
+		if (ea == null)
+			throw new FailedLoginException("No such email");
+		
+		if (!ea.getPerson().checkPassword(password))
+			throw new FailedLoginException("Wrong password");
+		
+		return new AuthCredentials(ea.getPerson().getId(), email, password, ea.getPerson().getRoles());
+	}
 	
 	/**
 	 * @see AccountMgr#getSelf()
@@ -176,7 +193,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 		
 		Person p = this.em.get(Person.class, personId);
 		
-		return new AuthCredentials(email, p.getPassword());
+		return new AuthCredentials(personId, email, p.getPassword(), p.getRoles());
 	}
 
 	/**

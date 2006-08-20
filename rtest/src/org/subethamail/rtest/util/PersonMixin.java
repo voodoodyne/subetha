@@ -31,4 +31,9 @@ public class PersonMixin extends PersonInfoMixin
 	
 	/** */
 	public Long getId() { return this.id; }
+	
+	/** */
+	@Override
+	public String getPrincipalName() { return this.id.toString(); }
+	
 }

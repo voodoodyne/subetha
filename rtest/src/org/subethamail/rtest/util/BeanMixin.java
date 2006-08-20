@@ -42,8 +42,8 @@ public class BeanMixin
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(BeanMixin.class);
 
-	private Admin admin;
 	private AccountMgr accountMgr;
+	private Admin admin;
 	private ListMgr listMgr;
 	private ListWizard listWizard;
 	private Indexer indexer;
@@ -63,7 +63,7 @@ public class BeanMixin
 	}
 	
 	/** If this is null, clears all credentials */
-	public String getEmail() { return null; };
+	public String getPrincipalName() { return null; };
 	
 	/** */
 	public String getPassword() { return null; }
@@ -73,14 +73,14 @@ public class BeanMixin
 	 */
 	public void establish()
 	{
-		if (this.getEmail() == null)
+		if (this.getPrincipalName() == null)
 		{
 	        SecurityAssociation.setPrincipal(null);
 	        SecurityAssociation.setCredential(null);
 		}
 		else
 		{
-			Principal p = new SimplePrincipal(this.getEmail());
+			Principal p = new SimplePrincipal(this.getPrincipalName());
 	        SecurityAssociation.setPrincipal(p);
 	        SecurityAssociation.setCredential(this.getPassword());
 		}

@@ -6,6 +6,7 @@
 package org.subethamail.core.acct.i;
 
 import javax.ejb.Local;
+import javax.security.auth.login.FailedLoginException;
 
 import org.subethamail.common.NotFoundException;
 
@@ -23,6 +24,13 @@ public interface AccountMgr
 {
 	/** */
 	public static final String JNDI_NAME = "subetha/AccountMgr/local";
+	
+	/**
+	 * Checks login credentials, returning the user id information if successful.
+	 * 
+	 * No access control.
+	 */
+	public AuthCredentials authenticate(String email, String password) throws FailedLoginException;
 	
 	/**
 	 * @return many details about myself, including email addresses

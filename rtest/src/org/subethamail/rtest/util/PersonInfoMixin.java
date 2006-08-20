@@ -38,12 +38,10 @@ public class PersonInfoMixin extends BeanMixin
 		this.address = new InternetAddress(this.email, this.name);
 	}
 	
-	/** */
-	@Override
-	public String getEmail() { return this.email; }
-	
 	@Override
 	public String getPassword() { return this.password; }
+	
+	public String getEmail() { return this.email; }
 	
 	public String getName() { return this.name; }
 	

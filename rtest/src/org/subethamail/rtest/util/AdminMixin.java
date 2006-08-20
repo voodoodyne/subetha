@@ -20,15 +20,26 @@ public class AdminMixin extends BeanMixin
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(AdminMixin.class);
+	
+	/** */
+	public static final String EMAIL = "root@localhost";
+	public static final String PASSWORD = "password";
+	
+	/** */
+	Long id;
 
 	/** */
 	public AdminMixin() throws Exception
-	{}
+	{
+		// Need to fetch this as the unauthenticated identity
+		BeanMixin nobody = new BeanMixin();
+		this.id = nobody.getAccountMgr().authenticate(EMAIL, PASSWORD).getId();
+	}
 	
 	@Override
-	public String getEmail() { return "root@localhost"; }
+	public String getPrincipalName() { return this.id.toString(); }
 	
 	@Override
-	public String getPassword() { return "password"; }
+	public String getPassword() { return PASSWORD; }
 	
 }

@@ -6,22 +6,20 @@
 package org.subethamail.web.action.auth;
 
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.security.auth.callback.UsernamePasswordHandler;
 import org.jboss.util.Base64;
+import org.subethamail.core.acct.i.AuthCredentials;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
-import org.subethamail.web.security.Security;
+import org.subethamail.web.security.SecurityContext;
 
 /**
  * Provides basic authentication services to action subclasses.
@@ -46,14 +44,14 @@ abstract public class AuthAction extends SubEthaAction
 	/** */
 	private static Log log = LogFactory.getLog(AuthAction.class);
 	
-	/** The name of the jboss security context of this application. */
-	public static final String SECURITY_CONTEXT_NAME = "subetha";
-	
 	/** Name of autologin cookie */
 	protected static final String AUTO_LOGIN_COOKIE_KEY = "subetha.auth";
 	
 	/** The j2ee security role for administrative users */
 	public final static String SITE_ADMIN_ROLE = "siteAdmin";
+	
+	/** Key in http session to the pretty auth name */
+	protected static final String AUTH_NAME_KEY = "subetha.authName";
 	
 	/**
 	 * Actually perform the login logic by calling into the JAAS stack.
@@ -62,17 +60,26 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public void login(String who, String password) throws LoginException
 	{
-		Security.logout(this.getCtx().getSession());
+		this.getCtx().getSession().removeAttribute(SecurityContext.SESSION_KEY);
 		
-		CallbackHandler handler = new UsernamePasswordHandler(who, password);
-		LoginContext lc = new LoginContext(SECURITY_CONTEXT_NAME, handler);
-		
-		lc.login();
+		AuthCredentials creds = Backend.instance().getAccountMgr().authenticate(who, password);
 		
 		if (log.isDebugEnabled())
 			log.debug("Successful authentication for:  " + who);
-
-		Security.login(this.getCtx().getSession(), who, password);
+		
+		this.markLoggedIn(creds);
+	}
+	
+	/**
+	 * Utility method that makes the user logged in as the specified credentials.
+	 */
+	protected void markLoggedIn(AuthCredentials creds)
+	{
+		SecurityContext sctx = new SecurityContext(creds.getId().toString(), creds.getPassword(), creds.getRoles());
+		this.getCtx().getSession().setAttribute(SecurityContext.SESSION_KEY, sctx);
+		sctx.associateCredentials();
+		
+		this.getCtx().getSession().setAttribute(AUTH_NAME_KEY, creds.getPrettyName());
 	}
 	
 	/**
@@ -80,7 +87,25 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public boolean isLoggedIn()
 	{
-		return Security.isLoggedIn(this.getCtx().getRequest());
+		return this.getSecurityContext() != null;
+	}
+
+	/**
+	 * @return the current security context, or null if there isn't one
+	 */
+	protected SecurityContext getSecurityContext()
+	{
+		return getSecurityContext(this.getCtx().getSession());
+	}
+	
+	public static boolean isLoggedIn(HttpSession session)
+	{
+		return getSecurityContext(session) != null;
+	}
+
+	public static SecurityContext getSecurityContext(HttpSession session)
+	{
+		return (SecurityContext)session.getAttribute(SecurityContext.SESSION_KEY);
 	}
 
 	/**
@@ -88,7 +113,11 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public boolean isSiteAdmin()
 	{
-		return Security.isUserInRole(SITE_ADMIN_ROLE, this.getCtx().getRequest());
+		SecurityContext sctx = this.getSecurityContext();
+		if (sctx != null)
+			return sctx.isUserInRole(SITE_ADMIN_ROLE);
+		else
+			return false;
 	}
 	
 	/**
@@ -96,11 +125,10 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public String getAuthName()
 	{
-		Principal p = Security.getUserPrincipal(this.getCtx().getRequest());
-		if (p == null)
-			return null;
+		if (this.isLoggedIn())
+			return (String)this.getCtx().getSession().getAttribute(AUTH_NAME_KEY);
 		else
-			return p.getName();
+			return null;
 	}
 	
 	/**
@@ -108,10 +136,10 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	protected void logout()
 	{
-		Security.logout(this.getCtx().getSession());
-		
-		// Invalidating the session clears anything else
-		this.getCtx().getSession().invalidate();
+		SecurityContext sctx = this.getSecurityContext();
+		this.getCtx().getSession().removeAttribute(SecurityContext.SESSION_KEY);
+		if (sctx != null)
+			sctx.disassociateCredentials();
 	}
 	
 	/**

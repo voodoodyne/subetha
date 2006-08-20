@@ -9,14 +9,14 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.mail.MessagingException;
+import javax.security.auth.login.FailedLoginException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jboss.security.SimplePrincipal;
 import org.subethamail.web.Backend;
-import org.subethamail.web.security.Security;
+import org.subethamail.web.security.SecurityContext;
 
 /**
  * Servlet allows calling the injector with a very simple HTTP POST
@@ -24,7 +24,8 @@ import org.subethamail.web.security.Security;
  * 
  * Parameters expected:
  * 
- * authName: the email address of a site administrator
+ * authId: the person id of a site administrator (this *or* authName must be specified)
+ * authName: the email address of a site administrator (this *or* authId must be specified)
  * authPassword: the password for the site administrator account
  * from: the email address of the envelope sender
  * recipient: the email address of the envelope recipient
@@ -33,6 +34,8 @@ import org.subethamail.web.security.Security;
  * The result will be 200 OK if accepted, 500 if an error occurred.
  * A 599 will be returned if the recipient is unknown.
  * 
+ * Note that authId *or* authName must be present, not both.
+ * 
  * TODO:  make this a lot more efficient by using the content body
  * as the raw message bytes instead of requiring www-form-urlencoded 
  */
@@ -40,6 +43,7 @@ import org.subethamail.web.security.Security;
 public class InjectorServlet extends HttpServlet
 {
 	/** */
+	public static final String AUTH_ID_PARAM = "authId";
 	public static final String AUTH_NAME_PARAM = "authName";
 	public static final String AUTH_PASS_PARAM = "authPassword";
 	public static final String FROM_PARAM = "from";
@@ -57,18 +61,36 @@ public class InjectorServlet extends HttpServlet
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		String authId = request.getParameter(AUTH_ID_PARAM);
 		String authName = request.getParameter(AUTH_NAME_PARAM);
 		String authPass = request.getParameter(AUTH_PASS_PARAM);
 		String from = request.getParameter(FROM_PARAM);
 		String recipient = request.getParameter(RECIPIENT_PARAM);
 		String message = request.getParameter(MESSAGE_PARAM);
 		
-		if (authName == null || authPass == null || from == null || recipient == null || message == null)
+		if (authPass == null || from == null || recipient == null || message == null)
 			throw new ServletException("Missing parameter");
 		
+		if (authId == null && authName == null)
+			throw new ServletException("Missing parameter");
+		
+		if (authId != null && authName != null)
+			throw new ServletException("Cannot specify both authId and authName");
+		
+		// One way or another we need an authId
+		if (authName != null)
+		{
+			try
+			{
+				authId = Backend.instance().getAccountMgr().authenticate(authName, authPass).getId().toString();
+			}
+			catch (FailedLoginException ex) { throw new ServletException(ex); }
+		}
+		
+		SecurityContext sctx = new SecurityContext(authId, authPass, null);
 		try
 		{
-			Security.associateCredentials(new SimplePrincipal(authName), authPass);
+			sctx.associateCredentials();
 			
 			if (!Backend.instance().getInjector().inject(from, recipient, new ByteArrayInputStream(message.getBytes())))
 				response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
@@ -79,7 +101,7 @@ public class InjectorServlet extends HttpServlet
 		}
 		finally
 		{
-			Security.disassociateCredentials();
+			sctx.disassociateCredentials();
 		}
 	}
 }

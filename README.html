@@ -17,14 +17,17 @@
 				<ul>
 					<li>List administrators can now edit subscriber options.</li>
 					<li>Stabilized the order of many lists (subscriptions, email addresses, etc).</li>
+
 					<li>"Your mail held" notifications now set at most once per day per sender address.</li>
 					<li>Old held mail and held subscriptions are now periodically purged.</li>
 					<li>Fixed a problem changing the postmaster address.</li>
+					<li>Added $archiveUrl context variable to the AppendFooterFilter.</li>
+					<li>Various minor UI improvements.</li>
 				</ul>
 				<p>
 					<strong>NOTE:</strong>  The names of some of the roles have changed.
 					You must update your database before SubEtha will function.  Shut
-					down SubEtha and run the following queries:
+					down the JBoss instance running SubEtha and run the following queries:
 				</p>
 				<ol>
 					<li>update RolePermission set perm='EDIT_SUBSCRIPTIONS' where perm='UNSUBSCRIBE_OTHERS'</li>

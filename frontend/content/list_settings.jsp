@@ -9,7 +9,7 @@
 
 <trim:list title="List Settings" listId="${param.listId}">
 
-	<form action="<c:url value="/list_settings_submit.jsp"/>" method="post">
+	<form action="<c:url value="/list_settings_submit.jsp"/>" method="post" class="form-inline">
 		<input type="hidden" name="listId" value="${param.listId}" />
 
 	<fieldset>
@@ -114,7 +114,7 @@
 
 		<input type="submit" value="Save" />
 	</form>
-	<form action="<c:url value="/list.jsp"/>" method="post">
+	<form action="<c:url value="/list.jsp"/>" method="post" class="form-inline">
 		<input type="hidden" name="listId" value="${param.listId}" />
 		<input type="submit" value="Cancel" />
 	</form>

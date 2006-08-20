@@ -10,36 +10,36 @@
 
 	<p>Site Administrators can add, remove, and edit any mailing list.</p>
 
-	<form action="<c:url value="/admins_remove_submit.jsp"/>" method="post">
-		<input type="hidden" name="id" value="<c:out value="${person.id}" />" />
-		<table class="sort-table" id="emails-table">
-			<thead>
-				<tr>
-					<td>Name</td>
-					<td>Addresses</td>
-					<td>Action</td>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach var="person" items="${siteAdmins}" varStatus="loop">
-						<tr>
-							<td><c:out value="${person.name}" /></td>
-							<td>
-								<c:forEach var="e" items="${person.emailAddresses}"  varStatus="loop">
-									<a href="mailto:<c:out value="${e}" />"><c:out value="${e}" /></a><c:if test="${! loop.last}">, </c:if>
-								</c:forEach>
-							</td>
-							<td>
-								<c:if test="${person.id != me.id}">
+	<table class="sort-table" id="emails-table">
+		<thead>
+			<tr>
+				<td>Name</td>
+				<td>Addresses</td>
+				<td>Action</td>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach var="person" items="${siteAdmins}" varStatus="loop">
+					<tr>
+						<td><c:out value="${person.name}" /></td>
+						<td>
+							<c:forEach var="e" items="${person.emailAddresses}"  varStatus="loop">
+								<a href="mailto:<c:out value="${e}" />"><c:out value="${e}" /></a><c:if test="${! loop.last}">, </c:if>
+							</c:forEach>
+						</td>
+						<td>
+							<c:if test="${person.id != me.id}">
+								<form action="<c:url value="/admins_remove_submit.jsp"/>" method="post">
+									<input type="hidden" name="id" value="<c:out value="${person.id}" />" />
 									<input type="submit" value="Remove" 
-									onclick="return confirm('Are you sure you want to remove this administrator?');" />
-								</c:if>
-							</td>
-						</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-	</form>
+										onclick="return confirm('Are you sure you want to remove this administrator?');" />
+								</form>
+							</c:if>
+						</td>
+					</tr>
+			</c:forEach>
+		</tbody>
+	</table>
 
 	<form action="<c:url value="/admins_add_submit.jsp"/>" method="post">
 		<h3>Add Site Administrator</h3>

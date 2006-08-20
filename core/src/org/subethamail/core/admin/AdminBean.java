@@ -6,6 +6,7 @@
 package org.subethamail.core.admin;
 
 import java.net.URL;
+import java.security.Principal;
 import java.util.List;
 import java.util.Random;
 
@@ -13,10 +14,18 @@ import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanException;
+import javax.management.MBeanServer;
+import javax.management.MBeanServerFactory;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
+import javax.management.ReflectionException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.security.SimplePrincipal;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
@@ -318,6 +327,8 @@ public class AdminBean extends EntityManipulatorBean implements Admin, AdminRemo
 	{
 		Person p = this.em.get(Person.class, personId);
 		p.setSiteAdmin(value);
+		
+		this.flushJBossCredentialCache(personId);
 	}
 
 	/*
@@ -328,6 +339,32 @@ public class AdminBean extends EntityManipulatorBean implements Admin, AdminRemo
 	{
 		EmailAddress ea = this.em.getEmailAddress(email);
 		ea.getPerson().setSiteAdmin(siteAdmin);
+		
+		this.flushJBossCredentialCache(ea.getPerson().getId());
+	}
+	
+	/**
+	 * Flushes the auth credential cache of a specific user.  Necessary if something
+	 * involving j2ee roles will change.  Note that this won't necessarily be reflected
+	 * in the user interface, which has it's own cache of roles.
+	 */
+	private void flushJBossCredentialCache(Long personId)
+	{
+		// This code taken from http://wiki.jboss.org/wiki/Wiki.jsp?page=CachingLoginCredentials
+		try
+		{
+			String domain = "subetha";
+			Principal user = new SimplePrincipal(personId.toString());
+			ObjectName jaasMgr = new ObjectName("jboss.security:service=JaasSecurityManager");
+			Object[] params = { domain, user };
+			String[] signature = { "java.lang.String", Principal.class.getName() };
+			MBeanServer server = (MBeanServer) MBeanServerFactory.findMBeanServer(null).get(0);
+			server.invoke(jaasMgr, "flushAuthenticationCache", params, signature);
+		}
+		catch (MalformedObjectNameException ex) { throw new RuntimeException(ex); }
+		catch (InstanceNotFoundException ex) { throw new RuntimeException(ex); }
+		catch (MBeanException ex) { throw new RuntimeException(ex); }
+		catch (ReflectionException ex) { throw new RuntimeException(ex); }
 	}
 
 	/**

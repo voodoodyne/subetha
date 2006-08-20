@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.mail.internet.InternetAddress;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Hibernate;
@@ -91,7 +93,25 @@ public class AnyImmutableType implements UserType
 	 */
 	public boolean equals(Object x, Object y) throws HibernateException
 	{
-		return (x == y) || (x != null && y != null && (x.equals(y)));
+		if (x == y)
+		{
+			return true;
+		}
+		else if (x != null && y != null)
+		{
+			if (x instanceof InternetAddress && y instanceof InternetAddress)
+			{
+				// InternetAddress is stupid and ignores the personal
+				// part of the address in the equals() method.
+				InternetAddress iax = (InternetAddress)x;
+				InternetAddress iay = (InternetAddress)y;
+				return equals(iax.getAddress(), iay.getAddress()) && equals(iax.getPersonal(), iay.getPersonal());
+			}
+			else
+				return x.equals(y);
+		}
+		else
+			return false;
 	}
 
 	/**

@@ -9,6 +9,7 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.common.Utils;
 
 /**
  * @author Jeff Schnitzer
@@ -27,15 +28,10 @@ public class PersonInfoMixin extends BeanMixin
 	/** */
 	public PersonInfoMixin() throws Exception
 	{
-		String objectId = this.toString();
-		// looks like:  com.similarity.rtest.PersonInfoMixin@bb0d0d
-		objectId = objectId.substring(objectId.lastIndexOf('@') + 1);
+		String uniqueString = Utils.uniqueString();
 		
-		String baseName = Long.toString(System.currentTimeMillis(), 36); 
-		String name =  baseName + "-" + objectId;
-		
-		this.password = "asdf" + objectId;	// only needs be unique for JVM session
-		this.email = "subetha-" + name + "@localhost";
+		this.password = "asdf" + uniqueString;
+		this.email = "subetha-" + uniqueString + "@localhost";
 		
 		this.name = "Test User";
 		

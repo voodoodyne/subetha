@@ -19,7 +19,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
@@ -31,8 +30,6 @@ import org.subethamail.entity.i.Validator;
  * 
  * @author Jeff Schnitzer
  */
-@NamedQueries({
-})
 @Entity
 // Disabled caching until instrumentation problem with 4.0.4.GA resolved
 //@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL, include="non-lazy")

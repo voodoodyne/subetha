@@ -12,6 +12,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.annotation.security.RunAs;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +30,7 @@ import org.subethamail.entity.SubscriptionHold;
  * 
  * @author Jeff Schnitzer
  */
-@Service(objectName="subetha:service=Cleanup")
+@Service(name="Cleanup", objectName="subetha:service=Cleanup")
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
 public class CleanupBean extends EntityManipulatorBean implements CleanupManagement
@@ -47,7 +50,13 @@ public class CleanupBean extends EntityManipulatorBean implements CleanupManagem
 	{
 		public void run()
 		{
-			cleanup();
+			try
+			{
+				Context ctx = new InitialContext();
+				CleanupManagement cleaner = (CleanupManagement)ctx.lookup(CleanupManagement.JNDI_NAME);
+				cleaner.cleanup();
+			}
+			catch (NamingException ex) { throw new RuntimeException(ex); }
 		}
 	}
 	

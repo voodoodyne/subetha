@@ -21,6 +21,9 @@ import javax.annotation.Resource;
 import javax.ejb.EJBException;
 import javax.mail.MessagingException;
 import javax.mail.Session;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
@@ -79,7 +82,13 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	{
 		public void run()
 		{
-			update();
+			try
+			{
+				Context ctx = new InitialContext();
+				Indexer ind = (Indexer)ctx.lookup(Indexer.JNDI_NAME);
+				ind.update();
+			}
+			catch (NamingException ex) { throw new RuntimeException(ex); }
 		}
 	}
 	

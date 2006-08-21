@@ -7,11 +7,11 @@
 	<table>
 		<tr>
 			<td>
-				<div class="searchBar">
+				<div id="searchBar">
 					<form action="<c:url value="/archive_search.jsp"/>" method="get">
 						<input type="hidden" name="listId" value="${msg.listId}" />
 						
-						<input type="text" name="query" size="50" />
+						<input type="text" name="query" size="40" />
 						<input type="submit" value="Search" />
 					</form>
 				</div>

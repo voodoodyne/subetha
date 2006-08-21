@@ -206,11 +206,7 @@ span.authorName {
 }
 
 div#searchBar {
-	text-align: center;
-}
-
-table#searchResult {
-	border: 1;
+	padding-bottom: 15px;	
 }
 
 /* End Message Archives Styles */
@@ -223,5 +219,4 @@ div.note {
 
 table.sideHeader th {
 	padding-right: 7px;
-}
 }

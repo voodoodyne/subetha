@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.common.SearchException;
 import org.subethamail.core.lists.i.SearchHit;
 import org.subethamail.core.lists.i.SearchResult;
 import org.subethamail.web.Backend;
@@ -39,6 +40,8 @@ public class SearchArchive extends AuthAction
 		@Property Long listId;
 		@Property String query;
 		@Property List<SearchHit> hits;
+
+		@Property String error;
 	}
 
 	public void initialize()
@@ -51,9 +54,16 @@ public class SearchArchive extends AuthAction
 	{
 		Model model = (Model)this.getCtx().getModel();
 
-		SearchResult result = Backend.instance().getArchiver().search(model.listId, model.query, model.getSkip(), model.getCount());
-		
-		model.hits = result.getHits();
-		model.setTotalCount(result.getTotal());
+		try
+		{
+			SearchResult result = Backend.instance().getArchiver().search(model.listId, model.query, model.getSkip(), model.getCount());
+			
+			model.hits = result.getHits();
+			model.setTotalCount(result.getTotal());
+		}
+		catch (SearchException se)
+		{
+			model.error = se.getMessage();
+		}
 	}
 }

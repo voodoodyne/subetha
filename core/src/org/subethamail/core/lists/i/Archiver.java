@@ -13,6 +13,7 @@ import javax.ejb.Local;
 
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.common.SearchException;
 import org.subethamail.entity.i.PermissionException;
 
 /**
@@ -38,7 +39,7 @@ public interface Archiver
 	 * 
 	 * @return a paginated list of messages that match the criteria.
 	 */
-	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException;
+	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException, SearchException;
 	
 	/**
 	 * Required Permission.VIEW_ARCHIVES

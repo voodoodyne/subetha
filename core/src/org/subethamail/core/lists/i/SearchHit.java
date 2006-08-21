@@ -79,7 +79,19 @@ public class SearchHit implements Serializable
 	{
 		return this.score;
 	}
-	
+
+	/**
+	 * This method returns an int[] from 0 to 10
+	 * based on the score. This is a hack to allow
+	 * the score to be represented in the UI in 
+	 * a semi pretty way.
+	 */
+	public int[] getScores()
+	{
+		int tmp = new Float(this.score * 10).intValue();
+		return new int[tmp];
+	}
+
 	/** */
 	public String toString()
 	{

@@ -35,6 +35,7 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.common.SearchException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.filter.FilterRunner;
@@ -135,7 +136,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#search(java.lang.Long, java.lang.String, int, int)
 	 */
-	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException
+	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException, SearchException
 	{
 		Person me = this.getMe();
 		

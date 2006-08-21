@@ -7,6 +7,8 @@ package org.subethamail.core.search.i;
 
 import javax.ejb.Local;
 
+import org.subethamail.common.SearchException;
+
 /**
  * Interface for indexing and searching through textual data.  This is
  * a very primitive interface that only returns the ids of data objects.
@@ -27,7 +29,8 @@ public interface Indexer
 	 * @param firstResult is the 0-based index of the first result to fetch
 	 * @param maxResults is the number of results to return.
 	 */
-	public SimpleResult search(Long listId, String queryText, int firstResult, int maxResults);
+	public SimpleResult search(Long listId, String queryText, int firstResult, int maxResults)
+		throws SearchException;
 	
 	/**
 	 * Updates the index with any changes in since the last update.

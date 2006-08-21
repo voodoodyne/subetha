@@ -30,6 +30,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.queryParser.ParseException;
 import org.jboss.annotation.ejb.Service;
+import org.subethamail.common.SearchException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.search.i.Indexer;
 import org.subethamail.core.search.i.IndexerRemote;
@@ -275,16 +276,21 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	 * @see org.subethamail.core.search.i.Indexer#search(java.lang.Long, java.lang.String, int, int)
 	 */
 	public SimpleResult search(Long listId, String queryText, int firstResult, int maxResults)
+		throws SearchException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Searching list " + listId + " for text " + queryText);
 		
+		if (queryText == null || queryText.length() == 0)
+		{
+			throw new SearchException("Must enter some text to search for.");
+		}
 		try
 		{
 			return getCurrentIndex().search(listId, queryText, firstResult, maxResults);
 		}
 		catch (IOException ex) { throw new EJBException(ex); }
-		catch (ParseException ex) { throw new EJBException(ex); }
+		catch (ParseException ex) { throw new SearchException(ex.getMessage()); }
 	}
 	
 	/**

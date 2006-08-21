@@ -17,7 +17,7 @@
 	#set($action = "subscribed")
 	#set($tofrom = "to")
 #end
-#set($subject = "$who $action to $sub.list.name")
+#set($subject = "$who $action $tofrom $sub.list.name")
 ${who} $action ${tofrom} ${sub.list.name}.
 
 This person has the following email address(es):

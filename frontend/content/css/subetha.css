@@ -220,3 +220,7 @@ div.note {
 table.sideHeader th {
 	padding-right: 7px;
 }
+
+table.keyTable td {
+	padding-right: 15px;
+}

@@ -8,11 +8,14 @@ package org.subethamail.web.action;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.Cookie;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.validator.ClassValidator;
+import org.hibernate.validator.InvalidValue;
 import org.tagonist.AbstractAction;
 
 /**
@@ -25,6 +28,9 @@ abstract public class SubEthaAction extends AbstractAction
 	/** */
 	private static Log log = LogFactory.getLog(SubEthaAction.class);
 	
+	/** Keep all the validators around */
+	private static Map<Class, ClassValidator> validators = new ConcurrentHashMap<Class, ClassValidator>();
+
 	/**
 	 * @return the action param specified by the key, as a String
 	 */
@@ -155,6 +161,33 @@ abstract public class SubEthaAction extends AbstractAction
 				return this.getContextlessRequestURI();
 			else
 				return this.getContextlessRequestURI() + "?" + query;
+		}
+	}
+
+	/**
+	 * Reflect any public fields that have been annotated with contraints
+	 * and modify the error map accordingly.  The public requirement is
+	 * inherent to java reflection, unfortunately.
+	 */
+	@SuppressWarnings("unchecked")
+	public void validate() throws IllegalAccessException
+	{
+		
+		Object model = this.getCtx().getModel();
+		ClassValidator val = validators.get(model.getClass());
+		if (val == null)
+		{
+			val = new ClassValidator(model.getClass());
+			validators.put(this.getClass(), val);
+		}
+		
+		for (InvalidValue invalid: val.getInvalidValues(model))
+		{
+			Object existingError = this.getCtx().getError(invalid.getPropertyPath());
+			if (existingError == null)
+				this.getCtx().setError(invalid.getPropertyPath(), invalid.getMessage());
+			else
+				this.getCtx().setError(invalid.getPropertyPath(), existingError + "\n" + invalid.getMessage());
 		}
 	}
 }

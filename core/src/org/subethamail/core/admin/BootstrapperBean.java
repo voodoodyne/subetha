@@ -9,8 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.ejb.EJB;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;

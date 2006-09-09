@@ -8,8 +8,8 @@ package org.subethamail.core.injector;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.mail.MessagingException;
 

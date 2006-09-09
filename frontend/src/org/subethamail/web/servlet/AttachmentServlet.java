@@ -7,7 +7,7 @@ package org.subethamail.web.servlet;
 
 import java.io.IOException;
 
-import javax.annotation.EJB;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

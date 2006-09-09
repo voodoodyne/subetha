@@ -7,9 +7,9 @@ package org.subethamail.core.deliv;
 
 import java.io.IOException;
 
-import javax.annotation.EJB;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.mail.Address;
 import javax.mail.MessagingException;

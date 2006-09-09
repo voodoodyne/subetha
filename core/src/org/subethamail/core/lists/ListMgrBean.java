@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
 

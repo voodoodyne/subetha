@@ -8,8 +8,8 @@ package org.subethamail.plugin.filter;
 import java.io.IOException;
 import java.util.Enumeration;
 
-import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
+import javax.ejb.EJB;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;

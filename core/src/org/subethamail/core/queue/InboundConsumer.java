@@ -5,9 +5,9 @@
 
 package org.subethamail.core.queue;
 
-import javax.annotation.EJB;
 import javax.annotation.security.RunAs;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

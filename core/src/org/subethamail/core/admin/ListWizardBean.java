@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;

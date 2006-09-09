@@ -7,9 +7,9 @@ package org.subethamail.core.postfix;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import javax.annotation.EJB;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

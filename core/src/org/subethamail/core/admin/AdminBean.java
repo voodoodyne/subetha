@@ -10,8 +10,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.EJB;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
 import javax.management.InstanceNotFoundException;

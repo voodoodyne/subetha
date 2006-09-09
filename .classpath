@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="entity/src"/>
-	<classpathentry kind="src" path="core/src"/>
-	<classpathentry kind="src" path="plugin/src"/>
-	<classpathentry kind="src" path="frontend/src"/>
-	<classpathentry kind="src" path="common/src"/>
-	<classpathentry kind="src" path="rtest/src"/>
-	<classpathentry kind="src" path="loadtest/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/javax.servlet.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/javax.servlet.jsp.jar"/>
@@ -21,16 +14,23 @@
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/ejb3-persistence.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>
+	<classpathentry sourcepath="/JAVAMAIL_SRC" kind="var" path="JBOSS_HOME/server/default/lib/mail.jar"/>
 	<classpathentry kind="lib" path="rtest/lib/junit.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/jstl.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/standard.jar"/>
 	<classpathentry kind="lib" path="core/lib/velocity-1.4.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/tagonist.jar"/>
-	<classpathentry sourcepath="/JAVAMAIL_SRC" kind="var" path="JBOSS_HOME/server/default/lib/mail.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/commons-fileupload-1.0.jar"/>
 	<classpathentry kind="lib" path="core/lib/subetha-smtp.jar"/>
 	<classpathentry kind="lib" path="rtest/lib/subetha-wiser.jar"/>
 	<classpathentry kind="lib" path="core/lib/lucene-core-2.0.0.jar"/>
+	<classpathentry kind="src" path="entity/src"/>
+	<classpathentry kind="src" path="core/src"/>
+	<classpathentry kind="src" path="plugin/src"/>
+	<classpathentry kind="src" path="frontend/src"/>
+	<classpathentry kind="src" path="common/src"/>
+	<classpathentry kind="src" path="rtest/src"/>
+	<classpathentry kind="src" path="loadtest/src"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

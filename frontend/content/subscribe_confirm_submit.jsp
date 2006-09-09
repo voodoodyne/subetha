@@ -10,8 +10,6 @@
 		<jsp:forward page="subscribe_held.jsp"/>
 	</c:when>
 	<c:otherwise>
-		<c:redirect url="list.jsp">
-			<c:param name="listId" value="${model.listId}" />
-		</c:redirect>
+		<jsp:forward page="subscribe_ok.jsp"/>
 	</c:otherwise>
 </c:choose>

@@ -13,8 +13,6 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.injector.i.Injector;
-import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
@@ -32,7 +30,6 @@ public class InjectorTest extends SubEthaTestCase
 	private static Log log = LogFactory.getLog(InjectorTest.class);
 	
 	/** */
-	Injector injector;
 	AdminMixin admin;
 	MailingListMixin ml;
 	PersonMixin person1;
@@ -48,8 +45,6 @@ public class InjectorTest extends SubEthaTestCase
 		super.setUp();
 		
 		Context ctx = new InitialContext();
-		
-		this.injector = (Injector)ctx.lookup(InjectorRemote.JNDI_NAME);
 		
 		this.admin = new AdminMixin();
 		this.person1 = new PersonMixin(this.admin);
@@ -93,7 +88,7 @@ public class InjectorTest extends SubEthaTestCase
 		
 		byte[] rawMsg = this.createMessage(this.person1.getAddress(), this.ml.getAddress());
 		
-		this.injector.inject(this.person1.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
+		this.admin.getInjector().inject(this.person1.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
 		
 		Thread.sleep(1000);
 		

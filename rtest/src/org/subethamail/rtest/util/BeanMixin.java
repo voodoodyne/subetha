@@ -22,6 +22,8 @@ import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.core.admin.i.ListWizardRemote;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
+import org.subethamail.core.lists.i.Archiver;
+import org.subethamail.core.lists.i.ArchiverRemote;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.ListMgrRemote;
 import org.subethamail.core.search.i.Indexer;
@@ -48,6 +50,7 @@ public class BeanMixin
 	private ListWizard listWizard;
 	private Indexer indexer;
 	private Injector injector;
+	private Archiver archiver;
 	
 	
 	/** */
@@ -60,6 +63,7 @@ public class BeanMixin
 		this.listWizard = (ListWizard)ctx.lookup(ListWizardRemote.JNDI_NAME);
 		this.indexer = (Indexer)ctx.lookup(IndexerRemote.JNDI_NAME);
 		this.injector = (Injector)ctx.lookup(InjectorRemote.JNDI_NAME);
+		this.archiver = (Archiver)ctx.lookup(ArchiverRemote.JNDI_NAME);
 	}
 	
 	/** If this is null, clears all credentials */
@@ -126,5 +130,12 @@ public class BeanMixin
 	{
 		this.establish();
 		return this.injector;
+	}
+	
+	/** */
+	public Archiver getArchiver()
+	{
+		this.establish();
+		return this.archiver;
 	}
 }

@@ -178,4 +178,12 @@ public interface Admin
 	 * Sets the address of the site postmaster.
 	 */
 	public void setPostmaster(InternetAddress address);
+
+	/**
+	 * Deletes a mailing list.  Must be called by siteAdmin.
+	 * 
+	 * @param password is the password of the caller, for validation purposes.
+	 * @return true if the password was correct and the list was deleted, false if it was incorrect.
+	 */
+	public boolean deleteList(Long listId, String password) throws NotFoundException;
 }

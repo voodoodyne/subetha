@@ -5,9 +5,6 @@
 
 package org.subethamail.rtest;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -43,8 +40,6 @@ public class InjectorTest extends SubEthaTestCase
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		
-		Context ctx = new InitialContext();
 		
 		this.admin = new AdminMixin();
 		this.person1 = new PersonMixin(this.admin);

@@ -24,6 +24,7 @@ import javax.management.ReflectionException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.SessionFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.jboss.security.SimplePrincipal;
 import org.subethamail.common.NotFoundException;
@@ -38,8 +39,8 @@ import org.subethamail.core.admin.i.SiteStatus;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.i.Queuer;
-import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.core.util.OwnerAddress;
+import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.Config;
@@ -59,7 +60,7 @@ import org.subethamail.entity.i.Permission;
 @Stateless(name="Admin")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
-public class AdminBean extends EntityManipulatorBean implements Admin, AdminRemote
+public class AdminBean extends PersonalBean implements Admin, AdminRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(AdminBean.class);
@@ -656,5 +657,38 @@ public class AdminBean extends EntityManipulatorBean implements Admin, AdminRemo
 	public void setPostmaster(InternetAddress address)
 	{
 		this.em.setConfigValue(Config.ID_SITE_POSTMASTER, address);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#deleteList(java.lang.Long, java.lang.String)
+	 */
+	public boolean deleteList(Long listId, String password) throws NotFoundException
+	{
+		Person me = this.getMe();
+		if (!me.checkPassword(password))
+			return false;
+
+		MailingList list = this.em.get(MailingList.class, listId);
+
+		// Cascading delete should take care of:
+		// Subscriptions
+		// SubscriptionHolds
+		// Mails
+		// Roles
+		// EnabledFilters and FilterArguments
+		this.em.remove(list);
+		
+		// Cascading persistence is not smart enough when dealing with the 2nd
+		// level cache; for instance, Person objects have cached relationships
+		// to (now defunct) Subscription objects.  We can just hit the problem
+		// with a sledgehammer and reset the cache.
+		SessionFactory sf = this.em.getHibernateSession().getSessionFactory();
+		sf.evictCollection(Person.class.getName() + ".subscriptions");
+		sf.evictQueries();
+		
+		// TODO:  rebuild the search index?
+		
+		return true;
 	}
 }

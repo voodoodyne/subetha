@@ -10,8 +10,11 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.common.NotFoundException;
+import org.subethamail.common.Utils;
 import org.subethamail.core.acct.i.MyListRelationship;
 import org.subethamail.core.lists.i.ListData;
+import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.BeanMixin;
@@ -105,6 +108,61 @@ public class MailingListTest extends SubEthaTestCase
 		data = this.admin.getListMgr().getList(ml.getId());
 		assertEquals(ml.getEmail(), data.getEmail());
 		assertEquals(ml.getUrl().toString(), data.getUrl());
+	}
+	
+	/** */
+	public void testDeleteMailingList() throws Exception
+	{
+		// Create a mailing list
+		MailingListMixin ml = new MailingListMixin(this.admin, this.pers.getAddress());
+		
+		// Add a message to it
+		String subject = Utils.uniqueString();
+		
+		byte[] rawMsg = this.createMessage(this.pers.getAddress(), ml.getAddress(), subject, TEST_BODY);
+		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), ml.getEmail(), rawMsg);
+
+		// Make sure it is indexed
+		this.admin.getIndexer().update();
+		
+		// Find the id of that message
+		MailSummary summary = this.admin.getArchiver().getThreads(ml.getId(), 0, 10).get(0);
+		
+		// Must have valid password
+		boolean shouldBeFalse = this.admin.getAdmin().deleteList(ml.getId(), "wrong password");
+		assertFalse(shouldBeFalse);
+		this.admin.getListMgr().getList(ml.getId());	// should work still
+		
+		// Now delete the list
+		boolean shouldBeTrue = this.admin.getAdmin().deleteList(ml.getId(), this.admin.getPassword());
+		assert(shouldBeTrue);
+		
+		// The list should be gone
+		try
+		{
+			this.admin.getListMgr().getList(ml.getId());
+			fail("List was not deleted");
+		}
+		catch (NotFoundException ex) {}
+		
+		// The message should be gone
+		try
+		{
+			this.admin.getArchiver().getMail(summary.getId());
+			fail("Archived message was not deleted from deleted list");
+		}
+		catch (NotFoundException ex) {}
+
+		// The person should no longer be subscribed
+		assert(this.pers.getAccountMgr().getSelf().getSubscriptions().isEmpty());
+		
+		// You shouldn't be able to find the search term
+		try
+		{
+			this.admin.getArchiver().search(ml.getId(), subject, 0, 10);
+			fail("Able to search deleted list");
+		}
+		catch (NotFoundException ex) {}
 	}
 	
 	/** */

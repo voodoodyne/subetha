@@ -197,6 +197,10 @@ public class MailingList implements Serializable, Comparable
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	@OrderBy(value="name")
 	Set<Role> roles;
+	
+	/** The only reason this is here is to provide cascading delete */
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
+	Set<Mail> mails;
 
 	/**
 	 */

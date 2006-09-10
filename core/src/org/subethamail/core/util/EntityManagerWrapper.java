@@ -11,6 +11,9 @@ import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
+import org.hibernate.Session;
+import org.jboss.ejb3.entity.HibernateSession;
+
 /**
  * Simple wrapper of all EntityManager methods. 
  * 
@@ -137,5 +140,13 @@ public class EntityManagerWrapper implements EntityManager
 	public EntityTransaction getTransaction()
 	{
 		return this.base.getTransaction();
+	}
+	
+	/**
+	 * This one is extra.
+	 */
+	public Session getHibernateSession()
+	{
+        return ((HibernateSession)this.base).getHibernateSession();
 	}
 }

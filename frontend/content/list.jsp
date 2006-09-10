@@ -54,8 +54,14 @@
 				<div style="float: right">
 					<form action="<c:url value="/list_settings.jsp"/>" method="get">
 						<input type="hidden" name="listId" value="${list.id}" />
-						<input type="submit" value="Edit List Settings" />
+						<input type="submit" value="Edit List Settings" style="width: 120px"/>
 					</form>
+					<c:if test="${auth.siteAdmin}">
+						<form action="<c:url value="/list_delete.jsp"/>" method="get">
+							<input type="hidden" name="listId" value="${list.id}" />
+							<input type="submit" value="Delete List"  style="width: 120px"/>
+						</form>
+					</c:if>
 				</div>
 			</c:if>
 			<c:if test="${listStats.heldSubscriptionCount > 0 || listStatus.heldMessageCount > 0}">

@@ -27,15 +27,22 @@
 						class="error"
 					</c:if>			
 				>
-					<input type="text" size="35" name="name" value="<c:out value="${myName}"/>">
-					
+					<input type="text" size="35" name="name" id="nameValue" value="<c:out value="${myName}"/>"
+						onkeyup="enableChanged('nameSubmit', 'nameValue', nameOrigValue)">
+
 					<c:if test="${!empty model.errors.name}">
 						<p class="error"><c:out value="${model.errors.name}"/></p>
 					</c:if>
 				</td>
-				<td><input type="submit" value="Save" /></td>
+				<td><input type="submit" id="nameSubmit" value="Save" /></td>
 			</tr>
 		</table>
+
+		<script>
+			var nameOrigValue = document.getElementById('nameValue').value;
+			document.getElementById('nameSubmit').disabled=true;
+		</script>
+
 	</form>
 
 	</fieldset>
@@ -74,8 +81,9 @@
 			</c:forEach>
 			<form action="<c:url value="/email_add.jsp"/>" method="post">
 				<tr class="a">
-					<td><input type="text" name="email" value="" /></td>
-					<td><input type="submit" value="Add" style="width: 5em" /></td>
+					<td><input type="text" name="email" value="" id="emailValue"
+							onkeyup="enableChanged('addSubmit', 'emailValue', emailOrigValue)"/></td>
+					<td><input type="submit" value="Add" id="addSubmit" style="width: 5em" /></td>
 				</tr>
 				<c:if test="${!empty model.errors.email}">
 				<tr>
@@ -86,6 +94,9 @@
 		</tbody>
 	</table>
 	<script type="text/javascript">
+	var emailOrigValue = document.getElementById('emailValue').value;
+	document.getElementById('addSubmit').disabled=true;
+
 	var st = new SortableTable(document.getElementById("emails-table"), ["None", "None"]);
 	st.onsort = st.tableRowColors;
 	</script>

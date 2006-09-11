@@ -17,6 +17,7 @@ import java.util.TreeSet;
 public enum Permission
 {
 	EDIT_ROLES("Edit and reassign roles and permissions.  This should not be granted to non-owners."),
+	DELETE_ARCHIVES("Delete messages from the archive."),
 	EDIT_SETTINGS("Edit the name, description, and major configuration options of the list."),
 	EDIT_FILTERS("Add, remove, and change the properties of mail filters."),
 	EDIT_NOTES("Create and edit administrative notes for subscribers."),

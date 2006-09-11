@@ -77,7 +77,6 @@ import com.sun.mail.util.LineInputStream;
 @RunAs("siteAdmin")
 public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemote
 {
-
 	@EJB Deliverator deliverator;
 	@EJB FilterRunner filterRunner;
 	@EJB Detacher detacher;
@@ -85,7 +84,6 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	@EJB Injector injector;
 	@EJB Indexer indexer;
 
-	
 	/** */
 	private static Log log = LogFactory.getLog(ArchiverBean.class);
 
@@ -414,5 +412,33 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 			// Ditto
 			throw new RuntimeException(ex);
 		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#deleteMail(java.lang.Long)
+	 */
+	public Long deleteMail(Long mailId) throws NotFoundException, PermissionException
+	{
+		Mail mail = this.getMailFor(mailId, Permission.DELETE_ARCHIVES);
+		
+		// Make all the children belong to the parent
+		Mail parent = mail.getParent();
+		
+		if (parent != null)
+			parent.getReplies().remove(mail);
+		
+		for (Mail child: mail.getReplies())
+		{
+			child.setParent(parent);
+			if (parent != null)
+				parent.getReplies().add(child);
+		}
+		
+		this.em.remove(mail);
+		
+		// TODO:  figure out how to remove it from the search index
+		
+		return mail.getList().getId();
 	}
 }

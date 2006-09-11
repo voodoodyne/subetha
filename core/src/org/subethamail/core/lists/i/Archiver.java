@@ -99,4 +99,13 @@ public interface Archiver
 	 * @throws PermissionException if the user has not IMPORT_MESSAGES permissions
 	 */
 	public int importMessages(Long listId, InputStream mboxStream) throws NotFoundException, PermissionException, ImportMessagesException;
+
+	/**
+	 * Deletes a message from an archive.
+	 * 
+	 * Requires Permission.DELETE_ARCHIVES
+	 * 
+	 * @return the id of the list to which the msg belongs
+	 */
+	public Long deleteMail(Long mailId) throws NotFoundException, PermissionException;
 }

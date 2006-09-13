@@ -90,6 +90,10 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 				ind.update();
 			}
 			catch (NamingException ex) { throw new RuntimeException(ex); }
+			catch (Exception ex)
+			{
+				log.error("Error during index update", ex);
+			}
 		}
 	}
 	

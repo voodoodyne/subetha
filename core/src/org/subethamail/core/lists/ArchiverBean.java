@@ -435,6 +435,8 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 				parent.getReplies().add(child);
 		}
 		
+		mail.getReplies().clear();
+		
 		this.em.remove(mail);
 		
 		// TODO:  figure out how to remove it from the search index

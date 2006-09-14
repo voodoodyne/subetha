@@ -28,7 +28,7 @@
 					</c:if>			
 				>
 					<input type="text" size="35" name="name" id="nameValue" value="<c:out value="${myName}"/>"
-						onkeyup="enableChanged('nameSubmit', 'nameValue', nameOrigValue)">
+						onkeyup="enableChanged('nameSubmit', 'nameValue', nameOrigValue)" />
 
 					<c:if test="${!empty model.errors.name}">
 						<p class="error"><c:out value="${model.errors.name}"/></p>
@@ -38,7 +38,7 @@
 			</tr>
 		</table>
 
-		<script>
+		<script type="text/javascript">
 			var nameOrigValue = document.getElementById('nameValue').value;
 			document.getElementById('nameSubmit').disabled=true;
 		</script>
@@ -82,7 +82,7 @@
 			<form action="<c:url value="/email_add.jsp"/>" method="post">
 				<tr class="a">
 					<td><input type="text" name="email" value="" id="emailValue"
-							onkeyup="enableChanged('addSubmit', 'emailValue', emailOrigValue)"/></td>
+							onkeyup="enableChanged('addSubmit', 'emailValue', emailOrigValue)" /></td>
 					<td><input type="submit" value="Add" id="addSubmit" style="width: 5em" /></td>
 				</tr>
 				<c:if test="${!empty model.errors.email}">
@@ -142,7 +142,8 @@
 					<td>
 					<form action="<c:url value="/subscribe_me.jsp"/>" method="post">
 						<input type="hidden" name="listId" value="<c:out value="${subs.id}"/>" />
-						<select name="deliverTo">
+						<select name="deliverTo" id="deliverTo${loop.index}"
+							onchange="enableChanged('setButton${loop.index}', 'deliverTo${loop.index}', deliverToOrigValue${loop.index})">
 							<option value="">Disable Delivery</option>
 							<c:forEach var="eml" items="${me.emailAddresses}">
 								<option value="<c:out value="${eml}"/>" 
@@ -151,8 +152,12 @@
 								</option>
 							</c:forEach>
 						</select>
-						<input type="submit" value="Set" />
+						<input type="submit" value="Set" id="setButton${loop.index}" />
 					</form>
+					<script type="text/javascript">
+					var deliverToOrigValue${loop.index} = document.getElementById('deliverTo${loop.index}').value;
+					document.getElementById('setButton${loop.index}').disabled=true;
+					</script>
 					</td>
 					<td>
 					<form action="<c:url value="/unsubscribe_me.jsp"/>" method="post">

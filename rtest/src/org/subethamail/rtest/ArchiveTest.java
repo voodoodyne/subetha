@@ -10,6 +10,7 @@ import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.common.NotFoundException;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonMixin;
@@ -52,6 +53,18 @@ public class ArchiveTest extends SubEthaTestCase
 		
 		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
 		
+		Long mailId = this.admin.getArchiver().getThreads(this.ml.getId(), 0, 100).get(0).getId();
+		
+		this.admin.getArchiver().deleteMail(mailId);
+		
+		try
+		{
+			this.admin.getArchiver().getMail(mailId);
+			fail("able to get deleted mail");
+		}
+		catch (NotFoundException ex) {}
+		
+		// TODO:  test when mail has replies or is a reply to other mail
 	}
 	
 	/** */

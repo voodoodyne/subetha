@@ -62,7 +62,7 @@
 						<input type="hidden" name="msgId" value="${msg.id}" />
 						
 						<fieldset><legend>Administration</legend>
-							<input type="submit" value="Delete" />
+							<input type="submit" value="Delete Message" onclick="return confirm('Are you sure you want to delete this message?');" />
 						</fieldset>
 					</form> 
 				</c:if>

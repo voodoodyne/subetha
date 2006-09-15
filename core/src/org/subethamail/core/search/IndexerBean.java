@@ -176,8 +176,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 		this.initialize();
 		
 		// Schedule updates to repeat every hour, starting 5 minutes from now
-		long firstTime = System.currentTimeMillis() + UPDATE_DELAY_MILLIS;
-		this.timer.schedule(new UpdateTask(), firstTime, UPDATE_PERIOD_MILLIS);
+		this.timer.schedule(new UpdateTask(), UPDATE_DELAY_MILLIS, UPDATE_PERIOD_MILLIS);
 	}
 	
 	/*

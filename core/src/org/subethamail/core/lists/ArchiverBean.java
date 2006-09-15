@@ -145,9 +145,17 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		
 		List<SearchHit> hits = new ArrayList<SearchHit>(simpleResult.getHits().size());
 		
+		// Since there might be deleted mail in the results, let's do a partial attempt
+		// to reduce the total number when we know about specific deleted mail.  The number
+		// is not exact, of course, because there may be more deleted mail on different
+		// pages of search results.  But at least the number isn't obviously wrong for
+		// small result sets.
+		int totalResults = simpleResult.getTotal();
+		
 		for (SimpleHit simpleHit: simpleResult.getHits())
 		{
-			Mail mail = this.em.get(Mail.class, simpleHit.getId());
+			// Note that there might be deleted mail in the hits, so be careful
+			Mail mail = this.em.find(Mail.class, simpleHit.getId());
 			if (mail != null)
 			{
 				hits.add(new SearchHit(
@@ -160,9 +168,13 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 						simpleHit.getScore()
 						));
 			}
+			else
+			{
+				totalResults--;
+			}
 		}
 		
-		return new SearchResult(simpleResult.getTotal(), hits);
+		return new SearchResult(totalResults, hits);
 	}
 	
 	/* (non-Javadoc)

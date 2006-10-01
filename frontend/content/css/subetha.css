@@ -224,3 +224,8 @@ table.sideHeader th {
 table.keyTable td {
 	padding-right: 15px;
 }
+
+/* The adversiting */
+div.ad {
+	margin-left: 2.5em;
+}

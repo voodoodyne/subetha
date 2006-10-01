@@ -81,6 +81,28 @@
 		</div> <!-- sideBox LHS -->
 	</c:if>
 	
+	<%-- If you want to remove the ads, delete this whole div section --%>
+	<div class="ad LHS">
+<script type="text/javascript"><!--
+google_ad_client = "pub-3899545862839569";
+google_alternate_color = "ffffff";
+google_ad_width = 125;
+google_ad_height = 125;
+google_ad_format = "125x125_as";
+google_ad_type = "text_image";
+//2006-10-01: SubEthaMail.org
+google_ad_channel ="5178944091";
+google_color_border = "0080FF";
+google_color_bg = "E8F0FF";
+google_color_link = "4080FF";
+google_color_text = "3D81EE";
+google_color_url = "FF0000";
+//--></script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+	</div> <!-- ad LHS -->
+	
 	<div id="bodyText">
 		<h1><c:out value="${title}"/></h1>
 		<jsp:doBody/>

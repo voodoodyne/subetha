@@ -12,6 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -36,6 +39,8 @@ import org.subethamail.core.util.Transmute;
 @Service(name="ListWizard")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
+@WebService(name="ListWizard", targetNamespace="http://ws.subethamail.org/", serviceName="ListWizardService")
+@SOAPBinding(style=SOAPBinding.Style.RPC)
 public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRegistry
 {
 	/** */
@@ -74,6 +79,7 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 	/**
 	 * @see ListWizard#getBlueprints() 
 	 */
+	@WebMethod
 	public List<BlueprintData> getBlueprints()
 	{
 		return Transmute.blueprints(this.blueprints.values());
@@ -82,6 +88,7 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 	/**
 	 * @see ListWizard#createMailingList(InternetAddress, URL, String, InternetAddress[], String)
 	 */
+	@WebMethod
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
 		Blueprint blue = this.blueprints.get(blueprintId);

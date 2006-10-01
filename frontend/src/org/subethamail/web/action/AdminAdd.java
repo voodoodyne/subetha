@@ -52,7 +52,7 @@ public class AdminAdd extends AuthRequired
 		{
 			try
 			{
-				Backend.instance().getAdmin().setSiteAdmin(model.email, true);
+				Backend.instance().getAdmin().setSiteAdminByEmail(model.email, true);
 			}
 			catch (NotFoundException nfe)
 			{

@@ -146,7 +146,7 @@ public interface ListMgr
 	 * 
 	 * Requires Permission.EDIT_FILTERS
 	 */
-	public void setFilter(Long listId, String className) throws NotFoundException, PermissionException;
+	public void setFilterDefault(Long listId, String className) throws NotFoundException, PermissionException;
 
 	/**
 	 * Disables a filter on a list.  Fails silently if filter is not enabled on the list.
@@ -285,7 +285,7 @@ public interface ListMgr
 	 * Gets the number of Subscribers on a list for a given query
 	 * Requires Permission.VIEW_SUBSCRIBERS
 	 */
-	public int countSubscribers(Long listId, String query) throws NotFoundException, PermissionException;
+	public int countSubscribersQuery(Long listId, String query) throws NotFoundException, PermissionException;
 
 	/**
 	 * Gets the number of subscriptions on a list in a held state.

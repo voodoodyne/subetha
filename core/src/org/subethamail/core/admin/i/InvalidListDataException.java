@@ -18,6 +18,9 @@ public class InvalidListDataException extends Exception
 	boolean ownerAddress;
 	boolean verpAddress;
 	
+	/** */
+	public InvalidListDataException() {}
+	
 	/**
 	 */
 	public InvalidListDataException(String msg, boolean ownerAddress, boolean verpAddress)

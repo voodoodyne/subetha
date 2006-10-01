@@ -50,16 +50,6 @@ public interface AccountMgr
 	public void setPassword(String newPassword);
 
 	/**
-	 * Updates password
-	 * 
-	 * @param oldPassword The current password
-	 * @param newPassword The new password
-	 * 
-	 * @return false if the old password was incorrect, true if succeeded
-	 */
-	public boolean setPassword(String oldPassword, String newPassword);
-
-	/**
 	 * Sends an email request to the new email address that when clicked,
 	 * will result in the email address being added to my list of addresses.
 	 * If the new email address is already associated with a Person, the

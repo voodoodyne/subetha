@@ -104,16 +104,20 @@ public interface Deliverator
 	public static final String JNDI_NAME = "subetha/Deliverator/local";
 
 	/**
-	 * Actually delivers a piece of mail to a person.  No queueing
+	 * Actually delivers a piece of mail to a person, if they are
+	 * subscribed and have delivery enabled.  No queueing
 	 * involved.  The mail will be customized for the person.
 	 */
 	public void deliver(Long mailId, Long personId) throws NotFoundException;
 	
 	/**
-	 * Actually delivers a piece of mail to an email.  No queueing
-	 * involved.  The mail will be customized for the person.
+	 * Actually delivers a piece of mail to an email, even if the
+	 * person is not subscribed.  No queueing involved.  The mail
+	 * will be customized for the person.
+	 * 
+	 * @param email must be a valid, registered email addres of someone.
 	 */
-	public void deliver(Long mailId, String email) throws NotFoundException;
+	public void deliverToEmail(Long mailId, String email) throws NotFoundException;
 	
 }
 

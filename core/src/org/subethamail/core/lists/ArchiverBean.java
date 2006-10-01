@@ -24,6 +24,9 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.Session;
@@ -75,6 +78,8 @@ import com.sun.mail.util.LineInputStream;
 @SecurityDomain("subetha")
 @PermitAll
 @RunAs("siteAdmin")
+@WebService(name="Archiver", targetNamespace="http://ws.subethamail.org/", serviceName="ArchiverService")
+@SOAPBinding(style=SOAPBinding.Style.RPC)
 public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemote
 {
 	@EJB Deliverator deliverator;
@@ -94,15 +99,17 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#sendTo(java.lang.Long, String email)
 	 */
+	@WebMethod
 	public void sendTo(Long mailId, String email) throws NotFoundException
 	{
-		this.deliverator.deliver(mailId, email);
+		this.deliverator.deliverToEmail(mailId, email);
 	}
 	
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getThreads(java.lang.Long)
 	 */
+	@WebMethod
 	public List<MailSummary> getThreads(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
@@ -134,6 +141,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#search(java.lang.Long, java.lang.String, int, int)
 	 */
+	@WebMethod
 	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException, SearchException
 	{
 		Person me = this.getMe();
@@ -180,6 +188,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	/* (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#countMailByList(java.lang.Long)
 	 */
+	@WebMethod
 	public int countMailByList(Long listId)
 	{
 		return this.em.countMailByList(listId);
@@ -241,6 +250,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getAttachmentContentType(java.lang.Long)
 	 */
+	@WebMethod
 	public String getAttachmentContentType(Long attachmentId) throws NotFoundException, PermissionException
 	{
 		Attachment a = this.em.get(Attachment.class, attachmentId);
@@ -252,6 +262,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getMail(java.lang.Long)
 	 */
+	@WebMethod
 	public MailData getMail(Long mailId) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
@@ -430,6 +441,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#deleteMail(java.lang.Long)
 	 */
+	@WebMethod
 	public Long deleteMail(Long mailId) throws NotFoundException, PermissionException
 	{
 		Mail mail = this.getMailFor(mailId, Permission.DELETE_ARCHIVES);

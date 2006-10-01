@@ -14,6 +14,9 @@ import javax.annotation.security.RolesAllowed;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
 import javax.mail.internet.InternetAddress;
 import javax.security.auth.login.FailedLoginException;
 
@@ -49,6 +52,8 @@ import org.subethamail.entity.Subscription;
 @SecurityDomain("subetha")
 @RolesAllowed("user")
 @RunAs("siteAdmin")
+@WebService(name="AccountMgr", targetNamespace="http://ws.subethamail.org/", serviceName="AccountMgrService")
+@SOAPBinding(style=SOAPBinding.Style.RPC)
 public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountMgrRemote
 {
 	/** */
@@ -75,6 +80,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	 * @see org.subethamail.core.acct.i.AccountMgr#authenticate(java.lang.String, java.lang.String)
 	 */
 	@PermitAll
+	@WebMethod
 	public AuthCredentials authenticate(String email, String password) throws FailedLoginException
 	{
 		EmailAddress ea = this.em.findEmailAddress(email);
@@ -90,6 +96,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	/**
 	 * @see AccountMgr#getSelf()
 	 */
+	@WebMethod
 	public Self getSelf()
 	{
 		log.debug("Getting self");
@@ -108,6 +115,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	/**
 	 * @see AccountMgr#setName(String)
 	 */
+	@WebMethod
 	public void setName(String newName)
 	{
 		log.debug("Setting name");
@@ -118,6 +126,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	/**
 	 * @see AccountMgr#setPassword(String)
 	 */
+	@WebMethod
 	public void setPassword(String newPassword)
 	{	
 		log.debug("Setting password");
@@ -127,26 +136,9 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	}
 
 	/**
-	 * @see AccountMgr#setPassword(String, String)
-	 */
-	public boolean setPassword(String oldPassword, String newPassword)
-	{	
-		log.debug("Setting password");
-		
-		Person me = this.getMe();
-		
-		// check the old password, current really.
-		if (!me.checkPassword(oldPassword))
-			return false;
-		
-		me.setPassword(newPassword);
-		
-		return true;
-	}
-
-	/**
 	 * @see AccountMgr#addEmailRequest(String)
 	 */
+	@WebMethod
 	public void addEmailRequest(String newEmail)
 	{
 		// Send a token to the person's account
@@ -199,6 +191,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	/**
 	 * @see AccountMgr#removeEmail(String)
 	 */
+	@WebMethod
 	public void removeEmail(String email)
 	{
 		Person me = this.getMe();
@@ -221,6 +214,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	 * @see org.subethamail.core.acct.i.AccountMgr#getMyListRelationship(java.lang.Long)
 	 */
 	@PermitAll
+	@WebMethod
 	public MyListRelationship getMyListRelationship(Long listId) throws NotFoundException
 	{
 		MailingList ml = this.em.get(MailingList.class, listId);
@@ -235,6 +229,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	 * The token emailed is encrypted "listId:email:name".
 	 */
 	@PermitAll
+	@WebMethod
 	public void subscribeAnonymousRequest(Long listId, String email, String name) throws NotFoundException
 	{
 		// Send a token to the person's account
@@ -284,12 +279,13 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 
 		InternetAddress address = Transmute.internetAddress(email, name);
 		
-		return this.admin.subscribe(listId, address, false, false);
+		return this.admin.subscribeEmail(listId, address, false, false);
 	}
 
 	/**
 	 * @see AccountMgr#subscribeMe(Long, String)
 	 */
+	@WebMethod
 	public SubscribeResult subscribeMe(Long listId, String email) throws NotFoundException
 	{
 		Person me = this.getMe();
@@ -319,6 +315,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	/**
 	 * @see AccountMgr#unsubscribeMe(Long)
 	 */
+	@WebMethod
 	public void unsubscribeMe(Long listId) throws NotFoundException
 	{
 		Person me = this.getMe();
@@ -330,6 +327,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountM
 	 * @see org.subethamail.core.acct.i.AccountMgr#forgotPassword(java.lang.String)
 	 */
 	@PermitAll
+	@WebMethod
 	public void forgotPassword(String email) throws NotFoundException
 	{
 		EmailAddress addy = this.em.getEmailAddress(email);

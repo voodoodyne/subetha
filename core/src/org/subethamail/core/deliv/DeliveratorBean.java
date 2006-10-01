@@ -11,6 +11,9 @@ import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -41,6 +44,8 @@ import org.subethamail.entity.Subscription;
 @Stateless(name="Deliverator")
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
+@WebService(name="Deliverator", targetNamespace="http://ws.subethamail.org/", serviceName="DeliveratorService")
+@SOAPBinding(style=SOAPBinding.Style.RPC)
 public class DeliveratorBean extends EntityManipulatorBean implements Deliverator, DeliveratorRemote
 {
 	/** */
@@ -55,9 +60,10 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 	@Resource(mappedName="java:/Mail") private Session mailSession;
 	
 	/**
-	 * @see Deliverator#deliver(Long, String)
+	 * @see Deliverator#deliverToEmail(Long, String)
 	 */
-	public void deliver(Long mailId, String email) throws NotFoundException
+	@WebMethod
+	public void deliverToEmail(Long mailId, String email) throws NotFoundException
 	{
 		EmailAddress ea = this.em.getEmailAddress(email);
 		Mail mail = this.em.get(Mail.class, mailId);		
@@ -68,6 +74,7 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 	/**
 	 * @see Deliverator#deliver(Long, Long)
 	 */
+	@WebMethod
 	public void deliver(Long mailId, Long personId) throws NotFoundException
 	{
 

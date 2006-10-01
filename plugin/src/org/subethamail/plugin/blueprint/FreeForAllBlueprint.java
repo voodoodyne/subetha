@@ -74,8 +74,8 @@ public class FreeForAllBlueprint extends AbstractBlueprint implements Lifecycle
 			listMgr.setAnonymousRole(listId, roleId);
 
 			// Add a couple useful filters
-			listMgr.setFilter(listId, AppendFooterFilter.class.getName());
-			listMgr.setFilter(listId, ListHeaderFilter.class.getName());
+			listMgr.setFilterDefault(listId, AppendFooterFilter.class.getName());
+			listMgr.setFilterDefault(listId, ListHeaderFilter.class.getName());
 		}
 		catch (NotFoundException nfe)
 		{

@@ -19,6 +19,9 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -65,6 +68,8 @@ import org.subethamail.entity.i.PermissionException;
 @SecurityDomain("subetha")
 @PermitAll
 @RunAs("siteAdmin")
+@WebService(name="ListMgr", targetNamespace="http://ws.subethamail.org/", serviceName="ListMgrService")
+@SOAPBinding(style=SOAPBinding.Style.RPC)
 public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 {
 	/** */
@@ -80,6 +85,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#lookup(java.net.URL)
 	 */
+	@WebMethod
 	public Long lookup(URL url) throws NotFoundException
 	{
 		return this.em.getMailingList(url).getId();
@@ -89,6 +95,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setList(java.lang.Long, java.lang.String, java.lang.String, java.lang.String, boolean)
 	 */
+	@WebMethod
 	public void setList(Long listId, String name, String description, String welcomeMessage, boolean holdSubs) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_SETTINGS);
@@ -104,6 +111,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setHoldSubscriptions(java.lang.Long, boolean)
 	 */
+	@WebMethod
 	public void setHoldSubscriptions(Long listId, boolean value) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_SETTINGS);
@@ -132,6 +140,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getList(java.lang.Long)
 	 */
+	@WebMethod
 	public ListData getList(Long listId) throws NotFoundException
 	{
 		MailingList list = this.em.get(MailingList.class, listId);
@@ -143,6 +152,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getRoles(java.lang.Long)
 	 */
+	@WebMethod
 	public ListRoles getRoles(Long listId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
@@ -158,6 +168,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#addRole(java.lang.Long, java.lang.String, java.util.Set)
 	 */
+	@WebMethod
 	public Long addRole(Long listId, String name, Set<Permission> perms) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
@@ -174,6 +185,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setRole(java.lang.Long, java.lang.String, java.util.Set)
 	 */
+	@WebMethod
 	public Long setRole(Long roleId, String name, Set<Permission> perms) throws NotFoundException, PermissionException
 	{
 		Role role = this.getRoleForEdit(roleId);
@@ -192,6 +204,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setDefaultRole(java.lang.Long, java.lang.Long)
 	 */
+	@WebMethod
 	public void setDefaultRole(Long listId, Long roleId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
@@ -204,6 +217,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setAnonymousRole(java.lang.Long, java.lang.Long)
 	 */
+	@WebMethod
 	public void setAnonymousRole(Long listId, Long roleId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
@@ -216,6 +230,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getRole(java.lang.Long)
 	 */
+	@WebMethod
 	public RoleData getRole(Long roleId) throws NotFoundException, PermissionException
 	{
 		Role role = this.getRoleForEdit(roleId);
@@ -226,6 +241,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#deleteRole(java.lang.Long, java.lang.Long)
 	 */
+	@WebMethod
 	public Long deleteRole(Long deleteRoleId, Long convertToRoleId) throws NotFoundException, PermissionException
 	{
 		Role deleteRole = this.getRoleForEdit(deleteRoleId);
@@ -254,6 +270,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getFilters(java.lang.Long)
 	 */
+	@WebMethod
 	public Filters getFilters(Long listId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
@@ -279,6 +296,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getFilter(java.lang.Long, java.lang.String)
 	 */
+	@WebMethod
 	public EnabledFilterData getFilter(Long listId, String className) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
@@ -308,7 +326,8 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setFilter(java.lang.Long, java.lang.String)
 	 */
-	public void setFilter(Long listId, String className) throws NotFoundException, PermissionException
+	@WebMethod
+	public void setFilterDefault(Long listId, String className) throws NotFoundException, PermissionException
 	{
 		this.setFilter(listId, className, null);
 	}
@@ -317,6 +336,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setFilter(java.lang.Long, java.lang.String, java.util.Map)
 	 */
+	@WebMethod
 	public void setFilter(Long listId, String className, Map<String, Object> args) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
@@ -402,6 +422,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#disableFilter(java.lang.Long, java.lang.String)
 	 */
+	@WebMethod
 	public void disableFilter(Long listId, String className) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
@@ -422,6 +443,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#massSubscribe(java.lang.Long, org.subethamail.core.lists.i.MassSubscribeType, javax.mail.internet.InternetAddress[])
 	 */
+	@WebMethod
 	public void massSubscribe(Long listId, MassSubscribeType how, InternetAddress[] addresses) throws NotFoundException, PermissionException
 	{
 		// We don't need the object, but we need to check permission
@@ -435,12 +457,12 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		else if (MassSubscribeType.WELCOME.equals(how))
 		{
 			for (InternetAddress addy: addresses)
-				this.admin.subscribe(listId, addy, true, false);
+				this.admin.subscribeEmail(listId, addy, true, false);
 		}
 		else if (MassSubscribeType.SILENT.equals(how))
 		{
 			for (InternetAddress addy: addresses)
-				this.admin.subscribe(listId, addy, true, true);
+				this.admin.subscribeEmail(listId, addy, true, true);
 		}
 		else
 		{
@@ -452,6 +474,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getHeldSubscriptions(java.lang.Long)
 	 */
+	@WebMethod
 	public List<SubscriberData> getHeldSubscriptions(Long listId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
@@ -463,6 +486,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldSubscription(java.lang.Long, java.lang.Long)
 	 */
+	@WebMethod
 	public void approveHeldSubscription(Long listId, Long personId) throws NotFoundException, PermissionException
 	{
 		SubscriptionHold discarded = this.discardHeldSubcriptionInternal(listId, personId);
@@ -478,6 +502,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#discardHeldSubscription(java.lang.Long, java.lang.Long)
 	 */
+	@WebMethod
 	public void discardHeldSubscription(Long listId, Long personId) throws NotFoundException, PermissionException
 	{
 		this.discardHeldSubcriptionInternal(listId, personId);
@@ -487,6 +512,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldMessageAndSubscribe(java.lang.Long)
 	 */
+	@WebMethod
 	public Long approveHeldMessageAndSubscribe(Long msgId) throws NotFoundException, PermissionException
 	{
 		// This is really just a subscribe operation, the message (and any
@@ -495,7 +521,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
 		mail.getList().checkPermission(getMe(), Permission.APPROVE_SUBSCRIPTIONS);
 
-		this.admin.subscribe(mail.getList().getId(), mail.getFromAddress(), true, false);
+		this.admin.subscribeEmail(mail.getList().getId(), mail.getFromAddress(), true, false);
 
 		return mail.getList().getId();
 	}
@@ -522,6 +548,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#unsubscribe(java.lang.Long, java.lang.Long)
 	 */
+	@WebMethod
 	public void unsubscribe(Long listId, Long personId) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.EDIT_SUBSCRIPTIONS);
@@ -532,6 +559,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setSubscriptionRole(java.lang.Long, java.lang.Long, java.lang.Long)
 	 */
+	@WebMethod
 	public void setSubscriptionRole(Long listId, Long personId, Long roleId) throws NotFoundException, PermissionException
 	{
 		Subscription sub = this.getSubscriptionFor(listId, personId, Permission.EDIT_ROLES, this.getMe());
@@ -543,6 +571,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getHeldMessages(java.lang.Long, int, int)
 	 */
+	@WebMethod
 	public Collection<MailHold> getHeldMessages(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.APPROVE_MESSAGES);
@@ -556,6 +585,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#countHeldMessages(java.lang.Long)
 	 */
+	@WebMethod
 	public int countHeldMessages(Long listId) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.APPROVE_MESSAGES);
@@ -567,6 +597,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldMessage(java.lang.Long)
 	 */
+	@WebMethod
 	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException
 	{
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
@@ -582,6 +613,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#discardHeldMessage(java.lang.Long)
 	 */
+	@WebMethod
 	public Long discardHeldMessage(Long msgId) throws NotFoundException, PermissionException
 	{
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
@@ -595,6 +627,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#countHeldSubscriptions(java.lang.Long)
 	 */
+	@WebMethod
 	public int countHeldSubscriptions(Long listId) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
@@ -606,6 +639,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getSubscribers(java.lang.Long, int, int)
 	 */
+	@WebMethod
 	public List<SubscriberData> getSubscribers(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
@@ -621,6 +655,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#searchSubscribers(java.lang.Long, java.lang.String, int, int)
 	 */
+	@WebMethod
 	public List<SubscriberData> searchSubscribers(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
@@ -636,6 +671,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#countSubscribers(java.lang.Long)
 	 */
+	@WebMethod
 	public int countSubscribers(Long listId) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
@@ -647,7 +683,8 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#countSubscribers(java.lang.Long, java.lang.String)
 	 */
-	public int countSubscribers(Long listId, String query) throws NotFoundException, PermissionException
+	@WebMethod
+	public int countSubscribersQuery(Long listId, String query) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
 		
@@ -658,6 +695,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#checkPermission(java.lang.Long, org.subethamail.common.Permission)
 	 */
+	@WebMethod
 	public void checkPermission(Long listId, Permission perm) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, perm);
@@ -667,6 +705,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setSubscriptionDelivery(java.lang.Long, java.lang.Long, java.lang.String)
 	 */
+	@WebMethod
 	public void setSubscriptionDelivery(Long listId, Long personId, String deliverTo) throws NotFoundException, PermissionException
 	{
 		Subscription sub = this.getSubscriptionFor(listId, personId, Permission.EDIT_SUBSCRIPTIONS, this.getMe());
@@ -689,6 +728,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setSubscriptionNote(java.lang.Long, java.lang.Long, java.lang.String)
 	 */
+	@WebMethod
 	public void setSubscriptionNote(Long listId, Long personId, String note) throws NotFoundException, PermissionException
 	{
 		Subscription sub = this.getSubscriptionFor(listId, personId, Permission.EDIT_NOTES, this.getMe());
@@ -700,6 +740,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getSubscription(java.lang.Long, java.lang.Long)
 	 */
+	@WebMethod
 	public SubscriberData getSubscription(Long listId, Long personId) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();

@@ -85,7 +85,7 @@ public interface Admin
 	 *  
 	 * @throws NotFoundException if the list id is not valid.
 	 */
-	public AuthSubscribeResult subscribe(Long listId, InternetAddress address, boolean ignoreHold, boolean silent) throws NotFoundException;
+	public AuthSubscribeResult subscribeEmail(Long listId, InternetAddress address, boolean ignoreHold, boolean silent) throws NotFoundException;
 
 	/**
 	 * UnSubscribes a user from a list
@@ -107,7 +107,7 @@ public interface Admin
 	 * 
 	 * @throws NotFoundException if nobody has that email address
 	 */
-	public void setSiteAdmin(String email, boolean siteAdmin) throws NotFoundException;
+	public void setSiteAdminByEmail(String email, boolean siteAdmin) throws NotFoundException;
 
 	/**
 	 * Adds an email address to an existing account.  If the email address
@@ -162,7 +162,7 @@ public interface Admin
 	/**
 	 * Get the total number of lists which match the query.
 	 */
-	public int countLists(String query);
+	public int countListsQuery(String query);
 	
 	/**
 	 * @return some useful administrative information about the site

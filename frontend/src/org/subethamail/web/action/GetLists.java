@@ -54,7 +54,7 @@ public class GetLists extends AuthRequired
 		else
 		{
 			model.lists = Backend.instance().getAdmin().searchLists(model.query, model.getSkip(), model.getCount());
-			model.setTotalCount(Backend.instance().getAdmin().countLists(model.query));
+			model.setTotalCount(Backend.instance().getAdmin().countListsQuery(model.query));
 			
 			// If we are doing a query, then we need to find out how many results would
 			// have been returned for our query (before the limit was applied) in 

@@ -18,6 +18,9 @@ public class DuplicateListDataException extends Exception
 	boolean addressTaken;
 	boolean urlTaken;
 	
+	/** */
+	public DuplicateListDataException() {}
+	
 	/**
 	 */
 	public DuplicateListDataException(String msg, boolean duplicateAddress, boolean duplicateUrl)

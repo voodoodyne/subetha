@@ -18,6 +18,9 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -57,10 +60,8 @@ import org.subethamail.entity.i.Permission;
 @SecurityDomain("subetha")
 @PermitAll
 @RunAs("siteAdmin")
-//@WebService(
-//		name="InjectorEndpoint", 
-//		targetNamespace="http://www.subethamila.org/injector",
-//		serviceName="InjectorService")
+@WebService(name="Injector", targetNamespace="http://ws.subethamail.org/", serviceName="InjectorService")
+@SOAPBinding(style=SOAPBinding.Style.RPC)
 public class InjectorBean extends EntityManipulatorBean implements Injector, InjectorRemote
 {
 	/** */
@@ -110,6 +111,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#accept(java.lang.String)
 	 */
+	@WebMethod
 	public boolean accept(String toAddress) throws MessagingException
 	{
 		if (log.isDebugEnabled())
@@ -144,7 +146,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, byte[])
 	 */
-//	@WebMethod
+	@WebMethod
 	public boolean inject(String fromAddress, String toAddress, byte[] mailData) throws MessagingException, IOException
 	{
 		return this.inject(fromAddress, toAddress, new ByteArrayInputStream(mailData));

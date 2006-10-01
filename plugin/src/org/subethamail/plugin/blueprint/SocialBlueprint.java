@@ -90,9 +90,9 @@ public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
 			listMgr.addRole(listId, "Moderator", perms);
 
 			// Add a couple useful filters
-			listMgr.setFilter(listId, ReplyToFilter.class.getName());
-			listMgr.setFilter(listId, AppendFooterFilter.class.getName());
-			listMgr.setFilter(listId, ListHeaderFilter.class.getName());
+			listMgr.setFilterDefault(listId, ReplyToFilter.class.getName());
+			listMgr.setFilterDefault(listId, AppendFooterFilter.class.getName());
+			listMgr.setFilterDefault(listId, ListHeaderFilter.class.getName());
 		}
 		catch (PermissionException pe)
 		{

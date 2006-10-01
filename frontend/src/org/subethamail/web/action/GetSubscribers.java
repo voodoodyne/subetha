@@ -54,7 +54,7 @@ public class GetSubscribers extends AuthAction
 		else
 		{
 			model.subscribers = Backend.instance().getListMgr().searchSubscribers(model.listId, model.query, model.getSkip(), model.getCount());
-			model.setTotalCount(Backend.instance().getListMgr().countSubscribers(model.listId, model.query));
+			model.setTotalCount(Backend.instance().getListMgr().countSubscribersQuery(model.listId, model.query));
 			// See the comment in GetLists
 		}
 	}

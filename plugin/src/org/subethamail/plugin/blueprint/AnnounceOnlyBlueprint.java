@@ -85,9 +85,9 @@ public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycl
 			listMgr.addRole(listId, "Moderator", perms);
 
 			// Add a couple useful filters
-			listMgr.setFilter(listId, AppendFooterFilter.class.getName());
-			listMgr.setFilter(listId, ListHeaderFilter.class.getName());
-			listMgr.setFilter(listId, HoldEverythingFilter.class.getName());
+			listMgr.setFilterDefault(listId, AppendFooterFilter.class.getName());
+			listMgr.setFilterDefault(listId, ListHeaderFilter.class.getName());
+			listMgr.setFilterDefault(listId, HoldEverythingFilter.class.getName());
 		}
 		catch (PermissionException pe)
 		{

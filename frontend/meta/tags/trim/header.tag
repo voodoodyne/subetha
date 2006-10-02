@@ -20,17 +20,17 @@
 						<table>
 							<tr>
 								<th>Email:</th>
-								<td><input type="text" name="email"  /></td>
+								<td><input type="text" name="email" id="loginEmail" onkeyup="enableLoginButton();" /></td>
 							</tr>
 							<tr>
 								<th>Password:</th>
-								<td><input type="password" name="password" /></td>
+								<td><input type="password" name="password" id="loginPassword" onkeyup="enableLoginButton();" /></td>
 							</tr>
 							<tr>
 								<th>Remember?</th>
 								<td>
 									<input type="checkbox" name="remember" />
-									<input type="submit" value="Login" />
+									<input type="submit" id="loginSubmit" value="Login" />
 									<a href="<c:url value="/pw_forgot.jsp"/>">forgot?</a>
 								</td>
 							</tr>
@@ -39,6 +39,19 @@
 					<script type="text/javascript">
 					<!--
 					document.getElementById('loginform').email.focus();
+					document.getElementById('loginSubmit').disabled=true;
+					function enableLoginButton()
+					{
+						if (document.getElementById('loginEmail').value == "" ||
+							document.getElementById('loginPassword').value == "")
+						{
+							document.getElementById('loginSubmit').disabled=true;
+						}
+						else
+						{
+							document.getElementById('loginSubmit').disabled=false;
+						}
+					}
 					// -->
 					</script>
 				</c:otherwise>

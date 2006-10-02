@@ -8,8 +8,24 @@
 	<h1>All Lists</h1>
 
 	<form action="<c:url value="/lists.jsp"/>" method="get" style="display:inline">
-		<input type="text" name="query" value="<c:out value="${param.query}" />" />
-		<input type="submit" value="Search" />
+		<input type="text" name="query" id="query" value="<c:out value="${param.query}" />" onkeyup="enableSearch();" />
+		<input type="submit" value="Search" id="searchSubmit" />
+		
+		<script type="text/javascript">
+			function enableSearch()
+			{
+				if (document.getElementById('query').value != "")
+				{
+					document.getElementById('searchSubmit').disabled=false;
+				}
+				else
+				{
+					document.getElementById('searchSubmit').disabled=true;
+				}
+				return true;
+			}
+			document.getElementById('searchSubmit').disabled=true;
+		</script>
 	</form>
 	
 	<br /><br />

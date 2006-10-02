@@ -15,7 +15,8 @@
 				<c:if test="${!empty model.errors.name}">
 						class="error"
 					</c:if>>
-			<input id="name" name="name" type="text" size="60"
+			<input id="name" name="name" id="name" type="text" size="60"
+				onkeyup="enableSubmit();"
 				value="${model.name}" /> <c:if test="${!empty model.errors.name}">
 				<p class="error"><c:out value="${model.errors.name}" /></p>
 			</c:if></td>
@@ -26,7 +27,7 @@
 				<c:if test="${!empty model.errors.description}">
 						class="error"
 					</c:if>>
-			<textarea id="description" name="description" rows="5" cols="60"
+			<textarea id="description" id="description" name="description" onkeyup="enableSubmit();" rows="5" cols="60"
 				style="width:95%"><c:out
 				value="${model.description}" /></textarea> <c:if
 				test="${!empty model.errors.description}">
@@ -39,7 +40,7 @@
 				<c:if test="${!empty model.errors.email}">
 						class="error"
 					</c:if>>
-			<input id="email" name="email" type="text" size="60"
+			<input id="email" name="email" id="email" type="text" onkeyup="enableSubmit();" size="60"
 				value="${model.email}" />
 			<div>Example: announce@somedomain.com</div>
 			<div id="email-error" style="color: red"></div>
@@ -56,11 +57,11 @@
 					</c:if>>
 			
 			<c:if test="${!empty model.url}">		
-				<input id="url" name="url" type="text" size="60" value="${model.url}" />
+				<input id="url" name="url" id="url" type="text" size="60" onkeyup="enableSubmit();" value="${model.url}" />
 			</c:if>
 			
 			<c:if test="${empty model.url}">		
-				<input id="url" name="url" type="text" size="60" value="${siteStatus.defaultSiteUrl}list/" />
+				<input id="url" name="url" id="url" type="text" size="60" onkeyup="enableSubmit();" value="${siteStatus.defaultSiteUrl}list/" />
 			</c:if>
 			
 			<div>Example: http://somedomain.com<strong>/se/list/</strong>announce</div>
@@ -78,7 +79,9 @@
 						class="error"
 				</c:if>
 			>
-				<textarea id="owners" name="owners" rows="5" cols="60" style="width:95%"
+				<textarea id="owners" name="owners" id="owners" rows="5" cols="60" 
+						onkeyup="enableSubmit();"
+						style="width:95%"
 					><c:out value="${model.owners}" /></textarea>
 				
 				<div>
@@ -109,7 +112,7 @@
 		<c:forEach var="blueprint" items="${backend.listWizard.blueprints}"
 			varStatus="loop">
 			<tr>
-				<th><input type="radio" name="blueprint"
+				<th><input type="radio" name="blueprint" id="blueprint"
 					value="${blueprint.id}" id="blueprint${blueprint.id}"
 					<c:if test="${(empty model.blueprint && loop.first) || model.blueprint == blueprint.id}">checked="checked"</c:if> />
 				</th>
@@ -119,5 +122,27 @@
 		</c:forEach>
 	</table>
 
-	<input type="submit" value="Create List" /></form>
+	<input type="submit" id="submit" value="Create List" />
+
+	<script type="text/javascript">
+	function enableSubmit()
+	{
+		if (document.getElementById('name').value != "" &&
+			document.getElementById('description').value != "" &&
+			document.getElementById('email').value != "" &&
+			document.getElementById('url').value != "" &&
+			document.getElementById('owners').value != "")
+		{
+			document.getElementById('submit').disabled=false;
+		}
+		else
+		{
+			document.getElementById('submit').disabled=true;
+		}
+		return true;
+	}
+		document.getElementById('submit').disabled=true;
+	</script>
+
+	</form>
 </trim:main>

@@ -20,3 +20,16 @@ function enableChanged(button, field, origValue)
 	}
 	return true;
 }
+
+function checkSame(elementA, elementB, submitButton)
+{
+	if (document.getElementById(elementA).value == document.getElementById(elementB).value)
+	{
+		document.getElementById(submitButton).disabled=false;
+	}
+	else
+	{
+		document.getElementById(submitButton).disabled=true;
+	}
+	return true;				
+}

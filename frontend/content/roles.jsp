@@ -87,7 +87,8 @@
 				</tr>
 				<tr>
 					<th class="role <c:if test="${!empty model.errors.name}">error</c:if>">
-						<input name="name" value="${model.name}" type="text" />
+						<input name="name" id="addName" value="${model.name}" type="text"
+							onkeyup="enableSingleField('addName', 'addSubmit');" />
 						
 						<c:if test="${!empty model.errors.name}">
 							<p class="error"><c:out value="${model.errors.name}"/></p>
@@ -102,8 +103,12 @@
 					</c:forEach>
 				</tr>
 			</table>
-			<input type="submit" value="Add Role" />
+			<input type="submit" id="addSubmit" value="Add Role" />
 		</fieldset>
+		<script type="text/javascript">
+			document.getElementById('addSubmit').disabled=true;
+			document.getElementById('addName').focus();
+		</script>
 	</form>
 
 	<fieldset>

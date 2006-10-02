@@ -15,9 +15,13 @@
 				<form action="<c:url value="/archive_search.jsp"/>" method="get">
 					<input type="hidden" name="listId" value="${param.listId}" />
 					
-					<input type="text" name="query" size="50" />
-					<input type="submit" value="Search" />
+					<input type="text" name="query" id="query" size="50" onkeyup="enableSingleField('query', 'searchSubmit');" />
+					<input type="submit" value="Search" id="searchSubmit" />
 				</form>
+				<script type="text/javascript">
+					document.getElementById('searchSubmit').disabled=true;
+					document.getElementById('query').focus();
+				</script>
 			</div>
 			
 			<ul class="rootSummaries">

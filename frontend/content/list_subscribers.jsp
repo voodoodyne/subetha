@@ -9,8 +9,13 @@
 
 	<form action="<c:url value="/list_subscribers.jsp"/>" method="get" style="display:inline">
 		<input type="hidden" name="listId" value="${param.listId}" />
-		<input type="text" name="query" value="<c:out value="${param.query}" />" />
-		<input type="submit" value="Search" />
+		<input type="text" name="query" id="query" value="<c:out value="${param.query}" />"
+			 onkeyup="enableSingleField('query', 'searchSubmit');" />
+		<input type="submit" value="Search" id="searchSubmit" />
+		<script type="text/javascript">
+			document.getElementById('searchSubmit').disabled=true;
+			document.getElementById('query').focus();
+		</script>
 	</form>
 	
 	<br /><br />

@@ -35,6 +35,7 @@
 					</c:if>
 				>
 					<textarea id="emails" name="emails" rows="10" cols="50" style="width:95%"
+					 onkeyup="enableSingleField('emails', 'submit');"
 					><c:out value="${model.emails}"/></textarea>
 					<div>
 						<small>
@@ -49,8 +50,13 @@
 				</td>
 			</tr>
 		</table>
-		<input type="submit" value="Subscribe" />
+		<input type="submit" value="Subscribe" id="submit" />
 	</form>
+	<script type="text/javascript">
+		document.getElementById('submit').disabled=true;
+		document.getElementById('emails').focus();
+	</script>
+
 	</fieldset>
 
 </trim:list>

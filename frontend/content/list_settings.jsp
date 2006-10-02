@@ -118,5 +118,8 @@
 		<input type="hidden" name="listId" value="${param.listId}" />
 		<input type="submit" value="Cancel" />
 	</form>
+	<script type="text/javascript">
+		document.getElementById('name').focus();
+	</script>
 
 </trim:list>

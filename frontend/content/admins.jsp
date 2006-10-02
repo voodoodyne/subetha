@@ -54,10 +54,14 @@
 
 		<table>
 			<tr>
-				<td><input type="text" name="email" value="${model.email}" /></td>
-				<td><input type="submit" value="Add" /></td>
+				<td><input type="text" name="email" value="${model.email}" id="email" onkeyup="enableSingleField('email', 'addSubmit');" /></td>
+				<td><input type="submit" value="Add" id="addSubmit" /></td>
 			</tr>
 		</table>
 
+		<script type="text/javascript">
+			document.getElementById('addSubmit').disabled=true;
+			document.getElementById('email').focus();
+		</script>
 	</form>
 </trim:main>

@@ -33,3 +33,16 @@ function checkSame(elementA, elementB, submitButton)
 	}
 	return true;				
 }
+
+function enableSingleField(field, button)
+{
+	if (document.getElementById(field).value != "")
+	{
+		document.getElementById(button).disabled=false;
+	}
+	else
+	{
+		document.getElementById(button).disabled=true;
+	}
+	return true;
+}

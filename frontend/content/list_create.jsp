@@ -125,23 +125,24 @@
 	<input type="submit" id="submit" value="Create List" />
 
 	<script type="text/javascript">
-	function enableSubmit()
-	{
-		if (document.getElementById('name').value != "" &&
-			document.getElementById('description').value != "" &&
-			document.getElementById('email').value != "" &&
-			document.getElementById('url').value != "" &&
-			document.getElementById('owners').value != "")
+		function enableSubmit()
 		{
-			document.getElementById('submit').disabled=false;
+			if (document.getElementById('name').value != "" &&
+				document.getElementById('description').value != "" &&
+				document.getElementById('email').value != "" &&
+				document.getElementById('url').value != "" &&
+				document.getElementById('owners').value != "")
+			{
+				document.getElementById('submit').disabled=false;
+			}
+			else
+			{
+				document.getElementById('submit').disabled=true;
+			}
+			return true;
 		}
-		else
-		{
-			document.getElementById('submit').disabled=true;
-		}
-		return true;
-	}
 		document.getElementById('submit').disabled=true;
+		document.getElementById('name').focus();
 	</script>
 
 	</form>

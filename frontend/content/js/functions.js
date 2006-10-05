@@ -46,3 +46,16 @@ function enableSingleField(field, button)
 	}
 	return true;
 }
+
+function enableDoubleFields(fieldA, fieldB, button)
+{
+	if (document.getElementById(fieldA).value != "" && document.getElementById(fieldB).value != "")
+	{
+		document.getElementById(button).disabled=false;
+	}
+	else
+	{
+		document.getElementById(button).disabled=true;
+	}
+	return true;
+}

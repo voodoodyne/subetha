@@ -20,11 +20,11 @@
 						<table>
 							<tr>
 								<th>Email:</th>
-								<td><input type="text" name="email" id="loginEmail" onkeyup="enableLoginButton();" /></td>
+								<td><input type="text" name="email" id="loginEmail" onkeyup="enableDoubleFields('loginEmail', 'loginPassword', 'loginSubmit')" /></td>
 							</tr>
 							<tr>
 								<th>Password:</th>
-								<td><input type="password" name="password" id="loginPassword" onkeyup="enableLoginButton();" /></td>
+								<td><input type="password" name="password" id="loginPassword" onkeyup="enableDoubleFields('loginEmail', 'loginPassword', 'loginSubmit')" /></td>
 							</tr>
 							<tr>
 								<th>Remember?</th>
@@ -37,22 +37,8 @@
 						</table>
 					</form>
 					<script type="text/javascript">
-					<!--
-					document.getElementById('loginform').email.focus();
-					document.getElementById('loginSubmit').disabled=true;
-					function enableLoginButton()
-					{
-						if (document.getElementById('loginEmail').value == "" ||
-							document.getElementById('loginPassword').value == "")
-						{
-							document.getElementById('loginSubmit').disabled=true;
-						}
-						else
-						{
-							document.getElementById('loginSubmit').disabled=false;
-						}
-					}
-					// -->
+						document.getElementById('loginform').email.focus();
+						document.getElementById('loginSubmit').disabled=true;
 					</script>
 				</c:otherwise>
 			</c:choose>

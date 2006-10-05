@@ -37,11 +37,16 @@
 					<ol>
 						<li>Choose the ejb3 (NOT ejb3-clustered) option.</li>
 						<li>Leave the configuration name as 'default'.</li>
-						<li>Do NOT enable deployment isolation/call-by-value.</li>
+						<li>Do not enable deployment isolation/call-by-value (this setting is actually irrelevant to us).</li>
 						<li>Secure all of the JMX access points.  <strong>Be sure to use a non-guessable password</strong>.</li>
 					</ol>
 					The remaining documentation referrs to the directory in which you
 					installed JBoss as ${jboss.dir}.
+				</li>
+				<li>
+					Install <a href="http://labs.jboss.com/portal/jbossws/downloads">JBossWS 1.0.3.GA</a>.
+					This involves copying some new files over the old files; instructions are provided on
+					the JBoss website.
 				</li>
 				<li>
 					SubEtha uses JavaMail to send messages through an existing Mail Transport Agent

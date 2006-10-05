@@ -9,13 +9,28 @@
 		<p>
 			For installation instructions, see <a href="www/install.html">the install guide</a>.
 		</p>
+		<p>
+			Note!  This version requires upgrading JBossAS 4.0.4.GA with JBossWS 1.0.3.  SubEtha
+			will not deploy without this upgrade of the web services component.
+		</p>
+		<p>
+			You may also notice a small google ad in the dead space under the menus; we
+			think of this as a small donation for our long nights writing this (free)
+			software. If you wish to remove it, see the <a href="www/faq.html">FAQ</a> for
+			instructions.
+		</p>
 		
 		<h2>Changes</h2>
 		<dl>
 			<dt>0.9</dt>
 			<dd>
 				<ul>
-					<li>The Cleanup thread was not running properly.  It is now.</li>
+					<li>Preliminary SOAP web service API exposed.</li>
+					<li>Many minor UI improvements.</li>
+					<li>Now works with the "new" JBoss 4.0.4.GA that has API change.</li>
+					<li>Added small google adsense.</li>
+					<li>The search indexer wasn't running properly.  It is now.</li>
+					<li>The cleanup thread was not running properly.  It is now.</li>
 					<li>Empty archive searches send a stack trace.</li>
 					<li>UI for search results have been cleaned up. In addition,
 						we now display the search score as a value from 

@@ -15,6 +15,102 @@
 	<body>
 		<h2>SubEtha Frequently Asked Questions</h2>
 		
+		<h3>General</h3>
+		<dl>
+			<dt>How does SubEtha compare to Mailman?</dt>
+			<dd>
+				<p>Both are open source mailing list managers.  In Mailman's favor:</p>
+				<ul>
+					<li>Mailman is a much more mature application.  SubEtha is relatively new and
+						might possibly still have bugs.</li>
+					<li>Mailman has a known performance profile.  While SubEtha should scale well,
+						there are not yet any large SubEtha installations, so performance is still
+						unproven.</li>
+					<li>Mailman has a very large user community.  SubEtha is just getting started.</li>
+					<li>Mailman stores data on a filesystem rather than using a database.  Some people
+						would view this as a disadvantage.</li>
+					<li>Mailman has a smaller memory footprint.  SubEtha requires a Java appserver.
+						However, it should be noted that Mailman's qrunner footprint is not especially
+						svelte, and JBoss can be slimmed down considerably in a low-traffic environment.</li>
+					<li>Mailman has all the little quirky configuration options that only comes from years of
+						obscure user requests and patching.</li>
+				</ul>
+				
+				<p>In SubEtha's favor:</p>
+				<ul>
+					<li>Features!  SubEtha offers virtual domains, role-based permissions, 
+						keeping attachments on the server, searchable archives, and the ability
+						for users to have multiple email addresses, among others.  The only major
+						feature present in Mailman but missing in SubEtha is digest mode.</li>
+					<li>Usability.  SubEtha works like a reasonably modern web application.
+						Mailman's interface is... antiquated.</li>
+					<li>Pluggability, automation, and integration.  You can write a wide variety of
+						plugins for SubEtha, and SubEtha exposes much of it's internal
+						machination as a public API.  You can plug in your own quirky obscure
+						behaviors without patching the core.</li>
+					<li>Theoretical scalablity.  In theory, SubEtha should easily scale into a cluster
+						of dozens of machines.  However, nobody has tried this yet - if you do,
+						we want to hear from you.</li>
+					<li>SubEtha stores data in a database rather than using the filesystem.  Some
+						people would view this as a disadvantage.</li>
+					<li>SubEtha runs on Windows.  Yeah, we know, some people would view this as a
+						disadvantage :-)</li>
+				</ul>
+				
+				<p>
+					We would like to think that SubEtha significantly raises the bar for what
+					users expect a mailing list manager to do.  However, this is new software;
+					expect a few rough edges.
+				</p>
+			</dd>
+			
+			<dt>What's with the google ad?</dt>
+			<dd>
+				<p>Developing SubEtha was a major effort, requiring several months of fulltime
+				work by several engineers motivated by the bizarre notion "wouldn't
+				it be cool!"  The thought that we might be able to get beer money out of
+				this project didn't occur to us until long after the fact.</p>
+				<p>Rather than asking for donations, we've added the least obtrusive
+				google ad we could find to the dead space under the menus.  We hope
+				it's not too irritating, but if it is, you are welcome to remove it.
+				We won't be upset.</p>
+			</dd>
+			
+			<dt>How do I remove the google ad?</dt>
+			<dd>
+				<p>The easiest way is to "explode" the packaging of SubEtha into a directory structure,
+				then edit the JSP file that contains the offending HTML.  Note that .ear and .war files
+				are simply standard zip files with different extensions.</p>
+				
+				<ol>
+					<li>Stop JBoss</li>
+					<li>Move the file ${jboss.dir}/server/default/deploy/subetha.ear somewhere else (say, /tmp)</li>
+					<li>Unzip the contents of subetha.ear into the directory ${jboss.dir}/server/default/deploy/subetha.ear/</li>
+					<li>Move the file ${jboss.dir}/server/default/deploy/subetha.ear/frontend.war somewhere else (say, /tmp)</li>
+					<li>Unzip the contents of frontend.war into the directory ${jboss.dir}/server/default/deploy/subetha.ear/frontend.war/</li>
+					<li>
+						Edit the file ${jboss.dir}/server/default/deploy/subetha.ear/frontend.war/WEB-INF/tags/trim/list.tag.
+						There is a comment next to the HTML that you should remove.
+					</li>
+					<li>Start JBoss again</li>
+				</ol>
+				
+				<p>Alternatively, you could check out the source code, make the change to list.tag, and build
+				SubEtha yourself.  This is easier than you might think, and we developers will even be happy
+				to help you.  In summary - install JDK1.5, install JBoss, install Ant, checkout SubEtha (either
+				the tagged version you want or trunk, which is almost always safe), edit build.properties to
+				point to the JBoss dir, and run ant.</p>
+			</dd>
+			
+			<dt>Can't you just make that a config option?</dt>
+			<dd>
+				<p>Come now.  We went through all this trouble to write SubEtha, the least you can do
+				is put a little effort into your mean (mean!) attempts to circumvent our beer money
+				collection scheme.</p>
+			</dd>
+		</dl>
+		
+		<h3>Tech Specs</h3>
 		<dl>
 			<dt>What JDK version does SubEtha require?</dt>
 			<dd>SubEtha requires JDK1.5 or later.</dd>
@@ -71,60 +167,19 @@
 				bug whereby quoted-printable content with nonascii characters will
 				have it's header changed to "8bit" without updating the actual contents.
 				If this defect in JavaMail is corrected, this FAQ entry will change.</dd>
+		</dl>
 
+		<h3>Design Questions</h3>
+		<dl>
 			<dt>Why does SubEtha store attachments in a separate table?</dt>
 			<dd>1) they're huge, and we don't want to have to parse them when we're rendering the archive page
 				2) they need to be accessed separately as links from the archives anyways
 				3) message bodies without attachments are small enough to store in the
 				2nd level cache, making archive reading fast and scalable.</dd>
-
-			<dt>How does SubEtha compare to Mailman?</dt>
-			<dd>
-				<p>Both are open source mailing list managers.  In Mailman's favor:</p>
-				<ul>
-					<li>Mailman is a much more mature application.  SubEtha is relatively new and
-						might possibly still have bugs.</li>
-					<li>Mailman has a known performance profile.  While SubEtha should scale well,
-						there are not yet any large SubEtha installations, so performance is still
-						unproven.</li>
-					<li>Mailman has a very large user community.  SubEtha is just getting started.</li>
-					<li>Mailman stores data on a filesystem rather than using a database.  Some people
-						would view this as a disadvantage.</li>
-					<li>Mailman has a smaller memory footprint.  SubEtha requires a Java appserver.
-						However, it should be noted that Mailman's qrunner footprint is not especially
-						svelte, and JBoss can be slimmed down considerably in a low-traffic environment.</li>
-					<li>Mailman has all the little quirky configuration options that only comes from years of
-						obscure user requests and patching.</li>
-				</ul>
-				
-				<p>In SubEtha's favor:</p>
-				<ul>
-					<li>Features!  SubEtha offers virtual domains, role-based permissions, 
-						keeping attachments on the server, searchable archives, and the ability
-						for users to have multiple email addresses, among others.  The only major
-						feature present in Mailman but missing in SubEtha is digest mode.</li>
-					<li>Usability.  SubEtha works like a reasonably modern web application.
-						Mailman's interface is... antiquated.</li>
-					<li>Pluggability, automation, and integration.  You can write a wide variety of
-						plugins for SubEtha, and SubEtha exposes much of it's internal
-						machination as a public API.  You can plug in your own quirky obscure
-						behaviors without patching the core.</li>
-					<li>Theoretical scalablity.  In theory, SubEtha should easily scale into a cluster
-						of dozens of machines.  However, nobody has tried this yet - if you do,
-						we want to hear from you.</li>
-					<li>SubEtha stores data in a database rather than using the filesystem.  Some
-						people would view this as a disadvantage.</li>
-					<li>SubEtha runs on Windows.  Yeah, we know, some people would view this as a
-						disadvantage :-)</li>
-				</ul>
-				
-				<p>
-					We would like to think that SubEtha significantly raises the bar for what
-					users expect a mailing list manager to do.  However, this is new software;
-					expect a few rough edges.
-				</p>
-			</dd>
-			
+		</dl>
+		
+		<h3>Help!</h3>
+		<dl>
 			<dt>I just sent a message to a list and it isn't showing up in the
 				archives during a search!</dt>
 			<dd>
@@ -140,15 +195,13 @@
 			<p>JBoss accidentally slipped this change into a new installer 
 			release of 4.0.4.GA, which is really unfortunate because it means that 
 			the binary v0.8 that we released will no longer work with JBoss 4.0.4. Until we make
-			a v0.9 release (soon!), you can fix this problem by checking our code out from
+			a v0.9 release, you can fix this problem by checking our code out from
 			the <a href="http://subetha.tigris.org/servlets/ProjectSource">subversion repository</a> 
 			and <a href="http://subetha.tigris.org/developers.html">compiling it yourself</a>.
 			Don't worry about grabbing the latest code from us. We keep the repository in
 			good condition.
 			</p>
 			</dd>
-
-
 		</dl>
 	</body>
 </html>

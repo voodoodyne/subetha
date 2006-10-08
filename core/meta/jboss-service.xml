@@ -31,4 +31,16 @@ $URL$
 		<depends optional-attribute-name="SecurityManagerService">jboss.security:service=JaasSecurityManager</depends>
 	</mbean>
 	
+	<mbean code="org.jboss.mq.server.jmx.Queue" name="jboss.mq.destination:service=Queue,name=subetha/inbound">
+		<depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+		<depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+		<attribute name="RedeliveryLimit">100</attribute>
+		<attribute name="RedeliveryDelay">600000</attribute> <!-- 10 minutes -->
+	</mbean>
+	<mbean code="org.jboss.mq.server.jmx.Queue" name="jboss.mq.destination:service=Queue,name=subetha/outbound">
+		<depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+		<depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+		<attribute name="RedeliveryLimit">100</attribute>
+		<attribute name="RedeliveryDelay">600000</attribute> <!-- 10 minutes -->
+	</mbean>
 </server>

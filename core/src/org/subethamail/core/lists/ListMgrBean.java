@@ -92,6 +92,9 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		// Sometimes people looking for a list like "http://www.example.com/se/list"
 		// might type in "http://www.example.com/se/list/", so we will check for
 		// this.  However, keep in mind that the trailing / can be deliberate.
+		//
+		// They might also type in "http://example.com/se/list", so we should
+		// try adding the www too.
 		
 		String stringified = url.toString();
 		try
@@ -105,6 +108,20 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 				try
 				{
 					url = new URL(stringified.substring(0, stringified.length()-1));
+					return this.em.getMailingList(url).getId();
+				}
+				catch (MalformedURLException mux) { throw new RuntimeException(mux); }
+				catch (NotFoundException nfx) { throw ex; }	// throw the original anyways
+			}
+			else if (!url.getHost().startsWith("www."))
+			{
+				try
+				{
+					int pivot = stringified.indexOf("//") + 2;
+					String firstPart = stringified.substring(0, pivot);
+					String secondPart = stringified.substring(pivot);
+					url = new URL(firstPart + "www." + secondPart);
+					
 					return this.em.getMailingList(url).getId();
 				}
 				catch (MalformedURLException mux) { throw new RuntimeException(mux); }

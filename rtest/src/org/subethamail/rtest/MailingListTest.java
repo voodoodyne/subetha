@@ -5,6 +5,8 @@
 
 package org.subethamail.rtest;
 
+import java.net.URL;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -51,6 +53,20 @@ public class MailingListTest extends SubEthaTestCase
 		this.admin = new AdminMixin();
 		this.pers = new PersonMixin(this.admin);
 		this.nobody = new BeanMixin();
+	}
+	
+	/** */
+	public void testLookupAlternatives() throws Exception
+	{
+		MailingListMixin ml = new MailingListMixin(this.admin, this.pers.getAddress());
+		String lastPart = Utils.uniqueString();
+		
+		URL normalUrl = new URL("http://www.example.com/se/list/" + lastPart);
+		this.admin.getAdmin().setListAddresses(ml.getId(), ml.getAddress(), normalUrl);
+
+		// These shouldn't throw NotFoundExeption
+		this.nobody.getListMgr().lookup(new URL("http://www.example.com/se/list/" + lastPart + "/"));
+		this.nobody.getListMgr().lookup(new URL("http://example.com/se/list/" + lastPart));
 	}
 	
 	/** */

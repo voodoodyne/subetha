@@ -5,6 +5,7 @@
 
 package org.subethamail.core.lists;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -88,7 +89,33 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	@WebMethod
 	public Long lookup(URL url) throws NotFoundException
 	{
-		return this.em.getMailingList(url).getId();
+		// Sometimes people looking for a list like "http://www.example.com/se/list"
+		// might type in "http://www.example.com/se/list/", so we will check for
+		// this.  However, keep in mind that the trailing / can be deliberate.
+		
+		String stringified = url.toString();
+		try
+		{
+			return this.em.getMailingList(url).getId();
+		}
+		catch (NotFoundException ex)
+		{
+			if (stringified.endsWith("/"))
+			{
+				try
+				{
+					url = new URL(stringified.substring(0, stringified.length()-1));
+					return this.em.getMailingList(url).getId();
+				}
+				catch (MalformedURLException mux) { throw new RuntimeException(mux); }
+				catch (NotFoundException nfx) { throw ex; }	// throw the original anyways
+			}
+			else
+			{
+				throw ex;
+			}
+		}
+		
 	}
 	
 	/*

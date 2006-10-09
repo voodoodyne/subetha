@@ -82,23 +82,22 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 		Person person = this.em.get(Person.class, personId);
 		Subscription sub = person.getSubscription(mail.getList().getId());
 
-		EmailAddress ea = sub.getDeliverTo();
-		
 		if (sub == null || sub.getDeliverTo() == null)
 		{
 			// User has unsubscribed or decided they don't want mail after all.
 			return;
 		}
-		
+
+		EmailAddress ea = sub.getDeliverTo();
+
 		deliverTo(mail, ea);
 	}
 	
 	/**
 	 * Send a mail directly to an email
 	 * 
-	 * @param mailId the message to send
-	 * @param prettyName the email to send to.
-	 * @param personId the person to send to, if there is one.
+	 * @param mail the message to send
+	 * @param emailAddress the person to send to, if there is one.
 	 * 
 	 * @throws NotFoundException if something can't be found
 	 */

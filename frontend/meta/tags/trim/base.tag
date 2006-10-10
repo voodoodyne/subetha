@@ -17,7 +17,7 @@
 
 		<script type="text/javascript" src="<c:url value="/js/sortabletable.jsp"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/functions.js"/>"></script>
-  	</head>
+	</head>
 	
 	<body>
 		<jsp:doBody/>

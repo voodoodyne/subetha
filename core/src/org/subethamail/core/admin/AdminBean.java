@@ -7,6 +7,7 @@ package org.subethamail.core.admin;
 
 import java.net.URL;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -40,6 +41,7 @@ import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.core.admin.i.SiteStatus;
 import org.subethamail.core.lists.i.ListData;
+import org.subethamail.core.lists.i.ListDataPlus;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.util.OwnerAddress;
@@ -54,6 +56,7 @@ import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Permission;
+import org.subethamail.entity.i.PermissionException;
 
 /**
  * Implementation of the Admin interface.
@@ -87,7 +90,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	/** */
 	@EJB PostOffice postOffice;
 	@EJB Queuer queuer;
-
+	
 	/**
 	 * For generating random passwords.
 	 */
@@ -615,7 +618,27 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	{
 		return Transmute.mailingLists(this.em.findMailingLists(skip, count));
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#getListsPlus(int, int)
+	 */
+	@WebMethod
+	public List<ListDataPlus> getListsPlus(int skip, int count) throws NotFoundException, PermissionException
+	{
+		List<MailingList> mailingLists = this.em.findMailingLists(skip, count);
+		List<ListDataPlus> listDatas = new ArrayList<ListDataPlus>(mailingLists.size());
+		
+		for (MailingList list : mailingLists)
+		{
+			ListDataPlus listData = Transmute.mailingListPlus(list, 
+					this.em.countSubscribers(list.getId()), 
+					this.em.countMailByList(list.getId()));
+			listDatas.add(listData);
+		}
+		return listDatas;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#searchLists(java.lang.String, int, int)
@@ -624,6 +647,26 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	public List<ListData> searchLists(String query, int skip, int count)
 	{
 		return Transmute.mailingLists(this.em.findMailingLists(query, skip, count));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#searchListsPlus(java.lang.String, int, int)
+	 */
+	@WebMethod
+	public List<ListDataPlus> searchListsPlus(String query, int skip, int count) throws NotFoundException, PermissionException
+	{
+		List<MailingList> mailingLists = this.em.findMailingLists(query, skip, count);
+		List<ListDataPlus> listDatas = new ArrayList<ListDataPlus>(mailingLists.size());
+		
+		for (MailingList list : mailingLists)
+		{
+			ListDataPlus listData = Transmute.mailingListPlus(list, 
+				this.em.countSubscribers(list.getId()), 
+				this.em.countMailByList(list.getId()));
+			listDatas.add(listData);
+		}
+		return listDatas;
 	}
 	
 	/*

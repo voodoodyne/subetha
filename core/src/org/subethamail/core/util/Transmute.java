@@ -23,6 +23,7 @@ import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.lists.i.EnabledFilterData;
 import org.subethamail.core.lists.i.FilterData;
 import org.subethamail.core.lists.i.ListData;
+import org.subethamail.core.lists.i.ListDataPlus;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.RoleData;
@@ -106,6 +107,26 @@ public class Transmute
 				raw.isSubscriptionHeld());
 	}
 
+	/** */
+	public static ListDataPlus mailingListPlus(MailingList raw, int subscriberCount, int messageCount)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+	
+		return new ListDataPlus(
+				raw.getId(),
+				raw.getEmail(),
+				raw.getName(),
+				raw.getUrl(),
+				raw.getUrlBase(),
+				raw.getDescription(),
+				raw.getWelcomeMessage(),
+				raw.getOwnerEmail(),
+				raw.isSubscriptionHeld(),
+				subscriberCount,
+				messageCount);
+	}
+	
 	/** Does not add held subscriptions */
 	public static List<SubscriberData> subscribers(Collection<Subscription> subscriptions, boolean showNote)
 	{

@@ -16,6 +16,8 @@ import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.lists.i.ListData;
+import org.subethamail.core.lists.i.ListDataPlus;
+import org.subethamail.entity.i.PermissionException;
 
 /**
  * Administrative interface for managing the site.
@@ -153,6 +155,16 @@ public interface Admin
 	 * Gets a list of lists matching a String query
 	 */
 	public List<ListData> searchLists(String query, int skip, int count);
+
+	/**
+	 * Gets a list of all the lists on the system.
+	 */
+	public List<ListDataPlus> getListsPlus(int skip, int count) throws NotFoundException, PermissionException;
+
+	/**
+	 * Gets a list of lists matching a String query
+	 */
+	public List<ListDataPlus> searchListsPlus(String query, int skip, int count) throws NotFoundException, PermissionException;
 
 	/**
 	 * Get the total number of lists in the system.

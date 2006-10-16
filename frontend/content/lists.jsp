@@ -33,6 +33,8 @@
 					<td>Name</td>
 					<td>Address</td>
 					<td>URL</td>
+					<td>Subscribers</td>
+					<td>Messages</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -57,6 +59,12 @@
 						</td>
 						<td>
 							<a href="<c:out value="${list.url}"/>"><c:out value="${list.url}" /></a>
+						</td>
+						<td>
+							<fmt:formatNumber value="${list.subscriberCount}" />
+						</td>
+						<td>
+							<fmt:formatNumber value="${list.messageCount}" />
 						</td>
 					</tr>
 				</c:forEach>

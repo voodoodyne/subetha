@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.lists.i.ListData;
+import org.subethamail.core.lists.i.ListDataPlus;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.PaginateModel;
@@ -33,7 +33,7 @@ public class GetLists extends AuthRequired
 	{
 		/** */
 		@Property String query = "";
-		@Property List<ListData> lists;
+		@Property List<ListDataPlus> lists;
 	}
 	
 	public void initialize()
@@ -48,12 +48,12 @@ public class GetLists extends AuthRequired
 		
 		if (model.query.trim().length() == 0)
 		{
-			model.lists = Backend.instance().getAdmin().getLists(model.getSkip(), model.getCount());
+			model.lists = Backend.instance().getAdmin().getListsPlus(model.getSkip(), model.getCount());
 			model.setTotalCount(Backend.instance().getAdmin().countLists());
 		}
 		else
 		{
-			model.lists = Backend.instance().getAdmin().searchLists(model.query, model.getSkip(), model.getCount());
+			model.lists = Backend.instance().getAdmin().searchListsPlus(model.query, model.getSkip(), model.getCount());
 			model.setTotalCount(Backend.instance().getAdmin().countListsQuery(model.query));
 			
 			// If we are doing a query, then we need to find out how many results would

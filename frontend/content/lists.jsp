@@ -61,10 +61,16 @@
 							<a href="<c:out value="${list.url}"/>"><c:out value="${list.url}" /></a>
 						</td>
 						<td>
-							<fmt:formatNumber value="${list.subscriberCount}" />
+							<c:url var="listIdUrl" value="list_subscribers.jsp">
+								<c:param name="listId" value="${list.id}" />
+							</c:url>
+							<a href="<c:out value="${listIdUrl}"/>"><fmt:formatNumber value="${list.subscriberCount}" /></a>
 						</td>
 						<td>
-							<fmt:formatNumber value="${list.messageCount}" />
+							<c:url var="listIdUrl" value="archive.jsp">
+								<c:param name="listId" value="${list.id}" />
+							</c:url>
+							<a href="<c:out value="${listIdUrl}"/>"><fmt:formatNumber value="${list.messageCount}" /></a>
 						</td>
 					</tr>
 				</c:forEach>

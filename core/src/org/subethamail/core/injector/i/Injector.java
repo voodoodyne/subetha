@@ -59,6 +59,20 @@ public interface Injector
 	public boolean inject(String fromAddress, String toAddress, byte[] mailData) throws MessagingException, IOException;
 	
 	/**
+	 * Inject a message into a mailing list. Primarily used internally to 
+	 * send a message via the web UI.
+	 * 
+	 * @param listId The id of the mailing list.
+	 * @param msgId The id of the message we are replying to. If it isn't a reply, then set to null.
+	 * @param toAddress The email address of the user sending the message
+	 * @param mailData The message data.
+	 * @throws NotFoundException 
+	 * @throws IOException 
+	 * @throws MessagingException 
+	 */
+	public boolean inject(String fromAddress, Long listId, Long msgId, String subject, String mailData) throws NotFoundException, MessagingException, IOException;
+
+	/**
 	 * Imports of a piece of raw mail in rfc822 format into the archives
 	 * of a particular list.
 	 * 
@@ -72,6 +86,5 @@ public interface Injector
 	 * @throws IOException if there are these types of things
 	 */
 	public Date importMessage(Long listId, String envelopeSender, InputStream mailData, boolean ignoreDuplicate, Date fallbackDate) throws NotFoundException, MessagingException, IOException;
-
 }
 

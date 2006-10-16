@@ -6,12 +6,14 @@
 package org.subethamail.core.injector;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
@@ -26,6 +28,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -599,5 +602,32 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 					break;
 			}
 		}
+	}
+
+	public boolean inject(String fromAddress, Long listId, Long msgId, String subject, String mailData) throws NotFoundException, MessagingException, IOException
+	{
+		MailingList toList = this.em.get(MailingList.class, listId);
+
+		Session session = Session.getDefaultInstance(new Properties());
+		
+		// Craft a new message
+		SubEthaMessage sm = new SubEthaMessage(session);
+		sm.setFrom(new InternetAddress(fromAddress));
+		sm.setRecipient(RecipientType.TO, new InternetAddress(toList.getEmail()));;
+		sm.setSubject(subject);
+		sm.setContent(mailData, "text/plain");
+		
+		if (msgId != null)
+		{
+			String inReplyTo = this.em.get(Mail.class, msgId).getMessageId();
+			if (inReplyTo != null && inReplyTo.length() > 0)
+				sm.setHeader("In-Reply-To", inReplyTo);
+		}
+
+		ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
+		sm.writeTo(tmpStream);
+		tmpStream.flush();
+		
+		return this.inject(fromAddress, toList.getEmail(), tmpStream.toByteArray());
 	}
 }

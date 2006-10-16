@@ -7,7 +7,6 @@
 </t:action>
 <c:set var="perms" value="${myList.perms}"/>
 
-
 <trim:list title="${msg.subject}" listId="${msg.listId}">
 	<table>
 		<tr>
@@ -19,14 +18,13 @@
 					<form action="<c:url value="/message/${msg.id}/view/${msg.listId}-${msg.id}.eml"/>" method="get" style="display:inline">
 						<input type="submit" value="View" />
 					</form>
-					<%--
 					<c:if test="${auth.loggedIn && perms.POST}">
-						<form action="<c:url value="/archive_msg_reply.jsp"/>" method="get" style="display:inline">
+						<form action="<c:url value="/msg_send.jsp"/>" method="get" style="display:inline">
+							<input type="hidden" name="type" value="reply"/>
 							<input type="hidden" name="msgId" value="${msg.id}"/>
 							<input type="submit" value="Reply" />
 						</form>
 					</c:if>
-					--%>
 				</fieldset>
 			</td>
 			<c:if test="${auth.loggedIn}">

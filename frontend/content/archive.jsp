@@ -45,6 +45,21 @@
 			</c:url>
 			<se:searchPaginator url="${queryURL}&" model="${model}"/>
 
+			<t:action var="myList" type="org.subethamail.web.action.GetMyListRelationship">
+				<t:param name="listId" value="${model.listId}"/>
+			</t:action>
+			<c:set var="perms" value="${myList.perms}"/>
+
+			<c:choose>
+				<c:when test="${perms.POST}">
+					<form action="<c:url value="/msg_send.jsp"/>" method="get">
+						<input type="hidden" name="listId" value="${param.listId}" />				
+						<input type="hidden" name="type" value="post" />				
+						<input type="submit" value="Post" />
+					</form>
+				</c:when>
+			</c:choose>
+
 		</c:otherwise>
 	</c:choose>
 	

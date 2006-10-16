@@ -5,6 +5,10 @@
 
 package org.subethamail.web.action;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
+
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -34,6 +38,7 @@ public class SubscribeMass extends AuthAction
 		@Property Long listId;
 		@Property String how = "";
 		@Property String emails = "";
+		@Property Set<String> addedEmails;
 	}
 	
 	/** */
@@ -51,14 +56,38 @@ public class SubscribeMass extends AuthAction
 		
 		try
 		{
-			InternetAddress[] addresses = InternetAddress.parse(model.emails);
-			
+			InternetAddress[] addresses = null;
+
+			// TODO: This could break things if we have "Jon,Stevens" <jon@lskdfj.com>
+			//			But then again, don't do that.
+			if (model.emails.indexOf(',') <= 0)
+			{
+				StringTokenizer st = new StringTokenizer(model.emails);
+				addresses = new InternetAddress[st.countTokens()];
+				int i = 0;
+				while (st.hasMoreTokens())
+				{
+					String token = (String)st.nextToken();
+					addresses[i] = new InternetAddress(token);
+					i++;
+				}
+			}
+			else
+			{
+				addresses = InternetAddress.parse(model.emails);
+			}
+
 			Backend.instance().getListMgr().massSubscribe(model.listId, how, addresses);
+
+			model.addedEmails = new HashSet<String>(addresses.length);
+			for (InternetAddress address : addresses)
+			{
+				model.addedEmails.add(address.getAddress());
+			}
 		}
 		catch (AddressException ex)
 		{
 			model.setError("emails", ex.getMessage());
 		}
-	}
-	
+	}	
 }

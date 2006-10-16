@@ -39,7 +39,7 @@
 					><c:out value="${model.emails}"/></textarea>
 					<div>
 						<small>
-							Email addresses should be comma separated, and may contain
+							Email addresses should be comma separated or one per line, and may contain
 							personal names.  For example:<br/>
 							 "Joe User" &lt;juser@nowhere.com&gt;, Bob &lt;bob@nowhere.com&gt;, another@nowhere.com
 						</small>

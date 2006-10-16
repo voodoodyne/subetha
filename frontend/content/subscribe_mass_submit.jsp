@@ -4,9 +4,21 @@
 
 <c:choose>
 	<c:when test="${empty model.errors}">
-		<c:redirect url="/list_subscribers.jsp">
-			<c:param name="listId" value="${model.listId}" />
-		</c:redirect>
+		<trim:list title="Mass Subscribe Results" listId="${param.listId}">
+			<c:choose>
+				<c:when test="${!empty model.addedEmails}">
+					<p>Attempting to add the following emails to the list:</p>
+					<ul>
+					<c:forEach var="email" items="${model.addedEmails}">
+						<li><c:out value="${email}" /></li>
+					</c:forEach>
+					</ul>
+				</c:when>
+				<c:otherwise>
+					<p>Sorry, no emails were added to the list.</p>
+				</c:otherwise>
+			</c:choose>
+		</trim:list>
 	</c:when>
 	<c:otherwise>
 		<jsp:forward page="/subscribe_mass.jsp" />

@@ -11,19 +11,43 @@
 			</p>
 		</c:when>
 		<c:otherwise>
-			<div class="searchBar">
-				<form action="<c:url value="/archive_search.jsp"/>" method="get">
-					<input type="hidden" name="listId" value="${param.listId}" />
-					
-					<input type="text" name="query" id="query" size="50" onkeyup="enableSingleField('query', 'searchSubmit');" />
-					<input type="submit" value="Search" id="searchSubmit" />
-				</form>
-				<script type="text/javascript">
-					document.getElementById('searchSubmit').disabled=true;
-					document.getElementById('query').focus();
-				</script>
-			</div>
-			
+
+			<table>
+				<tr>
+					<td>
+						<fieldset><legend>Search</legend>
+						<div class="searchBar">
+							<form action="<c:url value="/archive_search.jsp"/>" method="get">
+								<input type="hidden" name="listId" value="${param.listId}" />
+								
+								<input type="text" name="query" id="query" size="50" onkeyup="enableSingleField('query', 'searchSubmit');" />
+								<input type="submit" value="Search" id="searchSubmit" />
+							</form>
+							<script type="text/javascript">
+								document.getElementById('searchSubmit').disabled=true;
+								document.getElementById('query').focus();
+							</script>
+						</div>
+						</fieldset>
+					</td>
+					<td>
+						<fieldset><legend>Post</legend>
+						<t:action var="myList" type="org.subethamail.web.action.GetMyListRelationship">
+							<t:param name="listId" value="${model.listId}"/>
+						</t:action>
+						<c:set var="perms" value="${myList.perms}"/>
+						<c:if test="${perms.POST}">
+							<form action="<c:url value="/msg_send.jsp"/>" method="get">
+								<input type="hidden" name="listId" value="${param.listId}" />				
+								<input type="hidden" name="type" value="post" />				
+								<input type="submit" value="Send Message To List" />
+							</form>
+						</c:if>
+						</fieldset>
+					</td>
+				</tr>
+			</table>
+	
 			<ul class="rootSummaries">
 				<c:forEach var="root" items="${model.messages}">
 					<li>
@@ -44,21 +68,6 @@
 				<c:param name="listId" value="${model.listId}"/>
 			</c:url>
 			<se:searchPaginator url="${queryURL}&" model="${model}"/>
-
-			<t:action var="myList" type="org.subethamail.web.action.GetMyListRelationship">
-				<t:param name="listId" value="${model.listId}"/>
-			</t:action>
-			<c:set var="perms" value="${myList.perms}"/>
-
-			<c:choose>
-				<c:when test="${perms.POST}">
-					<form action="<c:url value="/msg_send.jsp"/>" method="get">
-						<input type="hidden" name="listId" value="${param.listId}" />				
-						<input type="hidden" name="type" value="post" />				
-						<input type="submit" value="Post" />
-					</form>
-				</c:when>
-			</c:choose>
 
 		</c:otherwise>
 	</c:choose>

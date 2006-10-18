@@ -11,7 +11,6 @@ import java.io.InputStream;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Local;
-import javax.mail.MessagingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -71,15 +70,7 @@ public class MessageListenerAdapter implements MessageListener, Lifecycle
 	 */
 	public boolean accept(String from, String recipient)
 	{
-		try
-		{
-			return this.injector.accept(recipient);
-		}
-		catch (MessagingException ex)
-		{
-			// Bad address?  Maybe return false instead?
-			throw new RuntimeException(ex);
-		}
+		return this.injector.accept(recipient);
 	}
 
 	/**
@@ -96,14 +87,6 @@ public class MessageListenerAdapter implements MessageListener, Lifecycle
 				
 				throw new RuntimeException("Data no longer wanted");
 			}
-		}
-		catch (MessagingException ex)
-		{
-			if (log.isWarnEnabled())
-				log.warn("Trouble parsing input data", ex);
-			
-			// Problem parsing the data
-			throw new RuntimeException(ex);
 		}
 		catch (LimitExceededException ex)
 		{

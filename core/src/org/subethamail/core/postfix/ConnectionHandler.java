@@ -7,8 +7,6 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import javax.mail.MessagingException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.postfix.io.CRLFTerminatedReader;
@@ -118,16 +116,7 @@ public class ConnectionHandler extends Thread implements ConnectionContext
 				line = line.substring(4, line.length());
 				
 				TcpTableService service = this.server.getTcpTableService();
-				boolean accepted = false;
-				try
-				{
-					// do we have a valid email?
-					accepted = service.injector.accept(line);
-				}
-				catch (MessagingException e)
-				{
-					log.debug(e);
-				}
+				boolean accepted = service.injector.accept(line);
 				if (accepted)
 				{
 					int port = service.smtpManagement.getPort();

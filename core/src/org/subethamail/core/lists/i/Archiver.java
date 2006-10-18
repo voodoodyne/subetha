@@ -108,4 +108,32 @@ public interface Archiver
 	 * @return the id of the list to which the msg belongs
 	 */
 	public Long deleteMail(Long mailId) throws NotFoundException, PermissionException;
+	
+	/**
+	 * Post a new message to the list.  Starts a new thread.
+	 * 
+	 * Requires Permission.POST.  Must also be logged in.
+	 * 
+	 * @param listId The id of the mailing list.
+	 * @param fromAddress must be one of the caller's valid email addresses
+	 * @param body The message body.
+	 * 
+	 * @throws NotFoundException if listId is not valid 
+	 */
+	public void post(String fromAddress, Long listId, String subject, String body) throws NotFoundException, PermissionException;
+
+	/**
+	 * Replies to an existing message on a list.
+	 * 
+	 * Requires Permission.POST.  Must also be logged in.
+	 * 
+	 * @param msgId The id of the message we are replying to
+	 * @param fromAddress must be one of the caller's valid email addresses
+	 * @param body The message body.
+	 * @return the id of the list to which the msg belongs
+	 * 
+	 * @throws NotFoundException if msgId is not valid
+	 */
+	public Long reply(String fromAddress, Long msgId, String subject, String body) throws NotFoundException, PermissionException;
+
 }

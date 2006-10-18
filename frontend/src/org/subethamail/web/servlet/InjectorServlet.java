@@ -8,7 +8,6 @@ package org.subethamail.web.servlet;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import javax.mail.MessagingException;
 import javax.security.auth.login.FailedLoginException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -94,10 +93,6 @@ public class InjectorServlet extends HttpServlet
 			
 			if (!Backend.instance().getInjector().inject(from, recipient, new ByteArrayInputStream(message.getBytes())))
 				response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
-		}
-		catch (MessagingException ex)
-		{
-			throw new ServletException(ex);
 		}
 		finally
 		{

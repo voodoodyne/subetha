@@ -8,7 +8,6 @@ package org.subethamail.web.action;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
-import org.subethamail.core.lists.i.MailData;
 import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
@@ -16,15 +15,17 @@ import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
 
 /**
- * Injects a piece of mail into the system via a web form.
+ * Injects a piece of mail into the system via a web form.  One of msgId or listId
+ * will be specified to indicate reply or post, respectively.
  * 
  * @author Jon Stevens
+ * @author Jeff Schnitzer
  */
-public class InjectMessage extends AuthRequired 
+public class PostMessage extends AuthRequired 
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(InjectMessage.class);
+	private static Log log = LogFactory.getLog(PostMessage.class);
 
 	public class Model extends ErrorMapModel
 	{
@@ -56,17 +57,11 @@ public class InjectMessage extends AuthRequired
 			// Reply
 			if (model.msgId != null)
 			{
-				MailData mail = Backend.instance().getArchiver().getMail(model.msgId);
-				if (log.isDebugEnabled())
-					log.debug("Injecting message from " + this.getAuthName() + " to list: " + mail.getListId());
-	
-				model.listId = mail.getListId();
-				
-				Backend.instance().getInjector().inject(this.getAuthName(), model.listId, model.msgId, model.subject, model.message);
+				model.listId = Backend.instance().getArchiver().reply(this.getAuthName(), model.msgId, model.subject, model.message);
 			}
-			else if (model.listId != null)	// Post
+			else
 			{
-				Backend.instance().getInjector().inject(this.getAuthName(), model.listId, null, model.subject, model.message);
+				Backend.instance().getArchiver().post(this.getAuthName(), model.listId, model.subject, model.message);
 			}
 		}
 	}

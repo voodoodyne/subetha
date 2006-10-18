@@ -6,14 +6,12 @@
 package org.subethamail.core.injector;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
@@ -28,13 +26,13 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.common.io.LimitExceededException;
 import org.subethamail.common.io.LimitingInputStream;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
@@ -115,42 +113,45 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 * @see org.subethamail.core.injector.i.Injector#accept(java.lang.String)
 	 */
 	@WebMethod
-	public boolean accept(String toAddress) throws MessagingException
+	public boolean accept(String toAddress)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Checking if we want address " + toAddress);
 		
-		InternetAddress addy = new InternetAddress(toAddress);
-		
-		// Maybe it's a VERP bounce?
-		VERPAddress verp = VERPAddress.getVERPBounce(addy.getAddress());
-		if (verp != null)
-			addy = new InternetAddress(verp.getEmail());	// check if this is for a list here
-		else
-		{
-			// Maybe it's an owner address?
-			String ownerList = OwnerAddress.getList(addy.getAddress());
-			if (ownerList != null)
-				addy = new InternetAddress(ownerList);
-		}
-		
 		try
 		{
-			this.em.getMailingList(addy);
-			return true;
+			InternetAddress addy = new InternetAddress(toAddress);
+			
+			// Maybe it's a VERP bounce?
+			VERPAddress verp = VERPAddress.getVERPBounce(addy.getAddress());
+			if (verp != null)
+				addy = new InternetAddress(verp.getEmail());	// check if this is for a list here
+			else
+			{
+				// Maybe it's an owner address?
+				String ownerList = OwnerAddress.getList(addy.getAddress());
+				if (ownerList != null)
+					addy = new InternetAddress(ownerList);
+			}
+			
+			try
+			{
+				this.em.getMailingList(addy);
+				return true;
+			}
+			catch (NotFoundException ex)
+			{
+				return false;
+			}
 		}
-		catch (NotFoundException ex)
-		{
-			return false;
-		}
+		catch (MessagingException ex) { throw new RuntimeException(ex); }
 	}
 	
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, byte[])
 	 */
-	@WebMethod
-	public boolean inject(String fromAddress, String toAddress, byte[] mailData) throws MessagingException, IOException
+	public boolean inject(String fromAddress, String toAddress, byte[] mailData) throws LimitExceededException
 	{
 		return this.inject(fromAddress, toAddress, new ByteArrayInputStream(mailData));
 	}
@@ -159,7 +160,21 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, byte[])
 	 */
-	public boolean inject(String envelopeSender, String envelopeRecipient, InputStream mailData) throws MessagingException, IOException
+	public boolean inject(String envelopeSender, String envelopeRecipient, InputStream mailData) throws LimitExceededException
+	{
+		try
+		{
+			return this.injectImpl(envelopeSender, envelopeRecipient, mailData);
+		}
+		catch (LimitExceededException ex) { throw ex; }
+		catch (MessagingException ex) { throw new RuntimeException(ex); }
+		catch (IOException ex) { throw new RuntimeException(ex); }
+	}
+	
+	/**
+	 * Factors out the exception catching.
+	 */
+	protected boolean injectImpl(String envelopeSender, String envelopeRecipient, InputStream mailData) throws MessagingException, LimitExceededException, IOException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Injecting message sent to " + envelopeRecipient);
@@ -313,68 +328,73 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#importMessage(java.lang.Long, java.lang.String, java.io.InputStream, boolean, java.util.Date)
 	 */
-	public Date importMessage(Long listId, String envelopeSender, InputStream mailData, boolean ignoreDuplicate, Date fallbackDate) throws NotFoundException, MessagingException, IOException
+	public Date importMessage(Long listId, String envelopeSender, InputStream mailData, boolean ignoreDuplicate, Date fallbackDate) throws NotFoundException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Importing message from " + envelopeSender + " into list " + listId);
 
-		InternetAddress senderAddy = new InternetAddress(envelopeSender);
-
-		// Figure out which list this is for
-		MailingList toList = this.em.get(MailingList.class, listId);
-		
-		// Parse up the message
-		mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
-		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
-		
-		// Check to see if the message is a duplicate.
-		if (this.isDuplicateMessage(toList, msg)) 
-		{
-			// Are we dropping duplicates? 
-			if (ignoreDuplicate)
-				return msg.getSentDate();
-			else
-				msg.replaceMessageID();
-		}
-
-		// If it stays null, no moderation required
-		HoldType hold = null;
-		
-		// Run it through the plugin stack
 		try
 		{
-			this.filterRunner.onInject(msg, toList);
-		}
-		catch (IgnoreException ex)
-		{
-			if (log.isDebugEnabled())
-				log.debug("Plugin ignoring message", ex);
+			InternetAddress senderAddy = new InternetAddress(envelopeSender);
+	
+			// Figure out which list this is for
+			MailingList toList = this.em.get(MailingList.class, listId);
+			
+			// Parse up the message
+			mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
+			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
+			
+			// Check to see if the message is a duplicate.
+			if (this.isDuplicateMessage(toList, msg)) 
+			{
+				// Are we dropping duplicates? 
+				if (ignoreDuplicate)
+					return msg.getSentDate();
+				else
+					msg.replaceMessageID();
+			}
+	
+			// If it stays null, no moderation required
+			HoldType hold = null;
+			
+			// Run it through the plugin stack
+			try
+			{
+				this.filterRunner.onInject(msg, toList);
+			}
+			catch (IgnoreException ex)
+			{
+				if (log.isDebugEnabled())
+					log.debug("Plugin ignoring message", ex);
+				
+				return msg.getSentDate();
+			}
+			catch (HoldException ex)
+			{
+				if (log.isDebugEnabled())
+					log.debug("Plugin holding message", ex);
+				
+				hold = HoldType.HARD;
+			}
+	
+			Date sentDate = msg.getSentDate();
+			if (sentDate == null)
+				sentDate = fallbackDate;
+					
+			Mail mail = new Mail(senderAddy, msg, toList, hold, sentDate);
+			this.em.persist(mail);
+			
+			// Convert all binary attachments to references and then set the content
+			this.detacher.detach(msg, mail);
+			mail.setContent(msg);
+			
+			if (mail.getHold() == null)
+				this.threadMail(mail, msg);
 			
 			return msg.getSentDate();
 		}
-		catch (HoldException ex)
-		{
-			if (log.isDebugEnabled())
-				log.debug("Plugin holding message", ex);
-			
-			hold = HoldType.HARD;
-		}
-
-		Date sentDate = msg.getSentDate();
-		if (sentDate == null)
-			sentDate = fallbackDate;
-				
-		Mail mail = new Mail(senderAddy, msg, toList, hold, sentDate);
-		this.em.persist(mail);
-		
-		// Convert all binary attachments to references and then set the content
-		this.detacher.detach(msg, mail);
-		mail.setContent(msg);
-		
-		if (mail.getHold() == null)
-			this.threadMail(mail, msg);
-		
-		return msg.getSentDate();
+		catch (MessagingException ex) { throw new RuntimeException(ex); }
+		catch (IOException ex) { throw new RuntimeException(ex); }
 	}
 	
 	/**
@@ -602,32 +622,5 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 					break;
 			}
 		}
-	}
-
-	public boolean inject(String fromAddress, Long listId, Long msgId, String subject, String mailData) throws NotFoundException, MessagingException, IOException
-	{
-		MailingList toList = this.em.get(MailingList.class, listId);
-
-		Session session = Session.getDefaultInstance(new Properties());
-		
-		// Craft a new message
-		SubEthaMessage sm = new SubEthaMessage(session);
-		sm.setFrom(new InternetAddress(fromAddress));
-		sm.setRecipient(RecipientType.TO, new InternetAddress(toList.getEmail()));;
-		sm.setSubject(subject);
-		sm.setContent(mailData, "text/plain");
-		
-		if (msgId != null)
-		{
-			String inReplyTo = this.em.get(Mail.class, msgId).getMessageId();
-			if (inReplyTo != null && inReplyTo.length() > 0)
-				sm.setHeader("In-Reply-To", inReplyTo);
-		}
-
-		ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
-		sm.writeTo(tmpStream);
-		tmpStream.flush();
-		
-		return this.inject(fromAddress, toList.getEmail(), tmpStream.toByteArray());
 	}
 }

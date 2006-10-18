@@ -1,6 +1,6 @@
 <%@include file="inc/top_standard.jspf" %>
 
-<t:action var="model" type="org.subethamail.web.action.InjectMessage"/>
+<t:action var="model" type="org.subethamail.web.action.PostMessage"/>
 
 <c:choose>
 	<c:when test="${!empty model.errors}">
@@ -8,10 +8,10 @@
 		<jsp:forward page="/msg_send.jsp"/>
 	</c:when>
 	<c:otherwise>
-		<trim:list title="Send success" listId="${model.listId}">
+		<trim:list title="Posted" listId="${model.listId}">
 		
 			<p>
-				Your message has been successfully sent to the list. 
+				Your message has been posted to the list. 
 				<c:url value="/archive.jsp" var="archivesUrl">
 					<c:param name="listId" value="${model.listId}" />
 				</c:url>

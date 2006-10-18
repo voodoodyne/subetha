@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -31,6 +32,7 @@ import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -344,10 +346,6 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		{
 			throw new ImportMessagesException(ex);
 		}
-		catch (MessagingException ex)
-		{
-			throw new ImportMessagesException(ex);
-		}
 	}
 	
 	/**
@@ -466,5 +464,82 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		// TODO:  figure out how to remove it from the search index
 		
 		return mail.getList().getId();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#post(java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
+	 */
+	public void post(String fromAddress, Long listId, String subject, String body) throws NotFoundException, PermissionException
+	{
+		Person me = this.getMe();
+		if (me == null)
+			throw new IllegalStateException("Must be logged in");
+		
+		MailingList toList = this.getListFor(listId, Permission.POST, me);
+		
+		if (me.getEmailAddress(fromAddress) == null)
+			throw new IllegalArgumentException("Not one of your addresses");
+
+		Session session = Session.getDefaultInstance(new Properties());
+		
+		try
+		{
+			// Craft a new message
+			SubEthaMessage sm = new SubEthaMessage(session);
+			sm.setFrom(new InternetAddress(fromAddress));
+			sm.setRecipient(RecipientType.TO, new InternetAddress(toList.getEmail()));;
+			sm.setSubject(subject);
+			sm.setContent(body, "text/plain");
+			
+			ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
+			sm.writeTo(tmpStream);
+			
+			this.injector.inject(fromAddress, toList.getEmail(), tmpStream.toByteArray());
+		}
+		catch (MessagingException ex) { throw new RuntimeException(ex); }
+		catch (IOException ex) { throw new RuntimeException(ex); }
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#reply(java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
+	 */
+	public Long reply(String fromAddress, Long msgId, String subject, String body) throws NotFoundException, PermissionException
+	{
+		Person me = this.getMe();
+		if (me == null)
+			throw new IllegalStateException("Must be logged in");
+		
+		Mail mail = this.getMailFor(msgId, Permission.POST, me);
+		MailingList toList = mail.getList();
+		
+		if (me.getEmailAddress(fromAddress) == null)
+			throw new IllegalArgumentException("Not one of your addresses");
+
+		Session session = Session.getDefaultInstance(new Properties());
+		
+		try
+		{
+			// Craft a new message
+			SubEthaMessage sm = new SubEthaMessage(session);
+			sm.setFrom(new InternetAddress(fromAddress));
+			sm.setRecipient(RecipientType.TO, new InternetAddress(toList.getEmail()));;
+			sm.setSubject(subject);
+			sm.setContent(body, "text/plain");
+			
+			String inReplyTo = mail.getMessageId();
+			if (inReplyTo != null && inReplyTo.length() > 0)
+				sm.setHeader("In-Reply-To", inReplyTo);
+			
+			ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
+			sm.writeTo(tmpStream);
+			
+			this.injector.inject(fromAddress, toList.getEmail(), tmpStream.toByteArray());
+		}
+		catch (MessagingException ex) { throw new RuntimeException(ex); }
+		catch (IOException ex) { throw new RuntimeException(ex); }
+		
+		return toList.getId();
 	}
 }

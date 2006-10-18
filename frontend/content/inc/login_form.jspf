@@ -53,6 +53,5 @@
 </form>
 <script type="text/javascript">
 	document.getElementById('loginForm').email.focus();
-	document.getElementById('loginSubmit').disabled=true;
 </script>
 

@@ -38,8 +38,6 @@
 					</form>
 					<script type="text/javascript">
 						document.getElementById('loginform').email.focus();
-						if (document.getElementById('loginEmail').value == "" && document.getElementById('loginPassword').value == "")
-							document.getElementById('loginSubmit').disabled=true;
 					</script>
 				</c:otherwise>
 			</c:choose>

@@ -40,7 +40,7 @@
 							<form action="<c:url value="/msg_send.jsp"/>" method="get">
 								<input type="hidden" name="listId" value="${param.listId}" />				
 								<input type="hidden" name="type" value="post" />				
-								<input type="submit" value="Send Message To List" />
+								<input type="submit" value="Compose Message" />
 							</form>
 						</c:if>
 						</fieldset>

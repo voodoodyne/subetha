@@ -9,7 +9,7 @@
 			<input type="hidden" name="listId" value="${param.listId}" />
 			
 			<p>Please submit a MBOX file.  Note that this could take a while.</p>
-			<input id="file" name="file" size="65" type="file"/>
+			<input id="file" name="file" size="65" type="file" />
 			<input type="submit" value="Import" />
 		</form>
 	</fieldset>

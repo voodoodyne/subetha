@@ -13,7 +13,7 @@ import org.subethamail.web.Backend;
 import org.tagonist.propertize.Property;
 
 /**
- * Adds a site admin.
+ * This action is used primarily on msg_send.jsp to initialize the data for that page.
  * 
  * @author Jon Stevens
  * @author Jeff Schnitzer

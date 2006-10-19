@@ -3,9 +3,9 @@
 <t:action var="model" type="org.subethamail.web.action.UploadMBOX"/>
 
 <c:choose>
-	<c:when test="${not empty model.errors}">
+	<c:when test="${! empty model.errors}">
 		<c:redirect url="/import_messages.jsp">
-			<c:param name="listId" value="${model.listId}" />
+			<c:param name="listId" value="${param.listId}" />
 		</c:redirect>
 	</c:when>
 	<c:otherwise>

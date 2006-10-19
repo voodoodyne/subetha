@@ -20,7 +20,6 @@
 					</form>
 					<c:if test="${auth.loggedIn && perms.POST}">
 						<form action="<c:url value="/msg_send.jsp"/>" method="get" style="display:inline">
-							<input type="hidden" name="type" value="reply"/>
 							<input type="hidden" name="msgId" value="${msg.id}"/>
 							<input type="submit" value="Reply" />
 						</form>

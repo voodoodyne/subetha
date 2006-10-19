@@ -38,8 +38,7 @@
 						<c:set var="perms" value="${myList.perms}"/>
 						<c:if test="${perms.POST}">
 							<form action="<c:url value="/msg_send.jsp"/>" method="get">
-								<input type="hidden" name="listId" value="${param.listId}" />				
-								<input type="hidden" name="type" value="post" />				
+								<input type="hidden" name="listId" value="${param.listId}" />
 								<input type="submit" value="Compose Message" />
 							</form>
 						</c:if>

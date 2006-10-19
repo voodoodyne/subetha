@@ -1,39 +1,37 @@
 <%@include file="/inc/top_standard.jspf" %>
 
+<t:action var="msg" type="org.subethamail.web.action.PrepareReply" />
+
 <c:choose>
-	<c:when test="${param.type == 'post'}">
-		<c:set var="type" value="Post"/>
-		<c:set var="title" value="Post Message" />
-		<c:set var="listId" value="${param.listId}" />
+	<c:when test="${empty msg.msgId}">
+		<c:set var="type" value="Compose"/>
+		<c:set var="title" value="Compose Message" />
 	</c:when>
 	<c:otherwise>
-		<t:action var="msg" type="org.subethamail.web.action.GetMessage" />
 		<c:set var="type" value="Reply"/>
-		<c:if test="${empty subject}">
-			<c:set var="subject" value="Re: ${msg.subject}" />
-		</c:if>
-		<c:set var="title" value="${subject}" />
-		<c:set var="listId" value="${msg.listId}" />
+		<c:set var="title" value="${msg.subject}" />
 	</c:otherwise>
 </c:choose>
 
-<trim:list title="${title}" listId="${listId}">
+<trim:list title="${title}" listId="${msg.listId}">
 
-	<fieldset> <legend><c:out value="${type}: ${msg.subject}" /></legend>
+	<fieldset><legend><c:out value="${type}" /></legend>
 		<form action="<c:url value="/msg_send_submit.jsp"/>" method="post" class="form-inline">
-			<c:if test="${!empty msg}">
-				<input type="hidden" name="msgId" value="${msg.id}"/>
-			</c:if>
-			<c:if test="${empty msg}">
-				<input type="hidden" name="listId" value="${listId}"/>
-			</c:if>
-			<input type="hidden" name="type" value="${param.type}"/>
+			<c:choose>
+				<c:when test="${!empty msg.msgId}">
+					<input type="hidden" name="msgId" value="${msg.msgId}" />
+				</c:when>
+				<c:otherwise>
+					<input type="hidden" name="listId" value="${msg.listId}" />
+				</c:otherwise>
+			</c:choose>
+
 			<table>
 				<tr>
 					<th>Subject:</th>
 					<td>
 						<input type="text" id="formSubject" name="subject" size="80" 
-							value="<c:out value="${subject}" />"
+							value="<c:out value="${msg.subject}" />"
 							onkeyup="enableButton();" />
 						<c:if test="${!empty model.errors.subject}">
 							<p class="error"><c:out value="${model.errors.subject}" /></p>
@@ -54,18 +52,22 @@
 			</table>
 			<input type="submit" id="buttonSubmit" value="<c:out value="${type}"/>" />
 		</form>
-		<c:if test="${!empty msg}">
+
+		<c:choose>
+			<c:when test="${!empty msg.msgId}">
 			<form action="<c:url value="/archive_msg.jsp"/>" method="get" class="form-inline">
-				<input type="hidden" name="msgId" value="${msg.id}"/>
+				<input type="hidden" name="msgId" value="${msg.msgId}" />
 				<input type="submit" value="Cancel" />
 			</form>
-		</c:if>
-		<c:if test="${empty msg}">
-			<form action="<c:url value="/archive.jsp"/>" method="get" class="form-inline">
-				<input type="hidden" name="listId" value="${listId}"/>
-				<input type="submit" value="Cancel" />
-			</form>
-		</c:if>
+			</c:when>
+			<c:otherwise>
+				<form action="<c:url value="/archive.jsp"/>" method="get" class="form-inline">
+					<input type="hidden" name="listId" value="${msg.listId}" />
+					<input type="submit" value="Cancel" />
+				</form>
+			</c:otherwise>
+		</c:choose>
+
 	</fieldset>
 
 	<script language="JavaScript">
@@ -84,22 +86,22 @@
 		}
 	</script>
 
-	<c:if test="${!empty msg}">
+	<c:if test="${!empty msg.mailData}">
 		<p>
 			From
-			<span class="authorName"><c:out value="${msg.fromName}"/></span>
+			<span class="authorName"><c:out value="${msg.mailData.fromName}"/></span>
 			
-			<c:if test="${!empty msg.fromEmail}">
+			<c:if test="${!empty msg.mailData.fromEmail}">
 				<span class="authorEmail">
-					&lt;<a href="mailto:<c:out value="${msg.fromEmail}"/>"><c:out value="${msg.fromEmail}"/></a>&gt;
+					&lt;<a href="mailto:<c:out value="${msg.mailData.fromEmail}"/>"><c:out value="${msg.mailData.fromEmail}"/></a>&gt;
 				</span>
 			</c:if>
 			
-			<span class="messageDate"><fmt:formatDate value="${msg.sentDate}" type="both" timeStyle="short" /></span>
+			<span class="messageDate"><fmt:formatDate value="${msg.mailData.sentDate}" type="both" timeStyle="short" /></span>
 		</p>
 	
 		<div class="message">
-			<c:forEach var="part" items="${msg.textParts}">
+			<c:forEach var="part" items="${msg.mailData.textParts}">
 				<div class="messagePart">
 					<pre class="message" ><c:out value="${part.contents}"/></pre>
 				</div>

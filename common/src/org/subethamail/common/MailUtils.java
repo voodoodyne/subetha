@@ -5,6 +5,9 @@
 
 package org.subethamail.common;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -25,6 +28,8 @@ public class MailUtils
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(MailUtils.class);
+
+	public static final Pattern SUBJECT_PATTERN = Pattern.compile("((RE|AW|SV)(\\[\\d+\\])*:\\s*)+", Pattern.CASE_INSENSITIVE);
 
 	/** default constructor prevents util class from being created. */
 	private MailUtils() {}
@@ -143,5 +148,35 @@ public class MailUtils
 			
 			return buf.toString();
 		}
+	}
+
+	/**
+	 * Converts:  Re: Re: Foo to Re: Foo
+	
+	 * @param subject the subject message
+	 * @param prefix null or the stuff in the []... Re: [List Name] Subject
+	 * @param isReply if you know this is a reply, then always append Re:
+	 * @return A perfect subject.
+	 */
+	public static String cleanRe(String subject, String prefix, boolean isReply)
+	{
+		if (prefix == null)
+			prefix = new String();
+
+		Matcher matcher = SUBJECT_PATTERN.matcher(subject);
+		String result = null;
+		if (matcher.find())
+		{
+			subject = subject.substring(matcher.end());
+			result = "Re: " + prefix + subject;
+		}
+		else
+		{
+			if (isReply)
+				result = "Re: " + prefix + subject;
+			else
+				result = prefix + subject;
+		}
+		return result;
 	}
 }

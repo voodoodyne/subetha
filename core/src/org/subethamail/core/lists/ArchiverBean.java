@@ -486,7 +486,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		try
 		{
 			// Craft a new message
-			SubEthaMessage sm = craftMessage(toList, fromAddress, me.getName(), subject, body);
+			SubEthaMessage sm = craftMessage(toList, fromAddress, me.getName(), subject, body, false);
 			
 			ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
 			sm.writeTo(tmpStream);
@@ -518,7 +518,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		try
 		{
 			// Craft a new message
-			SubEthaMessage sm = craftMessage(toList, fromAddress, me.getName(), subject, body);
+			SubEthaMessage sm = craftMessage(toList, fromAddress, me.getName(), subject, body, true);
 			
 			String inReplyTo = mail.getMessageId();
 			if (inReplyTo != null && inReplyTo.length() > 0)
@@ -536,7 +536,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	}
 	
 	/** */
-	private SubEthaMessage craftMessage(MailingList toList, String fromAddress, String fromName, String subject, String body)
+	private SubEthaMessage craftMessage(MailingList toList, String fromAddress, String fromName, String subject, String body, boolean reply)
 		throws MessagingException, IOException
 	{
 		Session session = Session.getDefaultInstance(new Properties());

@@ -5,9 +5,6 @@
 
 package org.subethamail.plugin.filter;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 
@@ -15,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
@@ -40,7 +38,6 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 	private static Log log = LogFactory.getLog(SubjectFilter.class);
 
 	public static final String ARG_SUBJECTPREFIX = "Subject";
-	public static final Pattern SUBJECT_PATTERN = Pattern.compile("((RE|AW|SV)(\\[\\d+\\])*:\\s*)+", Pattern.CASE_INSENSITIVE);
 	
 	/** */
 	static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
@@ -102,18 +99,10 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 		// find any existing expandedSubjectArg's in the subjectMsg and remove them
 		subjectMsg = subjectMsg.replace(expandedSubjectArg, "");
 
-		// remove all duplicate Re: stuff.
-		Matcher matcher = SUBJECT_PATTERN.matcher(subjectMsg);
-		if (matcher.find())
-		{
-			subjectMsg = subjectMsg.substring(matcher.end());
-			subjectMsg = "Re: " + expandedSubjectArg + subjectMsg;
-		}
-		else
-		{
-			subjectMsg = expandedSubjectArg + subjectMsg;
-		}
-		
+		// remove all duplicate Re: stuff and possibly insert the expandedSubjectArg in the
+		// right place.
+		subjectMsg = MailUtils.cleanRe(subjectMsg, expandedSubjectArg, false);
+
 		// set the subject on the message
 		msg.setSubject(subjectMsg);
 	}

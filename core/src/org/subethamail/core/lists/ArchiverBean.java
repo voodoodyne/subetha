@@ -486,11 +486,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		try
 		{
 			// Craft a new message
-			SubEthaMessage sm = new SubEthaMessage(session);
-			sm.setFrom(new InternetAddress(fromAddress));
-			sm.setRecipient(RecipientType.TO, new InternetAddress(toList.getEmail()));;
-			sm.setSubject(subject);
-			sm.setContent(body, "text/plain");
+			SubEthaMessage sm = craftMessage(toList, fromAddress, me.getName(), subject, body);
 			
 			ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
 			sm.writeTo(tmpStream);
@@ -522,11 +518,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		try
 		{
 			// Craft a new message
-			SubEthaMessage sm = new SubEthaMessage(session);
-			sm.setFrom(new InternetAddress(fromAddress));
-			sm.setRecipient(RecipientType.TO, new InternetAddress(toList.getEmail()));;
-			sm.setSubject(subject);
-			sm.setContent(body, "text/plain");
+			SubEthaMessage sm = craftMessage(toList, fromAddress, me.getName(), subject, body);
 			
 			String inReplyTo = mail.getMessageId();
 			if (inReplyTo != null && inReplyTo.length() > 0)
@@ -541,5 +533,19 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		catch (IOException ex) { throw new RuntimeException(ex); }
 		
 		return toList.getId();
+	}
+	
+	/** */
+	private SubEthaMessage craftMessage(MailingList toList, String fromAddress, String fromName, String subject, String body)
+		throws MessagingException, IOException
+	{
+		Session session = Session.getDefaultInstance(new Properties());
+		
+		SubEthaMessage sm = new SubEthaMessage(session);
+		sm.setFrom(new InternetAddress(fromAddress, fromName));
+		sm.setRecipient(RecipientType.TO, new InternetAddress(toList.getEmail()));;
+		sm.setSubject(subject);
+		sm.setContent(body, "text/plain");
+		return sm;
 	}
 }

@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -178,5 +180,35 @@ public class MailUtils
 				result = prefix + subject;
 		}
 		return result;
+	}
+
+	/**
+	 * Pass in either a comma or newline separated list of emails and it returns a list of InternetAddress
+	 * @param input
+	 * @return
+	 * @throws AddressException if there is an error parsing the emails.
+	 */
+	public static InternetAddress[] parseMassSubscribe(String input) throws AddressException
+	{
+		String[] split = input.split("[\\n\\r]");
+
+		if (split.length == 1)
+		{
+			return InternetAddress.parse(split[0]);
+		}
+		else
+		{
+			InternetAddress[] addresses = new InternetAddress[split.length];
+			int i = 0;
+			for (String token : split)
+			{
+				if (token.length() > 0)
+				{
+					addresses[i] = new InternetAddress(token);
+					i++;
+				}
+			}
+			return addresses;
+		}
 	}
 }

@@ -7,11 +7,14 @@ package org.subethamail.rtest;
 
 import java.net.URL;
 
+import javax.mail.internet.InternetAddress;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Utils;
 import org.subethamail.core.acct.i.MyListRelationship;
@@ -181,6 +184,24 @@ public class MailingListTest extends SubEthaTestCase
 		catch (NotFoundException ex) {}
 	}
 	
+	public void testMassSubscribeToMailingList() throws Exception
+	{
+		String massA = "Foo Bar <foo@bar.com>, \"Jeff\" <jeff@bar.com>";
+		String massB = "Foo Bar <foo@bar.com>\n \"Jeff\" <jeff@bar.com>";
+	
+		InternetAddress[] addrA = MailUtils.parseMassSubscribe(massA);
+		assertEquals("foo@bar.com", addrA[0].getAddress());
+		assertEquals("Foo Bar", addrA[0].getPersonal());
+		assertEquals("jeff@bar.com", addrA[1].getAddress());
+		assertEquals("Jeff", addrA[1].getPersonal());
+
+		InternetAddress[] addrB = MailUtils.parseMassSubscribe(massB);
+		assertEquals("foo@bar.com", addrB[0].getAddress());
+		assertEquals("Foo Bar", addrB[0].getPersonal());
+		assertEquals("jeff@bar.com", addrB[1].getAddress());
+		assertEquals("Jeff", addrB[1].getPersonal());
+	}
+
 	/** */
 	public static Test suite()
 	{

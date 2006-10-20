@@ -7,13 +7,13 @@ package org.subethamail.web.action;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.common.MailUtils;
 import org.subethamail.core.lists.i.MassSubscribeType;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -56,26 +56,7 @@ public class SubscribeMass extends AuthAction
 		
 		try
 		{
-			InternetAddress[] addresses = null;
-
-			// TODO: This could break things if we have "Jon,Stevens" <jon@lskdfj.com>
-			//			But then again, don't do that.
-			if (model.emails.indexOf(',') <= 0)
-			{
-				StringTokenizer st = new StringTokenizer(model.emails);
-				addresses = new InternetAddress[st.countTokens()];
-				int i = 0;
-				while (st.hasMoreTokens())
-				{
-					String token = (String)st.nextToken();
-					addresses[i] = new InternetAddress(token);
-					i++;
-				}
-			}
-			else
-			{
-				addresses = InternetAddress.parse(model.emails);
-			}
+			InternetAddress[] addresses = MailUtils.parseMassSubscribe(model.emails);
 
 			Backend.instance().getListMgr().massSubscribe(model.listId, how, addresses);
 

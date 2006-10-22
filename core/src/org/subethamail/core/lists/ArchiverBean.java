@@ -481,8 +481,6 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		if (me.getEmailAddress(fromAddress) == null)
 			throw new IllegalArgumentException("Not one of your addresses");
 
-		Session session = Session.getDefaultInstance(new Properties());
-		
 		try
 		{
 			// Craft a new message
@@ -513,8 +511,6 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		if (me.getEmailAddress(fromAddress) == null)
 			throw new IllegalArgumentException("Not one of your addresses");
 
-		Session session = Session.getDefaultInstance(new Properties());
-		
 		try
 		{
 			// Craft a new message

@@ -6,16 +6,20 @@ package org.subethamail.core.postfix;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.nio.charset.Charset;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.mina.common.IoHandlerAdapter;
+import org.apache.mina.common.IoSession;
+import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
+import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.jboss.annotation.ejb.Depends;
 import org.jboss.annotation.ejb.Service;
-import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.smtp.SMTPManagement;
 
@@ -24,8 +28,6 @@ import org.subethamail.core.smtp.SMTPManagement;
  * @author Jeff Schnitzer
  */
 @Service(objectName="subetha:service=TcpTable")
-@SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
 public class TcpTableService implements TcpTableManagement
 {
 	@EJB Injector injector;
@@ -40,13 +42,74 @@ public class TcpTableService implements TcpTableManagement
 
 	private String hostName = null;
 	
-	private TcpTableServer server;
+	private SocketAcceptor acceptor;
 	
-	@PermitAll
+	/** */
+	public class Handler extends IoHandlerAdapter
+	{
+		/* (non-Javadoc)
+		 * @see org.apache.mina.common.IoHandlerAdapter#sessionOpened(org.apache.mina.common.IoSession)
+		 */
+		@Override
+		public void sessionOpened(IoSession arg0) throws Exception
+		{
+			log.debug("session opened!");
+		}
+
+		/* (non-Javadoc)
+		 * @see org.apache.mina.common.IoHandlerAdapter#messageReceived(org.apache.mina.common.IoSession, java.lang.Object)
+		 */
+		@Override
+		public void messageReceived(IoSession session, Object msg) throws Exception
+		{
+			if (log.isDebugEnabled())
+				log.debug("Message received:  " + msg);
+			
+			String line = (String)msg;
+			
+			// need at least 5 characters... really need more though
+			if (line.length() < 5)
+			{
+				session.write("500 Invalid command");
+				return;
+			}
+			
+			// check for "get "
+			String getPart = line.substring(0,4);
+			if (!getPart.toLowerCase().equals("get "))
+			{
+				session.write("500 Invalid command");
+				return;
+			}
+
+			// strip off the "get "
+			// get<SPACE>STUFF<NEWLINE>
+			line = line.substring(4, line.length());
+			
+			boolean accepted = injector.accept(line);
+			if (accepted)
+			{
+				int smtpPort = smtpManagement.getPort();
+				InetAddress binding = smtpManagement.getBinding();
+				if (binding == null)
+				{
+					binding = InetAddress.getLocalHost();
+				}
+
+				session.write("200 smtp:[" + binding.getHostAddress() + "]:" + smtpPort);
+			}
+			else
+			{
+				session.write("500 Lookup failed for: " + line);
+			}
+		}
+	}
+	
+	/** */
 	public void start() throws IOException
 	{
-		if (this.server != null)
-			throw new IllegalStateException("TcpTableServer already running");
+		if (this.acceptor != null)
+			throw new IllegalStateException("TcpTableService already running");
 		
 		InetAddress binding = null;
 		
@@ -54,51 +117,51 @@ public class TcpTableService implements TcpTableManagement
 		if (bindAddress != null && !"0.0.0.0".equals(bindAddress))
 			binding = InetAddress.getByName(bindAddress);
 
-		log.info("Starting TcpTable service: " + (binding==null ? "*" : binding) + ":" + port);
+		log.info("Starting TcpTableService: " + (binding==null ? "*" : binding) + ":" + port);
 		
-		this.server = new TcpTableServer(this);
-		this.server.setBindAddress(binding);
-		this.server.setPort(this.port);
+		this.acceptor = new SocketAcceptor();
+		this.acceptor.getFilterChain().addLast(
+				"codec",
+				new ProtocolCodecFilter(
+						new TextLineCodecFactory(Charset.forName("UTF-8")))
+				);
 		
-		if (this.hostName != null)
-			this.server.setHostName(this.hostName);
-		
-		this.server.start();
+		this.acceptor.bind(new InetSocketAddress(binding, this.port), new Handler());
 	}
 
-	@PermitAll
+	/** */
 	public void stop()
 	{
 		log.info("Stopping TcpTable service");
-		this.server.stop();
-		this.server = null;
+		this.acceptor.unbindAll();
+		this.acceptor = null;
 	}
 
-	@PermitAll
+	/** */
 	public void setPort(int port)
 	{
-		if (this.server != null)
+		if (this.acceptor != null)
 			throw new IllegalStateException("TcpTable already running");
 		
 		this.port = port;
 	}
 
-	@PermitAll
+	/** */
 	public int getPort()
 	{
 		return this.port;
 	}
 
-	@PermitAll
+	/** */
 	public void setHostName(String hostname)
 	{
-		if (this.server != null)
+		if (this.acceptor != null)
 			throw new IllegalStateException("TcpTable already running");
 		
 		this.hostName = hostname;
 	}
 
-	@PermitAll
+	/** */
 	public String getHostName()
 	{
 		return this.hostName;

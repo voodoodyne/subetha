@@ -15,8 +15,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.IoHandlerAdapter;
 import org.apache.mina.common.IoSession;
+import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
+import org.apache.mina.filter.codec.ProtocolDecoder;
+import org.apache.mina.filter.codec.ProtocolEncoder;
+import org.apache.mina.filter.codec.textline.LineDelimiter;
 import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
+import org.apache.mina.filter.codec.textline.TextLineDecoder;
+import org.apache.mina.filter.codec.textline.TextLineEncoder;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.jboss.annotation.ejb.Depends;
 import org.jboss.annotation.ejb.Service;
@@ -70,7 +76,7 @@ public class TcpTableService implements TcpTableManagement
 			// need at least 5 characters... really need more though
 			if (line.length() < 5)
 			{
-				session.write("500 Invalid command\n");
+				session.write("500 Invalid command");
 				return;
 			}
 			
@@ -78,7 +84,7 @@ public class TcpTableService implements TcpTableManagement
 			String getPart = line.substring(0,4);
 			if (!getPart.toLowerCase().equals("get "))
 			{
-				session.write("500 Invalid command\n");
+				session.write("500 Invalid command");
 				return;
 			}
 
@@ -96,14 +102,31 @@ public class TcpTableService implements TcpTableManagement
 					binding = InetAddress.getLocalHost();
 				}
 
-				session.write("200 smtp:[" + binding.getHostAddress() + "]:" + smtpPort + "\n");
+				session.write("200 smtp:[" + binding.getHostAddress() + "]:" + smtpPort);
 			}
 			else
 			{
-				session.write("500 Lookup failed for: " + line + "\n");
+				session.write("500 Lookup failed for: " + line);
 			}
 		}
 	}
+	
+	/** */
+//	public class CodecFactory implements ProtocolCodecFactory
+//	{
+//		TextLineEncoder encoder = new TextLineEncoder();
+//		TextLineDecoder decoder = new TextLineDecoder();
+//
+//		public ProtocolDecoder getDecoder() throws Exception
+//		{
+//			return this.decoder;
+//		}
+//
+//		public ProtocolEncoder getEncoder() throws Exception
+//		{
+//			return this.encoder;
+//		}
+//	}
 	
 	/** */
 	public void start() throws IOException
@@ -123,8 +146,7 @@ public class TcpTableService implements TcpTableManagement
 		this.acceptor.getFilterChain().addLast(
 				"codec",
 				new ProtocolCodecFilter(
-						new TextLineCodecFactory(Charset.forName("UTF-8")))
-				);
+						new TextLineCodecFactory(Charset.forName("UTF-8"))));
 		
 		this.acceptor.bind(new InetSocketAddress(binding, this.port), new Handler());
 	}

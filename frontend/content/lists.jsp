@@ -78,7 +78,7 @@
 			</table>
 
 <script type="text/javascript">
-var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String"]);
+var st1 = new SortableTable(document.getElementById("lists-table"), ["String", "String", "String", "Number", "Number"]);
 st1.onsort = st1.tableRowColors;
 </script>
 			<c:url var="queryURL" value="/lists.jsp">

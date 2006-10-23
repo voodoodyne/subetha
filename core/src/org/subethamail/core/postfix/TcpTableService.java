@@ -70,7 +70,7 @@ public class TcpTableService implements TcpTableManagement
 			// need at least 5 characters... really need more though
 			if (line.length() < 5)
 			{
-				session.write("500 Invalid command");
+				session.write("500 Invalid command\n");
 				return;
 			}
 			
@@ -78,7 +78,7 @@ public class TcpTableService implements TcpTableManagement
 			String getPart = line.substring(0,4);
 			if (!getPart.toLowerCase().equals("get "))
 			{
-				session.write("500 Invalid command");
+				session.write("500 Invalid command\n");
 				return;
 			}
 
@@ -96,11 +96,11 @@ public class TcpTableService implements TcpTableManagement
 					binding = InetAddress.getLocalHost();
 				}
 
-				session.write("200 smtp:[" + binding.getHostAddress() + "]:" + smtpPort);
+				session.write("200 smtp:[" + binding.getHostAddress() + "]:" + smtpPort + "\n");
 			}
 			else
 			{
-				session.write("500 Lookup failed for: " + line);
+				session.write("500 Lookup failed for: " + line + "\n");
 			}
 		}
 	}

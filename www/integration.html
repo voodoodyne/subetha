@@ -154,6 +154,14 @@
 			wants to claim, such as mailing list addresses, mailing list owner addresses,
 			and VERPed bounce messages.
 		</p>
+		
+		<p>
+			On some systems (OSX), the tcp_table is not compiled in by default. In order to enable it,
+			download the latest source, compile and then install postfix over your existing installation.
+			Use the command: 'make makefiles CCARGS=-DSNAPSHOT; make; make install' and just answer the
+			defaults during install.
+		</p>
+		
 		<p>
 			The steps are similar to manual postfix mapping, all configured in main.cf:
 		</p>

@@ -1,5 +1,7 @@
 <%@include file="/inc/top_standard.jspf" %>
 
+<t:action type="org.subethamail.web.action.auth.AuthRequired" />
+
 <t:action var="model" type="org.subethamail.web.action.FilterSave"/>
 
 <c:choose>

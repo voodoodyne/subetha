@@ -30,20 +30,20 @@
 						</div>
 						</fieldset>
 					</td>
-					<td>
-						<fieldset><legend>Post</legend>
-						<t:action var="myList" type="org.subethamail.web.action.GetMyListRelationship">
-							<t:param name="listId" value="${model.listId}"/>
-						</t:action>
-						<c:set var="perms" value="${myList.perms}"/>
-						<c:if test="${perms.POST}">
-							<form action="<c:url value="/msg_send.jsp"/>" method="get">
-								<input type="hidden" name="listId" value="${param.listId}" />
-								<input type="submit" value="Compose Message" />
-							</form>
-						</c:if>
-						</fieldset>
-					</td>
+					<c:if test="${perms.POST}">
+						<td>
+							<fieldset><legend>Post</legend>
+							<t:action var="myList" type="org.subethamail.web.action.GetMyListRelationship">
+								<t:param name="listId" value="${model.listId}"/>
+							</t:action>
+							<c:set var="perms" value="${myList.perms}"/>
+								<form action="<c:url value="/msg_send.jsp"/>" method="get">
+									<input type="hidden" name="listId" value="${param.listId}" />
+									<input type="submit" value="Compose Message" />
+								</form>
+							</fieldset>
+						</td>
+					</c:if>
 				</tr>
 			</table>
 	

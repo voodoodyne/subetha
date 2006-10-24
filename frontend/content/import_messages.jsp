@@ -1,7 +1,5 @@
 <%@include file="/inc/top_standard.jspf" %>
 
-<t:action type="org.subethamail.web.action.auth.AuthRequired" />
-
 <trim:list title="Import Messages" listId="${param.listId}">
 
 	<fieldset>
@@ -14,10 +12,6 @@
 			<input id="file" name="file" size="65" type="file" />
 			<input type="submit" value="Import" />
 		</form>
-		
-		<c:if test="${! empty model.errors.files}">
-			<p class="error"><c:out value="${model.errors.files}" /></p>
-		</c:if>
 	</fieldset>
 
 </trim:list>

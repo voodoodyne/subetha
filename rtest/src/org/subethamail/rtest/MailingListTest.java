@@ -188,6 +188,7 @@ public class MailingListTest extends SubEthaTestCase
 	{
 		String massA = "Foo Bar <foo@bar.com>, \"Jeff\" <jeff@bar.com>";
 		String massB = "Foo Bar <foo@bar.com>\n \"Jeff\" <jeff@bar.com>";
+		String massC = "Foo Bar <foo@bar.com>\n \"Jeff\" <jeff@bar.com>, \"Jeff2\" <jeff2@bar.com>\n\n\"Jeff3\" <jeff3@bar.com>";
 	
 		InternetAddress[] addrA = MailUtils.parseMassSubscribe(massA);
 		assertEquals("foo@bar.com", addrA[0].getAddress());
@@ -200,6 +201,16 @@ public class MailingListTest extends SubEthaTestCase
 		assertEquals("Foo Bar", addrB[0].getPersonal());
 		assertEquals("jeff@bar.com", addrB[1].getAddress());
 		assertEquals("Jeff", addrB[1].getPersonal());
+
+		InternetAddress[] addrC = MailUtils.parseMassSubscribe(massC);
+		assertEquals("foo@bar.com", addrC[0].getAddress());
+		assertEquals("Foo Bar", addrC[0].getPersonal());
+		assertEquals("jeff@bar.com", addrC[1].getAddress());
+		assertEquals("Jeff", addrC[1].getPersonal());	
+		assertEquals("jeff2@bar.com", addrC[2].getAddress());
+		assertEquals("Jeff2", addrC[2].getPersonal());
+		assertEquals("jeff3@bar.com", addrC[3].getAddress());
+		assertEquals("Jeff3", addrC[3].getPersonal());
 	}
 
 	/** */

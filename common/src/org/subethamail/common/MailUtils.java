@@ -5,6 +5,8 @@
 
 package org.subethamail.common;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -183,32 +185,28 @@ public class MailUtils
 	}
 
 	/**
-	 * Pass in either a comma or newline separated list of emails and it returns a list of InternetAddress
+	 * Pass in either a comma and/or newline separated list of emails and it returns a list of InternetAddress
 	 * @param input
 	 * @return
 	 * @throws AddressException if there is an error parsing the emails.
 	 */
 	public static InternetAddress[] parseMassSubscribe(String input) throws AddressException
 	{
-		String[] split = input.split("[\\n\\r]");
-
-		if (split.length == 1)
+		String[] split = input.split("[\r\n\t]");
+		
+		List<InternetAddress> list = new ArrayList<InternetAddress>();
+		for (String token : split)
 		{
-			return InternetAddress.parse(split[0]);
-		}
-		else
-		{
-			InternetAddress[] addresses = new InternetAddress[split.length];
-			int i = 0;
-			for (String token : split)
+			token = token.trim();
+			if (token.length() > 0)
 			{
-				if (token.length() > 0)
+				InternetAddress[] addresses = InternetAddress.parse(token);
+				for (InternetAddress address : addresses)
 				{
-					addresses[i] = new InternetAddress(token);
-					i++;
+					list.add(address);
 				}
 			}
-			return addresses;
 		}
+		return list.toArray(new InternetAddress[list.size()]);
 	}
 }

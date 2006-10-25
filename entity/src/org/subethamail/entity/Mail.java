@@ -168,7 +168,7 @@ public class Mail implements Serializable, Comparable
 	Long id;
 	
 	/** Nullable because content is set after object persistence */
-	@Column(nullable=true)	// , length=Validator.MAX_MAIL_CONTENT)
+	@Column(nullable=true, length=Validator.MAX_MAIL_CONTENT)
 	byte[] content;
 	
 	/** Message id might not exist */

@@ -13,6 +13,7 @@ import javax.ejb.EJB;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.mina.common.IdleStatus;
 import org.apache.mina.common.IoHandlerAdapter;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
@@ -51,9 +52,11 @@ public class TcpTableService implements TcpTableManagement
 		 * @see org.apache.mina.common.IoHandlerAdapter#sessionOpened(org.apache.mina.common.IoSession)
 		 */
 		@Override
-		public void sessionOpened(IoSession arg0) throws Exception
+		public void sessionOpened(IoSession session) throws Exception
 		{
 			log.debug("session opened!");
+			
+			session.setIdleTime(IdleStatus.BOTH_IDLE, 60);
 		}
 
 		/* (non-Javadoc)
@@ -102,6 +105,30 @@ public class TcpTableService implements TcpTableManagement
 			{
 				session.write("500 Lookup failed for: " + line);
 			}
+		}
+		
+		/* (non-Javadoc)
+		 * @see org.apache.mina.common.IoHandlerAdapter#exceptionCaught(org.apache.mina.common.IoSession, java.lang.Throwable)
+		 */
+		@Override
+		public void exceptionCaught(IoSession session, Throwable cause) throws Exception
+		{
+			if (log.isInfoEnabled())
+				log.info("Closing due to exception", cause);
+			
+			session.close();
+		}
+
+		/* (non-Javadoc)
+		 * @see org.apache.mina.common.IoHandlerAdapter#sessionIdle(org.apache.mina.common.IoSession, org.apache.mina.common.IdleStatus)
+		 */
+		@Override
+		public void sessionIdle(IoSession session, IdleStatus status) throws Exception
+		{
+			if (log.isDebugEnabled())
+				log.debug("Closing idle connection with status " + status);
+			
+			session.close();
 		}
 	}
 	

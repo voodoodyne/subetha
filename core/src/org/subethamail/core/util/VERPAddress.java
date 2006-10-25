@@ -35,13 +35,13 @@ public class VERPAddress
 	
 	/** */
 	String email;
-	byte[] token;
+	String token62;
 	
 	/** */
-	VERPAddress(String email, byte[] token)
+	VERPAddress(String email, String token62)
 	{
 		this.email = email;
-		this.token = token;
+		this.token62 = token62;
 	}
 	
 	/**
@@ -51,9 +51,13 @@ public class VERPAddress
 	public String getEmail() { return this.email; }
 	
 	/**
+	 * Lazily decodes the token.  This is important because sometimes
+	 * the tokens are invalid, notably because email addresses that
+	 * go through Postfix tcp mapping are lowercased.  Bastards.
+	 * 
 	 * @return the token that was extracted from the VERP address. 
 	 */
-	public byte[] getToken() { return this.token; }
+	public byte[] getToken() { return Base62.decode(this.token62); }
 	
 	/**
 	 * @return null if the address was not a VERP'ed address.  
@@ -79,11 +83,11 @@ public class VERPAddress
 		if (log.isDebugEnabled())
 			log.debug(addy + " becomes " + email + "/" + token62);
 		
-		return new VERPAddress(email, Base62.decode(token62));
+		return new VERPAddress(email, token62);
 	}
 	
 	/**
-	 * @return an email address encoded with the token.
+	 * @return an email address encoded with the binary token.
 	 */
 	public static String encodeVERP(String email, byte[] token)
 	{

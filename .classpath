@@ -33,6 +33,6 @@
 	<classpathentry kind="src" path="common/src"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="loadtest/src"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/jbossws.sar/jbossws.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/jbossws.sar/jboss-jaxws.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

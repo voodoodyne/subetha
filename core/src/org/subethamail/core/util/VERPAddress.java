@@ -5,6 +5,8 @@
 
 package org.subethamail.core.util;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -18,7 +20,12 @@ import org.apache.commons.logging.LogFactory;
  * 
  * announce-verp-THISISTHETOKEN-bounce@domain.com
  * 
- * The extracted email will be announce@domain.com
+ * The extracted email will be announce@domain.com.
+ * 
+ * Note that the token is a lowercase hex-encoded string.
+ * This is because some evil MTAs (Postfix grrr) force
+ * the mailbox part of an address to lowercase, screwing
+ * up any attempt at base64 encoding.
  * 
  * @author Jeff Schnitzer
  */
@@ -35,13 +42,13 @@ public class VERPAddress
 	
 	/** */
 	String email;
-	String token62;
+	String tokenHex;
 	
 	/** */
-	VERPAddress(String email, String token62)
+	VERPAddress(String email, String tokenHex)
 	{
 		this.email = email;
-		this.token62 = token62;
+		this.tokenHex = tokenHex;
 	}
 	
 	/**
@@ -51,13 +58,18 @@ public class VERPAddress
 	public String getEmail() { return this.email; }
 	
 	/**
-	 * Lazily decodes the token.  This is important because sometimes
-	 * the tokens are invalid, notably because email addresses that
-	 * go through Postfix tcp mapping are lowercased.  Bastards.
+	 * Lazily decodes the token.
 	 * 
 	 * @return the token that was extracted from the VERP address. 
 	 */
-	public byte[] getToken() { return Base62.decode(this.token62); }
+	public byte[] getToken()
+	{
+		try
+		{
+			return (byte[])Hex.decodeHex(this.tokenHex.toCharArray());
+		}
+		catch (DecoderException ex) { throw new RuntimeException(ex); }
+	}
 	
 	/**
 	 * @return null if the address was not a VERP'ed address.  
@@ -78,12 +90,12 @@ public class VERPAddress
 			return null;
 
 		String email = addy.substring(0, leadIndex) + '@' + addy.substring(suffixIndex+SUFFIX.length());
-		String token62 = addy.substring(leadIndex+LEAD.length(), suffixIndex);
+		String tokenHex = addy.substring(leadIndex+LEAD.length(), suffixIndex);
 		
 		if (log.isDebugEnabled())
-			log.debug(addy + " becomes " + email + "/" + token62);
+			log.debug(addy + " becomes " + email + "/" + tokenHex);
 		
-		return new VERPAddress(email, token62);
+		return new VERPAddress(email, tokenHex);
 	}
 	
 	/**
@@ -94,7 +106,7 @@ public class VERPAddress
 		int atIndex = email.indexOf('@');
 		
 		return email.substring(0, atIndex)
-			+ LEAD + Base62.encode(token) + SUFFIX 
+			+ LEAD + new String(Hex.encodeHex(token)) + SUFFIX 
 			+ email.substring(atIndex+1);
 	}
 }

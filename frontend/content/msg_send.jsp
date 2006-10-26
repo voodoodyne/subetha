@@ -4,11 +4,9 @@
 
 <c:choose>
 	<c:when test="${empty msg.msgId}">
-		<c:set var="type" value="Compose"/>
 		<c:set var="title" value="Compose Message" />
 	</c:when>
 	<c:otherwise>
-		<c:set var="type" value="Reply"/>
 		<c:set var="title" value="${msg.subject}" />
 	</c:otherwise>
 </c:choose>
@@ -50,7 +48,7 @@
 				<tr>
 				</tr>
 			</table>
-			<input type="submit" id="buttonSubmit" value="<c:out value="${type}"/>" />
+			<input type="submit" id="buttonSubmit" value="Send" />
 		</form>
 
 		<c:choose>

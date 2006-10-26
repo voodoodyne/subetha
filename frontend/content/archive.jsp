@@ -2,6 +2,11 @@
 
 <t:action var="model" type="org.subethamail.web.action.GetThreads" />
 
+<t:action var="myList" type="org.subethamail.web.action.GetMyListRelationship">
+	<t:param name="listId" value="${model.listId}"/>
+</t:action>
+<c:set var="perms" value="${myList.perms}"/>
+
 <trim:list title="Archive" listId="${param.listId}">
 
 	<c:choose>
@@ -33,10 +38,6 @@
 					<c:if test="${perms.POST}">
 						<td>
 							<fieldset><legend>Post</legend>
-							<t:action var="myList" type="org.subethamail.web.action.GetMyListRelationship">
-								<t:param name="listId" value="${model.listId}"/>
-							</t:action>
-							<c:set var="perms" value="${myList.perms}"/>
 								<form action="<c:url value="/msg_send.jsp"/>" method="get">
 									<input type="hidden" name="listId" value="${param.listId}" />
 									<input type="submit" value="Compose Message" />

@@ -133,23 +133,6 @@ public class TcpTableService implements TcpTableManagement
 	}
 	
 	/** */
-//	public class CodecFactory implements ProtocolCodecFactory
-//	{
-//		TextLineEncoder encoder = new TextLineEncoder();
-//		TextLineDecoder decoder = new TextLineDecoder();
-//
-//		public ProtocolDecoder getDecoder() throws Exception
-//		{
-//			return this.decoder;
-//		}
-//
-//		public ProtocolEncoder getEncoder() throws Exception
-//		{
-//			return this.encoder;
-//		}
-//	}
-	
-	/** */
 	public void start() throws IOException
 	{
 		if (this.acceptor != null)

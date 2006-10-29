@@ -17,12 +17,17 @@
 		<div class="app">
 			<h1>How to Install SubEtha</h1>
 			
-			<p>
-				As opposed to the developer documentation, these instructions describe
-				how to set up SubEtha for production use.  In the future, SubEtha will
-				come as a RPM or DEB package which includes JBoss preconfigured.
-			</p>
-		
+			<blockquote>
+				<strong>These instructions are for the svn trunk (0.9.5-dev) of SubEtha.</strong>
+				Instructions for installing release versions are included in the distribution.
+			</blockquote>
+			
+			<blockquote>
+				Note:  These are the full instructions for installing from scratch.  For
+				an easier method, see the
+				<a href="install.html">Ready To Run</a> documentation.
+			</blockquote>
+			
 			<p>
 				These instructions describe setting up a single, standalone
 				instance of SubEtha.  If you wish to run a cluster you should
@@ -30,69 +35,109 @@
 				JDK 1.5 and whatever database you intend to use.
 			</p>
 			
-			<ul>
+			<ol>
 				<li>
-					Install <a href="http://labs.jboss.com/portal/jbossas/download">JBoss 4.0.4.GA</a>
-					using the installer (not the zip download!).
+					<p>Install <a href="http://labs.jboss.com/portal/jbossas/download">JBoss 4.0.5.GA</a>
+					using the installer (not the zip download!).</p>
 					<ol>
-						<li>Choose the ejb3 (NOT ejb3-clustered) option.</li>
+						<li>Choose the ejb3-clustered option.  You will disable clustering later.</li>
 						<li>Leave the configuration name as 'default'.</li>
-						<li>Do not enable deployment isolation/call-by-value (this setting is actually irrelevant to us).</li>
+						<li>Do not enable isolation/call-by-value.</li>
 						<li>Secure all of the JMX access points.  <strong>Be sure to use a non-guessable password</strong>.</li>
 					</ol>
-					The remaining documentation referrs to the directory in which you
-					installed JBoss as ${jboss.dir}.
+					<p>The remaining documentation referrs to the directory in which you
+					installed JBoss as ${jboss.dir}.</p>
 				</li>
 				<li>
-					Install <a href="http://labs.jboss.com/portal/jbossws/downloads">JBossWS 1.0.3.GA</a>.
-					This involves copying some new files over the old files; instructions are provided on
-					the JBoss website.
+					<p>We installed the ejb3-clustered configuration so that we get the JBoss TreeCache
+					service, which is not installed in the non-clustered config.  However, you probably
+					don't actually want a clustered JBoss.  This section disables clustering.</p>
+					
+					<p>Delete the following files and directories:</p>
+					<ul>
+						<li>${jboss.dir}/server/default/deploy-hasingleton/</li>
+						<li>${jboss.dir}/server/default/deploy/tc5-cluster.sar/</li>
+						<li>${jboss.dir}/server/default/deploy/cache-invalidation-service.xml</li>
+						<li>${jboss.dir}/server/default/deploy/cluster-service.xml</li>
+						<li>${jboss.dir}/server/default/deploy/deploy-hasingleton-service.xml</li>
+						<li>${jboss.dir}/server/default/deploy/ejb3-clustered-sfsbcache-service.xml</li>
+					</ul>
+					<p>Edit ${jboss.dir}/server/default/deploy/jbossweb-tomcat55.sar/META-INF/jboss-service.xml
+					and remove or comment out the following line:</p>
+					<blockquote><pre>&lt;depends&gt;jboss.cache:service=TomcatClusteringCache&lt;/depends&gt;</pre></blockquote>
 				</li>
 				<li>
-					SubEtha uses JavaMail to send messages through an existing Mail Transport Agent
+					<p>Edit ${jboss.dir}/server/default/deploy/ejb3-entity-cache-service.xml and change
+					this line to LOCAL:</p>
+					<blockquote><pre>&lt;attribute name="CacheMode"&gt;LOCAL&lt;/attribute&gt;</pre></blockquote>
+				</li>
+				<li>
+					<p>SubEtha uses JavaMail to send messages through an existing Mail Transport Agent
 					such as Postfix or Sendmail.  Edit the configuration in
 					${jboss.dir}/server/default/deploy/mail-service.xml and set the
-					following parameters:
+					following parameters:</p>
 					<ul>
 						<li>mail.smtp.host - the name of your outgoing smtp mail server (probably "localhost")</li>
 						<li>mail.smtp.port - the port number of your outgoing smtp mail server (probably 25)</li>
 						<!-- JavaMail is broken with this on -->
 						<!-- <li>mail.smtp.allow8bitmime - set to "true" to optionally create more efficient email.  Most modern MTAs (ie Postfix) can handle this.</li> -->
 					</ul>
+					<p>You will need to add the mail.smtp.port line if you wish to change from the default (25).
+					Everything else in the file can be left as-is.</p>
 				</li>
 				<li>
-					Set up the JDBC data source.
+					<p>Set up the JDBC data source.</p>
 					<ol>
 						<li>Copy an appropriate JDBC driver for your database into ${jboss.dir}/server/default/lib.
 							(Download MySQL JDBC driver (MySQL Connector/J) from <a href="http://dev.mysql.com/downloads/">here</a>.)
 						</li>
 						<li>
-							Configure a data source appropriate to your particular database by copying one of
-							the templates in ${jboss.dir}/docs/examples/jca/ into ${jboss.dir}/server/default/deploy/.
-							There are examples for most modern RDBMSes.  You must change the jndi-name to
-							be SubEthaDS:
-							<blockquote>&lt;jndi-name&gt;SubEthaDS&lt;/jndi-name&gt;</blockquote>
+							Configure <strong>two</strong> data sources appropriate to your particular database by
+							copying one of the templates in ${jboss.dir}/docs/examples/jca/ into
+							${jboss.dir}/server/default/deploy/.  There are examples for most modern RDBMSes.
+							You can declare both data sources in the same file.  The names of the data sources
+							must be <strong>SubEthaDS</strong> and <strong>SubEthaQueueDS</strong>.  Here is
+							an example:
+							<blockquote><pre>
+&lt;datasources&gt;
+  &lt;local-tx-datasource&gt;
+    &lt;jndi-name&gt;SubEthaDS&lt;/jndi-name&gt;
+    &lt;connection-url&gt;jdbc:mysql://localhost:3306/subetha&lt;/connection-url&gt;
+    &lt;driver-class&gt;com.mysql.jdbc.Driver&lt;/driver-class&gt;
+    &lt;user-name&gt;root&lt;/user-name&gt;
+    &lt;password&gt;&lt;/password&gt;
+    &lt;exception-sorter-class-name&gt;org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter&lt;/exception-sorter-class-name&gt;
+  &lt;/local-tx-datasource&gt;
+  
+  &lt;local-tx-datasource&gt;
+    &lt;jndi-name&gt;SubEthaQueueDS&lt;/jndi-name&gt;
+    &lt;connection-url&gt;jdbc:mysql://localhost:3306/subetha-q&lt;/connection-url&gt;
+    &lt;driver-class&gt;com.mysql.jdbc.Driver&lt;/driver-class&gt;
+    &lt;user-name&gt;root&lt;/user-name&gt;
+    &lt;password&gt;&lt;/password&gt;
+    &lt;exception-sorter-class-name&gt;org.jboss.resource.adapter.jdbc.vendor.MySQLExceptionSorter&lt;/exception-sorter-class-name&gt;
+  &lt;/local-tx-datasource&gt;
+&lt;/datasources&gt;
+</pre></blockquote>
 							The filename is arbitrary but it should end with -ds.xml.
 						</li>
 						<li>
-							Create the schema (not the tables) that you referenced in your -ds.xml file.
-							For example, if you used a JDBC url of 
-							<blockquote>&lt;connection-url&gt;jdbc:mysql://localhost:3306/subetha&lt;/connection-url&gt;</blockquote>
-							make sure that you create a database schema named "subetha".
+							Create the schemas (not the tables) that you referenced in your -ds.xml file.
+							In the above example, you should create databases named "subetha" and "subetha-q"
 						</li>
 						<li>Note that JBoss will create the database tables for you when SubEtha runs for the first time.</li>
 					</ol>
 				</li>
 				<li>
-					Copy subetha.ear to ${jboss.dir}/server/default/deploy/.
+					<p>Copy subetha.ear to ${jboss.dir}/server/default/deploy/.</p>
 				</li>
 				<li>
-					Configure the startup scripts.  You probably want to add -Dfile.encoding=UTF-8 to
+					<p>Configure the startup scripts.  You probably want to add -Dfile.encoding=UTF-8 to
 					the JAVA_OPTS environment variable (check ${jboss.dir}/bin/run.sh or run.bat).
 					If you are using Linux, example scripts suitable for /etc/init.d are
-					located in ${jboss.dir}/bin/.  They will require some customization for your environment.
+					located in ${jboss.dir}/bin/.  They will require some customization for your environment.</p>
 				</li>
-			</ul>
+			</ol>
 			
 			<h2>Integrate with your MTA</h2>
 			<p>

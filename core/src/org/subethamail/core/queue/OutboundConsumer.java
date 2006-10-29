@@ -26,9 +26,7 @@ import org.subethamail.core.deliv.i.Deliverator;
 @Consumer(
 	activationConfig={
 		@ActivationConfigProperty(propertyName="destinationType", propertyValue="javax.jms.Queue"),
-		@ActivationConfigProperty(propertyName="destination", propertyValue="queue/subetha/outbound"),
-		@ActivationConfigProperty(propertyName="minPoolSize", propertyValue="1"),
-		@ActivationConfigProperty(propertyName="maxPoolSize", propertyValue="2")
+		@ActivationConfigProperty(propertyName="destination", propertyValue="queue/subetha/outbound")
 	}
 )
 @SecurityDomain("subetha")

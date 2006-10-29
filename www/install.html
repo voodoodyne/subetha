@@ -53,18 +53,24 @@
 					service, which is not installed in the non-clustered config.  However, you probably
 					don't actually want a clustered JBoss.  This section disables clustering.</p>
 					
-					<p>Delete the following files and directories:</p>
-					<ul>
-						<li>${jboss.dir}/server/default/deploy-hasingleton/</li>
-						<li>${jboss.dir}/server/default/deploy/tc5-cluster.sar/</li>
-						<li>${jboss.dir}/server/default/deploy/cache-invalidation-service.xml</li>
-						<li>${jboss.dir}/server/default/deploy/cluster-service.xml</li>
-						<li>${jboss.dir}/server/default/deploy/deploy-hasingleton-service.xml</li>
-						<li>${jboss.dir}/server/default/deploy/ejb3-clustered-sfsbcache-service.xml</li>
-					</ul>
-					<p>Edit ${jboss.dir}/server/default/deploy/jbossweb-tomcat55.sar/META-INF/jboss-service.xml
-					and remove or comment out the following line:</p>
-					<blockquote><pre>&lt;depends&gt;jboss.cache:service=TomcatClusteringCache&lt;/depends&gt;</pre></blockquote>
+					<ol>
+						<li>
+							<p>Delete the following files and directories:</p>
+							<ul>
+								<li>${jboss.dir}/server/default/deploy-hasingleton/</li>
+								<li>${jboss.dir}/server/default/deploy/tc5-cluster.sar/</li>
+								<li>${jboss.dir}/server/default/deploy/cache-invalidation-service.xml</li>
+								<li>${jboss.dir}/server/default/deploy/cluster-service.xml</li>
+								<li>${jboss.dir}/server/default/deploy/deploy-hasingleton-service.xml</li>
+								<li>${jboss.dir}/server/default/deploy/ejb3-clustered-sfsbcache-service.xml</li>
+							</ul>
+						</li>
+						<li>
+							<p>Edit ${jboss.dir}/server/default/deploy/jbossweb-tomcat55.sar/META-INF/jboss-service.xml
+							and remove or comment out the following line:</p>
+							<blockquote><pre>&lt;depends&gt;jboss.cache:service=TomcatClusteringCache&lt;/depends&gt;</pre></blockquote>
+						</li>
+					</ol>
 				</li>
 				<li>
 					<p>Edit ${jboss.dir}/server/default/deploy/ejb3-entity-cache-service.xml and change

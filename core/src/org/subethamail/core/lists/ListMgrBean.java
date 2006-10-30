@@ -23,6 +23,7 @@ import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
@@ -190,6 +191,23 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		MailingList list = this.em.get(MailingList.class, listId);
 		
 		return Transmute.mailingList(list);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.ListMgr#getList(java.lang.String)
+	 */
+	@WebMethod
+	public ListData getListByEmail(String email) throws NotFoundException
+	{
+		try
+		{
+			InternetAddress addy = new InternetAddress(email);
+			MailingList list = this.em.getMailingList(addy);
+			
+			return Transmute.mailingList(list);
+		}
+		catch (AddressException ex) { throw new NotFoundException(ex); }
 	}
 
 	/*

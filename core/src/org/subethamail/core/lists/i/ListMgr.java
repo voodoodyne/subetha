@@ -59,6 +59,13 @@ public interface ListMgr
 	public ListData getList(Long listId) throws NotFoundException;
 
 	/**
+	 * Convenience method which gets information about a list based
+	 * on it's email address. 
+	 * No permissions necessary.
+	 */
+	public ListData getListByEmail(String email) throws NotFoundException;
+
+	/**
 	 * Gets the basic info about a role. 
 	 * Requires Permission.EDIT_ROLES
 	 */

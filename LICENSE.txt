@@ -1,5 +1,11 @@
 SubEthaMail - A mailing list server
-Copyright (C) 2006 SubEthaMail.org
+Copyright (C) 2006 Voodoodyne Inc.
+
+This license covers SubEtha itself.  Additional licenses covering JBoss
+and its dependencies can be found in the jboss-4.0.5.GA/docs/licenses 
+directory of the RTR distribution.
+
+-------------------------------------------------------------------------------
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

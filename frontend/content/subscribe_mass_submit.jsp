@@ -7,7 +7,7 @@
 		<trim:list title="Mass Subscribe Results" listId="${param.listId}">
 			<c:choose>
 				<c:when test="${!empty model.addedEmails}">
-					<p>Attempting to add the following emails to the list:</p>
+					<p>Processed:</p>
 					<ul>
 					<c:forEach var="email" items="${model.addedEmails}">
 						<li><c:out value="${email}" /></li>

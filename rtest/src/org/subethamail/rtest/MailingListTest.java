@@ -59,6 +59,16 @@ public class MailingListTest extends SubEthaTestCase
 	}
 	
 	/** */
+	public void testAddRemoveFilter() throws Exception
+	{
+		MailingListMixin ml = new MailingListMixin(this.admin, this.pers.getAddress());
+		
+		this.admin.getListMgr().setFilterDefault(ml.getId(), "org.subethamail.plugin.filter.HoldEverythingFilter");
+		
+		this.admin.getListMgr().disableFilter(ml.getId(), "org.subethamail.plugin.filter.HoldEverythingFilter");
+	}
+
+	/** */
 	public void testLookupAlternatives() throws Exception
 	{
 		MailingListMixin ml = new MailingListMixin(this.admin, this.pers.getAddress());
@@ -212,7 +222,7 @@ public class MailingListTest extends SubEthaTestCase
 		assertEquals("jeff3@bar.com", addrC[3].getAddress());
 		assertEquals("Jeff3", addrC[3].getPersonal());
 	}
-
+	
 	/** */
 	public static Test suite()
 	{

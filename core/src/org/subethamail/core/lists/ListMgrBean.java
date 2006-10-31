@@ -489,7 +489,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 		
-		EnabledFilter filt = list.getEnabledFilters().remove(className);
+		EnabledFilter filt = list.getEnabledFilters().get(className);
 		if (filt == null)
 		{
 			if (log.isWarnEnabled())
@@ -497,6 +497,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		}
 		else
 		{
+			list.getEnabledFilters().remove(className);
 			this.em.remove(filt);
 		}
 	}

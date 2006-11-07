@@ -245,9 +245,12 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 			if (!ignoreHold && list.isSubscriptionHeld())
 			{
 				// Maybe already held, if so, replace it; email address might be new
-				SubscriptionHold hold = who.getHeldSubscriptions().remove(list.getId());
+				SubscriptionHold hold = who.getHeldSubscriptions().get(list.getId());
 				if (hold != null)
+				{
+					who.getHeldSubscriptions().remove(list.getId());
 					this.em.remove(hold);
+				}
 				
 				hold = new SubscriptionHold(who, list, deliverTo);
 				this.em.persist(hold);

@@ -212,7 +212,11 @@ public class Person implements Serializable, Comparable
 			throw new IllegalStateException("Cannot remove last email address");
 		
 		email = Validator.normalizeEmail(email);
-		return this.emailAddresses.remove(email);
+		
+		// This odd construct is to work around hibernate bug HHH-2142
+		EmailAddress addy = this.emailAddresses.get(email);
+		this.emailAddresses.remove(email);
+		return addy;
 		
 	}
 	

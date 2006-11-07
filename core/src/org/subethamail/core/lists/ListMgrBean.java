@@ -600,9 +600,12 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		
 		Person pers = this.em.get(Person.class, personId);
 		
-		SubscriptionHold hold = pers.getHeldSubscriptions().remove(listId);
+		SubscriptionHold hold = pers.getHeldSubscriptions().get(listId);
 		if (hold != null)
+		{
+			pers.getHeldSubscriptions().remove(listId);
 			this.em.remove(hold);
+		}
 		
 		return hold;
 	}

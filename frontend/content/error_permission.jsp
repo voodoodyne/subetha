@@ -17,6 +17,7 @@
 	</c:if>
 	
 	<p class="error">
-		<c:out value="${f:exceptionMessage(requestScope['javax.servlet.error.exception'])}"/>
+		Requires permission 
+		<c:out value="${requestScope['javax.servlet.error.exception'].pretty}" />
 	</p>
 </trim:plain>

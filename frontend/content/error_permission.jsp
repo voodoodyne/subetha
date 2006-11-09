@@ -10,7 +10,9 @@
 	
 	<c:if test="${!auth.loggedIn}">
 		<p>
-			You might if you were logged in.  Use the form above.
+			This probably means that you need to login first.  Use the form
+			at the top of this page.  If you do not remember your password,
+			click the 'forgot' link to have your password sent to you.
 		</p>
 	</c:if>
 	

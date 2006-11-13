@@ -127,6 +127,12 @@ import org.subethamail.entity.i.Validator;
 		}
 	),
 	@NamedQuery(
+		name="RecentMailBySubject", 
+		query="select m from Mail m where m.hold is null and m.list.id = :listId and m.subject = :subject and m.arrivalDate >= :cutoff order by m.arrivalDate desc",
+		hints={
+		}
+	),
+	@NamedQuery(
 		name="MailSince", 
 		query="select m from Mail m where m.hold is null and m.arrivalDate > :since",
 		hints={
@@ -177,6 +183,7 @@ public class Mail implements Serializable, Comparable
 	
 	/** */
 	@Column(nullable=false, length=Validator.MAX_MAIL_SUBJECT)
+	@Index(name="subject")
 	String subject;
 	
 	/**
@@ -446,6 +453,9 @@ public class Mail implements Serializable, Comparable
 	
 	public void setParent(Mail value)
 	{
+		if (value.getId().equals(this.getId()))
+			throw new IllegalArgumentException("Parent cannot be self!");
+		
 		this.parent = value;
 	}
 	

@@ -30,6 +30,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.LimitExceededException;
@@ -97,6 +98,11 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 * from the user was held.  Currently 24 hours.
 	 */
 	public static final long MIN_HOLD_NOTIFICATION_INTERVAL_MILLIS = 1000 * 60 * 60 * 24;
+	
+	/**
+	 * How far back to look for the parent of a message by subject.
+	 */
+	public static final long MAX_SUBJECT_THREAD_PARENT_AGE_MILLIS = 1000L * 60L * 60L * 24L * 30L;
 
 	/** */
 	@EJB Queuer queuer;
@@ -552,6 +558,9 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			{
 				parent = this.em.getMailByMessageId(mail.getList().getId(), candidate);
 				
+				if (log.isDebugEnabled())
+					log.debug("Found parent at choice " + i + ", max " + (wantedReference.size()-1));
+				
 				// Got one, eliminate anything from wantedReference that is at this
 				// level or later.  Do it from the end to make ArrayList happy.
 				for (int delInd=wantedReference.size()-1; delInd>=i; delInd--)
@@ -562,8 +571,33 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			catch (NotFoundException ex) {}
 		}
 		
+		// If that didn't help us, try the desperate step of matching on subject
+		if (parent == null)
+		{
+			String subj = mail.getSubject();
+			subj = MailUtils.cleanRe(subj);
+			
+			Date cutoff = new Date(System.currentTimeMillis() - MAX_SUBJECT_THREAD_PARENT_AGE_MILLIS);
+			
+			// This is a little ugly - grab two because the current mail will show up in the search
+			List<Mail> found = this.em.findRecentMailBySubject(mail.getList().getId(), subj, cutoff, 2);
+			for (Mail foundMail: found)
+			{
+				// The current mail itself should show up in the search
+				if (foundMail == mail)
+					continue;
+				
+				parent = foundMail;
+				
+				if (log.isDebugEnabled())
+					log.debug("Found parent using subject match");
+				
+				break;
+			}
+		}
+		
 		if (log.isDebugEnabled())
-			log.debug("Found thread ancestor " + parent);
+			log.debug("Best thread ancestor found is " + parent);
 		
 		// Intermission - we can now set the mail's parent and wantedReference
 		if (parent != null)

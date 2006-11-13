@@ -605,4 +605,27 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 		
 		return ((Number)q.getSingleResult()).intValue();
 	}
+
+	/**
+	 * Finds most recent mail with the constraints.
+	 * 
+	 * @param listId the mailing list to look in
+	 * @param subj the subject to match
+	 * @param cutoff the oldest mail to consider
+	 * @param count the max number of results to return 
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Mail> findRecentMailBySubject(Long listId, String subj, Date cutoff, int count)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Finding mail with subject " + subj + " younger than " + cutoff);
+		
+		Query q = this.createNamedQuery("RecentMailBySubject");
+		q.setParameter("listId", listId);
+		q.setParameter("subject", subj);
+		q.setParameter("cutoff", cutoff);
+		q.setMaxResults(count);
+		
+		return q.getResultList();
+	}
 }

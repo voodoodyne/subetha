@@ -33,8 +33,9 @@ public class MailUtils
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(MailUtils.class);
 
+	/** Matches stuff like (without the quotes):  "Re[1][3]: Aw: Sv[3]:  " */
 	public static final Pattern SUBJECT_PATTERN = Pattern.compile("((RE|AW|SV)(\\[\\d+\\])*:\\s*)+", Pattern.CASE_INSENSITIVE);
-
+	
 	/** default constructor prevents util class from being created. */
 	private MailUtils() {}
 
@@ -155,6 +156,8 @@ public class MailUtils
 	}
 
 	/**
+	 * FIXME:  This documentation needs revision, what does this method do?!?
+	 * 
 	 * Converts:  Re: Re: Foo to Re: Foo
 	
 	 * @param subject the subject message
@@ -182,6 +185,26 @@ public class MailUtils
 				result = prefix + subject;
 		}
 		return result;
+	}
+
+	/**
+	 * Removes Re: and friends from the beginning of a subject line.
+	
+	 * @param a subject that might or might not start with reply prefixes.
+	 * 
+	 * @return the subject without the reply prefixes.
+	 */
+	public static String cleanRe(String subject)
+	{
+		Matcher matcher = SUBJECT_PATTERN.matcher(subject);
+		if (matcher.find())
+		{
+			return subject.substring(matcher.end());
+		}
+		else
+		{
+			return subject;
+		}
 	}
 
 	/**

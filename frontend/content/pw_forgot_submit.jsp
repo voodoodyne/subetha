@@ -4,7 +4,12 @@
 
 <c:choose>
 	<c:when test="${empty model.errors}">
-		<c:redirect url="/"/>
+		<trim:plain title="Password Reminder">
+			<h1>Password Reminder emailed</h1>
+			<p>
+				Your password has been emailed to you.
+			</p>
+		</trim:plain>
 	</c:when>
 	<c:otherwise>
 		<jsp:forward page="/pw_forgot.jsp" />

@@ -10,7 +10,7 @@
 	
 	<p class="error">
 		Requires permission 
-		<c:out value="${requestScope['javax.servlet.error.exception'].pretty}" />
+		<c:out value="${requestScope['javax.servlet.error.exception'].cause.pretty}" />
 	</p>
 
 	<c:if test="${!auth.loggedIn}">

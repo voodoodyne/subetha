@@ -76,6 +76,8 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 	{
 		try
 		{
+			boolean didSomething = false;
+			
 			for (Part part: msg.getParts())
 			{
 				if (part.getContentType().startsWith(SubEthaMessage.DETACHMENT_MIME_TYPE))
@@ -95,10 +97,11 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 					
 					part.setText("This attachment was left behind at the server:\n     " + attachmentUrl + "\n");
 					part.setDisposition(Part.INLINE);
+					didSomething = true;
 				}
 			}
 			
-			msg.save();
+			if (didSomething) msg.save();
 		}
 		catch (IOException ioex)
 		{

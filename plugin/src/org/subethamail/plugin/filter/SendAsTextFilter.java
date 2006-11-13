@@ -52,7 +52,7 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 	 */
 	public String getName()
 	{
-		return "Send Email as Text Only";
+		return "Text Only";
 	}
 
 	/*

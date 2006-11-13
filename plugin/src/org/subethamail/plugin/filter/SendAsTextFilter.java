@@ -62,7 +62,7 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 	 */
 	public String getDescription()
 	{
-		return "Tries to send email as text only. This will strip everything that isn't text.";
+		return "Send email as text only. This will strip everything but the first text/plain part. If no text part is found, a link to the archives is sent in the place of the message.";
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws MessagingException
 	{
 		String archiveUrl = ctx.getList().getUrlBase() + "archive_msg.jsp?msgId=" + ctx.getMailId();
-		String archiveFooter = "This message can be read on the Archives: " + archiveUrl;
+		String archiveFooter = "Parts of this message have been removed. The full message can be read in the Archives: " + archiveUrl;
 		try
 		{
 			String msgText = null;
@@ -83,7 +83,7 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 				for (int i = 0; i < multi.getCount(); i++)
 				{
 					BodyPart bp = multi.getBodyPart(i);
-					if (bp.getContentType().toLowerCase().startsWith("text")) 
+					if (bp.getContentType().toLowerCase().startsWith("text/plain")) 
 					{
 						msgText = (String)bp.getContent();
 						break;

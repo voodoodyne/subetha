@@ -308,10 +308,15 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	protected void unsubscribe(Long listId, Person who) throws NotFoundException
 	{
 		MailingList list = this.em.get(MailingList.class, listId);
-		Subscription sub = who.getSubscriptions().remove(listId);
-		list.getSubscriptions().remove(sub);
-		this.em.remove(sub);
-		
+		// Can't just call getSubscriptions().remote(listId). Workaround for hibernate bug.
+		Subscription sub = who.getSubscriptions().get(listId);
+		if (sub != null)
+		{
+			who.getSubscriptions().remove(listId);
+			list.getSubscriptions().remove(sub);
+			this.em.remove(sub);
+		}
+
 		// Notify anyone with APPROVE_SUBSCRIPTIONS
 		for (Subscription maybeNotify: list.getSubscriptions())
 			if (maybeNotify.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS)

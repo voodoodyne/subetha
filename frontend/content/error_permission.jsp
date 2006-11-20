@@ -9,18 +9,15 @@
 	</p>
 	
 	<p class="error">
-		Requires permission 
-		<c:out value="${requestScope['javax.servlet.error.exception'].cause.pretty}" />
+		<c:out value="${f:exceptionMessage(requestScope['javax.servlet.error.exception'])}"/>
 	</p>
 
 	<c:if test="${!auth.loggedIn}">
 		<p>
 			This probably means that you need to login first.  Use the form
-			at the top of this page.  If you do not remember your password,
-			type in your email address below to have your password sent to you.
+			at the top of this page, or click <a href="<c:url value="/pw_forgot.jsp"/>">here</a>
+			if you do not know your password.
 		</p>
-
-		<%@include file="/inc/forgot_password_form.jspf" %>
 	</c:if>
 	
 </trim:plain>

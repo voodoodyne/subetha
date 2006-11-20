@@ -239,10 +239,15 @@ list@whichever.com		list@subetha.whichever.com
 		<p>
 		<h3>v4.61</h3>
 
-		This config will create a domain (or subdomain) filter to relay all messages to smtp://localhost:2500. It uses the fake lists.localhost domain to work from. 
+		<p>
+		This config will create a domain (or subdomain) filter to relay all messages to smtp://localhost:2500. 
+		To do this we create a fake email (sub)domain (@lists.localhost) while still allowing local delivery for @localhost addresses. 
+		</p>
 		
+		<p>
 		Make the following changes to etc/exim.config :
-
+		</p>
+		
 		<h4>Transports Section:</h4>
 		<pre>
 local_smtp_port_2500:
@@ -254,11 +259,16 @@ local_smtp_port_2500:
 		</pre>
 		<p><strong>Notes</strong> 
 		<ul>
-			<li> <p>
-			The hosts are resolved using the gethostbyname function so that the system can be resolved from alternate sources like etc/hosts.</p>
+			<li> 
+				<p>
+					gethostbyname: This resolves hosts using alternate sources like etc/hosts instead of just through dns mx records.
+				</p>
 			</li>
 			<li>
-			The special instruction to allow_localhost is added. This is usually not allows to help keep mail-loops under control. :)
+				<p>
+				allow_localhost: This is usually not allowed to help keep mail-loops under control. :)  
+				Since we are running a totally different mail server on localhost:2500 we have no worries that the message will loop back into the same system.
+				</p>
 			</li>
 		</ul>
 		</p>
@@ -274,7 +284,11 @@ subetha:
 		</pre>
 		</p>
 
-		<p>Note: I found while working with Cygwin that every time I changed etc/exim.config file the permissions were changed to my current windows account: <pre>-rwx------+ 1 skot None 31250 May  8 20:48 /etc/exim.conf</pre> This was problematic as exim was setup to run as a service and should have had the following permissions: <pre>-rw-rw-r--+ 1 SYSTEM root 31250 May  8 20:48 /etc/exim.conf</pre>. To fix this problem I had to continuously re-run exim-config, or change the permissions manually.</p>
+		<p><b>Note:</b> I found while working with Cygwin that every time I changed etc/exim.config file the permissions 
+		were changed to my current windows account: <pre>-rwx------+ 1 skot None 31250 May  8 20:48 /etc/exim.conf</pre> 
+		This was problematic as exim was setup to run as a service and should have had the following permissions: 
+		<pre>-rw-rw-r--+ 1 SYSTEM root 31250 May  8 20:48 /etc/exim.conf</pre>. To fix this problem I had to 
+		continuously re-run exim-config, or change the permissions manually.</p>
 		
 		<a name="qmail"></a>
 		<h2>Qmail</h2>
@@ -293,14 +307,11 @@ The following instructions were adapted from Microsoft Technical documents
 </p>
 
 <p>
-Depending upon your needs you can setup your SubEtha lists to exist publicly
-on a subdomain (lists.example.com) or for your SubEtha lists to exist on a
-primary domain which is shared between your Exchange Server and your SubEtha
-List Server.  I describe each below:
+You can setup your SubEtha lists to exist publicly on a subdomain (lists.example.com) or have exchange pass through any domain for that matter.
 </p>
  
 <p>
- Hosting your SubEtha Lists on a subdomain (lists.example.com)
+ Hosting your SubEtha Lists on a (sub)domain (lists.example.com)
 </p>
  
 <p>
@@ -346,11 +357,15 @@ You should now be able to send mail to your lists in the form of
 mylist@lists.example.com and your Exchange server will relay it to your
 SubEtha List Server.
 </p>
- 
-<p>
-Sharing your primary domain between Exchange Server and SubEtha
-</p>
 
+
+<h3> 
+Sharing your primary domain between Exchange Server and SubEtha
+</h3>
+<p>
+When doing this you will not get all the features included in subetha. 
+You will not get support for verp, and related features.
+</p>
 <p>
 This setup still requires that you treat your SubEtha List Server as a
 subdomain (lists.example.com), however, to the outside world your lists will

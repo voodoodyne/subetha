@@ -36,7 +36,11 @@ abstract public class SubEthaAction extends AbstractAction
 	 */
 	protected String getActionParam(String key)
 	{
-		return this.getCtx().getActionParams().get(key).toString();
+		Object value = this.getCtx().getActionParams().get(key);
+		if (value == null)
+			return null;
+		else
+			return value.toString();
 	}
 
 	/**

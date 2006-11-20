@@ -11,7 +11,8 @@ import org.tagonist.RedirectException;
 
 /**
  * If the user is logged in, issue a redirect to the
- * destination specified by actionParam "dest".
+ * destination specified by actionParam "dest".  If
+ * dest is not supplied, defaults to /home.jsp.
  * 
  * An auto login will occur if proper cookies are available.
  * 
@@ -33,7 +34,9 @@ public class AuthRedirect extends AutoLogin
 			if (redir != null)
 				throw new RedirectException(redir);
 			else
-				throw new IllegalStateException("Missing actionParam 'dest'");
+				throw new RedirectException(
+						this.getCtx().getResponse().encodeRedirectURL(
+								this.getCtx().getRequest().getContextPath() + "/home.jsp"));
 		}
 	}
 }

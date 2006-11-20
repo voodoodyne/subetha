@@ -143,7 +143,7 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 
 				MimeBodyPart part = new MimeBodyPart();
 				part.setText(expandedFooter);
-				multi.addBodyPart(part);
+				multi.addBodyPart(part, Integer.MAX_VALUE);
 				
 				msg.save();
 			}

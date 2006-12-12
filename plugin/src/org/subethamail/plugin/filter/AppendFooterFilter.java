@@ -147,7 +147,7 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 				// Workaround for a javamail bug where addBodyPart()
 				// doesn't always put it at the end for some reason.
 				int count = multi.getCount();
-				multi.addBodyPart(part, count+1);
+				multi.addBodyPart(part, count);
 
 				msg.save();
 			}

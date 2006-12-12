@@ -143,8 +143,12 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 
 				MimeBodyPart part = new MimeBodyPart();
 				part.setText(expandedFooter);
-				multi.addBodyPart(part, Integer.MAX_VALUE);
 				
+				// Workaround for a javamail bug where addBodyPart()
+				// doesn't always put it at the end for some reason.
+				int count = multi.getCount();
+				multi.addBodyPart(part, count+1);
+
 				msg.save();
 			}
 			else

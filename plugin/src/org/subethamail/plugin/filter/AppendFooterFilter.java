@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
@@ -141,14 +142,25 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 			{
 				MimeMultipart multi = (MimeMultipart)msg.getContent();
 
+				String type = multi.getContentType();
+				if (type.startsWith("multipart/alternative"))
+				{
+					// Need to first wrap the message content (which is an alternative) in a mixed
+					Multipart mixed = new MimeMultipart("mixed");
+					MimeBodyPart wrap = new MimeBodyPart();
+					wrap.setContent(multi);
+					mixed.addBodyPart(wrap);
+
+					msg.setContent(mixed);
+					multi = (MimeMultipart)msg.getContent();
+				}
+				
+				// and then append the footer to what should be a mixed.
 				MimeBodyPart part = new MimeBodyPart();
 				part.setText(expandedFooter);
+				part.setDisposition("inline");
+				multi.addBodyPart(part);
 				
-				// Workaround for a javamail bug where addBodyPart()
-				// doesn't always put it at the end for some reason.
-				int count = multi.getCount();
-				multi.addBodyPart(part, count);
-
 				msg.save();
 			}
 			else

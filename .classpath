@@ -6,15 +6,16 @@
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jboss-j2ee.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jbosssx.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/activation.jar" sourcepath="/J2EESRC_HOME/activation/src/java"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-annotations-ejb3.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3x.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/lib/jboss-common.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/lib/commons-logging.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/ejb3-persistence.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/mail.jar" sourcepath="/JAVAMAIL_SRC"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-annotations-ejb3.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3x.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/jbossws.sar/jboss-jaxws.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/lib/jboss-common.jar"/>
+	<classpathentry kind="var" path="JBOSS_HOME/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="rtest/lib/junit.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="frontend/lib/jstl.jar"/>
@@ -36,6 +37,5 @@
 	<classpathentry kind="src" path="common/src"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="loadtest/src"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/jbossws.sar/jboss-jaxws.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

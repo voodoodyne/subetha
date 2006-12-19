@@ -95,6 +95,8 @@ public class SubjectFilter extends GenericFilter implements Lifecycle
 
 		// get the subject for the message
 		String subjectMsg = msg.getSubject();
+		if (subjectMsg == null)
+			subjectMsg = "";
 
 		// find any existing expandedSubjectArg's in the subjectMsg and remove them
 		subjectMsg = subjectMsg.replace(expandedSubjectArg, "");

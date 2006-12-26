@@ -78,6 +78,13 @@
 				<a href="${importMsgsUrl}">&rsaquo; Import</a>
 			</c:if>
 			
+			<c:if test="${myList.perms.VIEW_ARCHIVES}">
+				<c:url var="exportMsgsUrl" value="/export_messages.jsp">
+					<c:param name="listId" value="${listId}"/>
+				</c:url>
+				<a href="${exportMsgsUrl}">&rsaquo; Export</a>
+			</c:if>
+						
 		</div> <!-- sideBox LHS -->
 	</c:if>
 	

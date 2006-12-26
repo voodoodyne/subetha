@@ -6,6 +6,7 @@
 package org.subethamail.core.lists;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,7 +19,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.SortedSet;
+import java.util.Stack;
 import java.util.TreeSet;
+import java.util.zip.Adler32;
+import java.util.zip.CheckedOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
@@ -37,6 +43,7 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.subethamail.common.ExportMessagesException;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
@@ -49,6 +56,7 @@ import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ArchiverRemote;
 import org.subethamail.core.lists.i.AttachmentPartData;
+import org.subethamail.core.lists.i.ExportFormat;
 import org.subethamail.core.lists.i.InlinePartData;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.MailData;
@@ -206,18 +214,25 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 
 		try 
 		{
-			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
-
-			this.filterRunner.onSend(msg, mail);
-			
-			this.detacher.attach(msg);
-			
-			msg.writeTo(stream);
+			writeMessage(mail, stream);
 		} 
 		catch (Exception e)
 		{
-			if (log.isDebugEnabled()) log.debug("error getting exception getting mail#" + mailId + "\n" + e.toString());
+			if (log.isDebugEnabled()) log.debug("exception getting mail#" + mailId + "\n" + e.toString());
 		}	
+	}
+	/**
+	 * Writes a message out to the stream. First current filters are applied, and then message is written.
+	 * 
+	 * @param msg The message to write
+	 * @param stream The stream to write to
+	 */
+	private void writeMessage(Mail mail, OutputStream stream) throws MessagingException, IOException
+	{
+		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
+		this.filterRunner.onArchiveRender(msg, mail);
+		this.detacher.attach(msg);		
+		msg.writeTo(stream);
 	}
 
 	/*
@@ -543,5 +558,80 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		sm.setSubject(subject);
 		sm.setContent(body, "text/plain");
 		return sm;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#exportMessages(java.lang.Long[], org.subethamail.core.lists.i.ExportFormat, java.io.OutputStream)
+	 */
+	public void exportMessages(Long[] msgIds, ExportFormat format, OutputStream outStream) throws NotFoundException, PermissionException, ExportMessagesException
+	{
+		if(ExportFormat.XML.equals(format))
+			throw new ExportMessagesException("The XML format is supported, for now.");
+		
+		ZipOutputStream zipOutputStream = null;
+		
+		if(ExportFormat.RFC2822DIRECTORY.equals(format))
+		{
+			CheckedOutputStream checksum = new CheckedOutputStream(outStream, new Adler32());
+			zipOutputStream = new ZipOutputStream(new BufferedOutputStream(checksum));
+		}
+
+		try {
+			for (int i = 0; i < msgIds.length; i++)
+			{
+				Long msgId = msgIds[i];
+				Mail mail = this.getMailFor(msgId, Permission.VIEW_ARCHIVES);
+	
+				switch (format)
+				{
+				case RFC2822DIRECTORY:
+					ZipEntry entry = new ZipEntry(msgId.toString() + ".eml");
+					entry.setComment("Message from " + mail.getFrom() + " for list " + mail.getList().getEmail());
+					entry.setTime(mail.getArrivalDate().getTime());
+					zipOutputStream.putNextEntry(entry);
+					writeMessage(mail, zipOutputStream);
+					zipOutputStream.closeEntry();
+					break;
+				case MBOX:
+					outStream.write(("FROM_ " + mail.getFrom()).getBytes());
+					outStream.write("\r\n".getBytes());
+					writeMessage(mail, outStream);
+					outStream.write("\r\n\r\n".getBytes());
+					break;
+	
+				default:
+					throw new ExportMessagesException("Unsupported Format!" + format.toString());
+					//break;
+				}
+			}
+			switch (format)
+			{
+			case RFC2822DIRECTORY:
+				zipOutputStream.close();
+				break;
+			}
+
+		}
+		catch (Exception e) {
+			throw new ExportMessagesException("Error:" + e.getMessage());
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#exportList(java.lang.Long, org.subethamail.core.lists.i.ExportFormat, java.io.OutputStream)
+	 */
+	public void exportList(Long listId, ExportFormat format, OutputStream outStream) throws NotFoundException, PermissionException, ExportMessagesException
+	{
+		List<Mail> mails = this.em.findMailByList(listId, 0, Integer.MAX_VALUE);
+
+		Stack<Long> mailIds = new Stack<Long>();
+		
+		for (Mail mail : mails)
+		{
+			mailIds.add(mail.getId());
+		}
+		
+		exportMessages(mailIds.toArray(new Long[] {}), format, outStream);
 	}
 }

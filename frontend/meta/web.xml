@@ -95,6 +95,16 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>ExportServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.ExportServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ExportServlet</servlet-name>
+		<url-pattern>/export/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>PermissionImageServlet</servlet-name>
 		<servlet-class>org.subethamail.web.servlet.PermissionImageServlet</servlet-class>
 	</servlet>

@@ -29,7 +29,8 @@
 			<c:url var="archiveUrl" value="/archive.jsp">
 				<c:param name="listId" value="${list.id}"/>
 			</c:url>
-			<li><a href="${archiveUrl}">${listStats.archiveCount}</a> archived messages</li>
+			<c:url var="exportUrl" value="/export/${list.id}/${list.name}.zip"/>		
+			<li><a href="${archiveUrl}">${listStats.archiveCount}</a> archived messages (<a href="${exportUrl}">Download all</a>) </li>			
 		</c:if>
 		
 		<c:if test="${list.subscriptionHeld}">

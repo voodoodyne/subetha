@@ -21,7 +21,9 @@ import org.subethamail.entity.i.PermissionException;
 import org.subethamail.web.Backend;
 
 /**
- * This servlet will return an archived message in its raw rfc2822 format.
+ * This servlet will return the attachement.
+ * 
+ * The url format is something like /id/filename. The id is converted to an attachmentId and streamed from the datasource.
  */
 @SuppressWarnings("serial")
 public class AttachmentServlet extends HttpServlet

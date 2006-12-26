@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
+import org.subethamail.common.ExportMessagesException;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SearchException;
@@ -20,6 +21,7 @@ import org.subethamail.entity.i.PermissionException;
  * Tools for viewing the list archives.
  *
  * @author Jeff Schnitzer
+ * @author scotthernandez
  */
 @Local
 public interface Archiver
@@ -100,6 +102,25 @@ public interface Archiver
 	 */
 	public int importMessages(Long listId, InputStream mboxStream) throws NotFoundException, PermissionException, ImportMessagesException;
 
+	/**
+	 * Exports the messages to the output stream given.
+	 * 
+	 * @param msgIds The messages to write out
+	 * @param format The format to write out
+	 * @param outStream The stream to write to
+	 * @throws  
+	 */
+	public void exportMessages(Long[] msgIds, ExportFormat format, OutputStream outStream) throws NotFoundException, PermissionException, ExportMessagesException;
+	
+	/**
+	 * Exports the list messages to the output stream given.
+	 * 
+	 * @param msgIds The messages to write out
+	 * @param format The format to write out
+	 * @param outStream The stream to write to
+	 */
+	public void exportList(Long listId, ExportFormat format, OutputStream outStream) throws NotFoundException, PermissionException, ExportMessagesException;
+		
 	/**
 	 * Deletes a message from an archive.
 	 * 

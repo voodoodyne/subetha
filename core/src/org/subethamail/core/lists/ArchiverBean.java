@@ -577,32 +577,33 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 			zipOutputStream = new ZipOutputStream(new BufferedOutputStream(checksum));
 		}
 
-		try {
+		try
+		{
 			for (int i = 0; i < msgIds.length; i++)
 			{
 				Long msgId = msgIds[i];
 				Mail mail = this.getMailFor(msgId, Permission.VIEW_ARCHIVES);
-	
+
 				switch (format)
 				{
-				case RFC2822DIRECTORY:
-					ZipEntry entry = new ZipEntry(msgId.toString() + ".eml");
-					entry.setComment("Message from " + mail.getFrom() + " for list " + mail.getList().getEmail());
-					entry.setTime(mail.getArrivalDate().getTime());
-					zipOutputStream.putNextEntry(entry);
-					writeMessage(mail, zipOutputStream);
-					zipOutputStream.closeEntry();
-					break;
-				case MBOX:
-					outStream.write(("FROM_ " + mail.getFrom()).getBytes());
-					outStream.write("\r\n".getBytes());
-					writeMessage(mail, outStream);
-					outStream.write("\r\n\r\n".getBytes());
-					break;
+					case RFC2822DIRECTORY:
+						ZipEntry entry = new ZipEntry(msgId.toString() + ".eml");
+						entry.setComment("Message from " + mail.getFrom() + " for list " + mail.getList().getEmail());
+						entry.setTime(mail.getArrivalDate().getTime());
+						zipOutputStream.putNextEntry(entry);
+						writeMessage(mail, zipOutputStream);
+						zipOutputStream.closeEntry();
+						break;
+					case MBOX:
+						outStream.write(("FROM_ " + mail.getFrom()).getBytes());
+						outStream.write("\r\n".getBytes());
+						writeMessage(mail, outStream);
+						outStream.write("\r\n\r\n".getBytes());
+						break;
 	
-				default:
-					throw new ExportMessagesException("Unsupported Format!" + format.toString());
-					//break;
+					default:
+						throw new ExportMessagesException("Unsupported Format!" + format.toString());
+						// break;
 				}
 			}
 			switch (format)
@@ -613,7 +614,8 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 			}
 
 		}
-		catch (Exception e) {
+		catch (Exception e)
+		{
 			throw new ExportMessagesException("Error:" + e.getMessage());
 		}
 	}

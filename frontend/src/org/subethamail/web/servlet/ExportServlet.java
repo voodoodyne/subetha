@@ -46,12 +46,16 @@ public class ExportServlet extends HttpServlet
 		ExportFormat format = null;
 		if (pathSplit.length > 2)
 		{
-			try {
+			try
+			{
 				format = ExportFormat.valueOf(pathSplit[2]);
 			}
-			catch (IllegalArgumentException iae) {}
-			finally {
-				format = (format==null) ? ExportFormat.RFC2822DIRECTORY : format; 
+			catch (IllegalArgumentException iae)
+			{
+			}
+			finally
+			{
+				format = (format == null) ? ExportFormat.RFC2822DIRECTORY : format;
 			}
 		}
 		
@@ -62,15 +66,15 @@ public class ExportServlet extends HttpServlet
 			if (listId == null) throw new NotFoundException("List not found: invalid id!");
 			switch (format)
 			{
-			case MBOX:
-				//response.setHeader("Content-Disposition", "attachment");
-				response.setContentType("application/mbox");
-				break;
-
-			case RFC2822DIRECTORY:
-				response.setHeader("Content-Disposition", "attachment");
-				response.setContentType("application/x-compressed");
-				break;
+				case MBOX:
+					//response.setHeader("Content-Disposition", "attachment");
+					response.setContentType("application/mbox");
+					break;
+	
+				case RFC2822DIRECTORY:
+					response.setHeader("Content-Disposition", "attachment");
+					response.setContentType("application/x-compressed");
+					break;
 			}
 			
 			BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());

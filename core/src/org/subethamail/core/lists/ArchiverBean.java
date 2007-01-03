@@ -64,6 +64,7 @@ import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.SearchHit;
 import org.subethamail.core.lists.i.SearchResult;
 import org.subethamail.core.lists.i.TextPartData;
+import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.search.i.Indexer;
 import org.subethamail.core.search.i.SimpleHit;
 import org.subethamail.core.search.i.SimpleResult;
@@ -230,7 +231,14 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	private void writeMessage(Mail mail, OutputStream stream) throws MessagingException, IOException
 	{
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
-		this.filterRunner.onArchiveRender(msg, mail);
+		try
+		{
+			this.filterRunner.onSend(msg, mail);
+		}
+		catch (IgnoreException e)
+		{
+			// FIXME: This is for skot.
+		}
 		this.detacher.attach(msg);		
 		msg.writeTo(stream);
 	}

@@ -39,6 +39,23 @@ public interface Archiver
 	/**
 	 * Requires Permission.VIEW_ARCHIVES
 	 * 
+	 * @return returns the mail thread from the current message.  Most recent thread is at the bottom.
+	 */
+	public MailSummary getThread(Long mailId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Requires Permission.VIEW_ARCHIVES
+	 * 
+	 * @param mailId The message in the thread to return
+	 * @return An array of MailData objects in the same thread.
+	 * @throws NotFoundException Well, what can I say, it wasn't found.
+	 * @throws PermissionException You know what this means if you get it!
+	 */
+	public MailData[] getThreadMessages(Long mailId) throws NotFoundException, PermissionException;
+
+	/**
+	 * Requires Permission.VIEW_ARCHIVES
+	 * 
 	 * @return a paginated list of messages that match the criteria.
 	 */
 	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException, SearchException;

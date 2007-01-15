@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.IgnoreException;
@@ -109,4 +110,12 @@ public class ReplyToFilter extends GenericFilter implements Lifecycle
 		Address[] addrs = {addr};
 		msg.setReplyTo(addrs);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onArchiveRender(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.ArchiveRenderFilterContext)
+	 */
+	@Override
+	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
+	{
+	}	
 }

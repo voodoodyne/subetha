@@ -14,6 +14,7 @@ import org.subethamail.common.SubEthaMessage;
  * several opportunities to modify a piece of inbound or outbound mail. 
  * 
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
 public interface Filter
 {
@@ -58,4 +59,13 @@ public interface Filter
 	 *  of the filter stack.
 	 */
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException;
+
+	/**
+	 * Allows filter to manipulate the message upon before being passed to the Archive Rendering process.
+	 * 
+	 * @throws MessagingException if there was an error processing the message. 
+	 * Halts execution of the filter stack.
+	 * 
+	 */
+	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException;
 }

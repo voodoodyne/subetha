@@ -38,7 +38,7 @@ public class MailData extends MailSummary
 			List<AttachmentPartData> attachmentParts 
 			)
 	{
-		super(id, subject, fromEmail, fromName, sentDate, replies);
+		super(id, listId, subject, fromEmail, fromName, sentDate, replies);
 		
 		this.listId = listId;
 		this.inlineParts = inlineParts;

@@ -5,6 +5,7 @@
 
 package org.subethamail.core.util;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,22 +13,30 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import javax.mail.MessagingException;
+import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.common.MailUtils;
+import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.acct.i.MyListRelationship;
 import org.subethamail.core.acct.i.PersonData;
 import org.subethamail.core.acct.i.SubscribedList;
 import org.subethamail.core.admin.i.BlueprintData;
+import org.subethamail.core.lists.i.AttachmentPartData;
 import org.subethamail.core.lists.i.EnabledFilterData;
 import org.subethamail.core.lists.i.FilterData;
+import org.subethamail.core.lists.i.InlinePartData;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListDataPlus;
+import org.subethamail.core.lists.i.MailData;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
+import org.subethamail.core.lists.i.TextPartData;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.entity.EmailAddress;
@@ -257,6 +266,7 @@ public class Transmute
 			
 		return new MailSummary(
 				raw.getId(),
+				raw.getList().getId(),
 				raw.getSubject(),
 				showEmail ? addy.getAddress() : null,
 				addy.getPersonal(),
@@ -264,6 +274,111 @@ public class Transmute
 				mailSummaries(raw.getReplies(), showEmail, replacement));
 	}
 
+	public static MailData mailData(Mail raw, boolean showEmail)
+	{
+		try
+		{
+			InternetAddress addy = raw.getFromAddress();
+		
+			SubEthaMessage msg = new SubEthaMessage(null, raw.getContent());
+			
+			List<InlinePartData> inlineParts = new ArrayList<InlinePartData>();
+			List<AttachmentPartData> attachmentParts = new ArrayList<AttachmentPartData>();
+
+			for (Part part: msg.getParts())
+			{
+				String contentType = part.getContentType();
+				if (contentType.startsWith(SubEthaMessage.DETACHMENT_MIME_TYPE))
+				{
+					//we need the orig Content-Type before the message was munged
+					contentType = part.getHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE)[0];
+					//put back the orig Content-Type
+					part.setHeader(SubEthaMessage.HDR_CONTENT_TYPE, contentType);
+
+					String name = part.getFileName();
+					
+					// just in case we are working with something that isn't
+					// C-D: attachment; filename=""
+					if (name == null || name.length() == 0)
+						name = MailUtils.getNameFromContentType(contentType);
+					
+					Long id = (Long) part.getContent();
+					
+					//TODO: Set the correct size. This should be the size of the Attachment.content (Blob)
+					AttachmentPartData apd = new AttachmentPartData(id, contentType, name, 0);
+					attachmentParts.add(apd);
+				}
+				else
+				{
+					// not an attachment cause it isn't stored as a detached part.
+					Object content = part.getContent();
+
+					String name = part.getFileName();
+					
+					// just in case we are working with something that isn't
+					// C-D: attachment; filename=""
+					if (name == null || name.length() == 0)
+						name = MailUtils.getNameFromContentType(contentType);
+					
+					InlinePartData ipd;
+					if (content instanceof String)
+					{
+						ipd = new TextPartData((String)content, part.getContentType(), name, part.getSize());
+					}
+					else 
+					{
+						ipd = new InlinePartData(content, part.getContentType(), name, part.getSize());
+					}
+
+					inlineParts.add(ipd);
+				}
+			}
+			
+			return new MailData(
+					raw.getId(),
+					raw.getSubject(),
+					showEmail ? addy.getAddress() : null,
+					addy.getPersonal(),
+					raw.getSentDate(),
+					Transmute.mailSummaries(raw.getReplies(), showEmail, null),
+					raw.getList().getId(),
+					inlineParts,
+					attachmentParts);
+		}
+		catch (MessagingException ex)
+		{
+			// Should be impossible since everything was already run through
+			// JavaMail when the data was imported.
+			throw new RuntimeException(ex);
+		}
+		catch (IOException ex)
+		{
+			// Ditto
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	/**
+	 */
+	public static MailData[] mailThread(Mail raw, boolean showEmail)
+	{
+		if (log.isDebugEnabled())
+			log.debug(raw.toString());
+		
+		Mail root = raw;
+		while (root.getParent() != null) { root = root.getParent(); }
+	
+		List<Mail> mails = raw.getDescendents();
+		MailData[] mailDatas =  new MailData[mails.size()];
+	
+		int x = 0;
+		for (Mail mail: mails)
+		{
+			mailDatas[x] = Transmute.mailData(mail, showEmail);
+		}
+		
+		return mailDatas;
+	}
 	/**
 	 */
 	public static List<RoleData> roles(Collection<Role> rawColl)

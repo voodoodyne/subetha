@@ -35,7 +35,6 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.mail.MessagingException;
-import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage.RecipientType;
@@ -55,15 +54,12 @@ import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ArchiverRemote;
-import org.subethamail.core.lists.i.AttachmentPartData;
 import org.subethamail.core.lists.i.ExportFormat;
-import org.subethamail.core.lists.i.InlinePartData;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.SearchHit;
 import org.subethamail.core.lists.i.SearchResult;
-import org.subethamail.core.lists.i.TextPartData;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.search.i.Indexer;
 import org.subethamail.core.search.i.SimpleHit;
@@ -148,6 +144,27 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		return Transmute.mailSummaries(roots, showEmail, null);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.subethamail.core.lists.i.Archiver#getThread(java.lang.Long)
+	 */
+	public MailSummary getThread(Long mailId) throws NotFoundException, PermissionException
+	{
+		Person me = this.getMe();
+		
+		Mail mail = this.getMailFor(mailId, Permission.VIEW_ARCHIVES, me);
+		
+		while (mail.getParent() != null) { mail = mail.getParent(); }
+		
+		return Transmute.mailSummary(mail, mail.getList().getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES), null);	
+	}
+
+	public MailData[] getThreadMessages(Long mailId) throws NotFoundException, PermissionException
+	{
+		Person me = this.getMe();
+		Mail mail = this.getMailFor(mailId, Permission.VIEW_ARCHIVES);
+		return Transmute.mailThread(mail, mail.getList().getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES));
+	}
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#search(java.lang.Long, java.lang.String, int, int)
@@ -298,7 +315,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		// Figure out if we're allowed to see emails
 		boolean showEmail = mail.getList().getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES);
 		
-		MailData data = this.makeMailData(mail, showEmail);
+		MailData data = Transmute.mailData(mail, showEmail);
 		
 		Mail root = mail;
 		while (root.getParent() != null)
@@ -371,93 +388,6 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		}
 	}
 	
-	/**
-	 * Makes the base mail data.  Doesn't set the threadRoot.
-	 */
-	protected MailData makeMailData(Mail raw, boolean showEmail) throws NotFoundException
-	{
-		try
-		{
-			InternetAddress addy = raw.getFromAddress();
-		
-			SubEthaMessage msg = new SubEthaMessage(this.mailSession, raw.getContent());
-			
-			List<InlinePartData> inlineParts = new ArrayList<InlinePartData>();
-			List<AttachmentPartData> attachmentParts = new ArrayList<AttachmentPartData>();
-
-			for (Part part: msg.getParts()) 
-			{
-				String contentType = part.getContentType();
-				if (contentType.startsWith(SubEthaMessage.DETACHMENT_MIME_TYPE))
-				{
-					//we need the orig Content-Type before the message was munged
-					contentType = part.getHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE)[0];
-					//put back the orig Content-Type
-					part.setHeader(SubEthaMessage.HDR_CONTENT_TYPE, contentType);
-
-					String name = part.getFileName();
-					
-					// just in case we are working with something that isn't
-					// C-D: attachment; filename=""
-					if (name == null || name.length() == 0)
-						name = MailUtils.getNameFromContentType(contentType);
-					
-					Long id = (Long) part.getContent();
-					
-					//TODO: Set the correct size. This should be the size of the Attachment.content (Blob)
-					AttachmentPartData apd = new AttachmentPartData(id, contentType, name, 0);
-					attachmentParts.add(apd);
-				}
-				else
-				{
-					// not an attachment cause it isn't stored as a detached part.
-					Object content = part.getContent();
-
-					String name = part.getFileName();
-					
-					// just in case we are working with something that isn't
-					// C-D: attachment; filename=""
-					if (name == null || name.length() == 0)
-						name = MailUtils.getNameFromContentType(contentType);
-					
-					InlinePartData ipd;
-					if (content instanceof String)
-					{
-						ipd = new TextPartData((String)content, part.getContentType(), name, part.getSize());
-					}
-					else 
-					{
-						ipd = new InlinePartData(content, part.getContentType(), name, part.getSize());
-					}
-
-					inlineParts.add(ipd);
-				}
-			}
-			
-			return new MailData(
-					raw.getId(),
-					raw.getSubject(),
-					showEmail ? addy.getAddress() : null,
-					addy.getPersonal(),
-					raw.getSentDate(),
-					Transmute.mailSummaries(raw.getReplies(), showEmail, null),
-					raw.getList().getId(),
-					inlineParts,
-					attachmentParts);
-		}
-		catch (MessagingException ex)
-		{
-			// Should be impossible since everything was already run through
-			// JavaMail when the data was imported.
-			throw new RuntimeException(ex);
-		}
-		catch (IOException ex)
-		{
-			// Ditto
-			throw new RuntimeException(ex);
-		}
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#deleteMail(java.lang.Long)

@@ -20,6 +20,7 @@ import java.util.List;
 public class MailSummary implements Serializable
 {	
 	Long id;
+	Long listId;
 	String subject;
 	String fromEmail;	// might be null if no permission to view
 	String fromName;
@@ -30,6 +31,7 @@ public class MailSummary implements Serializable
 	 */
 	public MailSummary(
 			Long id,
+			Long listId,
 			String subject,
 			String fromEmail,
 			String fromName,
@@ -37,6 +39,7 @@ public class MailSummary implements Serializable
 			List<MailSummary> replies)
 	{
 		this.id = id;
+		this.listId = listId;
 		this.subject = subject;
 		this.fromEmail = fromEmail;
 		this.fromName = fromName;
@@ -49,7 +52,13 @@ public class MailSummary implements Serializable
 	{
 		return this.id;
 	}
-
+	
+	/** */
+	public Long getListId()
+	{
+		return this.listId;
+	}
+	
 	/** */
 	public String getSubject()
 	{

@@ -1,14 +1,13 @@
 /*
- * $Id$
- * $URL$
+ * $Id: SendFilterContextImpl.java 263 2006-05-04 20:58:25Z lhoriman $
+ * $URL: http://subetha.tigris.org/svn/subetha/trunk/core/src/org/subethamail/core/filter/SendFilterContextImpl.java $
  */
 
 package org.subethamail.core.filter;
 
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.lists.i.MailSummary;
+import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
-import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.Mail;
 
@@ -16,20 +15,16 @@ import org.subethamail.entity.Mail;
 /**
  * Implementation of the SendFilterContext
  * 
- * @author Jeff Schnitzer
- * @author Jon Stevens
+ * @author Scott Hernandez
  */
-class SendFilterContextImpl extends FilterContextImpl implements SendFilterContext
+class ArchiveRenderFilterContextImpl extends FilterContextImpl implements ArchiveRenderFilterContext
 {
 	/** The mail object associated with the SubEthaMessage */
 	Mail mail;
 	
-	/** Cached just in case the client calls lots of times */
-	MailSummary cachedThreadRoot;
-	
 	/** 
 	 */
-	public SendFilterContextImpl(EnabledFilter enabledFilter, Filter filter, SubEthaMessage msg, Mail mail)
+	public ArchiveRenderFilterContextImpl(EnabledFilter enabledFilter, Filter filter, SubEthaMessage msg, Mail mail)
 	{
 		super(enabledFilter, filter, msg);
 		

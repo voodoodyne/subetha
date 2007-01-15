@@ -31,5 +31,4 @@ public class AttachmentPartData extends PartData
 	{
 		return this.contentType + " stored as attachment id " + this.id;
 	}
-	
 }

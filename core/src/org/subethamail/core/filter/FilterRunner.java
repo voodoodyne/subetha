@@ -43,6 +43,13 @@ public interface FilterRunner
 	 * @see Filter#onSend(SubEthaMessage, FilterContext)
 	 */
 	public void onSend(SubEthaMessage msg, Mail mail) throws IgnoreException, MessagingException;
+
+	/**
+	 * Runs the message through all the filters associated with the list.
+	 * 
+	 * @see Filter#onArchiveRender(SubEthaMessage, FilterContext)
+	 */
+	public void onArchiveRender(SubEthaMessage msg, Mail mail) throws MessagingException;
 	
 	/**
 	 * @return all the available filters.

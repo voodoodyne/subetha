@@ -19,6 +19,7 @@ import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.Archiver;
+import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.SendFilterContext;
@@ -77,7 +78,7 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 		try
 		{
 			String msgText = null;
-			if(msg.getParts().size() > 0) 
+			if(msg.getParts().size() > 0)
 			{
 				MimeMultipart multi = (MimeMultipart)msg.getContent();
 				for (int i = 0; i < multi.getCount(); i++)
@@ -104,7 +105,16 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 		{
 			if (log.isDebugEnabled())
 				log.debug("Error getting message parts", ioex);
-		}		
+		}
 		return;
 	}
+
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onArchiveRender(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.ArchiveRenderFilterContext)
+	 */
+	@Override
+	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
+	{
+		return;
+	}	
 }

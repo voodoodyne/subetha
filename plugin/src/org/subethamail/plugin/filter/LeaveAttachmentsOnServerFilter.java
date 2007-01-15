@@ -21,6 +21,7 @@ import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.Archiver;
+import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.SendFilterContext;
@@ -108,5 +109,14 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter implements Lif
 			if (log.isDebugEnabled())
 				log.debug("Error getting message parts", ioex);
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onArchiveRender(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.ArchiveRenderFilterContext)
+	 */
+	@Override
+	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
+	{
+		return;
 	}
 }

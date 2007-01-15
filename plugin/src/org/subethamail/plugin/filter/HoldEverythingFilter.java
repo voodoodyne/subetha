@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
@@ -66,4 +67,11 @@ public class HoldEverythingFilter extends GenericFilter implements Lifecycle
 		throw new HoldException("Holding all messages");
 	}
 
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onArchiveRender(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.ArchiveRenderFilterContext)
+	 */
+	@Override
+	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
+	{
+	}
 }

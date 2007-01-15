@@ -11,10 +11,12 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import javax.ejb.EJBException;
 import javax.mail.Address;
@@ -462,6 +464,27 @@ public class Mail implements Serializable, Comparable
 	/** */
 	public Set<Mail> getReplies() { return this.replies; }
 
+	/**
+	 * Gets every message related to this one, or any reply.
+	 * @return A list of the children, their children and so forth.
+	 */
+	public List<Mail> getDescendents() 
+	{
+		Set<Mail> children = this.getReplies();
+		
+		if (children == null || children.size() < 1) return null; 
+		
+		List<Mail> descendents = new Vector<Mail>(children.size());
+		for (Iterator iter = children.iterator(); iter.hasNext();)
+		{
+			Mail child = (Mail) iter.next();
+			List<Mail> underlings = child.getDescendents();
+			if(underlings != null && underlings.size() > 0)
+				descendents.addAll(underlings);
+		}
+		return descendents;
+	}
+	
 	/** */
 	public String toString()
 	{

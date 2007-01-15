@@ -8,6 +8,7 @@ package org.subethamail.core.plugin.i.helper;
 import javax.mail.MessagingException;
 
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterParameter;
@@ -44,5 +45,20 @@ public abstract class GenericFilter extends AbstractFilter
 	 */
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException
 	{
+	}
+
+	/**
+	 * @see Filter#onArchiveRender(SubEthaMessage, ArchiveRenderFilterContext)
+	 */
+	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
+	{
+		try 
+		{
+			onSend(msg, ctx);
+		}
+		catch (IgnoreException ex) 
+		{ 
+			throw new MessagingException("Message should be ignored...",ex);
+		}
 	}
 }

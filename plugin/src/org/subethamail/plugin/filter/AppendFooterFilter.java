@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.IgnoreException;
@@ -141,9 +142,7 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 			else if (contentType.startsWith("multipart/"))
 			{
 				MimeMultipart multi = (MimeMultipart)msg.getContent();
-
-				String type = multi.getContentType();
-				if (type.startsWith("multipart/alternative"))
+				if (contentType.startsWith("multipart/alternative"))
 				{
 					// Need to first wrap the message content (which is an alternative) in a mixed
 					Multipart mixed = new MimeMultipart("mixed");
@@ -154,7 +153,12 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 					msg.setContent(mixed);
 					multi = (MimeMultipart)msg.getContent();
 				}
-				
+				else
+				{
+					// for now, we only handle alternative
+					// mixed, and others cause problems
+					return;
+				}
 				// and then append the footer to what should be a mixed.
 				MimeBodyPart part = new MimeBodyPart();
 				part.setText(expandedFooter);
@@ -174,4 +178,13 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 			throw new RuntimeException(ex);
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onArchiveRender(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.ArchiveRenderFilterContext)
+	 */
+	@Override
+	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
+	{
+	}
+	
 }

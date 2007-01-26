@@ -73,7 +73,7 @@
 						<c:if test="${fn:length(me.emailAddresses) > 1}">
 							<form action="<c:url value="/email_remove.jsp"/>" method="post">
 								<input type="hidden" name="email" value="<c:out value="${email}"/>" />
-								<input type="submit" value="Remove" style="width: 5em" />
+								<input type="submit" value="Remove" style="width: 5em" onclick="return confirm('Are you sure you want to remove this email?');" />
 							</form>
 						</c:if>
 					</td>

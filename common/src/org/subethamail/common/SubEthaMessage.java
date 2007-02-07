@@ -46,6 +46,9 @@ public class SubEthaMessage extends SMTPMessage
 	public static final String HDR_X_LOOP = "X-Loop";
 	public static final String HDR_CONTENT_TYPE = "Content-Type";
 	public static final String HDR_CONTENT_DISPOSITION = "Content-Disposition";
+	public static final String HDR_ERRORS_TO = "Errors-To";
+	public static final String HDR_SENDER = "Sender";
+	public static final String HDR_PRECEDENCE = "Precedence";
 
 	/**
 	 * Header for parts that have been detached; holds the original

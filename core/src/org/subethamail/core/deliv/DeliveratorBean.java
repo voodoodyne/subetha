@@ -119,11 +119,14 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 			msg.addXLoop(mail.getList().getEmail());
 			
 			// Precedence: list
-			msg.setHeader("Precedence", "list");
+			msg.setHeader(SubEthaMessage.HDR_PRECEDENCE, "list");
 			
 			// Set up the VERP bounce address
 			byte[] token = this.encryptor.encryptString(emailAddress.getId());
-			msg.setEnvelopeFrom(VERPAddress.encodeVERP(mail.getList().getEmail(), token));
+			String verp = VERPAddress.encodeVERP(mail.getList().getEmail(), token);
+			msg.setEnvelopeFrom(verp);
+			msg.setHeader(SubEthaMessage.HDR_ERRORS_TO, verp);
+			msg.setHeader(SubEthaMessage.HDR_SENDER, verp);
 
 			this.filterRunner.onSend(msg, mail);
 			

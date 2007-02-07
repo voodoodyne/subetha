@@ -28,6 +28,7 @@
 		</fileset>
 		
 		<path refid="core.classpath" />
+		<pathelement location="${build.core.ejb.file}"/>
 
 		<path refid="master.classpath" />
 	</path>

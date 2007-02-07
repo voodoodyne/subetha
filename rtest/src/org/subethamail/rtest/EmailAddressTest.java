@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.acct.i.Self;
 import org.subethamail.core.post.i.MailType;
+import org.subethamail.core.util.VERPAddress;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonInfoMixin;
@@ -141,6 +142,16 @@ public class EmailAddressTest extends SubEthaTestCase
 		assertEquals(list.getId(), me.getSubscriptions().get(0).getId());
 	}
 	
+	/** */
+	public void testVERPAddressParser() throws Exception
+	{
+		String verpAddress = "smtp-verp-6206c602c2e21f842635661d625ac3846eaddb97a0fdf57be59483dc0b07f325-bounce@subethamail.org";
+		VERPAddress addr = VERPAddress.getVERPBounce(verpAddress);
+		assertEquals("smtp@subethamail.org", addr.getEmail());
+		assertEquals("6206c602c2e21f842635661d625ac3846eaddb97a0fdf57be59483dc0b07f325", 
+						addr.getRawToken());
+	}
+
 	/** */
 	protected void assertEmailInSelf(String email, Self me)
 	{

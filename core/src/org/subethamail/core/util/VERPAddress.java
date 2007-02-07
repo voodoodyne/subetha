@@ -70,7 +70,15 @@ public class VERPAddress
 		}
 		catch (DecoderException ex) { throw new RuntimeException(ex); }
 	}
-	
+
+	/**
+	 * @return The Hex encoded string.
+	 */
+	public String getRawToken()
+	{
+		return this.tokenHex;
+	}
+
 	/**
 	 * @return null if the address was not a VERP'ed address.  
 	 */

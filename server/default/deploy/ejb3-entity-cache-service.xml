@@ -9,6 +9,8 @@
     <depends>jboss:service=TransactionManager</depends>
 	<depends>jboss:service=ClientUserTransaction</depends>
 	
+      <attribute name="UseRegionBasedMarshalling">true</attribute>
+
     <!-- Configure the TransactionManager -->
     <attribute name="TransactionManagerLookupClass">org.jboss.cache.JBossTransactionManagerLookup</attribute>
 

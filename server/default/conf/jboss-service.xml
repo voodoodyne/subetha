@@ -513,7 +513,7 @@
                  scans the specified WebDAV location
        -->
       <attribute name="URLs">
-         deploy/,deploy-subetha/
+         deploy/
       </attribute>
 
       <!-- Indicates if the scanner should recursively scan directories that

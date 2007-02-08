@@ -7,7 +7,7 @@
 	<t:param name="listId" value="${listId}"/>
 </t:action>
 
-<trim:menus title="${title}" headerTitle="${myList.listName} <${myList.listEmail}>">
+<trim:menus title="${myList.listName} - ${title}" headerTitle="${myList.listName} <${myList.listEmail}>">
 	<div class="sideBox LHS">
 		<div>List Menu</div>
 

@@ -25,7 +25,7 @@
 	<property name="build.deprecation" value="on" />
 	
 	<!-- Maybe overriden in your user.properties -->
-	<property name="deploy.dir" location="${jboss.dir}/server/default/deploy-subetha" />
+	<property name="deploy.dir" location="${jboss.dir}/server/default/deploy" />
 
 	<!-- Set up a basic path for everyone -->
 	<path id="base.classpath">

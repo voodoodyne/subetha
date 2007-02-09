@@ -78,7 +78,7 @@
 
 	<path id="plugin.classpath">
 		<fileset dir="${build.dir}/core/">
-			<include name="core.jar"/>
+			<include name="subetha-api.jar"/>
 		</fileset>
 		<fileset dir="${build.dir}/common/">
 			<include name="common.jar"/>
@@ -94,7 +94,7 @@
 			<include name="common.jar"/>
 		</fileset>
 		<fileset dir="${build.dir}/core/">
-			<include name="core.jar"/>
+			<include name="subetha-api.jar"/>
 		</fileset>
 		<fileset dir="${build.dir}/entity/">
 			<include name="entity.jar"/>

@@ -53,19 +53,13 @@
 	</path>
 
 	<path id="entity.classpath">
-		<fileset dir="${build.dir}/common/">
-			<include name="common.jar"/>
-		</fileset>
+		<pathelement location="${build.dir}/common/common.jar" />
 		<path refid="jboss.classpath" />
 	</path>
 
 	<path id="core.classpath">
-		<fileset dir="${build.dir}/entity/">
-			<include name="entity.jar"/>
-		</fileset>
-		<fileset dir="${build.dir}/common/">
-			<include name="common.jar"/>
-		</fileset>
+		<pathelement location="${build.dir}/entity/entity.jar" />
+		<pathelement location="${build.dir}/common/common.jar" />
 		<fileset dir="${base.dir}/lib">
 			<include name="${velocity.jar}"/>
 			<include name="${smtp.jar}"/>
@@ -77,33 +71,39 @@
 	</path>
 
 	<path id="plugin.classpath">
-		<fileset dir="${build.dir}/core/">
-			<include name="subetha-api.jar"/>
-		</fileset>
-		<fileset dir="${build.dir}/common/">
-			<include name="common.jar"/>
-		</fileset>
-		<fileset dir="${build.dir}/entity/">
-			<include name="entity.jar"/>
-		</fileset>
+		<pathelement location="${build.dir}/core/subetha-api.jar" />
+		<pathelement location="${build.dir}/entity/entity.jar" />
+		<pathelement location="${build.dir}/common/common.jar" />
 		<path refid="jboss.classpath" />
 	</path>
 
 	<path id="frontend.classpath">
-		<fileset dir="${build.dir}/common/">
-			<include name="common.jar"/>
-		</fileset>
-		<fileset dir="${build.dir}/core/">
-			<include name="subetha-api.jar"/>
-		</fileset>
-		<fileset dir="${build.dir}/entity/">
-			<include name="entity.jar"/>
-		</fileset>
+		<pathelement location="${build.dir}/core/subetha-api.jar" />
+		<pathelement location="${build.dir}/entity/entity.jar" />
+		<pathelement location="${build.dir}/common/common.jar" />
 		<fileset dir="${base.dir}/lib">
 			<include name="${commons-fileupload.jar}"/>
 			<include name="${tagonist.jar}"/>
 		</fileset>
 		<path refid="jboss.classpath" />
+	</path>
+
+	<path id="rtest.classpath">
+		<pathelement location="${build.dir}/core/core.jar" />
+		<pathelement location="${build.dir}/entity/entity.jar" />
+		<pathelement location="${build.dir}/common/common.jar" />
+		<fileset dir="${base.dir}/lib">
+			<include name="${junit.jar}"/>
+			<include name="${smtp.jar}"/>
+			<include name="${wiser.jar}"/>
+		</fileset>
+		<path refid="jboss.classpath" />
+	</path>
+
+	<path id="rtest.run.classpath">
+		<path refid="rtest.classpath" />
+
+		<pathelement location="${build.dir}/rtest/rtest.jar" />
 	</path>
 
 	<!-- ******************************************************** -->
@@ -198,7 +198,7 @@
 
 			<fileset dir="${build.dir}/core/classes" />
 
-			<fileset dir="${base.dir}/core/src/org/subethamail/core/post">
+			<fileset dir="${base.dir}/core/src">
 				<include name="**/*.vm" />
 			</fileset>
 
@@ -321,6 +321,32 @@
 		</war>
 	</target>
 
+ 	<target name="rtest-compile" depends="compile">
+		<mkdir dir="${build.dir}/rtest/classes" />
+ 		
+		<javac
+			srcdir="${base.dir}/rtest/src"
+			destdir="${build.dir}/rtest/classes"
+			includeAntRuntime="false"
+			debug="${build.debug}"
+			deprecation="${build.deprecation}"
+			target="${ant.build.javac.target}"
+			source="${ant.build.javac.source}">
+
+			<classpath refid="rtest.classpath" />
+		</javac>
+		<jar jarfile="${build.dir}/rtest/rtest.jar">
+			<fileset dir="${build.dir}/rtest/classes"/>
+			<fileset dir="${base.dir}/rtest/src/org/subethamail/rtest/msg">
+				<include name="**/*.msg"/>
+			</fileset>
+			<manifest>
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
+		</jar>
+	</target>
+
 	<target name="compile" depends="common, core, entity, plugin, frontend">
 	</target>
 
@@ -364,6 +390,68 @@
 	</target>
 
 	<target name="cleandeploy" depends="clean, deploy">
+	</target>
+
+	<target name="junit" depends="rtest-compile">
+		<junit printsummary="yes" showoutput="yes" fork="yes">
+			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties"/>
+			
+			<classpath refid="rtest.run.classpath"/>
+			
+			<syspropertyset>
+				<propertyref prefix="java.naming" />
+			</syspropertyset>
+			
+			<formatter type="plain" />
+			
+			<batchtest todir="${build.dir}">
+				<fileset dir="${build.dir}/rtest/classes">
+					<include name="**/*Test.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="junit-special" depends="rtest-compile">
+		<junit printsummary="true" showoutput="true" fork="true">
+			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties"/>
+			
+			<classpath refid="rtest.run.classpath"/>
+			
+			<syspropertyset>
+				<propertyref prefix="java.naming" />
+			</syspropertyset>
+			
+			<formatter type="plain" />
+			
+			<batchtest todir="${build.dir}">
+				<fileset dir="${build.dir}/rtest/classes">
+					<include name="${junit.special.tests}" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	<target name="junit-debug" depends="rtest-compile">
+		<junit printsummary="yes" showoutput="yes" fork="yes">
+			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties"/>
+			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8001"/>
+			<!-- <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8001"/> -->
+
+			<classpath refid="rtest.run.classpath"/>
+			
+			<syspropertyset>
+				<propertyref prefix="java.naming" />
+			</syspropertyset>
+			
+			<formatter type="plain" />
+			
+			<batchtest todir="${build.dir}">
+				<fileset dir="${build.dir}/rtest/classes">
+					<include name="${junit.special.tests}" />
+				</fileset>
+			</batchtest>
+		</junit>
 	</target>
 
 <!--

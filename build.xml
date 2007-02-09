@@ -10,125 +10,367 @@
 	To run the junit tests, you must copy junit.jar into ANT_HOME/lib.
 -->
 
-<project name="subetha" default="appmain-ear" basedir=".">
+<project name="subetha" default="compile" basedir=".">
 
 	<property name="name" value="${ant.project.name}" />
 	
 	<property file="user.properties" />
+	<property file="${user.home}/build.properties" />
 	<property file="build.properties" />
+	<property file="jar.properties" />
 
-	<property name="build.dir" location="build" />
-	<property name="build.javadoc.i.dir" location="${build.dir}/api-public" />
-	<property name="build.javadoc.all.dir" location="${build.dir}/api-all" />
+	<property name="base.dir" location="." />
+
+	<property name="build.dir" location="target" />
 	
 	<property name="build.debug" value="on" />
 	<property name="build.deprecation" value="on" />
-	
-	<!-- Maybe overriden in your user.properties -->
+
+	<property name="ant.build.javac.target" value="1.5" />
+	<property name="ant.build.javac.source" value="1.5" />
+
 	<property name="deploy.dir" location="${jboss.dir}/server/default/deploy" />
 
-	<!-- Set up a basic path for everyone -->
-	<path id="base.classpath">
+	<!-- ******************************************************** -->
+	<path id="jboss.classpath">
 		<fileset dir="${jboss.dir}">
 			<include name="server/default/deploy/**/*.jar"/>
 			<include name="server/default/lib/**/*.jar"/>
 			<include name="lib/**/*.jar"/>
 		</fileset>
+	</path>
+
+	<path id="propertize.classpath">
+		<fileset dir="${base.dir}/lib">
+			<include name="${asm.jar}"/>
+			<include name="${jen.jar}"/>
+			<include name="${tagonist.jar}"/>
+		</fileset>
+	</path>
+
+	<path id="common.classpath">
+		<path refid="jboss.classpath" />
+	</path>
+
+	<path id="entity.classpath">
+		<fileset dir="${build.dir}/common/">
+			<include name="common.jar"/>
+		</fileset>
+		<path refid="jboss.classpath" />
+	</path>
+
+	<path id="core.classpath">
+		<fileset dir="${build.dir}/entity/">
+			<include name="entity.jar"/>
+		</fileset>
+		<fileset dir="${build.dir}/common/">
+			<include name="common.jar"/>
+		</fileset>
+		<fileset dir="${base.dir}/lib">
+			<include name="${velocity.jar}"/>
+			<include name="${smtp.jar}"/>
+			<include name="${mina-core.jar}"/>
+			<include name="${lucene-core.jar}"/>
+		</fileset>
+
+		<path refid="jboss.classpath" />
+	</path>
+
+	<path id="plugin.classpath">
+		<fileset dir="${build.dir}/core/">
+			<include name="core.jar"/>
+		</fileset>
+		<fileset dir="${build.dir}/common/">
+			<include name="common.jar"/>
+		</fileset>
+		<fileset dir="${build.dir}/entity/">
+			<include name="entity.jar"/>
+		</fileset>
+		<path refid="jboss.classpath" />
+	</path>
+
+	<path id="frontend.classpath">
+		<fileset dir="${build.dir}/common/">
+			<include name="common.jar"/>
+		</fileset>
+		<fileset dir="${build.dir}/core/">
+			<include name="core.jar"/>
+		</fileset>
+		<fileset dir="${build.dir}/entity/">
+			<include name="entity.jar"/>
+		</fileset>
+		<fileset dir="${base.dir}/lib">
+			<include name="${commons-fileupload.jar}"/>
+			<include name="${tagonist.jar}"/>
+		</fileset>
+		<path refid="jboss.classpath" />
+	</path>
+
+	<!-- ******************************************************** -->
+
+	<target name="common" depends="init">
+		<mkdir dir="${build.dir}/common/classes" />
+		<javac
+			srcdir="${base.dir}/common/src/"
+			destdir="${build.dir}/common/classes"
+			includeAntRuntime="false"
+			debug="${build.debug}"
+			deprecation="${build.deprecation}"
+			target="${ant.build.javac.target}"
+			source="${ant.build.javac.source}">
+
+			<classpath refid="common.classpath" />
+		</javac>
+		<jar jarfile="${build.dir}/common/common.jar">
+			<fileset dir="${build.dir}/common/classes"/>
+			<manifest>
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="entity" depends="init, common">
+		<mkdir dir="${build.dir}/entity/classes"/>
 		
-		<pathelement path="${java.class.path}" />
-	</path>
-	
-	<!-- Common is special because master.classpath depends on it -->
-	<import file="common/build.xml"/>
-	
-	<path id="master.classpath">
-		<pathelement location="${build.common.jar.file}" />
-		<path refid="common.classpath" />
-	</path>
-	
-	<!-- Now the rest of the imports -->
-	<import file="entity/build.xml"/>
-	<import file="core/build.xml"/>
-	<import file="plugin/build.xml"/>	
-	<import file="frontend/build.xml"/>
-	<import file="rtest/build.xml"/>
-	<import file="loadtest/build.xml"/>
-	<import file="appmain/build.xml"/>
-	
-	<target name="usage"> 
-		<echo message="  Execute 'ant -projecthelp' for build file help."/> 
-		<echo message="  Execute 'ant -help' for Ant help."/> 
-	</target> 
-	<target name="help" depends="usage"/>
-	
+		<javac 
+			srcdir="${base.dir}/entity/src"
+			destdir="${build.dir}/entity/classes" 
+			includeAntRuntime="false"
+			debug="${build.debug}" 
+			deprecation="${build.deprecation}"
+			target="${ant.build.javac.target}"
+			source="${ant.build.javac.source}">
+			
+			<classpath refid="entity.classpath"/>			
+		</javac>
+
+		<jar jarfile="${build.dir}/entity/entity.jar">
+			<metainf dir="${base.dir}/entity/meta/">
+				<include name="persistence.xml"/>
+			</metainf>
+			<manifest>
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
+			<fileset dir="${build.dir}/entity/classes"/>
+		</jar>
+	</target>
+
+ 	<target name="core" depends="init, entity">
+		<mkdir dir="${build.dir}/core/classes" />
+ 		
+		<javac
+			srcdir="${base.dir}/core/src"
+			destdir="${build.dir}/core/classes"
+			includeAntRuntime="false"
+			debug="${build.debug}"
+			deprecation="${build.deprecation}"
+			target="${ant.build.javac.target}"
+			source="${ant.build.javac.source}">
+			
+			<classpath refid="core.classpath" />			
+		</javac>
+
+		<jar jarfile="${build.dir}/core/subetha-api.jar">
+			<!--
+				Yes this means there is a duplicate of the entity interface classes
+				in the entity jar.  Fortunately JBoss handles duplicates in the
+				same JVM nicely, as long as the files are identical (which they
+				should be).  The main point is that now remote clients have access
+				to the validation constants.
+			-->
+			<fileset dir="${build.dir}/core/classes">
+				<include name="**/i/**" />
+			</fileset>
+		
+			<manifest>
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
+		</jar>
+
+		<jar jarfile="${build.dir}/core/core.jar">			
+			<metainf dir="${base.dir}/core/meta">
+				<include name="mailcap"/>
+				<include name="mime.types"/>
+			</metainf>
+
+			<fileset dir="${build.dir}/core/classes" />
+
+			<fileset dir="${base.dir}/core/src/org/subethamail/core/post">
+				<include name="**/*.vm" />
+			</fileset>
+
+			<manifest>
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
+		</jar>
+
+		<jar destfile="${build.dir}/core/core.sar">
+			<metainf dir="${base.dir}/core/meta">
+				<include name="jboss-service.xml"/>
+			</metainf>
+			
+			<fileset dir="${base.dir}/lib/">
+				<include name="${velocity.jar}"/>
+				<include name="${smtp.jar}"/>
+				<include name="${lucene-core.jar}"/>
+				<include name="${commons-beanutils.jar}"/>
+
+				<!-- MINA and it's deps -->
+				<include name="${mina-core.jar}"/>
+				<include name="${slf4j-simple.jar}"/>
+				<include name="${backport-util-concurrent.jar}"/>
+				<include name="${commons-codec.jar}"/>
+			</fileset>
+			
+			<fileset file="${build.dir}/common/subetha-api.jar"/>
+			<fileset file="${build.dir}/common/common.jar"/>
+
+			<manifest>
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="plugin" depends="common, core, entity">
+		<mkdir dir="${build.dir}/plugin/classes" />
+ 		
+		<javac
+			srcdir="${base.dir}/plugin/src"
+			destdir="${build.dir}/plugin/classes"
+			includeAntRuntime="false"
+			debug="${build.debug}"
+			deprecation="${build.deprecation}"
+			target="${ant.build.javac.target}"
+			source="${ant.build.javac.source}">
+			
+			<classpath refid="plugin.classpath" />
+		</javac>
+
+		<jar jarfile="${build.dir}/plugin/plugin.jar">
+			<!--
+			<metainf dir="${plugin.meta.dir}">
+				<include name="jboss-service.xml"/>
+			</metainf>
+			-->
+			
+			<fileset dir="${build.dir}/plugin/classes"/>
+			
+			<!--
+			<fileset dir="${plugin.lib.dir}"/>
+			-->
+			
+			<manifest>
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
+		</jar>
+
+	</target>
+
+	<target name="frontend" depends="core">
+		<mkdir dir="${build.dir}/frontend/classes"/>
+
+		<javac 
+			srcdir="${base.dir}/frontend/src/org"
+			destdir="${build.dir}/frontend/classes" 
+			includeAntRuntime="false"
+			debug="${build.debug}" 
+			deprecation="${build.deprecation}"
+			target="${ant.build.javac.target}"
+			source="${ant.build.javac.source}">
+			
+			<classpath refid="frontend.classpath"/>
+		</javac>
+
+		<taskdef name="propertize" classname="org.tagonist.propertize.PropertizeTask">
+			<classpath>
+				<path refid="propertize.classpath" />
+			</classpath>
+		</taskdef>		
+
+		<propertize verbose="false">
+			<fileset dir="${build.dir}/frontend/classes"/>
+		</propertize>
+
+		<jar jarfile="${build.dir}/frontend/frontend.jar">
+			<fileset dir="${build.dir}/frontend/classes" />
+			<manifest>
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
+		</jar>
+
+		<war destfile="${build.dir}/frontend/frontend.war" 
+			webxml="${base.dir}/frontend/meta/web.xml">
+
+			<fileset dir="${base.dir}/frontend/content" />
+
+			<lib file="${build.dir}/frontend/frontend.jar"/>
+
+			<lib dir="${base.dir}/lib">
+				<include name="${jstl.jar}"/>
+				<include name="${standard.jar}"/>
+				<include name="${tagonist.jar}"/>
+				<include name="${commons-fileupload.jar}"/>
+			</lib>
+		</war>
+	</target>
+
+	<target name="compile" depends="common, core, entity, plugin, frontend">
+	</target>
+
+	<target name="ear" depends="compile">
+		<mkdir dir="${build.dir}/ear"/>
+		<ear destfile="${build.dir}/ear/subetha.ear" appxml="${base.dir}/frontend/meta/application.xml">
+			<metainf dir="${base.dir}/frontend/meta/">
+				<include name="jboss-app.xml" />
+			</metainf>
+
+			<fileset file="${build.dir}/entity/entity.jar" />
+			<fileset file="${build.dir}/core/core.jar" />
+			<fileset file="${build.dir}/core/core.sar" />
+			<fileset file="${build.dir}/plugin/plugin.jar" />
+			<fileset file="${build.dir}/frontend/frontend.war" />
+		</ear>
+	</target>
+
+	<target name="deploy" depends="ear">
+		<copy file="${build.dir}/ear/subetha.ear" todir="${deploy.dir}" />
+	</target>
+
 	<target name="init">
 		<tstamp/>
-		<property name="build.version" value="UNVERSIONED"/>
+		<tstamp>
+			<format property="YEAR" pattern="yyyy" />
+		</tstamp>
+		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
+			<classpath>
+				<fileset dir="${base.dir}/lib">
+					<include name="svn*.jar"/>
+					<include name="javasvn*.jar"/>
+				</fileset>
+			</classpath>
+		</typedef>
+		<svn><status path="." revisionProperty="version" /></svn>
 	</target>
-	
-	<target name="input-version">
-		<input addproperty="build.version" message="Version number?" />
-	</target>
-	
-	<target name="formal-build" depends="clean, input-version, appmain-ear">
-	</target>
-	
-	<target name="formal-deploy" depends="formal-build, deploy">
-	</target>
-	
+
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="javadoc-i">
-		<mkdir dir="${build.javadoc.i.dir}"/>
-		
-		<!-- this classpath isn't right -->
-		<javadoc
-			destdir="${build.javadoc.i.dir}"
-			packagenames="*"
-			classpathref="frontend.classpath"
-			author="true"
-			version="true"
-		>
-			<fileset dir="${common.javasrc.dir}"/>
-			
-			<fileset dir="${core.javasrc.dir}">
-				<include name="**/i/**" />
-			</fileset>
-		</javadoc>
-	</target>
-	
-	<target name="javadoc-all">
-		<mkdir dir="${build.javadoc.all.dir}"/>
-		
-		<!-- this classpath isn't right -->
-		<javadoc
-			destdir="${build.javadoc.all.dir}"
-			packagenames="*"
-			classpathref="frontend.classpath"
-			author="true"
-			version="true"
-		>
-			<fileset dir="${common.javasrc.dir}"/>
-			<fileset dir="${entity.javasrc.dir}"/>
-			<fileset dir="${core.javasrc.dir}"/>
-			<fileset dir="${plugin.javasrc.dir}"/>
-			<fileset dir="${frontend.javasrc.dir}"/>
-			<fileset dir="${rtest.javasrc.dir}"/>
-		</javadoc>
-	</target>
-	
-	<target name="deploy" depends="appmain-ear">
-		<copy file="${build.appmain.ear.file}" todir="${deploy.dir}" />
-	</target>
-	
 	<target name="cleandeploy" depends="clean, deploy">
 	</target>
+
+<!--
+	<target name="formal-build" depends="clean, input-version, appmain-ear">
+	</target>
 	
-	<target name="touchapp">
-		<basename property="build.appmain.ear.basename" file="${build.appmain.ear.file}" />
-		<touch file="${deploy.dir}/${build.appmain.ear.basename}" />
+	<target name="formal-deploy" depends="formal-build, deploy">
 	</target>
 	
 	<target name="dist" depends="input-version, clean, appmain-ear, javadoc-i, javadoc-all">
@@ -160,6 +402,7 @@
 			<include name="${build.dist.dir.basename}/**" />
 		</zip>
 	</target>
+-->
 
 </project>
 

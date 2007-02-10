@@ -454,43 +454,27 @@
 		</junit>
 	</target>
 
-<!--
-	<target name="formal-build" depends="clean, input-version, appmain-ear">
-	</target>
+	<target name="dist" depends="cleandeploy">
+		<input addproperty="version-dist" message="Version number?" />
+		<property name="dist.name" value="SubEtha-${version-dist}" />
 	
-	<target name="formal-deploy" depends="formal-build, deploy">
-	</target>
-	
-	<target name="dist" depends="input-version, clean, appmain-ear, javadoc-i, javadoc-all">
-		<property name="build.dist.dir" location="${build.dir}/${ant.project.name}-${build.version}"/>
-		<property name="build.dist.zip" location="${build.dir}/${ant.project.name}-${build.version}.zip"/>
-
-		<basename property="build.javadoc.i.dir.basename" file="${build.javadoc.i.dir}" />
-		<basename property="build.javadoc.all.dir.basename" file="${build.javadoc.all.dir}" />
-		
-		<copy todir="${build.dist.dir}">
-			<fileset dir="${build.dir}">
-				<include name="${build.javadoc.i.dir.basename}/**" />
-				<include name="${build.javadoc.all.dir.basename}/**" />
+		<copy todir="${build.dir}/${dist.name}/jboss">
+			<fileset dir="${jboss.dir}">
+				<exclude name="**/velocity.log" />
+				<exclude name="**/log/**" />
+				<exclude name="**/tmp/**" />
+				<exclude name="**/work/**" />
+				<exclude name="**/data/**" />
 			</fileset>
-			
-			<fileset file="${build.appmain.ear.file}"/>
-			
+		</copy>
+		<copy todir="${build.dir}/${dist.name}/">
 			<fileset dir=".">
 				<include name="README.html" />
 				<include name="LICENSE.txt" />
 				<include name="www/**" />
 			</fileset>
 		</copy>
-		
-		<dirname property="build.dist.dir.dirname" file="${build.dist.dir}" />
-		<basename property="build.dist.dir.basename" file="${build.dist.dir}" />
-		
-		<zip zipfile="${build.dist.zip}" basedir="${build.dist.dir.dirname}">
-			<include name="${build.dist.dir.basename}/**" />
-		</zip>
+		<zip zipfile="${build.dir}/${dist.name}.zip" basedir="${build.dir}/${dist.name}" />
 	</target>
--->
-
 </project>
 

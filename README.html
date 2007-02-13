@@ -28,7 +28,7 @@
 		</p>
 
 		<p>
-			<strong>This version requires JBossAS 4.0.5.GA.</strong>
+			<strong>This version requires JBossAS 4.0.5.GA from the JEMS 1.2.0 GA installer.</strong>
 		</p>
 
 		<h2>Changes</h2>
@@ -39,6 +39,14 @@
 				<ul>
 					<li>Fixed problem with the AppendFooterFilter not properly encapsulating 
 					the footer in multipart mime messages.</li>
+					<li>Updated to JBoss 4.0.5.GA from the JEMS 1.2.0 GA installer.</li>
+					<li>Ant build system has been rewritten from scratch.</li>
+					<li>The ready-to-run (RTR) release is now based off a copy of JBoss that we 
+						maintain in our <a href="http://guest@subetha.tigris.org/svn/subetha/jboss/trunk/">svn repo</a>.</li>
+					<li>Added a new filter mode for archive rendering (mail web view).</li>
+					<li>Filter exceptions no longer stop processing of the message.</li>
+					<li>Messages without subjects were throwing exceptions if the SubjectFilter was enabled.</li>
+					<li>Added ability to download/export messages.</li>
 				</ul>
 			</dd>
 	

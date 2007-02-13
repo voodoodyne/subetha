@@ -31,10 +31,10 @@
 			</p>
 			
 			<ul>
-				<li>The base JBoss Application Server 4.0.5.GA.</li>
+				<li>The base JBoss Application Server 4.0.5.GA (from the JEMS 1.2.0GA installer).</li>
 				<li>The current version of SubEtha installed.</li>
 				<li>The MySQL JDBC driver.</li>
-				<li>Data sources which will connect SubEtha to a MySQL database running on localhost.</li>
+				<li>Data sources which will connect SubEtha to a MySQL database running on localhost as the root MySQL user.</li>
 			</ul>
 			
 			<p>
@@ -50,16 +50,16 @@
 			
 			<ul>
 				<li>
-					Install Java.  You want "JDK 5.0" from the 
+					Install Java. On MacOS X, Java is already installed.  You want "JDK 5.0" from the 
 					<a href="http://java.sun.com/javase/downloads/index.jsp">Java SE download page</a>.
 					Not "...with NetBeans" nor "...with Java EE".
 				</li>
 				<li>
-					Install MySQL.  5.0 is preferred, but any version should work.
+					Install MySQL.  5.0.x is preferred, but any version should work.
 				</li>
 				<li>
-					Create two databases.  One should be called "subetha" and one
-					should be called "subetha-q".
+					In MySQL, create two databases.  One should be called "subetha" and one
+					should be called "subetha-q". (ie: mysqladmin -u root create subetha; mysqladmin -u root create subtha-q)
 				</li>
 				<li>
 					Install a Mail Transfer Agent such as Postfix, Exim, or Sendmail.
@@ -78,6 +78,11 @@
 					two connections to the database, one for the master db and one for the
 					message queue.  They don't need to be in the same database.  Make sure
 					that the logins, passwords, and JDBC connect strings are correct.
+				</li>
+				<li>
+					Edit ${jboss.dir}/server/default/deploy/mail-service.xml.  This file defines
+					the mail server that SubEtha uses to send out mail. You should define the
+					mail.smtp.host and mail.smtp.port variables to be your mailserver and port.
 				</li>
 				<li>
 					Edit ${jboss.dir}/server/default/conf/props/jmx-console-users.properties.

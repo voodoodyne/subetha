@@ -33,39 +33,15 @@
 			<ol>
 				<li>
 					<p>Install <a href="http://labs.jboss.com/portal/jbossas/download">JBoss 4.0.5.GA</a>
-					using the installer (not the zip download!).</p>
+					using the JEMS 1.2.0GA installer (not the zip download!).</p>
 					<ol>
-						<li>Choose the ejb3-clustered option.  You will disable clustering later.</li>
+						<li>Choose the ejb3-nonclustered option.</li>
 						<li>Leave the configuration name as 'default'.</li>
 						<li>Do not enable isolation/call-by-value.</li>
 						<li>Secure all of the JMX access points.  <strong>Be sure to use a non-guessable password</strong>.</li>
 					</ol>
 					<p>The remaining documentation referrs to the directory in which you
 					installed JBoss as ${jboss.dir}.</p>
-				</li>
-				<li>
-					<p>We installed the ejb3-clustered configuration so that we get the JBoss TreeCache
-					service, which is not installed in the non-clustered config.  However, you probably
-					don't actually want a clustered JBoss.  This section disables clustering.</p>
-					
-					<ol>
-						<li>
-							<p>Delete the following files and directories:</p>
-							<ul>
-								<li>${jboss.dir}/server/default/deploy-hasingleton/</li>
-								<li>${jboss.dir}/server/default/deploy/tc5-cluster.sar/</li>
-								<li>${jboss.dir}/server/default/deploy/cache-invalidation-service.xml</li>
-								<li>${jboss.dir}/server/default/deploy/cluster-service.xml</li>
-								<li>${jboss.dir}/server/default/deploy/deploy-hasingleton-service.xml</li>
-								<li>${jboss.dir}/server/default/deploy/ejb3-clustered-sfsbcache-service.xml</li>
-							</ul>
-						</li>
-						<li>
-							<p>Edit ${jboss.dir}/server/default/deploy/jbossweb-tomcat55.sar/META-INF/jboss-service.xml
-							and remove or comment out the following line:</p>
-							<blockquote><pre>&lt;depends&gt;jboss.cache:service=TomcatClusteringCache&lt;/depends&gt;</pre></blockquote>
-						</li>
-					</ol>
 				</li>
 				<li>
 					<p>Edit ${jboss.dir}/server/default/deploy/ejb3-entity-cache-service.xml and change

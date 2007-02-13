@@ -726,6 +726,16 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 
 	/*
 	 * (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#getDefaultSiteUrl()
+	 */
+	@WebMethod
+	public URL getDefaultSiteUrl()
+	{
+		return (URL)this.em.findConfigValue(Config.ID_SITE_URL);
+	}
+	
+	/*
+	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setPostmaster(javax.mail.internet.InternetAddress)
 	 */
 	@WebMethod

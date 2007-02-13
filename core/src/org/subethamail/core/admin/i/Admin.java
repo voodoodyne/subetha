@@ -185,7 +185,12 @@ public interface Admin
 	 * Sets the default site url.
 	 */
 	public void setDefaultSiteUrl(URL url);
-	
+
+	/**
+	 * Gets the default site url.
+	 */
+	public URL getDefaultSiteUrl();
+
 	/**
 	 * Sets the address of the site postmaster.
 	 */

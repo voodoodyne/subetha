@@ -34,23 +34,17 @@ public class AuthRedirect extends AutoLogin
 			String loc = null;
 			String siteUrl = Backend.instance().getAdmin().getDefaultSiteUrl().toString();
 			if ("http://needsconfiguration/se/".equals(siteUrl))
-			{
-				loc = this.getCtx().getResponse().encodeRedirectURL(
-					this.getCtx().getRequest().getContextPath());
-			}
+				loc = this.getCtx().getRequest().getContextPath();
 			else
-			{
-				loc = this.getCtx().getResponse().encodeRedirectURL(
-						siteUrl + this.getCtx().getRequest().getContextPath().substring(1));
-			}
-			
+				loc = siteUrl;
+
 			String redir = this.getActionParam("dest");
 			if (redir != null)
-				throw new RedirectException(loc + redir);
+				loc = loc + redir;
 			else
-			{
-				throw new RedirectException(loc + "/home.jsp");
-			}
+				loc = loc + "home.jsp";
+
+			throw new RedirectException(this.getCtx().getResponse().encodeRedirectURL(loc));
 		}
 	}
 }

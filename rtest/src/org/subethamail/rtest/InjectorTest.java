@@ -47,7 +47,7 @@ public class InjectorTest extends SubEthaTestCase
 		
 		this.person1.getAccountMgr().subscribeMe(this.ml.getId(), this.person1.getEmail());
 	}
-	
+
 	/** */
 	public void testTrivialInjection() throws Exception
 	{
@@ -94,6 +94,20 @@ public class InjectorTest extends SubEthaTestCase
 		assertTrue(envelopeSender.contains("-verp-"));
 		
 		this.admin.getAdmin().log("############### Ended testHasVERP()");
+	}
+
+	/** */
+	public void testVERPBounceMessage() throws Exception
+	{
+		this.admin.getAdmin().log("############### Starting testVERPBounceMessage()");
+
+		this.admin.getInjector().inject(this.smtp.get(0).getEnvelopeSender(), this.smtp.get(0).getEnvelopeSender(), this.smtp.get(0).getData());
+		this.admin.getInjector().inject(this.smtp.get(0).getEnvelopeSender(), this.smtp.get(0).getEnvelopeSender(), this.smtp.get(0).getData());
+		this.admin.getInjector().inject(this.smtp.get(0).getEnvelopeSender(), this.smtp.get(0).getEnvelopeSender(), this.smtp.get(0).getData());
+		
+		// TODO: there is no api i can find that will tell me the bouncecount for the envelopesender.
+		// So, if you look in the database after this method runs, then you will see the bouncecount
+		// is 2.
 	}
 	
 	/** */

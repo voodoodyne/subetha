@@ -31,6 +31,11 @@
 
 	<property name="deploy.dir" location="${jboss.dir}/server/default/deploy" />
 
+	<tstamp/>
+	<tstamp>
+		<format property="YEAR" pattern="yyyy" />
+	</tstamp>
+
 	<!-- ******************************************************** -->
 	<path id="jboss.classpath">
 		<fileset dir="${jboss.dir}">
@@ -370,10 +375,6 @@
 	</target>
 
 	<target name="init">
-		<tstamp/>
-		<tstamp>
-			<format property="YEAR" pattern="yyyy" />
-		</tstamp>
 		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
 			<classpath>
 				<fileset dir="${base.dir}/lib">
@@ -382,7 +383,14 @@
 				</fileset>
 			</classpath>
 		</typedef>
-		<svn><status path="." revisionProperty="version" /></svn>
+		<svn><status path="." revisionProperty="revisionVersion" /></svn>
+		<!--  A hack because svnant does not respect Ant's properties can't be overwritten rule. -->
+		<property name="version" value="${revisionVersion}" />
+	</target>
+
+	<target name="init-dist">
+		<input addproperty="version" message="Version number?" />
+		<property name="dist.name" value="SubEtha-${version}" />
 	</target>
 
 	<target name="clean">
@@ -454,10 +462,7 @@
 		</junit>
 	</target>
 
-	<target name="dist" depends="cleandeploy">
-		<input addproperty="version-dist" message="Version number?" />
-		<property name="dist.name" value="SubEtha-${version-dist}" />
-	
+	<target name="dist" depends="init-dist, cleandeploy">
 		<copy todir="${build.dir}/${dist.name}/jboss">
 			<fileset dir="${jboss.dir}">
 				<exclude name="**/velocity.log" />

@@ -444,7 +444,7 @@ public class MailingList implements Serializable, Comparable
 		if (pos < 0)
 			throw new IllegalStateException("Malformed list url");
 
-		return this.url.substring(0, pos + "/se/".length()); 
+		return this.url.substring(0, pos + SiteUtils.WEBAPP_CONTEXT_PATH.length()); 
 	}
 	
 	/**

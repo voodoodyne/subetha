@@ -195,7 +195,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			return true;
 		}
 		
-		if (envelopeSender == null || envelopeSender.isEmpty())
+		if (envelopeSender == null || envelopeSender.trim().length() == 0)
 		{
 			log.error("Got non-verp mail with empty sender");
 			return false;

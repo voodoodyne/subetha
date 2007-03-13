@@ -178,7 +178,6 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			return this.injectImpl(envelopeSender, envelopeRecipient, mailData);
 		}
 		catch (LimitExceededException ex) { throw ex; }
-		catch (RuntimeException ex) { throw ex; }
 		catch (Exception ex)
 		{
 			if (log.isDebugEnabled())
@@ -203,7 +202,10 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 				}
 			}
 			
-			throw new RuntimeException(ex);
+			if (ex instanceof RuntimeException)
+				throw (RuntimeException)ex;
+			else
+				throw new RuntimeException(ex);
 		}
 	}
 	

@@ -278,6 +278,7 @@ public class Mail implements Serializable, Comparable
 	 * to exist before it can create Attachment objects, and the assigned content
 	 * must contain the newly created ids of the attachments.
 	 * 
+	 * @param envelopeSender can be null if no envelope sender was specified
 	 * @param holdFor can be null which means none required
 	 * @param sentDate is the date which should be used as the sent date.  If null, current time is chosen.
 	 */
@@ -305,7 +306,10 @@ public class Mail implements Serializable, Comparable
 		if (froms != null && froms.length > 0)
 			this.from = froms[0].toString();
 		
-		this.setEnvelopeSender(envelopeSender.getAddress());
+		if (envelopeSender == null)
+			this.setEnvelopeSender("");
+		else
+			this.setEnvelopeSender(envelopeSender.getAddress());
 		
 		this.replies = new TreeSet<Mail>();
 		this.attachments = new HashSet<Attachment>();

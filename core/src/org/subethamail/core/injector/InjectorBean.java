@@ -226,19 +226,20 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			return true;
 		}
 		
-		if (envelopeSender == null || envelopeSender.trim().length() == 0)
+		// Note that this can stay null; there might not be a sender
+		InternetAddress senderAddy = null;
+		
+		if (envelopeSender != null && envelopeSender.trim().length() > 0)
 		{
-			log.error("Got non-verp mail with empty sender");
-			return false;
+			senderAddy = new InternetAddress(envelopeSender);
+			
+			// Immediately check to see if the envelope sender is a verp address.  If it is,
+			// convert it into an -owner address.  This magic allows lists to subscribe to lists.
+			VERPAddress senderVerp = VERPAddress.getVERPBounce(senderAddy.getAddress());
+			if (senderVerp != null)
+				senderAddy = new InternetAddress(OwnerAddress.makeOwner(senderAddy.getAddress()));
+			
 		}
-		
-		InternetAddress senderAddy = new InternetAddress(envelopeSender);
-		
-		// Immediately check to see if the envelope sender is a verp address.  If it is,
-		// convert it into an -owner address.  This magic allows lists to subscribe to lists.
-		VERPAddress senderVerp = VERPAddress.getVERPBounce(senderAddy.getAddress());
-		if (senderVerp != null)
-			senderAddy = new InternetAddress(OwnerAddress.makeOwner(senderAddy.getAddress()));
 		
 		// Check for -owner mail
 		String listForOwner = OwnerAddress.getList(envelopeRecipient);
@@ -313,9 +314,12 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			// Figure out who sent it, if we know
 			Person author = null;
 			
-			EmailAddress addy = this.em.findEmailAddress(senderAddy.getAddress());
-			if (addy != null)
-				author = addy.getPerson();
+			if (senderAddy != null)
+			{
+				EmailAddress addy = this.em.findEmailAddress(senderAddy.getAddress());
+				if (addy != null)
+					author = addy.getPerson();
+			}
 			
 			if (log.isDebugEnabled())
 				log.debug("Message author is: " + author);
@@ -336,17 +340,20 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		
 		if (mail.getHold() != null)
 		{
-			// We don't want to send too many of these notification messages
-			// because they might cause too much backscatter from spam.  We
-			// compromise on sending at most one per time period.
-			Date cutoff = new Date(System.currentTimeMillis() - MIN_HOLD_NOTIFICATION_INTERVAL_MILLIS);
-			
-			int recentHolds = this.em.countRecentHeldMail(senderAddy.getAddress(), cutoff);
-			if (recentHolds <= 1)	// count includes the current held msg
+			if (senderAddy != null)
 			{
-				// Send instructions so that user can self-moderate
-				// Or send a message saying "you must wait for admin approval", use holdMsg if available
-				this.postOffice.sendPosterMailHoldNotice(toList, senderAddy.getAddress(), mail, holdMsg);
+				// We don't want to send too many of these notification messages
+				// because they might cause too much backscatter from spam.  We
+				// compromise on sending at most one per time period.
+				Date cutoff = new Date(System.currentTimeMillis() - MIN_HOLD_NOTIFICATION_INTERVAL_MILLIS);
+				
+				int recentHolds = this.em.countRecentHeldMail(senderAddy.getAddress(), cutoff);
+				if (recentHolds <= 1)	// count includes the current held msg
+				{
+					// Send instructions so that user can self-moderate
+					// Or send a message saying "you must wait for admin approval", use holdMsg if available
+					this.postOffice.sendPosterMailHoldNotice(toList, senderAddy.getAddress(), mail, holdMsg);
+				}
 			}
 			
 			if (hold == HoldType.HARD)

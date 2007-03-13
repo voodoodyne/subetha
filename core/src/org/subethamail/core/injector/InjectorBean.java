@@ -185,14 +185,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		if (log.isDebugEnabled())
 			log.debug("Injecting message sent to " + envelopeRecipient);
 		
-		InternetAddress senderAddy = new InternetAddress(envelopeSender);
 		InternetAddress recipientAddy = new InternetAddress(envelopeRecipient);
-		
-		// Immediately check to see if the envelope sender is a verp address.  If it is,
-		// convert it into an -owner address.  This magic allows lists to subscribe to lists.
-		VERPAddress senderVerp = VERPAddress.getVERPBounce(senderAddy.getAddress());
-		if (senderVerp != null)
-			senderAddy = new InternetAddress(OwnerAddress.makeOwner(senderAddy.getAddress()));
 		
 		// Must check for recipient VERP bounce
 		VERPAddress recipientVerp = VERPAddress.getVERPBounce(recipientAddy.getAddress());
@@ -201,6 +194,20 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			this.handleBounce(recipientVerp);
 			return true;
 		}
+		
+		if (envelopeSender == null || envelopeSender.isEmpty())
+		{
+			log.error("Got non-verp mail with empty sender");
+			return false;
+		}
+		
+		InternetAddress senderAddy = new InternetAddress(envelopeSender);
+		
+		// Immediately check to see if the envelope sender is a verp address.  If it is,
+		// convert it into an -owner address.  This magic allows lists to subscribe to lists.
+		VERPAddress senderVerp = VERPAddress.getVERPBounce(senderAddy.getAddress());
+		if (senderVerp != null)
+			senderAddy = new InternetAddress(OwnerAddress.makeOwner(senderAddy.getAddress()));
 		
 		// Check for -owner mail
 		String listForOwner = OwnerAddress.getList(envelopeRecipient);

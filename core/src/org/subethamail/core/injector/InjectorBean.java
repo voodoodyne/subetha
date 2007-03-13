@@ -5,6 +5,7 @@
 
 package org.subethamail.core.injector;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -170,8 +171,13 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 */
 	public boolean inject(String envelopeSender, String envelopeRecipient, InputStream mailData) throws LimitExceededException
 	{
-		if (log.isDebugEnabled() && mailData.markSupported())
-			mailData.mark(4096);
+		if (log.isDebugEnabled())
+		{
+			if (!mailData.markSupported())
+				mailData = new BufferedInputStream(mailData);
+			
+			mailData.mark(8192);
+		}
 		
 		try
 		{
@@ -182,24 +188,17 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		{
 			if (log.isDebugEnabled())
 			{
-				if (mailData.markSupported())
+				try
 				{
-					try
-					{
-						mailData.reset();
-						Reader reader = new InputStreamReader(mailData);
-						StringBuilder builder = new StringBuilder();
-						while (reader.ready())
-							builder.append((char)reader.read());
-						
-						log.debug("Mail body was: " + builder);
-					}
-					catch (IOException e) {}
+					mailData.reset();
+					Reader reader = new InputStreamReader(mailData);
+					StringBuilder builder = new StringBuilder();
+					while (reader.ready())
+						builder.append((char)reader.read());
+					
+					log.debug("Mail body was: " + builder);
 				}
-				else
-				{
-					log.debug("Mark not supported, can't debug print mail content");
-				}
+				catch (IOException e) {}
 			}
 			
 			if (ex instanceof RuntimeException)

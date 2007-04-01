@@ -47,7 +47,7 @@ public class Config implements Serializable, Comparable
 	@Type(type="anyImmutable")
 	@Columns(columns={
 		@Column(name="type", nullable=false),
-		@Column(name="value", nullable=false, length=Validator.MAX_CONFIG_VALUE)
+		@Column(name="value", length=Validator.MAX_CONFIG_VALUE)
 	})
 	Object value;
 	

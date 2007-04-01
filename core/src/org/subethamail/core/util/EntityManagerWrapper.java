@@ -94,7 +94,7 @@ public class EntityManagerWrapper implements EntityManager
 
 	public Query createQuery(String arg0)
 	{
-		return this.base.createNamedQuery(arg0);
+		return this.base.createQuery(arg0);
 	}
 
 	public Query createNamedQuery(String arg0)

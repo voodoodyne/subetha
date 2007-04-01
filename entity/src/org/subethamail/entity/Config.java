@@ -20,6 +20,8 @@ import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
 import org.subethamail.entity.i.Validator;
 
+import com.cinchblog.entity.i.Validation;
+
 /**
  * Contains a sitewide config parameter, key and value.
  * 
@@ -44,8 +46,8 @@ public class Config implements Serializable, Comparable
 	/** */
 	@Type(type="anyImmutable")
 	@Columns(columns={
-		@Column(name="type"),
-		@Column(name="value", length=Validator.MAX_CONFIG_VALUE)
+		@Column(name="type", nullable=false),
+		@Column(name="value", nullable=false, length=Validator.MAX_CONFIG_VALUE)
 	})
 	Object value;
 	

@@ -20,8 +20,6 @@ import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
 import org.subethamail.entity.i.Validator;
 
-import com.cinchblog.entity.i.Validation;
-
 /**
  * Contains a sitewide config parameter, key and value.
  * 

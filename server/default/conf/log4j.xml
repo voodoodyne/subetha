@@ -252,12 +252,12 @@
      <priority value="INFO" />
      <appender-ref ref="TRAP_LOG"/>
    </category>
+-->
   
 
    <category name="org.tigris.subetha">
      <priority value="DEBUG" />
    </category>
--->
    
    <!-- ======================= -->
    <!-- Setup the Root category -->

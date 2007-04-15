@@ -42,7 +42,7 @@ public class AuthRedirect extends AutoLogin
 			if (redir != null)
 				loc = loc + redir;
 			else
-				loc = loc + "home.jsp";
+				loc = loc + "/home.jsp";
 
 			throw new RedirectException(this.getCtx().getResponse().encodeRedirectURL(loc));
 		}

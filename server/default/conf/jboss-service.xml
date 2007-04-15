@@ -228,7 +228,7 @@
       <!-- The call by value mode. true if all lookups are unmarshalled using
       the caller's TCL, false if in VM lookups return the value by reference.
       -->
-      <attribute name="CallByValue">true</attribute>
+      <attribute name="CallByValue">false</attribute>
       <!-- The listening port for the bootstrap JNP service. Set this to -1
         to run the NamingService without the JNP invoker listening port.
       -->

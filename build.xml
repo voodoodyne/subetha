@@ -465,7 +465,7 @@
 	<target name="dist" depends="init-dist, cleandeploy">
 		<copy todir="${build.dir}/${dist.name}/jboss">
 			<fileset dir="${jboss.dir}">
-				<exclude name="**/velocity.log" />
+				<exclude name="**/velocity.log*" />
 				<exclude name="**/log/**" />
 				<exclude name="**/tmp/**" />
 				<exclude name="**/work/**" />

@@ -472,6 +472,7 @@
 				<exclude name="**/data/**" />
 			</fileset>
 		</copy>
+		<chmod dir="${build.dir}/${dist.name}/jboss/bin" perm="ugo+rx" includes="**/*.sh"/>
 		<copy todir="${build.dir}/${dist.name}/">
 			<fileset dir=".">
 				<include name="README.html" />

@@ -38,6 +38,38 @@ public class Smtp extends Wiser
 		this.setPort(PORT);
 	}
 
+	/** Take care of futzing the server side smtp config */
+	@Override
+	public void start()
+	{
+		super.start();
+		
+		String host = System.getProperty("org.subethamail.smtp.host");
+		if (host == null)
+			host = "localhost";
+		
+		try
+		{
+			AdminMixin god = new AdminMixin();
+			god.getPlumber().overrideSmtpServer(host + ":" + PORT);
+		}
+		catch (Exception ex) { throw new RuntimeException(ex); }
+	}
+
+	/** Take care of futzing the server side smtp config */
+	@Override
+	public void stop()
+	{
+		try
+		{
+			AdminMixin god = new AdminMixin();
+			god.getPlumber().restoreStmpServer();
+		}
+		catch (Exception ex) { throw new RuntimeException(ex); }
+		
+		super.stop();
+	}
+	
 	/** */
 	public int size()
 	{

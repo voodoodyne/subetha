@@ -70,6 +70,7 @@
 			<include name="${smtp.jar}"/>
 			<include name="${mina-core.jar}"/>
 			<include name="${lucene-core.jar}"/>
+			<include name="${jdom.jar}"/>
 		</fileset>
 
 		<path refid="jboss.classpath" />
@@ -223,6 +224,7 @@
 				<include name="${smtp.jar}"/>
 				<include name="${lucene-core.jar}"/>
 				<include name="${commons-beanutils.jar}"/>
+				<include name="${jdom.jar}"/>
 
 				<!-- MINA and it's deps -->
 				<include name="${mina-core.jar}"/>

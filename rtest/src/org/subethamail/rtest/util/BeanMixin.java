@@ -20,6 +20,8 @@ import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.AdminRemote;
 import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.core.admin.i.ListWizardRemote;
+import org.subethamail.core.admin.i.Plumber;
+import org.subethamail.core.admin.i.PlumberRemote;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.lists.i.Archiver;
@@ -51,6 +53,7 @@ public class BeanMixin
 	private Indexer indexer;
 	private Injector injector;
 	private Archiver archiver;
+	private Plumber plumber;
 	
 	
 	/** */
@@ -64,6 +67,7 @@ public class BeanMixin
 		this.indexer = (Indexer)ctx.lookup(IndexerRemote.JNDI_NAME);
 		this.injector = (Injector)ctx.lookup(InjectorRemote.JNDI_NAME);
 		this.archiver = (Archiver)ctx.lookup(ArchiverRemote.JNDI_NAME);
+		this.plumber = (Plumber)ctx.lookup(PlumberRemote.JNDI_NAME);
 	}
 	
 	/** If this is null, clears all credentials */
@@ -137,5 +141,12 @@ public class BeanMixin
 	{
 		this.establish();
 		return this.archiver;
+	}
+	
+	/** */
+	public Plumber getPlumber()
+	{
+		this.establish();
+		return this.plumber;
 	}
 }

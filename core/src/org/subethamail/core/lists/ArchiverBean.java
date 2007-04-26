@@ -362,6 +362,8 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					
 					fromLine = line;
 					envelopeSender = MailUtils.getMboxFrom(fromLine);
+					if (envelopeSender == null)
+						continue;
 					buf = new ByteArrayOutputStream();
 				}
 				else if (buf != null)

@@ -7,7 +7,6 @@ package org.subethamail.web.action.auth;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.web.Backend;
 import org.tagonist.RedirectException;
 
 /**
@@ -31,20 +30,13 @@ public class AuthRedirect extends AutoLogin
 	{
 		if (this.isLoggedIn())
 		{
-			String loc = null;
-			String siteUrl = Backend.instance().getAdmin().getDefaultSiteUrl().toString();
-			if ("http://needsconfiguration/se/".equals(siteUrl))
-				loc = this.getCtx().getRequest().getContextPath();
-			else
-				loc = siteUrl;
-
 			String redir = this.getActionParam("dest");
 			if (redir != null)
-				loc = loc + redir;
+				throw new RedirectException(redir);
 			else
-				loc = loc + "/home.jsp";
-
-			throw new RedirectException(this.getCtx().getResponse().encodeRedirectURL(loc));
+				throw new RedirectException(
+						this.getCtx().getResponse().encodeRedirectURL(
+								this.getCtx().getRequest().getContextPath() + "/home.jsp"));
 		}
 	}
 }

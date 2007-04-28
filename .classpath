@@ -22,7 +22,6 @@
 	<classpathentry kind="lib" path="lib/lucene-core-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/mina-core-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/subetha-smtp.jar"/>
-	<classpathentry kind="lib" path="lib/velocity-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/tagonist.jar"/>
 	<classpathentry kind="lib" path="lib/standard.jar"/>
 	<classpathentry kind="lib" path="lib/jstl.jar"/>
@@ -31,6 +30,7 @@
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/subetha-wiser.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/velocity-1.5.jar"/>
 	<classpathentry kind="src" path="entity/src"/>
 	<classpathentry kind="src" path="core/src"/>
 	<classpathentry kind="src" path="plugin/src"/>

@@ -221,6 +221,7 @@
 			
 			<fileset dir="${base.dir}/lib/">
 				<include name="${velocity.jar}"/>
+				<include name="${commons-lang.jar}"/>
 				<include name="${smtp.jar}"/>
 				<include name="${lucene-core.jar}"/>
 				<include name="${commons-beanutils.jar}"/>

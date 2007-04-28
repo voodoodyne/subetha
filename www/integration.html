@@ -231,7 +231,15 @@ list@whichever.com		list@subetha.whichever.com
 		<a name="sendmail"></a>
 		<h2>Sendmail</h2>
 		<p>
-			Want to write this?
+			<ol>
+			<li><p>Add your domain to access file:</p>
+			<pre>DOMAIN.COM RELAY</pre></li>
+			<li><p>Add a mailertable in mailertable file:</p>
+			<pre>DOMAIN.COM smtp:[IP]:PORT</pre></li>
+			<li><p>Rehash the files:</p>
+			<pre>makemap hash /etc/mail/access < /etc/mail/access</pre>
+			<pre>makemap hash /etc/mail/mailertable < /etc/mail/mailertable</pre></li>
+			</ol>
 		</p>
 		
 		<a name="exim"></a>
@@ -293,7 +301,15 @@ subetha:
 		<a name="qmail"></a>
 		<h2>Qmail</h2>
 		<p>
-			Want to write this?
+			<ol>
+			<li><p>Create a file under /var/qmail/control named smtproutes and with the content:</p>
+			<pre>domain.com:[IP MACHINE]:PORT</pre>
+			
+			<p>In my setup, the file looks like:</p>
+			<pre>domain.com:[127.0.0.1]:2500</pre></li>
+			
+			<li>Restart Qmail.</li>
+			</ol>
 		</p>
 		
 		<a name="exchange"></a>

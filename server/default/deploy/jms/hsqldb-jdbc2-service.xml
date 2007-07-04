@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- $Id: hsqldb-jdbc2-service.xml 38669 2005-12-02 02:51:48Z adrian $ -->
 
 <server>
 
   <!-- ==================================================================== -->
-  <!-- Persistence and caching                                  -->
+  <!-- Persistence and caching using HSQLDB                                 -->
   <!-- See docs/examples/jms for other configurations                       -->
   <!-- ==================================================================== -->
 
@@ -35,16 +36,22 @@
     <attribute name="CacheStore">jboss.mq:service=PersistenceManager</attribute>
   </mbean>
 
-
   <!-- 
      | The jdbc2 PersistenceManager is the new improved JDBC implementation.
      | This implementation allows you to control how messages are stored in 
      | the database.
-     | 
-     | This jdbc2 PM configuration has been tested against HSQLDB. 
-     | If you selected datasource which is not HSQLDB, you may need to change these SQL depending on your 
-     | Database
-     | 
+     |
+     | Use this PM if you want the reliablity a relational database can offer
+     | you.  The default configuration is known to work with hsqldb, other
+     | databases will requrie teaking of the SqlProperties e.g. changing table
+     | colum definitions to database supported types.
+     |
+     | Take care that the selected blob column type in jms_messages can store
+     | all message data. Some databases (e.g. mySQL) offer blob types with
+     | different maximum capacity (e.g. mySQL-type BLOB=64K, LONGBLOB=2G).
+     |
+     | If you encouter problems with the configured BLOB_TYPE try a different
+     | setting. Valid settings are OBJECT_BLOB, BINARYSTREAM_BLOB and BYTES_BLOB.
    -->
   <mbean code="org.jboss.mq.pm.jdbc2.PersistenceManager"
 	 name="jboss.mq:service=PersistenceManager">
@@ -81,6 +88,5 @@
     <!-- The number of blobs to load at once during message recovery -->
     <attribute name="RecoverMessagesChunk">0</attribute>
   </mbean>
-
  
 </server>

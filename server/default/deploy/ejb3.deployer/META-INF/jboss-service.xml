@@ -2,12 +2,11 @@
 <!--
    JBoss EJB3Deployer
    
-   $Id: jboss-service.xml 44799 2006-05-11 04:18:48Z bill $
+   $Id: jboss-service.xml 61039 2007-03-02 01:17:31Z bdecoste $
 -->
 <server>
 
    <mbean code="org.jboss.remoting.transport.Connector"
-          xmbean-dd="org/jboss/remoting/transport/Connector.xml"
           name="jboss.remoting:type=Connector,name=DefaultEjb3Connector,handler=ejb3">
       <depends>jboss.aop:service=AspectDeployer</depends>
       <attribute name="InvokerLocator">socket://${jboss.bind.address}:3873</attribute>
@@ -103,6 +102,8 @@
 
    <mbean code="org.jboss.ejb3.EJB3Deployer" name="jboss.ejb3:service=EJB3Deployer" xmbean-dd="">
 
+      <attribute name="DeployEjb3ExtensionOnly">false</attribute>
+
       <!-- Inline XMBean Descriptor BEGIN -->
       <xmbean>
          <description>The EJB3Deployer responsible for ejb3 deployment</description>
@@ -156,6 +157,12 @@
          <attribute access="read-only" getMethod="getDefaultProperties">
             <name>DefaultProperties</name>
             <type>java.util.Properties</type>
+         </attribute>
+
+         <attribute access="read-write" getMethod="getDeployEjb3ExtensionOnly" setMethod="setDeployEjb3ExtensionOnly">
+            <description>If true, .jars will not be examined for annotations, 3.0 descriptors</description>
+            <name>DeployEjb3ExtensionOnly</name>
+            <type>boolean</type>
          </attribute>
 
          <attribute access="write-only" setMethod="setJarsIgnoredForScanning">

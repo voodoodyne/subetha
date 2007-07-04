@@ -1,4 +1,4 @@
-<!-- $Id: jsr88-service.xml 34537 2005-08-03 17:41:18Z starksm $
+<!-- $Id: jsr88-service.xml 60132 2007-01-31 12:43:12Z thomas.diesler@jboss.com $
 The JSR-88 DeploymentManager support services
 -->
 <server>
@@ -11,5 +11,9 @@ The JSR-88 DeploymentManager support services
       <attribute name="CARDeployer">jboss.j2ee:service=ClientDeployer</attribute>
       <attribute name="UploadDir">${jboss.server.temp.dir}/jsr88</attribute>
       <depends optional-attribute-name="MainDeployer">jboss.system:service=MainDeployer</depends>
+      <!-- If false, the an existing deployment may exist in the upload dir  -->
+      <attribute name="FailOnCollision">false</attribute>
+      <!-- If false, the deployment is retained in the upload dir -->
+      <attribute name="DeleteOnUndeploy">false</attribute>
    </mbean>
 </server>

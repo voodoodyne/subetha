@@ -4,7 +4,7 @@
    "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <!-- The http-invoker.sar/invoker.war web.xml descriptor
-web.xml.vm,v 1.1.2.1 2005/09/23 00:30:41 starksm Exp $
+$Id: web.xml 26202 2004-11-29 16:54:36Z starksm $
 -->
 <web-app>
     <filter>
@@ -33,7 +33,7 @@ web.xml.vm,v 1.1.2.1 2005/09/23 00:30:41 starksm Exp $
       <url-pattern>/readonly/*</url-pattern>
     </filter-mapping>
 
-<!-- Servlets -->
+<!-- ### Servlets -->
     <servlet>
         <servlet-name>EJBInvokerServlet</servlet-name>
         <description>The EJBInvokerServlet receives posts containing serlized
@@ -101,7 +101,7 @@ web.xml.vm,v 1.1.2.1 2005/09/23 00:30:41 starksm Exp $
        <load-on-startup>2</load-on-startup>
    </servlet>
 
-<!-- Servlet Mappings -->
+<!-- ### Servlet Mappings -->
     <servlet-mapping>
         <servlet-name>JNDIFactory</servlet-name>
         <url-pattern>/JNDIFactory/*</url-pattern>
@@ -156,9 +156,6 @@ web.xml.vm,v 1.1.2.1 2005/09/23 00:30:41 starksm Exp $
             role HttpInvoker to access the HTTP invoker servlets
          </description>
          <url-pattern>/restricted/*</url-pattern>
-         <url-pattern>/JNDIFactory/*</url-pattern>
-         <url-pattern>/EJBInvokerServlet/*</url-pattern>
-         <url-pattern>/JMXInvokerServlet/*</url-pattern>
          <http-method>GET</http-method>
          <http-method>POST</http-method>
       </web-resource-collection>

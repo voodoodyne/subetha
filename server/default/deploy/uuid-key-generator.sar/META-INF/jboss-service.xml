@@ -6,7 +6,6 @@
 <!--                                                                       -->
 <!-- ===================================================================== -->
 
-
 <server>
 
   <!-- UUIDKeyGeneratorFactoryService -->
@@ -34,13 +33,9 @@
      <!-- Column that contains hi values -->
      <attribute name="IdColumnName">HIGHVALUES</attribute>
 
-     <!-- Create table DDL -->
+     <!-- Create table DDL - DDL should be in a single line without line breaks to work with DB2 7.2 -->
      <attribute name="CreateTableDdl">
-        create table HILOSEQUENCES (
-           SEQUENCENAME varchar(50) not null,
-           HIGHVALUES integer not null,
-           constraint hilo_pk primary key (SEQUENCENAME)
-        )
+        create table HILOSEQUENCES (SEQUENCENAME varchar(50) not null, HIGHVALUES integer not null, constraint hilo_pk primary key (SEQUENCENAME))
      </attribute>
 
      <!-- Uncomment to make it cluster-safe: Select current Hi value query (FOR UPDATE is recommended)

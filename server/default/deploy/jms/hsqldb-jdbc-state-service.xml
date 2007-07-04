@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--  hsqldb-jdbc-state-service.xml 23386 2004-09-03 21:38:12Z ejort  -->
-
+<!-- $Id: hsqldb-jdbc-state-service.xml 61572 2007-03-22 14:32:18Z adrian@jboss.org $ -->
 
 <server>
 
@@ -17,12 +16,12 @@
     <attribute name="SqlProperties">
       CREATE_TABLES_ON_STARTUP = TRUE
       CREATE_USER_TABLE = CREATE TABLE JMS_USERS (USERID VARCHAR(32) NOT NULL, PASSWD VARCHAR(32) NOT NULL, \
-                                                 CLIENTID VARCHAR(128), PRIMARY KEY(USERID))
+                                                 CLIENTID VARCHAR(128) NULL, PRIMARY KEY(USERID))
       CREATE_ROLE_TABLE = CREATE TABLE JMS_ROLES (ROLEID VARCHAR(32) NOT NULL, USERID VARCHAR(32) NOT NULL, \
                                                  PRIMARY KEY(USERID, ROLEID))
       CREATE_SUBSCRIPTION_TABLE = CREATE TABLE JMS_SUBSCRIPTIONS (CLIENTID VARCHAR(128) NOT NULL, \
                                                  SUBNAME VARCHAR(128) NOT NULL, TOPIC VARCHAR(255) NOT NULL, \
-                                                 SELECTOR VARCHAR(255), PRIMARY KEY(CLIENTID, SUBNAME))
+                                                 SELECTOR VARCHAR(255) NULL, PRIMARY KEY(CLIENTID, SUBNAME))
       GET_SUBSCRIPTION = SELECT TOPIC, SELECTOR FROM JMS_SUBSCRIPTIONS WHERE CLIENTID=? AND SUBNAME=?
       LOCK_SUBSCRIPTION = SELECT TOPIC, SELECTOR FROM JMS_SUBSCRIPTIONS WHERE CLIENTID=? AND SUBNAME=?
       GET_SUBSCRIPTIONS_FOR_TOPIC = SELECT CLIENTID, SUBNAME, SELECTOR FROM JMS_SUBSCRIPTIONS WHERE TOPIC=?

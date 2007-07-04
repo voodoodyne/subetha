@@ -1,6 +1,6 @@
 @echo off
 
-rem $Id: wstools.bat 499 2006-06-21 22:33:41Z jason.greene@jboss.com $
+rem $Id$
 
 @if not "%ECHO%" == ""  echo %ECHO%
 @if "%OS%" == "Windows_NT"  setlocal

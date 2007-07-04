@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id: schedule-manager-service.xml 46255 2006-07-13 19:53:58Z dimitris $ -->
+<!-- $Id: schedule-manager-service.xml 59789 2007-01-18 17:30:15Z dimitris@jboss.org $ -->
 
 <server>
 
    <!-- ==================================================================== -->
    <!-- Scheduler Service                                                    -->
    <!-- ==================================================================== -->
+   
+   <!--
+    | JDK5 javax.management.timer.Timer appears to be using a single
+    | threaded implementation for executing scheduled tasks.
+    | If you want to revert to the JBossMX timer implementation that
+    | uses a dynamically extensible thread pool to execute scheduled
+    | tasks, uncomment the JBossTimer service below. The Scheduler
+    | service will use this, instead of creating a new Timer.
+    - -> 
+   <mbean code="org.jboss.mx.timer.JBossTimer"
+          name="jboss:service=Timer">
+   </mbean>
+   <!- - -->
    
    <!--
     | This MBean is an example of a Schedule Target

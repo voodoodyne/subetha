@@ -3,7 +3,7 @@ rem -------------------------------------------------------------------------
 rem JBoss JVM Launcher
 rem -------------------------------------------------------------------------
 
-rem $Id: shutdown.bat 22783 2004-08-07 19:39:38Z starksm $
+rem $Id$
 
 if not "%ECHO%" == ""  echo %ECHO%
 if "%OS%" == "Windows_NT"  setlocal

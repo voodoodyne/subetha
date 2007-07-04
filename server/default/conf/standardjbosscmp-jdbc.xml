@@ -9,8 +9,7 @@
 <!--                                                                       -->
 <!-- ===================================================================== -->
 
-<!-- standardjbosscmp-jdbc.xml 41762 2006-03-06 14:39:33Z aloubyansky  -->
-
+<!-- $Id: standardjbosscmp-jdbc.xml 62388 2007-04-18 08:39:43Z alex.loubyansky@jboss.com $ -->
 
 <jbosscmp-jdbc>
 
@@ -1824,6 +1823,10 @@ Mapping proposed by Computer Associates, but does not work with JBoss properly
             <function-name>count</function-name>
             <function-sql>count(?1)</function-sql>
          </function-mapping>
+         <function-mapping>
+            <function-name>locate</function-name>
+            <function-sql>position(?1 IN ?2)</function-sql>
+         </function-mapping>
 
          <mapping>
             <java-type>java.lang.Character</java-type>
@@ -3024,6 +3027,22 @@ Mapping proposed by Computer Associates, but does not work with JBoss properly
                       class="org.jboss.ejb.plugins.cmp.jdbc2.PkSqlCreateCommand">
          <!-- change to define SQL used to obtain key prior to insert -->
          <attribute name="pk-sql">SELECT CURRENT_TIMESTAMP</attribute>
+      </entity-command>
+
+      <!-- retrieves generated key of the record inserted into hsql db for jdbc2 pm -->
+      <entity-command name="jdbc2pm-hsqldb-fetch-key"
+                      class="org.jboss.ejb.plugins.cmp.jdbc2.keygen.HsqldbCreateCommand">
+         <!-- uncomment to change SQL statement used to obtain identity
+         <attribute name="pk-sql">CALL IDENTITY()</attribute>
+         -->
+      </entity-command>
+
+      <!-- retrieves the currval of the the sequence associated with a PostgreSQL SERIAL column for jdbc2 pm -->
+      <entity-command name="jdbc2pm-postgresql-fetch-seq"
+                      class="org.jboss.ejb.plugins.cmp.jdbc2.keygen.PostgreSQLCreateCommand">
+         <!-- uncomment to change the name of the sequence; default is ${table}_${pkColumn}_seq
+         <attribute name="sequence"></attribute>
+         -->
       </entity-command>
    </entity-commands>
 

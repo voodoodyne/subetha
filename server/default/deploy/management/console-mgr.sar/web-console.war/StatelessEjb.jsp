@@ -1,11 +1,10 @@
 <%@ taglib uri="/webconsole" prefix="jb" %>
 <jb:mbean id="ejb" intf="org.jboss.management.j2ee.StatelessSessionBeanMBean" />
-<jb:mbean id="container" mbean='<%="jboss.j2ee:service=EJB,jndiName=" + (new javax.management.ObjectName(request.getParameter("ObjectName")).getKeyProperty ("name"))%>' intf="org.jboss.ejb.ContainerMBean" />
+<jb:mbean id="container" mbean='<%=request.getParameter("ContainerObjectName")%>' intf="org.jboss.ejb.ContainerMBean" />
 <%
    String ejbName = new javax.management.ObjectName(request.getParameter("ObjectName")).getKeyProperty ("name");
    String ejbModule = new javax.management.ObjectName(request.getParameter("ObjectName")).getKeyProperty ("EJBModule");
-   String containerUrl = "jboss.j2ee:service=EJB,jndiName=" + ejbName;
-   containerUrl = java.net.URLEncoder.encode(containerUrl);
+   String containerUrl = java.net.URLEncoder.encode(request.getParameter("ContainerObjectName"));
    containerUrl = "../jmx-console/HtmlAdaptor?action=inspectMBean&name=" + containerUrl;
 
    org.jboss.invocation.InvocationStatistics invokeStats= container.getInvokeStats ();
@@ -21,9 +20,12 @@
    	 invokeStats.resetStats ();
    }
 
-   String resetUrl = response.encodeURL(request.getRequestURI()) + "?doReset=true&ObjectName=" + java.net.URLEncoder.encode(request.getParameter("ObjectName"));
-   String resetInvocUrl = response.encodeURL(request.getRequestURI()) + "?doResetInvoc=true&ObjectName=" + java.net.URLEncoder.encode(request.getParameter("ObjectName"));
-   String myUrl = response.encodeURL(request.getRequestURI()) + "?" + "&ObjectName=" + java.net.URLEncoder.encode(request.getParameter("ObjectName"));
+   String parameters = "&ObjectName=" + java.net.URLEncoder.encode(request.getParameter("ObjectName"));
+   parameters = parameters + "&ContainerObjectName=" + java.net.URLEncoder.encode(request.getParameter("ContainerObjectName"));
+   
+   String resetUrl = response.encodeURL(request.getRequestURI()) + "?doReset=true" + parameters;
+   String resetInvocUrl = response.encodeURL(request.getRequestURI()) + "?doResetInvoc=true" + parameters;
+   String myUrl = response.encodeURL(request.getRequestURI()) + "?" + parameters;
    org.jboss.metadata.BeanMetaData beanMetaData = container.getBeanMetaData();
 
 %>

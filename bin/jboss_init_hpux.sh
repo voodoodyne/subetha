@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: jboss_init_hpux.sh 57105 2006-09-23 14:09:27Z dimitris@jboss.org $
+# $Id$
 #
 # JBoss Control Script for HP-UX
 #

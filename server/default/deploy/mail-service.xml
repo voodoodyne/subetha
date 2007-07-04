@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE server>
-<!-- $Id: mail-service.xml 31716 2005-06-01 06:20:43Z starksm $ -->
-
+<!-- $Id: mail-service.xml 62349 2007-04-15 16:48:15Z dimitris@jboss.org $ -->
 <server>
 
   <!-- ==================================================================== -->
@@ -14,30 +12,32 @@
     <attribute name="User">nobody</attribute>
     <attribute name="Password">password</attribute>
     <attribute name="Configuration">
-       <!-- Test -->
-       <configuration>
-          <!-- Change to your mail server prototocol -->
-          <property name="mail.store.protocol" value="pop3"/>
-          <property name="mail.transport.protocol" value="smtp"/>
+      <!-- A test configuration -->
+      <configuration>
+        <!-- Change to your mail server prototocol -->
+        <property name="mail.store.protocol" value="pop3"/>
+        <property name="mail.transport.protocol" value="smtp"/>
 
-          <!-- Change to the user who will receive mail  -->
-          <property name="mail.user" value="nobody"/>
+        <!-- Change to the user who will receive mail  -->
+        <property name="mail.user" value="nobody"/>
 
-          <!-- Change to the mail server  -->
-          <property name="mail.pop3.host" value="pop3.nosuchhost.nosuchdomain.com"/>
+        <!-- Change to the mail server  -->
+        <property name="mail.pop3.host" value="pop3.nosuchhost.nosuchdomain.com"/>
 
-          <!-- Change to the SMTP gateway server -->
-          <property name="mail.smtp.host" value="localhost"/>
-          <property name="mail.smtp.port" value="2525"/>
+        <!-- Change to the SMTP gateway server -->
+        <property name="mail.smtp.host" value="localhost"/>
+        
+        <!-- The mail server port -->
+        <property name="mail.smtp.port" value="2525"/>
+        
+        <!-- Change to the address mail will be from  -->
+        <property name="mail.from" value="nobody@nosuchhost.nosuchdomain.com"/>
 
-          <!-- Change to the address mail will be from  -->
-          <property name="mail.from" value="nobody@nosuchhost.nosuchdomain.com"/>
-
-          <!-- Enable debugging output from the javamail classes -->
-          <property name="mail.debug" value="false"/>
-       </configuration>
-       <depends>jboss:service=Naming</depends>
+        <!-- Enable debugging output from the javamail classes -->
+        <property name="mail.debug" value="false"/>
+      </configuration>
     </attribute>
+    <depends>jboss:service=Naming</depends>
   </mbean>
 
 </server>

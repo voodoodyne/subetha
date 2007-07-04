@@ -24,6 +24,11 @@ public class RoleData implements Serializable
 	Set<Permission> permissions;
 	Long listId;
 	
+	protected RoleData()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/**
 	 */
 	public RoleData(Long id, String name, boolean owner, Set<Permission> permissions, Long listId)

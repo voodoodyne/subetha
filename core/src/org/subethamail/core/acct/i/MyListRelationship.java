@@ -27,6 +27,11 @@ public class MyListRelationship implements Serializable
 	boolean subscribed;
 	String deliverTo;
 	
+	protected MyListRelationship()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0		
+	}
+
 	/**
 	 */
 	public MyListRelationship(

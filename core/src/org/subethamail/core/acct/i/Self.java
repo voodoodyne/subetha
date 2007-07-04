@@ -17,10 +17,15 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class Self extends PersonData
 {
-	List<SubscribedList> subscriptions;
+	protected List<SubscribedList> subscriptions;
 	
 	/** */
 	boolean siteAdmin;
+
+	protected Self()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
 
 	/**
 	 */

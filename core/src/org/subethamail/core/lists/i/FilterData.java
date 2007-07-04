@@ -24,6 +24,11 @@ public class FilterData implements Serializable
 	String description;
 	FilterParameter[] parameters;
 
+	protected FilterData()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/**
 	 */
 	public FilterData(String className, String name, String description, FilterParameter[] parameters)

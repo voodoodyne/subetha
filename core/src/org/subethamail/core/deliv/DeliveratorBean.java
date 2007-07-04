@@ -23,6 +23,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ws.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
@@ -45,7 +46,8 @@ import org.subethamail.entity.Subscription;
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
 @WebService(name="Deliverator", targetNamespace="http://ws.subethamail.org/", serviceName="DeliveratorService")
-@SOAPBinding(style=SOAPBinding.Style.RPC)
+@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+@WebContext(contextRoot="/subetha")
 public class DeliveratorBean extends EntityManipulatorBean implements Deliverator, DeliveratorRemote
 {
 	/** */

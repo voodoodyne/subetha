@@ -22,6 +22,11 @@ public class AuthSubscribeResult extends AuthCredentials
 	SubscribeResult result;
 	Long listId;
 	
+	protected AuthSubscribeResult()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/** */
 	public AuthSubscribeResult(Long id, String prettyName, String password, Set<String> roles, SubscribeResult result, Long listId)
 	{

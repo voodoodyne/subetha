@@ -21,6 +21,11 @@ public class Filters implements Serializable
 	List<FilterData> available;
 	List<EnabledFilterData> enabled;
 	
+	protected Filters()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/**
 	 */
 	public Filters(List<FilterData> available, List<EnabledFilterData> enabled)

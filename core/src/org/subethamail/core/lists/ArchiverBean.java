@@ -42,6 +42,7 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ws.annotation.WebContext;
 import org.subethamail.common.ExportMessagesException;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.MailUtils;
@@ -86,7 +87,8 @@ import com.sun.mail.util.LineInputStream;
 @PermitAll
 @RunAs("siteAdmin")
 @WebService(name="Archiver", targetNamespace="http://ws.subethamail.org/", serviceName="ArchiverService")
-@SOAPBinding(style=SOAPBinding.Style.RPC)
+@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+@WebContext(contextRoot="/subetha")
 public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemote
 {
 	@EJB Deliverator deliverator;

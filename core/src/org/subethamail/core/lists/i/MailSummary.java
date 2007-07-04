@@ -27,6 +27,11 @@ public class MailSummary implements Serializable
 	Date sentDate;
 	List<MailSummary> replies;
 
+	protected MailSummary()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/**
 	 */
 	public MailSummary(

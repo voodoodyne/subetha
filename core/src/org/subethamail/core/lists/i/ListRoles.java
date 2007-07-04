@@ -21,6 +21,11 @@ public class ListRoles implements Serializable
 	RoleData anonymousRole;
 	List<RoleData> roles;
 	
+	protected ListRoles()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/**
 	 */
 	public ListRoles(Long listId, RoleData defaultRole, RoleData anonymousRole, List<RoleData> roles)

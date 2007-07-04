@@ -24,6 +24,11 @@ public class SubscriberData extends PersonData
 	Date dateSubscribed;
 	String note;	// will be null if you don't have permission to see it
 	
+	protected SubscriberData()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/**
 	 */
 	public SubscriberData(

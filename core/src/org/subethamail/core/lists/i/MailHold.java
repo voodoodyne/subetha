@@ -22,6 +22,11 @@ public class MailHold implements Serializable
 	Date date;
 	boolean hard;
 
+	protected MailHold()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/**
 	 */
 	public MailHold(

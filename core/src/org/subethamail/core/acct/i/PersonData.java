@@ -21,6 +21,11 @@ public class PersonData implements Serializable
 	protected List<String> emailAddresses;
 	protected boolean isSiteAdmin = false;
 	
+	protected PersonData()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0		
+	}
+
 	public PersonData(Long id, String name, List<String> emailAddresses)
 	{
 		this.id = id;

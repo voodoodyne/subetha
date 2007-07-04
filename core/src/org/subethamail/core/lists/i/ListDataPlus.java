@@ -17,7 +17,12 @@ public class ListDataPlus extends ListData
 {
 	int subscriberCount;
 	int messageCount;
-	
+
+	protected ListDataPlus()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/**
 	 */
 	public ListDataPlus(Long id, 

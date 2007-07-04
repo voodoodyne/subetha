@@ -38,7 +38,7 @@ public class ExceptionUtils
 			if (t instanceof ServletException)
 				t = ((ServletException)t).getRootCause();
 			else if (t instanceof JspException)
-				t = ((JspException)t).getRootCause();
+				t = ((JspException)t).getCause();
 			else
 				t = t.getCause();
 		}

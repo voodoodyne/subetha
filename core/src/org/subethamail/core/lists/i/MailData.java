@@ -23,6 +23,10 @@ public class MailData extends MailSummary
 	List<AttachmentPartData> attachmentParts;
 	MailSummary threadRoot;
 	
+	protected MailData()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
 	
 	/**
 	 */

@@ -29,6 +29,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ws.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
@@ -71,7 +72,8 @@ import org.subethamail.entity.i.PermissionException;
 @PermitAll
 @RunAs("siteAdmin")
 @WebService(name="ListMgr", targetNamespace="http://ws.subethamail.org/", serviceName="ListMgrService")
-@SOAPBinding(style=SOAPBinding.Style.RPC)
+@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+@WebContext(contextRoot="/subetha")
 public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 {
 	/** */
@@ -398,7 +400,6 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setFilter(java.lang.Long, java.lang.String, java.util.Map)
 	 */
-	@WebMethod
 	public void setFilter(Long listId, String className, Map<String, Object> args) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);

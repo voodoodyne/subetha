@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.jboss.security.SimplePrincipal;
+import org.jboss.ws.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
@@ -67,7 +68,8 @@ import org.subethamail.entity.i.PermissionException;
 @SecurityDomain("subetha")
 @RolesAllowed("siteAdmin")
 @WebService(name="Admin", targetNamespace="http://ws.subethamail.org/", serviceName="AdminService")
-@SOAPBinding(style=SOAPBinding.Style.RPC)
+@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+@WebContext(contextRoot="/subetha")
 public class AdminBean extends PersonalBean implements Admin, AdminRemote
 {
 	/** */

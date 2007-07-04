@@ -25,6 +25,11 @@ public class ListData implements Serializable, Comparable
 	String urlBase;
 	String ownerEmail;
 	
+	protected ListData()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/**
 	 */
 	public ListData(Long id, 

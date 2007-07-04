@@ -22,6 +22,11 @@ public class EnabledFilterData extends FilterData
 	Long listId;
 	Map<String, Object> arguments;
 
+	protected EnabledFilterData()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/**
 	 */
 	public EnabledFilterData(

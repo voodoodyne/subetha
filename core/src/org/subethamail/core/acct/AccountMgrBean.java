@@ -23,6 +23,7 @@ import javax.security.auth.login.FailedLoginException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ws.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AccountMgrRemote;
@@ -53,7 +54,8 @@ import org.subethamail.entity.Subscription;
 @RolesAllowed("user")
 @RunAs("siteAdmin")
 @WebService(name="AccountMgr", targetNamespace="http://ws.subethamail.org/", serviceName="AccountMgrService")
-@SOAPBinding(style=SOAPBinding.Style.RPC)
+@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+@WebContext(contextRoot="/subetha")
 public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountMgrRemote
 {
 	/** */

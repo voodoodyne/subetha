@@ -21,6 +21,11 @@ public class SearchResult implements Serializable
 	int total;
 	List<SearchHit> hits;
 	
+	protected SearchResult()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/** */
 	public SearchResult(int total, List<SearchHit> hits)
 	{

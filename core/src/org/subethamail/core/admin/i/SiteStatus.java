@@ -28,6 +28,11 @@ public class SiteStatus implements Serializable
 	URL defaultSiteUrl;
 	InternetAddress postmasterEmail;
 	
+	protected SiteStatus()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/** */
 	public SiteStatus(String encoding, int listCount, int personCount, int mailCount,
 						URL defaultSiteUrl, InternetAddress postmasterEmail)

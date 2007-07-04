@@ -25,6 +25,11 @@ public class AuthCredentials implements Serializable
 	String password;
 	Set<String> roles;
 	
+	protected AuthCredentials()
+	{
+		// http://forums.java.net/jive/thread.jspa?threadID=26539&tstart=0
+	}
+
 	/** */
 	public AuthCredentials(Long id, String prettyName, String password, Set<String> roles)
 	{

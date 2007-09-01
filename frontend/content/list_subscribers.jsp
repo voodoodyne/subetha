@@ -127,6 +127,11 @@ st1.onsort = st1.tableRowColors;
 			</c:url>
 			<small><a href="${showAllURL}">show all</a></small>
 
+			<c:url var="printableURL" value="/list_subscribers_print.jsp">
+				<c:param name="listId" value="${model.listId}"/>
+				<c:param name="query" value="${model.query}"/>
+			</c:url>
+			<small><a href="${printableURL}" target="printable">printable</a></small>
 		</c:otherwise>
 	</c:choose>
 </trim:list>

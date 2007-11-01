@@ -42,7 +42,7 @@ import javax.mail.internet.MimeMessage.RecipientType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
-import org.jboss.ws.annotation.WebContext;
+import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.ExportMessagesException;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.MailUtils;

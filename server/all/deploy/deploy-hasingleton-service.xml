@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: deploy-hasingleton-service.xml 61770 2007-03-28 02:42:24Z bstansberry@jboss.com $ -->
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  This service ensures that exactly one node in the cluster            -->
+<!--  deploys the services under "deploy-hasingleton" 			   -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<server>
+  
+   <!--
+    |
+    | Use the deployer service on the singleton node. 
+    |
+   -->
+   <mbean code="org.jboss.ha.singleton.HASingletonController" 
+          name="jboss.ha:service=HASingletonDeployer">
+      <!-- We now inject the partition into the HAJNDI service instead
+           of requiring that the partition name be passed -->
+      <depends optional-attribute-name="ClusterPartition"
+         proxy-type="attribute">jboss:service=${jboss.partition.name:DefaultPartition}</depends>  
+      <depends optional-attribute-name="TargetName">jboss.system:service=MainDeployer</depends>
+      <attribute name="TargetStartMethod">deploy</attribute>
+      <attribute name="TargetStartMethodArgument">${jboss.server.home.url}/deploy-hasingleton</attribute>
+      <attribute name="TargetStopMethod">undeploy</attribute>
+      <attribute name="TargetStopMethodArgument">${jboss.server.home.url}/deploy-hasingleton</attribute>
+      
+      <!-- Whether the singleton should be restarted (i.e. invoke the TargetStopMethod and then the
+           TargetStartMethod) if a cluster merge occurs while this node is the singleton master.
+           A cluster merge means there may have been more than one singleton masters during the period
+           when communication between some or all of the nodes in the cluster was disrupted; hence the  
+           surviving master may not be aware of state changes made by another master. Restarting the 
+           singleton gives it a signal that it should refresh its internal state from any external 
+           store.  
+           
+           By default this is set to true, as HA-JMS should re-establish state from its persistent
+           store if a cluster merge occurs.
+      -->
+      <attribute name="RestartOnMerge">true</attribute>
+   </mbean>
+
+   <!--
+    | A BarrierController that controls the lifecycle of a Barrier mbean
+    | based on notifications received by the HASingletonController above.
+    |
+    | Services deployed normally inside ./deploy or ./farm that want to be
+    | started/stopped whenever the content of ./deploy-hasingleton/ gets
+    | deployed/undeployed, or else, whenever the current node becomes the
+    | master, need only specify a dependency on the Barrier:
+    |
+    |    <depends>jboss.ha:service=HASingletonDeployer,type=Barrier</depends>
+    |
+    | With this setup the Barrier and all services that depend on it
+    | will be started *after* the content of deploy-hasingleton is deployed.
+    | To change this, just use the following enabled notification types:
+    |
+    |    <enable type="org.jboss.ha.singleton.starting"/>
+    |    <enable type="org.jboss.ha.singleton.stopped"/>
+   -->
+   <mbean code="org.jboss.system.BarrierController"
+          name="jboss.ha:service=HASingletonDeployer,type=BarrierController">
+    
+      <!-- Dependent services will depend on this mbean -->
+      <attribute name="BarrierObjectName">jboss.ha:service=HASingletonDeployer,type=Barrier</attribute>
+    
+      <!-- Whether to subscribe for notifications after startup -->
+      <attribute name="DynamicSubscriptions">false</attribute>    
+      <!-- The notification subscription handback that starts the barrier -->
+      <attribute name="StartBarrierHandback">start</attribute>
+      <!-- The notification subscription handback that stops the barrier -->
+      <attribute name="StopBarrierHandback">stop</attribute>
+    
+      <!-- The notifications to subscribe for, along with their handbacks -->
+      <attribute name="SubscriptionList">
+         <subscription-list>
+            <mbean name="jboss.ha:service=HASingletonDeployer" handback="start">
+               <filter factory="NotificationFilterSupportFactory">
+                  <enable type="org.jboss.ha.singleton.started"/>
+               </filter>
+            </mbean>
+            <mbean name="jboss.ha:service=HASingletonDeployer" handback="stop">
+               <filter factory="NotificationFilterSupportFactory">
+                  <enable type="org.jboss.ha.singleton.stopping"/>
+               </filter>
+            </mbean>        
+         </subscription-list>
+      </attribute>
+   </mbean>
+   
+</server>

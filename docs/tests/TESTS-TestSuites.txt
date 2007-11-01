@@ -1,0 +1,44 @@
+
+
+JBoss daily test results
+
+SUMMARY
+
+Number of tests run:   4119
+
+--------------------------------------------
+
+Successful tests:      4119
+
+Errors:                0
+
+Failures:              0
+
+--------------------------------------------
+
+
+
+[time of test: 2007-05-11.22-14 GMT]
+[java.version: 1.5.0_11]
+[java.vendor: Sun Microsystems Inc.]
+[java.vm.version: 1.5.0_11-b03]
+[java.vm.name: Java HotSpot(TM) Server VM]
+[java.vm.info: mixed mode]
+[os.name: Linux]
+[os.arch: i386]
+[os.version: 2.6.9-55.ELsmp]
+
+Useful resources:
+
+- http://jboss.sourceforge.net/junit-results/32/2007-05-11.22-14 for
+the junit report of this test.
+
+
+NOTE: If there are any errors shown above - this mail is only highlighting 
+them - it is NOT indicating that they are being looked at by anyone.
+
+It is assumed that whoever makes change(s) to jboss that 
+break the test will be fixing the test or jboss, as appropriate!
+
+--------------------------------------------
+

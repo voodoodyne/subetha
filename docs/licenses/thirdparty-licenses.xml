@@ -1,0 +1,607 @@
+<thirdparty-licenses>	<module name='jboss/jaxr'
+		licenseType='lgpl'
+		version='1.2.0.GA'
+		projectHome='null'
+		description='JBoss JAXR implementation'>
+		<jar name='juddi-service.sar' />
+		<jar name='juddi-saaj.jar' />
+	</module>
+	<module name='apache-digester'
+		licenseType='apache-2.0'
+		version='1.7-brew'
+		projectHome='http://jakarta.apache.org/commons/digester/'
+		description='XML to Java object mapping module'>
+		<jar name='commons-digester.jar' />
+	</module>
+	<module name='jboss/jbossts14'
+		licenseType='lgpl'
+		version='4.2.3.SP3'
+		projectHome='http://labs.jboss.com/portal/jbosstm'
+		description='JBoss Transaction Service'>
+		<jar name='jbossjta.jar' />
+		<jar name='jbossjta-integration.jar' />
+		<jar name='jbossts-common.jar' />
+		<jar name='jbossjta-properties.xml' />
+	</module>
+	<module name='apache-collections'
+		licenseType='apache-2.0'
+		version='3.1-brew'
+		projectHome='http://jakarta.apache.org/commons/collections/'
+		description='Extensions to java.util type of collections'>
+		<jar name='commons-collections.jar' />
+	</module>
+	<module name='apache-velocity'
+		licenseType='apache-2.0'
+		version='1.4jboss-brew'
+		projectHome='http://jakarta.apache.org/velocity'
+		description='Velocity is a Java-based template engine.               This jboss patch allows ',' and ':' characters to be in a               variable character set to work around the problem that velocity               has no way to escape ${x:y} and ${x,y:z} constructs that should               just pass through the template engine unchanged'>
+		<jar name='velocity.jar' />
+	</module>
+	<module name='qdox'
+		licenseType='ironsmith'
+		version='1.6.1-brew'
+		projectHome='http://qdox.codehaus.org/'
+		description='Parser for extracting class/interface/method definitions from source files complete with JavaDoc @tags.'>
+		<jar name='qdox.jar' />
+	</module>
+	<module name='apache-avalon'
+		licenseType='apache-1.1'
+		version='4.1.5-brew'
+		projectHome='http://www.apache.org/dist/avalon/avalon-framework/'
+		description='Java Apache Server Framework'>
+		<jar name='avalon-framework.jar' />
+	</module>
+	<module name='jboss/profiler/jvmti'
+		licenseType='lgpl'
+		version='1.0.0.CR5-brew'
+		projectHome='http://www.jboss.org/profiler'
+		description='JVMTI Wrapper Library'>
+		<jar name='jboss-profiler-jvmti.jar' />
+	</module>
+	<module name='oswego-concurrent'
+		licenseType='oswego'
+		version='1.3.4-brew'
+		projectHome='http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html'
+		description='Oswego util.concurrent package'>
+		<jar name='concurrent.jar' />
+	</module>
+	<module name='jacorb'
+		licenseType='lgpl'
+		version='2.2.4jboss.patch1-brew'
+		projectHome='http://www.jacorb.org'
+		description='Java implementation of the OMG's CORBA standard.'>
+		<jar name='idl.jar' />
+		<jar name='idl_g.jar' />
+		<jar name='jacorb.jar' />
+		<jar name='jacorb_g.jar' />
+		<jar name='orb.idl' />
+		<jar name='CSI.idl' />
+		<jar name='CosTransactions.idl' />
+		<jar name='jacorb.properties' />
+	</module>
+	<module name='apache-avalon-logkit'
+		licenseType='apache-1.1'
+		version='1.2-brew'
+		projectHome='http://www.apache.org/dist/avalon/logkit/'
+		description='Java Apache Server Framework Logging'>
+		<jar name='logkit.jar' />
+	</module>
+	<module name='jboss/jboss-vfs'
+		licenseType='lgpl'
+		version='1.0.0.GA'
+		projectHome='null'
+		description='A VFS library'>
+		<jar name='jboss-vfs.jar' />
+		<jar name='jboss-vfs-sources.jar' />
+	</module>
+	<module name='trove'
+		licenseType='lgpl'
+		version='1.0.2-brew'
+		projectHome='http://trove4j.sourceforge.net/'
+		description='High performance collections for Java'>
+		<jar name='trove.jar' />
+	</module>
+	<module name='sun-javacc'
+		licenseType='bsd'
+		version='3.2'
+		projectHome='https://javacc.dev.java.net/'
+		description='JavaCC is a parser/scanner generator for java'>
+		<jar name='javacc.jar' />
+	</module>
+	<module name='gjt-jpl-util'
+		licenseType='lgpl'
+		version='1.0'
+		projectHome='http://www.gjt.org/pkgdoc/org/gjt/lindfors/util/'
+		description='Miscellaneous utility classes and methods'>
+		<jar name='jpl-util.jar' />
+		<jar name='jpl-pattern.jar' />
+	</module>
+	<module name='quartz'
+		licenseType='apache-2.0'
+		version='1.5.2-brew'
+		projectHome='http://www.opensymphony.com/'
+		description='Quartz is a full-featured, open source job scheduling system that can be integrated with, or used along side virtually any J2EE or J2SE application'>
+		<jar name='quartz-all.jar' />
+		<jar name='quartz.jar' />
+	</module>
+	<module name='sun-jstl'
+		licenseType='cddl'
+		version='1.2'
+		projectHome='http://jcp.org/en/jsr/detail?id=52'
+		description='The JSTL 1.2 implementation'>
+		<jar name='jstl.jar' />
+	</module>
+	<module name='apache-fileupload'
+		licenseType='apache-2.0'
+		version='1.1.1-brew'
+		projectHome='http://jakarta.apache.org/commons/fileupload/'
+		description='FileUpload parses HTTP requests which conform to RFC 1867'>
+		<jar name='commons-fileupload.jar' />
+	</module>
+	<module name='javassist'
+		licenseType='lgpl'
+		version='3.5.0.GA-brew'
+		projectHome='http://sourceforge.net/projects/jboss'
+		description='Simple Java bytecode manipulation (cvstag rel_3_5_GA)'>
+		<jar name='javassist.jar' />
+		<jar name='javassist-src.jar' />
+	</module>
+	<module name='antlr'
+		licenseType='antlr'
+		version='2.7.6-brew'
+		projectHome='http://www.antlr.org/'
+		description='ANother Tool for Language Recognition'>
+		<jar name='antlr.jar' />
+	</module>
+	<module name='gnu-getopt'
+		licenseType='lgpl'
+		version='1.0.12-brew'
+		projectHome='http://www.urbanophile.com/arenn/hacking/download.html'
+		description='Java getopt classes for short and long argument parsing'>
+		<jar name='getopt.jar' />
+	</module>
+	<module name='jboss/web'
+		licenseType='lgpl'
+		version='2.0.0.GA'
+		projectHome='null'
+		description='JBoss Web 2.0.0.GA'>
+		<jar name='el-api.jar' />
+		<jar name='jasper-jdt.jar' />
+		<jar name='jbossweb.jar' />
+		<jar name='jbossweb-extras.jar' />
+		<jar name='jsp-api.jar' />
+		<jar name='servlet-api.jar' />
+		<jar name='jbossweb-src.zip' />
+	</module>
+	<module name='apache-xmlsec'
+		licenseType='apache-2.0'
+		version='1.3.0-brew'
+		projectHome='http://xml.apache.org/security/index.html'
+		description='implementation of security standards for XML'>
+		<jar name='xmlsec.jar' />
+	</module>
+	<module name='wutka-dtdparser'
+		licenseType='lgpl'
+		version='1.21-brew'
+		projectHome='http://www.wutka.com/dtdparser.html'
+		description='DTD parser for Java'>
+		<jar name='dtdparser.jar' />
+	</module>
+	<module name='sun-jsf'
+		licenseType='cddl'
+		version='1.2_04_P01'
+		projectHome='https://javaserverfaces.dev.java.net/'
+		description='The JSF 1.2 implementation'>
+		<jar name='jsf-api.jar' />
+		<jar name='jsf-impl.jar' />
+	</module>
+	<module name='cglib'
+		licenseType='apache-2.0'
+		version='2.1.3-brew'
+		projectHome='http://cglib.sourceforge.net/'
+		description='Code Generation Library with no dependencies'>
+		<jar name='cglib.jar' />
+	</module>
+	<module name='apache-xerces'
+		licenseType='apache-2.0'
+		version='2.7.1-brew'
+		projectHome='http://xml.apache.org/xerces2-j/index.html'
+		description='High performance, fully compliant XML parser'>
+		<jar name='xercesImpl.jar' />
+	</module>
+	<module name='sun-jaf'
+		licenseType='cddl'
+		version='1.1'
+		projectHome='https://glassfish.dev.java.net/'
+		description='JavaBeans Activation Frameworkfrom glashfish(http://wiki.java.net/bin/view/Projects/GlassFishCodeDependencies)'>
+		<jar name='activation.jar' />
+	</module>
+	<module name='hibernate'
+		licenseType='lgpl'
+		version='3.2.3.GA'
+		projectHome='http://hibernate.org/'
+		description='ultra-high performance object/relational persistence'>
+		<jar name='hibernate3.jar' />
+	</module>
+	<module name='jboss/jbossws'
+		licenseType='lgpl'
+		version='1.2.1.GA'
+		projectHome='null'
+		description='JBossWS an implementation of J2EE Web Services'>
+		<jar name='jbossws-integration.jar' />
+		<jar name='jbossws-client.jar' />
+		<jar name='jbossws-core.jar' />
+		<jar name='jbossws-core-src.zip' />
+		<jar name='jboss-jaxrpc.jar' />
+		<jar name='jboss-jaxws.jar' />
+		<jar name='jboss-saaj.jar' />
+	</module>
+	<module name='beanshell'
+		licenseType='lgpl'
+		version='1.3.0-brew'
+		projectHome='http://www.beanshell.org/'
+		description='Lightweight Scripting for Java'>
+		<jar name='bsh.jar' />
+	</module>
+	<module name='woodstox'
+		licenseType='lgpl'
+		version='3.1.1-brew'
+		projectHome='http://woodstox.codehaus.org/'
+		description='A fast STAX parser implementation'>
+		<jar name='wstx.jar' />
+	</module>
+	<module name='jboss/jbossxb'
+		licenseType='lgpl'
+		version='1.0.0.GA-brew'
+		projectHome='http://anonsvn.jboss.org/repos/common/jbossxb/'
+		description='JBoss XML Binding'>
+		<jar name='jboss-xml-binding.jar' />
+		<jar name='jboss-xml-binding-sources.jar' />
+	</module>
+	<module name='apache-scout'
+		licenseType='apache-2.0'
+		version='0.7rc2'
+		projectHome='http://ws.apache.org/scout/'
+		description='An implementation of the JAXR spec'>
+		<jar name='scout.jar' />
+	</module>
+	<module name='joesnmp'
+		licenseType='lgpl'
+		version='0.3.4-brew'
+		projectHome='http://sourceforge.net/projects/joesnmp'
+		description='joeSNMP is an open-source Java SNMP library'>
+		<jar name='joesnmp.jar' />
+	</module>
+	<module name='apache-codec'
+		licenseType='apache-2.0'
+		version='1.3.0-brew'
+		projectHome='http://jakarta.apache.org/commons/codec/'
+		description='Commons Codec provides implementations of common encoders and decoders'>
+		<jar name='commons-codec.jar' />
+	</module>
+	<module name='apache-bcel'
+		licenseType='apache-2.0'
+		version='5.1-brew'
+		projectHome='http://jakarta.apache.org/bcel/index.html'
+		description='Byte Code Engineering Library'>
+		<jar name='bcel.jar' />
+	</module>
+	<module name='hibernate-annotations'
+		licenseType='lgpl'
+		version='3.2.1.GA'
+		projectHome='http://annotations.hibernate.org'
+		description='Annotations for Hibernate/EJB3'>
+		<jar name='hibernate-annotations.jar' />
+	</module>
+	<module name='stax-api'
+		licenseType='apache-2.0'
+		version='1.0'
+		projectHome='http://stax.codehaus.org/'
+		description='The STAX API'>
+		<jar name='stax-api.jar' />
+	</module>
+	<module name='hibernate-entitymanager'
+		licenseType='lgpl'
+		version='3.2.1.GA'
+		projectHome='http://entitymanager.hibernate.org/'
+		description='Hibernate EntityManager for EJB3'>
+		<jar name='hibernate-entitymanager.jar' />
+		<jar name='ejb3-persistence.jar' />
+	</module>
+	<module name='apache-log4j'
+		licenseType='apache-2.0'
+		version='1.2.14-brew'
+		projectHome='http://logging.apache.org/'
+		description='Java logging framework'>
+		<jar name='log4j.jar' />
+	</module>
+	<module name='apache-slide'
+		licenseType='apache-2.0'
+		version='2.1-brew'
+		projectHome='http://jakarta.apache.org/slide/index.html'
+		description='WebDAV Support Library'>
+		<jar name='jakarta-slide-webdavlib.jar' />
+	</module>
+	<module name='jboss/common'
+		licenseType='lgpl'
+		version='1.2.0.GA-brew'
+		projectHome='null'
+		description='Common utilities used in Branch_4_x of the JBossAS project'>
+		<jar name='namespace.jar' />
+		<jar name='jboss-common.jar' />
+		<jar name='jboss-common-client.jar' />
+		<jar name='jboss-common-sources.jar' />
+	</module>
+	<module name='jgroups'
+		licenseType='lgpl'
+		version='2.4.1.SP3-brew'
+		projectHome='http://www.jgroups.org'
+		description='JGroups is a toolkit for reliable multicast communication'>
+		<jar name='jgroups.jar' />
+	</module>
+	<module name='jboss/cache'
+		licenseType='lgpl'
+		version='1.4.1.SP3'
+		projectHome='http://www.jboss.org/products/jbosscache'
+		description='JBoss Cache is a product designed to cache                frequently accessed Java objects in order to dramatically improve                the performance of e-business applications.'>
+		<jar name='jboss-cache-jdk50.jar' />
+	</module>
+	<module name='hsqldb'
+		licenseType='hsqldb'
+		version='1.8.0.2'
+		projectHome='http://hsqldb.org/'
+		description='Java relational database engine supporting a subset of ANSI-92 SQL plus SQL 99 and 2003 enhancements'>
+		<jar name='hsqldb.jar' />
+	</module>
+	<module name='apache-httpclient'
+		licenseType='apache-2.0'
+		version='3.0.1-brew'
+		projectHome='http://jakarta.apache.org/commons/httpclient/'
+		description='Implementation of client side of the most recent HTTP standards'>
+		<jar name='commons-httpclient.jar' />
+	</module>
+	<module name='jboss/dom4j-jarjar'
+		licenseType='dom4j'
+		version='1.6.1'
+		projectHome='http://dom4j.org/'
+		description='JarJar Dom4j(base package = org.jboss.dom4j)'>
+		<jar name='dom4j-jarjar.jar' />
+	</module>
+	<module name='jboss/remoting'
+		licenseType='lgpl'
+		version='2.2.0.SP4'
+		projectHome='http://www.jboss.org/products/remoting'
+		description='a single API for most network based invocations and related service that uses pluggable transports and data marshallers'>
+		<jar name='jboss-remoting.jar' />
+	</module>
+	<module name='jbpm/jpdl'
+		licenseType='lgpl'
+		version='3.2.GA'
+		projectHome='http://jbpm.org/'
+		description='BPM and workflow engine in Java'>
+		<jar name='jbpm-jpdl.jar' />
+		<jar name='jbpm-identity.jar' />
+		<jar name='jbpm-jmx.jar' />
+		<jar name='jbpm-console.war' />
+	</module>
+	<module name='jbpm/bpel'
+		licenseType='cpl-1.0'
+		version='1.1.0.GA'
+		projectHome='http://jbpm.org/'
+		description='Web services orchestration platform'>
+		<jar name='jbpm-bpel.jar' />
+		<jar name='jbpm-bpel-jbossws12.jar' />
+		<jar name='jbpm-bpel.war' />
+		<jar name='jbpm-bpel.sar' />
+	</module>
+	<module name='apache-lang'
+		licenseType='apache-2.0'
+		version='2.1'
+		projectHome='http://jakarta.apache.org/commons/lang/'
+		description='no description'>
+		<jar name='commons-lang-2.1.jar' />
+		<jar name='commons-lang.jar' />
+	</module>
+	<module name='jboss/jbossws-wsconsume-impl'
+		licenseType='cddl'
+		version='2.0.0'
+		projectHome='null'
+		description='JBossWS wsconsume implementation'>
+		<jar name='jbossws-wsconsume-impl.jar' />
+	</module>
+	<module name='jfreechart'
+		licenseType='lgpl'
+		version='0.9.20'
+		projectHome='http://www.jfree.org/jfreechart/'
+		description='A free Java class library for generating charts, including'>
+		<jar name='jfreechart.jar' />
+		<jar name='jcommon.jar' />
+	</module>
+	<module name='junit'
+		licenseType='cpl-1.0'
+		version='3.8.2-brew'
+		projectHome='http://www.junit.org/index.htm'
+		description='Java unit testing framework'>
+		<jar name='junit.jar' />
+	</module>
+	<module name='xdoclet'
+		licenseType='xdoclet'
+		version='1.2.3-brew'
+		projectHome='http://xdoclet.sourceforge.net/xdoclet/index.html'
+		description='Open source code generation engine'>
+		<jar name='xdoclet-ejb-module.jar' />
+		<jar name='xdoclet-hibernate-module.jar' />
+		<jar name='xdoclet-java-module.jar' />
+		<jar name='xdoclet-jboss-module.jar' />
+		<jar name='xdoclet-jmx-module.jar' />
+		<jar name='xdoclet-portlet-module.jar' />
+		<jar name='xdoclet-web-module.jar' />
+		<jar name='xdoclet-xdoclet-module.jar' />
+		<jar name='xjavadoc.jar' />
+		<jar name='xdoclet.jar' />
+	</module>
+	<module name='jboss/microcontainer'
+		licenseType='lgpl'
+		version='1.0.2'
+		projectHome='null'
+		description='no description'>
+		<jar name='jboss-container.jar' />
+		<jar name='jboss-dependency.jar' />
+		<jar name='jboss-microcontainer.jar' />
+	</module>
+	<module name='odmg'
+		licenseType='apache-2.0'
+		version='3.0-brew'
+		projectHome='http://www.odmg.org/'
+		description='ODMG Java binding'>
+		<jar name='odmg.jar' />
+	</module>
+	<module name='dom4j'
+		licenseType='dom4j'
+		version='1.6.1-brew'
+		projectHome='http://dom4j.org/'
+		description='Library for XML, XPath and XSLT on the Java platform'>
+		<jar name='dom4j.jar' />
+	</module>
+	<module name='jboss/jbossws-jboss42'
+		licenseType='lgpl'
+		version='1.2.1.GA'
+		projectHome='null'
+		description='JBossWS an implementation of J2EE Web Services'>
+		<jar name='jbossws42.sar' />
+		<jar name='jbossws42-src.zip' />
+	</module>
+	<module name='apache-jaxme'
+		licenseType='apache-2.0'
+		version='0.2-cvs'
+		projectHome='http://ws.apache.org/jaxme/'
+		description='no description'>
+		<jar name='jaxmexs.jar' />
+	</module>
+	<module name='sun-jaxb'
+		licenseType='cddl'
+		version='2.0.3jboss'
+		projectHome='https://jaxb.dev.java.net/'
+		description='The JAXB 2.0 implementation'>
+		<jar name='jaxb-api.jar' />
+		<jar name='jaxb-xjc.jar' />
+		<jar name='jaxb-impl.jar' />
+	</module>
+	<module name='ibm-wsdl4j'
+		licenseType='cpl-1.0'
+		version='1.6.2-brew'
+		projectHome='http://sourceforge.net/projects/wsdl4j'
+		description='Web Services Description Language for Java Toolkit'>
+		<jar name='wsdl4j.jar' />
+		<jar name='wsdl4j-src.jar' />
+	</module>
+	<module name='apache-bsf'
+		licenseType='apache-1.1'
+		version='2.3.0-brew'
+		projectHome='http://jakarta.apache.org/bsf/'
+		description='Apache Bean Scripting Framework (BSF)'>
+		<jar name='bsf.jar' />
+	</module>
+	<module name='sun-javamail'
+		licenseType='cddl'
+		version='1.4'
+		projectHome='https://glassfish.dev.java.net/javaee5/mail/'
+		description='JavaMail APIs from glashfish(http://wiki.java.net/bin/view/Projects/GlassFishCodeDependencies)'>
+		<jar name='mail.jar' />
+	</module>
+	<module name='apache-discovery'
+		licenseType='apache-2.0'
+		version='0.4-brew'
+		projectHome='http://jakarta.apache.org/commons/discovery/'
+		description='Jakarta Commons Discovery'>
+		<jar name='commons-discovery.jar' />
+	</module>
+	<module name='snmptrapappender'
+		licenseType='apache-2.0'
+		version='1.2.8-brew'
+		projectHome=' http://www.m2technologies.net/asp/snmpTrapAppender.asp'
+		description='SNMP Trap Appender extension for log4j'>
+		<jar name='snmpTrapAppender.jar' />
+	</module>
+	<module name='juddi'
+		licenseType='juddi'
+		version='0.9RC4-brew'
+		projectHome='http://ws.apache.org/juddi/'
+		description='Universal Description, Discovery, and Integration (UDDI)'>
+		<jar name='juddi.jar' />
+		<jar name='juddi.war' />
+	</module>
+	<module name='jaxen'
+		licenseType='jaxen'
+		version='1.1-brew'
+		projectHome='http://jaxen.codehaus.org/'
+		description='Java XPath Engine'>
+		<jar name='jaxen.jar' />
+	</module>
+	<module name='objectweb-joramtests'
+		licenseType='lgpl'
+		version='1.1'
+		projectHome='null'
+		description='no description'>
+		<jar name='joram-tests.jar' />
+	</module>
+	<module name='jboss/aop'
+		licenseType='lgpl'
+		version='1.5.5.GA'
+		projectHome='http://www.jboss.org/products/aop'
+		description='JBoss Aspect Oriented Programming'>
+		<jar name='common-softvaluehashmap.jar' />
+		<jar name='jboss-aop-jdk50-client.jar' />
+		<jar name='jboss-aop-jdk50.jar' />
+		<jar name='jboss-aop.jar' />
+		<jar name='jdk14-pluggable-instrumentor.jar' />
+		<jar name='jrockit-pluggable-instrumentor.jar' />
+		<jar name='pluggable-instrumentor.jar' />
+	</module>
+	<module name='sun-servlet'
+		licenseType='apache-2.0'
+		version='2.5-brew'
+		projectHome='http://jakarta.apache.org/tomcat/index.html'
+		description='Tomcat 6.0.10 servlet 2.5 spec api classes (jsp 2.1)'>
+		<jar name='servlet-api.jar' />
+		<jar name='jsp-api.jar' />
+	</module>
+	<module name='apache-logging'
+		licenseType='apache-2.0'
+		version='1.1.0.jboss'
+		projectHome='http://jakarta.apache.org/commons/logging/'
+		description='Yet another logging api. This is the 1.1 release with the reflective log4j logger patch.'>
+		<jar name='commons-logging.jar' />
+		<jar name='commons-logging-src.zip' />
+	</module>
+	<module name='apache-beanutils'
+		licenseType='apache-2.0'
+		version='1.7.0-brew'
+		projectHome='http://jakarta.apache.org/commons/beanutils/'
+		description='Jakarta Commons BeanUtils Package'>
+		<jar name='commons-beanutils.jar' />
+	</module>
+	<module name='apache-xalan'
+		licenseType='apache-2.0'
+		version='2.7.0.patch01-brew'
+		projectHome='http://xml.apache.org/xalan-j/'
+		description='Xalan-Java is an XSLT processor for transforming XML documents'>
+		<jar name='xalan.jar' />
+		<jar name='serializer.jar' />
+	</module>
+	<module name='jboss/serialization'
+		licenseType='lgpl'
+		version='1.0.3.GA'
+		projectHome='http://labs.jboss.com/serialization'
+		description='JBoss Alternative Serialization'>
+		<jar name='jboss-serialization.jar' />
+	</module>
+	<module name='apache-xml-commons'
+		licenseType='apache-2.0'
+		version='1.3.03-brew'
+		projectHome='http://xml.apache.org/commons/'
+		description='Common code for XML projects'>
+		<jar name='resolver.jar' />
+		<jar name='xml-apis.jar' />
+	</module>
+</thirdparty-licenses>

@@ -286,7 +286,7 @@
          <interceptor-ref name="org.jboss.ejb3.interceptor.EJB3InterceptorsFactory"/>
       </bind>
       <annotation expr="!class(@org.jboss.annotation.ejb.PoolClass)">
-         @org.jboss.annotation.ejb.PoolClass (value=org.jboss.ejb3.StrictMaxPool.class, maxSize=30, timeout=10000)
+         @org.jboss.annotation.ejb.PoolClass (value=org.jboss.ejb3.StrictMaxPool.class, maxSize=15, timeout=10000)
       </annotation>
    </domain>
 
@@ -307,7 +307,7 @@
          <interceptor-ref name="org.jboss.ejb3.interceptor.EJB3InterceptorsFactory"/>
       </bind>
       <annotation expr="!class(@org.jboss.annotation.ejb.PoolClass)">
-         @org.jboss.annotation.ejb.PoolClass (value=org.jboss.ejb3.StrictMaxPool.class, maxSize=30, timeout=10000)
+         @org.jboss.annotation.ejb.PoolClass (value=org.jboss.ejb3.StrictMaxPool.class, maxSize=15, timeout=10000)
       </annotation>
    </domain>
 

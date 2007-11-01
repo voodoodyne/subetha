@@ -2,7 +2,7 @@
 
 <!-- The Hypersonic embedded database JCA connection factory config -->
 
-<!-- $Id: hsqldb-ds.xml 39791 2006-01-10 18:14:42Z dimitris $ -->
+<!-- $Id: hsqldb-ds.xml 63175 2007-05-21 16:26:06Z rrajesh $ -->
 
 <datasources>
    <local-tx-datasource>
@@ -79,7 +79,7 @@
       <!-- HSQL DB benefits from prepared statement caching -->
       <prepared-statement-cache-size>32</prepared-statement-cache-size>
 
-      <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml (optional) -->
+      <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml -->
       <metadata>
          <type-mapping>Hypersonic SQL</type-mapping>
       </metadata>

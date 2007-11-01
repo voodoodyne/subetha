@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: jbossmq-service.xml 38187 2005-11-16 23:55:44Z adrian $ -->
+<!-- $Id: jbossmq-service.xml 65363 2007-09-13 15:05:39Z adrian@jboss.org $ -->
 
 <server>
 
@@ -31,6 +31,7 @@
       </security>
     </attribute>
     <attribute name="SecurityDomain">java:/jaas/jbossmq</attribute>
+    <depends>jboss.security:service=JaasSecurityManager</depends> 
     <depends optional-attribute-name="NextInterceptor">jboss.mq:service=DestinationManager</depends>
   </mbean>
 

@@ -21,7 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
-import org.jboss.wsf.spi.annotation.WebContext;
+import org.jboss.ws.annotation.WebContext;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.admin.i.DuplicateListDataException;

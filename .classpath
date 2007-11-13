@@ -12,7 +12,6 @@
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/mail-plugin.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jsp-api.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jboss-ejb3x.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jbossws-spi.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-annotations-ejb3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
 	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/jbossws.sar/jboss-jaxws.jar"/>

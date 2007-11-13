@@ -7,7 +7,7 @@
 <!--                                                                       -->
 <!-- ===================================================================== -->
 
-<!-- $Id: jboss-log4j.xml 65459 2007-09-19 00:25:51Z dimitris@jboss.org $ -->
+<!-- $Id: jboss-log4j.xml 62403 2007-04-18 15:26:43Z dimitris@jboss.org $ -->
 
 <!--
    | For more configuration infromation and examples see the Jakarta Log4j
@@ -164,19 +164,19 @@
       <priority value="INFO"/>
    </category>
 
-   <!-- Limit the jacorb category to WARN as its INFO is verbose -->
-   <category name="jacorb">
-      <priority value="WARN"/>
+   <!-- Limit the org.jboss.serial (jboss-serialization) to INFO as its DEBUG is verbose -->
+   <category name="org.jboss.serial">
+      <priority value="INFO"/>
    </category>
-   
+
    <!-- Limit the org.jgroups category to WARN as its INFO is verbose -->
    <category name="org.jgroups">
       <priority value="WARN"/>
    </category>
-   
-   <!-- Limit the org.quartz category to INFO as its DEBUG is verbose -->
-   <category name="org.quartz">
-      <priority value="INFO"/>
+
+   <!-- Limit the jacorb category to WARN as its INFO is verbose -->
+   <category name="jacorb">
+      <priority value="WARN"/>
    </category>
 
    <!-- Limit JBoss categories
@@ -190,26 +190,21 @@
       <priority value="INFO"/>
    </category>
 
-   <!-- Show the evolution of the DataSource pool in the logs [inUse/Available/Max]
-   <category name="org.jboss.resource.connectionmanager.JBossManagedConnectionPool">
-     <priority value="TRACE"/>
+   <!-- Enable JBossWS message tracing
+   <category name="jbossws.SOAPMessage">
+    <priority value="TRACE"/>
    </category>
    -->
-   
-   <!-- Limit the org.jboss.serial (jboss-serialization) to INFO as its DEBUG is verbose -->
-   <category name="org.jboss.serial">
-      <priority value="INFO"/>
-   </category>
-   
+
    <!-- Decrease the priority threshold for the org.jboss.varia category
    <category name="org.jboss.varia">
      <priority value="DEBUG"/>
    </category>
    -->
 
-   <!-- Enable JBossWS message tracing
-   <category name="org.jboss.ws.core.MessageTrace">
-    <priority value="TRACE"/>
+   <!-- Show the evolution of the DataSource pool in the logs [inUse/Available/Max]
+   <category name="org.jboss.resource.connectionmanager.JBossManagedConnectionPool">
+     <priority value="TRACE"/>
    </category>
    -->
 
@@ -262,10 +257,20 @@
      <priority value="INFO" />
      <appender-ref ref="TRAP_LOG"/>
    </category>
+  
    -->
    <category name="org.tigris.subetha">
      <priority value="DEBUG" />
    </category>
+
+   <!-- ======================= -->
+   <!-- Setup the Root category -->
+   <!-- ======================= -->
+
+   <root>
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="FILE"/>
+   </root>
 
    <!-- Clustering logging -->
    <!-- Uncomment the following to redirect the org.jgroups and
@@ -291,14 +296,5 @@
      <appender-ref ref="CLUSTER"/>
    </category>
    -->
-   
-   <!-- ======================= -->
-   <!-- Setup the Root category -->
-   <!-- ======================= -->
-
-   <root>
-      <appender-ref ref="CONSOLE"/>
-      <appender-ref ref="FILE"/>
-   </root>
 
 </log4j:configuration>

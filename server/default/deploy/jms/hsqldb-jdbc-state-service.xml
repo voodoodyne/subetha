@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id: hsqldb-jdbc-state-service.xml 63362 2007-06-05 19:19:17Z adrian@jboss.org $ -->
+<!-- $Id: hsqldb-jdbc-state-service.xml 61572 2007-03-22 14:32:18Z adrian@jboss.org $ -->
 
 <server>
 
   <!-- ==================================================================== -->
-  <!-- JBossMQ State Management                                             -->
-  <!--                                                                      -->
-  <!-- This configuration uses DefaultDS which by default is HSQLDB         -->
-  <!--                                                                      -->
-  <!-- If you want to use a different database/jndi name then either change -->
-  <!-- the ConnectionManager property, e.g.                                 -->
-  <!-- Oracle: jboss.jca:service=DataSourceBinding,name=OracleDS            -->
-  <!-- or                                                                   -->
-  <!-- change the jndi binding DefaultDS to be the database you want to use.-->
+  <!-- JBossMQ State Management using HSQLDB                                -->
+  <!-- See docs/examples/jms for other configurations                       -->
   <!-- ==================================================================== -->
    
   <!-- A Statemanager that stores state in the database -->

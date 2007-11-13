@@ -2,7 +2,7 @@
 <!--
    JBoss EJB3Deployer
    
-   $Id: jboss-service.xml 63100 2007-05-16 18:02:32Z bdecoste $
+   $Id: jboss-service.xml 61039 2007-03-02 01:17:31Z bdecoste $
 -->
 <server>
 
@@ -16,28 +16,6 @@
          </handlers>
       </attribute>
    </mbean>
-   
-   <!-- The following is sample configuration for modifying the Connector 
-   <mbean code="org.jboss.remoting.transport.Connector"
-          name="jboss.remoting:type=Connector,name=DefaultEjb3Connector,handler=ejb3">
-      <depends>jboss.aop:service=AspectDeployer</depends>
-      <attribute name="Configuration">
-         <config>
-            <invoker transport="socket">
-               <attribute name="numAcceptThreads">1</attribute>
-               <attribute name="maxPoolSize">300</attribute>
-               <attribute name="clientMaxPoolSize" isParam="true">50</attribute>
-               <attribute name="timeout" isParam="true">60000</attribute>
-               <attribute name="serverBindAddress">${jboss.bind.address}</attribute>
-               <attribute name="serverBindPort">3873</attribute>
-               <attribute name="backlog">200</attribute>
-            </invoker>
-            <handlers>
-               <handler subsystem="AOP">org.jboss.aspects.remoting.AOPRemotingInvocationHandler</handler>
-            </handlers>
-         </config>
-      </attribute>
-   </mbean-->
 
    <mbean code="org.jboss.ejb3.JarsIgnoredForScanning" name="jboss.ejb3:service=JarsIgnoredForScanning">
       <attribute name="IgnoredJars">

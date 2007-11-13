@@ -175,7 +175,7 @@ if [ -d "$JBOSS_NATIVE_DIR" ]; then
     fi
 fi
 
-# Setup JBoss specific properties
+# Setup JBoss sepecific properties
 JAVA_OPTS="-Dprogram.name=$PROGNAME $JAVA_OPTS"
 
 # Setup the java endorsed dirs

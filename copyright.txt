@@ -1,4 +1,4 @@
-The JBoss(R)* app server is Copyright 2000-2007, Red Hat Middleware LLC
+The JBoss(R)* app server is Copyright 2000-2006, Red Hat Middleware LLC
 and individual contributors, and is licensed under the GNU LGPL.
 
 A summary of the individual contributors is given below.
@@ -10,7 +10,6 @@ adrian,ejort            Adrian Brock
 aloubyansky,loubyansky  Alex Loubyansky
 asaldhana,osdchicago    Anil Saldhana
 csuconic,clebert        Clebert Suconic
-dimitris,andd           Dimitris Andreadis
 kkhan,kabkhan           Kabir Khan
 ovidiu,ovidiuf          Ovidiu Feodorov
 starksm,stark           Scott M Stark
@@ -20,6 +19,7 @@ bstansberry             Brian Stansberry
 jgreene,nihility        Jason Greene
 rloehr                  Ruel Loehr
 reverbel                Francisco Reverbel
+dimitris,andd           Dimitris Andreadis
 alesj                   Ales Justin
 bdecoste                Bill DeCoste
 bill,patriot1burke      Bill Burke

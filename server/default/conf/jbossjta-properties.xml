@@ -2,14 +2,14 @@
 <transaction-service>
     <properties depends="common" name="arjuna">
         <!--
-        Transaction Reaper Timeout (default is 120000 ms).
+        Transaction Reaper Timeout (default is 120000 microseconds).
       -->
         <property
             name="com.arjuna.ats.arjuna.coordinator.txReaperTimeout" value="120000"/>
         <!--
         Transaction Reaper Mode, can be: NORMAL or DYNAMIC (default is NORMAL).
       -->
-        <property name="com.arjuna.ats.arjuna.coordinator.txReaperMode" value="DYNAMIC"/>
+        <property name="com.arjuna.ats.arjuna.coordinator.txReaperMode" value="NORMAL"/>
         <!--
         (default is NO)
       -->

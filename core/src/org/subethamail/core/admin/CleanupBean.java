@@ -39,10 +39,10 @@ public class CleanupBean extends EntityManipulatorBean implements CleanupManagem
 	private static Log log = LogFactory.getLog(CleanupBean.class);
 
 	/** Keep held subscriptions around for 30 days */
-	public static final long MAX_HELD_SUB_AGE_MILLIS = 1000 * 60 * 60 * 24 * 30;
+	public static final long MAX_HELD_SUB_AGE_MILLIS = 1000L * 60L * 60L * 24L * 30L;
 
 	/** Keep held messages around for 7 days */
-	public static final long MAX_HELD_MSG_AGE_MILLIS = 1000 * 60 * 60 * 24 * 7;
+	public static final long MAX_HELD_MSG_AGE_MILLIS = 1000L * 60L * 60L * 24L * 7L;
 
 	/** */
 	class CleanupTask extends TimerTask
@@ -88,7 +88,7 @@ public class CleanupBean extends EntityManipulatorBean implements CleanupManagem
 		if (now.after(next))
 			next.add(Calendar.DAY_OF_YEAR, 1);
 
-		final long millisInDay = 1000 * 60 * 60 * 24;
+		final long millisInDay = 1000L * 60L * 60L * 24L;
 
 		this.timer.scheduleAtFixedRate(new CleanupTask(), next.getTime(), millisInDay);
 

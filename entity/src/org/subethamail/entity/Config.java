@@ -25,19 +25,19 @@ import org.subethamail.entity.i.Validator;
 @org.hibernate.annotations.TypeDefs({
 	@org.hibernate.annotations.TypeDef(
 		name="anyImmutable",
-		typeClass=org.subethamail.entity.type.AnyImmutableType.class            
+		typeClass=org.subethamail.entity.type.AnyImmutableType.class
 	)
 })
 
 /**
  * Contains a sitewide config parameter, key and value.
- * 
+ *
  * @author Jeff Schnitzer
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
-public class Config implements Serializable, Comparable
+public class Config implements Serializable, Comparable<Config>
 {
 	/** */
 	@Transient private static Log log = LogFactory.getLog(Config.class);
@@ -49,7 +49,7 @@ public class Config implements Serializable, Comparable
 	@Id
 	@Column(length=Validator.MAX_CONFIG_ID)
 	String id;
-	
+
 	/** */
 	@Type(type="anyImmutable")
 	@Columns(columns={
@@ -57,27 +57,27 @@ public class Config implements Serializable, Comparable
 		@Column(name="value", length=Validator.MAX_CONFIG_VALUE)
 	})
 	Object value;
-	
+
 	/**
 	 */
 	public Config() {}
-	
+
 	/**
 	 */
 	public Config(String id, Object value)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new Config: " + id);
-		
+
 		this.id = id;
 		this.value = value;
 	}
-	
+
 	/** */
 	public String getId()		{ return this.id; }
 
 	/**
-	 * @return the value object in its native type 
+	 * @return the value object in its native type
 	 */
 	public Object getValue() { return this.value; }
 
@@ -87,18 +87,17 @@ public class Config implements Serializable, Comparable
 	}
 
 	/** */
+	@Override
 	public String toString()
 	{
 		return this.getClass() + " {id=" + this.id + "}";
 	}
-	
+
 	/**
 	 * Natural sort order is based on id
 	 */
-	public int compareTo(Object arg0)
+	public int compareTo(Config other)
 	{
-		Config other = (Config)arg0;
-
 		return this.id.compareTo(other.getId());
 	}
 }

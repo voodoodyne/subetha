@@ -25,7 +25,7 @@ public class ListDataPlus extends ListData
 
 	/**
 	 */
-	public ListDataPlus(Long id, 
+	public ListDataPlus(Long id,
 					String email,
 					String name,
 					String url,
@@ -41,23 +41,22 @@ public class ListDataPlus extends ListData
 		this.subscriberCount = subscriberCount;
 		this.messageCount = messageCount;
 	}
-	
+
 	/** */
+	@Override
 	public String toString()
 	{
 		return this.getClass().getName() + " {id=" + this.id + ", name=" + this.name + "}";
 	}
 
 	/** */
-	public int compareTo(Object o)
+	public int compareTo(ListDataPlus other)
 	{
-		ListDataPlus other = (ListDataPlus)o;
-		
 		// Only return 0 if they are actually identical to make TreeMap happy
 		if (this.id.equals(other.id))
 			return 0;
-		
-		int result = this.name.compareTo(((ListDataPlus)o).getName());
+
+		int result = this.name.compareTo(other.getName());
 		if (result == 0)
 			return this.id.compareTo(other.id);
 		else

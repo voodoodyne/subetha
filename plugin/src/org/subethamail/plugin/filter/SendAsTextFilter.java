@@ -30,7 +30,7 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  * This filter removes all attachments greater than a certain size immediately
  * upon message injection. The attachments are never stored. The attachment can
  * optionally be replaced with a message indicating what action was taken.
- * 
+ *
  * @author Scott Hernandez
  */
 
@@ -48,7 +48,7 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.subethamail.core.plugin.i.Filter#getName()
 	 */
 	public String getName()
@@ -58,7 +58,7 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.subethamail.core.plugin.i.Filter#getDescription()
 	 */
 	public String getDescription()
@@ -70,7 +70,6 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 	 * @see Filter#onSend(SubEthaMessage, FilterContext)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws MessagingException
 	{
 		String archiveUrl = ctx.getList().getUrlBase() + "archive_msg.jsp?msgId=" + ctx.getMailId();
@@ -84,19 +83,19 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 				for (int i = 0; i < multi.getCount(); i++)
 				{
 					BodyPart bp = multi.getBodyPart(i);
-					if (bp.getContentType().toLowerCase().startsWith("text/plain")) 
+					if (bp.getContentType().toLowerCase().startsWith("text/plain"))
 					{
 						msgText = (String)bp.getContent();
 						break;
 					}
 				}
 			}
-			
-			if (msgText != null) 
+
+			if (msgText != null)
 			{
 				msg.setText(msgText + "\r\n" + archiveFooter);
-			} 
-			else 
+			}
+			else
 			{
 				msg.setText(archiveFooter);
 			}
@@ -116,5 +115,5 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
 	{
 		return;
-	}	
+	}
 }

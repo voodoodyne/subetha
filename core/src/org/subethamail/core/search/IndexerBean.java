@@ -44,7 +44,7 @@ import org.subethamail.entity.Mail;
  * current index (which is used for searching) and the fallow index
  * (which is either nonexistant or in the process of being built).
  * This allows rebuilds and searches to peacefully co-occur.
- * 
+ *
  * @author Jeff Schnitzer
  */
 @Service(objectName="subetha:service=Indexer")
@@ -53,34 +53,34 @@ import org.subethamail.entity.Mail;
 public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer, IndexerRemote
 {
 	/** */
-	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(IndexerBean.class);
-	
+
 	/** Milliseconds before update after server start; 5 minutes */
 	static final long UPDATE_DELAY_MILLIS = 1000 * 60 * 5;
-	
+
 	/** Milliseconds between updates; 1 hour */
 	static final long UPDATE_PERIOD_MILLIS = 1000 * 60 * 60;
-	
+
 	/** The base dir under which everything is put */
 	static final File BASE_DIR = new File("/var/tmp/subetha/indexer");
 	static { BASE_DIR.mkdirs(); }
-	
+
 	/** If this file exists, use index2 instead of index1 */
 	static final File USE2 = new File(BASE_DIR, "use2");
-	
+
 	/** Synchronize on this object before updating or rebuilding the index */
 	static Object updateMutex = new Object();
-	
+
 	/**
 	 * One of two index managers will be active at a time
 	 */
 	static IndexMgr index1 = new IndexMgr(new File(BASE_DIR, "1"));
 	static IndexMgr index2 = new IndexMgr(new File(BASE_DIR, "2"));
-	
+
 	/** */
 	class UpdateTask extends TimerTask
 	{
+		@Override
 		public void run()
 		{
 			try
@@ -96,18 +96,18 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 			}
 		}
 	}
-	
+
 	/** */
 	@Resource(mappedName="java:/SubEthaDS") DataSource ds;
-	
+
 	/** */
 	@Resource(mappedName="java:/Mail") Session mailSession;
-	
+
 	/**
 	 * Timer used to schedule the service event.
 	 */
 	Timer timer = new Timer("Indexer", false);
-	
+
 	/**
 	 * @return the currently in-use index manager.
 	 */
@@ -129,7 +129,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 		else
 			return index2;
 	}
-	
+
 	/**
 	 * Sets which index becomes the current one by
 	 * modifying the existance of the USE2 file.
@@ -164,7 +164,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 			this.rebuild();
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.search.IndexerManagement#start()
@@ -172,13 +172,13 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	public void start() throws Exception
 	{
 		log.info("Starting indexer service");
-		
+
 		this.initialize();
-		
+
 		// Schedule updates to repeat every hour, starting 5 minutes from now
 		this.timer.schedule(new UpdateTask(), UPDATE_DELAY_MILLIS, UPDATE_PERIOD_MILLIS);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.search.IndexerManagement#stop()
@@ -186,9 +186,9 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	public void stop() throws Exception
 	{
 		log.info("Stopping IndexerService");
-		
+
 		this.timer.cancel();
-		
+
 		getCurrentIndex().closeResources();
 	}
 
@@ -201,20 +201,20 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 		synchronized(updateMutex)
 		{
 			log.info("Rebuilding all search indexes");
-			
+
 			try
 			{
 				IndexMgr mgr = getFallowIndex();
-				
+
 				Modifier mod = mgr.modifyIndex(true);
-				
+
 				log.info("Indexing all messages");
 				this.indexAllMail(mod);
 				mod.flush();
 				log.info(mod.docCount() + " total documents in index");
-				
+
 				mod.close();
-				
+
 				this.swapCurrentIndex();
 			}
 			catch (IOException ex) { throw new EJBException(ex); }
@@ -230,17 +230,17 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 		synchronized(updateMutex)
 		{
 			log.info("Updating search index");
-			
+
 			try
 			{
 				// We can use hibernate here since the cache is probably full
 				// of the recent changes.  It's more convenient than raw SQL
 				// because we need to make two passes across the data, one
 				// for deletes and one for adds.
-				
+
 				IndexMgr mgr = getCurrentIndex();
 				Date since = new Date(mgr.getLastModified());
-				
+
 				Modifier mod = mgr.modifyIndex(false);
 
 				if (log.isInfoEnabled())
@@ -249,7 +249,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 				List<Mail> indexMail = this.em.findMailSince(since);
 				if (log.isInfoEnabled())
 					log.info(indexMail.size() + " messages to index");
-					
+
 				for (Mail m: indexMail)
 				{
 					try
@@ -262,12 +262,12 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 						log.error("Exception indexing message " + m.getId(), ex);
 					}
 				}
-				
+
 				mod.flush();
-				
+
 				if (log.isInfoEnabled())
 					log.info(mod.docCount() + " total documents in index");
-				
+
 				mod.close();
 			}
 			catch (IOException ex) { throw new EJBException(ex); }
@@ -283,7 +283,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	{
 		if (log.isDebugEnabled())
 			log.debug("Searching list " + listId + " for text " + queryText);
-		
+
 		if (queryText == null || queryText.length() == 0)
 		{
 			throw new SearchException("Must enter some text to search for.");
@@ -295,24 +295,24 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 		catch (IOException ex) { throw new EJBException(ex); }
 		catch (ParseException ex) { throw new SearchException(ex.getMessage()); }
 	}
-	
+
 	/**
 	 * Launches a sql statement that indexes all mail messages into the modifier.
 	 * Avoids using hibernate so that the 2nd-level cache is not polluted with
-	 * a ton of crap. 
+	 * a ton of crap.
 	 */
 	void indexAllMail(Modifier modifier) throws IOException
 	{
 		try
 		{
-			Connection con = ds.getConnection();
+			Connection con = this.ds.getConnection();
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try
 			{
 				stmt = con.prepareStatement("select m.listId, m.id, m.fromField, m.subject, m.content from Mail m where m.hold is null");
 				rs = stmt.executeQuery();
-				
+
 				while (rs.next())
 				{
 					Long listId = rs.getLong(1);
@@ -320,15 +320,15 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 					String from = rs.getString(3);
 					String subject = rs.getString(4);
 					Blob body = rs.getBlob(5);
-					
+
 					// Not quite sure how this is happening, but if it does, ignore the mail.
 					if (body == null)
 						continue;
-					
+
 					try
 					{
 						SubEthaMessage msg = new SubEthaMessage(this.mailSession, body.getBinaryStream());
-						
+
 						modifier.indexMail(listId, id, from, subject, msg.getIndexableText());
 					}
 					catch (Exception ex)

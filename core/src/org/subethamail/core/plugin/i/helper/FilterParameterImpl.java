@@ -14,7 +14,7 @@ import org.subethamail.core.plugin.i.FilterParameter;
 
 /**
  * Simple implementation of FilterParameter
- * 
+ *
  * @author Jeff Schnitzer
  */
 @SuppressWarnings("serial")
@@ -22,20 +22,20 @@ public class FilterParameterImpl implements FilterParameter, Serializable
 {
 	String name;
 	String description;
-	Class type;
+	Class<?> type;
 	Object defaultValue;
 	int textLines;
 	boolean expanded;
 	Map<String, String> documentation;
 
 	/** */
-	public FilterParameterImpl(String name, String description, Class type, Object defaultValue)
+	public FilterParameterImpl(String name, String description, Class<?> type, Object defaultValue)
 	{
 		this.name = name;
 		this.description = description;
 		this.type = type;
 		this.defaultValue = defaultValue;
-		
+
 		if (this.defaultValue != null && !this.defaultValue.getClass().equals(type))
 			throw new IllegalArgumentException("Type mismatch for parameter " + name
 					+ "; type is " + type.getName() + " but default value has type "
@@ -64,11 +64,11 @@ public class FilterParameterImpl implements FilterParameter, Serializable
 	public FilterParameterImpl(String name, String description, String defaultValue, int textLines, boolean expanded, Map<String, String> documentation)
 	{
 		this(name, description, String.class, defaultValue);
-		
+
 		this.textLines = textLines;
 		this.expanded = expanded;
 		if (this.expanded == true)
-			initDocumentation();
+			this.initDocumentation();
 		if (documentation != null)
 			this.documentation.putAll(documentation);
 	}
@@ -78,19 +78,19 @@ public class FilterParameterImpl implements FilterParameter, Serializable
 	 * @see org.subethamail.core.plugin.i.FilterParameter#getName()
 	 */
 	public String getName() { return this.name; }
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.plugin.i.FilterParameter#getDescription()
 	 */
 	public String getDescription() { return this.description; }
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.plugin.i.FilterParameter#getType()
 	 */
-	public Class getType() { return this.type; }
-	
+	public Class<?> getType() { return this.type; }
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.plugin.i.FilterParameter#getDefaultValue()
@@ -105,7 +105,7 @@ public class FilterParameterImpl implements FilterParameter, Serializable
 	{
 		return this.textLines;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.plugin.i.FilterParameter#isExpanded()
@@ -116,17 +116,17 @@ public class FilterParameterImpl implements FilterParameter, Serializable
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public Map<String, String> getDocumentation()
 	{
 		// we only want to init the documentation if it this
 		// parameter is marked as to be expanded.
-		if (expanded && documentation == null)
+		if (this.expanded && this.documentation == null)
 		{
-			initDocumentation();
+			this.initDocumentation();
 		}
-		return documentation;
+		return this.documentation;
 	}
 
 	/**
@@ -134,15 +134,15 @@ public class FilterParameterImpl implements FilterParameter, Serializable
 	 */
 	protected void initDocumentation()
 	{
-		if (documentation == null)
+		if (this.documentation == null)
 		{
-			documentation = new TreeMap<String, String>();
-			documentation.put("${list.name}", "The name of this mailing list.");
-			documentation.put("${list.description}", "The description of this mailing list.");
-			documentation.put("${list.email}", "The email address of this mailing list.");
-			documentation.put("${list.url}", "The url of this mailing list.");
-			documentation.put("${list.id}", "The numeric id of this mailing list.");
-			documentation.put("${mail.subject}", "The mail subject.");		
+			this.documentation = new TreeMap<String, String>();
+			this.documentation.put("${list.name}", "The name of this mailing list.");
+			this.documentation.put("${list.description}", "The description of this mailing list.");
+			this.documentation.put("${list.email}", "The email address of this mailing list.");
+			this.documentation.put("${list.url}", "The url of this mailing list.");
+			this.documentation.put("${list.id}", "The numeric id of this mailing list.");
+			this.documentation.put("${mail.subject}", "The mail subject.");
 		}
 	}
 }

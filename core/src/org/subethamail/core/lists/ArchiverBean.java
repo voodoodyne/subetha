@@ -37,12 +37,11 @@ import javax.jws.soap.SOAPBinding;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
-import org.jboss.ws.annotation.WebContext;
+import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.ExportMessagesException;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.MailUtils;
@@ -78,7 +77,7 @@ import com.sun.mail.util.LineInputStream;
 
 /**
  * Implementation of the Archiver interface.
- * 
+ *
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
@@ -113,7 +112,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	{
 		this.deliverator.deliverToEmail(mailId, email);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getThreads(java.lang.Long)
@@ -122,12 +121,12 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	public List<MailSummary> getThreads(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
-		
+
 		// Are we allowed to view archives?
 		MailingList list = this.getListFor(listId, Permission.VIEW_ARCHIVES, me);
-		
+
 		List<Mail> mails = this.em.findMailByList(listId, skip, count);
-		
+
 		// This is fun.  Assemble the thread relationships.
 		SortedSet<Mail> roots = new TreeSet<Mail>();
 		for (Mail mail: mails)
@@ -138,10 +137,10 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 
 			roots.add(parent);
 		}
-		
+
 		// Figure out if we're allowed to see emails
 		boolean showEmail = list.getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES);
-		
+
 		// Now generate the entire summary
 		return Transmute.mailSummaries(roots, showEmail, null);
 	}
@@ -153,12 +152,12 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	public MailSummary getThread(Long mailId) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
-		
+
 		Mail mail = this.getMailFor(mailId, Permission.VIEW_ARCHIVES, me);
-		
+
 		while (mail.getParent() != null) { mail = mail.getParent(); }
-		
-		return Transmute.mailSummary(mail, mail.getList().getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES), null);	
+
+		return Transmute.mailSummary(mail, mail.getList().getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES), null);
 	}
 
 	public MailData[] getThreadMessages(Long mailId) throws NotFoundException, PermissionException
@@ -175,21 +174,21 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException, SearchException
 	{
 		Person me = this.getMe();
-		
+
 		// Are we allowed to view archives?
 		MailingList list = this.getListFor(listId, Permission.VIEW_ARCHIVES, me);
-		
+
 		SimpleResult simpleResult = this.indexer.search(listId, query, skip, count);
-		
+
 		List<SearchHit> hits = new ArrayList<SearchHit>(simpleResult.getHits().size());
-		
+
 		// Since there might be deleted mail in the results, let's do a partial attempt
 		// to reduce the total number when we know about specific deleted mail.  The number
 		// is not exact, of course, because there may be more deleted mail on different
 		// pages of search results.  But at least the number isn't obviously wrong for
 		// small result sets.
 		int totalResults = simpleResult.getTotal();
-		
+
 		for (SimpleHit simpleHit: simpleResult.getHits())
 		{
 			// Note that there might be deleted mail in the hits, so be careful
@@ -211,10 +210,10 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 				totalResults--;
 			}
 		}
-		
+
 		return new SearchResult(totalResults, hits);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#countMailByList(java.lang.Long)
 	 */
@@ -232,18 +231,18 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	{
 		Mail mail = this.getMailFor(mailId, Permission.VIEW_ARCHIVES);
 
-		try 
+		try
 		{
-			writeMessage(mail, stream);
-		} 
+			this.writeMessage(mail, stream);
+		}
 		catch (Exception e)
 		{
 			if (log.isDebugEnabled()) log.debug("exception getting mail#" + mailId + "\n" + e.toString());
-		}	
+		}
 	}
 	/**
 	 * Writes a message out to the stream. First current filters are applied, and then message is written.
-	 * 
+	 *
 	 * @param msg The message to write
 	 * @param stream The stream to write to
 	 */
@@ -258,7 +257,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		{
 			// FIXME: This is for skot.
 		}
-		this.detacher.attach(msg);		
+		this.detacher.attach(msg);
 		msg.writeTo(stream);
 	}
 
@@ -269,12 +268,12 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	public void writeAttachment(Long attachmentId, OutputStream stream) throws NotFoundException, PermissionException
 	{
 		Attachment a = this.em.get(Attachment.class, attachmentId);
-		a.getMail().getList().checkPermission(getMe(), Permission.VIEW_ARCHIVES);
+		a.getMail().getList().checkPermission(this.getMe(), Permission.VIEW_ARCHIVES);
 
 		Blob data = a.getContent();
 		try
 		{
-			BufferedInputStream bis = new BufferedInputStream(data.getBinaryStream());	
+			BufferedInputStream bis = new BufferedInputStream(data.getBinaryStream());
 
 			int stuff;
 			while ((stuff = bis.read()) >= 0)
@@ -284,7 +283,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		{
 			throw new RuntimeException(ex);
 		}
-		catch (IOException ex) 
+		catch (IOException ex)
 		{
 			throw new RuntimeException(ex);
 		}
@@ -298,10 +297,10 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	public String getAttachmentContentType(Long attachmentId) throws NotFoundException, PermissionException
 	{
 		Attachment a = this.em.get(Attachment.class, attachmentId);
-		a.getMail().getList().checkPermission(getMe(), Permission.VIEW_ARCHIVES);
+		a.getMail().getList().checkPermission(this.getMe(), Permission.VIEW_ARCHIVES);
 		return a.getContentType();
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getMail(java.lang.Long)
@@ -310,22 +309,22 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	public MailData getMail(Long mailId) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
-		
+
 		// Are we allowed to view archives?
 		Mail mail = this.getMailFor(mailId, Permission.VIEW_ARCHIVES, me);
-		
+
 		// Figure out if we're allowed to see emails
 		boolean showEmail = mail.getList().getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES);
-		
+
 		MailData data = Transmute.mailData(mail, showEmail);
-		
+
 		Mail root = mail;
 		while (root.getParent() != null)
 			root = root.getParent();
-		
+
 		// This trick inserts us into the thread hierarchy we create.
 		data.setThreadRoot(Transmute.mailSummary(root, showEmail, data));
-		
+
 		return data;
 	}
 
@@ -336,8 +335,8 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	public int importMessages(Long listId, InputStream mboxStream) throws NotFoundException, PermissionException, ImportMessagesException
 	{
 		MailingList list = this.getListFor(listId, Permission.IMPORT_MESSAGES);
-		
-		try 
+
+		try
 		{
 		    LineInputStream in = new LineInputStream(mboxStream);
 			String line = null;
@@ -346,7 +345,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 			ByteArrayOutputStream buf = null;
 			Date fallbackDate = new Date();
 			int count = 0;
-	
+
 			for (line = in.readLine(); line != null; line = in.readLine())
 			{
 				if (line.indexOf("From ") == 0)
@@ -358,10 +357,10 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 						Date sent = this.injector.importMessage(list.getId(), envelopeSender, bin, true, fallbackDate);
 						if (sent != null)
 							fallbackDate = sent;
-						
+
 						count++;
 					}
-					
+
 					fromLine = line;
 					envelopeSender = MailUtils.getMboxFrom(fromLine);
 					if (envelopeSender == null)
@@ -375,7 +374,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 					buf.write(10); // LF
 				}
 			}
-			
+
 			if (buf != null)
 			{
 				byte[] bytes = buf.toByteArray();
@@ -391,7 +390,7 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 			throw new ImportMessagesException(ex);
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#deleteMail(java.lang.Long)
@@ -400,26 +399,26 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	public Long deleteMail(Long mailId) throws NotFoundException, PermissionException
 	{
 		Mail mail = this.getMailFor(mailId, Permission.DELETE_ARCHIVES);
-		
+
 		// Make all the children belong to the parent
 		Mail parent = mail.getParent();
-		
+
 		if (parent != null)
 			parent.getReplies().remove(mail);
-		
+
 		for (Mail child: mail.getReplies())
 		{
 			child.setParent(parent);
 			if (parent != null)
 				parent.getReplies().add(child);
 		}
-		
+
 		mail.getReplies().clear();
-		
+
 		this.em.remove(mail);
-		
+
 		// TODO:  figure out how to remove it from the search index
-		
+
 		return mail.getList().getId();
 	}
 
@@ -432,20 +431,20 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		Person me = this.getMe();
 		if (me == null)
 			throw new IllegalStateException("Must be logged in");
-		
+
 		MailingList toList = this.getListFor(listId, Permission.POST, me);
-		
+
 		if (me.getEmailAddress(fromAddress) == null)
 			throw new IllegalArgumentException("Not one of your addresses");
 
 		try
 		{
 			// Craft a new message
-			SubEthaMessage sm = craftMessage(toList, fromAddress, me.getName(), subject, body, false);
-			
+			SubEthaMessage sm = this.craftMessage(toList, fromAddress, me.getName(), subject, body, false);
+
 			ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
 			sm.writeTo(tmpStream);
-			
+
 			this.injector.inject(fromAddress, toList.getEmail(), tmpStream.toByteArray());
 		}
 		catch (MessagingException ex) { throw new RuntimeException(ex); }
@@ -461,42 +460,42 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		Person me = this.getMe();
 		if (me == null)
 			throw new IllegalStateException("Must be logged in");
-		
+
 		Mail mail = this.getMailFor(msgId, Permission.POST, me);
 		MailingList toList = mail.getList();
-		
+
 		if (me.getEmailAddress(fromAddress) == null)
 			throw new IllegalArgumentException("Not one of your addresses");
 
 		try
 		{
 			// Craft a new message
-			SubEthaMessage sm = craftMessage(toList, fromAddress, me.getName(), subject, body, true);
-			
+			SubEthaMessage sm = this.craftMessage(toList, fromAddress, me.getName(), subject, body, true);
+
 			String inReplyTo = mail.getMessageId();
 			if (inReplyTo != null && inReplyTo.length() > 0)
 				sm.setHeader("In-Reply-To", inReplyTo);
-			
+
 			ByteArrayOutputStream tmpStream = new ByteArrayOutputStream(8192);
 			sm.writeTo(tmpStream);
-			
+
 			this.injector.inject(fromAddress, toList.getEmail(), tmpStream.toByteArray());
 		}
 		catch (MessagingException ex) { throw new RuntimeException(ex); }
 		catch (IOException ex) { throw new RuntimeException(ex); }
-		
+
 		return toList.getId();
 	}
-	
+
 	/** */
 	private SubEthaMessage craftMessage(MailingList toList, String fromAddress, String fromName, String subject, String body, boolean reply)
 		throws MessagingException, IOException
 	{
 		Session session = Session.getDefaultInstance(new Properties());
-		
+
 		SubEthaMessage sm = new SubEthaMessage(session);
 		sm.setFrom(new InternetAddress(fromAddress, fromName));
-		sm.setRecipient(RecipientType.TO, new InternetAddress(toList.getEmail()));;
+		sm.setRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(toList.getEmail()));;
 		sm.setSubject(subject);
 		sm.setContent(body, "text/plain");
 		return sm;
@@ -510,9 +509,9 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 	{
 		if(ExportFormat.XML.equals(format))
 			throw new ExportMessagesException("The XML format is supported, for now.");
-		
+
 		ZipOutputStream zipOutputStream = null;
-		
+
 		if(ExportFormat.RFC2822DIRECTORY.equals(format))
 		{
 			CheckedOutputStream checksum = new CheckedOutputStream(outStream, new Adler32());
@@ -521,9 +520,8 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 
 		try
 		{
-			for (int i = 0; i < msgIds.length; i++)
+			for (Long msgId : msgIds)
 			{
-				Long msgId = msgIds[i];
 				Mail mail = this.getMailFor(msgId, Permission.VIEW_ARCHIVES);
 
 				switch (format)
@@ -533,16 +531,16 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 						entry.setComment("Message from " + mail.getFrom() + " for list " + mail.getList().getEmail());
 						entry.setTime(mail.getArrivalDate().getTime());
 						zipOutputStream.putNextEntry(entry);
-						writeMessage(mail, zipOutputStream);
+						this.writeMessage(mail, zipOutputStream);
 						zipOutputStream.closeEntry();
 						break;
 					case MBOX:
 						outStream.write(("FROM_ " + mail.getFrom()).getBytes());
 						outStream.write("\r\n".getBytes());
-						writeMessage(mail, outStream);
+						this.writeMessage(mail, outStream);
 						outStream.write("\r\n\r\n".getBytes());
 						break;
-	
+
 					default:
 						throw new ExportMessagesException("Unsupported Format!" + format.toString());
 						// break;
@@ -570,12 +568,12 @@ public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemo
 		List<Mail> mails = this.em.findMailByList(listId, 0, Integer.MAX_VALUE);
 
 		Stack<Long> mailIds = new Stack<Long>();
-		
+
 		for (Mail mail : mails)
 		{
 			mailIds.add(mail.getId());
 		}
-		
-		exportMessages(mailIds.toArray(new Long[] {}), format, outStream);
+
+		this.exportMessages(mailIds.toArray(new Long[] {}), format, outStream);
 	}
 }

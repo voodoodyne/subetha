@@ -378,15 +378,15 @@
 	</target>
 
 	<target name="init">
-		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml">
+		<typedef resource="com/googlecode/svntask/svntask.xml">
 			<classpath>
 				<fileset dir="${base.dir}/lib">
-					<include name="svn*.jar"/>
-					<include name="javasvn*.jar"/>
+					<include name="svnkit.jar"/>
+					<include name="svntask.jar"/>
 				</fileset>
 			</classpath>
 		</typedef>
-		<svn javahl="false"><status path="." revisionProperty="revisionVersion" /></svn>
+		<svn><info path="${base.dir}" revisionProperty="revisionVersion" /></svn>
 		<!--  A hack because svnant does not respect Ant's properties can't be overwritten rule. -->
 		<property name="version" value="${revisionVersion}" />
 	</target>

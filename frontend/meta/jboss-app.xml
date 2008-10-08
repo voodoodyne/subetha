@@ -10,14 +10,16 @@
 -->
 
 <jboss-app>
+	<!--  
+		Important in order to get web services to work properly.
+		@see https://jira.jboss.org/jira/browse/JBWS-1822
+	 -->
+	<module-order>strict</module-order>
+
 	<security-domain>java:/jaas/subetha</security-domain>
 
 	<module>
 		<service>core.sar</service>
 	</module>
-	<!--
-	<module>
-		<service>plugin.sar</service>
-	</module>
-	-->
+
 </jboss-app>

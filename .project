@@ -16,14 +16,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>jboss-work</name>
+			<name>jboss-config</name>
 			<type>2</type>
-			<locationURI>JBOSS_HOME/server/default/work</locationURI>
-		</link>
-		<link>
-			<name>jboss-log</name>
-			<type>2</type>
-			<locationURI>JBOSS_HOME/server/default/log</locationURI>
+			<locationURI>JBOSS_HOME/server/default/conf</locationURI>
 		</link>
 		<link>
 			<name>jboss-deploy</name>
@@ -31,14 +26,19 @@
 			<locationURI>JBOSS_HOME/server/default/deploy</locationURI>
 		</link>
 		<link>
+			<name>jboss-log</name>
+			<type>2</type>
+			<locationURI>JBOSS_HOME/server/default/log</locationURI>
+		</link>
+		<link>
 			<name>jboss-tmp</name>
 			<type>2</type>
 			<locationURI>JBOSS_HOME/server/default/tmp</locationURI>
 		</link>
 		<link>
-			<name>jboss-config</name>
+			<name>jboss-work</name>
 			<type>2</type>
-			<locationURI>JBOSS_HOME/server/default/conf</locationURI>
+			<locationURI>JBOSS_HOME/server/default/work</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

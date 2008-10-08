@@ -43,12 +43,12 @@ import org.subethamail.entity.i.Validator;
 
 /**
  * Entity for a single mailing list
- * 
+ *
  * @author Jeff Schnitzer
  */
 @NamedQueries({
 	@NamedQuery(
-		name="MailingListByEmail", 
+		name="MailingListByEmail",
 		query="from MailingList l where l.email = :email",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
@@ -56,7 +56,7 @@ import org.subethamail.entity.i.Validator;
 		}
 	),
 	@NamedQuery(
-		name="MailingListByUrl", 
+		name="MailingListByUrl",
 		query="from MailingList l where l.url = :url",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
@@ -64,7 +64,7 @@ import org.subethamail.entity.i.Validator;
 		}
 	),
 	@NamedQuery(
-		name="AllMailingLists", 
+		name="AllMailingLists",
 		query="from MailingList l order by l.name",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
@@ -72,7 +72,7 @@ import org.subethamail.entity.i.Validator;
 		}
 	),
 	@NamedQuery(
-			name="SearchMailingLists", 
+			name="SearchMailingLists",
 			query="from MailingList l where (l.name like :name) or " +
 											"(l.email like :email) or" +
 											"(l.url like :url) or" +
@@ -83,7 +83,7 @@ import org.subethamail.entity.i.Validator;
 			}
 		),
 	@NamedQuery(
-			name="CountMailingLists", 
+			name="CountMailingLists",
 			query="select count(*) from MailingList l",
 			hints={
 				@QueryHint(name="org.hibernate.readOnly", value="true"),
@@ -91,7 +91,7 @@ import org.subethamail.entity.i.Validator;
 			}
 		),
 	@NamedQuery(
-			name="CountMailingListsQuery", 
+			name="CountMailingListsQuery",
 			query="select count(*) from MailingList l where (l.name like :name) or " +
 											"(l.email like :email) or" +
 											"(l.url like :url) or" +
@@ -105,11 +105,11 @@ import org.subethamail.entity.i.Validator;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
-public class MailingList implements Serializable, Comparable
+public class MailingList implements Serializable, Comparable<MailingList>
 {
 	/** */
 	@Transient private static Log log = LogFactory.getLog(MailingList.class);
-	
+
 	/**
 	 * TreeSet requires a weird comparator because it uses the comparator
 	 * instead of equals().  When we return 0, it means the objects must
@@ -121,83 +121,83 @@ public class MailingList implements Serializable, Comparable
 		{
 			if (s1 == null || s2 == null)
 				return 0;
-			
+
 			int result = s1.getPerson().compareTo(s2.getPerson());
-			
+
 			if (result == 0)
 				return s1.getPerson().getId().compareTo(s2.getPerson().getId());
 			else
 				return result;
 		}
 	};
-	
+
 	/** */
 	@Id
 	@GeneratedValue
 	Long id;
-	
+
 	/** */
 	@Column(nullable=false, length=Validator.MAX_LIST_EMAIL)
 	@Email
 	String email;
-	
+
 	@Column(nullable=false, length=Validator.MAX_LIST_NAME)
 	String name;
-	
+
 	/** */
 	@Column(nullable=false, length=Validator.MAX_LIST_URL)
 	String url;
-	
+
 	@Column(nullable=false, length=Validator.MAX_LIST_DESCRIPTION)
 	String description;
-	
+
 	/** Hold subs for moderator approval */
 	@Column(nullable=false)
 	boolean subscriptionHeld;
-	
+
 	@Column(nullable=false, length=Validator.MAX_LIST_WELCOME_MESSAGE)
 	String welcomeMessage;
-	
+
 	//
 	// TODO:  set these two columns back to nullable=false when
 	// this hibernate bug is fixed:
 	// http://opensource.atlassian.com/projects/hibernate/browse/HHH-1654
 	// Also, this affects the creation sequence for mailing lists
 	//
-	
+
 	/** The default role for new subscribers */
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="defaultRoleId", nullable=true)
 	Role defaultRole;
-	
+
 	/** The role to consider anonymous (not subscribed) people */
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="anonymousRoleId", nullable=true)
 	Role anonymousRole;
-	
+
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@Sort(type=SortType.COMPARATOR, comparator=SubscriptionComparator.class)
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	SortedSet<Subscription> subscriptions;
-	
+
 	/** not cached */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@OrderBy(value="dateCreated")
 	Set<SubscriptionHold> subscriptionHolds;
-	
+
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	@MapKey(name="className")
 	Map<String, EnabledFilter> enabledFilters;
-	
+
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	@OrderBy(value="name")
 	Set<Role> roles;
-	
+
 	/** The only reason this is here is to provide cascading delete */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
 	Set<Mail> mails;
@@ -205,74 +205,74 @@ public class MailingList implements Serializable, Comparable
 	/**
 	 */
 	public MailingList() {}
-	
+
 	/**
 	 */
 	public MailingList(String email, String name, String url, String description)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mailing list");
-		
+
 		// These are validated normally.
 		this.setEmail(email);
 		this.setName(name);
 		this.setUrl(url);
 		this.setDescription(description);
-		
+
 		// Make sure collections start empty
 		this.subscriptions = new TreeSet<Subscription>(new SubscriptionComparator());
 		this.enabledFilters = new HashMap<String, EnabledFilter>();
 		this.roles = new HashSet<Role>();
 		this.subscriptionHolds = new HashSet<SubscriptionHold>();
-		
+
 		// We have to start with one role, the owner role
 		Role owner = new Role(this);
 		this.roles.add(owner);
-		
+
 		this.welcomeMessage = "";
-		
+
 // TODO:  restore this code when hibernate bug fixed.  In the mean time,
 // the creator MUST persist the MailingList *then* set these values.
 // http://opensource.atlassian.com/projects/hibernate/browse/HHH-1654
 //		this.defaultRole = owner;
 //		this.anonymousRole = owner;
 	}
-	
+
 	/** */
 	public Long getId()		{ return this.id; }
 
 	/**
 	 */
 	public String getEmail() { return this.email; }
-	
+
 	/**
 	 */
 	public void setEmail(String value)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Setting email of " + this + " to " + value);
-		
+
 		this.email = value;
 	}
-	
+
 	/**
 	 */
 	public String getName() { return this.name; }
-	
+
 	/**
 	 */
 	public void setName(String value)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Setting name of " + this + " to " + value);
-		
+
 		this.name = value;
 	}
-	
+
 	/**
 	 */
 	public String getUrl() { return this.url; }
-	
+
 	/**
 	 */
 	public void setUrl(String value)
@@ -282,27 +282,27 @@ public class MailingList implements Serializable, Comparable
 
 		if (!SiteUtils.isValidListUrl(value))
 			throw new IllegalArgumentException("Invalid url");
-		
+
 		if (log.isDebugEnabled())
 			log.debug("Setting url of " + this + " to " + value);
-		
+
 		this.url = value;
 	}
-	
+
 	/**
 	 */
 	public String getDescription() { return this.description; }
-	
+
 	/**
 	 */
 	public void setDescription(String value)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Setting description of " + this + " to " + value);
-		
+
 		this.description = value;
 	}
-	
+
 	public String getWelcomeMessage()
 	{
 		return this.welcomeMessage;
@@ -319,27 +319,27 @@ public class MailingList implements Serializable, Comparable
 	/**
 	 */
 	public boolean isSubscriptionHeld() { return this.subscriptionHeld; }
-	
+
 	public void setSubscriptionHeld(boolean value)
 	{
 		this.subscriptionHeld = value;
 	}
-	
-	/** 
+
+	/**
 	 * @return all the subscriptions associated with this list
 	 */
 	public Set<Subscription> getSubscriptions() { return this.subscriptions; }
-	
-	/** 
+
+	/**
 	 * @return all the held subscriptions
 	 */
 	public Set<SubscriptionHold> getSubscriptionHolds() { return this.subscriptionHolds; }
-	
-	/** 
+
+	/**
 	 * @return all plugins enabled on this list
 	 */
 	public Map<String, EnabledFilter> getEnabledFilters() { return this.enabledFilters; }
-	
+
 	/**
 	 * Convenience method.
 	 */
@@ -348,11 +348,11 @@ public class MailingList implements Serializable, Comparable
 		this.enabledFilters.put(filt.getClassName(), filt);
 	}
 
-	/** 
+	/**
 	 * @return all roles available for this list
 	 */
 	public Set<Role> getRoles() { return this.roles; }
-	
+
 	/**
 	 * @return true if role is valid for this list
 	 */
@@ -360,18 +360,18 @@ public class MailingList implements Serializable, Comparable
 	{
 		return this.roles.contains(role);
 	}
-	
+
 	/** */
 	public Role getDefaultRole() { return this.defaultRole; }
-	
+
 	public void setDefaultRole(Role value)
 	{
 		if (!this.isValidRole(value))
 			throw new IllegalArgumentException("Role belongs to some other list");
-			
+
 		this.defaultRole = value;
 	}
-	
+
 	/** */
 	public Role getAnonymousRole() { return this.anonymousRole; }
 
@@ -379,10 +379,10 @@ public class MailingList implements Serializable, Comparable
 	{
 		if (!this.isValidRole(value))
 			throw new IllegalArgumentException("Role belongs to some other list");
-			
+
 		this.anonymousRole = value;
 	}
-	
+
 	/**
 	 * Figures out which role is the owner and returns it
 	 */
@@ -391,13 +391,13 @@ public class MailingList implements Serializable, Comparable
 		for (Role check: this.roles)
 			if (check.isOwner())
 				return check;
-		
+
 		throw new IllegalStateException("Missing owner role");
 	}
-	
+
 	/**
 	 * Figures out the role for a person.  If pers is null,
-	 * returns the anonymous role. 
+	 * returns the anonymous role.
 	 */
 	public Role getRoleFor(Person pers)
 	{
@@ -406,11 +406,11 @@ public class MailingList implements Serializable, Comparable
 		else
 			return pers.getRoleIn(this);
 	}
-	
+
 	/**
 	 * Figures out the permissions for a person.  Very
 	 * similar to getRoleFor() but takes into account
-	 * site adminstrators which always have permission. 
+	 * site adminstrators which always have permission.
 	 */
 	public Set<Permission> getPermissionsFor(Person pers)
 	{
@@ -419,17 +419,17 @@ public class MailingList implements Serializable, Comparable
 		else
 			return pers.getPermissionsIn(this);
 	}
-	
+
 	/**
 	 * @param pers can be null to indicate anonymous person.  Site admins have all permissions.
-	 * @throws PermissionException if person doesn't have the permission 
+	 * @throws PermissionException if person doesn't have the permission
 	 */
 	public void checkPermission(Person pers, Permission check) throws PermissionException
 	{
 		if (! this.getPermissionsFor(pers).contains(check))
 			throw new PermissionException(check);
 	}
-	
+
 	/**
 	 * @return the context root of the SubEtha web application, determined
 	 *  from the main URL.  Includes trailing /.
@@ -439,28 +439,29 @@ public class MailingList implements Serializable, Comparable
 		// Maybe this should be replaced with creating a URL and
 		// then replacing the path with WEBAPP_CONTEXT_PATH... but
 		// that's relatively quite expensive.
-		
+
 		int pos = this.url.indexOf(SiteUtils.WEBAPP_CONTEXT_PATH);
 		if (pos < 0)
 			throw new IllegalStateException("Malformed list url");
 
-		return this.url.substring(0, pos + SiteUtils.WEBAPP_CONTEXT_PATH.length()); 
+		return this.url.substring(0, pos + SiteUtils.WEBAPP_CONTEXT_PATH.length());
 	}
-	
+
 	/**
 	 * @return the owner email address for this list
 	 */
 	public String getOwnerEmail()
 	{
 		int atIndex = this.email.indexOf('@');
-		
+
 		String box = this.email.substring(0, atIndex);
 		String remainder = this.email.substring(atIndex);
-		
+
 		return box + "-owner" + remainder;
 	}
-	
+
 	/** */
+	@Override
 	public String toString()
 	{
 		return this.getClass() + " {id=" + this.id + ", address=" + this.email + "}";
@@ -469,10 +470,8 @@ public class MailingList implements Serializable, Comparable
 	/**
 	 * Natural sort order is based on email address
 	 */
-	public int compareTo(Object arg0)
+	public int compareTo(MailingList other)
 	{
-		MailingList other = (MailingList)arg0;
-
 		return this.email.compareTo(other.getEmail());
 	}
 }

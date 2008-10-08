@@ -20,15 +20,14 @@ import org.tagonist.propertize.Property;
 
 /**
  * Processes an mbox of messages and inserts them into the list.
- * 
+ *
  * @author Scott Hernandez
  */
 public class UploadMBOX extends AuthAction
 {
 	/** */
-	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(UploadMBOX.class);
-	
+
 	/** */
 	public static class Model extends ErrorMapModel
 	{
@@ -36,17 +35,19 @@ public class UploadMBOX extends AuthAction
 		@Property Long listId;
 
 		@Property List<String> messageSubjects;
-		
+
 		@Property int countImported;
 	}
-	
+
 	/** */
+	@Override
 	public void initialize()
 	{
 		this.getCtx().setModel(new Model());
 	}
-		
+
 	/** */
+	@Override
 	public void execute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();
@@ -78,5 +79,5 @@ public class UploadMBOX extends AuthAction
 		FileItem file = files.get(0);
 
 		model.countImported = Backend.instance().getArchiver().importMessages(model.listId, file.getInputStream());
-	}	
+	}
 }

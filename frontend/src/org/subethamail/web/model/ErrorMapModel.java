@@ -15,17 +15,17 @@ import org.hibernate.validator.InvalidValue;
 
 /**
  * Models with a simple error map.
- * 
+ *
  * @author Jeff Schnitzer
  */
-public class ErrorMapModel 
+public class ErrorMapModel
 {
 	/** Keep all the validators around */
-	private static Map<Class, ClassValidator> validators = new ConcurrentHashMap<Class, ClassValidator>();
-	
+	private static Map<Class<?>, ClassValidator<?>> validators = new ConcurrentHashMap<Class<?>, ClassValidator<?>>();
+
 	/** */
 	Map<String, String> errors;
-	
+
 	/** */
 	@SuppressWarnings("unchecked")
 	public Map<String, String> getErrors()
@@ -41,10 +41,10 @@ public class ErrorMapModel
 	{
 		if (this.errors == null)
 			this.errors = new HashMap<String, String>();
-		
+
 		this.errors.put(key, msg);
 	}
-	
+
 	/**
 	 * Reflect any public fields that have been annotated with contraints
 	 * and modify the error map accordingly.  The public requirement is
@@ -59,7 +59,7 @@ public class ErrorMapModel
 			val = new ClassValidator(this.getClass());
 			validators.put(this.getClass(), val);
 		}
-		
+
 		for (InvalidValue invalid: val.getInvalidValues(this))
 		{
 			String existingError = this.getErrors().get(invalid.getPropertyPath());

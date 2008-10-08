@@ -36,12 +36,12 @@ import org.subethamail.entity.i.Validator;
 
 /**
  * Entity of a human user of the system.
- * 
+ *
  * @author Jeff Schnitzer
  */
 @NamedQueries({
 	@NamedQuery(
-		name="SiteAdmin", 
+		name="SiteAdmin",
 		query="from Person p where p.siteAdmin = true order by p.name",
 		hints={
 			@QueryHint(name="org.hibernate.readOnly", value="true"),
@@ -49,7 +49,7 @@ import org.subethamail.entity.i.Validator;
 		}
 	),
 	@NamedQuery(
-			name="CountPerson", 
+			name="CountPerson",
 			query="select count(*) from Person",
 			hints={
 				@QueryHint(name="org.hibernate.readOnly", value="true"),
@@ -60,11 +60,11 @@ import org.subethamail.entity.i.Validator;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
-public class Person implements Serializable, Comparable
+public class Person implements Serializable, Comparable<Person>
 {
 	/** */
 	@Transient private static Log log = LogFactory.getLog(Person.class);
-	
+
 	/** */
 	static final Set<String> USER_ROLES = Collections.singleton("user");
 	static final Set<String> SITE_ADMIN_ROLES;
@@ -73,63 +73,63 @@ public class Person implements Serializable, Comparable
 		Set<String> roles = new HashSet<String>();
 		roles.add("user");
 		roles.add("siteAdmin");
-		
+
 		SITE_ADMIN_ROLES = Collections.unmodifiableSet(roles);
 	}
-	
+
 	/** */
 	@Id
 	@GeneratedValue
 	Long id;
-	
+
 	@Column(name="passwd", nullable=false, length=Validator.MAX_PERSON_PASSWORD)
 	@Length(min=3)
 	String password;
-	
+
 	@Column(nullable=false, length=Validator.MAX_PERSON_NAME)
 	String name;
-	
+
 	@Column(nullable=false)
 	boolean siteAdmin;
-	
+
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	@MapKey(name="id")
 	Map<String, EmailAddress> emailAddresses;
-	
+
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	@MapKey(name="listId")
 	Map<Long, Subscription> subscriptions;
-	
+
 	/** not cached */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
 	@MapKey(name="listId")
 	Map<Long, SubscriptionHold> heldSubscriptions;
-	
+
 	/**
 	 */
 	public Person() {}
-	
+
 	/**
 	 */
 	public Person(String password, String name)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new person");
-		
+
 		// These are validated normally.
 		this.setPassword(password);
 		this.setName(name);
-		
+
 		this.emailAddresses = new HashMap<String, EmailAddress>();
 		this.subscriptions = new HashMap<Long, Subscription>();
 		this.heldSubscriptions = new HashMap<Long, SubscriptionHold>();
 	}
-	
+
 	/** */
 	public Long getId()		{ return this.id; }
-	
+
 	/**
 	 * TODO:  consider minimal two-way encryption so that pws are not easily readable in db
 	 */
@@ -141,16 +141,16 @@ public class Person implements Serializable, Comparable
 	/**
 	 * Note that the password is stored in cleartext so that
 	 * we can email it back to its owner.
-	 * 
+	 *
 	 * TODO:  consider minimal two-way encryption (even rot13) so that pws are not easily readable in db dumps
-	 * 
+	 *
 	 * @param value is a plaintext password
 	 */
 	public void setPassword(String value)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Setting password of " + this);
-		
+
 		this.password = value;
 	}
 
@@ -163,18 +163,18 @@ public class Person implements Serializable, Comparable
 	{
 		return this.password.equals(plainText);
 	}
-	
+
 	/**
 	 */
 	public String getName() { return this.name; }
-	
+
 	/**
 	 */
 	public void setName(String value)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Setting name of " + this + " to " + value);
-		
+
 		this.name = value;
 	}
 
@@ -189,19 +189,19 @@ public class Person implements Serializable, Comparable
 	{
 		if (log.isDebugEnabled())
 			log.debug("Setting admin flag of " + this + " to " + value);
-		
+
 		this.siteAdmin = value;
 	}
-	
+
 	/** */
 	public Map<String, EmailAddress> getEmailAddresses() { return this.emailAddresses; }
-	
+
 	/** */
 	public void addEmailAddress(EmailAddress value)
 	{
 		this.emailAddresses.put(value.getId(), value);
 	}
-	
+
 	/**
 	 * Normalizes the email address first.  Ensures that the
 	 * last email address cannot be removed.
@@ -210,20 +210,20 @@ public class Person implements Serializable, Comparable
 	{
 		if (this.emailAddresses.size() <= 1)
 			throw new IllegalStateException("Cannot remove last email address");
-		
+
 		email = Validator.normalizeEmail(email);
-		
+
 		// This odd construct is to work around hibernate bug HHH-2142
 		EmailAddress addy = this.emailAddresses.get(email);
 		this.emailAddresses.remove(email);
 		return addy;
-		
+
 	}
-	
+
 	/**
 	 * Gets the email address associated with that email, properly
 	 * normalizing before checking.
-	 * 
+	 *
 	 * @return null if that is not one of my email addresses.
 	 */
 	public EmailAddress getEmailAddress(String email)
@@ -231,32 +231,32 @@ public class Person implements Serializable, Comparable
 		email = Validator.normalizeEmail(email);
 		return this.emailAddresses.get(email);
 	}
-	
+
 	/**
 	 * Convenience method
 	 */
 	public List<String> getEmailList()
 	{
 		List<String> addresses = new ArrayList<String>(this.emailAddresses.size());
-		
+
 		int i = 0;
 		for (EmailAddress addy: this.emailAddresses.values())
 		{
 			addresses.add(addy.getId());
 			i++;
 		}
-		
+
 		// This wouldn't be necessary if @Sort worked on Maps
 		Collections.sort(addresses);
-		
+
 		return addresses;
 	}
-	
-	/** 
+
+	/**
 	 * @return all the subscriptions associated with this person
 	 */
 	public Map<Long, Subscription> getSubscriptions() { return this.subscriptions; }
-	
+
 	/**
 	 * Adds a subscription to our internal map.
 	 */
@@ -264,7 +264,7 @@ public class Person implements Serializable, Comparable
 	{
 		this.subscriptions.put(value.getList().getId(), value);
 	}
-	
+
 	/**
 	 * @return true if this person is subscribed to the list
 	 */
@@ -272,7 +272,7 @@ public class Person implements Serializable, Comparable
 	{
 		return this.subscriptions.containsKey(list.getId());
 	}
-	
+
 	/**
 	 * @return the subscription, or null if not subscribed to the list
 	 */
@@ -280,12 +280,12 @@ public class Person implements Serializable, Comparable
 	{
 		return this.subscriptions.get(listId);
 	}
-	
+
 	/**
 	 * @return (not cached) the subscription holds for this user
 	 */
 	public Map<Long, SubscriptionHold> getHeldSubscriptions() { return this.heldSubscriptions; }
-	
+
 	/**
 	 * Convenience method
 	 */
@@ -293,15 +293,15 @@ public class Person implements Serializable, Comparable
 	{
 		this.heldSubscriptions.put(hold.getList().getId(), hold);
 	}
-	
+
 	/** */
 	public Role getRoleIn(MailingList list)
 	{
 		Subscription sub = this.subscriptions.get(list.getId());
-		
+
 		return (sub == null) ? list.getAnonymousRole() : sub.getRole();
 	}
-	
+
 	/** */
 	public Set<Permission> getPermissionsIn(MailingList list)
 	{
@@ -310,7 +310,7 @@ public class Person implements Serializable, Comparable
 		else
 			return this.getRoleIn(list).getPermissions();
 	}
-	
+
 	/** @return the j2ee security roles associated with this person */
 	public Set<String> getRoles()
 	{
@@ -319,8 +319,9 @@ public class Person implements Serializable, Comparable
 		else
 			return USER_ROLES;
 	}
-	
+
 	/** */
+	@Override
 	public String toString()
 	{
 		return this.getClass().getName() + " {id=" + this.id + ", emailAddresses=" + this.emailAddresses + "}";
@@ -329,10 +330,8 @@ public class Person implements Serializable, Comparable
 	/**
 	 * Natural sort order is based on name
 	 */
-	public int compareTo(Object arg0)
+	public int compareTo(Person other)
 	{
-		Person other = (Person)arg0;
-
 		return this.name.compareTo(other.getName());
 	}
 

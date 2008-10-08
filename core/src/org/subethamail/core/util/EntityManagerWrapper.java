@@ -15,15 +15,15 @@ import org.hibernate.Session;
 import org.jboss.ejb3.entity.HibernateSession;
 
 /**
- * Simple wrapper of all EntityManager methods. 
- * 
+ * Simple wrapper of all EntityManager methods.
+ *
  * @author Jeff Schnitzer
  */
 public class EntityManagerWrapper implements EntityManager
 {
 	/** */
 	EntityManager base;
-	
+
 	/**
 	 * Wraps the base entity manager
 	 */
@@ -31,7 +31,7 @@ public class EntityManagerWrapper implements EntityManager
 	{
 		this.base = base;
 	}
-	
+
 	public void persist(Object arg0)
 	{
 		this.base.persist(arg0);
@@ -107,6 +107,7 @@ public class EntityManagerWrapper implements EntityManager
 		return this.base.createNativeQuery(arg0);
 	}
 
+	@SuppressWarnings("unchecked")
 	public Query createNativeQuery(String arg0, Class arg1)
 	{
 		return this.base.createNativeQuery(arg0, arg1);
@@ -141,7 +142,7 @@ public class EntityManagerWrapper implements EntityManager
 	{
 		return this.base.getTransaction();
 	}
-	
+
 	/**
 	 * This one is extra.
 	 */

@@ -18,15 +18,15 @@ public class ConfigData implements Serializable
 	String id;
 	String description;
 	Object value;
-	
+
 	/**
 	 */
 	public ConfigData() {}
-	
+
 	/**
 	 */
 	public ConfigData(
-					String id, 
+					String id,
 					String description,
 					Object value)
 	{
@@ -34,12 +34,13 @@ public class ConfigData implements Serializable
 		this.description = description;
 		this.value = value;
 	}
-	
+
 	/** */
+	@Override
 	public String toString()
 	{
-		return this.getClass().getName() + " {id=" + this.id + 
-			", type=" + this.value.getClass().getName() + 
+		return this.getClass().getName() + " {id=" + this.id +
+			", type=" + this.value.getClass().getName() +
 			", value=" + this.value + "}";
 	}
 
@@ -58,8 +59,8 @@ public class ConfigData implements Serializable
 	{
 		this.value = value;
 	}
-	
-	public Class getType()
+
+	public Class<?> getType()
 	{
 		return this.value.getClass();
 	}

@@ -14,28 +14,29 @@ import org.tagonist.propertize.Property;
 
 /**
  * This action is used primarily on msg_send.jsp to initialize the data for that page.
- * 
+ *
  * @author Jon Stevens
  * @author Jeff Schnitzer
  */
 public class PrepareReply extends PostMessage
 {
 	/** */
-	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(PrepareReply.class);
 
 	public class Model extends PostMessage.Model
 	{
 		@Property MailData mailData;
 	}
-	
+
 	/** */
+	@Override
 	public void initialize()
 	{
 		this.getCtx().setModel(new Model());
 	}
-	
+
 	/** */
+	@Override
 	public void authExecute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();

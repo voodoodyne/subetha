@@ -23,7 +23,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
-import org.jboss.ws.annotation.WebContext;
+import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
@@ -52,15 +52,15 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 {
 	/** */
 	private static Log log = LogFactory.getLog(DeliveratorBean.class);
-	
+
 	/** */
 	@EJB FilterRunner filterRunner;
 	@EJB Encryptor encryptor;
 	@EJB Detacher detacher;
-	
+
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
-	
+
 	/**
 	 * @see Deliverator#deliverToEmail(Long, String)
 	 */
@@ -68,11 +68,11 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 	public void deliverToEmail(Long mailId, String email) throws NotFoundException
 	{
 		EmailAddress ea = this.em.getEmailAddress(email);
-		Mail mail = this.em.get(Mail.class, mailId);		
-		deliverTo(mail, ea);
+		Mail mail = this.em.get(Mail.class, mailId);
+		this.deliverTo(mail, ea);
 	}
-	
-	
+
+
 	/**
 	 * @see Deliverator#deliver(Long, Long)
 	 */
@@ -92,37 +92,37 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 
 		EmailAddress ea = sub.getDeliverTo();
 
-		deliverTo(mail, ea);
+		this.deliverTo(mail, ea);
 	}
-	
+
 	/**
 	 * Send a mail directly to an email
-	 * 
+	 *
 	 * @param mail the message to send
 	 * @param emailAddress the person to send to, if there is one.
-	 * 
+	 *
 	 * @throws NotFoundException if something can't be found
 	 */
 	protected void deliverTo(Mail mail, EmailAddress emailAddress) throws NotFoundException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Delivering mailId " + mail.getId() + " to email " + emailAddress.getId());
-		
+
 		try
 		{
 			Address destination = new InternetAddress(emailAddress.getId());
 			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
-			
+
 			if (log.isDebugEnabled())
 				log.debug("Delivering msg of contentType " + msg.getContentType());
-			
+
 			// Add an X-Loop header to prevent mail loops, the other
 			// end is tested on injection.
 			msg.addXLoop(mail.getList().getEmail());
-			
+
 			// Precedence: list
 			msg.setHeader(SubEthaMessage.HDR_PRECEDENCE, "list");
-			
+
 			// Set up the VERP bounce address
 			byte[] token = this.encryptor.encryptString(emailAddress.getId());
 			String verp = VERPAddress.encodeVERP(mail.getList().getEmail(), token);
@@ -131,11 +131,11 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 			msg.setHeader(SubEthaMessage.HDR_SENDER, verp);
 
 			this.filterRunner.onSend(msg, mail);
-			
+
 			this.detacher.attach(msg);
-			
+
 			Transport.send(msg, new Address[] { destination });
-			
+
 			emailAddress.bounceDecay();
 		}
 		catch (IgnoreException ex)

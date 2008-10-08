@@ -13,24 +13,24 @@ import org.tagonist.propertize.Property;
 
 /**
  * Removes a site admin.
- * 
+ *
  * @author Jon Stevens
  * @author Jeff Schnitzer
  */
-public class AdminRemove extends AuthRequired 
+public class AdminRemove extends AuthRequired
 {
 	/** */
-	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(AdminRemove.class);
 
 	@Property Long id;
-	
+
 	/** */
+	@Override
 	public void authExecute() throws Exception
 	{
 		if (log.isDebugEnabled())
 			log.debug("Removing site admin person id: " + this.id);
-		
+
 		Backend.instance().getAdmin().setSiteAdmin(this.id, false);
-	}	
+	}
 }

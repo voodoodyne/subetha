@@ -20,16 +20,16 @@ import org.tagonist.AbstractAction;
 
 /**
  * Adds some handy methods.
- * 
+ *
  * @author Jeff Schnitzer
  */
-abstract public class SubEthaAction extends AbstractAction 
+abstract public class SubEthaAction extends AbstractAction
 {
 	/** */
 	private static Log log = LogFactory.getLog(SubEthaAction.class);
-	
+
 	/** Keep all the validators around */
-	private static Map<Class, ClassValidator> validators = new ConcurrentHashMap<Class, ClassValidator>();
+	private static Map<Class<?>, ClassValidator<?>> validators = new ConcurrentHashMap<Class<?>, ClassValidator<?>>();
 
 	/**
 	 * @return the action param specified by the key, as a String
@@ -49,19 +49,19 @@ abstract public class SubEthaAction extends AbstractAction
 	protected Cookie getCookie(String name)
 	{
 		Cookie[] cookies = this.getCtx().getRequest().getCookies();
-		
+
 		if (cookies != null)
 		{
-			for (int i=0; i<cookies.length; i++)
+			for (Cookie cookie : cookies)
 			{
-				if (cookies[i].getName().equals(name))
-					return cookies[i];
+				if (cookie.getName().equals(name))
+					return cookie;
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * @return null if cookie is not present
 	 */
@@ -73,37 +73,37 @@ abstract public class SubEthaAction extends AbstractAction
 		else
 			return cook.getValue();
 	}
-	
+
 	/**
 	 */
 	protected void setCookie(String name, String value, int maxAge)
 	{
 		Cookie cook = new Cookie(name, value);
 		cook.setMaxAge(maxAge);
-		
+
 		this.getCtx().getResponse().addCookie(cook);
 	}
-	
+
 	/**
 	 * @return the request URI without the context path.
 	 */
 	protected String getContextlessRequestURI()
 	{
 		String contextPath = this.getCtx().getRequest().getContextPath();
-		
+
 		// Irritatingly, if we have an error the getRequestURI() method
 		// returns the URI of the error page.  The original page is saved
 		// as an attribute in the request.
 		String requestURI = (String)this.getCtx().getRequest().getAttribute("javax.servlet.error.request_uri");
 		if (requestURI == null)
 			requestURI = this.getCtx().getRequest().getRequestURI();
-		
+
 		if (log.isDebugEnabled())
 			log.debug("Getting contextless request URI.  contextPath is " + contextPath + ", requestURI is " + requestURI);
-		
+
 		return requestURI.substring(contextPath.length());
 	}
-	
+
 	/**
 	 * @return the contextless URI plus the query string.  Works even
 	 *  if an http POST was submitted.  This is what you can safely
@@ -115,7 +115,7 @@ abstract public class SubEthaAction extends AbstractAction
 		if ("POST".equals(this.getCtx().getRequest().getMethod().toUpperCase()))
 		{
 			Map<String, String[]> params = this.getCtx().getRequest().getParameterMap();
-			
+
 			if (params.isEmpty())
 			{
 				return this.getContextlessRequestURI();
@@ -125,7 +125,7 @@ abstract public class SubEthaAction extends AbstractAction
 				// We have to build the query string from the parameters by hand
 				StringBuffer queryBuf = new StringBuffer(1024);
 				queryBuf.append(this.getContextlessRequestURI());
-	
+
 				boolean afterFirst = false;
 				for (Map.Entry<String, String[]> entry: params.entrySet())
 				{
@@ -140,7 +140,7 @@ abstract public class SubEthaAction extends AbstractAction
 							queryBuf.append('?');
 							afterFirst = true;
 						}
-						
+
 						try
 						{
 							queryBuf.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
@@ -154,7 +154,7 @@ abstract public class SubEthaAction extends AbstractAction
 						}
 					}
 				}
-				
+
 				return queryBuf.toString();
 			}
 		}
@@ -176,7 +176,7 @@ abstract public class SubEthaAction extends AbstractAction
 	@SuppressWarnings("unchecked")
 	public void validate() throws IllegalAccessException
 	{
-		
+
 		Object model = this.getCtx().getModel();
 		ClassValidator val = validators.get(model.getClass());
 		if (val == null)
@@ -184,7 +184,7 @@ abstract public class SubEthaAction extends AbstractAction
 			val = new ClassValidator(model.getClass());
 			validators.put(this.getClass(), val);
 		}
-		
+
 		for (InvalidValue invalid: val.getInvalidValues(model))
 		{
 			Object existingError = this.getCtx().getError(invalid.getPropertyPath());

@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.jboss.security.SimplePrincipal;
-import org.jboss.ws.annotation.WebContext;
+import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
@@ -61,7 +61,7 @@ import org.subethamail.entity.i.PermissionException;
 
 /**
  * Implementation of the Admin interface.
- * 
+ *
  * @author Jeff Schnitzer
  */
 @Stateless(name="Admin")
@@ -74,7 +74,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(AdminBean.class);
-	
+
 	/**
 	 * The set of characters from which randomly generated
 	 * passwords will be obtained.
@@ -83,21 +83,21 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		"abcdefghijklmnopqrstuvwxyz" +
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"0123456789";
-	
+
 	/**
 	 * The length of randomly generated passwords.
 	 */
 	protected static final int PASSWORD_GEN_LENGTH = 6;
-	
+
 	/** */
 	@EJB PostOffice postOffice;
 	@EJB Queuer queuer;
-	
+
 	/**
 	 * For generating random passwords.
 	 */
 	protected Random randomizer = new Random();
-	
+
 	/**
 	 * @see Admin#log(String)
 	 */
@@ -106,7 +106,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		if (log.isInfoEnabled())
 			log.info("CLIENT:  " + msg);
 	}
-	
+
 	/**
 	 * @see Admin#createMailingList(InternetAddress, URL, String, InternetAddress[])
 	 */
@@ -114,7 +114,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException
 	{
 		this.checkListAddresses(address, url);
-		
+
 		// Then create the mailing list and attach the owners.
 		MailingList list = new MailingList(address.getAddress(), address.getPersonal(), url.toString(), description);
 		this.em.persist(list);
@@ -122,20 +122,20 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		// is fixed.  This should be performed within the constructor of MailingList.
 		list.setDefaultRole(list.getRoles().iterator().next());
 		list.setAnonymousRole(list.getRoles().iterator().next());
-		
+
 		for (InternetAddress ownerAddress: initialOwners)
 		{
 			EmailAddress ea = this.establishEmailAddress(ownerAddress, null);
 			Subscription sub = new Subscription(ea.getPerson(), list, ea, list.getOwnerRole());
-			
+
 			this.em.persist(sub);
-			
+
 			list.getSubscriptions().add(sub);
 			ea.getPerson().addSubscription(sub);
-			
+
 			this.postOffice.sendOwnerNewMailingList(list, ea);
 		}
-		
+
 		return list.getId();
 	}
 
@@ -160,21 +160,21 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		catch (NotFoundException ex)
 		{
 			// Nobody with that name, lets create
-			
+
 			if (password == null)
 				password = this.generateRandomPassword();
-			
+
 			String personal = address.getPersonal();
 			if (personal == null)
 				personal = "";
-			
+
 			Person p = new Person(password, personal);
 			EmailAddress e = new EmailAddress(p, address.getAddress());
 			p.addEmailAddress(e);
-			
+
 			this.em.persist(p);
 			this.em.persist(e);
-			
+
 			return e;
 		}
 	}
@@ -186,9 +186,9 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	public AuthSubscribeResult subscribeEmail(Long listId, InternetAddress address, boolean ignoreHold, boolean silent) throws NotFoundException
 	{
 		EmailAddress addy = this.establishEmailAddress(address, null);
-		
+
 		SubscribeResult result = this.subscribe(listId, addy.getPerson(), addy, ignoreHold, silent);
-		
+
 		return new AuthSubscribeResult(
 				addy.getPerson().getId(),
 				addy.getId(),
@@ -197,7 +197,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 				result,
 				listId);
 	}
-	
+
 	/**
 	 * @see Admin#subscribe(Long, Long, String, boolean)
 	 */
@@ -205,7 +205,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	public SubscribeResult subscribe(Long listId, Long personId, String email, boolean ignoreHold) throws NotFoundException
 	{
 		Person who = this.em.get(Person.class, personId);
-		
+
 		if (email == null)
 		{
 			// Subscribing with (or changing to) disabled delivery
@@ -214,14 +214,14 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		else
 		{
 			EmailAddress addy = who.getEmailAddress(email);
-			
+
 			if (addy == null)
 				throw new IllegalStateException("Must be one of person's email addresses");
-			
+
 			return this.subscribe(listId, who, addy, ignoreHold, false);
 		}
 	}
-	
+
 	/**
 	 * Subscribes someone to a mailing list, or changes the delivery address
 	 * of an existing subscriber.
@@ -232,14 +232,14 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	protected SubscribeResult subscribe(Long listId, Person who, EmailAddress deliverTo, boolean ignoreHold, boolean silent) throws NotFoundException
 	{
 		MailingList list = this.em.get(MailingList.class, listId);
-		
+
 		Subscription sub = who.getSubscription(listId);
 		if (sub != null)
 		{
 			// If we're already subscribed, maybe we want to change the
 			// delivery address.
 			sub.setDeliverTo(deliverTo);
-			
+
 			return SubscribeResult.OK;
 		}
 		else
@@ -253,41 +253,41 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 					who.getHeldSubscriptions().remove(list.getId());
 					this.em.remove(hold);
 				}
-				
+
 				hold = new SubscriptionHold(who, list, deliverTo);
 				this.em.persist(hold);
-				
+
 				// Send mail to anyone that can approve
 				for (Subscription maybeModerator: list.getSubscriptions())
 					if (maybeModerator.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS)
 							&& maybeModerator.getDeliverTo() != null)
 						this.postOffice.sendModeratorSubscriptionHeldNotice(maybeModerator.getDeliverTo(), hold);
-				
+
 				return SubscribeResult.HELD;
 			}
 			else
 			{
 				sub = new Subscription(who, list, deliverTo, list.getDefaultRole());
-				
+
 				this.em.persist(sub);
-				
+
 				who.addSubscription(sub);
 				list.getSubscriptions().add(sub);
-				
+
 				if (!silent)
 				{
 					this.postOffice.sendSubscribed(list, who, deliverTo);
-					
+
 					// Notify anyone with APPROVE_SUBSCRIPTIONS
 					for (Subscription maybeNotify: list.getSubscriptions())
 						if (maybeNotify.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS)
 								&& maybeNotify.getDeliverTo() != null)
 							this.postOffice.sendModeratorSubscriptionNotice(maybeNotify.getDeliverTo(), sub, false);
 				}
-			
+
 				// Flush any messages that might be held prior to this subscription.
 				this.selfModerate(who.getId());
-				
+
 				return SubscribeResult.OK;
 			}
 		}
@@ -332,14 +332,14 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	protected String generateRandomPassword()
 	{
 		StringBuffer gen = new StringBuffer(PASSWORD_GEN_LENGTH);
-		
+
 		for (int i=0; i<PASSWORD_GEN_LENGTH; i++)
 		{
-			int which = (int)(PASSWORD_GEN_CHARS.length() * randomizer.nextDouble());
-			
+			int which = (int)(PASSWORD_GEN_CHARS.length() * this.randomizer.nextDouble());
+
 			gen.append(PASSWORD_GEN_CHARS.charAt(which));
 		}
-		
+
 		return gen.toString();
 	}
 
@@ -352,7 +352,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	{
 		Person p = this.em.get(Person.class, personId);
 		p.setSiteAdmin(value);
-		
+
 		this.flushJBossCredentialCache(personId);
 	}
 
@@ -365,10 +365,10 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	{
 		EmailAddress ea = this.em.getEmailAddress(email);
 		ea.getPerson().setSiteAdmin(siteAdmin);
-		
+
 		this.flushJBossCredentialCache(ea.getPerson().getId());
 	}
-	
+
 	/**
 	 * Flushes the auth credential cache of a specific user.  Necessary if something
 	 * involving j2ee roles will change.  Note that this won't necessarily be reflected
@@ -400,16 +400,16 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	public void addEmail(Long personId, String email) throws NotFoundException
 	{
 		EmailAddress addy = this.em.findEmailAddress(email);
-		
+
 		// Three cases:  either addy is null, addy is already associated with
 		// the person, or addy is already associated with someone else.
-		
+
 		// Lets quickly handle the case were we don't have to do anything
 		if (addy != null && addy.getPerson().getId().equals(personId))
 			return;
-		
+
 		Person who = this.em.get(Person.class, personId);
-			
+
 		if (addy == null)
 		{
 			addy = new EmailAddress(who, email);
@@ -420,7 +420,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		{
 			this.merge(addy.getPerson().getId(), who.getId());
 		}
-		
+
 		this.selfModerate(who.getId());
 	}
 
@@ -439,19 +439,19 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		// First of all watch out for permission upgrade
 		if (from.isSiteAdmin())
 			to.setSiteAdmin(true);
-		
+
 		// Move email addresses
 		for (EmailAddress addy: from.getEmailAddresses().values())
 		{
 			if (log.isDebugEnabled())
 				log.debug(" merging " + addy);
-			
+
 			addy.setPerson(to);
 			to.addEmailAddress(addy);
 		}
-		
+
 		from.getEmailAddresses().clear();
-		
+
 		// Move subscriptions
 		for (Subscription sub: from.getSubscriptions().values())
 		{
@@ -461,25 +461,25 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 			{
 				if (log.isDebugEnabled())
 					log.debug(" abandoning duplicate " + sub);
-				
+
 				// Special case - if the other was an owner role, upgrade this one too
 				if (sub.getRole().isOwner())
 					toSub.setRole(sub.getRole());
-				
+
 				this.em.remove(sub);
 			}
 			else
 			{
 				if (log.isDebugEnabled())
 					log.debug(" merging " + sub);
-				
+
 				sub.setPerson(to);
 				to.addSubscription(sub);
 			}
 		}
-		
+
 		from.getSubscriptions().clear();
-		
+
 		// Move held subscriptions
 		for (SubscriptionHold hold: from.getHeldSubscriptions().values())
 		{
@@ -488,21 +488,21 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 			{
 				if (log.isDebugEnabled())
 					log.debug(" abandoning obsolete or duplicate " + hold);
-				
+
 				this.em.remove(hold);
 			}
 			else
 			{
 				if (log.isDebugEnabled())
 					log.debug(" merging " + hold);
-				
+
 				hold.setPerson(to);
 				to.addHeldSubscription(hold);
 			}
 		}
-		
+
 		from.getHeldSubscriptions().clear();
-		
+
 		// Some of those holds we might not need anymore because we were already
 		// subscribed or acquired a new subscription.
 		for (SubscriptionHold hold: to.getHeldSubscriptions().values())
@@ -514,11 +514,11 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 				this.em.remove(hold);
 			}
 		}
-		
+
 		// Nuke the old person object
 		if (log.isDebugEnabled())
 			log.debug(" deleting person " + from);
-		
+
 		this.em.remove(from);
 	}
 
@@ -529,11 +529,11 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	public int selfModerate(Long personId) throws NotFoundException
 	{
 		Person who = this.em.get(Person.class, personId);
-		
+
 		List<Mail> heldMail = this.em.findSoftHoldsForPerson(personId);
-		
+
 		int count = 0;
-		
+
 		for (Mail held: heldMail)
 		{
 			if (held.getList().getPermissionsFor(who).contains(Permission.POST))
@@ -543,10 +543,10 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 				count++;
 			}
 		}
-		
+
 		return count;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#getSiteAdmins()
@@ -557,7 +557,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		List<Person> siteAdmins = this.em.findSiteAdmins();
 		return Transmute.people(siteAdmins);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setListAddresses(java.lang.Long, javax.mail.internet.InternetAddress, java.net.URL)
@@ -566,18 +566,18 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	public void setListAddresses(Long listId, InternetAddress address, URL url) throws NotFoundException, DuplicateListDataException, InvalidListDataException
 	{
 		MailingList list = this.em.get(MailingList.class, listId);
-		
+
 		InternetAddress checkAddress = list.getEmail().equals(address.getAddress()) ? null : address;
 		URL checkUrl = list.getUrl().equals(url.toString()) ? null : url;
 		this.checkListAddresses(checkAddress, checkUrl);
-		
+
 		list.setEmail(address.getAddress());
 		list.setUrl(url.toString());
 	}
 
 	/**
 	 * Checks whether or not the list addresses are ok (valid and not duplicates)
-	 * 
+	 *
 	 * @param address can be null to skip address checking
 	 * @param url can be null to skip url checking
 	 */
@@ -585,15 +585,15 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	{
 		boolean dupAddress = false;
 		boolean dupUrl = false;
-		
+
 		if (address != null)
 		{
 			boolean ownerAddy = OwnerAddress.getList(address.getAddress()) != null;
 			boolean verpAddy = VERPAddress.getVERPBounce(address.getAddress()) != null;
-			
+
 			if (ownerAddy || verpAddy)
 				throw new InvalidListDataException("Address cannot be used", ownerAddy, verpAddy);
-			
+
 			try
 			{
 				this.em.getMailingList(address);
@@ -601,12 +601,12 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 			}
 			catch (NotFoundException ex) {}
 		}
-		
+
 		if (url != null)
 		{
 			// TODO:  consider whether or not we should enforce any formatting of
 			// the url here.  Seems like that's a job for the web front end?
-			
+
 			try
 			{
 				this.em.getMailingList(url);
@@ -614,9 +614,9 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 			}
 			catch (NotFoundException ex) {}
 		}
-		
+
 		if (dupAddress || dupUrl)
-			throw new DuplicateListDataException("Mailing list already exists", dupAddress, dupUrl);	
+			throw new DuplicateListDataException("Mailing list already exists", dupAddress, dupUrl);
 	}
 
 	/*
@@ -638,11 +638,11 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	{
 		List<MailingList> mailingLists = this.em.findMailingLists(skip, count);
 		List<ListDataPlus> listDatas = new ArrayList<ListDataPlus>(mailingLists.size());
-		
+
 		for (MailingList list : mailingLists)
 		{
-			ListDataPlus listData = Transmute.mailingListPlus(list, 
-					this.em.countSubscribers(list.getId()), 
+			ListDataPlus listData = Transmute.mailingListPlus(list,
+					this.em.countSubscribers(list.getId()),
 					this.em.countMailByList(list.getId()));
 			listDatas.add(listData);
 		}
@@ -668,17 +668,17 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	{
 		List<MailingList> mailingLists = this.em.findMailingLists(query, skip, count);
 		List<ListDataPlus> listDatas = new ArrayList<ListDataPlus>(mailingLists.size());
-		
+
 		for (MailingList list : mailingLists)
 		{
-			ListDataPlus listData = Transmute.mailingListPlus(list, 
-				this.em.countSubscribers(list.getId()), 
+			ListDataPlus listData = Transmute.mailingListPlus(list,
+				this.em.countSubscribers(list.getId()),
 				this.em.countMailByList(list.getId()));
 			listDatas.add(listData);
 		}
 		return listDatas;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#countLists()
@@ -712,10 +712,10 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 				this.em.countPeople(),
 				this.em.countMail(),
 				(URL)this.em.findConfigValue(Config.ID_SITE_URL),
-				(InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER)				
+				(InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER)
 			);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setDefaultSiteUrl(java.net.URL)
@@ -735,7 +735,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	{
 		return (URL)this.em.findConfigValue(Config.ID_SITE_URL);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setPostmaster(javax.mail.internet.InternetAddress)
@@ -766,7 +766,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		// Roles
 		// EnabledFilters and FilterArguments
 		this.em.remove(list);
-		
+
 		// Cascading persistence is not smart enough when dealing with the 2nd
 		// level cache; for instance, Person objects have cached relationships
 		// to (now defunct) Subscription objects.  We can just hit the problem
@@ -774,9 +774,9 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		SessionFactory sf = this.em.getHibernateSession().getSessionFactory();
 		sf.evictCollection(Person.class.getName() + ".subscriptions");
 		sf.evictQueries();
-		
+
 		// TODO:  rebuild the search index?
-		
+
 		return true;
 	}
 }

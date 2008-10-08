@@ -24,7 +24,7 @@ import org.hibernate.usertype.UserType;
 /**
  * <p>Custom hibernate type that will store any java type that follows
  * the following rules:</p>
- * 
+ *
  * <ul>
  *   <li>The type must be immutable.</li>
  *   <li>The type must implement a toString() method.</li>
@@ -36,19 +36,19 @@ import org.hibernate.usertype.UserType;
  *     </ol>
  *   <li>The object must be serializable.</li>
  * </ul>
- * 
+ *
  * <p>The type is stored in two String columns, the first
  * stores the classname and the second stores the toString() value.</p>
- * 
- * <p>Noteably, this can be used to store any java primitive type 
+ *
+ * <p>Noteably, this can be used to store any java primitive type
  * or Enum.  Technically java.lang.Character is missing the valueOf(String)
  * method but we handle that case specially.</p>
- * 
+ *
  * <p>When this type is cached in the 2nd-level cache, the materialized
  * object is stored, eliminating the need for String conversion.</p>
- * 
+ *
  * <p>The method comments are copied from UserType.</p>
- * 
+ *
  * @author Jeff Schnitzer
  */
 public class AnyImmutableType implements UserType
@@ -78,7 +78,7 @@ public class AnyImmutableType implements UserType
 	 *
 	 * @return Class
 	 */
-	public Class returnedClass()
+	public Class<?> returnedClass()
 	{
 		return Object.class;
 	}
@@ -105,7 +105,7 @@ public class AnyImmutableType implements UserType
 				// part of the address in the equals() method.
 				InternetAddress iax = (InternetAddress)x;
 				InternetAddress iay = (InternetAddress)y;
-				return equals(iax.getAddress(), iay.getAddress()) && equals(iax.getPersonal(), iay.getPersonal());
+				return this.equals(iax.getAddress(), iay.getAddress()) && this.equals(iax.getPersonal(), iay.getPersonal());
 			}
 			else
 				return x.equals(y);
@@ -138,15 +138,15 @@ public class AnyImmutableType implements UserType
 		String type = (String)Hibernate.STRING.nullSafeGet(rs, names[0]);
 		if (type == null)
 			return null;
-		
+
 		String value = (String)Hibernate.STRING.nullSafeGet(rs, names[1]);
 		if (value == null)
 			return null;
-		
+
 		try
 		{
-			Class clazz = Class.forName(type);
-			
+			Class<?> clazz = Class.forName(type);
+
 			if (clazz.equals(String.class))
 			{
 				return value;
@@ -164,26 +164,26 @@ public class AnyImmutableType implements UserType
 				}
 				catch (NoSuchMethodException ex)
 				{
-					Constructor c = clazz.getConstructor(String.class);
+					Constructor<?> c = clazz.getConstructor(String.class);
 					return c.newInstance(value);
 				}
 			}
 		}
 		catch (ClassNotFoundException ex)
 		{
-			throw new HibernateException("Unable to find class " + type, ex); 
+			throw new HibernateException("Unable to find class " + type, ex);
 		}
 		catch (NoSuchMethodException ex)
 		{
-			throw new HibernateException("Class " + type + " does not have a valueOf(String) method or a constructor(String)", ex); 
+			throw new HibernateException("Class " + type + " does not have a valueOf(String) method or a constructor(String)", ex);
 		}
 		catch (InvocationTargetException ex)
 		{
-			throw new HibernateException(type + ".valueOf(\"" + value + "\") threw an exception:  " + ex.getCause(), ex); 
+			throw new HibernateException(type + ".valueOf(\"" + value + "\") threw an exception:  " + ex.getCause(), ex);
 		}
 		catch (InstantiationException ex)
 		{
-			throw new HibernateException(type + "(\"" + value + "\") threw an exception:  " + ex.getCause(), ex); 
+			throw new HibernateException(type + "(\"" + value + "\") threw an exception:  " + ex.getCause(), ex);
 		}
 		catch (IllegalAccessException ex)
 		{

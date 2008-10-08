@@ -29,85 +29,86 @@ import org.subethamail.entity.i.Validator;
 /**
  * When a filter is added to a mailing list, one of these entities is
  * created.  It identifies the filter and stores all the filter arguments.
- * 
+ *
  * @author Jeff Schnitzer
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
-public class EnabledFilter implements Serializable, Comparable
+public class EnabledFilter implements Serializable, Comparable<EnabledFilter>
 {
 	/** */
 	@Transient private static Log log = LogFactory.getLog(EnabledFilter.class);
-	
+
 	/** */
 	@Id
 	@GeneratedValue
 	Long id;
-	
+
 	/** */
 	@Column(nullable=false, length=Validator.MAX_FILTER_CLASSNAME)
 	String className;
-	
+
 	/** TODO:  consider allowing null to mean global filter */
 	@ManyToOne
 	@JoinColumn(name="listId", nullable=false)
 	MailingList list;
-	
+
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="filter")
 	@MapKey(name="name")
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	Map<String, FilterArgument> arguments;
-	
+
 	/**
 	 */
 	public EnabledFilter() {}
-	
+
 	/**
 	 */
 	public EnabledFilter(MailingList list, String className)
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new EnabledFilter");
-		
+
 		this.list = list;
 		this.className = className;
 		this.arguments = new HashMap<String, FilterArgument>();
 	}
-	
+
 	/** */
 	public Long getId()		{ return this.id; }
 
 	/** */
 	public String getClassName() { return this.className; }
-	
+
 	/** */
 	public MailingList getList() { return this.list; }
-	
+
 	/** */
 	public Map<String, FilterArgument> getArguments() { return this.arguments; }
-	
+
 	/** Convenience method */
 	public void addArgument(FilterArgument arg)
 	{
 		this.arguments.put(arg.getName(), arg);
 	}
-	
+
 	/**
-	 * Builds a nice map of the key/values 
+	 * Builds a nice map of the key/values
 	 */
 	public Map<String, Object> getArgumentMap()
 	{
 		Map<String, Object> result = new HashMap<String, Object>(this.arguments.size() * 2);
-		
+
 		for (FilterArgument arg: this.arguments.values())
 			result.put(arg.getName(), arg.getValue());
-		
+
 		return result;
 	}
-	
+
 	/** */
+	@Override
 	public String toString()
 	{
 		return this.getClass() + " {id=" + this.id + ", class=" + this.className + "}";
@@ -116,10 +117,8 @@ public class EnabledFilter implements Serializable, Comparable
 	/**
 	 * Natural sort order is based on id?
 	 */
-	public int compareTo(Object arg0)
+	public int compareTo(EnabledFilter other)
 	{
-		EnabledFilter other = (EnabledFilter)arg0;
-
 		return this.id.compareTo(other.getId());
 	}
 }

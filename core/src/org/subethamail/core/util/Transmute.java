@@ -54,8 +54,8 @@ import org.subethamail.entity.i.Permission;
 
 /**
  * Offers static utility methods to convert between internal entity
- * objects and public interface value objects. 
- * 
+ * objects and public interface value objects.
+ *
  * @author Jeff Schnitzer
  * @author Jon Stevens
  */
@@ -63,47 +63,47 @@ public class Transmute
 {
 	/** */
 	private static Log log = LogFactory.getLog(Transmute.class);
-	
+
 	/** */
 	public static List<BlueprintData> blueprints(Collection<Blueprint> rawColl)
 	{
 		List<BlueprintData> result = new ArrayList<BlueprintData>(rawColl.size());
-		
+
 		for (Blueprint raw: rawColl)
 			result.add(blueprint(raw));
-		
+
 		return result;
 	}
-	
+
 	/** */
 	public static BlueprintData blueprint(Blueprint raw)
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-			
+
 		return new BlueprintData(
 				raw.getClass().getName(),
 				raw.getName(),
 				raw.getDescription());
 	}
-	
+
 	/** */
 	public static List<ListData> mailingLists(Collection<MailingList> rawColl)
 	{
 		List<ListData> result = new ArrayList<ListData>(rawColl.size());
-		
+
 		for (MailingList raw: rawColl)
 			result.add(mailingList(raw));
-		
+
 		return result;
 	}
-	
+
 	/** */
 	public static ListData mailingList(MailingList raw)
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-	
+
 		return new ListData(
 				raw.getId(),
 				raw.getEmail(),
@@ -121,7 +121,7 @@ public class Transmute
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-	
+
 		return new ListDataPlus(
 				raw.getId(),
 				raw.getEmail(),
@@ -135,7 +135,7 @@ public class Transmute
 				subscriberCount,
 				messageCount);
 	}
-	
+
 	/** Does not add held subscriptions */
 	public static List<SubscriberData> subscribers(Collection<Subscription> subscriptions, boolean showNote)
 	{
@@ -143,10 +143,10 @@ public class Transmute
 
 		for (Subscription subscription: subscriptions)
 			result.add(subscriber(subscription, showNote));
-		
+
 		return result;
 	}
-	
+
 	/** */
 	public static SubscriberData subscriber(Subscription raw, boolean showNote)
 	{
@@ -165,17 +165,17 @@ public class Transmute
 
 	/**
 	 * @param rawPerson can be null
-	 * @return the status of the person for the given list. 
+	 * @return the status of the person for the given list.
 	 */
 	public static MyListRelationship myListRelationship(Person rawPerson, MailingList rawList)
 	{
 		Set<Permission> perms = rawList.getPermissionsFor(rawPerson);
 
 		perms.size();	// initialize if it's a proxy
-		
+
 		Subscription rawSub = (rawPerson == null) ? null : rawPerson.getSubscription(rawList.getId());
 		EmailAddress deliverTo = (rawSub == null) ? null : rawSub.getDeliverTo();
-		
+
 		return new MyListRelationship(
 				rawList.getId(),
 				rawList.getName(),
@@ -184,7 +184,7 @@ public class Transmute
 				rawSub != null,
 				deliverTo == null ? null : deliverTo.getId());
 	}
-	
+
 	/**
 	 * Just hides the exception handling
 	 */
@@ -203,16 +203,15 @@ public class Transmute
 	/**
 	 * @return a sorted list of subscriptions
 	 */
-	@SuppressWarnings("unchecked")
 	public static List<SubscribedList> subscriptions(Collection<Subscription> rawColl)
 	{
 		List<SubscribedList> result = new ArrayList<SubscribedList>(rawColl.size());
-		
+
 		for (Subscription raw: rawColl)
 			result.add(subscription(raw));
-		
+
 		Collections.sort(result);
-		
+
 		return result;
 	}
 
@@ -222,7 +221,7 @@ public class Transmute
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-	
+
 		return new SubscribedList(
 				raw.getList().getId(),
 				raw.getList().getEmail(),
@@ -243,10 +242,10 @@ public class Transmute
 	public static List<MailSummary> mailSummaries(Collection<Mail> rawColl, boolean showEmail, MailSummary replacement)
 	{
 		List<MailSummary> result = new ArrayList<MailSummary>(rawColl.size());
-		
+
 		for (Mail raw: rawColl)
 			result.add(mailSummary(raw, showEmail, replacement));
-		
+
 		return result;
 	}
 
@@ -258,12 +257,12 @@ public class Transmute
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-	
+
 		if (replacement != null && replacement.getId().equals(raw.getId()))
 			return replacement;
-			
+
 		InternetAddress addy = raw.getFromAddress();
-			
+
 		return new MailSummary(
 				raw.getId(),
 				raw.getList().getId(),
@@ -279,9 +278,9 @@ public class Transmute
 		try
 		{
 			InternetAddress addy = raw.getFromAddress();
-		
+
 			SubEthaMessage msg = new SubEthaMessage(null, raw.getContent());
-			
+
 			List<InlinePartData> inlineParts = new ArrayList<InlinePartData>();
 			List<AttachmentPartData> attachmentParts = new ArrayList<AttachmentPartData>();
 
@@ -296,14 +295,14 @@ public class Transmute
 					part.setHeader(SubEthaMessage.HDR_CONTENT_TYPE, contentType);
 
 					String name = part.getFileName();
-					
+
 					// just in case we are working with something that isn't
 					// C-D: attachment; filename=""
 					if (name == null || name.length() == 0)
 						name = MailUtils.getNameFromContentType(contentType);
-					
+
 					Long id = (Long) part.getContent();
-					
+
 					//TODO: Set the correct size. This should be the size of the Attachment.content (Blob)
 					AttachmentPartData apd = new AttachmentPartData(id, contentType, name, 0);
 					attachmentParts.add(apd);
@@ -314,18 +313,18 @@ public class Transmute
 					Object content = part.getContent();
 
 					String name = part.getFileName();
-					
+
 					// just in case we are working with something that isn't
 					// C-D: attachment; filename=""
 					if (name == null || name.length() == 0)
 						name = MailUtils.getNameFromContentType(contentType);
-					
+
 					InlinePartData ipd;
 					if (content instanceof String)
 					{
 						ipd = new TextPartData((String)content, part.getContentType(), name, part.getSize());
 					}
-					else 
+					else
 					{
 						ipd = new InlinePartData(content, part.getContentType(), name, part.getSize());
 					}
@@ -333,7 +332,7 @@ public class Transmute
 					inlineParts.add(ipd);
 				}
 			}
-			
+
 			return new MailData(
 					raw.getId(),
 					raw.getSubject(),
@@ -357,26 +356,26 @@ public class Transmute
 			throw new RuntimeException(ex);
 		}
 	}
-	
+
 	/**
 	 */
 	public static MailData[] mailThread(Mail raw, boolean showEmail)
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-		
+
 		Mail root = raw;
 		while (root.getParent() != null) { root = root.getParent(); }
-	
+
 		List<Mail> mails = raw.getDescendents();
 		MailData[] mailDatas =  new MailData[mails.size()];
-	
+
 		int x = 0;
 		for (Mail mail: mails)
 		{
 			mailDatas[x] = Transmute.mailData(mail, showEmail);
 		}
-		
+
 		return mailDatas;
 	}
 	/**
@@ -384,10 +383,10 @@ public class Transmute
 	public static List<RoleData> roles(Collection<Role> rawColl)
 	{
 		List<RoleData> result = new ArrayList<RoleData>(rawColl.size());
-		
+
 		for (Role raw: rawColl)
 			result.add(role(raw));
-		
+
 		return result;
 	}
 
@@ -397,10 +396,10 @@ public class Transmute
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-	
-		// Might be a proxy, must initialize 
+
+		// Might be a proxy, must initialize
 		raw.getPermissions().size();
-		
+
 		return new RoleData(
 				raw.getId(),
 				raw.getName(),
@@ -414,10 +413,10 @@ public class Transmute
 	public static List<FilterData> filters(Collection<Filter> rawColl)
 	{
 		List<FilterData> result = new ArrayList<FilterData>(rawColl.size());
-		
+
 		for (Filter raw: rawColl)
 			result.add(filter(raw));
-		
+
 		return result;
 	}
 
@@ -427,7 +426,7 @@ public class Transmute
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-	
+
 		return new FilterData(
 				raw.getClass().getName(),
 				raw.getName(),
@@ -441,7 +440,7 @@ public class Transmute
 	{
 		if (log.isDebugEnabled())
 			log.debug(enabled.toString());
-	
+
 		return new EnabledFilterData(
 				filter.getClass().getName(),
 				filter.getName(),
@@ -456,10 +455,10 @@ public class Transmute
 	public static List<SubscriberData> heldSubscriptions(Collection<SubscriptionHold> rawColl)
 	{
 		List<SubscriberData> result = new ArrayList<SubscriberData>(rawColl.size());
-		
+
 		for (SubscriptionHold raw: rawColl)
 			result.add(heldSubscription(raw));
-		
+
 		return result;
 	}
 
@@ -469,7 +468,7 @@ public class Transmute
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-	
+
 		return new SubscriberData(
 				raw.getPerson().getId(),
 				raw.getPerson().getName(),
@@ -485,10 +484,10 @@ public class Transmute
 	public static Collection<MailHold> heldMail(Collection<Mail> rawColl)
 	{
 		List<MailHold> result = new ArrayList<MailHold>(rawColl.size());
-		
+
 		for (Mail raw: rawColl)
 			result.add(heldMail(raw));
-		
+
 		return result;
 	}
 
@@ -498,7 +497,7 @@ public class Transmute
 	{
 		if (log.isDebugEnabled())
 			log.debug(raw.toString());
-	
+
 		return new MailHold(
 				raw.getId(),
 				raw.getSubject(),
@@ -506,7 +505,7 @@ public class Transmute
 				raw.getSentDate(),
 				raw.getHold() == HoldType.HARD);
 	}
-	
+
 	/**
 	 * This method converts Person objects into PersonData objects.
 	 */
@@ -514,7 +513,7 @@ public class Transmute
 	{
 		List<PersonData> result = new ArrayList<PersonData>(persons.size());
 		for (Person person: persons)
-		{			
+		{
 			result.add(person(person));
 		}
 		return result;

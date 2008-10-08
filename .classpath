@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/servlet-api.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jboss-j2ee.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jbosssx.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/activation.jar" sourcepath="/J2EESRC_HOME/activation/src/java"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/ejb3-persistence.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate3.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/mail.jar" sourcepath="/JAVAMAIL_SRC"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/mail-plugin.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jsp-api.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/lib/jboss-ejb3x.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-annotations-ejb3.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/server/default/deploy/jbossws.sar/jboss-jaxws.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/lib/jboss-jmx.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/lib/jboss-system.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/lib/jboss-common.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/lib/commons-logging.jar"/>
-	<classpathentry kind="var" path="JBOSS_HOME/client/jbossws-client.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/servlet-api.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jboss-j2ee.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jbosssx.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/activation.jar" sourcepath="/J2EESRC_HOME/activation/src/java"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/ejb3-persistence.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/hibernate3.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/mail.jar" sourcepath="/JAVAMAIL_SRC"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/mail-plugin.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jsp-api.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jboss-ejb3x.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jbossws-spi.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jboss-jaxws.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-annotations-ejb3.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-jmx.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-system.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-common.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-core-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/mina-core-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/subetha-smtp.jar"/>

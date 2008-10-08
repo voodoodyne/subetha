@@ -16,14 +16,13 @@ import org.tagonist.propertize.Property;
 
 /**
  * Adds a site admin.
- * 
+ *
  * @author Jon Stevens
  * @author Jeff Schnitzer
  */
-public class AdminAdd extends AuthRequired 
+public class AdminAdd extends AuthRequired
 {
 	/** */
-	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(AdminAdd.class);
 
 	public class Model extends ErrorMapModel
@@ -31,21 +30,23 @@ public class AdminAdd extends AuthRequired
 		@Email
 		@Property String email;
 	}
-	
+
 	/** */
+	@Override
 	public void initialize()
 	{
 		this.getCtx().setModel(new Model());
 	}
-	
+
 	/** */
+	@Override
 	public void authExecute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();
-		
+
 		if (log.isDebugEnabled())
 			log.debug("Adding site admin: " + model.email);
-		
+
 		model.validate();
 
 		if (model.getErrors().isEmpty())

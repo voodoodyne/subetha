@@ -21,7 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.ejb.Service;
 import org.jboss.annotation.security.SecurityDomain;
-import org.jboss.ws.annotation.WebContext;
+import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.admin.i.DuplicateListDataException;
@@ -34,7 +34,7 @@ import org.subethamail.core.util.Transmute;
 
 /**
  * Implementation of the ListWizard interface.
- * 
+ *
  * @author Jeff Schnitzer
  */
 @Service(name="ListWizard")
@@ -47,10 +47,10 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 {
 	/** */
 	private static Log log = LogFactory.getLog(ListWizardBean.class);
-	
+
 	/** */
 	@EJB Admin admin;
-	
+
 	/**
 	 * Key is blueprint classname.  Watch out for concurrency.
 	 */
@@ -63,7 +63,7 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 	{
 		if (log.isInfoEnabled())
 			log.info("Registering " + print.getClass().getName());
-			
+
 		this.blueprints.put(print.getClass().getName(), print);
 	}
 
@@ -74,12 +74,12 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 	{
 		if (log.isInfoEnabled())
 			log.info("De-registering " + print.getClass().getName());
-			
+
 		this.blueprints.remove(print.getClass().getName());
 	}
-	
+
 	/**
-	 * @see ListWizard#getBlueprints() 
+	 * @see ListWizard#getBlueprints()
 	 */
 	@WebMethod
 	public List<BlueprintData> getBlueprints()
@@ -97,13 +97,13 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 
 		if (blue == null)
 			throw new IllegalStateException("Blueprint does not exist");
-		
+
 		Long listId = this.admin.createMailingList(address, url, description, initialOwners);
-		
+
 		blue.configureMailingList(listId);
-		
+
 		return listId;
 	}
-	
-	
+
+
 }

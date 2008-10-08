@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.subethamail.common.EnumerationAdapter;
 
@@ -36,23 +36,23 @@ public class FileUploadFilter extends AbstractFilter
 	 * Maximum size of an upload, currently 15MB.
 	 */
 	public static final int MAX_UPLOAD_BYTES = 1024 * 1024 * 15;
-	
+
 	/**
 	 * Attribute in the request where the files are stored.  Clients to
 	 * this filter should use getFiles()
 	 */
 	protected static final String ATTR_FILES = FileUploadFilter.class.getName() + ".files";
-	
+
 	/**
 	 * Attribute in the request where an exception will be stored.  This
 	 * will only be the case if an exception was thrown during processing.
 	 */
 	protected static final String ATTR_EXCEPTION = FileUploadFilter.class.getName() + ".exception";
-	
+
 	/**
 	 * Use this method to obtain the files extracted from the multipart request.
 	 * Form fields will not show up in this list.
-	 * 
+	 *
 	 * @throws any exception that might have been thrown during the processing of the
 	 *  upload.  The stack trace will seem a little odd.
 	 */
@@ -62,41 +62,42 @@ public class FileUploadFilter extends AbstractFilter
 		FileUploadException ex = (FileUploadException)request.getAttribute(ATTR_EXCEPTION);
 		if (ex != null)
 			throw ex;
-		
+
 		List<FileItem> files = (List)request.getAttribute(ATTR_FILES);
 		if (files == null)
 			throw new IllegalStateException("Missing files, perhaps filter not configured or form enctype was wrong");
 
 		return files;
 	}
-	
+
 	/**
 	 * Filter the current request. If it is a multipart request, parse it and
 	 * wrap it before chaining to the next filter or servlet. Otherwise, pass
 	 * it on untouched.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 		throws IOException, ServletException
 	{
-		if (!FileUpload.isMultipartContent(request))
+		if (!FileUploadBase.isMultipartContent(request))
 		{
 			chain.doFilter(request, response);
 			return;
 		}
-		
+
 		try
 		{
 			//FileItemFactory fact = new DiskFileItemFactory();
 			//FileUpload upload = new ServletFileUpload(fact);
 			DiskFileUpload upload = new DiskFileUpload();
 			upload.setSizeMax(MAX_UPLOAD_BYTES);
-			
+
 			List<FileItem> items = upload.parseRequest(request);
-			
+
 			Map<String, String[]> params = new HashMap<String, String[]>();
 			List<FileItem> files = new ArrayList(items.size());
-			
+
 			for (FileItem item: items)
 			{
 				if (item.isFormField())
@@ -112,19 +113,19 @@ public class FileUploadFilter extends AbstractFilter
 						String[] newArray = new String[array.length + 1];
 						System.arraycopy(array, 0, newArray, 0, array.length);
 						newArray[newArray.length - 1] = item.getString();
-						
+
 						array = newArray;
 					}
-					
+
 					params.put(item.getFieldName(), array);
 				}
 				else
 					files.add(item);
 			}
-			
+
 			request.setAttribute(ATTR_FILES, files);
 			HttpServletRequest wrapped = new RequestWrapper(request, params);
-			
+
 			chain.doFilter(wrapped, response);
 		}
 		catch (FileUploadException ex)
@@ -135,25 +136,24 @@ public class FileUploadFilter extends AbstractFilter
 			chain.doFilter(request, response);
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Wraps the request providing a set of params as if they were the
 	 * normal servlet params.
 	 */
-	@SuppressWarnings("deprecation")
 	class RequestWrapper extends HttpServletRequestWrapper
 	{
 		/** */
 		protected Map<String, String[]> params;
-		
+
 		/** */
 		public RequestWrapper(HttpServletRequest orig, Map<String, String[]> params)
 		{
 			super(orig);
-			
+
 			this.params = params;
 		}
-		
+
 		/* (non-Javadoc)
 		 * @see javax.servlet.ServletRequestWrapper#getParameter(java.lang.String)
 		 */
@@ -171,7 +171,7 @@ public class FileUploadFilter extends AbstractFilter
 		 * @see javax.servlet.ServletRequestWrapper#getParameterMap()
 		 */
 		@Override
-		public Map getParameterMap()
+		public Map<?,?> getParameterMap()
 		{
 			return this.params;
 		}
@@ -180,7 +180,7 @@ public class FileUploadFilter extends AbstractFilter
 		 * @see javax.servlet.ServletRequestWrapper#getParameterNames()
 		 */
 		@Override
-		public Enumeration getParameterNames()
+		public Enumeration<?> getParameterNames()
 		{
 			return new EnumerationAdapter(this.params.keySet().iterator());
 		}

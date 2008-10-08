@@ -33,7 +33,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
-import org.jboss.ws.annotation.WebContext;
+import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
@@ -73,14 +73,14 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 {
 	/** */
 	private static Log log = LogFactory.getLog(InjectorBean.class);
-	
+
 	/**
 	 * We bounce injected messages larger than this amount, in bytes.
 	 * Must be hardcoded because JavaMail creates a byte[] representation,
-	 * and we don't want huge files taking down our JVM.  
+	 * and we don't want huge files taking down our JVM.
 	 */
 	public static final int MAX_MESSAGE_BYTES = 1000 * 1000 * 10;
-	
+
 	/**
 	 * The oldest bounce message we are willing to consider valid.  This
 	 * is to prevent anyone that finds an old bounce token for a user
@@ -95,7 +95,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 * not occur.
 	 */
 	public static final long MAX_BOUNCE_THRESHOLD = 7;
-	
+
 	/**
 	 * Minimum number of milliseconds between hold notification emails.  It might
 	 * be longer if a steady stream arrives.  The logic actually only sends a
@@ -103,7 +103,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 * from the user was held.  Currently 24 hours.
 	 */
 	public static final long MIN_HOLD_NOTIFICATION_INTERVAL_MILLIS = 1000 * 60 * 60 * 24;
-	
+
 	/**
 	 * How far back to look for the parent of a message by subject.
 	 */
@@ -115,7 +115,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	@EJB Encryptor encryptor;
 	@EJB Detacher detacher;
 	@EJB PostOffice postOffice;
-	
+
 	/** */
 	@Resource(mappedName="java:/Mail") private Session mailSession;
 
@@ -128,11 +128,11 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	{
 		if (log.isDebugEnabled())
 			log.debug("Checking if we want address " + toAddress);
-		
+
 		try
 		{
 			InternetAddress addy = new InternetAddress(toAddress);
-			
+
 			// Maybe it's a VERP bounce?
 			VERPAddress verp = VERPAddress.getVERPBounce(addy.getAddress());
 			if (verp != null)
@@ -144,7 +144,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 				if (ownerList != null)
 					addy = new InternetAddress(ownerList);
 			}
-			
+
 			try
 			{
 				this.em.getMailingList(addy);
@@ -157,7 +157,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		}
 		catch (MessagingException ex) { throw new RuntimeException(ex); }
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, byte[])
@@ -166,7 +166,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	{
 		return this.inject(fromAddress, toAddress, new ByteArrayInputStream(mailData));
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#inject(java.lang.String, java.lang.String, byte[])
@@ -177,10 +177,10 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		{
 			if (!mailData.markSupported())
 				mailData = new BufferedInputStream(mailData);
-			
+
 			mailData.mark(8192);
 		}
-		
+
 		try
 		{
 			return this.injectImpl(envelopeSender, envelopeRecipient, mailData);
@@ -197,19 +197,19 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 					StringBuilder builder = new StringBuilder();
 					while (reader.ready())
 						builder.append((char)reader.read());
-					
+
 					log.debug("Mail body was: " + builder);
 				}
 				catch (IOException e) {}
 			}
-			
+
 			if (ex instanceof RuntimeException)
 				throw (RuntimeException)ex;
 			else
 				throw new RuntimeException(ex);
 		}
 	}
-	
+
 	/**
 	 * Factors out the exception catching.
 	 */
@@ -217,9 +217,9 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	{
 		if (log.isDebugEnabled())
 			log.debug("Injecting message sent to " + envelopeRecipient);
-		
+
 		InternetAddress recipientAddy = new InternetAddress(envelopeRecipient);
-		
+
 		// Must check for recipient VERP bounce
 		VERPAddress recipientVerp = VERPAddress.getVERPBounce(recipientAddy.getAddress());
 		if (recipientVerp != null)
@@ -227,27 +227,27 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			this.handleBounce(recipientVerp);
 			return true;
 		}
-		
+
 		// Note that this can stay null; there might not be a sender
 		InternetAddress senderAddy = null;
-		
+
 		if (envelopeSender != null && envelopeSender.trim().length() > 0)
 		{
 			senderAddy = new InternetAddress(envelopeSender);
-			
+
 			// Immediately check to see if the envelope sender is a verp address.  If it is,
 			// convert it into an -owner address.  This magic allows lists to subscribe to lists.
 			VERPAddress senderVerp = VERPAddress.getVERPBounce(senderAddy.getAddress());
 			if (senderVerp != null)
 				senderAddy = new InternetAddress(OwnerAddress.makeOwner(senderAddy.getAddress()));
-			
+
 		}
-		
+
 		// Check for -owner mail
 		String listForOwner = OwnerAddress.getList(envelopeRecipient);
 		if (listForOwner != null)
 			recipientAddy = new InternetAddress(listForOwner);
-		
+
 		// Figure out which list this is for
 		MailingList toList;
 		try
@@ -259,19 +259,19 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			log.error("Unknown destination: " + recipientAddy);
 			return false;
 		}
-		
+
 		if (log.isDebugEnabled())
 			log.debug("Message is for list: " + toList);
 
 		// Parse up the message
 		mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
-		
+
 		// If the message is looping, silently accept and drop it.  The
 		// X-Loop header is added by the deliverator.
 		if (msg.hasXLoop(toList.getEmail()))
 			return true;
-		
+
 		// Now that we have the basic building blocks, see if we
 		// should be forwarding the mail to owners instead
 		if (listForOwner != null)
@@ -279,15 +279,15 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			this.handleOwnerMail(toList, msg);
 			return true;
 		}
-		
+
 		// Make sure we have a unique message id
 		if (this.isDuplicateMessage(toList, msg))
 			msg.replaceMessageID();
-		
+
 		// If it stays null, no moderation required
 		HoldType hold = null;
 		String holdMsg = null;
-		
+
 		// Run it through the plugin stack
 		try
 		{
@@ -297,7 +297,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		{
 			if (log.isDebugEnabled())
 				log.debug("Plugin ignoring message", ex);
-			
+
 			// Maybe we should return false instead?
 			return true;
 		}
@@ -305,41 +305,41 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		{
 			if (log.isDebugEnabled())
 				log.debug("Plugin holding message", ex);
-			
+
 			hold = HoldType.HARD;
 			holdMsg = ex.getMessage();
 		}
-		
+
 		// Find out if the message should be held for moderation
 		if (hold == null)
 		{
 			// Figure out who sent it, if we know
 			Person author = null;
-			
+
 			if (senderAddy != null)
 			{
 				EmailAddress addy = this.em.findEmailAddress(senderAddy.getAddress());
 				if (addy != null)
 					author = addy.getPerson();
 			}
-			
+
 			if (log.isDebugEnabled())
 				log.debug("Message author is: " + author);
-			
+
 			if (!toList.getPermissionsFor(author).contains(Permission.POST))
 				hold = HoldType.SOFT;
 		}
-		
+
 		if (log.isDebugEnabled())
 			log.debug("Hold?  " + hold);
 
 		Mail mail = new Mail(senderAddy, msg, toList, hold);
 		this.em.persist(mail);
-		
+
 		// Convert all binary attachments to references and then set the content
 		this.detacher.detach(msg, mail);
 		mail.setContent(msg);
-		
+
 		if (mail.getHold() != null)
 		{
 			if (senderAddy != null)
@@ -348,7 +348,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 				// because they might cause too much backscatter from spam.  We
 				// compromise on sending at most one per time period.
 				Date cutoff = new Date(System.currentTimeMillis() - MIN_HOLD_NOTIFICATION_INTERVAL_MILLIS);
-				
+
 				int recentHolds = this.em.countRecentHeldMail(senderAddy.getAddress(), cutoff);
 				if (recentHolds <= 1)	// count includes the current held msg
 				{
@@ -357,7 +357,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 					this.postOffice.sendPosterMailHoldNotice(toList, senderAddy.getAddress(), mail, holdMsg);
 				}
 			}
-			
+
 			if (hold == HoldType.HARD)
 			{
 				for (Subscription sub: toList.getSubscriptions())
@@ -373,10 +373,10 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			this.threadMail(mail, msg);
 			this.queuer.queueForDelivery(mail.getId());
 		}
-		
+
 		return true;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#importMessage(java.lang.Long, java.lang.String, java.io.InputStream, boolean, java.util.Date)
@@ -389,27 +389,27 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		try
 		{
 			InternetAddress senderAddy = new InternetAddress(envelopeSender);
-	
+
 			// Figure out which list this is for
 			MailingList toList = this.em.get(MailingList.class, listId);
-			
+
 			// Parse up the message
 			mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
 			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);
-			
+
 			// Check to see if the message is a duplicate.
-			if (this.isDuplicateMessage(toList, msg)) 
+			if (this.isDuplicateMessage(toList, msg))
 			{
-				// Are we dropping duplicates? 
+				// Are we dropping duplicates?
 				if (ignoreDuplicate)
 					return msg.getSentDate();
 				else
 					msg.replaceMessageID();
 			}
-	
+
 			// If it stays null, no moderation required
 			HoldType hold = null;
-			
+
 			// Run it through the plugin stack
 			try
 			{
@@ -419,41 +419,41 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			{
 				if (log.isDebugEnabled())
 					log.debug("Plugin ignoring message", ex);
-				
+
 				return msg.getSentDate();
 			}
 			catch (HoldException ex)
 			{
 				if (log.isDebugEnabled())
 					log.debug("Plugin holding message", ex);
-				
+
 				hold = HoldType.HARD;
 			}
-	
+
 			Date sentDate = msg.getSentDate();
 			if (sentDate == null)
 				sentDate = fallbackDate;
-					
+
 			Mail mail = new Mail(senderAddy, msg, toList, hold, sentDate);
 			this.em.persist(mail);
-			
+
 			// Convert all binary attachments to references and then set the content
 			this.detacher.detach(msg, mail);
 			mail.setContent(msg);
-			
+
 			if (mail.getHold() == null)
 				this.threadMail(mail, msg);
-			
+
 			return msg.getSentDate();
 		}
 		catch (MessagingException ex) { throw new RuntimeException(ex); }
 		catch (IOException ex) { throw new RuntimeException(ex); }
 	}
-	
+
 	/**
 	 * Forwards the message to all owners of the list.  The return
 	 * address will be VERPed.
-	 * 
+	 *
 	 * @param list list whose owner(s) should receive the mail
 	 * @param msg is the message to forward
 	 */
@@ -464,13 +464,13 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 			if (sub.getRole().isOwner() && sub.getDeliverTo() != null)
 			{
 				Address destination = new InternetAddress(sub.getDeliverTo().getId());
-				
+
 				// Set up the VERP bounce address
 				byte[] token = this.encryptor.encryptString(sub.getDeliverTo().getId());
 				msg.setEnvelopeFrom(VERPAddress.encodeVERP(list.getEmail(), token));
-				
+
 				Transport.send(msg, new Address[] { destination });
-				
+
 				sub.getDeliverTo().bounceDecay();
 			}
 		}
@@ -482,7 +482,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	protected boolean isDuplicateMessage(MailingList list, SubEthaMessage msg) throws MessagingException
 	{
 		String messageId = msg.getMessageID();
-		
+
 		if (messageId != null)
 		{
 			try
@@ -490,7 +490,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 				this.em.getMailByMessageId(list.getId(), messageId);
 				return true;
 			}
-			catch (NotFoundException ex) 
+			catch (NotFoundException ex)
 			{
 				return false;
 			}
@@ -507,18 +507,18 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	{
 		if (log.isDebugEnabled())
 			log.debug("Handling bounce from list " + verp.getEmail());
-		
+
 		try
 		{
 			String originalEmail = this.encryptor.decryptString(verp.getToken(), MAX_BOUNCE_AGE_MILLIS);
 
 			if (log.isDebugEnabled())
 				log.debug("Bounced from " + originalEmail);
-			
+
 			EmailAddress found = this.em.getEmailAddress(originalEmail);
-			
+
 			found.bounceIncrement();
-			
+
 			if (found.getBounces() > MAX_BOUNCE_THRESHOLD)
 			{
 				// Unsubscribe the address from any delivery
@@ -532,7 +532,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 							log.warn("Stopping delivery of " + sub.getList().getName() + " to " + found.getId() + " due to excessive bounces");
 					}
 				}
-				
+
 				// TODO: somehow notify the person, perhaps at one of their other addresses?
 				// TODO: notify the administrator?
 			}
@@ -557,24 +557,24 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	/**
 	 * Places the mail in a thread hierarchy, possibly updating a variety
 	 * of other mails which are part of the hierarchy.
-	 * 
+	 *
 	 * When this completes, the mail may have a parent and children.
 	 */
 	void threadMail(Mail mail, SubEthaMessage msg) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Threading mail " + mail);
-		
+
 		//
 		// STEP ONE:  Figure who we want to be our parent.
 		//
 		List<String> wantedReference = new ArrayList<String>();
-		
+
 		// If there is an InReplyTo, that tops the list
 		String inReplyTo = msg.getInReplyTo();
 		if (inReplyTo != null)
 			wantedReference.add(inReplyTo);
-			
+
 		// Now add the references field.  Careful that the
 		// last reference might be duplicate of inReplyTo
 		String[] references = msg.getReferences();
@@ -587,45 +587,45 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 					wantedReference.add(references[i]);
 			}
 		}
-		
+
 		if (log.isDebugEnabled())
 			log.debug("Wanted references is " + wantedReference);
-		
+
 		//
 		// STEP TWO:  Find an acceptable candidate to be our thread parent,
 		// and eliminate any candidates that are inferior.
 		//
 		Mail parent = null;
-		
+
 		for (int i=0; i<wantedReference.size(); i++)
 		{
 			String candidate = wantedReference.get(i);
-			
+
 			try
 			{
 				parent = this.em.getMailByMessageId(mail.getList().getId(), candidate);
-				
+
 				if (log.isDebugEnabled())
 					log.debug("Found parent at choice " + i + ", max " + (wantedReference.size()-1));
-				
+
 				// Got one, eliminate anything from wantedReference that is at this
 				// level or later.  Do it from the end to make ArrayList happy.
 				for (int delInd=wantedReference.size()-1; delInd>=i; delInd--)
 					wantedReference.remove(delInd);
-				
+
 				break;
 			}
 			catch (NotFoundException ex) {}
 		}
-		
+
 		// If that didn't help us, try the desperate step of matching on subject
 		if (parent == null)
 		{
 			String subj = mail.getSubject();
 			subj = MailUtils.cleanRe(subj);
-			
+
 			Date cutoff = new Date(System.currentTimeMillis() - MAX_SUBJECT_THREAD_PARENT_AGE_MILLIS);
-			
+
 			// This is a little ugly - grab two because the current mail will show up in the search
 			List<Mail> found = this.em.findRecentMailBySubject(mail.getList().getId(), subj, cutoff, 2);
 			for (Mail foundMail: found)
@@ -633,28 +633,28 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 				// The current mail itself should show up in the search
 				if (foundMail == mail)
 					continue;
-				
+
 				parent = foundMail;
-				
+
 				if (log.isDebugEnabled())
 					log.debug("Found parent using subject match");
-				
+
 				break;
 			}
 		}
-		
+
 		if (log.isDebugEnabled())
 			log.debug("Best thread ancestor found is " + parent);
-		
+
 		// Intermission - we can now set the mail's parent and wantedReference
 		if (parent != null)
 		{
 			mail.setParent(parent);
 			parent.getReplies().add(mail);
 		}
-		
+
 		mail.setWantedReference(wantedReference);
-		
+
 		//
 		// STEP THREE:  Find anyone looking for us as a parent and insert us in
 		// their thread ancestry.  Watch out for loops.
@@ -664,7 +664,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		{
 			if (log.isDebugEnabled())
 				log.debug("Replacing parent of " + descendant);
-			
+
 			// Check for a loop
 			Mail checkForLoop = descendant;
 			while (checkForLoop != null)
@@ -673,27 +673,27 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 				{
 					if (log.isWarnEnabled())
 						log.warn("Found a mail loop, parent=" + mail + ", child=" + descendant);
-					
+
 					// Ignore this link and remove the wanted rerference
 					descendant.getWantedReference().remove(mail.getMessageId());
 
 					continue outer;
 				}
-				
+
 				checkForLoop = checkForLoop.getParent();
 			}
-			
+
 			// Remove from the old parent, if exists
 			if (descendant.getParent() != null)
 			{
 				Mail oldParent = descendant.getParent();
 				oldParent.getReplies().remove(descendant);
 			}
-			
+
 			// Add the new parent
 			descendant.setParent(mail);
 			mail.getReplies().add(descendant);
-			
+
 			// Prune the wantedReference collection, possibly to empty
 			List<String> wanted = descendant.getWantedReference();
 			for (int i=wanted.size()-1; i>=0; i--)

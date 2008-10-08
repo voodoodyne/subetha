@@ -20,13 +20,13 @@ import org.subethamail.core.deliv.i.Deliverator;
 
 /**
  * Consumer of the outbound queue.  This is a JBoss message-driven POJO.
- * 
+ *
  * @author Jeff Schnitzer
  */
 @Consumer(
 	activationConfig={
 		@ActivationConfigProperty(propertyName="destinationType", propertyValue="javax.jms.Queue"),
-		@ActivationConfigProperty(propertyName="destination", propertyValue="queue/subetha/outbound")
+		@ActivationConfigProperty(propertyName="destination", propertyValue="queue/outbound") // Must be set to this value for some reason
 	}
 )
 @SecurityDomain("subetha")
@@ -35,10 +35,10 @@ public class OutboundConsumer implements Outbound
 {
 	/** */
 	private static Log log = LogFactory.getLog(InboundConsumer.class);
-	
+
 	/** */
 	@EJB Deliverator deliverator;
-	
+
 	/**
 	 * @see Outbound#deliver(Long, Long)
 	 */
@@ -46,7 +46,7 @@ public class OutboundConsumer implements Outbound
 	{
 		if (log.isDebugEnabled())
 			log.debug("Delivering mailId " + mailId + " to personId " + personId);
-		
+
 		try
 		{
 			this.deliverator.deliver(mailId, personId);
@@ -58,7 +58,7 @@ public class OutboundConsumer implements Outbound
 				log.warn("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
 		}
 	}
-	
+
 	/**
 	 * @see Outbound#deliver(Long, List)
 	 */
@@ -66,7 +66,7 @@ public class OutboundConsumer implements Outbound
 	{
 		if (log.isDebugEnabled())
 			log.debug("Delivering mailId " + mailId + " to personIds " + personIds);
-		
+
 		for (Long personId: personIds)
 		{
 			try

@@ -29,7 +29,7 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
-import org.jboss.ws.annotation.WebContext;
+import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
@@ -64,7 +64,7 @@ import org.subethamail.entity.i.PermissionException;
 
 /**
  * Implementation of the ListMgr interface.
- * 
+ *
  * @author Jeff Schnitzer
  */
 @Stateless(name="ListMgr")
@@ -78,7 +78,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(ListMgrBean.class);
-	
+
 	/** */
 	@EJB FilterRunner filterRunner;
 	@EJB Admin admin;
@@ -98,7 +98,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		//
 		// They might also type in "http://example.com/se/list", so we should
 		// try adding the www too.
-		
+
 		String stringified = url.toString();
 		try
 		{
@@ -124,7 +124,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 					String firstPart = stringified.substring(0, pivot);
 					String secondPart = stringified.substring(pivot);
 					url = new URL(firstPart + "www." + secondPart);
-					
+
 					return this.em.getMailingList(url).getId();
 				}
 				catch (MalformedURLException mux) { throw new RuntimeException(mux); }
@@ -135,9 +135,9 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 				throw ex;
 			}
 		}
-		
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setList(java.lang.Long, java.lang.String, java.lang.String, java.lang.String, boolean)
@@ -146,11 +146,11 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public void setList(Long listId, String name, String description, String welcomeMessage, boolean holdSubs) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_SETTINGS);
-		
+
 		list.setName(name);
 		list.setDescription(description);
 		list.setWelcomeMessage(welcomeMessage);
-		
+
 		this.setHoldSubscriptions(list, holdSubs);
 	}
 
@@ -162,27 +162,27 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public void setHoldSubscriptions(Long listId, boolean value) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_SETTINGS);
-		
+
 		this.setHoldSubscriptions(list, value);
 	}
-	
+
 	/**
 	 * Convenience method.  Consider whether this method should
-	 * flush existing subscription holds. 
+	 * flush existing subscription holds.
 	 */
 	private void setHoldSubscriptions(MailingList list, boolean value)
 	{
 		boolean flushHolds = list.isSubscriptionHeld() && !value;
-		
+
 		list.setSubscriptionHeld(value);
-		
+
 		if (flushHolds)
 		{
 			// Flush all subscription holds?  Maybe it's better just
 			// to leave them in the queue for the administrator.
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getList(java.lang.Long)
@@ -191,7 +191,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public ListData getList(Long listId) throws NotFoundException
 	{
 		MailingList list = this.em.get(MailingList.class, listId);
-		
+
 		return Transmute.mailingList(list);
 	}
 
@@ -206,7 +206,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		{
 			InternetAddress addy = new InternetAddress(email);
 			MailingList list = this.em.getMailingList(addy);
-			
+
 			return Transmute.mailingList(list);
 		}
 		catch (AddressException ex) { throw new NotFoundException(ex); }
@@ -220,7 +220,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public ListRoles getRoles(Long listId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
-		
+
 		return new ListRoles(
 				listId,
 				Transmute.role(list.getDefaultRole()),
@@ -236,12 +236,12 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public Long addRole(Long listId, String name, Set<Permission> perms) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
-		
+
 		Role role = new Role(list, name, perms);
 		this.em.persist(role);
-		
+
 		list.getRoles().add(role);
-		
+
 		return role.getId();
 	}
 
@@ -253,14 +253,14 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public Long setRole(Long roleId, String name, Set<Permission> perms) throws NotFoundException, PermissionException
 	{
 		Role role = this.getRoleForEdit(roleId);
-		
+
 		if (role.isOwner())
 			throw new IllegalArgumentException("You cannot change the Owner role");
-		
+
 		role.setName(name);
 		role.getPermissions().clear();
 		role.getPermissions().addAll(perms);
-		
+
 		return role.getList().getId();
 	}
 
@@ -273,7 +273,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
 		Role role = this.em.get(Role.class, roleId);
-		
+
 		list.setDefaultRole(role);
 	}
 
@@ -286,7 +286,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_ROLES);
 		Role role = this.em.get(Role.class, roleId);
-		
+
 		list.setAnonymousRole(role);
 	}
 
@@ -310,23 +310,23 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		Role deleteRole = this.getRoleForEdit(deleteRoleId);
 		Role convertRole = this.getRoleForEdit(convertToRoleId);
-		
+
 		if (deleteRole.getList() != convertRole.getList())
 			throw new IllegalArgumentException("Roles are not from the same list");
 
 		if (deleteRole.getList().getDefaultRole() == deleteRole)
 			deleteRole.getList().setDefaultRole(convertRole);
-		
+
 		if (deleteRole.getList().getAnonymousRole() == deleteRole)
 			deleteRole.getList().setAnonymousRole(convertRole);
 
 		List<Subscription> subs = this.em.findSubscriptionsByRole(deleteRole.getId());
 		for (Subscription sub: subs)
 			sub.setRole(convertRole);
-		
+
 		deleteRole.getList().getRoles().remove(deleteRole);
 		this.em.remove(deleteRole);
-		
+
 		return convertRole.getList().getId();
 	}
 
@@ -338,12 +338,12 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public Filters getFilters(Long listId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
-		
+
 		Map<String, Filter> allFilters = this.filterRunner.getFilters();
-		
+
 		List<FilterData> available = new ArrayList<FilterData>(allFilters.size() - list.getEnabledFilters().size());
 		List<EnabledFilterData> enabled = new ArrayList<EnabledFilterData>(list.getEnabledFilters().size());
-		
+
 		for (Filter filt: allFilters.values())
 		{
 			EnabledFilter enabledFilt = list.getEnabledFilters().get(filt.getClass().getName());
@@ -352,7 +352,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			else
 				available.add(Transmute.filter(filt));
 		}
-		
+
 		return new Filters(available, enabled);
 	}
 
@@ -364,10 +364,10 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public EnabledFilterData getFilter(Long listId, String className) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
-		
+
 		Filter filt = this.filterRunner.getFilters().get(className);
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
-		
+
 		if (enabled != null)
 		{
 			return Transmute.enabledFilter(filt, enabled);
@@ -376,10 +376,10 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		{
 			// Create what looks like an enabled filter but populated with defaults
 			Map<String, Object> args = new HashMap<String, Object>();
-			
+
 			for (FilterParameter param: filt.getParameters())
 				args.put(param.getName(), param.getDefaultValue());
-			
+
 			return new EnabledFilterData(
 					className, filt.getName(), filt.getDescription(), filt.getParameters(),
 					listId, args);
@@ -395,7 +395,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		this.setFilter(listId, className, null);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setFilter(java.lang.Long, java.lang.String, java.util.Map)
@@ -403,9 +403,9 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public void setFilter(Long listId, String className, Map<String, Object> args) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
-		
+
 		Filter filt = this.filterRunner.getFilters().get(className);
-		
+
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
 		if (enabled == null)
 		{
@@ -413,7 +413,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			enabled = new EnabledFilter(list, className);
 			this.em.persist(enabled);
 			list.addEnabledFilter(enabled);
-			
+
 			for (FilterParameter param: filt.getParameters())
 			{
 				Object value = null;
@@ -429,7 +429,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 				}
 				if (!param.getType().equals(value.getClass()))
 					throw new IllegalArgumentException("Param " + param.getName() + " has " + value.getClass() + " but should have " + param.getType());
-					
+
 				FilterArgument farg = new FilterArgument(enabled, param.getName(), value);
 				this.em.persist(farg);
 				enabled.addArgument(farg);
@@ -438,13 +438,13 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		else
 		{
 			// We need to synchronize the args to the enabled list.
-			
+
 			// First get rid of anything already enabled but not in the paramNames
 			// We'll need a convenient set of filter params
 			Set<String> paramNames = new HashSet<String>();
 			for (FilterParameter param: filt.getParameters())
 				paramNames.add(param.getName());
-			
+
 			Iterator<FilterArgument> enabledArgsIt = enabled.getArguments().values().iterator();
 			while (enabledArgsIt.hasNext())
 			{
@@ -455,17 +455,17 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 					enabledArgsIt.remove();
 				}
 			}
-			
+
 			// Now add back in everything that is in the official list
 			for (FilterParameter param: filt.getParameters())
 			{
 				Object value = args.get(param.getName());
 				if (value == null)
 					value = param.getDefaultValue();
-				
+
 				if (!param.getType().equals(value.getClass()))
 					throw new IllegalArgumentException("Param " + param.getName() + " has class " + value.getClass() + " but should have class " + param.getType());
-					
+
 				FilterArgument farg = enabled.getArguments().get(param.getName());
 				if (farg == null)
 				{
@@ -480,7 +480,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			}
 		}
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#disableFilter(java.lang.Long, java.lang.String)
@@ -489,7 +489,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public void disableFilter(Long listId, String className) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
-		
+
 		EnabledFilter filt = list.getEnabledFilters().get(className);
 		if (filt == null)
 		{
@@ -512,7 +512,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		// We don't need the object, but we need to check permission
 		this.getListFor(listId, Permission.MASS_SUBSCRIBE);
-		
+
 		if (MassSubscribeType.INVITE.equals(how))
 		{
 			for (InternetAddress addy: addresses)
@@ -542,7 +542,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public List<SubscriberData> getHeldSubscriptions(Long listId) throws NotFoundException, PermissionException
 	{
 		MailingList list = this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
-		
+
 		return Transmute.heldSubscriptions(list.getSubscriptionHolds());
 	}
 
@@ -554,7 +554,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public void approveHeldSubscription(Long listId, Long personId) throws NotFoundException, PermissionException
 	{
 		SubscriptionHold discarded = this.discardHeldSubcriptionInternal(listId, personId);
-		
+
 		if (discarded != null)
 		{
 			String deliverTo = discarded.getDeliverTo() == null ? null : discarded.getDeliverTo().getId();
@@ -571,7 +571,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	{
 		this.discardHeldSubcriptionInternal(listId, personId);
 	}
-	
+
 	/**
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldMessageAndSubscribe(java.lang.Long)
@@ -583,31 +583,31 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		// others with the same email address) will automatically get flushed.
 
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
-		mail.getList().checkPermission(getMe(), Permission.APPROVE_SUBSCRIPTIONS);
+		mail.getList().checkPermission(this.getMe(), Permission.APPROVE_SUBSCRIPTIONS);
 
 		this.admin.subscribeEmail(mail.getList().getId(), mail.getFromAddress(), true, false);
 
 		return mail.getList().getId();
 	}
-	
+
 	/**
 	 * Convenient method discards the hold and returns the detached instance.
-	 * 
+	 *
 	 * @return null if no hold was found
 	 */
 	protected SubscriptionHold discardHeldSubcriptionInternal(Long listId, Long personId) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
-		
+
 		Person pers = this.em.get(Person.class, personId);
-		
+
 		SubscriptionHold hold = pers.getHeldSubscriptions().get(listId);
 		if (hold != null)
 		{
 			pers.getHeldSubscriptions().remove(listId);
 			this.em.remove(hold);
 		}
-		
+
 		return hold;
 	}
 
@@ -621,7 +621,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 		this.getListFor(listId, Permission.EDIT_SUBSCRIPTIONS);
 		this.admin.unsubscribe(listId, personId);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#setSubscriptionRole(java.lang.Long, java.lang.Long, java.lang.Long)
@@ -642,9 +642,9 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public Collection<MailHold> getHeldMessages(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.APPROVE_MESSAGES);
-		
+
 		List<Mail> held = this.em.findMailHeld(listId, skip, count);
-		
+
 		return Transmute.heldMail(held);
 	}
 
@@ -656,7 +656,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public int countHeldMessages(Long listId) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.APPROVE_MESSAGES);
-		
+
 		return this.em.countHeldMessages(listId);
 	}
 
@@ -668,11 +668,11 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException
 	{
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
-		
+
 		mail.approve();
-		
+
 		this.queuer.queueForDelivery(mail.getId());
-		
+
 		return mail.getList().getId();
 	}
 
@@ -684,9 +684,9 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public Long discardHeldMessage(Long msgId) throws NotFoundException, PermissionException
 	{
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
-		
+
 		this.em.remove(mail);
-		
+
 		return mail.getList().getId();
 	}
 
@@ -698,7 +698,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public int countHeldSubscriptions(Long listId) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.APPROVE_SUBSCRIPTIONS);
-		
+
 		return this.em.countHeldSubscriptions(listId);
 	}
 
@@ -710,9 +710,9 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public List<SubscriberData> getSubscribers(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
-		
+
 		MailingList list = this.getListFor(listId, Permission.VIEW_SUBSCRIBERS, me);
-		
+
 		boolean showNotes = list.getPermissionsFor(me).contains(Permission.VIEW_NOTES);
 
 		return Transmute.subscribers(this.em.findSubscribers(listId, skip, count), showNotes);
@@ -726,11 +726,11 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public List<SubscriberData> searchSubscribers(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
-		
+
 		MailingList list = this.getListFor(listId, Permission.VIEW_SUBSCRIBERS, me);
-		
+
 		boolean showNotes = list.getPermissionsFor(me).contains(Permission.VIEW_NOTES);
-		
+
 		return Transmute.subscribers(this.em.findSubscribers(listId, query, skip, count), showNotes);
 	}
 
@@ -742,7 +742,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public int countSubscribers(Long listId) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
-		
+
 		return this.em.countSubscribers(listId);
 	}
 
@@ -754,7 +754,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public int countSubscribersQuery(Long listId, String query) throws NotFoundException, PermissionException
 	{
 		this.getListFor(listId, Permission.VIEW_SUBSCRIBERS);
-		
+
 		return this.em.countSubscribers(listId, query);
 	}
 
@@ -786,7 +786,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 			EmailAddress addy = sub.getPerson().getEmailAddress(deliverTo);
 			if (addy == null)
 				throw new NotFoundException("Email address does not belong to the person");
-			
+
 			sub.setDeliverTo(addy);
 		}
 	}
@@ -799,7 +799,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public void setSubscriptionNote(Long listId, Long personId, String note) throws NotFoundException, PermissionException
 	{
 		Subscription sub = this.getSubscriptionFor(listId, personId, Permission.EDIT_NOTES, this.getMe());
-		
+
 		sub.setNote(note.trim());
 	}
 
@@ -811,11 +811,11 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	public SubscriberData getSubscription(Long listId, Long personId) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
-		
+
 		Subscription sub = this.getSubscriptionFor(listId, personId, Permission.VIEW_SUBSCRIBERS, me);
-		
+
 		boolean showNote = sub.getList().getPermissionsFor(me).contains(Permission.VIEW_NOTES);
-		
+
 		return Transmute.subscriber(sub, showNote);
 	}
 }

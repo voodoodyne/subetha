@@ -13,19 +13,19 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Some simple static methods useful as JSP functions
- *  
+ *
  * @author Jeff Schnitzer
  */
-public class CollectionTool 
+public class CollectionTool
 {
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(CollectionTool.class);
-	
+
 	/**
 	 * Does the set contain the object?
 	 */
-	public static boolean contains(Set set, Object obj)
+	public static boolean contains(Set<?> set, Object obj)
 	{
 		if (set == null)
 			return false;

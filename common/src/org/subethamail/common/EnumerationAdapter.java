@@ -13,14 +13,15 @@ import java.util.Iterator;
  *
  * @author Jeff Schnitzer
  */
+@SuppressWarnings("unchecked")
 public class EnumerationAdapter implements Enumeration
 {
 	/** */
-	protected Iterator iterator;
-	
+	protected Iterator<?> iterator;
+
 	/**
 	 */
-	public EnumerationAdapter(Iterator orig)
+	public EnumerationAdapter(Iterator<?> orig)
 	{
 		this.iterator = orig;
 	}

@@ -139,7 +139,7 @@ public class CleanupBean extends EntityManipulatorBean implements CleanupManagem
 
 		if (count > 0)
 			if (log.isInfoEnabled())
-				log.info(count + " obsolete subscription holds removed");
+				log.info(count + " obsolete subscription holds removed with cutoff: " + cutoff);
 	}
 
 	/**

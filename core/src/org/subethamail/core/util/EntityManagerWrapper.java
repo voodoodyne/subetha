@@ -115,7 +115,7 @@ public class EntityManagerWrapper implements EntityManager
 
 	public Query createNativeQuery(String arg0, String arg1)
 	{
-		return this.createNativeQuery(arg0, arg1);
+		return this.base.createNativeQuery(arg0, arg1);
 	}
 
 	public void joinTransaction()

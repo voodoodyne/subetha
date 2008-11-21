@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  Customized TreeCache Service Configuration for Tomcat 5 Clustering   -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<server>
+
+    <!-- ==================================================================== -->
+    <!-- Defines TreeCache configuration                                      -->
+    <!-- ==================================================================== -->
+
+	 <!-- Note we are using TreeCacheAop -->
+    <mbean code="org.jboss.cache.aop.TreeCacheAop"
+        name="jboss.cache:service=TomcatClusteringCache">
+
+        <depends>jboss:service=Naming</depends>
+        <depends>jboss:service=TransactionManager</depends>
+        <!-- We need the AspectDeployer to deploy our FIELD granularity aspects -->
+        <depends>jboss.aop:service=AspectDeployer</depends>
+
+        <!-- Name of cluster. Needs to be the same for all nodes in the 
+             cluster, in order to find each other
+        -->
+        <attribute name="ClusterName">Tomcat-${jboss.partition.name:Cluster}</attribute>
+        
+        <!--
+            Isolation level : SERIALIZABLE
+                              REPEATABLE_READ (default)
+                              READ_COMMITTED
+                              READ_UNCOMMITTED
+                              NONE
+        -->
+        <attribute name="IsolationLevel">REPEATABLE_READ</attribute>
+
+        <!-- Valid modes are LOCAL, REPL_ASYNC and REPL_SYNC
+             
+             If you use REPL_SYNC and a UDP-based ClusterConfig
+             we recommend you comment out the FC (flow control)
+             protocol in the ClusterConfig section below.
+        -->
+        <attribute name="CacheMode">REPL_ASYNC</attribute>
+
+        <!-- 
+          Indicates whether to the cache should unmarshall objects replicated
+          from other cluster nodes, or store them internally as a byte[]
+          until a web app requests them.  Must be "true" if session replication 
+          granularity "FIELD" is used in any webapp, otherwise "false" is
+          recommended.
+        -->
+		<attribute name="UseRegionBasedMarshalling">false</attribute>
+        
+        <!--  Whether or not the entire tree is inactive upon startup, only 
+          responding to replication messages after activateRegion() is 
+          called to activate one or more parts of the tree when a webapp is
+          deployed.  Must have the same value as "UseRegionBasedMarshalling".
+        -->
+		<attribute name="InactiveOnStartup">false</attribute>
+          
+        <!--  Make sure to specify BatchModeTransactionManager only! -->
+        <attribute name="TransactionManagerLookupClass">org.jboss.cache.BatchModeTransactionManagerLookup</attribute>
+
+        <!-- Configures binary format of messages sent between cluster nodes.
+             Changing this allows a later version of JBoss Cache to interoperate
+             with an earlier version. You might, for example, change this
+             if you are integrating a 4.0.4 server into a cluster with
+             servers running an earlier AS version.
+             
+             Possible values:
+             
+             1.2.3     JBC 1.2.3 or earlier; bundled with AS 4.0.3.SP1 and earlier
+             1.2.4     JBC 1.2.4
+             1.2.4.SP1 JBC 1.2.4.SP1
+             1.2.4.SP2 JBC 1.2.4.SP2; bundled with AS 4.0.4
+             
+             For version 1.3.0.GA and later, use the version name.
+        
+        	 If left blank or commented out, JBoss Cache will use the default
+        	 for that release (e.g. 1.4.0 for releases in the 1.4.0 series.
+        	 
+        	 The binary format of replication version 1.4.0 is much more efficient
+        	 than earlier releases, so there is a significant performance penalty
+        	 to trying to interoperate 1.4.0 with earlier releases vs. a pure
+        	 1.4.0 cluster.
+        
+        <attribute name="ReplicationVersion">1.4.0.GA</attribute>
+        -->
+        
+		<!-- JGroups protocol stack properties. Can also be a URL,
+             e.g. file:/home/bela/default.xml
+        <attribute name="ClusterProperties"></attribute>
+        -->
+
+        <attribute name="ClusterConfig">
+            <!--
+            The default UDP stack:
+            - If you have a multihomed machine, set the UDP protocol's bind_addr attribute to the
+            appropriate NIC IP address, e.g bind_addr="192.168.0.2".
+            - On Windows machines, because of the media sense feature being broken with multicast
+            (even after disabling media sense) set the UDP protocol's loopback attribute to true
+            
+            - If your CacheMode is set to REPL_SYNC we recommend you comment 
+            out the FC (flow control) protocol 
+            -->
+            <config>
+                <UDP mcast_addr="${jboss.partition.udpGroup:230.1.2.7}" 
+                     mcast_port="${jboss.webpartition.mcast_port:45577}"
+		             tos="8"
+		             ucast_recv_buf_size="20000000"
+		             ucast_send_buf_size="640000"
+		             mcast_recv_buf_size="25000000"
+		             mcast_send_buf_size="640000"
+		             loopback="false"
+		             discard_incompatible_packets="true"
+		             enable_bundling="true"
+		             max_bundle_size="64000"
+		             max_bundle_timeout="30"
+		             use_incoming_packet_handler="true"
+		             use_outgoing_packet_handler="false"
+		             ip_ttl="${jgroups.udp.ip_ttl:2}"
+		             down_thread="false" up_thread="false"/>
+		          <PING timeout="2000"
+		             down_thread="false" up_thread="false" num_initial_members="3"/>
+		          <MERGE2 max_interval="100000"
+		             down_thread="false" up_thread="false" min_interval="20000"/>
+		          <FD_SOCK down_thread="false" up_thread="false"/>
+		          <FD timeout="10000" max_tries="5" down_thread="false" up_thread="false" shun="true"/>
+		          <VERIFY_SUSPECT timeout="1500" down_thread="false" up_thread="false"/>
+		          <pbcast.NAKACK max_xmit_size="60000"
+		                   use_mcast_xmit="false" gc_lag="0"
+		                   retransmit_timeout="300,600,1200,2400,4800"
+		                   down_thread="false" up_thread="false"
+		                   discard_delivered_msgs="true"/>
+		          <UNICAST timeout="300,600,1200,2400,3600"
+		             down_thread="false" up_thread="false"/>
+		          <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+		                   down_thread="false" up_thread="false"
+		                   max_bytes="400000"/>
+		          <pbcast.GMS print_local_addr="true" join_timeout="3000"
+		                   down_thread="false" up_thread="false"
+		                   join_retry_timeout="2000" shun="true"
+		                   view_bundling="true"
+		                   view_ack_collection_timeout="5000"/>
+		          <FC max_credits="2000000" down_thread="false" up_thread="false"
+		              min_threshold="0.10"/>
+		          <FRAG2 frag_size="60000" down_thread="false" up_thread="false"/>
+		          <pbcast.STATE_TRANSFER down_thread="false" up_thread="false" use_flush="false"/>
+           </config>
+
+           <!-- 
+               Alternate TCP stack: customize it for your environment, 
+               change bind_addr and initial_hosts -->
+           <!--
+           <config>
+                <TCP bind_addr="thishost" start_port="7810" loopback="true"
+                     tcp_nodelay="true"
+	                 recv_buf_size="20000000"
+	                 send_buf_size="640000"
+	                 discard_incompatible_packets="true"
+	                 enable_bundling="true"
+	                 max_bundle_size="64000"
+	                 max_bundle_timeout="30"
+	                 use_incoming_packet_handler="true"
+	                 use_outgoing_packet_handler="false"
+	                 down_thread="false" up_thread="false"
+	                 use_send_queues="false"
+	                 sock_conn_timeout="300"
+	                 skip_suspected_members="true"/>
+	            <TCPPING initial_hosts="thishost[7810],otherhost[7810]" port_range="3"
+	                     timeout="3000"
+	                     down_thread="false" up_thread="false"
+	                     num_initial_members="3"/>
+	            <MERGE2 max_interval="100000"
+	                    down_thread="false" up_thread="false" min_interval="20000"/>
+	            <FD_SOCK down_thread="false" up_thread="false"/>
+	            <FD timeout="10000" max_tries="5" down_thread="false" up_thread="false" shun="true"/>
+	            <VERIFY_SUSPECT timeout="1500" down_thread="false" up_thread="false"/>
+	            <pbcast.NAKACK max_xmit_size="60000"
+	                           use_mcast_xmit="false" gc_lag="0"
+	                           retransmit_timeout="300,600,1200,2400,4800"
+	                           down_thread="false" up_thread="false"
+	                           discard_delivered_msgs="true"/>
+	            <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+	                           down_thread="false" up_thread="false"
+	                           max_bytes="400000"/>
+	            <pbcast.GMS print_local_addr="true" join_timeout="3000"
+	                        down_thread="false" up_thread="false"
+	                        join_retry_timeout="2000" shun="true"
+	                        view_bundling="true"/>
+	            <FC max_credits="2000000" down_thread="false" up_thread="false"
+	                min_threshold="0.10"/>
+	            <FRAG2 frag_size="60000" down_thread="false" up_thread="false"/>
+	            <pbcast.STATE_TRANSFER down_thread="false" up_thread="false" use_flush="false"/>
+           </config>
+           -->
+
+        </attribute>
+
+        <!--
+            Number of milliseconds to wait until all responses for a
+            synchronous call have been received.
+        -->
+        <attribute name="SyncReplTimeout">17500</attribute>
+
+        <!-- Max number of milliseconds to wait for a lock acquisition -->
+        <attribute name="LockAcquisitionTimeout">15000</attribute>
+
+        <!-- Buddy Replication config.
+        
+             See http://wiki.jboss.org/wiki/Wiki.jsp?page=JBossCacheBuddyReplicationDesign
+             and the JBoss Cache docs for more on buddy replication.
+             
+             By default, buddy replication is disabled.
+             
+             Following are the configuration elements likely to be changed:
+             
+             buddyReplicationEnabled  true if you want buddy replication; false if data
+                                      should be replicated to all nodes in the cluster
+                                      
+             numBuddies               to how many backup nodes should each node replicate
+                                      its state
+                                      
+             buddyPoolName            allows logical subgrouping of nodes within the cluster;
+                                      if possible, buddies will be chosen from nodes in the 
+                                      same buddy pool
+                                      
+             Do not change the data gravitation related options.             
+        -->
+        <attribute name="BuddyReplicationConfig">
+            <config>
+                <buddyReplicationEnabled>false</buddyReplicationEnabled>
+                <buddyLocatorClass>org.jboss.cache.buddyreplication.NextMemberBuddyLocator</buddyLocatorClass>
+                <buddyLocatorProperties>
+                    numBuddies = 1
+                    ignoreColocatedBuddies = true
+                </buddyLocatorProperties>
+
+                <buddyPoolName>default</buddyPoolName>
+                <buddyCommunicationTimeout>17500</buddyCommunicationTimeout>
+
+                <autoDataGravitation>false</autoDataGravitation>
+                <dataGravitationRemoveOnFind>true</dataGravitationRemoveOnFind>
+                <dataGravitationSearchBackupTrees>true</dataGravitationSearchBackupTrees>
+
+            </config>
+        </attribute>
+		   
+    </mbean>
+
+</server>

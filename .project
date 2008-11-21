@@ -18,27 +18,27 @@
 		<link>
 			<name>jboss-config</name>
 			<type>2</type>
-			<locationURI>JBOSS_HOME/server/default/conf</locationURI>
+			<locationURI>SUBETHA_JBOSS_HOME/server/default/conf</locationURI>
 		</link>
 		<link>
 			<name>jboss-deploy</name>
 			<type>2</type>
-			<locationURI>JBOSS_HOME/server/default/deploy</locationURI>
+			<locationURI>SUBETHA_JBOSS_HOME/server/default/deploy</locationURI>
 		</link>
 		<link>
 			<name>jboss-log</name>
 			<type>2</type>
-			<locationURI>JBOSS_HOME/server/default/log</locationURI>
+			<locationURI>SUBETHA_JBOSS_HOME/server/default/log</locationURI>
 		</link>
 		<link>
 			<name>jboss-tmp</name>
 			<type>2</type>
-			<locationURI>JBOSS_HOME/server/default/tmp</locationURI>
+			<locationURI>SUBETHA_JBOSS_HOME/server/default/tmp</locationURI>
 		</link>
 		<link>
 			<name>jboss-work</name>
 			<type>2</type>
-			<locationURI>JBOSS_HOME/server/default/work</locationURI>
+			<locationURI>SUBETHA_JBOSS_HOME/server/default/work</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

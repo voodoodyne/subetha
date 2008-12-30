@@ -6,7 +6,7 @@ package org.subethamail.core.smtp;
 
 import javax.ejb.Local;
 
-import org.subethamail.smtp.MessageListener;
+import org.subethamail.smtp.helper.SimpleMessageListener;
 
 /**
  * Listeners that wish to partake of inbound SMTP traffic must register
@@ -20,10 +20,10 @@ public interface MessageListenerRegistry
 	/**
 	 * Register a listener. The listener will become active immediately.
 	 */
-	public void register(MessageListener listener);
+	public void register(SimpleMessageListener listener);
 
 	/**
 	 * Deregister a listener. The listener will no longer receive notifications.
 	 */
-	public void deregister(MessageListener listener);
+	public void deregister(SimpleMessageListener listener);
 }

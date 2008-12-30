@@ -6,7 +6,7 @@ package org.subethamail.core.postfix;
 
 import java.io.IOException;
 
-import org.jboss.annotation.ejb.Management;
+import org.jboss.ejb3.annotation.Management;
 
 /**
  * JMX Management interface for the TcpTableService. The start() and stop() methods

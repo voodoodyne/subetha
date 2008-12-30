@@ -23,11 +23,11 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJBException;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.ejb.Service;
-import org.jboss.annotation.security.SecurityDomain;
-import org.jboss.util.Base64;
+import org.jboss.ejb3.annotation.SecurityDomain;
+import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
@@ -107,7 +107,7 @@ public class EncryptorBean extends EntityManipulatorBean implements Encryptor, E
 		Random rnd = new SecureRandom();
 		rnd.nextBytes(generated);
 		
-		return Base64.encodeBytes(generated);
+		return new String(Base64.encodeBase64(generated));
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public class EncryptorBean extends EntityManipulatorBean implements Encryptor, E
 	byte[] getKey()
 	{
 		String base64 = (String)this.em.findConfigValue(KEY_CONFIG_ID);
-		return Base64.decode(base64);
+		return Base64.decodeBase64(base64.getBytes());
 	}
 	
 	/**

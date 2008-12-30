@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.ejb.Local;
 
-import org.jboss.annotation.ejb.Producer;
+import org.jboss.ejb3.annotation.Producer;
 
 /**
  * @author Jeff Schnitzer

@@ -5,7 +5,7 @@
 
 package org.subethamail.core.plugin.i.helper;
 
-import org.jboss.annotation.ejb.Management;
+import org.jboss.ejb3.annotation.Management;
 
 /**
  * Management interface that provides lifecycle callback methods.

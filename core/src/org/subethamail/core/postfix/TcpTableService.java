@@ -19,8 +19,8 @@ import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
-import org.jboss.annotation.ejb.Depends;
-import org.jboss.annotation.ejb.Service;
+import org.jboss.ejb3.annotation.Depends;
+import org.jboss.ejb3.annotation.Service;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.smtp.SMTPManagement;
 

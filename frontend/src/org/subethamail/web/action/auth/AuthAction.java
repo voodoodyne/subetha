@@ -13,9 +13,9 @@ import javax.security.auth.login.LoginException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.util.Base64;
 import org.subethamail.core.acct.i.AuthCredentials;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
@@ -195,7 +195,7 @@ abstract public class AuthAction extends SubEthaAction
 		
 		byte[] cipherText = Backend.instance().getEncryptor().encryptList(pair);
 		
-		return Base64.encodeBytes(cipherText);
+		return new String(Base64.encodeBase64(cipherText));
 	}
 	
 	/**
@@ -207,7 +207,7 @@ abstract public class AuthAction extends SubEthaAction
 	{
 		try
 		{
-			byte[] cipherText = Base64.decode(cookieText);
+			byte[] cipherText = Base64.decodeBase64(cookieText.getBytes());
 			List<String> pair = Backend.instance().getEncryptor().decryptList(cipherText);
 			
 			return new String[] { pair.get(0), pair.get(1) };

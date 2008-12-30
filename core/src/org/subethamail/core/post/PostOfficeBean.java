@@ -25,7 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.annotation.SecurityDomain;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;

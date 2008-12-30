@@ -13,8 +13,8 @@ import javax.ejb.EJB;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.ejb.Consumer;
-import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.annotation.Consumer;
+import org.jboss.ejb3.annotation.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.deliv.i.Deliverator;
 

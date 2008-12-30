@@ -39,9 +39,8 @@
 	<!-- ******************************************************** -->
 	<path id="jboss.classpath">
 		<fileset dir="${jboss.dir}">
-			<include name="server/default/deploy/**/*.jar"/>
-			<include name="server/default/lib/**/*.jar"/>
-			<include name="lib/**/*.jar"/>
+			<include name="client/*.jar"/>
+			<include name="common/lib/*.jar"/>
 		</fileset>
 	</path>
 
@@ -57,20 +56,16 @@
 		<path refid="jboss.classpath" />
 	</path>
 
-	<path id="entity.classpath">
-		<pathelement location="${build.dir}/common/common.jar" />
-		<path refid="jboss.classpath" />
-	</path>
-
 	<path id="core.classpath">
-		<pathelement location="${build.dir}/entity/entity.jar" />
-		<pathelement location="${build.dir}/common/common.jar" />
+		<pathelement location="${build.dir}/common/lib/common.jar" />
 		<fileset dir="${base.dir}/lib">
 			<include name="${velocity.jar}"/>
-			<include name="${smtp.jar}"/>
-			<include name="${mina-core.jar}"/>
+			<include name="${subethasmtp.jar}"/>
+			<include name="${slf4j-api.jar}"/>
 			<include name="${lucene-core.jar}"/>
 			<include name="${jdom.jar}"/>
+			<include name="${mina-core.jar}"/>
+			<include name="${commons-codec.jar}"/>
 		</fileset>
 
 		<path refid="jboss.classpath" />
@@ -78,29 +73,25 @@
 
 	<path id="plugin.classpath">
 		<pathelement location="${build.dir}/core/subetha-api.jar" />
-		<pathelement location="${build.dir}/entity/entity.jar" />
-		<pathelement location="${build.dir}/common/common.jar" />
+		<pathelement location="${build.dir}/common/lib/common.jar" />
 		<path refid="jboss.classpath" />
 	</path>
 
 	<path id="frontend.classpath">
 		<pathelement location="${build.dir}/core/subetha-api.jar" />
-		<pathelement location="${build.dir}/entity/entity.jar" />
-		<pathelement location="${build.dir}/common/common.jar" />
 		<fileset dir="${base.dir}/lib">
 			<include name="${commons-fileupload.jar}"/>
 			<include name="${tagonist.jar}"/>
 		</fileset>
-		<path refid="jboss.classpath" />
+		<path refid="core.classpath" />
 	</path>
 
 	<path id="rtest.classpath">
 		<pathelement location="${build.dir}/core/core.jar" />
-		<pathelement location="${build.dir}/entity/entity.jar" />
-		<pathelement location="${build.dir}/common/common.jar" />
+		<pathelement location="${build.dir}/common/lib/common.jar" />
 		<fileset dir="${base.dir}/lib">
 			<include name="${junit.jar}"/>
-			<include name="${smtp.jar}"/>
+			<include name="${subethasmtp.jar}"/>
 			<include name="${wiser.jar}"/>
 		</fileset>
 		<path refid="jboss.classpath" />
@@ -116,6 +107,7 @@
 
 	<target name="common" depends="init">
 		<mkdir dir="${build.dir}/common/classes" />
+		<mkdir dir="${build.dir}/common/lib" />
 		<javac
 			srcdir="${base.dir}/common/src/"
 			destdir="${build.dir}/common/classes"
@@ -127,7 +119,7 @@
 
 			<classpath refid="common.classpath" />
 		</javac>
-		<jar jarfile="${build.dir}/common/common.jar">
+		<jar jarfile="${build.dir}/common/lib/common.jar">
 			<fileset dir="${build.dir}/common/classes"/>
 			<manifest>
 				<attribute name="Specification-Version" value="${version}" />
@@ -136,34 +128,7 @@
 		</jar>
 	</target>
 
-	<target name="entity" depends="init, common">
-		<mkdir dir="${build.dir}/entity/classes"/>
-		
-		<javac 
-			srcdir="${base.dir}/entity/src"
-			destdir="${build.dir}/entity/classes" 
-			includeAntRuntime="false"
-			debug="${build.debug}" 
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
-			
-			<classpath refid="entity.classpath"/>			
-		</javac>
-
-		<jar jarfile="${build.dir}/entity/entity.jar">
-			<metainf dir="${base.dir}/entity/meta/">
-				<include name="persistence.xml"/>
-			</metainf>
-			<manifest>
-				<attribute name="Specification-Version" value="${version}" />
-				<attribute name="Implementation-Version" value="${TODAY}" />
-			</manifest>
-			<fileset dir="${build.dir}/entity/classes"/>
-		</jar>
-	</target>
-
- 	<target name="core" depends="init, entity">
+ 	<target name="core" depends="init, common">
 		<mkdir dir="${build.dir}/core/classes" />
  		
 		<javac
@@ -200,6 +165,7 @@
 			<metainf dir="${base.dir}/core/meta">
 				<include name="mailcap"/>
 				<include name="mime.types"/>
+				<include name="persistence.xml"/>
 			</metainf>
 
 			<fileset dir="${build.dir}/core/classes" />
@@ -219,24 +185,6 @@
 				<include name="jboss-service.xml"/>
 			</metainf>
 			
-			<fileset dir="${base.dir}/lib/">
-				<include name="${velocity.jar}"/>
-				<include name="${commons-lang.jar}"/>
-				<include name="${smtp.jar}"/>
-				<include name="${lucene-core.jar}"/>
-				<include name="${commons-beanutils.jar}"/>
-				<include name="${jdom.jar}"/>
-
-				<!-- MINA and it's deps -->
-				<include name="${mina-core.jar}"/>
-				<include name="${slf4j-simple.jar}"/>
-				<include name="${backport-util-concurrent.jar}"/>
-				<include name="${commons-codec.jar}"/>
-			</fileset>
-			
-			<fileset file="${build.dir}/common/subetha-api.jar"/>
-			<fileset file="${build.dir}/common/common.jar"/>
-
 			<manifest>
 				<attribute name="Specification-Version" value="${version}" />
 				<attribute name="Implementation-Version" value="${TODAY}" />
@@ -244,7 +192,7 @@
 		</jar>
 	</target>
 
-	<target name="plugin" depends="common, core, entity">
+	<target name="plugin" depends="common, core">
 		<mkdir dir="${build.dir}/plugin/classes" />
  		
 		<javac
@@ -355,7 +303,7 @@
 		</jar>
 	</target>
 
-	<target name="compile" depends="common, core, entity, plugin, frontend">
+	<target name="compile" depends="common, core, plugin, frontend">
 	</target>
 
 	<target name="ear" depends="compile">
@@ -365,11 +313,29 @@
 				<include name="jboss-app.xml" />
 			</metainf>
 
-			<fileset file="${build.dir}/entity/entity.jar" />
 			<fileset file="${build.dir}/core/core.jar" />
 			<fileset file="${build.dir}/core/core.sar" />
 			<fileset file="${build.dir}/plugin/plugin.jar" />
 			<fileset file="${build.dir}/frontend/frontend.war" />
+
+			<!-- need to include this in the lib dir somehow -->
+			<fileset dir="${build.dir}/common">
+				<include name="lib/common.jar"/>
+			</fileset>
+
+			<fileset dir=".">
+				<include name="lib/${velocity.jar}"/>
+				<include name="lib/${commons-lang.jar}"/>
+				<include name="lib/${subethasmtp.jar}"/>
+				<include name="lib/${lucene-core.jar}"/>
+				<include name="lib/${commons-beanutils.jar}"/>
+				<include name="lib/${jdom.jar}"/>
+
+				<include name="lib/${slf4j-api.jar}"/>
+				<include name="lib/${slf4j-log4j12.jar}"/>
+				<include name="lib/${commons-codec.jar}"/>
+				<include name="lib/${mina-core.jar}"/>
+			</fileset>
 		</ear>
 	</target>
 

@@ -32,7 +32,7 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;

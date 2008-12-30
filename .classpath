@@ -1,35 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/servlet-api.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jboss-j2ee.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jbosssx.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/activation.jar" sourcepath="/J2EESRC_HOME/activation/src/java"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/ejb3-persistence.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/hibernate3.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/mail.jar" sourcepath="/JAVAMAIL_SRC"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/mail-plugin.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jsp-api.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jboss-ejb3x.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jbossws-spi.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jboss-jaxws.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-annotations-ejb3.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-jmx.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-system.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-common.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-core-2.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/mina-core-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/subetha-smtp.jar"/>
 	<classpathentry kind="lib" path="lib/tagonist.jar"/>
 	<classpathentry kind="lib" path="lib/standard.jar"/>
 	<classpathentry kind="lib" path="lib/jstl.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/junit.jar"/>
-	<classpathentry kind="lib" path="lib/subetha-wiser.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-1.5.jar"/>
 	<classpathentry kind="src" path="entity/src"/>
@@ -39,5 +19,30 @@
 	<classpathentry kind="src" path="common/src"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="loadtest/src"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/subethasmtp.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/commons-logging.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-javaee.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jbossws-native-jaxws.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/mail.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-ejb3-ext-api.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jbossws-spi.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jbosssx-client.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-core.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/activation.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/ejb3-persistence.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/jboss-ejb3-core.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/mail-plugin.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-system-jmx-client.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-j2se.jar"/>
+	<classpathentry kind="lib" path="lib/mina-core-1.1.7.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-ejb3-core-client.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/jbosssx.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/hibernate-annotations.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-validator.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-commons-annotations.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/jsp-api.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

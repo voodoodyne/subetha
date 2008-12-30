@@ -19,8 +19,8 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.ejb.Service;
-import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.annotation.SecurityDomain;
+import org.jboss.ejb3.annotation.Service;
 import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.BlueprintData;

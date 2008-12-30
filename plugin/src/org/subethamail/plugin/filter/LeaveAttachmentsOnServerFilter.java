@@ -16,8 +16,8 @@ import javax.mail.Part;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.ejb.Service;
-import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.annotation.SecurityDomain;
+import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.Archiver;

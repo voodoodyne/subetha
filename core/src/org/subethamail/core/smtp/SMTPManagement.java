@@ -7,7 +7,7 @@ package org.subethamail.core.smtp;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import org.jboss.annotation.ejb.Management;
+import org.jboss.ejb3.annotation.Management;
 
 /**
  * JMX Management interface for the SMTPService. The start() and stop() methods

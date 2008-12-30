@@ -11,15 +11,15 @@ import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.smtp.MessageListener;
 import org.subethamail.smtp.TooMuchDataException;
+import org.subethamail.smtp.helper.SimpleMessageListener;
 
 /**
  * Listener which counts the number of messages that it receives. 
  * 
  * @author Jeff Schnitzer
  */
-public class CountingListener implements MessageListener
+public class CountingListener implements SimpleMessageListener
 {
 	/** */
 	@SuppressWarnings("unused")

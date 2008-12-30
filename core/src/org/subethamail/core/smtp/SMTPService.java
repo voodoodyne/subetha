@@ -14,9 +14,10 @@ import javax.annotation.security.RolesAllowed;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.ejb.Service;
-import org.jboss.annotation.security.SecurityDomain;
-import org.subethamail.smtp.MessageListener;
+import org.jboss.ejb3.annotation.SecurityDomain;
+import org.jboss.ejb3.annotation.Service;
+import org.subethamail.smtp.helper.SimpleMessageListener;
+import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
 
 /**
@@ -44,7 +45,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	 * There is no ConcurrentHashSet, so we make up our own by mapping the
 	 * object to itself.
 	 */
-	private Map<MessageListener, MessageListener> listeners = new ConcurrentHashMap<MessageListener, MessageListener>();
+	private Map<SimpleMessageListener, SimpleMessageListener> listeners = new ConcurrentHashMap<SimpleMessageListener, SimpleMessageListener>();
 	
 	private int port = DEFAULT_PORT;
 	private String hostName = null;
@@ -68,7 +69,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.i.MessageListenerRegistry#register(org.subethamail.smtp.i.MessageListener)
 	 */
-	public void register(MessageListener listener)
+	public void register(SimpleMessageListener listener)
 	{
 		if (log.isInfoEnabled())
 			log.info("Registering " + listener);
@@ -80,7 +81,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.i.MessageListenerRegistry#deregister(org.subethamail.smtp.i.MessageListener)
 	 */
-	public void deregister(MessageListener listener)
+	public void deregister(SimpleMessageListener listener)
 	{
 		if (log.isInfoEnabled())
 			log.info("De-registering " + listener);
@@ -104,7 +105,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 
 		log.info("Starting SMTP service: " + (binding==null ? "*" : binding) + ":" + port);
 		
-		this.smtpServer = new SMTPServer(listeners.values());
+		this.smtpServer = new SMTPServer(new SimpleMessageListenerAdapter(listeners.values()));
 		this.smtpServer.setBindAddress(binding);
 		this.smtpServer.setPort(this.port);
 		

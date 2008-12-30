@@ -5,12 +5,9 @@
 
 package org.subethamail.load;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.smtp.MessageListener;
+import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
 
 /**
@@ -31,10 +28,7 @@ public class LoadTester
 	/** */
 	public LoadTester() throws Exception
 	{
-		Collection<MessageListener> listeners = new ArrayList<MessageListener>(1);
-		listeners.add(this.listener);
-		
-		this.server = new SMTPServer(listeners);
+		this.server = new SMTPServer(new SimpleMessageListenerAdapter(this.listener));
 		this.server.setPort(2525);
 		this.server.setHostName("localhost");
 	}

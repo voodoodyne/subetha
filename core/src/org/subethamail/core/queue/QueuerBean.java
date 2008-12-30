@@ -17,7 +17,7 @@ import javax.naming.NamingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.ejb3.mdb.ProducerManager;
 import org.jboss.ejb3.mdb.ProducerObject;
 import org.subethamail.core.queue.i.Queuer;

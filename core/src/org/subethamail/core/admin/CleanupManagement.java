@@ -7,7 +7,7 @@ package org.subethamail.core.admin;
 
 import javax.ejb.Local;
 
-import org.jboss.annotation.ejb.Management;
+import org.jboss.ejb3.annotation.Management;
 
 /**
  * Interface for purging obsolete message and subscription holds.

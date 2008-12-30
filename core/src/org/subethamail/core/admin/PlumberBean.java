@@ -16,10 +16,10 @@ import javax.management.ObjectName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.ejb.LocalBinding;
-import org.jboss.annotation.ejb.RemoteBinding;
-import org.jboss.annotation.ejb.Service;
-import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.annotation.LocalBinding;
+import org.jboss.ejb3.annotation.RemoteBinding;
+import org.jboss.ejb3.annotation.SecurityDomain;
+import org.jboss.ejb3.annotation.Service;
 import org.jboss.mail.MailServiceMBean;
 import org.jboss.mx.util.MBeanProxyExt;
 import org.jdom.Document;

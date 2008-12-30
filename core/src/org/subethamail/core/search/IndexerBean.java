@@ -29,7 +29,7 @@ import javax.sql.DataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.queryParser.ParseException;
-import org.jboss.annotation.ejb.Service;
+import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.SearchException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.search.i.Indexer;

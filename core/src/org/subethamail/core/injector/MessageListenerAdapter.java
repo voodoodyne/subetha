@@ -14,15 +14,15 @@ import javax.ejb.Local;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.annotation.ejb.Depends;
-import org.jboss.annotation.ejb.Service;
-import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.annotation.Depends;
+import org.jboss.ejb3.annotation.SecurityDomain;
+import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.io.LimitExceededException;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
 import org.subethamail.core.smtp.MessageListenerRegistry;
-import org.subethamail.smtp.MessageListener;
 import org.subethamail.smtp.TooMuchDataException;
+import org.subethamail.smtp.helper.SimpleMessageListener;
 
 /**
  * This acts as an SMTP listener and injects any interesting messages
@@ -38,8 +38,8 @@ import org.subethamail.smtp.TooMuchDataException;
 })
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
-@Local(MessageListener.class)
-public class MessageListenerAdapter implements MessageListener, Lifecycle
+@Local(SimpleMessageListener.class)
+public class MessageListenerAdapter implements SimpleMessageListener, Lifecycle
 {
 	/** */
 	private static Log log = LogFactory.getLog(MessageListenerAdapter.class);
@@ -66,7 +66,7 @@ public class MessageListenerAdapter implements MessageListener, Lifecycle
 	}
 
 	/**
-	 * @see MessageListener#accept(String, String)
+	 * @see SimpleMessageListener#accept(String, String)
 	 */
 	public boolean accept(String from, String recipient)
 	{
@@ -74,7 +74,7 @@ public class MessageListenerAdapter implements MessageListener, Lifecycle
 	}
 
 	/**
-	 * @see MessageListener#deliver(String, String, InputStream)
+	 * @see SimpleMessageListener#deliver(String, String, InputStream)
 	 */
 	public void deliver(String from, String recipient, InputStream input) throws TooMuchDataException, IOException
 	{

@@ -11,8 +11,8 @@ import java.util.Set;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 
-import org.jboss.annotation.ejb.Service;
-import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.annotation.SecurityDomain;
+import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.plugin.i.helper.AbstractBlueprint;

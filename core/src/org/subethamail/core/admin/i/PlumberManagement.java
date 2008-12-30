@@ -5,7 +5,7 @@
 
 package org.subethamail.core.admin.i;
 
-import org.jboss.annotation.ejb.Management;
+import org.jboss.ejb3.annotation.Management;
 
 
 /**

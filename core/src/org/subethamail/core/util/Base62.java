@@ -5,9 +5,9 @@
 
 package org.subethamail.core.util;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.util.Base64;
 
 
 /**
@@ -35,7 +35,7 @@ public class Base62
 	 */
 	public static String encode(byte[] data)
 	{
-		String base64 = Base64.encodeBytes(data);
+		String base64 = new String(Base64.encodeBase64(data));
 		return base64ToBase62(base64);
 	}
 	
@@ -45,7 +45,7 @@ public class Base62
 	public static byte[] decode(String base62)
 	{
 		String base64 = base62ToBase64(base62);
-		return Base64.decode(base64);
+		return Base64.decodeBase64(base64.getBytes());
 	}
 	
 	/**

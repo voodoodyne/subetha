@@ -8,7 +8,7 @@ package org.subethamail.core.plugin.i.helper;
 import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 
-import org.jboss.annotation.security.SecurityDomain;
+import org.jboss.ejb3.annotation.SecurityDomain;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.core.plugin.i.BlueprintRegistry;
 

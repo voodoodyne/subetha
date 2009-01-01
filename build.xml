@@ -29,7 +29,7 @@
 	<property name="ant.build.javac.target" value="1.5" />
 	<property name="ant.build.javac.source" value="1.5" />
 
-	<property name="deploy.dir" location="${jboss.dir}/server/default/deploy-subetha" />
+	<property name="deploy.dir" location="${jboss.dir}/server/default/deploy" />
 
 	<tstamp/>
 	<tstamp>
@@ -232,7 +232,7 @@
 		<mkdir dir="${build.dir}/frontend/classes"/>
 
 		<javac 
-			srcdir="${base.dir}/frontend/src/org"
+			srcdir="${base.dir}/frontend/src"
 			destdir="${build.dir}/frontend/classes" 
 			includeAntRuntime="false"
 			debug="${build.debug}" 
@@ -308,8 +308,8 @@
 
 	<target name="ear" depends="compile">
 		<mkdir dir="${build.dir}/ear"/>
-		<ear destfile="${build.dir}/ear/subetha.ear" appxml="${base.dir}/frontend/meta/application.xml">
-			<metainf dir="${base.dir}/frontend/meta/">
+		<ear destfile="${build.dir}/ear/subetha.ear" appxml="${base.dir}/core/meta/application.xml">
+			<metainf dir="${base.dir}/core/meta/">
 				<include name="jboss-app.xml" />
 			</metainf>
 

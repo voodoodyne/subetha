@@ -14,10 +14,6 @@
 	<display-name>Subetha</display-name>
 
 	<module>
-		<ejb>entity.jar</ejb>
-	</module>
-	
-	<module>
 		<ejb>core.jar</ejb>
 	</module>
 

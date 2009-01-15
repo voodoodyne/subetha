@@ -12,6 +12,7 @@ import javax.ejb.EJB;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.ejb3.annotation.Consumer;
+import org.jboss.ejb3.annotation.Depends;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.queue.i.Queuer;
@@ -27,9 +28,10 @@ import org.subethamail.entity.Subscription;
 @Consumer(
 	activationConfig={
 		@ActivationConfigProperty(propertyName="destinationType", propertyValue="javax.jms.Queue"),
-		@ActivationConfigProperty(propertyName="destination", propertyValue="queue/inbound") // Must be set to this value for some reason
+		@ActivationConfigProperty(propertyName="destination", propertyValue="queue/SubEthaInbound")
 	}
 )
+@Depends ({"jboss.messaging.destination:name=SubEthaInbound,service=Queue"})
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
 public class InboundConsumer extends EntityManipulatorBean implements Inbound

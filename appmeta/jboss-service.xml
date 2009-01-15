@@ -32,13 +32,13 @@ $URL$
 	</mbean>
 
 	<mbean code="org.jboss.jms.server.destination.QueueService"
-			name="jboss.messaging.destination:service=Queue,name=subetha/inbound"
+			name="jboss.messaging.destination:service=Queue,name=SubEthaInbound"
 			xmbean-dd="xmdesc/Queue-xmbean.xml">
 		<depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
 		<depends>jboss.messaging:service=PostOffice</depends>
 	</mbean>
 	<mbean code="org.jboss.jms.server.destination.QueueService"
-			name="jboss.messaging.destination:service=Queue,name=subetha/outbound"
+			name="jboss.messaging.destination:service=Queue,name=SubEthaOutbound"
 			xmbean-dd="xmdesc/Queue-xmbean.xml">
 		<depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
 		<depends>jboss.messaging:service=PostOffice</depends>

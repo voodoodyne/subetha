@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.ejb3.annotation.Consumer;
+import org.jboss.ejb3.annotation.Depends;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.deliv.i.Deliverator;
@@ -26,9 +27,10 @@ import org.subethamail.core.deliv.i.Deliverator;
 @Consumer(
 	activationConfig={
 		@ActivationConfigProperty(propertyName="destinationType", propertyValue="javax.jms.Queue"),
-		@ActivationConfigProperty(propertyName="destination", propertyValue="queue/outbound") // Must be set to this value for some reason
+		@ActivationConfigProperty(propertyName="destination", propertyValue="queue/SubEthaOutbound") // Must be set to this value for some reason
 	}
 )
+@Depends ({"jboss.messaging.destination:name=SubEthaOutbound,service=Queue"})
 @SecurityDomain("subetha")
 @RunAs("siteAdmin")
 public class OutboundConsumer implements Outbound

@@ -179,17 +179,6 @@
 				<attribute name="Implementation-Version" value="${TODAY}" />
 			</manifest>
 		</jar>
-
-		<jar destfile="${build.dir}/core/core.sar">
-			<metainf dir="${base.dir}/core/meta">
-				<include name="jboss-service.xml"/>
-			</metainf>
-			
-			<manifest>
-				<attribute name="Specification-Version" value="${version}" />
-				<attribute name="Implementation-Version" value="${TODAY}" />
-			</manifest>
-		</jar>
 	</target>
 
 	<target name="plugin" depends="common, core">
@@ -308,13 +297,13 @@
 
 	<target name="ear" depends="compile">
 		<mkdir dir="${build.dir}/ear"/>
-		<ear destfile="${build.dir}/ear/subetha.ear" appxml="${base.dir}/core/meta/application.xml">
-			<metainf dir="${base.dir}/core/meta/">
+		<ear destfile="${build.dir}/ear/subetha.ear" appxml="${base.dir}/appmeta/application.xml">
+			<metainf dir="${base.dir}/appmeta/">
 				<include name="jboss-app.xml" />
+				<include name="jboss-service.xml"/>
 			</metainf>
 
 			<fileset file="${build.dir}/core/core.jar" />
-			<fileset file="${build.dir}/core/core.sar" />
 			<fileset file="${build.dir}/plugin/plugin.jar" />
 			<fileset file="${build.dir}/frontend/frontend.war" />
 

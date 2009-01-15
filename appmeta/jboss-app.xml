@@ -16,10 +16,6 @@
 	 -->
 	<module-order>strict</module-order>
 
-	<security-domain>java:/jaas/subetha</security-domain>
-
-	<module>
-		<service>core.sar</service>
-	</module>
+	<!-- <security-domain>java:/jaas/subetha</security-domain> -->
 
 </jboss-app>

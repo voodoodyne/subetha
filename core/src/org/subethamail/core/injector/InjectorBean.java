@@ -327,7 +327,15 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 				log.debug("Message author is: " + author);
 
 			if (!toList.getPermissionsFor(author).contains(Permission.POST))
-				hold = HoldType.SOFT;
+			{
+				// No permission - if the user is anonymous, this is a SOFT hold (ie spam)
+				// If the user is actually a subscriber, let's make it a HARD hold so the
+				// moderators are alerted.
+				if (author != null && author.getSubscription(toList.getId()) != null)
+					hold = HoldType.HARD;
+				else
+					hold = HoldType.SOFT;
+			}
 		}
 
 		if (log.isDebugEnabled())

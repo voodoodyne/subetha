@@ -43,5 +43,6 @@
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-validator.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/jsp-api.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/servlet-api.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

@@ -33,7 +33,6 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.annotation.security.SecurityDomain;
-import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
@@ -68,7 +67,6 @@ import org.subethamail.entity.i.Permission;
 @RunAs("siteAdmin")
 @WebService(name="Injector", targetNamespace="http://ws.subethamail.org/", serviceName="InjectorService")
 @SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
 public class InjectorBean extends EntityManipulatorBean implements Injector, InjectorRemote
 {
 	/** */
@@ -327,7 +325,15 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 				log.debug("Message author is: " + author);
 
 			if (!toList.getPermissionsFor(author).contains(Permission.POST))
-				hold = HoldType.SOFT;
+			{
+				// No permission - if the user is anonymous, this is a SOFT hold (ie spam)
+				// If the user is actually a subscriber, let's make it a HARD hold so the
+				// moderators are alerted.
+				if (author != null && author.getSubscription(toList.getId()) != null)
+					hold = HoldType.HARD;
+				else
+					hold = HoldType.SOFT;
+			}
 		}
 
 		if (log.isDebugEnabled())

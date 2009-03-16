@@ -33,9 +33,9 @@ import org.subethamail.common.EnumerationAdapter;
 public class FileUploadFilter extends AbstractFilter
 {
 	/**
-	 * Maximum size of an upload, currently 15MB.
+	 * Maximum size of an upload, currently 1G.
 	 */
-	public static final int MAX_UPLOAD_BYTES = 1024 * 1024 * 15;
+	public static final int MAX_UPLOAD_BYTES = 1024 * 1024 * 1024;
 
 	/**
 	 * Attribute in the request where the files are stored.  Clients to

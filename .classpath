@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/servlet-api.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jboss-j2ee.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jbosssx.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/activation.jar" sourcepath="/J2EESRC_HOME/activation/src/java"/>
@@ -10,10 +9,7 @@
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/hibernate-annotations.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/mail.jar" sourcepath="/JAVAMAIL_SRC"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/mail-plugin.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jsp-api.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jboss-ejb3x.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jbossws-spi.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/jboss-jaxws.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3x.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-annotations-ejb3.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/deploy/ejb3.deployer/jboss-ejb3.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-jmx.jar"/>
@@ -39,5 +35,7 @@
 	<classpathentry kind="src" path="common/src"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="loadtest/src"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/javax.servlet.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/server/default/lib/javax.servlet.jsp.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

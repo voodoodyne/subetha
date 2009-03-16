@@ -31,7 +31,6 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
 import org.jboss.annotation.security.SecurityDomain;
 import org.jboss.security.SimplePrincipal;
-import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
@@ -69,7 +68,6 @@ import org.subethamail.entity.i.PermissionException;
 @RolesAllowed("siteAdmin")
 @WebService(name="Admin", targetNamespace="http://ws.subethamail.org/", serviceName="AdminService")
 @SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
 public class AdminBean extends PersonalBean implements Admin, AdminRemote
 {
 	/** */
@@ -384,7 +382,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 			ObjectName jaasMgr = new ObjectName("jboss.security:service=JaasSecurityManager");
 			Object[] params = { domain, user };
 			String[] signature = { "java.lang.String", Principal.class.getName() };
-			MBeanServer server = (MBeanServer) MBeanServerFactory.findMBeanServer(null).get(0);
+			MBeanServer server = (MBeanServer)MBeanServerFactory.findMBeanServer(null).get(0);
 			server.invoke(jaasMgr, "flushAuthenticationCache", params, signature);
 		}
 		catch (MalformedObjectNameException ex) { throw new RuntimeException(ex); }

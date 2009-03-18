@@ -31,8 +31,8 @@ import org.subethamail.core.deliv.i.Deliverator;
 	}
 )
 @Depends ({"jboss.messaging.destination:name=SubEthaOutbound,service=Queue"})
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 public class OutboundConsumer implements Outbound
 {
 	/** */

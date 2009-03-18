@@ -38,11 +38,11 @@ import org.subethamail.core.util.Transmute;
  * @author Jeff Schnitzer
  */
 @Service(name="ListWizard")
-@SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
-@WebService(name="ListWizard", targetNamespace="http://ws.subethamail.org/", serviceName="ListWizardService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
+//@SecurityDomain("subetha")
+//@RolesAllowed("siteAdmin")
+//@WebService(name="ListWizard", targetNamespace="http://ws.subethamail.org/", serviceName="ListWizardService")
+//@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+//@WebContext(contextRoot="/subetha")
 public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRegistry
 {
 	/** */

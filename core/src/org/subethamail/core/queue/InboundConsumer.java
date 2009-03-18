@@ -32,8 +32,8 @@ import org.subethamail.entity.Subscription;
 	}
 )
 @Depends ({"jboss.messaging.destination:name=SubEthaInbound,service=Queue"})
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 public class InboundConsumer extends EntityManipulatorBean implements Inbound
 {
 	/** */

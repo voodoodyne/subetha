@@ -38,8 +38,8 @@ import org.subethamail.entity.Config;
  * @author Jeff Schnitzer
  */
 @Service(objectName="subetha:service=Bootstrapper")
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 public class BootstrapperBean extends EntityManipulatorBean implements BootstrapperManagement
 {
 	/** */

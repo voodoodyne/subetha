@@ -8,14 +8,16 @@ package org.subethamail.web.servlet;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import javax.inject.Current;
 import javax.security.auth.login.FailedLoginException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.subethamail.core.acct.i.AuthCredentials;
+import org.subethamail.core.acct.i.LoginStatus;
 import org.subethamail.web.Backend;
-import org.subethamail.web.security.SecurityContext;
 
 /**
  * Servlet allows calling the injector with a very simple HTTP POST
@@ -39,6 +41,7 @@ import org.subethamail.web.security.SecurityContext;
  * as the raw message bytes instead of requiring www-form-urlencoded 
  */
 @SuppressWarnings("serial")
+//@Current @ApplicationScoped
 public class InjectorServlet extends HttpServlet
 {
 	/** */
@@ -53,6 +56,9 @@ public class InjectorServlet extends HttpServlet
 	 * Status code we return when we don't know what to do with the recipient.
 	 */
 	public static final int SC_ADDRESS_UNKNOWN = 599;
+	
+	@Current
+	private LoginStatus loginStatus;
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -81,22 +87,13 @@ public class InjectorServlet extends HttpServlet
 		{
 			try
 			{
-				authId = Backend.instance().getAccountMgr().authenticate(authName, authPass).getId().toString();
+				AuthCredentials authCred = Backend.instance().getAccountMgr().authenticate(authName, authPass);
+				this.loginStatus.SetCreds(authCred);
+				authId = authCred.getId().toString();
 			}
 			catch (FailedLoginException ex) { throw new ServletException(ex); }
 		}
-		
-		SecurityContext sctx = new SecurityContext(authId, authPass, null);
-		try
-		{
-			sctx.associateCredentials();
-			
-			if (!Backend.instance().getInjector().inject(from, recipient, new ByteArrayInputStream(message.getBytes())))
-				response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
-		}
-		finally
-		{
-			sctx.disassociateCredentials();
-		}
+		if (!Backend.instance().getInjector().inject(from, recipient, new ByteArrayInputStream(message.getBytes())))
+			response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
 	}
 }

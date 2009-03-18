@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Named;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
+import javax.context.ApplicationScoped;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
@@ -68,12 +70,13 @@ import org.subethamail.entity.i.PermissionException;
  * @author Jeff Schnitzer
  */
 @Stateless(name="ListMgr")
-@SecurityDomain("subetha")
-@PermitAll
-@RunAs("siteAdmin")
-@WebService(name="ListMgr", targetNamespace="http://ws.subethamail.org/", serviceName="ListMgrService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
+//@SecurityDomain("subetha")
+//@PermitAll
+//@RunAs("siteAdmin")
+//@WebService(name="ListMgr", targetNamespace="http://ws.subethamail.org/", serviceName="ListMgrService")
+//@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+//@WebContext(contextRoot="/subetha")
+@Named("ListMgr")
 public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 {
 	/** */

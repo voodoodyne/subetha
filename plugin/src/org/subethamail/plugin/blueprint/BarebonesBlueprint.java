@@ -18,8 +18,8 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  * @author Jeff Schnitzer
  */
 @Service
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 public class BarebonesBlueprint extends AbstractBlueprint implements Lifecycle
 //TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {

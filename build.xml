@@ -13,7 +13,7 @@
 <project name="subetha" default="compile" basedir=".">
 
 	<property name="name" value="${ant.project.name}" />
-	
+
 	<property file="user.properties" />
 	<property file="${user.home}/build.properties" />
 	<property file="build.properties" />
@@ -22,7 +22,8 @@
 	<property name="base.dir" location="." />
 
 	<property name="build.dir" location="target" />
-	
+	<property name="build.dir.exploded" value="${build.dir}/exploded" />
+
 	<property name="build.debug" value="on" />
 	<property name="build.deprecation" value="on" />
 
@@ -31,41 +32,52 @@
 
 	<property name="deploy.dir" location="${jboss.dir}/server/default/deploy" />
 
-	<tstamp/>
+	<tstamp />
 	<tstamp>
 		<format property="YEAR" pattern="yyyy" />
 	</tstamp>
 
 	<!-- ******************************************************** -->
+	<path id="beans.xml">
+		<fileset dir="${base.dir}/appmeta/">
+			<include name="beans.xml"/>
+		</fileset>
+	</path>
+	
 	<path id="jboss.classpath">
 		<fileset dir="${jboss.dir}">
-			<include name="client/*.jar"/>
-			<include name="common/lib/*.jar"/>
+			<include name="client/*.jar" />
+			<include name="common/lib/*.jar" />
 		</fileset>
 	</path>
 
 	<path id="propertize.classpath">
 		<fileset dir="${base.dir}/lib">
-			<include name="${asm.jar}"/>
-			<include name="${jen.jar}"/>
-			<include name="${tagonist.jar}"/>
+			<include name="${asm.jar}" />
+			<include name="${jen.jar}" />
+			<include name="${tagonist.jar}" />
 		</fileset>
 	</path>
 
 	<path id="common.classpath">
+		<fileset dir="${base.dir}/lib">
+			<include name="${jsr299-api.jar}" />
+		</fileset>
+
 		<path refid="jboss.classpath" />
 	</path>
 
 	<path id="core.classpath">
 		<pathelement location="${build.dir}/common/lib/common.jar" />
 		<fileset dir="${base.dir}/lib">
-			<include name="${velocity.jar}"/>
-			<include name="${subethasmtp.jar}"/>
-			<include name="${slf4j-api.jar}"/>
-			<include name="${lucene-core.jar}"/>
-			<include name="${jdom.jar}"/>
-			<include name="${mina-core.jar}"/>
-			<include name="${commons-codec.jar}"/>
+			<include name="${velocity.jar}" />
+			<include name="${subethasmtp.jar}" />
+			<include name="${slf4j-api.jar}" />
+			<include name="${lucene-core.jar}" />
+			<include name="${jdom.jar}" />
+			<include name="${mina-core.jar}" />
+			<include name="${commons-codec.jar}" />
+			<include name="${jsr299-api.jar}" />
 		</fileset>
 
 		<path refid="jboss.classpath" />
@@ -80,8 +92,8 @@
 	<path id="frontend.classpath">
 		<pathelement location="${build.dir}/core/subetha-api.jar" />
 		<fileset dir="${base.dir}/lib">
-			<include name="${commons-fileupload.jar}"/>
-			<include name="${tagonist.jar}"/>
+			<include name="${commons-fileupload.jar}" />
+			<include name="${tagonist.jar}" />
 		</fileset>
 		<path refid="core.classpath" />
 	</path>
@@ -90,9 +102,11 @@
 		<pathelement location="${build.dir}/core/core.jar" />
 		<pathelement location="${build.dir}/common/lib/common.jar" />
 		<fileset dir="${base.dir}/lib">
-			<include name="${junit.jar}"/>
-			<include name="${subethasmtp.jar}"/>
-			<include name="${wiser.jar}"/>
+			<include name="${junit.jar}" />
+			<include name="${subethasmtp.jar}" />
+			<include name="${wiser.jar}" />
+			<include name="jsr250-api.jar" />
+			<include name="${jsf-facelets.jar} " />
 		</fileset>
 		<path refid="jboss.classpath" />
 	</path>
@@ -108,41 +122,35 @@
 	<target name="common" depends="init">
 		<mkdir dir="${build.dir}/common/classes" />
 		<mkdir dir="${build.dir}/common/lib" />
-		<javac
-			srcdir="${base.dir}/common/src/"
-			destdir="${build.dir}/common/classes"
-			includeAntRuntime="false"
-			debug="${build.debug}"
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
+		<javac srcdir="${base.dir}/common/src/" 
+			destdir="${build.dir}/common/classes" includeAntRuntime="false" 
+			debug="${build.debug}" deprecation="${build.deprecation}" 
+			target="${ant.build.javac.target}" source="${ant.build.javac.source}">
 
 			<classpath refid="common.classpath" />
 		</javac>
 		<jar jarfile="${build.dir}/common/lib/common.jar">
-			<fileset dir="${build.dir}/common/classes"/>
+			<fileset dir="${build.dir}/common/classes" />
 			<manifest>
 				<attribute name="Specification-Version" value="${version}" />
 				<attribute name="Implementation-Version" value="${TODAY}" />
 			</manifest>
+			<metainf dir="${base.dir}/appmeta"><include name="beans.xml"/></metainf>
 		</jar>
 	</target>
+	
 
- 	<target name="core" depends="init, common">
+	<target name="core" depends="init, common">
 		<mkdir dir="${build.dir}/core/classes" />
- 		
-		<javac
-			srcdir="${base.dir}/core/src"
-			destdir="${build.dir}/core/classes"
-			includeAntRuntime="false"
-			debug="${build.debug}"
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
-			
-			<classpath refid="core.classpath" />			
-		</javac>
 
+		<javac srcdir="${base.dir}/core/src" destdir="${build.dir}/core/classes" 
+			includeAntRuntime="false" debug="${build.debug}" 
+			deprecation="${build.deprecation}" target="${ant.build.javac.target}" 
+			source="${ant.build.javac.source}">
+
+			<classpath refid="core.classpath" />
+		</javac>
+		
 		<jar jarfile="${build.dir}/core/subetha-api.jar">
 			<!--
 				Yes this means there is a duplicate of the entity interface classes
@@ -160,15 +168,19 @@
 				<attribute name="Implementation-Version" value="${TODAY}" />
 			</manifest>
 		</jar>
-
-		<jar jarfile="${build.dir}/core/core.jar">			
+		
+		<jar jarfile="${build.dir}/core/core.jar">
 			<metainf dir="${base.dir}/core/meta">
-				<include name="mailcap"/>
-				<include name="mime.types"/>
-				<include name="persistence.xml"/>
+				<include name="mailcap" />
+				<include name="mime.types" />
+				<include name="persistence.xml" />
 			</metainf>
+			
+			<metainf dir="${base.dir}/appmeta"><include name="beans.xml"/></metainf>
 
-			<fileset dir="${build.dir}/core/classes" />
+			<fileset dir="${build.dir}/core/classes">
+				<!--<exclude name="**/i/**" />-->
+			</fileset>
 
 			<fileset dir="${base.dir}/core/src">
 				<include name="**/*.vm" />
@@ -183,16 +195,9 @@
 
 	<target name="plugin" depends="common, core">
 		<mkdir dir="${build.dir}/plugin/classes" />
- 		
-		<javac
-			srcdir="${base.dir}/plugin/src"
-			destdir="${build.dir}/plugin/classes"
-			includeAntRuntime="false"
-			debug="${build.debug}"
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
-			
+
+		<javac srcdir="${base.dir}/plugin/src" destdir="${build.dir}/plugin/classes" includeAntRuntime="false" debug="${build.debug}" deprecation="${build.deprecation}" target="${ant.build.javac.target}" source="${ant.build.javac.source}">
+
 			<classpath refid="plugin.classpath" />
 		</javac>
 
@@ -202,13 +207,14 @@
 				<include name="jboss-service.xml"/>
 			</metainf>
 			-->
+			<metainf dir="${base.dir}/appmeta"><include name="beans.xml"/></metainf>
 			
-			<fileset dir="${build.dir}/plugin/classes"/>
-			
+			<fileset dir="${build.dir}/plugin/classes" />
+
 			<!--
 			<fileset dir="${plugin.lib.dir}"/>
 			-->
-			
+
 			<manifest>
 				<attribute name="Specification-Version" value="${version}" />
 				<attribute name="Implementation-Version" value="${TODAY}" />
@@ -218,77 +224,68 @@
 	</target>
 
 	<target name="frontend" depends="core">
-		<mkdir dir="${build.dir}/frontend/classes"/>
+		<mkdir dir="${build.dir}/frontend/classes" />
 
-		<javac 
-			srcdir="${base.dir}/frontend/src"
-			destdir="${build.dir}/frontend/classes" 
-			includeAntRuntime="false"
-			debug="${build.debug}" 
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
-			
-			<classpath refid="frontend.classpath"/>
+		<javac srcdir="${base.dir}/frontend/src" destdir="${build.dir}/frontend/classes" includeAntRuntime="false" debug="${build.debug}" deprecation="${build.deprecation}" target="${ant.build.javac.target}" source="${ant.build.javac.source}">
+			<classpath refid="frontend.classpath" />
 		</javac>
 
 		<taskdef name="propertize" classname="org.tagonist.propertize.PropertizeTask">
 			<classpath>
 				<path refid="propertize.classpath" />
 			</classpath>
-		</taskdef>		
+		</taskdef>
 
 		<propertize verbose="false">
-			<fileset dir="${build.dir}/frontend/classes"/>
+			<fileset dir="${build.dir}/frontend/classes" />
 		</propertize>
 
 		<jar jarfile="${build.dir}/frontend/frontend.jar">
 			<fileset dir="${build.dir}/frontend/classes" />
+			
 			<manifest>
 				<attribute name="Specification-Version" value="${version}" />
 				<attribute name="Implementation-Version" value="${TODAY}" />
 			</manifest>
+			
+			<metainf dir="${base.dir}/appmeta"><include name="beans.xml"/></metainf>
 		</jar>
 
-		<war destfile="${build.dir}/frontend/frontend.war" 
-			webxml="${base.dir}/frontend/meta/web.xml">
+		<war destfile="${build.dir}/frontend/frontend.war" webxml="${base.dir}/frontend/meta/web.xml">
+
+			<metainf dir="${base.dir}/appmeta"><include name="beans.xml"/></metainf>
+			<metainf dir="${base.dir}/frontend/meta"><include name="faces-config.xml"/></metainf>
 
 			<fileset dir="${base.dir}/frontend/content" />
 
-			<lib file="${build.dir}/frontend/frontend.jar"/>
+			<lib file="${build.dir}/frontend/frontend.jar" />
 
 			<lib dir="${base.dir}/lib">
-				<include name="${jstl.jar}"/>
-				<include name="${standard.jar}"/>
-				<include name="${tagonist.jar}"/>
-				<include name="${commons-fileupload.jar}"/>
+				<include name="${jstl.jar}" />
+				<include name="${standard.jar}" />
+				<include name="${tagonist.jar}" />
+				<include name="${commons-fileupload.jar}" />
 			</lib>
 		</war>
 	</target>
 
- 	<target name="rtest-compile" depends="compile">
+	<target name="rtest-compile" depends="compile">
 		<mkdir dir="${build.dir}/rtest/classes" />
- 		
-		<javac
-			srcdir="${base.dir}/rtest/src"
-			destdir="${build.dir}/rtest/classes"
-			includeAntRuntime="false"
-			debug="${build.debug}"
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
+
+		<javac srcdir="${base.dir}/rtest/src" destdir="${build.dir}/rtest/classes" includeAntRuntime="false" debug="${build.debug}" deprecation="${build.deprecation}" target="${ant.build.javac.target}" source="${ant.build.javac.source}">
 
 			<classpath refid="rtest.classpath" />
 		</javac>
 		<jar jarfile="${build.dir}/rtest/rtest.jar">
-			<fileset dir="${build.dir}/rtest/classes"/>
+			<fileset dir="${build.dir}/rtest/classes" />
 			<fileset dir="${base.dir}/rtest/src/org/subethamail/rtest/msg">
-				<include name="**/*.msg"/>
+				<include name="**/*.msg" />
 			</fileset>
 			<manifest>
 				<attribute name="Specification-Version" value="${version}" />
 				<attribute name="Implementation-Version" value="${TODAY}" />
 			</manifest>
+			<metainf dir="${base.dir}/appmeta"><include name="beans.xml"/></metainf>
 		</jar>
 	</target>
 
@@ -296,34 +293,36 @@
 	</target>
 
 	<target name="ear" depends="compile">
-		<mkdir dir="${build.dir}/ear"/>
+		<mkdir dir="${build.dir}/ear" />
 		<ear destfile="${build.dir}/ear/subetha.ear" appxml="${base.dir}/appmeta/application.xml">
 			<metainf dir="${base.dir}/appmeta/">
 				<include name="jboss-app.xml" />
-				<include name="jboss-service.xml"/>
+				<include name="beans.xml" />
+				<include name="jboss-service.xml" />
+				<include name="subetha-login-config.xml" />
 			</metainf>
-
+			
 			<fileset file="${build.dir}/core/core.jar" />
 			<fileset file="${build.dir}/plugin/plugin.jar" />
 			<fileset file="${build.dir}/frontend/frontend.war" />
 
 			<!-- need to include this in the lib dir somehow -->
 			<fileset dir="${build.dir}/common">
-				<include name="lib/common.jar"/>
+				<include name="lib/common.jar" />
 			</fileset>
 
 			<fileset dir=".">
-				<include name="lib/${velocity.jar}"/>
-				<include name="lib/${commons-lang.jar}"/>
-				<include name="lib/${subethasmtp.jar}"/>
-				<include name="lib/${lucene-core.jar}"/>
-				<include name="lib/${commons-beanutils.jar}"/>
-				<include name="lib/${jdom.jar}"/>
+				<include name="lib/${velocity.jar}" />
+				<include name="lib/${commons-lang.jar}" />
+				<include name="lib/${subethasmtp.jar}" />
+				<include name="lib/${lucene-core.jar}" />
+				<include name="lib/${commons-beanutils.jar}" />
+				<include name="lib/${jdom.jar}" />
 
-				<include name="lib/${slf4j-api.jar}"/>
-				<include name="lib/${slf4j-log4j12.jar}"/>
-				<include name="lib/${commons-codec.jar}"/>
-				<include name="lib/${mina-core.jar}"/>
+				<include name="lib/${slf4j-api.jar}" />
+				<include name="lib/${slf4j-log4j12.jar}" />
+				<include name="lib/${commons-codec.jar}" />
+				<include name="lib/${mina-core.jar}" />
 			</fileset>
 		</ear>
 	</target>
@@ -331,18 +330,69 @@
 	<target name="deploy" depends="ear">
 		<copy file="${build.dir}/ear/subetha.ear" todir="${deploy.dir}" />
 	</target>
+	
+	<target name="deploy-remote" depends="ear">
+		<copy file="${build.dir}/ear/subetha.ear" todir="s:/java/jboss-5.0.1.GA-simi/server/default/deploy/" />
+	</target>
+	
+	<target name="deploy-remote-exploded" depends="explode">
+		<copy todir="s:/java/jboss-5.0.1.GA-simi/server/default/deploy/">
+			<fileset dir="${build.dir.exploded}">
+				<include name="**/**"/>
+			</fileset>
+		</copy>
+		<touch file="s:/java/jboss-5.0.1.GA-simi/server/default/deploy/subetha.ear/meta-inf/application.xml"/>
+	</target>
+	
+	<target name="explode" depends="ear">
+		<!-- cleanup first -->
+		<delete dir="${build.dir.exploded}"/>
+		<mkdir  dir="${build.dir.exploded}"/>
+		
+		<unjar dest="${build.dir.exploded}/subetha.ear/" src="${build.dir}/ear/subetha.ear" />
+
+<!--
+		<delete file="${build.dir.exploded}/subetha.ear/core.jar"/>
+		<delete file="${build.dir.exploded}/subetha.ear/plugin.jar"/>
+		<delete file="${build.dir.exploded}/subetha.ear/lib/common.jar"/>
+		<copy todir="${build.dir.exploded}/subetha.ear/">
+			<fileset dir="${build.dir}/core/" >
+				<include name="classes/**"/>
+			</fileset>
+			<fileset dir="${build.dir}/plugin/">
+				<include name="classes/**"/>
+			</fileset>
+			<fileset dir="${build.dir}/common/">
+				<include name="classes/**"/>
+			</fileset>
+		</copy>
+-->				
+
+		<delete file="${build.dir.exploded}/subetha.ear/frontend.war" />
+		<unwar dest="${build.dir.exploded}/subetha.ear/frontend.war/" src="${build.dir}/frontend/frontend.war" />
+
+		<delete file="${build.dir.exploded}/subetha.ear/frontend.war/web-inf/lib/frontend.jar" />
+		<copy todir="${build.dir.exploded}/subetha.ear/frontend.war/web-inf/">
+			<fileset dir="${build.dir}/frontend/" >
+				<include name="classes/**"/>
+			</fileset>
+		</copy>
+		
+	</target>
 
 	<target name="init">
 		<typedef resource="com/googlecode/svntask/svntask.xml">
 			<classpath>
 				<fileset dir="${base.dir}/lib">
-					<include name="svnkit.jar"/>
-					<include name="svntask.jar"/>
+					<include name="svnkit.jar" />
+					<include name="svntask.jar" />
 				</fileset>
 			</classpath>
 		</typedef>
 
-		<svn><info path="${base.dir}" revisionProperty="revisionVersion" /></svn>
+		<svn>
+			<info path="${base.dir}" revisionProperty="revisionVersion" />
+		</svn>
 
 		<!--  A hack because svnant does not respect Ant's properties can't be overwritten rule. -->
 		<property name="version" value="${revisionVersion}" />
@@ -362,16 +412,16 @@
 
 	<target name="junit" depends="rtest-compile">
 		<junit printsummary="yes" showoutput="yes" fork="yes">
-			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties"/>
-			
-			<classpath refid="rtest.run.classpath"/>
-			
+			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties" />
+
+			<classpath refid="rtest.run.classpath" />
+
 			<syspropertyset>
 				<propertyref prefix="java.naming" />
 			</syspropertyset>
-			
+
 			<formatter type="plain" />
-			
+
 			<batchtest todir="${build.dir}">
 				<fileset dir="${build.dir}/rtest/classes">
 					<include name="**/*Test.class" />
@@ -382,16 +432,16 @@
 
 	<target name="junit-special" depends="rtest-compile">
 		<junit printsummary="true" showoutput="true" fork="true">
-			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties"/>
-			
-			<classpath refid="rtest.run.classpath"/>
-			
+			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties" />
+
+			<classpath refid="rtest.run.classpath" />
+
 			<syspropertyset>
 				<propertyref prefix="java.naming" />
 			</syspropertyset>
-			
+
 			<formatter type="plain" />
-			
+
 			<batchtest todir="${build.dir}">
 				<fileset dir="${build.dir}/rtest/classes">
 					<include name="${junit.special.tests}" />
@@ -399,21 +449,21 @@
 			</batchtest>
 		</junit>
 	</target>
-	
+
 	<target name="junit-debug" depends="rtest-compile">
 		<junit printsummary="yes" showoutput="yes" fork="yes">
-			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties"/>
-			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8001"/>
+			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties" />
+			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8001" />
 			<!-- <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8001"/> -->
 
-			<classpath refid="rtest.run.classpath"/>
-			
+			<classpath refid="rtest.run.classpath" />
+
 			<syspropertyset>
 				<propertyref prefix="java.naming" />
 			</syspropertyset>
-			
+
 			<formatter type="plain" />
-			
+
 			<batchtest todir="${build.dir}">
 				<fileset dir="${build.dir}/rtest/classes">
 					<include name="${junit.special.tests}" />
@@ -432,7 +482,7 @@
 				<exclude name="**/data/**" />
 			</fileset>
 		</copy>
-		<chmod dir="${build.dir}/${dist.name}/jboss/bin" perm="ugo+rx" includes="**/*.sh"/>
+		<chmod dir="${build.dir}/${dist.name}/jboss/bin" perm="ugo+rx" includes="**/*.sh" />
 		<copy todir="${build.dir}/${dist.name}/">
 			<fileset dir=".">
 				<include name="README.html" />

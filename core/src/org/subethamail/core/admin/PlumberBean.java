@@ -37,8 +37,8 @@ import org.subethamail.core.util.PersonalBean;
  * @author Jeff Schnitzer
  */
 @Service(name="Plumber", objectName="subetha:service=Plumber")
-@SecurityDomain("subetha")
-@PermitAll
+//@SecurityDomain("subetha")
+//@PermitAll
 @LocalBinding(jndiBinding=Plumber.JNDI_NAME)
 @RemoteBinding(jndiBinding=PlumberRemote.JNDI_NAME)
 public class PlumberBean extends PersonalBean implements Plumber, PlumberRemote, PlumberManagement

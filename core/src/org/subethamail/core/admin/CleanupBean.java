@@ -30,9 +30,9 @@ import org.subethamail.entity.SubscriptionHold;
  *
  * @author Jeff Schnitzer
  */
-@Service(name="Cleanup", objectName="subetha:service=Cleanup")
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@Service(name="Cleanup", objectName="subetha:service=Cleanup")
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 public class CleanupBean extends EntityManipulatorBean implements CleanupManagement
 {
 	/** */

@@ -35,8 +35,8 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  */
 
 @Service
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 // TODO: remove the implements clause when
 // http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 public class SendAsTextFilter extends GenericFilter implements Lifecycle

@@ -8,6 +8,9 @@ package org.subethamail.web.security;
 import java.security.Principal;
 import java.util.Set;
 
+import javax.context.SessionScoped;
+import javax.inject.Current;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.security.SecurityAssociation;
@@ -28,7 +31,7 @@ import org.jboss.security.SimplePrincipal;
 public class SecurityContext
 {
 	/** */
-	private static Log log = LogFactory.getLog(SecurityContext.class);
+	private Log log;
 	
 	/** Key in the session attrs that this object should be stored */
 	public static final String SESSION_KEY = "subetha.security.context";

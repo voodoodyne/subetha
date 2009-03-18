@@ -36,8 +36,8 @@ import org.subethamail.smtp.helper.SimpleMessageListener;
 	"jboss.j2ee:ear=subetha.ear,jar=core.jar,name=Injector,service=EJB3",
 	"subetha:service=SMTP"
 })
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 @Local(SimpleMessageListener.class)
 public class MessageListenerAdapter implements SimpleMessageListener, Lifecycle
 {

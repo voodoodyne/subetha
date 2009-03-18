@@ -11,7 +11,7 @@ import javax.ejb.Remote;
 /**
  * @author Jeff Schnitzer
  */
-@Remote
+//@Remote
 public interface InjectorRemote extends Injector
 {
 	/** */

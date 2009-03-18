@@ -65,11 +65,11 @@ import org.subethamail.entity.i.PermissionException;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Admin")
-@SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
-@WebService(name="Admin", targetNamespace="http://ws.subethamail.org/", serviceName="AdminService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
+//@SecurityDomain("subetha")
+//@RolesAllowed("siteAdmin")
+//@WebService(name="Admin", targetNamespace="http://ws.subethamail.org/", serviceName="AdminService")
+//@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+//@WebContext(contextRoot="/subetha")
 public class AdminBean extends PersonalBean implements Admin, AdminRemote
 {
 	/** */

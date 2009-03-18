@@ -12,7 +12,7 @@ import javax.ejb.Remote;
 /**
  * @author Jeff Schnitzer
  */
-@Remote
+//@Remote
 public interface AdminRemote extends Admin
 {
 	/** */

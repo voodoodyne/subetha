@@ -18,8 +18,8 @@ import org.subethamail.core.plugin.i.BlueprintRegistry;
  * 
  * @author Jeff Schnitzer
  */
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 abstract public class AbstractBlueprint implements Blueprint, Lifecycle
 {
 	/**

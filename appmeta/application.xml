@@ -28,18 +28,18 @@
 		</web>
 	</module>
 
-	<security-role>
-		<description>
-			Normal, authenticated users.
-		</description>
-		<role-name>user</role-name>
-	</security-role>
-
-	<security-role>
-		<description>
-			This role can perform site administrative functions.
-		</description>
-		<role-name>siteAdmin</role-name>
-	</security-role>
+<!--	<security-role>-->
+<!--		<description>-->
+<!--			Normal, authenticated users.-->
+<!--		</description>-->
+<!--		<role-name>user</role-name>-->
+<!--	</security-role>-->
+<!---->
+<!--	<security-role>-->
+<!--		<description>-->
+<!--			This role can perform site administrative functions.-->
+<!--		</description>-->
+<!--		<role-name>siteAdmin</role-name>-->
+<!--	</security-role>-->
 
 </application>

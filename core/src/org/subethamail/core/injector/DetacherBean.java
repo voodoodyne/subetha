@@ -34,9 +34,9 @@ import org.subethamail.entity.Mail;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Detacher")
-@SecurityDomain("subetha")
-@PermitAll
-@RunAs("siteAdmin")
+//@SecurityDomain("subetha")
+//@PermitAll
+//@RunAs("siteAdmin")
 public class DetacherBean extends EntityManipulatorBean implements Detacher
 {
 	/** */

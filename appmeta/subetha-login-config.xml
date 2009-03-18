@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+<policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="urn:jbosstest:caller-info"
+   targetNamespace="urn:jbosstest:caller-info"
+   >
+
+   <application-policy name="subetha">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.XMLLoginModule" flag="required">
+            <module-option name="userInfo">
+               <lm:users xmlns:lm="http://www.jboss.org/j2ee/schemas/XMLLoginModule">
+                  <lm:user name="scott" password="scott">
+                  	 <lm:role name="siteAdmin" />
+                  	 <lm:role name="god" />
+                  	 <lm:role name="user" />                  	 
+                  </lm:user>
+               </lm:users>
+            </module-option>
+            <module-option name="unauthenticatedIdentity">-1</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+</policy>
+-->
+
+
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+   <application-policy xmlns="urn:jboss:security-beans:1.0" name="subetha">
+      <authentication>
+         <login-module code="org.subethamail.core.util.SubEthaLoginModule" flag="required">
+            <module-option name="unauthenticatedIdentity">-1</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+</deployment>\ No newline at end of file

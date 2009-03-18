@@ -26,6 +26,7 @@ import javax.ejb.EJBException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jboss.ejb3.annotation.Depends;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.NotFoundException;
@@ -44,8 +45,9 @@ import org.subethamail.entity.Config;
  * @author Jeff Schnitzer
  */
 @Service(name="Encryptor", objectName="subetha:service=Encryptor")
-@SecurityDomain("subetha")
-@PermitAll
+@Depends("subetha:service=Bootstrapper")
+//@SecurityDomain("subetha")
+//@PermitAll
 public class EncryptorBean extends EntityManipulatorBean implements Encryptor, EncryptorManagement
 {
 	/** */
@@ -92,7 +94,14 @@ public class EncryptorBean extends EntityManipulatorBean implements Encryptor, E
 		catch (NotFoundException ex)
 		{
 			Config cfg = new Config(KEY_CONFIG_ID, this.generateKey());
-			this.em.persist(cfg);
+			try 
+			{
+				this.em.persist(cfg);
+			} catch (Exception e)
+			{
+				log.error("BAD: " + e.getMessage());
+			}
+			
 		}
 	}
 	

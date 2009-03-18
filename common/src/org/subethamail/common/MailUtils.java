@@ -31,7 +31,7 @@ public class MailUtils
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(MailUtils.class);
+	private static Log log =LogFactory.getLog(MailUtils.class);
 
 	/** Matches stuff like (without the quotes):  "Re[1][3]: Aw: Sv[3]:  " */
 	public static final Pattern SUBJECT_PATTERN = Pattern.compile("((RE|AW|SV)(\\[\\d+\\])*:\\s*)+", Pattern.CASE_INSENSITIVE);

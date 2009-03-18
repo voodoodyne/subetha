@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.inject.Current;
 import javax.servlet.http.Cookie;
 
 import org.apache.commons.logging.Log;
@@ -23,6 +24,7 @@ import org.tagonist.AbstractAction;
  *
  * @author Jeff Schnitzer
  */
+@Current
 abstract public class SubEthaAction extends AbstractAction
 {
 	/** */

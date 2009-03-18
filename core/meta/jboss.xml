@@ -6,5 +6,5 @@
 -->
 
 <jboss>
-	<security-domain>java:/jaas/subetha</security-domain>
+	<!-- <security-domain>java:/jaas/subetha</security-domain> -->
 </jboss> 

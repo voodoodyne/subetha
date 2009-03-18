@@ -21,8 +21,8 @@ import org.jboss.ejb3.annotation.Service;
  * @author Jon Stevens
  */
 @Service(objectName="subetha:service=Velocity")
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 public class VelocityBean implements VelocityManagement
 {
 	/** */

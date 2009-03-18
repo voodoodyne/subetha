@@ -8,6 +8,7 @@ package org.subethamail.core.injector.i;
 import java.io.InputStream;
 import java.util.Date;
 
+import javax.context.ApplicationScoped;
 import javax.ejb.Local;
 
 import org.subethamail.common.NotFoundException;

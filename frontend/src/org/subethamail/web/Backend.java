@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.inject.Current;
+import javax.inject.Initializer;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
@@ -47,13 +47,13 @@ public class Backend extends HttpServlet
 	static Backend singleton;
 	
 	/** Stateless session EJB references are all thread-safe */
-	Injector injector;
-	Admin admin;
-	Encryptor encryptor;
-	ListWizard listWizard;
-	ListMgr listMgr;
-	AccountMgr accountMgr;
-	Archiver archiver;
+	@Current Injector injector;
+	@Current Admin admin;
+	@Current Encryptor encryptor;
+	@Current ListWizard listWizard;
+	@Current ListMgr listMgr;
+	@Current AccountMgr accountMgr;
+	@Current Archiver archiver;
 	
 	/**
 	 * Obtain the current instance.
@@ -65,22 +65,23 @@ public class Backend extends HttpServlet
 	 * available in the application scope.
 	 */
 	@Override
+	@Initializer
 	public void init() throws ServletException
 	{
-		try
-		{
-			InitialContext ctx = new InitialContext();
-			
-			injector = (Injector)ctx.lookup(Injector.JNDI_NAME);
-			admin = (Admin)ctx.lookup(Admin.JNDI_NAME);
-			encryptor = (Encryptor)ctx.lookup(Encryptor.JNDI_NAME);
-			listWizard = (ListWizard)ctx.lookup(ListWizard.JNDI_NAME);
-			listMgr = (ListMgr)ctx.lookup(ListMgr.JNDI_NAME);
-			accountMgr = (AccountMgr)ctx.lookup(AccountMgr.JNDI_NAME);
-			archiver = (Archiver)ctx.lookup(Archiver.JNDI_NAME);
-		}
-		catch (NamingException ex) { throw new ServletException(ex); }
-		
+//		try
+//		{
+//			InitialContext ctx = new InitialContext();
+//			
+//			injector = (Injector)ctx.lookup(Injector.JNDI_NAME);
+//			admin = (Admin)ctx.lookup(Admin.JNDI_NAME);
+//			encryptor = (Encryptor)ctx.lookup(Encryptor.JNDI_NAME);
+//			listWizard = (ListWizard)ctx.lookup(ListWizard.JNDI_NAME);
+//			listMgr = (ListMgr)ctx.lookup(ListMgr.JNDI_NAME);
+//			accountMgr = (AccountMgr)ctx.lookup(AccountMgr.JNDI_NAME);
+//			archiver = (Archiver)ctx.lookup(Archiver.JNDI_NAME);
+//		}
+//		catch (NamingException ex) { throw new ServletException(ex); }
+//		
 		this.getServletContext().setAttribute(KEY, this);
 		
 		singleton = this;

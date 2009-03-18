@@ -47,8 +47,8 @@ import org.subethamail.entity.SubscriptionHold;
  * @author Jeff Schnitzer
  */
 @Stateless(name="PostOffice")
-@SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
+//@SecurityDomain("subetha")
+//@RolesAllowed("siteAdmin")
 public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 {
 	/** */

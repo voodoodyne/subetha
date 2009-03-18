@@ -82,12 +82,12 @@ import com.sun.mail.util.LineInputStream;
  * @author Scott Hernandez
  */
 @Stateless(name="Archiver")
-@SecurityDomain("subetha")
-@PermitAll
-@RunAs("siteAdmin")
-@WebService(name="Archiver", targetNamespace="http://ws.subethamail.org/", serviceName="ArchiverService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
+//@SecurityDomain("subetha")
+//@PermitAll
+//@RunAs("siteAdmin")
+//@WebService(name="Archiver", targetNamespace="http://ws.subethamail.org/", serviceName="ArchiverService")
+//@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+//@WebContext(contextRoot="/subetha")
 public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemote
 {
 	@EJB Deliverator deliverator;

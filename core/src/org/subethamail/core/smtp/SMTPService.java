@@ -31,8 +31,8 @@ import org.subethamail.smtp.server.SMTPServer;
  * @author Jon Stevens
  */
 @Service(name="SMTPService", objectName="subetha:service=SMTP")
-@SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
+//@SecurityDomain("subetha")
+//@RolesAllowed("siteAdmin")
 public class SMTPService implements SMTPManagement, MessageListenerRegistry
 {
 	/** */

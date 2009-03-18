@@ -10,7 +10,7 @@ import javax.ejb.Remote;
 
 /**
  */
-@Remote
+//@Remote
 public interface PlumberRemote extends Plumber
 {
 	/** */

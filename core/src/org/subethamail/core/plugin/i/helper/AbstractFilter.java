@@ -18,8 +18,8 @@ import org.subethamail.core.plugin.i.FilterRegistry;
  * 
  * @author Jeff Schnitzer
  */
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 abstract public class AbstractFilter implements Filter, Lifecycle
 {
 	/**

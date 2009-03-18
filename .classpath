@@ -4,7 +4,7 @@
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-jmx.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-system.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-core-2.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/tagonist.jar"/>
+	<classpathentry kind="lib" path="lib/tagonist.jar" sourcepath="/tagonist"/>
 	<classpathentry kind="lib" path="lib/standard.jar"/>
 	<classpathentry kind="lib" path="lib/jstl.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.0.jar"/>
@@ -32,7 +32,7 @@
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-core.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/activation.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/ejb3-persistence.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/jboss-ejb3-core.jar"/>
+	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/jboss-ejb3-core.jar" sourcepath="/JBoss 5.0.1 Source/server/src/main/org/jboss/ejb/plugins/security"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/mail-plugin.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-system-jmx-client.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-j2se.jar"/>
@@ -43,6 +43,9 @@
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-validator.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/jsp-api.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="C:/java/jboss-5.0.1.GA-simi/common/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/webbeans-core.jar" sourcepath="C:/java/webbeans-1.0.0.BETA1/lib/webbeans/webbeans-core-sources.jar"/>
+	<classpathentry kind="lib" path="lib/webbeans-spi.jar" sourcepath="C:/java/webbeans-1.0.0.BETA1/lib/webbeans/webbeans-spi-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jsr299-api.jar" sourcepath="C:/java/webbeans-1.0.0.BETA1/lib/webbeans/webbeans-spi-sources.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

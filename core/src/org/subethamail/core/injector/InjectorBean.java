@@ -17,13 +17,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -32,7 +28,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
@@ -63,11 +58,11 @@ import org.subethamail.entity.i.Permission;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Injector")
-@SecurityDomain("subetha")
-@PermitAll
-@RunAs("siteAdmin")
-@WebService(name="Injector", targetNamespace="http://ws.subethamail.org/", serviceName="InjectorService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+//@SecurityDomain("subetha")
+//@PermitAll
+//@RunAs("siteAdmin")
+//@WebService(name="Injector", targetNamespace="http://ws.subethamail.org/", serviceName="InjectorService")
+//@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
 @WebContext(contextRoot="/subetha")
 public class InjectorBean extends EntityManipulatorBean implements Injector, InjectorRemote
 {

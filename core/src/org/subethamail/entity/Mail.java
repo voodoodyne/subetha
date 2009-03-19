@@ -117,13 +117,13 @@ import org.subethamail.entity.i.Validator;
 	),
 	@NamedQuery(
 		name="HeldMailFrom",
-		query="select m from Mail m where m.hold is not null and m.envelopeSender = :sender and m.id <> :excluding order by m.arrivalDate desc",
+		query="select m from Mail m where m.hold is not null and m.senderNormal = :sender and m.id <> :excluding order by m.arrivalDate desc",
 		hints={
 		}
 	),
 	@NamedQuery(
 		name="CountRecentHeldMailFrom",
-		query="select count(*) from Mail m where m.hold is not null and m.envelopeSender = :sender and m.arrivalDate > :since",
+		query="select count(*) from Mail m where m.hold is not null and m.senderNormal = :sender and m.arrivalDate > :since",
 		hints={
 		}
 	),
@@ -188,20 +188,27 @@ public class Mail implements Serializable, Comparable<Mail>
 	String subject;
 
 	/**
-	 * rfc222-style, taken from the msg From: header
+	 * rfc222-style version of the sender.  This is pretty, includes the
+	 * person's name.  Note that it is not usually the envelope sender; it will
+	 * be the Sender: field if it exists, the first From: element if it exists,
+	 * and last of all the envelope sender.
+	 * 
 	 * Don't try to use hibernate email validator, it doesn't understand
 	 * the rfc222 style with personal names.
 	 */
-	@Column(name="fromField", nullable=true, length=Validator.MAX_MAIL_FROM)
-	String from;
+	@Column(nullable=true, length=Validator.MAX_MAIL_SENDER)
+	String sender;
 
-	/** normalized with lowercase domain */
+	/** 
+	 * This field is the normalized interpretation of the sender.  Mostly this gets
+	 * used to match for auto self moderation.
+	 */
 	//@Email
 	// The validator failed on this address: SRS0=aHFE=YF=pobox.com=fredx@bounce2.pobox.com
 	// It looks valid to me, so I can only guess that the validation pattern is broken.
-	@Column(nullable=false, length=Validator.MAX_MAIL_FROM)
-	@Index(name="mailEnvelopeSenderIndex")
-	String envelopeSender;
+	@Column(nullable=false, length=Validator.MAX_MAIL_SENDER)
+	@Index(name="senderIndex")
+	String senderNormal;
 
 	/** Date the entity was created, not from header fields */
 	@Column(nullable=false)
@@ -301,14 +308,22 @@ public class Mail implements Serializable, Comparable<Mail>
 
 		this.messageId = msg.getMessageID();
 
-		Address[] froms = msg.getFrom();
-		if (froms != null && froms.length > 0)
-			this.from = froms[0].toString();
-
-		if (envelopeSender == null)
-			this.setEnvelopeSender("");
+		// Convoluted process to determine sender.
+		// Check, in order:  Sender field, first entry of From field, envelope sender
+		Address senderField = msg.getSender();
+		if (senderField == null)
+		{
+			Address[] froms = msg.getFrom();
+			if (froms != null && froms.length > 0)
+				senderField = froms[0];
+			else
+				senderField = envelopeSender;
+		}
+		
+		if (senderField == null)
+			this.setSender("");
 		else
-			this.setEnvelopeSender(envelopeSender.getAddress());
+			this.setSender(senderField.toString());
 
 		this.replies = new TreeSet<Mail>();
 		this.attachments = new HashSet<Attachment>();
@@ -371,26 +386,12 @@ public class Mail implements Serializable, Comparable<Mail>
 
 	/**
 	 * @return a single rfc222-compilant address.  It will
-	 * be parseable with InternetAddress.parse().  Defaults to
-	 * the envelope sender if there was no From header.
+	 * be parseable with InternetAddress.parse().  This is
+	 * just a pretty alias for getSender().
 	 */
 	public String getFrom()
 	{
-		if (this.from != null)
-			return this.from;
-		else
-			return this.envelopeSender;
-	}
-
-	/**
-	 * @param value can be null.
-	 */
-	public void setFrom(String value)
-	{
-		if (log.isDebugEnabled())
-			log.debug("Setting from of " + this + " to " + value);
-
-		this.from = value;
+		return this.sender;
 	}
 
 	/**
@@ -408,26 +409,32 @@ public class Mail implements Serializable, Comparable<Mail>
 			throw new RuntimeException(ex);
 		}
 	}
+	
+	/**
+	 * @return the rfc822 version of our understanding of who sent the message
+	 */
+	public String getSender() { return this.sender; }
 
 	/**
-	 * @return the normalized box@domain.tld for the first From entry.
+	 * @return the normalized (just box@domain.tld) version of the sender
 	 *
 	 * @see Validator#normalizeEmail(String)
 	 */
-	public String getEnvelopeSender() { return this.envelopeSender; }
+	public String getSenderNormal() { return this.senderNormal; }
 
 	/**
-	 * @param value does not need to be normalized already; it
-	 *  will be normalized in this method.
+	 * @param value is the rfc822 value of who we understand is the sender of this message.
+	 * @throws AddressException if the value is a bad address
 	 */
-	public void setEnvelopeSender(String value)
+	public void setSender(String value) throws AddressException
 	{
-		value = Validator.normalizeEmail(value);
-
 		if (log.isDebugEnabled())
-			log.debug("Setting envelopeSender of " + this + " to " + value);
+			log.debug("Setting sender of " + this + " to " + value);
 
-		this.envelopeSender = value;
+		this.sender = value;
+		
+		InternetAddress addy = new InternetAddress(value);
+		this.senderNormal = Validator.normalizeEmail(addy.getAddress());
 	}
 
 	/** This is the date the mail came into the system */

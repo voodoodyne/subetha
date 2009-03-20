@@ -105,7 +105,7 @@ import org.subethamail.entity.i.Validator;
 	),
 	@NamedQuery(
 		name="SoftHoldsByPerson",
-		query="select m from Mail m, EmailAddress email where email.person.id = :personId and email.id = m.envelopeSender and m.hold = 'SOFT'",
+		query="select m from Mail m, EmailAddress email where email.person.id = :personId and email.id = m.senderNormal and m.hold = 'SOFT'",
 		hints={
 		}
 	),

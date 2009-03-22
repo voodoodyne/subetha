@@ -1,0 +1,231 @@
+/***************************************************************
+ * Local stylesheet extensions
+ ***************************************************************/
+
+/* start bluehaze.css overrides */
+table {
+	border-collapse: collapse;
+}
+
+body {
+	font-size: 0.8em;
+}
+
+legend {
+	font-size: 1.1em;
+}
+
+pre {
+	padding-left: 1em;
+	font-size: 1.1em;
+}
+
+#header {
+	height: 6.5em;
+	background-color: #fff;
+}
+
+#headerText {
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 150%;
+}
+
+#bodyText {
+	margin: 0px 5px 0 14em;
+	text-align: left;
+}
+
+#bodyText p {
+	padding-bottom: 0px;
+}
+
+#bodyText h1 {
+	border-top-style: solid;
+ 	border-top-width: 2px;
+ 	border-bottom-style: dotted;
+ 	background-color: #e8f0ff;
+ 	padding-top: 0.4em;
+ 	padding-left: 0.5em;
+}
+
+.menuBar {
+	font-size: 170%;
+}
+
+.sideBox {
+	margin-top: 0mm;
+	width: 12em;
+}
+
+.sideBox a,.sideBox a:hover,.sideBox span {
+	line-height: .75em;
+}
+
+/* end bluehaze.css overrides */
+
+
+/* for thread summaries */
+ul.rootSummaries {
+	list-style-type: square;
+}
+	
+div.nestedSummaries ul {
+	list-style-type: circle;
+}
+
+
+/* Forms (borrowed from trac) */
+input, textarea, select {
+	margin: 2px
+}
+input, select {
+	vertical-align: middle
+}
+input[type=button], input[type=submit], input[type=reset] {
+	background: #eee;
+	color: #222;
+	border: 1px outset #ccc;
+	padding: .1em .5em;
+}
+input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover {
+	background: #ccb;
+}
+input[type=button][disabled], input[type=submit][disabled], input[type=reset][disabled] {
+	background: #f6f6f6;
+	border-style: solid;
+	color: #999;
+}
+input[type=text], input[type=password], input.textwidget, textarea { 
+	border: 1px solid #d7d7d7
+}
+input[type=text], input[type=password], input.textwidget, textarea {
+	padding: .2em .2em; margin: 0px
+}
+input[type=text]:focus, input[type=password]:focus, input.textwidget:focus, textarea:focus {
+	border: 1px solid #886;
+}
+option {
+	border-bottom: 1px dotted #d7d7d7
+}
+fieldset {
+	border: 1px solid #d7d7d7; padding: .5em; margin: 0
+}
+fieldset.iefix { background: transparent; border: none; padding: 0; margin: 0 }
+* html fieldset.iefix { width: 98% }
+fieldset.iefix p { margin: 0 }
+legend { color: #555; padding: 0 .25em; font-size: 90%; font-weight: bold }
+label.disabled { color: #d7d7d7 }
+.buttons { margin: .5em .5em .5em 0 }
+.buttons form, .buttons form div { display: inline }
+.buttons input { margin: 1em .5em .1em 0 }
+
+.form-inline {
+	display: inline
+}
+
+.a td,.a th {
+	background: #f4f4f4;
+}
+
+.b td,.b th {
+	background: #e8e8e8;
+}
+
+h2 {
+	font-size: 135%;
+}
+
+form th {
+	text-align: right;
+	vertical-align: top;
+}
+
+td.error,th.error {
+	background-color: #fee;
+	border: 1px solid red;
+}
+
+div.error,p.error {
+	color: red;
+	font-weight: bold;
+}
+
+.sideBox {
+	margin-bottom: 1em;
+}
+
+.menuBar a {
+	border-left: 2px solid blue;
+	padding-left: 1ex;
+}
+
+.menuBar a.first {
+	border-left: none;
+}
+
+table.permissions {
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+table.permissions th {
+	vertical-align: bottom;
+	text-align: left;
+}
+
+table.permissions th.role {
+	font-weight: normal;
+	padding-right: 5px;
+	text-align: right;
+}
+
+table.permissions td {
+	border: 1px solid grey;
+}
+
+table.filters td {
+	vertical-align: top;
+}
+
+/* Message Archive Styles */
+.message {
+	
+}
+
+span.authorName {
+	
+}
+
+.messagePart {
+	font-size: larger
+}
+
+.attachments {
+	
+}
+
+div#searchBar {
+	padding-bottom: 15px;	
+}
+
+/* End Message Archives Styles */
+
+div.note {
+	font-weight: lighter;
+	font-style: italic;
+	padding-left: 3em;
+}
+
+table.sideHeader th {
+	padding-right: 7px;
+}
+
+table.keyTable td {
+	padding-right: 15px;
+}
+
+/* The adversiting */
+div.ad {
+	margin-left: 2.5em;
+}

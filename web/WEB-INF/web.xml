@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	$Id: web.xml 896 2006-12-26 21:14:36Z skot $
+	$URL: http://subetha.tigris.org/svn/subetha/branches/resin/frontend/meta/web.xml $
+-->
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	version="2.4">
+	
+	<display-name>SubEtha Frontend</display-name>
+	
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error.jsp</location>
+	</error-page>
+	
+	<filter>
+		<filter-name>SetRequestCharsetFilter</filter-name>
+		<filter-class>
+			org.subethamail.web.util.SetRequestCharsetFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>SetRequestCharsetFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>SecurityAssociationFilter</filter-name>
+		<filter-class>
+			org.subethamail.web.security.SecurityAssociationFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>SecurityAssociationFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>FileUploadFilter</filter-name>
+		<filter-class>org.subethamail.web.util.FileUploadFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>FileUploadFilter</filter-name>
+		<url-pattern>/import_messages_submit.jsp</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>Backend</servlet-name>
+		<servlet-class>org.subethamail.web.Backend</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>ListServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.ListServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ListServlet</servlet-name>
+		<url-pattern>/list/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>InjectorServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.InjectorServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>InjectorServlet</servlet-name>
+		<url-pattern>/inject</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ArchiveServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.ArchiveServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ArchiveServlet</servlet-name>
+		<url-pattern>/message/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>AttachmentServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.AttachmentServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>AttachmentServlet</servlet-name>
+		<url-pattern>/attachment/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ExportServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.ExportServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ExportServlet</servlet-name>
+		<url-pattern>/export/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PermissionImageServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.PermissionImageServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>PermissionImageServlet</servlet-name>
+		<url-pattern>/perm_img</url-pattern>
+	</servlet-mapping>
+</web-app>

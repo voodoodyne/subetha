@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Subetha (resin)</name>
+	<name>Subetha<name>
 	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
-		<buildCommand>
-			<name>org.python.pydev.PyDevBuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
@@ -18,33 +13,7 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
 	<linkedResources>
-		<link>
-			<name>jboss-config</name>
-			<type>2</type>
-			<locationURI>SUBETHA_JBOSS_HOME/server/default/conf</locationURI>
-		</link>
-		<link>
-			<name>jboss-deploy</name>
-			<type>2</type>
-			<locationURI>SUBETHA_JBOSS_HOME/server/default/deploy</locationURI>
-		</link>
-		<link>
-			<name>jboss-log</name>
-			<type>2</type>
-			<locationURI>SUBETHA_JBOSS_HOME/server/default/log</locationURI>
-		</link>
-		<link>
-			<name>jboss-tmp</name>
-			<type>2</type>
-			<locationURI>SUBETHA_JBOSS_HOME/server/default/tmp</locationURI>
-		</link>
-		<link>
-			<name>jboss-work</name>
-			<type>2</type>
-			<locationURI>SUBETHA_JBOSS_HOME/server/default/work</locationURI>
-		</link>
 	</linkedResources>
 </projectDescription>

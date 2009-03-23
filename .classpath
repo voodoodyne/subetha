@@ -10,6 +10,7 @@
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="loadtest/src"/>

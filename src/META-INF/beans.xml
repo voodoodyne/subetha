@@ -1,0 +1,9 @@
+<Beans	xmlns="urn:java:ee" 
+		xmlns:util="urn:java:resinscratchspace.util"
+		xmlns:biz="urn:java:resinscratchspace.biz"
+		>
+		
+<!--  <biz:SecurityManagerImpl/>-->
+<!--  <util:BootstrapperBean/>-->
+	
+</Beans>

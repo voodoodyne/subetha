@@ -11,6 +11,7 @@
 	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="lib/cos.jar"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="loadtest/src"/>
@@ -18,15 +19,15 @@
 	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.5.6.jar"/>
 	<classpathentry kind="lib" path="lib/subethasmtp.jar"/>
-	<classpathentry kind="var" path="RESIN_HOME/lib/activation.jar"/>
-	<classpathentry kind="var" path="RESIN_HOME/lib/javaee-16.jar"/>
-	<classpathentry kind="var" path="RESIN_HOME/lib/javamail-141.jar"/>
-	<classpathentry kind="var" path="RESIN_HOME/lib/jaxstream-15.jar"/>
-	<classpathentry kind="var" path="RESIN_HOME/lib/jaybird-full-2.1.6.jar"/>
-	<classpathentry kind="var" path="RESIN_HOME/lib/jsf-12.jar"/>
-	<classpathentry kind="var" path="RESIN_HOME/lib/osgi-14.jar"/>
-	<classpathentry kind="var" path="RESIN_HOME/lib/postgresql-8.3-604.jdbc4.jar"/>
-	<classpathentry kind="var" path="RESIN_HOME/lib/resin.jar"/>
-	<classpathentry kind="var" path="RESIN_HOME/lib/webutil.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/activation.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/javaee-16.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/javamail-141.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/jaxstream-15.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/jaybird-full-2.1.6.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/jsf-12.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/resin.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/osgi-14.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/postgresql-8.3-604.jdbc4.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/webutil.jar"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

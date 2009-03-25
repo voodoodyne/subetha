@@ -10,7 +10,7 @@
 	To run the junit tests, you must copy junit.jar into ANT_HOME/lib.
 -->
 
-<project name="subetha" default="compile" basedir=".">
+<project name="subetha" default="deploy" basedir=".">
 
 	<property name="name" value="${ant.project.name}" />
 	
@@ -21,7 +21,7 @@
 
 	<property name="base.dir" location="." />
 
-	<property name="build.dir" location="target" />
+	<property name="build.dir" location="build" />
 	
 	<property name="build.debug" value="on" />
 	<property name="build.deprecation" value="on" />
@@ -29,418 +29,81 @@
 	<property name="ant.build.javac.target" value="1.5" />
 	<property name="ant.build.javac.source" value="1.5" />
 
-	<property name="deploy.dir" location="${jboss.dir}/server/default/deploy" />
+	<property name="resin.dir" location="/java/resin-4.0.s090318/" />
+	<property name="webapp.deploy.dir" location="${resin.dir}/webapps/"/>
+	<property name="deploy.dir" location="${webapp.deploy.dir}" />
 
-	<tstamp/>
-	<tstamp>
-		<format property="YEAR" pattern="yyyy" />
-	</tstamp>
-
-	<!-- ******************************************************** -->
-	<path id="jboss.classpath">
-		<fileset dir="${jboss.dir}">
-			<include name="client/*.jar"/>
-			<include name="common/lib/*.jar"/>
+	<path id="web.jars">
+		<fileset dir="./lib">
+			<include name="*tripes*.jar"/>
+			<include name="tagonist.jar"/>
+			<include name="cos.jar"/>
 		</fileset>
 	</path>
-
-	<path id="propertize.classpath">
-		<fileset dir="${base.dir}/lib">
-			<include name="${asm.jar}"/>
-			<include name="${jen.jar}"/>
-			<include name="${tagonist.jar}"/>
+	
+	<path id="app.jars">
+		<fileset dir="./lib">
+			<include name="*.jar"/>
 		</fileset>
 	</path>
-
-	<path id="common.classpath">
-		<path refid="jboss.classpath" />
-	</path>
-
-	<path id="core.classpath">
-		<pathelement location="${build.dir}/common/lib/common.jar" />
-		<fileset dir="${base.dir}/lib">
-			<include name="${velocity.jar}"/>
-			<include name="${subethasmtp.jar}"/>
-			<include name="${slf4j-api.jar}"/>
-			<include name="${lucene-core.jar}"/>
-			<include name="${jdom.jar}"/>
-			<include name="${mina-core.jar}"/>
-			<include name="${commons-codec.jar}"/>
-		</fileset>
-
-		<path refid="jboss.classpath" />
-	</path>
-
-	<path id="plugin.classpath">
-		<pathelement location="${build.dir}/core/subetha-api.jar" />
-		<pathelement location="${build.dir}/common/lib/common.jar" />
-		<path refid="jboss.classpath" />
-	</path>
-
-	<path id="frontend.classpath">
-		<pathelement location="${build.dir}/core/subetha-api.jar" />
-		<fileset dir="${base.dir}/lib">
-			<include name="${commons-fileupload.jar}"/>
-			<include name="${tagonist.jar}"/>
-		</fileset>
-		<path refid="core.classpath" />
-	</path>
-
-	<path id="rtest.classpath">
-		<pathelement location="${build.dir}/core/core.jar" />
-		<pathelement location="${build.dir}/common/lib/common.jar" />
-		<fileset dir="${base.dir}/lib">
-			<include name="${junit.jar}"/>
-			<include name="${subethasmtp.jar}"/>
-			<include name="${wiser.jar}"/>
-		</fileset>
-		<path refid="jboss.classpath" />
-	</path>
-
-	<path id="rtest.run.classpath">
-		<path refid="rtest.classpath" />
-
-		<pathelement location="${build.dir}/rtest/rtest.jar" />
-	</path>
-
-	<!-- ******************************************************** -->
-
-	<target name="common" depends="init">
-		<mkdir dir="${build.dir}/common/classes" />
-		<mkdir dir="${build.dir}/common/lib" />
-		<javac
-			srcdir="${base.dir}/common/src/"
-			destdir="${build.dir}/common/classes"
-			includeAntRuntime="false"
-			debug="${build.debug}"
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
-
-			<classpath refid="common.classpath" />
-		</javac>
-		<jar jarfile="${build.dir}/common/lib/common.jar">
-			<fileset dir="${build.dir}/common/classes"/>
-			<manifest>
-				<attribute name="Specification-Version" value="${version}" />
-				<attribute name="Implementation-Version" value="${TODAY}" />
-			</manifest>
-		</jar>
-	</target>
-
- 	<target name="core" depends="init, common">
-		<mkdir dir="${build.dir}/core/classes" />
- 		
-		<javac
-			srcdir="${base.dir}/core/src"
-			destdir="${build.dir}/core/classes"
-			includeAntRuntime="false"
-			debug="${build.debug}"
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
-			
-			<classpath refid="core.classpath" />			
-		</javac>
-
-		<jar jarfile="${build.dir}/core/subetha-api.jar">
-			<!--
-				Yes this means there is a duplicate of the entity interface classes
-				in the entity jar.  Fortunately JBoss handles duplicates in the
-				same JVM nicely, as long as the files are identical (which they
-				should be).  The main point is that now remote clients have access
-				to the validation constants.
-			-->
-			<fileset dir="${build.dir}/core/classes">
-				<include name="**/i/**" />
-			</fileset>
-		
-			<manifest>
-				<attribute name="Specification-Version" value="${version}" />
-				<attribute name="Implementation-Version" value="${TODAY}" />
-			</manifest>
-		</jar>
-
-		<jar jarfile="${build.dir}/core/core.jar">			
-			<metainf dir="${base.dir}/core/meta">
-				<include name="mailcap"/>
-				<include name="mime.types"/>
-				<include name="persistence.xml"/>
-			</metainf>
-
-			<fileset dir="${build.dir}/core/classes" />
-
-			<fileset dir="${base.dir}/core/src">
-				<include name="**/*.vm" />
-			</fileset>
-
-			<manifest>
-				<attribute name="Specification-Version" value="${version}" />
-				<attribute name="Implementation-Version" value="${TODAY}" />
-			</manifest>
-		</jar>
-	</target>
-
-	<target name="plugin" depends="common, core">
-		<mkdir dir="${build.dir}/plugin/classes" />
- 		
-		<javac
-			srcdir="${base.dir}/plugin/src"
-			destdir="${build.dir}/plugin/classes"
-			includeAntRuntime="false"
-			debug="${build.debug}"
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
-			
-			<classpath refid="plugin.classpath" />
-		</javac>
-
-		<jar jarfile="${build.dir}/plugin/plugin.jar">
-			<!--
-			<metainf dir="${plugin.meta.dir}">
-				<include name="jboss-service.xml"/>
-			</metainf>
-			-->
-			
-			<fileset dir="${build.dir}/plugin/classes"/>
-			
-			<!--
-			<fileset dir="${plugin.lib.dir}"/>
-			-->
-			
-			<manifest>
-				<attribute name="Specification-Version" value="${version}" />
-				<attribute name="Implementation-Version" value="${TODAY}" />
-			</manifest>
-		</jar>
-
-	</target>
-
-	<target name="frontend" depends="core">
-		<mkdir dir="${build.dir}/frontend/classes"/>
-
-		<javac 
-			srcdir="${base.dir}/frontend/src"
-			destdir="${build.dir}/frontend/classes" 
-			includeAntRuntime="false"
-			debug="${build.debug}" 
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
-			
-			<classpath refid="frontend.classpath"/>
-		</javac>
-
-		<taskdef name="propertize" classname="org.tagonist.propertize.PropertizeTask">
-			<classpath>
-				<path refid="propertize.classpath" />
-			</classpath>
-		</taskdef>		
-
-		<propertize verbose="false">
-			<fileset dir="${build.dir}/frontend/classes"/>
-		</propertize>
-
-		<jar jarfile="${build.dir}/frontend/frontend.jar">
-			<fileset dir="${build.dir}/frontend/classes" />
-			<manifest>
-				<attribute name="Specification-Version" value="${version}" />
-				<attribute name="Implementation-Version" value="${TODAY}" />
-			</manifest>
-		</jar>
-
-		<war destfile="${build.dir}/frontend/frontend.war" 
-			webxml="${base.dir}/frontend/meta/web.xml">
-
-			<fileset dir="${base.dir}/frontend/content" />
-
-			<lib file="${build.dir}/frontend/frontend.jar"/>
-
-			<lib dir="${base.dir}/lib">
-				<include name="${jstl.jar}"/>
-				<include name="${standard.jar}"/>
-				<include name="${tagonist.jar}"/>
-				<include name="${commons-fileupload.jar}"/>
-			</lib>
-		</war>
-	</target>
-
- 	<target name="rtest-compile" depends="compile">
-		<mkdir dir="${build.dir}/rtest/classes" />
- 		
-		<javac
-			srcdir="${base.dir}/rtest/src"
-			destdir="${build.dir}/rtest/classes"
-			includeAntRuntime="false"
-			debug="${build.debug}"
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
-
-			<classpath refid="rtest.classpath" />
-		</javac>
-		<jar jarfile="${build.dir}/rtest/rtest.jar">
-			<fileset dir="${build.dir}/rtest/classes"/>
-			<fileset dir="${base.dir}/rtest/src/org/subethamail/rtest/msg">
-				<include name="**/*.msg"/>
-			</fileset>
-			<manifest>
-				<attribute name="Specification-Version" value="${version}" />
-				<attribute name="Implementation-Version" value="${TODAY}" />
-			</manifest>
-		</jar>
-	</target>
-
-	<target name="compile" depends="common, core, plugin, frontend">
-	</target>
-
-	<target name="ear" depends="compile">
-		<mkdir dir="${build.dir}/ear"/>
-		<ear destfile="${build.dir}/ear/subetha.ear" appxml="${base.dir}/appmeta/application.xml">
-			<metainf dir="${base.dir}/appmeta/">
-				<include name="jboss-app.xml" />
-				<include name="jboss-service.xml"/>
-			</metainf>
-
-			<fileset file="${build.dir}/core/core.jar" />
-			<fileset file="${build.dir}/plugin/plugin.jar" />
-			<fileset file="${build.dir}/frontend/frontend.war" />
-
-			<!-- need to include this in the lib dir somehow -->
-			<fileset dir="${build.dir}/common">
-				<include name="lib/common.jar"/>
-			</fileset>
-
-			<fileset dir=".">
-				<include name="lib/${velocity.jar}"/>
-				<include name="lib/${commons-lang.jar}"/>
-				<include name="lib/${subethasmtp.jar}"/>
-				<include name="lib/${lucene-core.jar}"/>
-				<include name="lib/${commons-beanutils.jar}"/>
-				<include name="lib/${jdom.jar}"/>
-
-				<include name="lib/${slf4j-api.jar}"/>
-				<include name="lib/${slf4j-log4j12.jar}"/>
-				<include name="lib/${commons-codec.jar}"/>
-				<include name="lib/${mina-core.jar}"/>
-			</fileset>
-		</ear>
-	</target>
-
-	<target name="deploy" depends="ear">
-		<copy file="${build.dir}/ear/subetha.ear" todir="${deploy.dir}" />
-	</target>
-
-	<target name="init">
-		<typedef resource="com/googlecode/svntask/svntask.xml">
-			<classpath>
-				<fileset dir="${base.dir}/lib">
-					<include name="svnkit.jar"/>
-					<include name="svntask.jar"/>
-				</fileset>
-			</classpath>
-		</typedef>
-
-		<svn><info path="${base.dir}" revisionProperty="revisionVersion" /></svn>
-
-		<!--  A hack because svnant does not respect Ant's properties can't be overwritten rule. -->
-		<property name="version" value="${revisionVersion}" />
-	</target>
-
-	<target name="init-dist">
-		<input addproperty="version" message="Version number?" />
-		<property name="dist.name" value="SubEtha-${version}" />
-	</target>
-
+	
 	<target name="clean">
+		<delete dir="${dist.dir}" />
 		<delete dir="${build.dir}" />
-	</target>
-
-	<target name="cleandeploy" depends="clean, deploy">
-	</target>
-
-	<target name="junit" depends="rtest-compile">
-		<junit printsummary="yes" showoutput="yes" fork="yes">
-			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties"/>
-			
-			<classpath refid="rtest.run.classpath"/>
-			
-			<syspropertyset>
-				<propertyref prefix="java.naming" />
-			</syspropertyset>
-			
-			<formatter type="plain" />
-			
-			<batchtest todir="${build.dir}">
-				<fileset dir="${build.dir}/rtest/classes">
-					<include name="**/*Test.class" />
-				</fileset>
-			</batchtest>
-		</junit>
-	</target>
-
-	<target name="junit-special" depends="rtest-compile">
-		<junit printsummary="true" showoutput="true" fork="true">
-			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties"/>
-			
-			<classpath refid="rtest.run.classpath"/>
-			
-			<syspropertyset>
-				<propertyref prefix="java.naming" />
-			</syspropertyset>
-			
-			<formatter type="plain" />
-			
-			<batchtest todir="${build.dir}">
-				<fileset dir="${build.dir}/rtest/classes">
-					<include name="${junit.special.tests}" />
-				</fileset>
-			</batchtest>
-		</junit>
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${build.dir}" />
 	</target>
 	
-	<target name="junit-debug" depends="rtest-compile">
-		<junit printsummary="yes" showoutput="yes" fork="yes">
-			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/rtest/log4j.properties"/>
-			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8001"/>
-			<!-- <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8001"/> -->
-
-			<classpath refid="rtest.run.classpath"/>
-			
-			<syspropertyset>
-				<propertyref prefix="java.naming" />
-			</syspropertyset>
-			
-			<formatter type="plain" />
-			
-			<batchtest todir="${build.dir}">
-				<fileset dir="${build.dir}/rtest/classes">
-					<include name="${junit.special.tests}" />
-				</fileset>
-			</batchtest>
-		</junit>
+	<target name="prepare-war">
+		<copy todir="${build.dir}/" preservelastmodified="true" >
+			<fileset dir="${basedir}/web/" includes="**/*"/>
+		</copy>
+	
+		<copy todir="${build.dir}/WEB-INF/lib/" preservelastmodified="true" > 
+			<fileset refid="${web.jars}"/>
+			<fileset refid="${app.jars}"/>		
+		</copy>
+		
+		<copy todir="${build.dir}/WEB-INF/classes/" preservelastmodified="true" >
+			<fileset dir="${basedir}/src" includes="**/*"/>
+		</copy>
+		
+		<copy todir="${build.dir}/WEB-INF/" preservelastmodified="true" >
+			<fileset dir="${basedir}/meta/" includes="resin-web.xml"/>
+		</copy>
+		
+		<copy todir="${build.dir}/WEB-INF/classes/META-INF/" preservelastmodified="true" >
+			<fileset dir="${basedir}/meta/" includes="beans.xml"/>
+			<fileset dir="${basedir}/meta/" includes="persistence.xml"/>
+		</copy>
 	</target>
 
-	<target name="dist" depends="init-dist, cleandeploy">
-		<copy todir="${build.dir}/${dist.name}/jboss">
-			<fileset dir="${jboss.dir}">
-				<exclude name="**/velocity.log*" />
-				<exclude name="**/log/**" />
-				<exclude name="**/tmp/**" />
-				<exclude name="**/work/**" />
-				<exclude name="**/data/**" />
-			</fileset>
+	<target name="build" description="Build" depends="clean">
+		<javac classpathref="build.class.path" destdir="${build.dir}/WEB-INF/classes/">
+			<sourcepath refid="source.path" />
+		</javac>
+	</target>
+	
+	<target name="war" description="Build dist package" depends="build">
+		<jar destfile="${dist.dir}/${dist.name}.war" 
+			basedir="${build.dir}" excludes="**\*.war">
+			<metainf><include name="${basedir}/meta/beans.xml"/></metainf>
+
+		</jar>
+	</target>
+	<target name="del_deploy" description="deleted the deployed webapps">
+		<delete dir="${webapp.deploy.dir}/${test1.war.name}/" includes="*"/>
+		<delete dir="${webapp.deploy.dir}/${test1.war.name}/" failonerror="false"/>
+    </target>
+
+	
+	<target name="clean_deploy" description="Clean the deployed webapp, then deploys" depends="clean, del_deploy, deploy">
+	</target>
+	
+	<target name="deploy" description="Deployes War" depends="prepare-war">		
+		<copy todir="${webapp.deploy.dir}/" overwrite="true" preservelastmodified="true" >
+			<fileset dir="${build.dir}/../" includes="**.war/**/*" excludes="/resinscratchspace" />
 		</copy>
-		<chmod dir="${build.dir}/${dist.name}/jboss/bin" perm="ugo+rx" includes="**/*.sh"/>
-		<copy todir="${build.dir}/${dist.name}/">
-			<fileset dir=".">
-				<include name="README.html" />
-				<include name="LICENSE.txt" />
-				<include name="www/**" />
-			</fileset>
-		</copy>
-		<zip zipfile="${build.dir}/${dist.name}.zip" basedir="${build.dir}/${dist.name}" />
 	</target>
 </project>
 

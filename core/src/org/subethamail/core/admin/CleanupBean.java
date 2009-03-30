@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.annotation.security.RunAs;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -32,7 +31,7 @@ import org.subethamail.entity.SubscriptionHold;
  */
 @Service(name="Cleanup", objectName="subetha:service=Cleanup")
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 public class CleanupBean extends EntityManipulatorBean implements CleanupManagement
 {
 	/** */

@@ -9,7 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.mail.internet.InternetAddress;
 
@@ -39,7 +38,7 @@ import org.subethamail.entity.Config;
  */
 @Service(objectName="subetha:service=Bootstrapper")
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 public class BootstrapperBean extends EntityManipulatorBean implements BootstrapperManagement
 {
 	/** */

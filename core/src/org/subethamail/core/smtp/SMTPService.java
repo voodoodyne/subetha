@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,7 +31,7 @@ import org.subethamail.smtp.server.SMTPServer;
  */
 @Service(name="SMTPService", objectName="subetha:service=SMTP")
 @SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
+//@RolesAllowed("siteAdmin")
 public class SMTPService implements SMTPManagement, MessageListenerRegistry
 {
 	/** */

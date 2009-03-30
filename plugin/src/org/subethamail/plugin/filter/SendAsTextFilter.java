@@ -7,7 +7,6 @@ package org.subethamail.plugin.filter;
 
 import java.io.IOException;
 
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
@@ -36,7 +35,7 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
 
 @Service
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 // TODO: remove the implements clause when
 // http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 public class SendAsTextFilter extends GenericFilter implements Lifecycle

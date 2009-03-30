@@ -5,8 +5,6 @@
 
 package org.subethamail.core.admin;
 
-import javax.annotation.security.RunAs;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.app.Velocity;
@@ -22,7 +20,7 @@ import org.jboss.ejb3.annotation.Service;
  */
 @Service(objectName="subetha:service=Velocity")
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 public class VelocityBean implements VelocityManagement
 {
 	/** */

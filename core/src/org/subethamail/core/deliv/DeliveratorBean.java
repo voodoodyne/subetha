@@ -8,12 +8,9 @@ package org.subethamail.core.deliv;
 import java.io.IOException;
 
 import javax.annotation.Resource;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -23,7 +20,6 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
@@ -44,10 +40,10 @@ import org.subethamail.entity.Subscription;
  */
 @Stateless(name="Deliverator")
 @SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
-@WebService(name="Deliverator", targetNamespace="http://ws.subethamail.org/", serviceName="DeliveratorService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
+//@RolesAllowed("siteAdmin")
+//@WebService(name="Deliverator", targetNamespace="http://ws.subethamail.org/", serviceName="DeliveratorService")
+//@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+//@WebContext(contextRoot="/subetha")
 public class DeliveratorBean extends EntityManipulatorBean implements Deliverator, DeliveratorRemote
 {
 	/** */

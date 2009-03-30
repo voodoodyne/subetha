@@ -7,8 +7,6 @@ package org.subethamail.core.admin;
 
 import java.util.Iterator;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.management.MalformedObjectNameException;
@@ -38,7 +36,7 @@ import org.subethamail.core.util.PersonalBean;
  */
 @Service(name="Plumber", objectName="subetha:service=Plumber")
 @SecurityDomain("subetha")
-@PermitAll
+//@PermitAll
 @LocalBinding(jndiBinding=Plumber.JNDI_NAME)
 @RemoteBinding(jndiBinding=PlumberRemote.JNDI_NAME)
 public class PlumberBean extends PersonalBean implements Plumber, PlumberRemote, PlumberManagement
@@ -63,7 +61,7 @@ public class PlumberBean extends PersonalBean implements Plumber, PlumberRemote,
 	 * (non-Javadoc)
 	 * @see com.kink.heart.biz.system.i.Plumber#overrideSmtpServer(java.lang.String)
 	 */
-	@RolesAllowed("siteAdmin")
+	//@RolesAllowed("siteAdmin")
 	public void overrideSmtpServer(String host)
 	{
 		if (this.mailConfig != null)
@@ -133,7 +131,7 @@ public class PlumberBean extends PersonalBean implements Plumber, PlumberRemote,
 	 * (non-Javadoc)
 	 * @see com.kink.heart.biz.system.i.Plumber#restoreStmpServer()
 	 */
-	@RolesAllowed("siteAdmin")
+	//@RolesAllowed("siteAdmin")
 	public void restoreStmpServer()
 	{
 		if (this.mailConfig == null)

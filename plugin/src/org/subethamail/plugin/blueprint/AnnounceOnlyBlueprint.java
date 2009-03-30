@@ -8,7 +8,6 @@ package org.subethamail.plugin.blueprint;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -31,7 +30,7 @@ import org.subethamail.plugin.filter.ListHeaderFilter;
  */
 @Service
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 public class AnnounceOnlyBlueprint extends AbstractBlueprint implements Lifecycle
 //TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {

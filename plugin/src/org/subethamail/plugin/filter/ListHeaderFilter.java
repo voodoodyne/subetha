@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 
@@ -35,7 +34,7 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  */
 @Service
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 public class ListHeaderFilter extends GenericFilter implements Lifecycle
 //TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {	

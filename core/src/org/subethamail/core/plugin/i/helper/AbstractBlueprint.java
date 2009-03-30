@@ -5,7 +5,6 @@
 
 package org.subethamail.core.plugin.i.helper;
 
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 
 import org.jboss.ejb3.annotation.SecurityDomain;
@@ -19,7 +18,7 @@ import org.subethamail.core.plugin.i.BlueprintRegistry;
  * @author Jeff Schnitzer
  */
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 abstract public class AbstractBlueprint implements Blueprint, Lifecycle
 {
 	/**

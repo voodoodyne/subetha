@@ -11,12 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
 import javax.mail.internet.InternetAddress;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
@@ -31,7 +28,6 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
 import org.jboss.ejb3.annotation.SecurityDomain;
 import org.jboss.security.SimplePrincipal;
-import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
@@ -66,10 +62,10 @@ import org.subethamail.entity.i.PermissionException;
  */
 @Stateless(name="Admin")
 @SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
-@WebService(name="Admin", targetNamespace="http://ws.subethamail.org/", serviceName="AdminService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
+//@RolesAllowed("siteAdmin")
+//@WebService(name="Admin", targetNamespace="http://ws.subethamail.org/", serviceName="AdminService")
+//@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+//@WebContext(contextRoot="/subetha")
 public class AdminBean extends PersonalBean implements Admin, AdminRemote
 {
 	/** */

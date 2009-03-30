@@ -8,7 +8,6 @@ package org.subethamail.plugin.filter;
 import java.io.IOException;
 import java.util.Enumeration;
 
-import javax.annotation.security.RunAs;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
@@ -38,7 +37,7 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  */
 @Service
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 public class StripAttachmentsFilter extends GenericFilter implements Lifecycle
 //TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
 {

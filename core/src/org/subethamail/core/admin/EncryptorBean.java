@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.security.PermitAll;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -45,7 +44,7 @@ import org.subethamail.entity.Config;
  */
 @Service(name="Encryptor", objectName="subetha:service=Encryptor")
 @SecurityDomain("subetha")
-@PermitAll
+//@PermitAll
 public class EncryptorBean extends EntityManipulatorBean implements Encryptor, EncryptorManagement
 {
 	/** */

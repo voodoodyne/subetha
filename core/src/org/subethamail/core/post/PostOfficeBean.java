@@ -10,7 +10,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
 import javax.annotation.Resource;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -48,7 +47,7 @@ import org.subethamail.entity.SubscriptionHold;
  */
 @Stateless(name="PostOffice")
 @SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
+//@RolesAllowed("siteAdmin")
 public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 {
 	/** */

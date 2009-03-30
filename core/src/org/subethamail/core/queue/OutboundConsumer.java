@@ -7,7 +7,6 @@ package org.subethamail.core.queue;
 
 import java.util.List;
 
-import javax.annotation.security.RunAs;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 
@@ -32,7 +31,7 @@ import org.subethamail.core.deliv.i.Deliverator;
 )
 @Depends ({"jboss.messaging.destination:name=SubEthaOutbound,service=Queue"})
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 public class OutboundConsumer implements Outbound
 {
 	/** */

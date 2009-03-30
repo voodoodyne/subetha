@@ -5,7 +5,6 @@
 
 package org.subethamail.core.queue;
 
-import javax.annotation.security.RunAs;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 
@@ -33,7 +32,7 @@ import org.subethamail.entity.Subscription;
 )
 @Depends ({"jboss.messaging.destination:name=SubEthaInbound,service=Queue"})
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 public class InboundConsumer extends EntityManipulatorBean implements Inbound
 {
 	/** */

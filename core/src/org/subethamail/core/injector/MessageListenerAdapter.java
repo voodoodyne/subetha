@@ -8,7 +8,6 @@ package org.subethamail.core.injector;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 
@@ -37,7 +36,7 @@ import org.subethamail.smtp.helper.SimpleMessageListener;
 	"subetha:service=SMTP"
 })
 @SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@RunAs("siteAdmin")
 @Local(SimpleMessageListener.class)
 public class MessageListenerAdapter implements SimpleMessageListener, Lifecycle
 {

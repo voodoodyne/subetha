@@ -16,20 +16,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
@@ -69,11 +64,11 @@ import org.subethamail.entity.i.PermissionException;
  */
 @Stateless(name="ListMgr")
 @SecurityDomain("subetha")
-@PermitAll
-@RunAs("siteAdmin")
-@WebService(name="ListMgr", targetNamespace="http://ws.subethamail.org/", serviceName="ListMgrService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
+//@PermitAll
+//@RunAs("siteAdmin")
+//@WebService(name="ListMgr", targetNamespace="http://ws.subethamail.org/", serviceName="ListMgrService")
+//@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+//@WebContext(contextRoot="/subetha")
 public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 {
 	/** */

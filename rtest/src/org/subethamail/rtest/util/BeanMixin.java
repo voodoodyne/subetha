@@ -5,15 +5,13 @@
 
 package org.subethamail.rtest.util;
 
-import java.security.Principal;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.security.SecurityAssociation;
-import org.jboss.security.SimplePrincipal;
+import org.jboss.security.client.SecurityClient;
+import org.jboss.security.client.SecurityClientFactory;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AccountMgrRemote;
 import org.subethamail.core.admin.i.Admin;
@@ -81,17 +79,21 @@ public class BeanMixin
 	 */
 	public void establish()
 	{
-		if (this.getPrincipalName() == null)
+		try
 		{
-	        SecurityAssociation.setPrincipal(null);
-	        SecurityAssociation.setCredential(null);
+			SecurityClient securityClient = SecurityClientFactory.getSecurityClient();
+			
+			if (this.getPrincipalName() == null)
+			{
+				securityClient.logout();
+			}
+			else
+			{
+				securityClient.setSimple(this.getPrincipalName(), this.getPassword());
+				securityClient.login();
+			}
 		}
-		else
-		{
-			Principal p = new SimplePrincipal(this.getPrincipalName());
-	        SecurityAssociation.setPrincipal(p);
-	        SecurityAssociation.setCredential(this.getPassword());
-		}
+		catch (Exception ex) { throw new RuntimeException(ex); }
 	}
 	
 	/** */

@@ -27,13 +27,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
@@ -41,7 +37,6 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.ExportMessagesException;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.MailUtils;
@@ -83,11 +78,11 @@ import com.sun.mail.util.LineInputStream;
  */
 @Stateless(name="Archiver")
 @SecurityDomain("subetha")
-@PermitAll
-@RunAs("siteAdmin")
-@WebService(name="Archiver", targetNamespace="http://ws.subethamail.org/", serviceName="ArchiverService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
+//@PermitAll
+//@RunAs("siteAdmin")
+//@WebService(name="Archiver", targetNamespace="http://ws.subethamail.org/", serviceName="ArchiverService")
+//@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
+//@WebContext(contextRoot="/subetha")
 public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemote
 {
 	@EJB Deliverator deliverator;

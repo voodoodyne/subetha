@@ -10,8 +10,6 @@ import java.io.InputStream;
 import java.sql.Blob;
 
 import javax.activation.DataHandler;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -35,8 +33,8 @@ import org.subethamail.entity.Mail;
  */
 @Stateless(name="Detacher")
 @SecurityDomain("subetha")
-@PermitAll
-@RunAs("siteAdmin")
+//@PermitAll
+//@RunAs("siteAdmin")
 public class DetacherBean extends EntityManipulatorBean implements Detacher
 {
 	/** */

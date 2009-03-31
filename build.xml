@@ -29,6 +29,7 @@
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.war.file" location="${build.dir}/${name}.war" />
+	<property name="build.client.file" location="${build.dir}/${name}-client.jar" />
 
 	<property name="resin.dir" location="/java/resin-4.0.s090318/" />
 	<property name="deploy.dir" location="${resin.dir}/webapps" />
@@ -63,6 +64,15 @@
 				deprecation="${build.deprecation}">
 			<classpath refid="master.classpath" />
 		</javac>
+	</target>
+	
+	<target name="client" depends="classes">
+		<jar jarfile="${build.client.file}">
+			<fileset dir="${build.classes.dir}">
+				<include name="org/subethamail/common/**" />
+				<include name="org/subethamail/**/i/**" />
+			</fileset>
+		</jar>
 	</target>
 	
 	<target name="war" depends="classes">
@@ -107,6 +117,11 @@
 		</sync>
 		<sync todir="${expanded.dir}/WEB-INF/classes/META-INF" verbose="true">
 			<fileset dir="${javasrc.dir}/META-INF" />
+		</sync>
+		<sync todir="${expanded.dir}/WEB-INF/lib" verbose="true">
+			<fileset dir="${lib.dir}">
+				<exclude name="**/buildonly/**" />
+			</fileset>
 		</sync>
 	</target>
 </project>

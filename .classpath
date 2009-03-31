@@ -16,6 +16,7 @@
 	<classpathentry kind="lib" path="lib/hibernate-core.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-validator.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-commons-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/stripes.jar"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="loadtest/src"/>
@@ -32,6 +33,5 @@
 	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/osgi-14.jar"/>
 	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/webutil.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-annotations.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/stripes (trunk)"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

@@ -61,7 +61,8 @@
 		<javac srcdir="${javasrc.dir}"
 				destdir="${build.classes.dir}"
 				debug="${build.debug}"
-				deprecation="${build.deprecation}">
+				deprecation="${build.deprecation}"
+			>
 			<classpath refid="master.classpath" />
 		</javac>
 	</target>
@@ -101,27 +102,33 @@
 		<copy file="${build.war.file}" todir="${deploy.dir}" />
 	</target>
 
-	<target name="sync" depends="classes">
-		<sync todir="${expanded.dir}" verbose="true">
+	<target name="sync-deploy" depends="classes">
+		<property name="timeDriftLimit" value="100"/>
+		<sync todir="${expanded.dir}" granularity="${timeDriftLimit}" verbose="true" >
 			<fileset dir="${web.dir}" />
 			<preserveintarget>
-				<include name="META-INF/**" />
+				<!-- resin crap -->
 				<include name="WEB-INF/tmp/**" />
 				<include name="WEB-INF/work/**" />
+				<!-- Taken care of below -->
+				<include name="META-INF/**" />
 				<include name="WEB-INF/classes/**" />
+				<include name="WEB-INF/lib/**" />
 			</preserveintarget>
 		</sync>
-		<sync todir="${expanded.dir}/WEB-INF/classes" verbose="true">
+		
+		<sync todir="${expanded.dir}/WEB-INF/classes" granularity="${timeDriftLimit}" verbose="true">
 			<fileset dir="${build.classes.dir}" />
 			<preserveintarget>
 				<include name="META-INF/**" />
 			</preserveintarget>
 		</sync>
-		<sync todir="${expanded.dir}/WEB-INF/classes/META-INF" verbose="true">
+		
+		<sync todir="${expanded.dir}/WEB-INF/classes/META-INF" granularity="${timeDriftLimit}" verbose="true">
 			<fileset dir="${javasrc.dir}/META-INF" />
 		</sync>
 		<sync todir="${expanded.dir}/WEB-INF/lib" verbose="true">
-			<fileset dir="${lib.dir}">
+			<fileset dir="${lib.dir}" >
 				<exclude name="**/buildonly/**" />
 			</fileset>
 		</sync>

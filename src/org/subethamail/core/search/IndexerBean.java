@@ -35,7 +35,6 @@ import org.apache.lucene.queryParser.ParseException;
 import org.subethamail.common.SearchException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.search.i.Indexer;
-import org.subethamail.core.search.i.IndexerRemote;
 import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
@@ -53,7 +52,7 @@ import com.caucho.config.Service;
  * @author Scott Hernandez
  */
 @Service
-public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer, IndexerRemote
+public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer
 {
 	/** */
 	private static Log log = LogFactory.getLog(IndexerBean.class);

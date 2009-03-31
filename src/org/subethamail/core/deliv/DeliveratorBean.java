@@ -22,7 +22,6 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.deliv.i.Deliverator;
-import org.subethamail.core.deliv.i.DeliveratorRemote;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.plugin.i.IgnoreException;
@@ -38,7 +37,7 @@ import org.subethamail.entity.Subscription;
  * @author Scott Hernandez
  */
 @Stateless
-public class DeliveratorBean extends EntityManipulatorBean implements Deliverator, DeliveratorRemote
+public class DeliveratorBean extends EntityManipulatorBean implements Deliverator
 {
 	/** */
 	private static Log log = LogFactory.getLog(DeliveratorBean.class);

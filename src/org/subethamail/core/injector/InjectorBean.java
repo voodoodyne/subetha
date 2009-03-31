@@ -37,7 +37,6 @@ import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.i.Injector;
-import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.post.PostOffice;
@@ -58,7 +57,7 @@ import org.subethamail.entity.i.Permission;
  * @author Scott Hernandez
  */
 @Stateless(name="Injector")
-public class InjectorBean extends EntityManipulatorBean implements Injector, InjectorRemote
+public class InjectorBean extends EntityManipulatorBean implements Injector
 {
 	/** */
 	private static Log log = LogFactory.getLog(InjectorBean.class);

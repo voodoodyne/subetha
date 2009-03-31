@@ -47,7 +47,6 @@ import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
-import org.subethamail.core.lists.i.ArchiverRemote;
 import org.subethamail.core.lists.i.ExportFormat;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.lists.i.MailData;
@@ -76,7 +75,7 @@ import com.sun.mail.util.LineInputStream;
  * @author Scott Hernandez
  */
 @Stateless(name="Archiver")
-public class ArchiverBean extends PersonalBean implements Archiver, ArchiverRemote
+public class ArchiverBean extends PersonalBean implements Archiver
 {
 	@EJB Deliverator deliverator;
 	@EJB FilterRunner filterRunner;

@@ -19,7 +19,13 @@ import javax.security.auth.login.FailedLoginException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.core.acct.i.*;
+import org.subethamail.core.acct.i.AccountMgr;
+import org.subethamail.core.acct.i.AuthCredentials;
+import org.subethamail.core.acct.i.AuthSubscribeResult;
+import org.subethamail.core.acct.i.BadTokenException;
+import org.subethamail.core.acct.i.MyListRelationship;
+import org.subethamail.core.acct.i.Self;
+import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.PostOffice;
@@ -37,7 +43,7 @@ import org.subethamail.entity.Subscription;
  * @author Jeff Schnitzer
  */
 @Stateless(name="AccountMgr")
-public class AccountMgrBean extends PersonalBean implements AccountMgr, AccountMgrRemote
+public class AccountMgrBean extends PersonalBean implements AccountMgr
 {
 	/** */
 	private static Log log = LogFactory.getLog(AccountMgrBean.class);

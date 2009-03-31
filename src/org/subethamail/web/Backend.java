@@ -9,12 +9,22 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
 
+import javax.inject.Current;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.subethamail.core.acct.i.AccountMgr;
+import org.subethamail.core.admin.i.Admin;
+import org.subethamail.core.admin.i.Encryptor;
+import org.subethamail.core.admin.i.ListWizard;
+import org.subethamail.core.injector.i.Injector;
+import org.subethamail.core.lists.i.Archiver;
+import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.entity.i.Permission;
 
 /**
+ * Singleton which provides access to the backend EJBs.  
+ * 
  * This is initialized as a servlet on startup so that it
  * can place itself in application scope; this makes it
  * available to JSPs as ${backend}.
@@ -35,22 +45,91 @@ public class Backend extends HttpServlet
 	 */
 	static Backend singleton;
 	
+	/** Stateless session EJB references are all thread-safe */
+	@Current Injector injector;
+	@Current Admin admin;
+	@Current Encryptor encryptor;
+	@Current ListWizard listWizard;
+	@Current ListMgr listMgr;
+	@Current AccountMgr accountMgr;
+	@Current Archiver archiver;
+	
 	/**
 	 * Obtain the current instance.
 	 */
 	public static Backend instance() { return singleton; }
 	
+	/**
+	 * Initialize all the ejb references and make them
+	 * available in the application scope.
+	 */
 	@Override
 	public void init() throws ServletException
 	{
+		this.getServletContext().setAttribute(KEY, this);
+		
+		singleton = this;
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.servlet.GenericServlet#destroy()
+	 */
+	@Override
+	public void destroy()
+	{
+		this.getServletContext().removeAttribute(KEY);
+		
+		singleton = null;
+	}
+	
 	/**
 	 * A convenient way of enumerating all the permissions from the presentation tier. 
 	 */
 	public Set<Permission> getAllPermissions()
 	{
 		return Permission.ALL;
+	}
+
+	/** */
+	public Injector getInjector()
+	{
+		return this.injector;
+	}
+
+	/** */
+	public Admin getAdmin()
+	{
+		return this.admin;
+	}
+
+	/** */
+	public Encryptor getEncryptor()
+	{
+		return this.encryptor;
+	}
+
+	/** */
+	public ListWizard getListWizard()
+	{
+		return this.listWizard;
+	}
+
+	/** */
+	public AccountMgr getAccountMgr()
+	{
+		return this.accountMgr;
+	}
+
+	/** */
+	public ListMgr getListMgr()
+	{
+		return this.listMgr;
+	}
+	
+	/** */
+	public Archiver getArchiver()
+	{
+		return this.archiver;
 	}
 	
 	/** @return some sense of what the whole application version # is */

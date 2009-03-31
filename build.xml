@@ -81,7 +81,9 @@
 				<exclude name="web.xml" />
 			</webinf>
 			
-			<fileset dir="${web.dir}" />
+			<fileset dir="${web.dir}">
+				<exclude name="WEB-INF/**" />
+			</fileset>
 			
 			<classes dir="${build.classes.dir}" />
 			

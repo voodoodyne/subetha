@@ -27,16 +27,16 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-	<filter>
-		<filter-name>SecurityAssociationFilter</filter-name>
-		<filter-class>
-			org.subethamail.web.security.SecurityAssociationFilter</filter-class>
-	</filter>
-	
-	<filter-mapping>
-		<filter-name>SecurityAssociationFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+<!--	<filter>-->
+<!--		<filter-name>SecurityAssociationFilter</filter-name>-->
+<!--		<filter-class>-->
+<!--			org.subethamail.web.security.SecurityAssociationFilter</filter-class>-->
+<!--	</filter>-->
+<!--	-->
+<!--	<filter-mapping>-->
+<!--		<filter-name>SecurityAssociationFilter</filter-name>-->
+<!--		<url-pattern>/*</url-pattern>-->
+<!--	</filter-mapping>-->
 
 	<filter>
 		<filter-name>FileUploadFilter</filter-name>

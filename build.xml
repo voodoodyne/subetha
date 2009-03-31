@@ -10,100 +10,104 @@
 	To run the junit tests, you must copy junit.jar into ANT_HOME/lib.
 -->
 
-<project name="subetha" default="deploy" basedir=".">
+<project name="subetha" default="war" basedir=".">
 
 	<property name="name" value="${ant.project.name}" />
 	
 	<property file="user.properties" />
 	<property file="${user.home}/build.properties" />
 	<property file="build.properties" />
-	<property file="jar.properties" />
 
 	<property name="base.dir" location="." />
 
-	<property name="build.dir" location="build" />
-	
 	<property name="build.debug" value="on" />
 	<property name="build.deprecation" value="on" />
 
 	<property name="ant.build.javac.target" value="1.5" />
 	<property name="ant.build.javac.source" value="1.5" />
 
-	<property name="resin.dir" location="/java/resin-4.0.s090318/" />
-	<property name="webapp.deploy.dir" location="${resin.dir}/webapps/"/>
-	<property name="deploy.dir" location="${webapp.deploy.dir}" />
+	<property name="build.dir" location="build" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="build.war.file" location="${build.dir}/${name}.war" />
 
-	<path id="web.jars">
-		<fileset dir="./lib">
-			<include name="*tripes*.jar"/>
-			<include name="tagonist.jar"/>
-			<include name="cos.jar"/>
+	<property name="resin.dir" location="/java/resin-4.0.s090318/" />
+	<property name="deploy.dir" location="${resin.dir}/webapps" />
+	<property name="expanded.dir" location="${deploy.dir}/${name}" />
+
+	<property name="javasrc.dir" location="src" />
+	<property name="web.dir" location="web" />
+	<property name="lib.dir" location="lib" />
+
+	<path id="master.classpath">
+		<pathelement path="${java.class.path}" />
+		
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
 		</fileset>
-	</path>
-	
-	<path id="app.jars">
-		<fileset dir="./lib">
-			<include name="*.jar"/>
+
+		<fileset dir="${resin.dir}/lib">
+			<include name="**/*.jar"/>
 		</fileset>
 	</path>
 	
 	<target name="clean">
-		<delete dir="${dist.dir}" />
 		<delete dir="${build.dir}" />
-		<mkdir dir="${dist.dir}" />
-		<mkdir dir="${build.dir}" />
 	</target>
 	
-	<target name="prepare-war">
-		<copy todir="${build.dir}/" preservelastmodified="true" >
-			<fileset dir="${basedir}/web/" includes="**/*"/>
-		</copy>
-	
-		<copy todir="${build.dir}/WEB-INF/lib/" preservelastmodified="true" > 
-			<fileset refid="${web.jars}"/>
-			<fileset refid="${app.jars}"/>		
-		</copy>
-		
-		<copy todir="${build.dir}/WEB-INF/classes/" preservelastmodified="true" >
-			<fileset dir="${basedir}/src" includes="**/*"/>
-		</copy>
-		
-		<copy todir="${build.dir}/WEB-INF/" preservelastmodified="true" >
-			<fileset dir="${basedir}/meta/" includes="resin-web.xml"/>
-		</copy>
-		
-		<copy todir="${build.dir}/WEB-INF/classes/META-INF/" preservelastmodified="true" >
-			<fileset dir="${basedir}/meta/" includes="beans.xml"/>
-			<fileset dir="${basedir}/meta/" includes="persistence.xml"/>
-		</copy>
-	</target>
-
-	<target name="build" description="Build" depends="clean">
-		<javac classpathref="build.class.path" destdir="${build.dir}/WEB-INF/classes/">
-			<sourcepath refid="source.path" />
+ 	<target name="classes">
+		<mkdir dir="${build.classes.dir}" />
+ 		
+		<javac srcdir="${javasrc.dir}"
+				destdir="${build.classes.dir}"
+				debug="${build.debug}"
+				deprecation="${build.deprecation}">
+			<classpath refid="master.classpath" />
 		</javac>
 	</target>
 	
-	<target name="war" description="Build dist package" depends="build">
-		<jar destfile="${dist.dir}/${dist.name}.war" 
-			basedir="${build.dir}" excludes="**\*.war">
-			<metainf><include name="${basedir}/meta/beans.xml"/></metainf>
+	<target name="war" depends="classes">
+		<war destfile="${build.war.file}" webxml="${web.dir}/WEB-INF/web.xml">
+			<webinf dir="${web.dir}/WEB-INF">
+				<exclude name="web.xml" />
+			</webinf>
+			
+			<fileset dir="${web.dir}" />
+			
+			<classes dir="${build.classes.dir}" />
+			
+			<classes dir="${javasrc.dir}">
+				<include name="META-INF/**" />
+			</classes>
 
-		</jar>
+			<lib dir="${lib.dir}">
+				<exclude name="buildonly/**"/>
+			</lib>
+		</war>
 	</target>
-	<target name="del_deploy" description="deleted the deployed webapps">
-		<delete dir="${webapp.deploy.dir}/${test1.war.name}/" includes="*"/>
-		<delete dir="${webapp.deploy.dir}/${test1.war.name}/" failonerror="false"/>
-    </target>
+	
+	<target name="deploy" depends="war">
+		<copy file="${build.war.file}" todir="${deploy.dir}" />
+	</target>
 
-	
-	<target name="clean_deploy" description="Clean the deployed webapp, then deploys" depends="clean, del_deploy, deploy">
-	</target>
-	
-	<target name="deploy" description="Deployes War" depends="prepare-war">		
-		<copy todir="${webapp.deploy.dir}/" overwrite="true" preservelastmodified="true" >
-			<fileset dir="${build.dir}/../" includes="**.war/**/*" excludes="/resinscratchspace" />
-		</copy>
+	<target name="sync" depends="classes">
+		<sync todir="${expanded.dir}" verbose="true">
+			<fileset dir="${web.dir}" />
+			<preserveintarget>
+				<include name="META-INF/**" />
+				<include name="WEB-INF/tmp/**" />
+				<include name="WEB-INF/work/**" />
+				<include name="WEB-INF/classes/**" />
+			</preserveintarget>
+		</sync>
+		<sync todir="${expanded.dir}/WEB-INF/classes" verbose="true">
+			<fileset dir="${build.classes.dir}" />
+			<preserveintarget>
+				<include name="META-INF/**" />
+			</preserveintarget>
+		</sync>
+		<sync todir="${expanded.dir}/WEB-INF/classes/META-INF" verbose="true">
+			<fileset dir="${javasrc.dir}/META-INF" />
+		</sync>
 	</target>
 </project>
 

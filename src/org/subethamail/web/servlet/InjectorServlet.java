@@ -8,13 +8,15 @@ package org.subethamail.web.servlet;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import javax.inject.Current;
 import javax.security.auth.login.FailedLoginException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.subethamail.web.Backend;
+import org.subethamail.core.acct.i.AccountMgr;
+import org.subethamail.core.injector.i.Injector;
 import org.subethamail.web.security.SecurityContext;
 
 /**
@@ -41,6 +43,8 @@ import org.subethamail.web.security.SecurityContext;
 @SuppressWarnings("serial")
 public class InjectorServlet extends HttpServlet
 {
+	@Current AccountMgr accMgr;
+	@Current Injector inj;
 	/** */
 	public static final String AUTH_ID_PARAM = "authId";
 	public static final String AUTH_NAME_PARAM = "authName";
@@ -81,7 +85,7 @@ public class InjectorServlet extends HttpServlet
 		{
 			try
 			{
-				authId = Backend.instance().getAccountMgr().authenticate(authName, authPass).getId().toString();
+				authId = accMgr.authenticate(authName, authPass).getId().toString();
 			}
 			catch (FailedLoginException ex) { throw new ServletException(ex); }
 		}
@@ -91,7 +95,7 @@ public class InjectorServlet extends HttpServlet
 		{
 			sctx.associateCredentials();
 			
-			if (!Backend.instance().getInjector().inject(from, recipient, new ByteArrayInputStream(message.getBytes())))
+			if (!inj.inject(from, recipient, new ByteArrayInputStream(message.getBytes())))
 				response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
 		}
 		finally

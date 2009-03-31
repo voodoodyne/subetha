@@ -8,6 +8,7 @@ package org.subethamail.web.servlet;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.inject.Current;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.web.Backend;
 
 /**
@@ -27,12 +29,15 @@ import org.subethamail.web.Backend;
 @SuppressWarnings("serial")
 public class ListServlet extends HttpServlet
 {
+	
 	/** */
 	public static final String LIST_PAGE = "/list.jsp";
 	public static final String ID_PARAM_NAME = "listId";
 	
 	public static final String BAD_LIST_PAGE = "/list_unknown.jsp";
 
+	@Current ListMgr listMgr;
+	
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
@@ -44,7 +49,7 @@ public class ListServlet extends HttpServlet
 		
 		try
 		{
-			Long listId = Backend.instance().getListMgr().lookup(url);
+			Long listId = listMgr.lookup(url);
 			
 			RequestDispatcher dispatcher = 
 				this.getServletContext().getRequestDispatcher(LIST_PAGE + "?" + ID_PARAM_NAME + "=" + listId);

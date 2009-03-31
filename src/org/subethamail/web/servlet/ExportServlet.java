@@ -8,6 +8,7 @@ package org.subethamail.web.servlet;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
+import javax.inject.Current;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,9 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.subethamail.common.ExportMessagesException;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ExportFormat;
 import org.subethamail.entity.i.PermissionException;
-import org.subethamail.web.Backend;
 
 /**
  * This servlet will exported messages for a list. The format is passed through.
@@ -28,6 +29,7 @@ import org.subethamail.web.Backend;
 @SuppressWarnings("serial")
 public class ExportServlet extends HttpServlet
 {
+	@Current Archiver archiver;
 
 	/*
 	 * (non-Javadoc)
@@ -78,7 +80,7 @@ public class ExportServlet extends HttpServlet
 			}
 			
 			BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream());
-			Backend.instance().getArchiver().exportList(listId, format, bos);
+			archiver.exportList(listId, format, bos);
 		}
 		catch (PermissionException pex)
 		{

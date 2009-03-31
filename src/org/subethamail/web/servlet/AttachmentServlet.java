@@ -7,7 +7,7 @@ package org.subethamail.web.servlet;
 
 import java.io.IOException;
 
-import javax.ejb.EJB;
+import javax.inject.Current;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +18,6 @@ import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.entity.i.PermissionException;
-import org.subethamail.web.Backend;
 
 /**
  * This servlet will return the attachement.
@@ -28,7 +27,7 @@ import org.subethamail.web.Backend;
 @SuppressWarnings("serial")
 public class AttachmentServlet extends HttpServlet
 {
-	@EJB Archiver archiver;
+	@Current Archiver archiver;
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -52,7 +51,7 @@ public class AttachmentServlet extends HttpServlet
 		
 		try
 		{
-			String contentType = Backend.instance().getArchiver().getAttachmentContentType(attachmentId);
+			String contentType = archiver.getAttachmentContentType(attachmentId);
 			String name = MailUtils.getNameFromContentType(contentType);
 			response.setContentType(contentType);
 			
@@ -61,7 +60,7 @@ public class AttachmentServlet extends HttpServlet
 				response.setHeader("Content-Disposition", " attachment; filename=\"" + name + "\"");
 			}
 			
-			Backend.instance().getArchiver().writeAttachment(attachmentId, response.getOutputStream());
+			archiver.writeAttachment(attachmentId, response.getOutputStream());
 		}
 		catch (PermissionException pex)
 		{

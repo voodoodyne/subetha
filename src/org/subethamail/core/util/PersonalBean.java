@@ -45,7 +45,7 @@ public class PersonalBean extends EntityManipulatorBean
 		
 		String name = p.getName();
 		
-		if (name == null || name.equals(SubEthaLoginModule.UNAUTHENTICATED_IDENTITY))
+		if (name == null)
 		{
 			return null;
 		}

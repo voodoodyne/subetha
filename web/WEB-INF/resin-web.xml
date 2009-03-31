@@ -8,6 +8,7 @@
 	>
 
 	<sec:ResinLogin/>
+	<util:SubEthaAuthenticator/>
 
 	<resource
 		mbean-name="subetha:name=Cleanup"

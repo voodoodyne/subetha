@@ -34,21 +34,21 @@ public class CleanupBean extends EntityManipulatorBean implements CleanupManagem
 
 	/*
 	 * (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run()
+	{
+		this.cleanup();
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.CleanupManagement#cleanup()
 	 */
 	public void cleanup()
 	{
 		this.cleanupHeldSubscriptions();
 		this.cleanupHeldMail();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
-	@Override
-	public void run() {
-		this.cleanup();
 	}
 
 	/**

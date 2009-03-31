@@ -145,53 +145,57 @@ public class EntityManagerWrapper implements EntityManager
 	}
 
 
-	@Override
-	public void clear(Object arg0) {
+	public void clear(Object arg0)
+	{
 		this.base.clear(arg0);
 	}
 
-	@Override
-	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2) {
+	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2)
+	{
 		return this.base.find(arg0, arg1, arg2);
 	}
 
-	@Override
-	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2, Map arg3) {
+	@SuppressWarnings("unchecked")
+	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2, Map arg3)
+	{
 		return this.base.find(arg0, arg1, arg2, arg3);
 	}
 
-	@Override
-	public EntityManagerFactory getEntityManagerFactory() {
+	public EntityManagerFactory getEntityManagerFactory()
+	{
 		return this.getEntityManagerFactory();
 	}
 
-	@Override
-	public LockModeType getLockMode(Object arg0) {
+	public LockModeType getLockMode(Object arg0)
+	{
 		return this.base.getLockMode(arg0);
 	}
 
-	@Override
-	public Map getProperties() {
+	@SuppressWarnings("unchecked")
+	public Map getProperties()
+	{
 		return this.base.getProperties();
 	}
 
-	@Override
-	public Set<String> getSupportedProperties() {
+	public Set<String> getSupportedProperties()
+	{
 		return this.base.getSupportedProperties();
 	}
 
-	@Override
-	public void lock(Object arg0, LockModeType arg1, Map arg2) {
+	@SuppressWarnings("unchecked")
+	public void lock(Object arg0, LockModeType arg1, Map arg2)
+	{
 		this.base.lock(arg0, arg1, arg2);		
 	}
 
-	@Override
-	public void refresh(Object arg0, LockModeType arg1) {
+	public void refresh(Object arg0, LockModeType arg1)
+	{
 		this.base.refresh(arg0, arg1);		
 	}
 
-	@Override
-	public void refresh(Object arg0, LockModeType arg1, Map arg2) {	
+	@SuppressWarnings("unchecked")
+	public void refresh(Object arg0, LockModeType arg1, Map arg2)
+	{	
 		this.base.refresh(arg0, arg1, arg2);
 	}
 }

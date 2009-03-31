@@ -5,8 +5,6 @@
 
 package org.subethamail.core.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Authenticates against the database
@@ -16,10 +14,6 @@ import org.apache.commons.logging.LogFactory;
  */
 public class SubEthaLoginModule //extends UsernamePasswordLoginModule
 {
-	/**`
-	 */
-	private static Log log = LogFactory.getLog(SubEthaLoginModule.class);
-	
 	/** Must be the same as what is defined in the DynamicLoginConfig service DD */
 	public static final Long UNAUTHENTICATED_IDENTITY = -1L;
 	

@@ -27,9 +27,13 @@ public class DeliveryListener extends EntityManipulatorBean implements MessageLi
 	/** */
 	@Current Deliverator deliverator;
 
-	@Override
-	public void onMessage(Message qMsg) {
-		try {
+	/**
+	 * 
+	 */
+	public void onMessage(Message qMsg)
+	{
+		try
+		{
 			UserMailDeliveryData umdd = (UserMailDeliveryData)((ObjectMessage) qMsg).getObject();
 
 			Long mailId = umdd.getMailId();

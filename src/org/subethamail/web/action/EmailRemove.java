@@ -5,9 +5,11 @@
 
 package org.subethamail.web.action;
 
+import javax.inject.Current;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.web.Backend;
+import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.tagonist.propertize.Property;
 
@@ -19,6 +21,8 @@ import org.tagonist.propertize.Property;
  */
 public class EmailRemove extends AuthRequired 
 {
+	@Current AccountMgr accMgr;
+	
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(EmailRemove.class);
@@ -28,6 +32,6 @@ public class EmailRemove extends AuthRequired
 	/** */
 	public void authExecute() throws Exception
 	{
-		Backend.instance().getAccountMgr().removeEmail(this.email);
+		accMgr.removeEmail(this.email);
 	}
 }

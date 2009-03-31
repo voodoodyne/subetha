@@ -5,10 +5,12 @@
 
 package org.subethamail.web.action;
 
+import javax.inject.Current;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.entity.i.Permission;
-import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.tagonist.propertize.Property;
 
@@ -26,6 +28,8 @@ import org.tagonist.propertize.Property;
  */
 public class CheckPermission extends AuthAction
 {
+	@Current ListMgr listMgr;
+	
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(CheckPermission.class);
@@ -35,6 +39,6 @@ public class CheckPermission extends AuthAction
 	public void execute() throws Exception
 	{
 		Permission perm = Permission.valueOf((String)this.getCtx().getActionParams().get("perm"));
-		Backend.instance().getListMgr().checkPermission(listId, perm);
+		listMgr.checkPermission(listId, perm);
 	}
 }

@@ -7,26 +7,22 @@ package org.subethamail.core.plugin.i;
 
 import javax.ejb.Local;
 
-
 /**
- * This local interface allows blueprints to register themsleves with the
- * application.  Plugins should register themselves when the application deploys
- * and de-register themselves when the app undeploys.  The JBoss service
- * lifecycle methods start() and stop() can be used.
- *
+ * This local interface allows blueprints to be registered
+ * 
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
 @Local
 public interface BlueprintRegistry
 {
 	/**
-	 * Register a blueprint.  The blueprint will become available
-	 * immediately.
+	 * Register a blueprint. The blueprint will become available immediately.
 	 */
-	public void register(Blueprint print);
-	
+	public void register(String clazz);
+
 	/**
 	 * Deregister a blueprint.
 	 */
-	public void deregister(Blueprint print);
+	public void deregister(String clazz);
 }

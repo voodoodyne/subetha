@@ -5,18 +5,15 @@
 
 package org.subethamail.core.plugin.i;
 
+import java.util.Set;
+
 import javax.ejb.Local;
 
-
-
-
 /**
- * This local interface allows filters to register themsleves with the
- * application.  Plugins should register themselves when the application deploys
- * and de-register themselves when the app undeploys.  The JBoss service
- * lifecycle methods start() and stop() can be used.
+ * This local interface allows filters to be registered.
  *
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
 @Local
 public interface FilterRegistry
@@ -25,10 +22,16 @@ public interface FilterRegistry
 	 * Register a mail filter.  The filter will become available
 	 * immediately.
 	 */
-	public void register(Filter filter);
+	public void register(String className);
 	
 	/**
 	 * Deregister a mail filter.  The filter will no longer be processed.
 	 */
-	public void deregister(Filter filter);
+	public void deregister(String className);
+	
+	/**
+	 * @return all the available filters.
+	 */
+	public Set<String> getFilters();
+
 }

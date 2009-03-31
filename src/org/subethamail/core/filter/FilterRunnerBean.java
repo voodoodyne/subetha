@@ -5,10 +5,13 @@
 
 package org.subethamail.core.filter;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 
+import javax.inject.Current;
+import javax.inject.manager.Manager;
 import javax.mail.MessagingException;
+
+import net.sourceforge.stripes.util.ConcurrentHashSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,34 +33,36 @@ import org.subethamail.entity.MailingList;
  */
 public class FilterRunnerBean implements FilterRunner, FilterRegistry
 {
+	@Current Manager wbManager;
 	/** */
 	private static Log log = LogFactory.getLog(FilterRunnerBean.class);
 
 	/**
 	 * Key is filter classname.  Make sure we have concurrent access.
 	 */
-	Map<String, Filter> filters = new ConcurrentHashMap<String, Filter>();
+//	Map<String, Filter> filters = new ConcurrentHashMap<String, Filter>();
+	Set<String> filters = new ConcurrentHashSet<String>();
 
 	/**
 	 * @see FilterRegistry#register(Filter)
 	 */
-	public void register(Filter filter)
+	public void register(String filter)
 	{
 		if (log.isInfoEnabled())
-			log.info("Registering " + filter.getClass().getName());
-			
-		this.filters.put(filter.getClass().getName(), filter);
+			log.info("Registering " + filter);
+		
+		this.filters.add(filter);
 	}
 
 	/**
 	 * @see FilterRegistry#deregister(Filter)
 	 */
-	public void deregister(Filter filter)
+	public void deregister(String filter)
 	{
 		if (log.isInfoEnabled())
-			log.info("De-registering " + filter.getClass().getName());
+			log.info("De-registering " + filter);
 			
-		this.filters.remove(filter.getClass().getName());
+		this.filters.remove(filter);
 	}
 
 	/**
@@ -74,7 +79,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		{
 			try
 			{
-				Filter filter = this.filters.get(enabled.getClassName());
+				Filter filter = (Filter)this.wbManager.getInstanceByName(enabled.getClassName());
 				if (filter == null)
 				{
 					// Log and ignore
@@ -123,7 +128,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		{
 			try 
 			{
-				Filter filter = this.filters.get(enabled.getClassName());
+				Filter filter = (Filter)this.wbManager.getInstanceByName(enabled.getClassName());
 				if (filter == null)
 				{
 					// Log and ignore
@@ -160,7 +165,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		{
 			try 
 			{					
-				Filter filter = this.filters.get(enabled.getClassName());
+				Filter filter = (Filter)this.wbManager.getInstanceByName(enabled.getClassName());
 				if (filter == null)
 				{
 					// Log and ignore
@@ -195,11 +200,11 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 				"' is enabled on list '" + list.getEmail() + "'");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.filter.FilterRunner#getFilters()
+
+	/**
+	 * @see FilterRegistry#getFilters()
 	 */
-	public Map<String, Filter> getFilters()
+	public Set<String> getFilters()
 	{
 		return this.filters;
 	}

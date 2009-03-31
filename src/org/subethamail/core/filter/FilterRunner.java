@@ -5,8 +5,6 @@
 
 package org.subethamail.core.filter;
 
-import java.util.Map;
-
 import javax.ejb.Local;
 import javax.mail.MessagingException;
 
@@ -50,10 +48,5 @@ public interface FilterRunner
 	 * @see Filter#onArchiveRender(SubEthaMessage, FilterContext)
 	 */
 	public void onArchiveRender(SubEthaMessage msg, Mail mail) throws MessagingException;
-	
-	/**
-	 * @return all the available filters.
-	 */
-	public Map<String, Filter> getFilters();
 }
 

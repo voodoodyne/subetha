@@ -19,6 +19,7 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.ejb.Stateless;
 import javax.inject.Current;
+import javax.inject.manager.Manager;
 import javax.jws.WebMethod;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -41,6 +42,7 @@ import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
+import org.subethamail.core.plugin.i.FilterRegistry;
 import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
@@ -69,12 +71,14 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 
 	/** */
 	@Current FilterRunner filterRunner;
+	@Current FilterRegistry filterReg;
 	@Current Admin admin;
 	@Current AccountMgr accountMgr;
 	
 	@InjectQueue 
 	BlockingQueue<Long> q;	
 
+	@Current Manager wbManager;
 
 	/*
 	 * (non-Javadoc)
@@ -330,14 +334,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 
-		Map<String, Filter> allFilters = this.filterRunner.getFilters();
+		Set<String> allFilters = this.filterReg.getFilters();
 
 		List<FilterData> available = new ArrayList<FilterData>(allFilters.size() - list.getEnabledFilters().size());
 		List<EnabledFilterData> enabled = new ArrayList<EnabledFilterData>(list.getEnabledFilters().size());
 
-		for (Filter filt: allFilters.values())
+		for (String filter: allFilters)
 		{
-			EnabledFilter enabledFilt = list.getEnabledFilters().get(filt.getClass().getName());
+			Filter filt = (Filter)wbManager.getInstanceByName(filter);
+			EnabledFilter enabledFilt = list.getEnabledFilters().get(filter);
 			if (enabledFilt != null)
 				enabled.add(Transmute.enabledFilter(filt, enabledFilt));
 			else
@@ -356,7 +361,8 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 
-		Filter filt = this.filterRunner.getFilters().get(className);
+        Filter filt = (Filter)wbManager.getInstanceByName(className);
+
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
 
 		if (enabled != null)
@@ -395,7 +401,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 
-		Filter filt = this.filterRunner.getFilters().get(className);
+        Filter filt = (Filter)wbManager.getInstanceByName(className);
 
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
 		if (enabled == null)

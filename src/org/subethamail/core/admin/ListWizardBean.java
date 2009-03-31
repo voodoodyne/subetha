@@ -6,14 +6,18 @@
 package org.subethamail.core.admin;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
+import java.util.Vector;
 
 import javax.context.ApplicationScoped;
-import javax.ejb.EJB;
+import javax.inject.Current;
+import javax.inject.manager.Manager;
 import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;
+
+import net.sourceforge.stripes.util.ConcurrentHashSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,6 +34,7 @@ import org.subethamail.core.util.Transmute;
  * Implementation of the ListWizard interface.
  *
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
 @ApplicationScoped
 public class ListWizardBean implements ListWizard, BlueprintRegistry
@@ -38,33 +43,34 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	private static Log log = LogFactory.getLog(ListWizardBean.class);
 
 	/** */
-	@EJB Admin admin;
-
+	@Current Admin admin;
+	@Current Manager wbManager;
+	
 	/**
 	 * Key is blueprint classname.  Watch out for concurrency.
 	 */
-	Map<String, Blueprint> blueprints = new ConcurrentHashMap<String, Blueprint>();
+	Set<String> blueprints = new ConcurrentHashSet<String>();
 
 	/**
 	 * @see BlueprintRegistry#register(Blueprint)
 	 */
-	public void register(Blueprint print)
+	public void register(String clazz)
 	{
 		if (log.isInfoEnabled())
-			log.info("Registering " + print.getClass().getName());
+			log.info("Registering " + clazz);
 
-		this.blueprints.put(print.getClass().getName(), print);
+		this.blueprints.add(clazz);
 	}
 
 	/**
 	 * @see BlueprintRegistry#deregister(Blueprint)
 	 */
-	public void deregister(Blueprint print)
+	public void deregister(String clazz)
 	{
 		if (log.isInfoEnabled())
-			log.info("De-registering " + print.getClass().getName());
+			log.info("De-registering " + clazz);
 
-		this.blueprints.remove(print.getClass().getName());
+		this.blueprints.remove(clazz);
 	}
 
 	/**
@@ -73,7 +79,13 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	@WebMethod
 	public List<BlueprintData> getBlueprints()
 	{
-		return Transmute.blueprints(this.blueprints.values());
+		Collection<Blueprint> bps = new Vector<Blueprint>();
+		for(String bp: blueprints)
+		{
+			bps.add((Blueprint)wbManager.getInstanceByName(bp));
+		}
+		
+		return Transmute.blueprints(bps);
 	}
 
 	/**
@@ -82,7 +94,9 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	@WebMethod
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
-		Blueprint blue = this.blueprints.get(blueprintId);
+		Blueprint blue = (Blueprint)wbManager.getInstanceByName(blueprintId);
+
+//		Blueprint blue = this.blueprints.get(blueprintId);
 
 		if (blue == null)
 			throw new IllegalStateException("Blueprint does not exist");

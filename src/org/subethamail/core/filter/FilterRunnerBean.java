@@ -5,17 +5,18 @@
 
 package org.subethamail.core.filter;
 
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Current;
 import javax.inject.manager.Manager;
 import javax.mail.MessagingException;
 
-import net.sourceforge.stripes.util.ConcurrentHashSet;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.lists.i.FilterData;
 import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
@@ -40,8 +41,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	/**
 	 * Key is filter classname.  Make sure we have concurrent access.
 	 */
-//	Map<String, Filter> filters = new ConcurrentHashMap<String, Filter>();
-	Set<String> filters = new ConcurrentHashSet<String>();
+	Map<String, FilterData> filters = new ConcurrentHashMap<String, FilterData>();
 
 	/**
 	 * @see FilterRegistry#register(Filter)
@@ -51,7 +51,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		if (log.isInfoEnabled())
 			log.info("Registering " + filter);
 		
-		this.filters.add(filter);
+		this.filters.put(filter,null);
 	}
 
 	/**
@@ -206,6 +206,6 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	 */
 	public Set<String> getFilters()
 	{
-		return this.filters;
+		return this.filters.keySet();
 	}
 }

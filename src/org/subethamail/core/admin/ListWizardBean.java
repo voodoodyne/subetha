@@ -7,17 +7,14 @@ package org.subethamail.core.admin;
 
 import java.net.URL;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.context.ApplicationScoped;
 import javax.inject.Current;
 import javax.inject.manager.Manager;
 import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;
-
-import net.sourceforge.stripes.util.ConcurrentHashSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,7 +46,7 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	/**
 	 * Key is blueprint classname.  Watch out for concurrency.
 	 */
-	Set<String> blueprints = new ConcurrentHashSet<String>();
+	Map<String,BlueprintData> blueprints = new ConcurrentHashMap<String, BlueprintData>();
 
 	/**
 	 * @see BlueprintRegistry#register(Blueprint)
@@ -59,7 +56,8 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 		if (log.isInfoEnabled())
 			log.info("Registering " + clazz);
 
-		this.blueprints.add(clazz);
+		BlueprintData bpd = Transmute.blueprint((Blueprint)wbManager.getInstanceByName(clazz));
+		this.blueprints.put(clazz, bpd);
 	}
 
 	/**
@@ -77,15 +75,9 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	 * @see ListWizard#getBlueprints()
 	 */
 	@WebMethod
-	public List<BlueprintData> getBlueprints()
+	public Collection<BlueprintData> getBlueprints()
 	{
-		Collection<Blueprint> bps = new Vector<Blueprint>();
-		for(String bp: blueprints)
-		{
-			bps.add((Blueprint)wbManager.getInstanceByName(bp));
-		}
-		
-		return Transmute.blueprints(bps);
+		return this.blueprints.values();
 	}
 
 	/**

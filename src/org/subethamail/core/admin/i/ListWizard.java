@@ -6,7 +6,7 @@
 package org.subethamail.core.admin.i;
 
 import java.net.URL;
-import java.util.List;
+import java.util.Collection;
 
 import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
@@ -26,7 +26,7 @@ public interface ListWizard
 	/**
 	 * @return a list of all known blueprints. 
 	 */
-	public List<BlueprintData> getBlueprints();
+	public Collection<BlueprintData> getBlueprints();
 
 	/**
 	 * Creates a mailing list and configures it to a blueprint.  

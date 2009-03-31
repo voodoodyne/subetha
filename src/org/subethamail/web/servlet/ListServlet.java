@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.lists.i.ListMgr;
-import org.subethamail.web.Backend;
 
 /**
  * This servlet is what allows master list URLs to be

@@ -10,12 +10,18 @@
 		<jta-data-source>java:/jdbc/subetha</jta-data-source>
 		
 		<properties>
-	       <property name="hibernate.transaction.manager_lookup_class" 
-	       			 value="org.hibernate.transaction.ResinTransactionManagerLookup"/>
+	       <property name="hibernate.transaction.manager_lookup_class"
+				value="org.hibernate.transaction.ResinTransactionManagerLookup" />
 			
-			<property name="hibernate.hbm2ddl.auto" value="update"/>
-			<property name="hibernate.max_fetch_depth" value="0"/>
-			<property name="hibernate.cache.use_query_cache" value="true"/>
+			<property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />
+			<property name="hibernate.connection.url" value="jdbc:postgresql://localhost/subetha" />
+			<property name="hibernate.connection.username" value="subetha" />
+			<property name="hibernate.connection.password" value="subetha" />
+			
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.max_fetch_depth" value="0" />
+			<property name="hibernate.cache.use_query_cache" value="true" />
  			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider"/>
  		</properties>
 	</persistence-unit>

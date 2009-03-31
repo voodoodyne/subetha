@@ -32,18 +32,20 @@
 	<jms:JmsConnectionFactory />
 
 	<jms:MemoryQueue>
+		<util:InjectQueue/>
 		<Named>injectedMsgIds</Named>
 	</jms:MemoryQueue>
 
-	<ejb-message-bean class="">
+	<ejb-message-bean class="org.subethamail.core.queue.InjectListener">
 		<destination>#{injectedMsgIds}</destination>
 	</ejb-message-bean>
 
 	<jms:MemoryQueue>
+		<util:DeliveryQueue/>
 		<Named>deliverableMessages</Named>
 	</jms:MemoryQueue>
 
-	<ejb-message-bean class="">
+	<ejb-message-bean class="org.subethamail.core.queue.DeliveryListener">
 		<destination>#{deliverableMessages}</destination>
 	</ejb-message-bean>
 

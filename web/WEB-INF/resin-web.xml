@@ -5,6 +5,7 @@
 	xmlns:adm="java:urn:org.subethamail.core.admin"
 	xmlns:util="java:urn:org.subethamail.core.util"
 	xmlns:sec="java:urn:org.subethamail.web.security"
+	xmlns:queue="java:urn:org.subethamail.core.queue"
 	>
 
 	<sec:ResinLogin/>
@@ -32,21 +33,21 @@
 	<jms:JmsConnectionFactory />
 
 	<jms:MemoryQueue>
-		<util:InjectQueue/>
-		<Named>injectedMsgIds</Named>
+		<queue:InjectQueue/>
+		<Named>injection</Named>
 	</jms:MemoryQueue>
 
 	<ejb-message-bean class="org.subethamail.core.queue.InjectListener">
-		<destination>#{injectedMsgIds}</destination>
+		<destination>#{injection}</destination>
 	</ejb-message-bean>
 
 	<jms:MemoryQueue>
-		<util:DeliveryQueue/>
-		<Named>deliverableMessages</Named>
+		<queue:DeliveryQueue/>
+		<Named>delivery</Named>
 	</jms:MemoryQueue>
 
 	<ejb-message-bean class="org.subethamail.core.queue.DeliveryListener">
-		<destination>#{deliverableMessages}</destination>
+		<destination>#{delivery}</destination>
 	</ejb-message-bean>
 
 

@@ -17,34 +17,40 @@ import javax.jms.ObjectMessage;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.core.util.DeliveryQueue;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Subscription;
 
+/**
+ * Queue which takes the individual, stored messages and turns them into
+ * a series of delivery queue messages.  This could take a while; any
+ * individual message may get turned into thousands of outboud queue
+ * messages.
+ */
 @MessageDriven
 public class InjectListener extends EntityManipulatorBean implements MessageListener{
 	/** */
 	private static Log log = LogFactory.getLog(InjectListener.class);
 
-	/** Number of messages to batch in each outbound queue request */
-	static final int BATCH_SIZE = 10;
+	/** */
+	@DeliveryQueue BlockingQueue<MailDelivery> outboundQueue;
 
-	@DeliveryQueue
-	BlockingQueue<UserMailDeliveryData> q;
-	
-	public void onMessage(Message qMsg) {
-		try {
-			Long id = (Long)((ObjectMessage) qMsg).getObject();
+	/** */
+	public void onMessage(Message qMsg)
+	{
+		try
+		{
+			Long id = (Long) ((ObjectMessage)qMsg).getObject();
 			this.deliver(id);
-		} catch (JMSException e) {
-			log.error("Error getting object outa message (from queue)",e);
+		}
+		catch (JMSException e)
+		{
+			log.error("Error getting object outa message (from queue)", e);
 		}
 	}
 	
-
 	/**
-	 * @see Inbound#deliver(Long)
+	 * Looks up who gets that message and creates new queue entries.
 	 */
 	private void deliver(Long mailId)
 	{
@@ -68,17 +74,19 @@ public class InjectListener extends EntityManipulatorBean implements MessageList
 			return;
 		}
 
-		// The original one-at-a-time code
+		// Now make sure each subscriber gets a copy
 		for (Subscription sub: mail.getList().getSubscriptions())
 		{
-			if (sub.getDeliverTo() != null){
-				try {
-					q.put(new UserMailDeliveryData(mailId, sub.getPerson().getId()));
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+			if (sub.getDeliverTo() != null)
+			{
+				try
+				{
+					this.outboundQueue.put(new MailDelivery(mailId, sub.getPerson().getId()));
+				}
+				catch (InterruptedException e)
+				{
 					log.error("Error queuing delivery message",e);
 				}
-				//this.queuer.queueForDelivery(mailId, sub.getPerson().getId());
 			}
 		}
 	}

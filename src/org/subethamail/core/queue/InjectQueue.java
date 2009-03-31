@@ -3,7 +3,7 @@
  * $URL:$
  */
 
-package org.subethamail.core.util;
+package org.subethamail.core.queue;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -18,6 +18,6 @@ import javax.inject.BindingType;
 @BindingType
 @Target({FIELD,METHOD,PARAMETER})
 @Retention(RUNTIME)
-public @interface DeliveryQueue {
-
+public @interface InjectQueue
+{
 }

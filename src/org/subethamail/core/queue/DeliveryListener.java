@@ -19,6 +19,10 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.util.EntityManipulatorBean;
 
+/**
+ * Processes delivery queue messages by creating an actual STMP message
+ * using JavaMail, relaying it through the deliverator.
+ */
 @MessageDriven
 public class DeliveryListener extends EntityManipulatorBean implements MessageListener{
 	/** */
@@ -28,16 +32,15 @@ public class DeliveryListener extends EntityManipulatorBean implements MessageLi
 	@Current Deliverator deliverator;
 
 	/**
-	 * 
 	 */
 	public void onMessage(Message qMsg)
 	{
 		try
 		{
-			UserMailDeliveryData umdd = (UserMailDeliveryData)((ObjectMessage) qMsg).getObject();
+			MailDelivery umdd = (MailDelivery)((ObjectMessage) qMsg).getObject();
 
 			Long mailId = umdd.getMailId();
-			Long personId = umdd.getUserId();
+			Long personId = umdd.getPersonId();
 			if (log.isDebugEnabled())
 				log.debug("Delivering mailId " + mailId + " to personId " + personId);
 	
@@ -51,8 +54,10 @@ public class DeliveryListener extends EntityManipulatorBean implements MessageLi
 				if (log.isWarnEnabled())
 					log.warn("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
 			}	
-		} catch (JMSException e) {
-			log.error("Error getting data off queue",e);
+		}
+		catch (JMSException ex)
+		{
+			log.error("Error getting data off queue",ex);
 		}
 	}
 }

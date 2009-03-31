@@ -41,8 +41,8 @@ import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.post.PostOffice;
+import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.util.EntityManipulatorBean;
-import org.subethamail.core.util.InjectQueue;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
@@ -98,9 +98,8 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	 */
 	public static final long MAX_SUBJECT_THREAD_PARENT_AGE_MILLIS = 1000L * 60L * 60L * 24L * 30L;
 
-	/** */
-	
-	@InjectQueue BlockingQueue<Long> q;
+	/** The "inbound queue" which processes injections */
+	@InjectQueue BlockingQueue<Long> inboundQueue;
 	
 	@Current FilterRunner filterRunner;
 	@Current Encryptor encryptor;
@@ -370,10 +369,14 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		else
 		{
 			this.threadMail(mail, msg);
-			try {
-				this.q.put(mail.getId());
-			} catch (InterruptedException e) {
-				throw new IOException("Error Queue'n; MailId=" + mail.getId() , e);
+			
+			try
+			{
+				this.inboundQueue.put(mail.getId());
+			}
+			catch (InterruptedException ex)
+			{
+				throw new RuntimeException(ex);
 			}
 		}
 

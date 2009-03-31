@@ -30,7 +30,7 @@ import org.subethamail.core.admin.i.SiteStatus;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListDataPlus;
 import org.subethamail.core.post.PostOffice;
-import org.subethamail.core.util.InjectQueue;
+import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;

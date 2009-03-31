@@ -42,7 +42,7 @@ import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
-import org.subethamail.core.util.InjectQueue;
+import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EmailAddress;

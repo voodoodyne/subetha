@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.injector.i.Injector;
-import org.subethamail.web.security.SecurityContext;
+import org.subethamail.web.security.ResinLogin;
 
 /**
  * Servlet allows calling the injector with a very simple HTTP POST
@@ -45,6 +45,9 @@ public class InjectorServlet extends HttpServlet
 {
 	@Current AccountMgr accMgr;
 	@Current Injector inj;
+	
+	@Current ResinLogin resinLogin;
+	
 	/** */
 	public static final String AUTH_ID_PARAM = "authId";
 	public static final String AUTH_NAME_PARAM = "authName";
@@ -90,17 +93,16 @@ public class InjectorServlet extends HttpServlet
 			catch (FailedLoginException ex) { throw new ServletException(ex); }
 		}
 		
-		SecurityContext sctx = new SecurityContext(authId, authPass, null);
 		try
 		{
-			sctx.associateCredentials();
+			this.resinLogin.login(authId, authPass, request);
 			
 			if (!inj.inject(from, recipient, new ByteArrayInputStream(message.getBytes())))
 				response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");
 		}
 		finally
 		{
-			sctx.disassociateCredentials();
+			this.resinLogin.logout(request);
 		}
 	}
 }

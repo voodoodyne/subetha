@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
@@ -19,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.acct.i.AuthCredentials;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
-import org.subethamail.web.security.SecurityContext;
 
 /**
  * Provides basic authentication services to action subclasses.
@@ -60,7 +58,7 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public void login(String who, String password) throws LoginException
 	{
-		this.getCtx().getSession().removeAttribute(SecurityContext.SESSION_KEY);
+		Backend.instance().getLogin().logout(this.getCtx().getRequest());
 		
 		AuthCredentials creds = Backend.instance().getAccountMgr().authenticate(who, password);
 		
@@ -75,9 +73,7 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	protected void markLoggedIn(AuthCredentials creds)
 	{
-		SecurityContext sctx = new SecurityContext(creds.getId().toString(), creds.getPassword(), creds.getRoles());
-		this.getCtx().getSession().setAttribute(SecurityContext.SESSION_KEY, sctx);
-		sctx.associateCredentials();
+		Backend.instance().getLogin().login(creds.getId().toString(), creds.getPassword(), this.getCtx().getRequest());
 		
 		this.getCtx().getSession().setAttribute(AUTH_NAME_KEY, creds.getPrettyName());
 	}
@@ -87,25 +83,7 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public boolean isLoggedIn()
 	{
-		return this.getSecurityContext() != null;
-	}
-
-	/**
-	 * @return the current security context, or null if there isn't one
-	 */
-	protected SecurityContext getSecurityContext()
-	{
-		return getSecurityContext(this.getCtx().getSession());
-	}
-	
-	public static boolean isLoggedIn(HttpSession session)
-	{
-		return getSecurityContext(session) != null;
-	}
-
-	public static SecurityContext getSecurityContext(HttpSession session)
-	{
-		return (SecurityContext)session.getAttribute(SecurityContext.SESSION_KEY);
+		return this.getCtx().getRequest().getUserPrincipal() != null;
 	}
 
 	/**
@@ -113,11 +91,7 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public boolean isSiteAdmin()
 	{
-		SecurityContext sctx = this.getSecurityContext();
-		if (sctx != null)
-			return sctx.isUserInRole(SITE_ADMIN_ROLE);
-		else
-			return false;
+		return this.getCtx().getRequest().isUserInRole(SITE_ADMIN_ROLE);
 	}
 	
 	/**
@@ -136,10 +110,8 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	protected void logout()
 	{
-		SecurityContext sctx = this.getSecurityContext();
-		this.getCtx().getSession().removeAttribute(SecurityContext.SESSION_KEY);
-		if (sctx != null)
-			sctx.disassociateCredentials();
+		Backend.instance().getLogin().logout(this.getCtx().getRequest());
+		this.getCtx().getSession().removeAttribute(AUTH_NAME_KEY);
 	}
 	
 	/**

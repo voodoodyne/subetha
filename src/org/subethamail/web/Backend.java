@@ -21,6 +21,7 @@ import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.entity.i.Permission;
+import org.subethamail.web.security.ResinLogin;
 
 /**
  * Singleton which provides access to the backend EJBs.  
@@ -53,6 +54,11 @@ public class Backend extends HttpServlet
 	@Current ListMgr listMgr;
 	@Current AccountMgr accountMgr;
 	@Current Archiver archiver;
+	
+	/**
+	 * Allows us to login and logout to the container.
+	 */
+	@Current ResinLogin resinLogin;
 	
 	/**
 	 * Obtain the current instance.
@@ -88,6 +94,12 @@ public class Backend extends HttpServlet
 	public Set<Permission> getAllPermissions()
 	{
 		return Permission.ALL;
+	}
+	
+	/** */
+	public ResinLogin getLogin()
+	{
+		return this.resinLogin;
 	}
 
 	/** */

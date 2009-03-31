@@ -1,62 +1,65 @@
-<web-app 	xmlns="http://caucho.com/ns/resin" xmlns:cfg="urn:java:com.caucho.config"
-		 	xmlns:jms="urn:java:com.caucho.jms" xmlns:ejb="urn:java:com.caucho.ejb"
-		 	xmlns:adm="java:urn:org.subethamail.core.admin"
-		 	xmlns:util="java:urn:org.subethamail.core.util"
-			>
+<web-app xmlns="http://caucho.com/ns/resin"
+	xmlns:cfg="urn:java:com.caucho.config"
+	xmlns:jms="urn:java:com.caucho.jms"
+	xmlns:ejb="urn:java:com.caucho.ejb"
+	xmlns:adm="java:urn:org.subethamail.core.admin"
+	xmlns:util="java:urn:org.subethamail.core.util"
+	xmlns:sec="java:urn:org.subethamail.web.security"
+	>
 
-  <security-manager/>
-  
-  <resource mbean-name="subetha:name=Cleanup"
-            type="org.subethamail.core.admin.CleanupBean"
-            mbean-interface="org.subethamail.core.admin.CleanupManagement"/>
+	<sec:ResinLogin/>
 
-  <resource mbean-name="subetha:name=SMTPService"
-            type="org.subethamail.core.smtp.SMTPService"
-            mbean-interface="org.subethamail.core.smtp.SMTPManagement"/>
+	<resource
+		mbean-name="subetha:name=Cleanup"
+		type="org.subethamail.core.admin.CleanupBean"
+		mbean-interface="org.subethamail.core.admin.CleanupManagement" />
 
-  <!-- Run every night at 4am (base 0 below) -->
-  <resin:ScheduledTask>
-  	<task>
-  		<adm:CleanupBean/>
-  	</task>
-    <cron>0 3 *</cron>
-  </resin:ScheduledTask>
+	<resource
+		mbean-name="subetha:name=SMTPService"
+		type="org.subethamail.core.smtp.SMTPService"
+		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />
 
-  <!--
-  			JMS			  -->
-  <jms:JmsConnectionFactory/>
+	<!-- Run every night at 4am (base 0 below) -->
+	<resin:ScheduledTask>
+		<task>
+			<adm:CleanupBean />
+		</task>
+		<cron>0 3 *</cron>
+	</resin:ScheduledTask>
 
-  <jms:MemoryQueue>
-    <Named>injectedMsgIds</Named>
-  </jms:MemoryQueue>
+	<!-- JMS -->
+	<jms:JmsConnectionFactory />
 
-  <ejb-message-bean class="">
-    <destination>#{injectedMsgIds}</destination>
-  </ejb-message-bean>
- 
-  <jms:MemoryQueue>
-    <Named>deliverableMessages</Named>
-  </jms:MemoryQueue>
+	<jms:MemoryQueue>
+		<Named>injectedMsgIds</Named>
+	</jms:MemoryQueue>
 
-  <ejb-message-bean class="">
-    <destination>#{deliverableMessages}</destination>
-  </ejb-message-bean>
- 
-   
-  <database jndi-name="jdbc/subetha">
-  	<ping>true</ping>
-    <ping-interval>0</ping-interval>
-    <ping-query>select 1;</ping-query>
-    
-    <driver type="org.postgresql.Driver">
-      <url>jdbc:postgresql://localhost/subetha</url>
-      <user>subetha</user>
-      <password>subetha</password>
-    </driver>
-  </database>
-  
-  <ejb-server data-source="jdbc/test" 
-  			  validate-database-schema="true"
-  			  create-database-schema="true"/>
+	<ejb-message-bean class="">
+		<destination>#{injectedMsgIds}</destination>
+	</ejb-message-bean>
+
+	<jms:MemoryQueue>
+		<Named>deliverableMessages</Named>
+	</jms:MemoryQueue>
+
+	<ejb-message-bean class="">
+		<destination>#{deliverableMessages}</destination>
+	</ejb-message-bean>
+
+
+	<database jndi-name="jdbc/subetha">
+		<ping>true</ping>
+		<ping-interval>0</ping-interval>
+		<ping-query>select 1;</ping-query>
+
+		<driver type="org.postgresql.Driver">
+			<url>jdbc:postgresql://localhost/subetha</url>
+			<user>subetha</user>
+			<password>subetha</password>
+		</driver>
+	</database>
+
+	<ejb-server data-source="jdbc/test"
+		validate-database-schema="true" create-database-schema="true" />
 
 </web-app>

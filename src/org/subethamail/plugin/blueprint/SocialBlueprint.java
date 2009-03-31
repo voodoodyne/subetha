@@ -8,15 +8,11 @@ package org.subethamail.plugin.blueprint;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.security.RunAs;
-import javax.ejb.EJB;
+import javax.inject.Current;
 
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.lists.i.ListMgr;
-import org.subethamail.core.plugin.i.helper.AbstractBlueprint;
-import org.subethamail.core.plugin.i.helper.Lifecycle;
+import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 import org.subethamail.plugin.filter.AppendFooterFilter;
@@ -28,19 +24,11 @@ import org.subethamail.plugin.filter.ReplyToFilter;
  * 
  * @author Jeff Schnitzer
  * @author Jon Stevens
+ * @author Scott Hernandez
  */
-@Service
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
-public class SocialBlueprint extends AbstractBlueprint implements Lifecycle
-//TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
+public class SocialBlueprint implements Blueprint
 {
-	@EJB ListMgr listMgr;
-
-	public void start() throws Exception
-	{
-		super.start();
-	}
+	@Current ListMgr listMgr;
 
 	/** */
 	public String getName()

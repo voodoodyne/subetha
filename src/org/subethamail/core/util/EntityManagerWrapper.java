@@ -5,14 +5,15 @@
 
 package org.subethamail.core.util;
 
+import java.util.Map;
+import java.util.Set;
+
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
-
-import org.hibernate.Session;
-import org.jboss.ejb3.entity.HibernateSession;
 
 /**
  * Simple wrapper of all EntityManager methods.
@@ -143,11 +144,54 @@ public class EntityManagerWrapper implements EntityManager
 		return this.base.getTransaction();
 	}
 
-	/**
-	 * This one is extra.
-	 */
-	public Session getHibernateSession()
-	{
-        return ((HibernateSession)this.base).getHibernateSession();
+
+	@Override
+	public void clear(Object arg0) {
+		this.base.clear(arg0);
+	}
+
+	@Override
+	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2) {
+		return this.base.find(arg0, arg1, arg2);
+	}
+
+	@Override
+	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2, Map arg3) {
+		return this.base.find(arg0, arg1, arg2, arg3);
+	}
+
+	@Override
+	public EntityManagerFactory getEntityManagerFactory() {
+		return this.getEntityManagerFactory();
+	}
+
+	@Override
+	public LockModeType getLockMode(Object arg0) {
+		return this.base.getLockMode(arg0);
+	}
+
+	@Override
+	public Map getProperties() {
+		return this.base.getProperties();
+	}
+
+	@Override
+	public Set<String> getSupportedProperties() {
+		return this.base.getSupportedProperties();
+	}
+
+	@Override
+	public void lock(Object arg0, LockModeType arg1, Map arg2) {
+		this.base.lock(arg0, arg1, arg2);		
+	}
+
+	@Override
+	public void refresh(Object arg0, LockModeType arg1) {
+		this.base.refresh(arg0, arg1);		
+	}
+
+	@Override
+	public void refresh(Object arg0, LockModeType arg1, Map arg2) {	
+		this.base.refresh(arg0, arg1, arg2);
 	}
 }

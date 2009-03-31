@@ -13,6 +13,9 @@ import org.subethamail.common.SubEthaMessage;
  * Interface that mail filters must implement.  Mail filters get
  * several opportunities to modify a piece of inbound or outbound mail. 
  * 
+ * If your class implements this interface subetha with automatically load,
+ * and registrer your class for use.
+ * 
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */

@@ -14,20 +14,16 @@ import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Columns;
-import org.hibernate.annotations.Type;
 import org.subethamail.entity.i.Validator;
 
 // Moved this here from package-info.java to fix JDK5/6 incompatibility problem
 // For some reason package-info.java built with JDK6 doesn't work on JDK5
-@org.hibernate.annotations.TypeDefs({
-	@org.hibernate.annotations.TypeDef(
-		name="anyImmutable",
-		typeClass=org.subethamail.entity.type.AnyImmutableType.class
-	)
-})
+//@org.hibernate.annotations.TypeDefs({
+//	@org.hibernate.annotations.TypeDef(
+//		name="anyImmutable",
+//		typeClass=org.subethamail.entity.type.AnyImmutableType.class
+//	)
+//})
 
 /**
  * Contains a sitewide config parameter, key and value.
@@ -35,7 +31,7 @@ import org.subethamail.entity.i.Validator;
  * @author Jeff Schnitzer
  */
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class Config implements Serializable, Comparable<Config>
 {

@@ -9,11 +9,9 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
-import javax.annotation.Resource;
-import javax.annotation.security.RolesAllowed;
-import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.inject.Current;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -25,7 +23,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.jboss.ejb3.annotation.SecurityDomain;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;
@@ -45,20 +42,19 @@ import org.subethamail.entity.SubscriptionHold;
  * Implementation of the PostOffice interface.
  * 
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
 @Stateless(name="PostOffice")
-@SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
 public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 {
 	/** */
 	private static Log log = LogFactory.getLog(PostOfficeBean.class);
 	
 	/** */
-	@Resource(mappedName="java:/Mail") Session mailSession;
+	@Current Session mailSession;
 
 	/** */
-	@EJB Encryptor encryptor;
+	@Current Encryptor encryptor;
 	
 	/** 
 	 * Builds a message from a velocity template, context, and some

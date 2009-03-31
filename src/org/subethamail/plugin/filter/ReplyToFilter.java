@@ -5,36 +5,28 @@
 
 package org.subethamail.plugin.filter;
 
-import javax.annotation.security.RunAs;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.core.plugin.i.helper.FilterParameterImpl;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
-import org.subethamail.core.plugin.i.helper.Lifecycle;
 
 /**
  * This filter sets the ReplyTo header on an outgoing message
  * to either the list or to an email address.
  * 
  * @author Jon Stevens
+ * @author Scott Hernandez
  */
-@Service
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
-public class ReplyToFilter extends GenericFilter implements Lifecycle
-//TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
+public class ReplyToFilter extends GenericFilter
 {
 	/** */
 	private static Log log = LogFactory.getLog(ReplyToFilter.class);
@@ -110,12 +102,4 @@ public class ReplyToFilter extends GenericFilter implements Lifecycle
 		Address[] addrs = {addr};
 		msg.setReplyTo(addrs);
 	}
-
-	/* (non-Javadoc)
-	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onArchiveRender(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.ArchiveRenderFilterContext)
-	 */
-	@Override
-	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
-	{
-	}	
 }

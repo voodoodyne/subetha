@@ -28,9 +28,6 @@ import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.validator.Length;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.Validator;
 
@@ -58,7 +55,7 @@ import org.subethamail.entity.i.Validator;
 	)
 })
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class Person implements Serializable, Comparable<Person>
 {
@@ -83,7 +80,7 @@ public class Person implements Serializable, Comparable<Person>
 	Long id;
 
 	@Column(name="passwd", nullable=false, length=Validator.MAX_PERSON_PASSWORD)
-	@Length(min=3)
+//	@Length(min=3)
 	String password;
 
 	@Column(nullable=false, length=Validator.MAX_PERSON_NAME)
@@ -93,12 +90,12 @@ public class Person implements Serializable, Comparable<Person>
 	boolean siteAdmin;
 
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
-	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+//	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	@MapKey(name="id")
 	Map<String, EmailAddress> emailAddresses;
 
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="person")
-	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+//	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	@MapKey(name="listId")
 	Map<Long, Subscription> subscriptions;
 
@@ -336,4 +333,3 @@ public class Person implements Serializable, Comparable<Person>
 	}
 
 }
-

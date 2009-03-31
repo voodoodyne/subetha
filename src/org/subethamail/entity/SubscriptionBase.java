@@ -114,4 +114,3 @@ public class SubscriptionBase implements Serializable
 		return this.getClass() + " {id=" + this.id + ", list=" + this.list + ", person=" + this.person + "}";
 	}
 }
-

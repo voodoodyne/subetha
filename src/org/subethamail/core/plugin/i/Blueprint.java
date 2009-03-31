@@ -5,9 +5,6 @@
 
 package org.subethamail.core.plugin.i;
 
-import javax.ejb.Local;
-
-
 /**
  * A blueprint generates the starting characteristics for
  * a mailing list.  When it executes, it uses the normal EJB
@@ -15,8 +12,8 @@ import javax.ejb.Local;
  * and configuration.
  *
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
-@Local
 public interface Blueprint
 {
 	/**

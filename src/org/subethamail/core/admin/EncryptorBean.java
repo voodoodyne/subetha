@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.security.PermitAll;
+import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -26,13 +26,13 @@ import javax.ejb.EJBException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Config;
+
+import com.caucho.config.Service;
 
 /**
  * Performs encryption and decryption using a constant key.  The
@@ -42,11 +42,10 @@ import org.subethamail.entity.Config;
  * Note that this bean does NOT have a remote interface.
  * 
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
-@Service(name="Encryptor", objectName="subetha:service=Encryptor")
-@SecurityDomain("subetha")
-@PermitAll
-public class EncryptorBean extends EntityManipulatorBean implements Encryptor, EncryptorManagement
+@Service
+public class EncryptorBean extends EntityManipulatorBean implements Encryptor
 {
 	/** */
 	private static Log log = LogFactory.getLog(EncryptorBean.class);
@@ -76,6 +75,7 @@ public class EncryptorBean extends EntityManipulatorBean implements Encryptor, E
 	/**
 	 * @see EncryptorManagement#start()
 	 */
+	@PostConstruct
 	public void start() throws Exception
 	{
 		// If we don't already have a key, generate one

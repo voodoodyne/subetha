@@ -8,15 +8,12 @@ package org.subethamail.core.injector;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.annotation.security.RunAs;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.Depends;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.io.LimitExceededException;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
@@ -24,21 +21,24 @@ import org.subethamail.core.smtp.MessageListenerRegistry;
 import org.subethamail.smtp.TooMuchDataException;
 import org.subethamail.smtp.helper.SimpleMessageListener;
 
+import com.caucho.config.Service;
+
 /**
  * This acts as an SMTP listener and injects any interesting messages
  * into the Injector. 
  * 
  * @author Jeff Schnitzer
  */
-@Service(objectName="subetha:service=MessageListenerAdapter")
-// This depends annotation can be removed when JBoss fixes dependency bug.
-@Depends({
-	"jboss.j2ee:ear=subetha.ear,jar=core.jar,name=Injector,service=EJB3",
-	"subetha:service=SMTP"
-})
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
+//@Service(objectName="subetha:service=MessageListenerAdapter")
+//// This depends annotation can be removed when JBoss fixes dependency bug.
+//@Depends({
+//	"jboss.j2ee:ear=subetha.ear,jar=core.jar,name=Injector,service=EJB3",
+//	"subetha:service=SMTP"
+//})
+//@SecurityDomain("subetha")
+//@RunAs("siteAdmin")
 @Local(SimpleMessageListener.class)
+@Service
 public class MessageListenerAdapter implements SimpleMessageListener, Lifecycle
 {
 	/** */
@@ -52,6 +52,7 @@ public class MessageListenerAdapter implements SimpleMessageListener, Lifecycle
 	/**
 	 * @see Lifecycle#start()
 	 */
+	@PostConstruct
 	public void start() throws Exception
 	{
 		this.registry.register(this);

@@ -15,15 +15,11 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
-import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RunAs;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Current;
 import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -32,8 +28,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
@@ -47,8 +41,8 @@ import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.post.PostOffice;
-import org.subethamail.core.queue.i.Queuer;
 import org.subethamail.core.util.EntityManipulatorBean;
+import org.subethamail.core.util.InjectQueue;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
@@ -61,14 +55,9 @@ import org.subethamail.entity.i.Permission;
 
 /**
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
 @Stateless(name="Injector")
-@SecurityDomain("subetha")
-@PermitAll
-@RunAs("siteAdmin")
-@WebService(name="Injector", targetNamespace="http://ws.subethamail.org/", serviceName="InjectorService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
 public class InjectorBean extends EntityManipulatorBean implements Injector, InjectorRemote
 {
 	/** */
@@ -110,14 +99,16 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 	public static final long MAX_SUBJECT_THREAD_PARENT_AGE_MILLIS = 1000L * 60L * 60L * 24L * 30L;
 
 	/** */
-	@EJB Queuer queuer;
-	@EJB FilterRunner filterRunner;
-	@EJB Encryptor encryptor;
-	@EJB Detacher detacher;
-	@EJB PostOffice postOffice;
+	
+	@InjectQueue BlockingQueue<Long> q;
+	
+	@Current FilterRunner filterRunner;
+	@Current Encryptor encryptor;
+	@Current Detacher detacher;
+	@Current PostOffice postOffice;
 
 	/** */
-	@Resource(mappedName="java:/Mail") private Session mailSession;
+	@Current private Session mailSession;
 
 	/*
 	 * (non-Javadoc)
@@ -379,7 +370,11 @@ public class InjectorBean extends EntityManipulatorBean implements Injector, Inj
 		else
 		{
 			this.threadMail(mail, msg);
-			this.queuer.queueForDelivery(mail.getId());
+			try {
+				this.q.put(mail.getId());
+			} catch (InterruptedException e) {
+				throw new IOException("Error Queue'n; MailId=" + mail.getId() , e);
+			}
 		}
 
 		return true;

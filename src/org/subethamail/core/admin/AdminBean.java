@@ -6,32 +6,18 @@
 package org.subethamail.core.admin;
 
 import java.net.URL;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
 
-import javax.annotation.security.RolesAllowed;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Current;
 import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
 import javax.mail.internet.InternetAddress;
-import javax.management.InstanceNotFoundException;
-import javax.management.MBeanException;
-import javax.management.MBeanServer;
-import javax.management.MBeanServerFactory;
-import javax.management.MalformedObjectNameException;
-import javax.management.ObjectName;
-import javax.management.ReflectionException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.SessionFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.security.SimplePrincipal;
-import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
@@ -44,7 +30,7 @@ import org.subethamail.core.admin.i.SiteStatus;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListDataPlus;
 import org.subethamail.core.post.PostOffice;
-import org.subethamail.core.queue.i.Queuer;
+import org.subethamail.core.util.InjectQueue;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
@@ -65,11 +51,6 @@ import org.subethamail.entity.i.PermissionException;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Admin")
-@SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
-@WebService(name="Admin", targetNamespace="http://ws.subethamail.org/", serviceName="AdminService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
 public class AdminBean extends PersonalBean implements Admin, AdminRemote
 {
 	/** */
@@ -90,8 +71,8 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	protected static final int PASSWORD_GEN_LENGTH = 6;
 
 	/** */
-	@EJB PostOffice postOffice;
-	@EJB Queuer queuer;
+	@Current PostOffice postOffice;
+	@InjectQueue BlockingQueue<Long> q;
 
 	/**
 	 * For generating random passwords.
@@ -353,7 +334,9 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		Person p = this.em.get(Person.class, personId);
 		p.setSiteAdmin(value);
 
-		this.flushJBossCredentialCache(personId);
+
+		// TODO: replace this with resin/auth code
+		//this.flushJBossCredentialCache(personId);
 	}
 
 	/*
@@ -366,34 +349,13 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		EmailAddress ea = this.em.getEmailAddress(email);
 		ea.getPerson().setSiteAdmin(siteAdmin);
 
-		this.flushJBossCredentialCache(ea.getPerson().getId());
+		// TODO: replace this with resin/auth code
+		//this.flushJBossCredentialCache(ea.getPerson().getId());
 	}
 
-	/**
-	 * Flushes the auth credential cache of a specific user.  Necessary if something
-	 * involving j2ee roles will change.  Note that this won't necessarily be reflected
-	 * in the user interface, which has it's own cache of roles.
-	 */
-	private void flushJBossCredentialCache(Long personId)
-	{
-		// This code taken from http://wiki.jboss.org/wiki/Wiki.jsp?page=CachingLoginCredentials
-		try
-		{
-			String domain = "subetha";
-			Principal user = new SimplePrincipal(personId.toString());
-			ObjectName jaasMgr = new ObjectName("jboss.security:service=JaasSecurityManager");
-			Object[] params = { domain, user };
-			String[] signature = { "java.lang.String", Principal.class.getName() };
-			MBeanServer server = (MBeanServer) MBeanServerFactory.findMBeanServer(null).get(0);
-			server.invoke(jaasMgr, "flushAuthenticationCache", params, signature);
-		}
-		catch (MalformedObjectNameException ex) { throw new RuntimeException(ex); }
-		catch (InstanceNotFoundException ex) { throw new RuntimeException(ex); }
-		catch (MBeanException ex) { throw new RuntimeException(ex); }
-		catch (ReflectionException ex) { throw new RuntimeException(ex); }
-	}
 
 	/**
+	 * @throws InterruptedException 
 	 * @see Admin#addEmail(Long, String)
 	 */
 	@WebMethod
@@ -523,6 +485,7 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 	}
 
 	/**
+	 * @throws InterruptedException 
 	 * @see Admin#selfModerate(Long)
 	 */
 	@WebMethod
@@ -539,7 +502,13 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 			if (held.getList().getPermissionsFor(who).contains(Permission.POST))
 			{
 				held.approve();
-				this.queuer.queueForDelivery(held.getId());
+				try {
+					this.q.put(held.getId());
+				} catch (InterruptedException e) {
+					log.error("Errror Que'n approved messageid",e);
+					throw new RuntimeException(e);
+				}
+//				this.queuer.queueForDelivery(held.getId());
 				count++;
 			}
 		}
@@ -767,14 +736,17 @@ public class AdminBean extends PersonalBean implements Admin, AdminRemote
 		// EnabledFilters and FilterArguments
 		this.em.remove(list);
 
+
+		// TODO: replace this with resin/amber code
+		
 		// Cascading persistence is not smart enough when dealing with the 2nd
 		// level cache; for instance, Person objects have cached relationships
 		// to (now defunct) Subscription objects.  We can just hit the problem
 		// with a sledgehammer and reset the cache.
-		SessionFactory sf = this.em.getHibernateSession().getSessionFactory();
-		sf.evictCollection(Person.class.getName() + ".subscriptions");
-		sf.evictQueries();
-
+//		SessionFactory sf = this.em.getHibernateSession().getSessionFactory();
+//		sf.evictCollection(Person.class.getName() + ".subscriptions");
+//		sf.evictQueries();
+//
 		// TODO:  rebuild the search index?
 
 		return true;

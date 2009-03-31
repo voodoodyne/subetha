@@ -43,7 +43,5 @@ public interface Detacher
 	 * link attachments and replaces them with the actual binary content
 	 * of the attachment.  Recursively descends the mime tree.
 	 */
-	public void attach(MimePart part) throws MessagingException, IOException;
-	
+	public void attach(MimePart part) throws MessagingException, IOException;	
 }
-

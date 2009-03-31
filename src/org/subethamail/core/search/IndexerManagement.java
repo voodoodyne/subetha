@@ -5,25 +5,18 @@
 
 package org.subethamail.core.search;
 
-import org.jboss.ejb3.annotation.Management;
+import org.subethamail.core.lists.ArchiverBean;
+
 
 /**
- * Management interface that provides lifecycle callback methods.
- * Implementing this interface on a Service bean causes JBoss to
- * magically call the methods.
+ * Management interface for index management {@link ArchiverBean}.
  *
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
-@Management
+
 public interface IndexerManagement
 {
-	/**
-	 */
-	public void start() throws Exception;
-	
-	/**
-	 */
-	public void stop() throws Exception;
 
 	/**
 	 * Rebuilds the entire index from scratch.  Searches will still

@@ -10,8 +10,6 @@ import java.io.InputStream;
 import java.sql.Blob;
 
 import javax.activation.DataHandler;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -21,8 +19,6 @@ import javax.mail.internet.MimePart;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.lob.BlobImpl;
-import org.jboss.ejb3.annotation.SecurityDomain;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.TrivialDataSource;
@@ -34,9 +30,6 @@ import org.subethamail.entity.Mail;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Detacher")
-@SecurityDomain("subetha")
-@PermitAll
-@RunAs("siteAdmin")
 public class DetacherBean extends EntityManipulatorBean implements Detacher
 {
 	/** */
@@ -91,7 +84,8 @@ public class DetacherBean extends EntityManipulatorBean implements Detacher
 					log.debug("Detaching an attachment of type " + contentType);
 				
 				InputStream input = part.getInputStream();
-				Blob blobby = new BlobImpl(input, input.available());
+				
+				Blob blobby = new org.hibernate.lob.BlobImpl(input, input.available());
 				
 				Attachment attach = new Attachment(ownerMail, blobby, contentType);
 				this.em.persist(attach);

@@ -5,34 +5,15 @@
 
 package org.subethamail.core.admin;
 
-import javax.ejb.Local;
-
-import org.jboss.ejb3.annotation.Management;
-
 /**
  * Interface for purging obsolete message and subscription holds.
+ * Used as MBean interface.
  * 
- * Management interface that provides lifecycle callback methods.
- * Implementing this interface on a Service bean causes JBoss to
- * magically call the methods.
- *
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
-@Management
-@Local
 public interface CleanupManagement
-{
-	/** */
-	public static final String JNDI_NAME = "subetha/Cleanup/local";
-
-	/**
-	 */
-	public void start() throws Exception;
-	
-	/**
-	 */
-	public void stop() throws Exception;
-	
+{	
 	/**
 	 * Purges all obsolete held messages and subscriptions.
 	 */

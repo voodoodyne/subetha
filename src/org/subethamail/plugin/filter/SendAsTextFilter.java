@@ -7,7 +7,6 @@ package org.subethamail.plugin.filter;
 
 import java.io.IOException;
 
-import javax.annotation.security.RunAs;
 import javax.ejb.EJB;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
@@ -15,16 +14,12 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.Archiver;
-import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
-import org.subethamail.core.plugin.i.helper.Lifecycle;
 
 /**
  * This filter removes all attachments greater than a certain size immediately
@@ -33,13 +28,7 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  *
  * @author Scott Hernandez
  */
-
-@Service
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
-// TODO: remove the implements clause when
-// http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
-public class SendAsTextFilter extends GenericFilter implements Lifecycle
+public class SendAsTextFilter extends GenericFilter
 {
 	/** */
 	private static Log log = LogFactory.getLog(SendAsTextFilter.class);
@@ -105,15 +94,6 @@ public class SendAsTextFilter extends GenericFilter implements Lifecycle
 			if (log.isDebugEnabled())
 				log.debug("Error getting message parts", ioex);
 		}
-		return;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onArchiveRender(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.ArchiveRenderFilterContext)
-	 */
-	@Override
-	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
-	{
 		return;
 	}
 }

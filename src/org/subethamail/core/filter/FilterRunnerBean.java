@@ -12,7 +12,6 @@ import javax.mail.MessagingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
@@ -27,13 +26,8 @@ import org.subethamail.entity.MailingList;
 
 /**
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
-@Service(name="FilterRunner")
-
-// Security is disabled because of JBoss bug:  http://jira.jboss.org/jira/browse/EJBTHREE-526
-// TODO:  re-enable security on this bean when jboss bug fixed.
-//@SecurityDomain("subetha")
-//@RolesAllowed("siteAdmin")
 public class FilterRunnerBean implements FilterRunner, FilterRegistry
 {
 	/** */

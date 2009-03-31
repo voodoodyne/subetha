@@ -9,7 +9,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 
-import javax.ejb.EJB;
+import javax.inject.Current;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,20 +19,22 @@ import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
-import org.jboss.ejb3.annotation.Depends;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.smtp.SMTPManagement;
+
+import com.caucho.config.Service;
 
 /**
  * @author Jon Stevens
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
-@Service(objectName="subetha:service=TcpTable")
+@Service
 public class TcpTableService implements TcpTableManagement
 {
-	@EJB Injector injector;
-	@Depends("subetha:service=SMTP") SMTPManagement smtpManagement;
+	@Current Injector injector;
+	@Current SMTPManagement smtpManagement;
+	
 
 	/** */
 	private static Log log = LogFactory.getLog(TcpTableService.class);

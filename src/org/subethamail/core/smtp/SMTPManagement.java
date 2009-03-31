@@ -4,30 +4,17 @@
  */
 package org.subethamail.core.smtp;
 
-import java.io.IOException;
 import java.net.InetAddress;
-
-import org.jboss.ejb3.annotation.Management;
 
 /**
  * JMX Management interface for the SMTPService. The start() and stop() methods
  * are magically called by JBoss.
  * 
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
-@Management
 public interface SMTPManagement
 {
-	/**
-	 * Called when the service starts.
-	 */
-	public void start() throws IOException;
-
-	/**
-	 * Called when the service stops.
-	 */
-	public void stop();
-
 	/**
 	 * When the SMTP server starts, it will listen on this port.
 	 */

@@ -132,8 +132,9 @@ public interface Admin
 	 * It might also be the case after adding a new email address.
 	 * 
 	 * @return the number of messages that were approved
+	 * @throws InterruptedException 
 	 */
-	public int selfModerate(Long personId) throws NotFoundException;
+	public int selfModerate(Long personId) throws NotFoundException, InterruptedException;
 
 	/**
 	 * Gets a list of site administrators. It's a special role.

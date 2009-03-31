@@ -15,21 +15,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RunAs;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Current;
 import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
@@ -47,7 +42,7 @@ import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
-import org.subethamail.core.queue.i.Queuer;
+import org.subethamail.core.util.InjectQueue;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EmailAddress;
@@ -68,22 +63,19 @@ import org.subethamail.entity.i.PermissionException;
  * @author Jeff Schnitzer
  */
 @Stateless(name="ListMgr")
-@SecurityDomain("subetha")
-@PermitAll
-@RunAs("siteAdmin")
-@WebService(name="ListMgr", targetNamespace="http://ws.subethamail.org/", serviceName="ListMgrService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
 public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 {
 	/** */
 	private static Log log = LogFactory.getLog(ListMgrBean.class);
 
 	/** */
-	@EJB FilterRunner filterRunner;
-	@EJB Admin admin;
-	@EJB AccountMgr accountMgr;
-	@EJB Queuer queuer;
+	@Current FilterRunner filterRunner;
+	@Current Admin admin;
+	@Current AccountMgr accountMgr;
+	
+	@InjectQueue 
+	BlockingQueue<Long> q;	
+
 
 	/*
 	 * (non-Javadoc)
@@ -665,13 +657,14 @@ public class ListMgrBean extends PersonalBean implements ListMgr, ListMgrRemote
 	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldMessage(java.lang.Long)
 	 */
 	@WebMethod
-	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException
+	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException, InterruptedException
 	{
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
 
 		mail.approve();
 
-		this.queuer.queueForDelivery(mail.getId());
+		this.q.put(mail.getId());
+//		this.queuer.queueForDelivery(mail.getId());
 
 		return mail.getList().getId();
 	}

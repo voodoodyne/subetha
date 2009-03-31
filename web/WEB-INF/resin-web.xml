@@ -1,23 +1,48 @@
 <web-app 	xmlns="http://caucho.com/ns/resin" xmlns:cfg="urn:java:com.caucho.config"
 		 	xmlns:jms="urn:java:com.caucho.jms" xmlns:ejb="urn:java:com.caucho.ejb"
+		 	xmlns:adm="java:urn:org.subethamail.core.admin"
+		 	xmlns:util="java:urn:org.subethamail.core.util"
 			>
 
-  <!--
-  		CanDI Beans/EJBs -->
-<!--  <util:LogProducer/>-->
+  <security-manager/>
+  
+  <resource mbean-name="subetha:name=Cleanup"
+            type="org.subethamail.core.admin.CleanupBean"
+            mbean-interface="org.subethamail.core.admin.CleanupManagement"/>
+
+  <resource mbean-name="subetha:name=SMTPService"
+            type="org.subethamail.core.smtp.SMTPService"
+            mbean-interface="org.subethamail.core.smtp.SMTPManagement"/>
+
+  <!-- Run every night at 4am (base 0 below) -->
+  <resin:ScheduledTask>
+  	<task>
+  		<adm:CleanupBean/>
+  	</task>
+    <cron>0 3 *</cron>
+  </resin:ScheduledTask>
 
   <!--
   			JMS			  -->
   <jms:JmsConnectionFactory/>
 
   <jms:MemoryQueue>
-    <Named>userEvents</Named>
+    <Named>injectedMsgIds</Named>
   </jms:MemoryQueue>
 
-<!-- <ejb-message-bean class="resinscratchspace.queues.UserEventListener">-->
-<!--    <destination>#{userEvents}</destination>-->
-<!--  </ejb-message-bean>-->
-  
+  <ejb-message-bean class="">
+    <destination>#{injectedMsgIds}</destination>
+  </ejb-message-bean>
+ 
+  <jms:MemoryQueue>
+    <Named>deliverableMessages</Named>
+  </jms:MemoryQueue>
+
+  <ejb-message-bean class="">
+    <destination>#{deliverableMessages}</destination>
+  </ejb-message-bean>
+ 
+   
   <database jndi-name="jdbc/subetha">
   	<ping>true</ping>
     <ping-interval>0</ping-interval>
@@ -33,5 +58,5 @@
   <ejb-server data-source="jdbc/test" 
   			  validate-database-schema="true"
   			  create-database-schema="true"/>
-  			  
+
 </web-app>

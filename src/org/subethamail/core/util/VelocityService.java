@@ -1,36 +1,34 @@
 /*
- * $Id: VelocityBean.java 988 2008-12-30 08:51:13Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/admin/VelocityBean.java $
+ * $Id: VelocityService.java 988 2008-12-30 08:51:13Z lhoriman $
+ * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/admin/VelocityService.java $
  */
 
-package org.subethamail.core.admin;
+package org.subethamail.core.util;
 
-import javax.annotation.security.RunAs;
+import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.app.Velocity;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
+
+import com.caucho.config.Service;
 
 /**
- * This Bean just initializes the static use of Velocity within Subetha.
- * 
- * Note that this bean has neither remote nor local interfaces.
+ * This Bean just initializes the static use of Velocity.
  * 
  * @author Jon Stevens
+ * @author Scott Hernandez
  */
-@Service(objectName="subetha:service=Velocity")
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
-public class VelocityBean implements VelocityManagement
+@Service
+public class VelocityService
 {
 	/** */
-	private static Log log = LogFactory.getLog(VelocityBean.class);
+	private static Log log = LogFactory.getLog(VelocityService.class);
 	
 	/**
 	 * Simply initialize the Velocity engine
 	 */
+	@PostConstruct
 	public void start() throws Exception
 	{
 		try

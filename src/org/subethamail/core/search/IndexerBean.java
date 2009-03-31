@@ -17,8 +17,11 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.EJBException;
+import javax.inject.Current;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.naming.Context;
@@ -29,7 +32,6 @@ import javax.sql.DataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.queryParser.ParseException;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.SearchException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.search.i.Indexer;
@@ -37,6 +39,8 @@ import org.subethamail.core.search.i.IndexerRemote;
 import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
+
+import com.caucho.config.Service;
 
 /**
  * Service which manages the Lucene search index and provides a
@@ -46,10 +50,9 @@ import org.subethamail.entity.Mail;
  * This allows rebuilds and searches to peacefully co-occur.
  *
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
-@Service(objectName="subetha:service=Indexer")
-//@SecurityDomain("subetha")
-//@RolesAllowed("siteAdmin")
+@Service
 public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer, IndexerRemote
 {
 	/** */
@@ -101,7 +104,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	@Resource(mappedName="java:/SubEthaDS") DataSource ds;
 
 	/** */
-	@Resource(mappedName="java:/Mail") Session mailSession;
+	@Current Session mailSession;
 
 	/**
 	 * Timer used to schedule the service event.
@@ -169,6 +172,8 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.search.IndexerManagement#start()
 	 */
+
+	@PostConstruct
 	public void start() throws Exception
 	{
 		log.info("Starting indexer service");
@@ -183,6 +188,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.search.IndexerManagement#stop()
 	 */
+	@PreDestroy
 	public void stop() throws Exception
 	{
 		log.info("Stopping IndexerService");

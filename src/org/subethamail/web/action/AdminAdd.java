@@ -5,11 +5,13 @@
 
 package org.subethamail.web.action;
 
+import javax.inject.Current;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Email;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.web.Backend;
+import org.subethamail.core.admin.i.Admin;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
@@ -22,6 +24,8 @@ import org.tagonist.propertize.Property;
  */
 public class AdminAdd extends AuthRequired
 {
+	@Current Admin admin;
+	
 	/** */
 	private static Log log = LogFactory.getLog(AdminAdd.class);
 
@@ -53,7 +57,7 @@ public class AdminAdd extends AuthRequired
 		{
 			try
 			{
-				Backend.instance().getAdmin().setSiteAdminByEmail(model.email, true);
+				admin.setSiteAdminByEmail(model.email, true);
 			}
 			catch (NotFoundException nfe)
 			{

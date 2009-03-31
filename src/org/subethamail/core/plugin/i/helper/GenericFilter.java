@@ -8,13 +8,7 @@ package org.subethamail.core.plugin.i.helper;
 import javax.mail.MessagingException;
 
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
-import org.subethamail.core.plugin.i.Filter;
-import org.subethamail.core.plugin.i.FilterContext;
-import org.subethamail.core.plugin.i.FilterParameter;
-import org.subethamail.core.plugin.i.HoldException;
-import org.subethamail.core.plugin.i.IgnoreException;
-import org.subethamail.core.plugin.i.SendFilterContext;
+import org.subethamail.core.plugin.i.*;
 
 /**
  * Trivial filter implementation that has no parameters and does
@@ -22,7 +16,7 @@ import org.subethamail.core.plugin.i.SendFilterContext;
  * 
  * @author Jeff Schnitzer
  */
-public abstract class GenericFilter extends AbstractFilter
+public abstract class GenericFilter implements Filter
 {
 	/**
 	 * @see Filter#getParameters()

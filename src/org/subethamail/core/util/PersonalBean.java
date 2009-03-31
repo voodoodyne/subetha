@@ -35,10 +35,6 @@ import org.subethamail.entity.i.PermissionException;
 public class PersonalBean extends EntityManipulatorBean
 {
 	/** */
-	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(PersonalBean.class);
-
-	/** */
 	@Resource protected SessionContext sessionContext;
 	
 	/**
@@ -150,5 +146,4 @@ public class PersonalBean extends EntityManipulatorBean
 
 		return sub;
 	}
-	
 }

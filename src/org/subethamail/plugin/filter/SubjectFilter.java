@@ -5,13 +5,10 @@
 
 package org.subethamail.plugin.filter;
 
-import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
@@ -21,18 +18,14 @@ import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.plugin.i.helper.FilterParameterImpl;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
-import org.subethamail.core.plugin.i.helper.Lifecycle;
 
 /**
  * This filter appends a customizable Subject to outgoing emails.
  * 
  * @author Jon Stevens
+ * @author Scott Hernandez
  */
-@Service
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
-public class SubjectFilter extends GenericFilter implements Lifecycle
-//TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
+public class SubjectFilter extends GenericFilter
 {
 	/** */
 	private static Log log = LogFactory.getLog(SubjectFilter.class);

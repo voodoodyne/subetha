@@ -10,21 +10,17 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
-import org.subethamail.core.plugin.i.helper.Lifecycle;
 
 /**
  * This filter appends the 
@@ -32,12 +28,9 @@ import org.subethamail.core.plugin.i.helper.Lifecycle;
  * headers to outgoing mail.
  * 
  * @author Jon Stevens
+ * @author Scott Hernandez
  */
-@Service
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
-public class ListHeaderFilter extends GenericFilter implements Lifecycle
-//TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
+public class ListHeaderFilter extends GenericFilter
 {	
 	/** */
 	private static Log log = LogFactory.getLog(ListHeaderFilter.class);

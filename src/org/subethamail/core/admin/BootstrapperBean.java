@@ -9,18 +9,18 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.annotation.security.RunAs;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Config;
+
+import com.caucho.config.Service;
 
 /**
  * This bean really is only used when run for the first time
@@ -36,11 +36,10 @@ import org.subethamail.entity.Config;
  * Note that this bean has neither remote nor local interfaces.
  * 
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
-@Service(objectName="subetha:service=Bootstrapper")
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
-public class BootstrapperBean extends EntityManipulatorBean implements BootstrapperManagement
+@Service
+public class BootstrapperBean extends EntityManipulatorBean
 {
 	/** */
 	private static Log log = LogFactory.getLog(BootstrapperBean.class);
@@ -84,6 +83,7 @@ public class BootstrapperBean extends EntityManipulatorBean implements Bootstrap
 	/**
 	 * @see BootstrapperManagement#start()
 	 */
+	@PostConstruct
 	public void start() throws Exception
 	{
 		// If we haven't been bootstrapped, we need to run.

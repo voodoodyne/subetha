@@ -5,21 +5,11 @@
 
 package org.subethamail.core.admin;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.annotation.security.RunAs;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.SubscriptionHold;
@@ -29,11 +19,9 @@ import org.subethamail.entity.SubscriptionHold;
  * Old held messages and held subscriptions are pruned.
  *
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
-@Service(name="Cleanup", objectName="subetha:service=Cleanup")
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
-public class CleanupBean extends EntityManipulatorBean implements CleanupManagement
+public class CleanupBean extends EntityManipulatorBean implements CleanupManagement, Runnable
 {
 	/** */
 	private static Log log = LogFactory.getLog(CleanupBean.class);
@@ -44,67 +32,6 @@ public class CleanupBean extends EntityManipulatorBean implements CleanupManagem
 	/** Keep held messages around for 7 days */
 	public static final long MAX_HELD_MSG_AGE_MILLIS = 1000L * 60L * 60L * 24L * 7L;
 
-	/** */
-	class CleanupTask extends TimerTask
-	{
-		@Override
-		public void run()
-		{
-			try
-			{
-				Context ctx = new InitialContext();
-				CleanupManagement cleaner = (CleanupManagement)ctx.lookup(CleanupManagement.JNDI_NAME);
-				cleaner.cleanup();
-			}
-			catch (NamingException ex) { throw new RuntimeException(ex); }
-		}
-	}
-
-	/**
-	 * Timer used to schedule the service event.
-	 */
-	Timer timer = new Timer("Cleanup", false);
-
-	/* (non-Javadoc)
-	 * @see org.subethamail.core.admin.CleanupManagement#start()
-	 */
-	public void start() throws Exception
-	{
-		log.info("Starting cleanup service");
-
-		// Schedule rebuilds to occur nightly at 4am, plus some random slop time.
-		// The slop time makes this play nicer in a clustered environment.  Really
-		// this should be a HA singleton service, but that would require running
-		// JBoss in a clustered configuration even on a single box.
-		Calendar next = Calendar.getInstance();
-
-		next.set(Calendar.HOUR_OF_DAY, 4);
-		next.set(Calendar.MINUTE, (int)(60 * Math.random()));
-		next.set(Calendar.SECOND, (int)(60 * Math.random()));
-		next.set(Calendar.MILLISECOND, (int)(1000 * Math.random()));
-
-		Calendar now = Calendar.getInstance();
-
-		if (now.after(next))
-			next.add(Calendar.DAY_OF_YEAR, 1);
-
-		final long millisInDay = 1000L * 60L * 60L * 24L;
-
-		this.timer.scheduleAtFixedRate(new CleanupTask(), next.getTime(), millisInDay);
-
-		log.info("Cleanup will occur daily starting at " + next.getTime());
-	}
-
-	/* (non-Javadoc)
-	 * @see org.subethamail.core.admin.CleanupManagement#stop()
-	 */
-	public void stop() throws Exception
-	{
-		log.info("Stopping cleanup service");
-
-		this.timer.cancel();
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.CleanupManagement#cleanup()
@@ -113,6 +40,15 @@ public class CleanupBean extends EntityManipulatorBean implements CleanupManagem
 	{
 		this.cleanupHeldSubscriptions();
 		this.cleanupHeldMail();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
+		this.cleanup();
 	}
 
 	/**

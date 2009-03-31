@@ -31,11 +31,6 @@ import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortType;
-import org.hibernate.validator.Email;
 import org.subethamail.common.SiteUtils;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
@@ -103,7 +98,7 @@ import org.subethamail.entity.i.Validator;
 		)
 })
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class MailingList implements Serializable, Comparable<MailingList>
 {
@@ -138,7 +133,7 @@ public class MailingList implements Serializable, Comparable<MailingList>
 
 	/** */
 	@Column(nullable=false, length=Validator.MAX_LIST_EMAIL)
-	@Email
+//	@Email
 	String email;
 
 	@Column(nullable=false, length=Validator.MAX_LIST_NAME)
@@ -177,8 +172,8 @@ public class MailingList implements Serializable, Comparable<MailingList>
 
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
-	@Sort(type=SortType.COMPARATOR, comparator=SubscriptionComparator.class)
-	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+//	@Sort(type=SortType.COMPARATOR, comparator=SubscriptionComparator.class)
+//	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	SortedSet<Subscription> subscriptions;
 
 	/** not cached */
@@ -188,13 +183,13 @@ public class MailingList implements Serializable, Comparable<MailingList>
 
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
-	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+//	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	@MapKey(name="className")
 	Map<String, EnabledFilter> enabledFilters;
 
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="list")
-	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+//	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	@OrderBy(value="name")
 	Set<Role> roles;
 
@@ -475,4 +470,3 @@ public class MailingList implements Serializable, Comparable<MailingList>
 		return this.email.compareTo(other.getEmail());
 	}
 }
-

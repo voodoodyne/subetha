@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.security.RunAs;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
@@ -18,29 +17,22 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.core.plugin.i.helper.FilterParameterImpl;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
-import org.subethamail.core.plugin.i.helper.Lifecycle;
 
 /**
  * This filter appends a customizable footer to the bottom
  * of outgoing emails.
  * 
  * @author Jon Stevens
+ * @author Scott Hernandez
  */
-@Service
-@SecurityDomain("subetha")
-@RunAs("siteAdmin")
-public class AppendFooterFilter extends GenericFilter implements Lifecycle
-//TODO:  remove the implements clause when http://jira.jboss.org/jira/browse/EJBTHREE-489 is fixed
+public class AppendFooterFilter extends GenericFilter
 {
 	/** */
 	private static Log log = LogFactory.getLog(AppendFooterFilter.class);
@@ -78,14 +70,6 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 			};
 	}
 
-	/**
-	 * @see Lifecycle#start()
-	 */
-	public void start() throws Exception
-	{
-		super.start();
-	}
-	
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.plugin.i.Filter#getName()
@@ -178,13 +162,4 @@ public class AppendFooterFilter extends GenericFilter implements Lifecycle
 			throw new RuntimeException(ex);
 		}
 	}
-
-	/* (non-Javadoc)
-	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onArchiveRender(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.ArchiveRenderFilterContext)
-	 */
-	@Override
-	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
-	{
-	}
-	
 }

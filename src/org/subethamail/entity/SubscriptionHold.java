@@ -13,8 +13,6 @@ import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A request to join a mailing list. 
@@ -37,7 +35,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 	)
 })
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class SubscriptionHold extends SubscriptionBase
 {
@@ -56,4 +54,3 @@ public class SubscriptionHold extends SubscriptionBase
 		super(person, list, deliverTo);
 	}
 }
-

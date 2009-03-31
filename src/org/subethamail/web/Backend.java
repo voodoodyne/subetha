@@ -9,23 +9,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import org.subethamail.core.acct.i.AccountMgr;
-import org.subethamail.core.admin.i.Admin;
-import org.subethamail.core.admin.i.Encryptor;
-import org.subethamail.core.admin.i.ListWizard;
-import org.subethamail.core.injector.i.Injector;
-import org.subethamail.core.lists.i.Archiver;
-import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.entity.i.Permission;
 
 /**
- * Singleton which provides access to the backend EJBs.  
- * 
  * This is initialized as a servlet on startup so that it
  * can place itself in application scope; this makes it
  * available to JSPs as ${backend}.
@@ -46,105 +35,22 @@ public class Backend extends HttpServlet
 	 */
 	static Backend singleton;
 	
-	/** Stateless session EJB references are all thread-safe */
-	Injector injector;
-	Admin admin;
-	Encryptor encryptor;
-	ListWizard listWizard;
-	ListMgr listMgr;
-	AccountMgr accountMgr;
-	Archiver archiver;
-	
 	/**
 	 * Obtain the current instance.
 	 */
 	public static Backend instance() { return singleton; }
 	
-	/**
-	 * Initialize all the ejb references and make them
-	 * available in the application scope.
-	 */
 	@Override
 	public void init() throws ServletException
 	{
-		try
-		{
-			InitialContext ctx = new InitialContext();
-			
-			injector = (Injector)ctx.lookup(Injector.JNDI_NAME);
-			admin = (Admin)ctx.lookup(Admin.JNDI_NAME);
-			encryptor = (Encryptor)ctx.lookup(Encryptor.JNDI_NAME);
-			listWizard = (ListWizard)ctx.lookup(ListWizard.JNDI_NAME);
-			listMgr = (ListMgr)ctx.lookup(ListMgr.JNDI_NAME);
-			accountMgr = (AccountMgr)ctx.lookup(AccountMgr.JNDI_NAME);
-			archiver = (Archiver)ctx.lookup(Archiver.JNDI_NAME);
-		}
-		catch (NamingException ex) { throw new ServletException(ex); }
-		
-		this.getServletContext().setAttribute(KEY, this);
-		
-		singleton = this;
 	}
 
-	/* (non-Javadoc)
-	 * @see javax.servlet.GenericServlet#destroy()
-	 */
-	@Override
-	public void destroy()
-	{
-		this.getServletContext().removeAttribute(KEY);
-		
-		singleton = null;
-	}
-	
 	/**
 	 * A convenient way of enumerating all the permissions from the presentation tier. 
 	 */
 	public Set<Permission> getAllPermissions()
 	{
 		return Permission.ALL;
-	}
-
-	/** */
-	public Injector getInjector()
-	{
-		return this.injector;
-	}
-
-	/** */
-	public Admin getAdmin()
-	{
-		return this.admin;
-	}
-
-	/** */
-	public Encryptor getEncryptor()
-	{
-		return this.encryptor;
-	}
-
-	/** */
-	public ListWizard getListWizard()
-	{
-		return this.listWizard;
-	}
-
-	/** */
-	public AccountMgr getAccountMgr()
-	{
-		return this.accountMgr;
-	}
-
-	/** */
-	public ListMgr getListMgr()
-	{
-		return this.listMgr;
-	}
-	
-	/** */
-	public Archiver getArchiver()
-	{
-		return this.archiver;
 	}
 	
 	/** @return some sense of what the whole application version # is */

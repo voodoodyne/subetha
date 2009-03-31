@@ -9,16 +9,17 @@ import java.net.InetAddress;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
 import org.subethamail.smtp.helper.SimpleMessageListener;
 import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
+
+import com.caucho.config.Service;
 
 /**
  * SubEtha's JBoss adapter for SubEthaSMTP.  The default port is 2500.  This
@@ -30,9 +31,7 @@ import org.subethamail.smtp.server.SMTPServer;
  * @author Jeff Schnitzer
  * @author Jon Stevens
  */
-@Service(name="SMTPService", objectName="subetha:service=SMTP")
-@SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
+@Service
 public class SMTPService implements SMTPManagement, MessageListenerRegistry
 {
 	/** */
@@ -94,6 +93,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	 * @see org.subethamail.smtp.service.SMTPManagement#start()
 	 */
 	@PermitAll
+	@PostConstruct
 	public void start() throws IOException
 	{
 		if (this.smtpServer != null)
@@ -120,6 +120,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	 * @see org.subethamail.smtp.service.SMTPManagement#stop()
 	 */
 	@PermitAll
+	@PreDestroy
 	public void stop()
 	{
 		log.info("Stopping SMTP service");

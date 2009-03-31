@@ -10,18 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.security.RolesAllowed;
+import javax.context.ApplicationScoped;
 import javax.ejb.EJB;
 import javax.jws.WebMethod;
-import javax.jws.WebService;
-import javax.jws.soap.SOAPBinding;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jboss.ejb3.annotation.SecurityDomain;
-import org.jboss.ejb3.annotation.Service;
-import org.jboss.wsf.spi.annotation.WebContext;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.admin.i.DuplicateListDataException;
@@ -37,12 +32,7 @@ import org.subethamail.core.util.Transmute;
  *
  * @author Jeff Schnitzer
  */
-@Service(name="ListWizard")
-@SecurityDomain("subetha")
-@RolesAllowed("siteAdmin")
-@WebService(name="ListWizard", targetNamespace="http://ws.subethamail.org/", serviceName="ListWizardService")
-@SOAPBinding(style=SOAPBinding.Style.DOCUMENT)
-@WebContext(contextRoot="/subetha")
+@ApplicationScoped
 public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRegistry
 {
 	/** */
@@ -104,6 +94,4 @@ public class ListWizardBean implements ListWizard, ListWizardRemote, BlueprintRe
 
 		return listId;
 	}
-
-
 }

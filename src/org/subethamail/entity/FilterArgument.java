@@ -17,17 +17,19 @@ import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.annotations.Columns;
+import org.hibernate.annotations.Type;
 import org.subethamail.entity.i.Validator;
 
 // In JBoss4, the copy of this in Config was sufficient to register
 // the type.  In JBoss5, either the order of loading changed or the
 // type must be registered in every class.
-//@org.hibernate.annotations.TypeDefs({
-//	@org.hibernate.annotations.TypeDef(
-//		name="anyImmutable",
-//		typeClass=org.subethamail.entity.type.AnyImmutableType.class
-//	)
-//})
+@org.hibernate.annotations.TypeDefs({
+	@org.hibernate.annotations.TypeDef(
+		name="anyImmutable",
+		typeClass=org.subethamail.entity.type.AnyImmutableType.class
+	)
+})
 
 /**
  * One parameter key and argument value for an enabled filter.

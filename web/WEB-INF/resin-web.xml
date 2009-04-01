@@ -65,5 +65,30 @@
 
 	<ejb-server data-source="jdbc/test"
 		validate-database-schema="true" create-database-schema="true" />
-
+		
+	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Admin" servlet-class="org.subethamail.core.admin.AdminBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/ListWizard" servlet-class="org.subethamail.core.admin.ListWizardBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Injector" servlet-class="org.subethamail.core.injector.InjectorBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Archiver" servlet-class="org.subethamail.core.list.ArchiverBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/ListMgr" servlet-class="org.subethamail.core.list.ListMgrBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Indexer" servlet-class="org.subethamail.core.search.IndexerBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Plumber" servlet-class="org.subethamail.core.admin.PlumberBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+  
 </web-app>

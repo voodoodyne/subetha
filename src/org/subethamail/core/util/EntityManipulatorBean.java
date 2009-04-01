@@ -5,7 +5,7 @@
 
 package org.subethamail.core.util;
 
-import javax.inject.Current;
+import com.caucho.config.Name;
 
 /**
  * Base class for session EJBs.  Provides access to
@@ -17,6 +17,6 @@ import javax.inject.Current;
 public class EntityManipulatorBean
 {
 	/** */
-	@Current
+	@Name("subetha")
 	protected SubEthaEntityManager em;
 }

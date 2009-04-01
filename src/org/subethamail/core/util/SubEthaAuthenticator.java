@@ -9,10 +9,10 @@ import java.security.Principal;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
 
 import org.subethamail.entity.Person;
 
+import com.caucho.config.Name;
 import com.caucho.security.Authenticator;
 import com.caucho.security.Credentials;
 import com.caucho.server.security.CachingPrincipal;
@@ -28,7 +28,7 @@ import com.caucho.server.security.CachingPrincipal;
 public class SubEthaAuthenticator implements Authenticator
 {
 	/** */
-	@Current SubEthaEntityManager em;
+	@Name("subetha") SubEthaEntityManager em;
 
 	/**
 	 * Authenticate the user by the password, returning null on failure.
@@ -67,6 +67,5 @@ public class SubEthaAuthenticator implements Authenticator
 	public void logout(Principal user)
 	{
 		// Nothing special needed
-	}
-	
+	}	
 }

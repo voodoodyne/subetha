@@ -9,6 +9,9 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
+import javax.context.ApplicationScoped;
+import javax.inject.Current;
+import javax.inject.Initializer;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -26,6 +29,8 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Validator;
 
+import com.caucho.config.Name;
+
 /**
  * The methods we add to a regular entity manager to give ourselves
  * a "prettier" interface.
@@ -37,6 +42,8 @@ import org.subethamail.entity.i.Validator;
  * 
  * @author Jeff Schnitzer
  */
+@ApplicationScoped
+@Name("subetha")
 public class SubEthaEntityManager extends EntityManagerWrapper
 {
 	/** */
@@ -45,7 +52,8 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 	/**
 	 * A normal entity manager is wrapped, providing the new methods.
 	 */
-	public SubEthaEntityManager(EntityManager base)
+	@Initializer
+	public SubEthaEntityManager(@Current EntityManager base)
 	{
 		super(base);
 	}

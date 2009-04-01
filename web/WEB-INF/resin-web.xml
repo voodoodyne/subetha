@@ -1,25 +1,26 @@
 <web-app xmlns="http://caucho.com/ns/resin"
+	xmlns:resin="urn:java:com.caucho.resin"
 	xmlns:cfg="urn:java:com.caucho.config"
 	xmlns:jms="urn:java:com.caucho.jms"
 	xmlns:ejb="urn:java:com.caucho.ejb"
-	xmlns:adm="java:urn:org.subethamail.core.admin"
-	xmlns:util="java:urn:org.subethamail.core.util"
-	xmlns:sec="java:urn:org.subethamail.web.security"
-	xmlns:queue="java:urn:org.subethamail.core.queue"
+	xmlns:adm="urn:java:org.subethamail.core.admin"
+	xmlns:util="urn:java:org.subethamail.core.util"
+	xmlns:ss="urn:java:org.subethamail.web.security"
+	xmlns:queue="urn:java:org.subethamail.core.queue"
 	>
 
-	<sec:ResinLogin/>
+	<ss:ResinLogin/>
 	<util:SubEthaAuthenticator/>
 
-	<resource
-		mbean-name="subetha:name=Cleanup"
-		type="org.subethamail.core.admin.CleanupBean"
-		mbean-interface="org.subethamail.core.admin.CleanupManagement" />
-
-	<resource
-		mbean-name="subetha:name=SMTPService"
-		type="org.subethamail.core.smtp.SMTPService"
-		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />
+<!--	<resource-->
+<!--		mbean-name="subetha:name=Cleanup"-->
+<!--		type="org.subethamail.core.admin.CleanupBean"-->
+<!--		mbean-interface="org.subethamail.core.admin.CleanupManagement" />-->
+<!---->
+<!--	<resource-->
+<!--		mbean-name="subetha:name=SMTPService"-->
+<!--		type="org.subethamail.core.smtp.SMTPService"-->
+<!--		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />-->
 
 	<!-- Run every night at 4am (base 0 below) -->
 	<resin:ScheduledTask>
@@ -63,9 +64,33 @@
 		</driver>
 	</database>
 
-	<ejb-server data-source="jdbc/test"
+	<ejb-server data-source="jdbc/subetha"
 		validate-database-schema="true" create-database-schema="true" />
-		
+	
+	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Admin" servlet-class="org.subethamail.core.admin.AdminBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/ListWizard" servlet-class="org.subethamail.core.admin.ListWizardBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Injector" servlet-class="org.subethamail.core.injector.InjectorBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Archiver" servlet-class="org.subethamail.core.list.ArchiverBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/ListMgr" servlet-class="org.subethamail.core.list.ListMgrBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Indexer" servlet-class="org.subethamail.core.search.IndexerBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Plumber" servlet-class="org.subethamail.core.admin.PlumberBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>		
 	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">
 		<protocol uri="hessian:"/>
 	</servlet-mapping>

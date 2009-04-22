@@ -73,7 +73,7 @@ public class AdminBean extends PersonalBean implements Admin
 	@Current PostOffice postOffice;
 
 	//TODO: Figure out why the injector is puking on this.	
-	@InjectQueue 
+	//@InjectQueue 
 //	@Name("injection")
 	BlockingQueue<Long> q;
 

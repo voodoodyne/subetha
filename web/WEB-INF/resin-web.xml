@@ -23,12 +23,12 @@
 		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />
 
 	<!-- Run every night at 4am (base 0 below) -->
-	<resin:ScheduledTask>
-		<task>
-			<adm:CleanupBean />
-		</task>
-		<cron>0 3 *</cron>
-	</resin:ScheduledTask>
+<!--	<resin:ScheduledTask>-->
+<!--		<task>-->
+<!--			<adm:CleanupBean />-->
+<!--		</task>-->
+<!--		<cron>0 3 *</cron>-->
+<!--	</resin:ScheduledTask>-->
 
 	<!-- JMS -->
 	<jms:JmsConnectionFactory />

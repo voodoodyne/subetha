@@ -99,7 +99,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector
 
 	/** The "inbound queue" which processes injections */
 	//TODO: Figure out why the injector is puking on this.
-	@InjectQueue 
+	//@InjectQueue 
 //	@Name("injection")
 	BlockingQueue<Long> inboundQueue;
 	

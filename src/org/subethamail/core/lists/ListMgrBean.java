@@ -77,7 +77,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	@Current AccountMgr accountMgr;
 
 	//TODO: Figure out why the injector is puking on this.
-	@InjectQueue
+	//@InjectQueue
 //	@Name("injection")
 	BlockingQueue<Long> q;	
 

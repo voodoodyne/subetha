@@ -25,9 +25,4 @@
  			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider"/>
  		</properties>
 	</persistence-unit>
-	
-<!-- 		Amber-->
-<!--	<persistence-unit name="subetha">-->
-<!--		<jta-data-source>java:jdbc/subetha</jta-data-source>-->
-<!--	</persistence-unit>-->
 </persistence>

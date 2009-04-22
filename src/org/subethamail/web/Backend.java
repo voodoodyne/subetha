@@ -14,6 +14,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.subethamail.core.acct.i.AccountMgr;
+import org.subethamail.core.admin.BootstrapperBean;
+import org.subethamail.core.admin.ScannerService;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ListWizard;
@@ -45,6 +47,11 @@ public class Backend extends HttpServlet
 	 * initialized by the web container on init().
 	 */
 	static Backend singleton;
+	
+	// TODO: Fix when services work. 
+	// For now, make sure these are first.
+	@Current BootstrapperBean bootstrap;
+	@Current ScannerService scanner;
 	
 	/** Stateless session EJB references are all thread-safe */
 	@Current Injector injector;

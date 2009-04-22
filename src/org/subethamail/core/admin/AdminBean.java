@@ -71,7 +71,11 @@ public class AdminBean extends PersonalBean implements Admin
 
 	/** */
 	@Current PostOffice postOffice;
-	@InjectQueue BlockingQueue<Long> q;
+
+	//TODO: Figure out why the injector is puking on this.	
+	@InjectQueue 
+//	@Name("injection")
+	BlockingQueue<Long> q;
 
 	/**
 	 * For generating random passwords.

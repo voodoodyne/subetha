@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
+import javax.context.ApplicationScoped;
 import javax.ejb.EJB;
 import javax.mail.internet.InternetAddress;
 
@@ -19,8 +20,6 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Config;
-
-import com.caucho.config.Service;
 
 /**
  * This bean really is only used when run for the first time
@@ -38,7 +37,12 @@ import com.caucho.config.Service;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@Service
+
+// TODO: Add @Service back once bug is fixed in Resin. For now this is triggered by 
+// the Backend Servlet (started with web container): http://bugs.caucho.com/view.php?id=3429
+
+//@Service
+@ApplicationScoped
 public class BootstrapperBean extends EntityManipulatorBean
 {
 	/** */

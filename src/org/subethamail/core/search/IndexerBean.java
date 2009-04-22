@@ -39,8 +39,6 @@ import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
 
-import com.caucho.config.Service;
-
 /**
  * Service which manages the Lucene search index and provides a
  * low-level search API.  Conceptually there are two indexes, the
@@ -51,7 +49,8 @@ import com.caucho.config.Service;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@Service
+
+// TODO: Add cron task in resin to do this.
 public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer
 {
 	/** */

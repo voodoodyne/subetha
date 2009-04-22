@@ -22,6 +22,8 @@ import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.subethamail.entity.i.Validator;
 
 /**
@@ -31,7 +33,7 @@ import org.subethamail.entity.i.Validator;
  * @author Jeff Schnitzer
  */
 @Entity
-//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class EnabledFilter implements Serializable, Comparable<EnabledFilter>
 {
@@ -55,7 +57,7 @@ public class EnabledFilter implements Serializable, Comparable<EnabledFilter>
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="filter")
 	@MapKey(name="name")
-//	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	Map<String, FilterArgument> arguments;
 
 	/**

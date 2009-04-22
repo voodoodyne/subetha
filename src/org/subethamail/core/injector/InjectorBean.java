@@ -98,7 +98,10 @@ public class InjectorBean extends EntityManipulatorBean implements Injector
 	public static final long MAX_SUBJECT_THREAD_PARENT_AGE_MILLIS = 1000L * 60L * 60L * 24L * 30L;
 
 	/** The "inbound queue" which processes injections */
-	@InjectQueue BlockingQueue<Long> inboundQueue;
+	//TODO: Figure out why the injector is puking on this.
+	@InjectQueue 
+//	@Name("injection")
+	BlockingQueue<Long> inboundQueue;
 	
 	@Current FilterRunner filterRunner;
 	@Current Encryptor encryptor;

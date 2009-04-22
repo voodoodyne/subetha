@@ -30,7 +30,9 @@ import com.caucho.config.Service;
  * @author Ian McFarland
  * @author Jeff Schnitzer
  * @author Jon Stevens
+ * @author Scott Hernandez
  */
+
 @Service
 public class SMTPService implements SMTPManagement, MessageListenerRegistry
 {
@@ -87,14 +89,14 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 		
 		this.listeners.remove(listener);
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.service.SMTPManagement#start()
 	 */
-	@PermitAll
+	@PermitAll	
 	@PostConstruct
-	public void start() throws IOException
+	public void startServer() throws IOException
 	{
 		if (this.smtpServer != null)
 			throw new IllegalStateException("SMTPServer already running");
@@ -121,7 +123,7 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 	 */
 	@PermitAll
 	@PreDestroy
-	public void stop()
+	public void stopServer()
 	{
 		log.info("Stopping SMTP service");
 		this.smtpServer.stop();

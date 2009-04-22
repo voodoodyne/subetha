@@ -17,11 +17,13 @@ import java.util.List;
 import java.util.Random;
 
 import javax.annotation.PostConstruct;
+import javax.context.ApplicationScoped;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJBException;
+import javax.inject.Current;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
@@ -32,19 +34,20 @@ import org.subethamail.core.admin.i.ExpiredException;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Config;
 
-import com.caucho.config.Service;
-
 /**
  * Performs encryption and decryption using a constant key.  The
  * key is set as a config value.  If the key doesn't exist when
  * the service is started, a random key is generated.
+ * 
+ * The BootstrapperBean is a dependency that must be init'd first.
  * 
  * Note that this bean does NOT have a remote interface.
  * 
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@Service
+
+@ApplicationScoped
 public class EncryptorBean extends EntityManipulatorBean implements Encryptor
 {
 	/** */
@@ -72,6 +75,11 @@ public class EncryptorBean extends EntityManipulatorBean implements Encryptor
 			IV[i] = (byte)(i+10);
 	}
 
+	
+	// TODO: Find a better way to insure the database is initialized.
+	@Current
+	BootstrapperBean boot;
+	
 	/**
 	 * @see EncryptorManagement#start()
 	 */

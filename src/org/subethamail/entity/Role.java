@@ -21,6 +21,10 @@ import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.validator.Length;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.Validator;
 
@@ -31,7 +35,7 @@ import org.subethamail.entity.i.Validator;
  * @author Jeff Schnitzer
  */
 @Entity
-//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class Role implements Serializable, Comparable<Role>
 {
@@ -48,7 +52,7 @@ public class Role implements Serializable, Comparable<Role>
 
 	/** */
 	@Column(nullable=false, length=Validator.MAX_ROLE_NAME)
-//	@Length(min=1)
+	@Length(min=1)
 	String name;
 
 	/** */
@@ -61,11 +65,11 @@ public class Role implements Serializable, Comparable<Role>
 	boolean owner;
 
 	/** */
-//	@CollectionOfElements
+	@CollectionOfElements
 	@JoinTable(name="RolePermission", joinColumns={@JoinColumn(name="roleId")})
 	@Enumerated(EnumType.STRING)
 	@Column(name="perm", nullable=false)
-//	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	Set<Permission> permissions;
 
 	/**

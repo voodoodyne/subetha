@@ -29,16 +29,8 @@ import com.caucho.config.Service;
  * 
  * @author Jeff Schnitzer
  */
-//@Service(objectName="subetha:service=MessageListenerAdapter")
-//// This depends annotation can be removed when JBoss fixes dependency bug.
-//@Depends({
-//	"jboss.j2ee:ear=subetha.ear,jar=core.jar,name=Injector,service=EJB3",
-//	"subetha:service=SMTP"
-//})
-//@SecurityDomain("subetha")
-//@RunAs("siteAdmin")
+
 @Local(SimpleMessageListener.class)
-@Service
 public class MessageListenerAdapter implements SimpleMessageListener, Lifecycle
 {
 	/** */

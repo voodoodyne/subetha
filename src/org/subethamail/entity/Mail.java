@@ -40,6 +40,14 @@ import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.annotations.Index;
+import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
+import org.hibernate.annotations.Table;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.TimeUtils;
 import org.subethamail.entity.i.Validator;
@@ -141,12 +149,12 @@ import org.subethamail.entity.i.Validator;
 	)
 })
 @Entity
-//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
-//@Table(
-//	appliesTo="Mail",
-//	indexes={@Index(name="mailMessageIdIndex", columnNames={"listId", "messageId"})}
-//)
+@Table(
+	appliesTo="Mail",
+	indexes={@Index(name="mailMessageIdIndex", columnNames={"listId", "messageId"})}
+)
 public class Mail implements Serializable, Comparable<Mail>
 {
 	/** */
@@ -176,7 +184,7 @@ public class Mail implements Serializable, Comparable<Mail>
 
 	/** */
 	@Column(nullable=false, length=Validator.MAX_MAIL_SUBJECT)
-//	@Index(name="subject")
+	@Index(name="subject")
 	String subject;
 
 	/**
@@ -195,21 +203,21 @@ public class Mail implements Serializable, Comparable<Mail>
 	 * This field is the normalized interpretation of the sender.  Mostly this gets
 	 * used to match for auto self moderation.
 	 */
-	//@Email
+//	@Email
 	// The validator failed on this address: SRS0=aHFE=YF=pobox.com=fredx@bounce2.pobox.com
 	// It looks valid to me, so I can only guess that the validation pattern is broken.
 	@Column(nullable=false, length=Validator.MAX_MAIL_SENDER)
-//	@Index(name="senderIndex")
+	@Index(name="senderIndex")
 	String senderNormal;
 
 	/** Date the entity was created, not from header fields */
 	@Column(nullable=false)
-//	@Index(name="arrivalDateIdx")
+	@Index(name="arrivalDateIdx")
 	Date arrivalDate;
 
 	/** Date from the header fields, or the arrivalDate if there was no header */
 	@Column(nullable=false)
-//	@Index(name="sentDateIdx")
+	@Index(name="sentDateIdx")
 	Date sentDate;
 
 	/** */
@@ -224,8 +232,8 @@ public class Mail implements Serializable, Comparable<Mail>
 
 	/** */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="parent")
-//	@Sort(type=SortType.NATURAL)
-//	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+	@Sort(type=SortType.NATURAL)
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	SortedSet<Mail> replies;
 
 	/** */
@@ -239,11 +247,11 @@ public class Mail implements Serializable, Comparable<Mail>
 	 * in using as our parent than what we have currently.  The first
 	 * entry is the best possible.
 	 */
-//	@CollectionOfElements
+	@CollectionOfElements
 	@JoinTable(name="WantedReference", joinColumns={@JoinColumn(name="mailId")})
 	@Column(name="messageId", nullable=false)
-//	@IndexColumn(name="ord")
-//	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+	@IndexColumn(name="ord")
+	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	//@Index(name="mailWantedRefIndex")	// TODO:  this doesn't seem to work
 	List<String> wantedReference;
 
@@ -252,7 +260,7 @@ public class Mail implements Serializable, Comparable<Mail>
 	 */
 	@Enumerated(EnumType.STRING)
 	@Column(nullable=true)
-//	@Index(name="holdIndex")
+	@Index(name="holdIndex")
 	HoldType hold;
 
 	/**

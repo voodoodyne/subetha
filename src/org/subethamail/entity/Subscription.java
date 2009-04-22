@@ -16,6 +16,8 @@ import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.subethamail.entity.i.Validator;
 
 /**
@@ -72,7 +74,7 @@ import org.subethamail.entity.i.Validator;
 	)
 })
 @Entity
-//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class Subscription extends SubscriptionBase
 {

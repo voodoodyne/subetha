@@ -4,6 +4,7 @@
  */
 package org.subethamail.core.smtp;
 
+import java.io.IOException;
 import java.net.InetAddress;
 
 /**
@@ -36,10 +37,22 @@ public interface SMTPManagement
 	 */
 	public void setHostName(String hostname);
 	
+	// TODO: Update default bind address to resin bind address
 	/**
 	 * The address which the server is bound to. We first attempt to
 	 * lookup the 'jboss.bind.address' system property. If it is null
 	 * the we have bound to *.
 	 */
 	public InetAddress getBinding();
+	
+	/**
+	 * Starts the server. 
+	 * @throws IOException 
+	 */
+	public void startServer() throws IOException;
+	
+	/**
+	 * Stops the server. 
+	 */
+	public void stopServer();
 }

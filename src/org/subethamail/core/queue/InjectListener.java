@@ -33,7 +33,10 @@ public class InjectListener extends EntityManipulatorBean implements MessageList
 	private static Log log = LogFactory.getLog(InjectListener.class);
 
 	/** */
-	@DeliveryQueue BlockingQueue<MailDelivery> outboundQueue;
+	//TODO: Figure out why the injector is puking on this.
+	@DeliveryQueue 
+//	@Name("delivery")
+	BlockingQueue<MailDelivery> outboundQueue ;//= new ArrayBlockingQueue<MailDelivery>(3);
 
 	/** */
 	public void onMessage(Message qMsg)

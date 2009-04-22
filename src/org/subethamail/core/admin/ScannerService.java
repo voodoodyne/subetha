@@ -1,65 +1,27 @@
-package org.subethamail.core.admin;
+/*
+ * $Id: PlumberBean.java 988 2008-12-30 08:51:13Z lhoriman $
+ * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/admin/PlumberBean.java $
+ */
 
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
+package org.subethamail.core.admin;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Current;
 
-import net.sourceforge.stripes.util.ResolverUtil;
-
-import org.subethamail.core.plugin.i.Blueprint;
-import org.subethamail.core.plugin.i.BlueprintRegistry;
-import org.subethamail.core.plugin.i.Filter;
-import org.subethamail.core.plugin.i.FilterRegistry;
-
-import com.caucho.config.Service;
-
-@Service
+/**
+ * 
+ * Simple services that starts the scanner.
+ * 
+ * @author Scott Hernandez
+ *
+ */
+//@Service
 public class ScannerService
 {
-	@Current
-	BlueprintRegistry	blueReg;
+	@Current Scanner scanner;
 	
-	@Current
-	FilterRegistry		filtReg;
-
 	@PostConstruct
-	public void postConstruct()
-	{
-		Package[] pkgs = Package.getPackages();
-		List<String> strPkgs = new Vector<String>();
-		for(Package p: pkgs)
-		{
-			strPkgs.add(p.getName());
-		}
-
-		registerBlueprints((String[]) strPkgs.toArray());
-		registerFilters((String[]) strPkgs.toArray());
-		
+	public void postConstruct(){
+		scanner.scan();
 	}
-	
-	private void registerFilters(String[] pkgs)
-	{
-		ResolverUtil<Filter> ru = new ResolverUtil<Filter>();
-		ru.findImplementations(Filter.class, pkgs);
-		Set<Class<? extends Filter>> classes = ru.getClasses();
-		for(Class<? extends Filter> c : classes)
-		{
-			filtReg.register(c.getName());
-		}		
-	}
-
-	private void registerBlueprints(String[] pkgs)
-	{
-		ResolverUtil<Blueprint> ru = new ResolverUtil<Blueprint>();
-		ru.findImplementations(Blueprint.class, pkgs);
-		Set<Class<? extends Blueprint>> classes = ru.getClasses();
-		for(Class<? extends Blueprint> c : classes)
-		{
-			blueReg.register(c.getName());
-		}	
-	}
-	
 }

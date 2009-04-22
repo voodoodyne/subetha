@@ -14,6 +14,8 @@ import javax.persistence.Transient;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
 import org.subethamail.entity.i.Validator;
@@ -33,7 +35,7 @@ import org.subethamail.entity.i.Validator;
  * @author Jeff Schnitzer
  */
 @Entity
-//@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 @SuppressWarnings("serial")
 public class Config implements Serializable, Comparable<Config>
 {

@@ -16,11 +16,11 @@
 <!--		mbean-name="subetha:name=Cleanup"-->
 <!--		type="org.subethamail.core.admin.CleanupBean"-->
 <!--		mbean-interface="org.subethamail.core.admin.CleanupManagement" />-->
-<!---->
-<!--	<resource-->
-<!--		mbean-name="subetha:name=SMTPService"-->
-<!--		type="org.subethamail.core.smtp.SMTPService"-->
-<!--		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />-->
+
+	<resource
+		mbean-name="subetha:name=SMTPService"
+		type="org.subethamail.core.smtp.SMTPService"
+		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />
 
 	<!-- Run every night at 4am (base 0 below) -->
 	<resin:ScheduledTask>
@@ -34,23 +34,24 @@
 	<jms:JmsConnectionFactory />
 
 	<jms:MemoryQueue>
-		<queue:InjectQueue/>
-		<Named>injection</Named>
+		<queue:DeliveryQueue/>
+<!--		<cfg:Name>delivery</cfg:Name>-->
+		<Named>delivery</Named>
 	</jms:MemoryQueue>
 
-	<ejb-message-bean class="org.subethamail.core.queue.InjectListener">
-		<destination>#{injection}</destination>
-	</ejb-message-bean>
-
 	<jms:MemoryQueue>
-		<queue:DeliveryQueue/>
-		<Named>delivery</Named>
+		<queue:InjectQueue/>
+<!--		<cfg:Name>injection</cfg:Name>-->
+		<Named>injection</Named>
 	</jms:MemoryQueue>
 
 	<ejb-message-bean class="org.subethamail.core.queue.DeliveryListener">
 		<destination>#{delivery}</destination>
 	</ejb-message-bean>
 
+	<ejb-message-bean class="org.subethamail.core.queue.InjectListener">
+		<destination>#{injection}</destination>
+	</ejb-message-bean>
 
 	<database jndi-name="jdbc/subetha">
 		<ping>true</ping>

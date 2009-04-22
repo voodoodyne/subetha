@@ -62,6 +62,7 @@ import org.subethamail.entity.i.PermissionException;
  * Implementation of the ListMgr interface.
  *
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
 @Stateless(name="ListMgr")
 public class ListMgrBean extends PersonalBean implements ListMgr
@@ -74,8 +75,10 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	@Current FilterRegistry filterReg;
 	@Current Admin admin;
 	@Current AccountMgr accountMgr;
-	
-	@InjectQueue 
+
+	//TODO: Figure out why the injector is puking on this.
+	@InjectQueue
+//	@Name("injection")
 	BlockingQueue<Long> q;	
 
 	@Current Manager wbManager;

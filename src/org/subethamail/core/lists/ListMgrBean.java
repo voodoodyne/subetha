@@ -77,9 +77,9 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	@Current AccountMgr accountMgr;
 
 	//TODO: Figure out why the injector is puking on this.
-	//@InjectQueue
-//	@Name("injection")
-	BlockingQueue<Long> q;	
+	@SuppressWarnings("unchecked")
+	@InjectQueue
+	BlockingQueue q;	
 
 	@Current Manager wbManager;
 
@@ -337,15 +337,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 
-		Set<String> allFilters = this.filterReg.getFilters();
+		Collection<Class<? extends Filter>> allFilters = this.filterReg.getFilters();
 
 		List<FilterData> available = new ArrayList<FilterData>(allFilters.size() - list.getEnabledFilters().size());
 		List<EnabledFilterData> enabled = new ArrayList<EnabledFilterData>(list.getEnabledFilters().size());
 
-		for (String filter: allFilters)
+		for (Class<? extends Filter> filterClass: allFilters)
 		{
-			Filter filt = (Filter)wbManager.getInstanceByName(filter);
-			EnabledFilter enabledFilt = list.getEnabledFilters().get(filter);
+			Filter filt = (Filter)wbManager.getInstanceByType(filterClass);
+			EnabledFilter enabledFilt = list.getEnabledFilters().get(filt.getClass().getName());
 			if (enabledFilt != null)
 				enabled.add(Transmute.enabledFilter(filt, enabledFilt));
 			else
@@ -664,6 +664,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldMessage(java.lang.Long)
 	 */
+	@SuppressWarnings("unchecked")
 	@WebMethod
 	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException, InterruptedException
 	{

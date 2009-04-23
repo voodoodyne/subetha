@@ -51,24 +51,24 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	/**
 	 * @see BlueprintRegistry#register(Blueprint)
 	 */
-	public void register(String clazz)
+	public void register(Class<? extends Blueprint> c)
 	{
 		if (log.isInfoEnabled())
-			log.info("Registering " + clazz);
+			log.info("Registering " + c.getName());
 
-		BlueprintData bpd = Transmute.blueprint((Blueprint)wbManager.getInstanceByName(clazz));
-		this.blueprints.put(clazz, bpd);
+		BlueprintData bpd = Transmute.blueprint((Blueprint)wbManager.getInstanceByType(c));
+		this.blueprints.put(c.getName(), bpd);
 	}
 
 	/**
 	 * @see BlueprintRegistry#deregister(Blueprint)
 	 */
-	public void deregister(String clazz)
+	public void deregister(Class<? extends Blueprint> c)
 	{
 		if (log.isInfoEnabled())
-			log.info("De-registering " + clazz);
+			log.info("De-registering " + c.getName());
 
-		this.blueprints.remove(clazz);
+		this.blueprints.remove(c.getName());
 	}
 
 	/**

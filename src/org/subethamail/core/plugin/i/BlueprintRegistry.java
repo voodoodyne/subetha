@@ -4,25 +4,21 @@
  */
 
 package org.subethamail.core.plugin.i;
-
-import javax.ejb.Local;
-
 /**
  * This local interface allows blueprints to be registered
  * 
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@Local
 public interface BlueprintRegistry
 {
 	/**
 	 * Register a blueprint. The blueprint will become available immediately.
 	 */
-	public void register(String clazz);
+	public void register(Class<? extends Blueprint> c);
 
 	/**
 	 * Deregister a blueprint.
 	 */
-	public void deregister(String clazz);
+	public void deregister(Class<? extends Blueprint> c);
 }

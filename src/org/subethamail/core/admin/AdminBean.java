@@ -73,9 +73,9 @@ public class AdminBean extends PersonalBean implements Admin
 	@Current PostOffice postOffice;
 
 	//TODO: Figure out why the injector is puking on this.	
-	//@InjectQueue 
-//	@Name("injection")
-	BlockingQueue<Long> q;
+	@SuppressWarnings("unchecked")
+	@InjectQueue
+	BlockingQueue q;
 
 	/**
 	 * For generating random passwords.
@@ -491,6 +491,7 @@ public class AdminBean extends PersonalBean implements Admin
 	 * @throws InterruptedException 
 	 * @see Admin#selfModerate(Long)
 	 */
+	@SuppressWarnings("unchecked")
 	@WebMethod
 	public int selfModerate(Long personId) throws NotFoundException
 	{

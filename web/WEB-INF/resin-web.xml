@@ -9,13 +9,14 @@
 	xmlns:queue="urn:java:org.subethamail.core.queue"
 	>
 
-	<ss:ResinLogin/>
-	<util:SubEthaAuthenticator/>
+<!--  These (specifically the ResingLogin) seems to cause the injector to find multiple matches. Seems to work just letting the class be found automatically. -->
+<!--	<ss:ResinLogin/>-->
+<!--	<util:SubEthaAuthenticator/>-->
 
-<!--	<resource-->
-<!--		mbean-name="subetha:name=Cleanup"-->
-<!--		type="org.subethamail.core.admin.CleanupBean"-->
-<!--		mbean-interface="org.subethamail.core.admin.CleanupManagement" />-->
+	<resource
+		mbean-name="subetha:name=Cleanup"
+		type="org.subethamail.core.admin.CleanupBean"
+		mbean-interface="org.subethamail.core.admin.CleanupManagement" />
 
 	<resource
 		mbean-name="subetha:name=SMTPService"
@@ -35,13 +36,11 @@
 
 	<jms:MemoryQueue>
 		<queue:DeliveryQueue/>
-<!--		<cfg:Name>delivery</cfg:Name>-->
 		<Named>delivery</Named>
 	</jms:MemoryQueue>
 
 	<jms:MemoryQueue>
 		<queue:InjectQueue/>
-<!--		<cfg:Name>injection</cfg:Name>-->
 		<Named>injection</Named>
 	</jms:MemoryQueue>
 

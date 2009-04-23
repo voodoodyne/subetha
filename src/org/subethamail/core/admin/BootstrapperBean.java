@@ -12,7 +12,11 @@ import java.net.URL;
 import javax.annotation.PostConstruct;
 import javax.context.ApplicationScoped;
 import javax.ejb.EJB;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.inject.Current;
 import javax.mail.internet.InternetAddress;
+import javax.transaction.UserTransaction;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,7 +46,7 @@ import org.subethamail.entity.Config;
 // the Backend Servlet (started with web container): http://bugs.caucho.com/view.php?id=3429
 
 //@Service
-@ApplicationScoped
+//@ApplicationScoped
 public class BootstrapperBean extends EntityManipulatorBean
 {
 	/** */
@@ -84,10 +88,13 @@ public class BootstrapperBean extends EntityManipulatorBean
 	/** */
 	@EJB Admin admin;
 
+	@Current UserTransaction ut;
+	
 	/**
 	 * @see BootstrapperManagement#start()
 	 */
 	@PostConstruct
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void start() throws Exception
 	{
 		// If we haven't been bootstrapped, we need to run.

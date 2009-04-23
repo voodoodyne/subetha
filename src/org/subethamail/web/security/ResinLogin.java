@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.context.ApplicationScoped;
 import javax.servlet.http.HttpServletRequest;
 
 import com.caucho.security.AbstractLogin;
@@ -18,6 +19,7 @@ import com.caucho.security.PasswordCredentials;
  * 
  * @author Jeff Schnitzer
  */
+@ApplicationScoped
 public class ResinLogin extends AbstractLogin
 {
 	private static final Logger log = Logger.getLogger(ResinLogin.class.getName());

@@ -17,8 +17,6 @@ if(t!=null){
 			t = ((ServletException)t).getRootCause();
 		else if (t instanceof JspException)
 			t = ((JspException)t).getRootCause();
-		else if (t instanceof org.apache.jasper.JasperException)
-			t = ((org.apache.jasper.JasperException)t).getRootCause();
 		else
 			t = t.getCause();
 		

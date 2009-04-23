@@ -89,7 +89,7 @@ public class Scanner
 		Set<Class<? extends Filter>> classes = ru.getClasses();
 		for(Class<? extends Filter> c : classes)
 		{
-			filtReg.register(c.getName());
+			if(!c.isInterface()) filtReg.register(c);
 		}		
 	}
 
@@ -108,7 +108,7 @@ public class Scanner
 		Set<Class<? extends Blueprint>> classes = ru.getClasses();
 		for(Class<? extends Blueprint> c : classes)
 		{
-			blueReg.register(c.getName());
+			if(!c.isInterface()) blueReg.register(c);
 		}	
 	}	
 }

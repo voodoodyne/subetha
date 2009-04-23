@@ -5,9 +5,9 @@
 
 package org.subethamail.core.filter;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collection;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import javax.inject.Current;
 import javax.inject.manager.Manager;
@@ -16,7 +16,6 @@ import javax.mail.MessagingException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.lists.i.FilterData;
 import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
@@ -41,28 +40,40 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	/**
 	 * Key is filter classname.  Make sure we have concurrent access.
 	 */
-	Map<String, FilterData> filters = new ConcurrentHashMap<String, FilterData>();
+	ConcurrentMap<String, Class<? extends Filter>> filters = new ConcurrentSkipListMap<String, Class<? extends Filter>>();
 
+	// TODO: try to use the above concurrent map to get rid of this; when I did I get NPEs on put
+//	Set<Class<? extends Filter>> filterClasses = new HashSet<Class<? extends Filter>>();
+	
 	/**
 	 * @see FilterRegistry#register(Filter)
 	 */
-	public void register(String filter)
+	public void register(Class<? extends Filter> c)
 	{
 		if (log.isInfoEnabled())
-			log.info("Registering " + filter);
+			log.info("Registering " + c.getName());
 		
-		this.filters.put(filter,null);
+		this.filters.putIfAbsent(c.getName(), c);
+//		this.filterClasses.add(c);
 	}
 
 	/**
 	 * @see FilterRegistry#deregister(Filter)
 	 */
-	public void deregister(String filter)
+	public void deregister(Class<? extends Filter> c)
 	{
 		if (log.isInfoEnabled())
-			log.info("De-registering " + filter);
+			log.info("De-registering " + c.getName());
 			
-		this.filters.remove(filter);
+		this.filters.remove(c.getName());
+	}
+
+	/**
+	 * @see FilterRegistry#getFilters()
+	 */
+	public Collection<Class<? extends Filter>> getFilters()
+	{
+		return this.filters.values();
 	}
 
 	/**
@@ -198,14 +209,5 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		if (log.isErrorEnabled())
 			log.error("Unregistered filter '" + enPlugin.getClassName() + 
 				"' is enabled on list '" + list.getEmail() + "'");
-	}
-
-
-	/**
-	 * @see FilterRegistry#getFilters()
-	 */
-	public Set<String> getFilters()
-	{
-		return this.filters.keySet();
 	}
 }

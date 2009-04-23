@@ -34,9 +34,8 @@ public class InjectListener extends EntityManipulatorBean implements MessageList
 
 	/** */
 	//TODO: Figure out why the injector is puking on this.
-	//@DeliveryQueue 
-//	@Name("delivery")
-	BlockingQueue<MailDelivery> outboundQueue ;//= new ArrayBlockingQueue<MailDelivery>(3);
+	@DeliveryQueue 
+	BlockingQueue outboundQueue ;//= new ArrayBlockingQueue<MailDelivery>(3);
 
 	/** */
 	public void onMessage(Message qMsg)

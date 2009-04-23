@@ -5,6 +5,7 @@
 
 package org.subethamail.core.plugin.i;
 
+import java.util.Collection;
 import java.util.Set;
 
 import javax.ejb.Local;
@@ -22,16 +23,16 @@ public interface FilterRegistry
 	 * Register a mail filter.  The filter will become available
 	 * immediately.
 	 */
-	public void register(String className);
+	public void register(Class<? extends Filter> c);
 	
 	/**
 	 * Deregister a mail filter.  The filter will no longer be processed.
 	 */
-	public void deregister(String className);
+	public void deregister(Class<? extends Filter> c);
 	
 	/**
 	 * @return all the available filters.
 	 */
-	public Set<String> getFilters();
+	public Collection<Class<? extends Filter>> getFilters();
 
 }

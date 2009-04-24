@@ -6,8 +6,8 @@
 package org.subethamail.core.filter;
 
 import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 
 import javax.inject.Current;
 import javax.inject.manager.Manager;
@@ -40,7 +40,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	/**
 	 * Key is filter classname.  Make sure we have concurrent access.
 	 */
-	ConcurrentMap<String, Class<? extends Filter>> filters = new ConcurrentSkipListMap<String, Class<? extends Filter>>();
+	ConcurrentMap<String, Class<? extends Filter>> filters = new ConcurrentHashMap<String, Class<? extends Filter>>();
 
 	// TODO: try to use the above concurrent map to get rid of this; when I did I get NPEs on put
 //	Set<Class<? extends Filter>> filterClasses = new HashSet<Class<? extends Filter>>();

@@ -65,6 +65,16 @@
 			>
 			<classpath refid="master.classpath" />
 		</javac>
+ 		
+		<taskdef name="propertize" classname="org.tagonist.propertize.PropertizeTask">
+			<classpath>
+				<path refid="master.classpath" />
+			</classpath>
+		</taskdef>		
+
+		<propertize verbose="false">
+			<fileset dir="${build.classes.dir}"/>
+		</propertize>
 	</target>
 	
 	<target name="client" depends="classes">

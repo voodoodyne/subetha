@@ -39,6 +39,8 @@ import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
 
+import com.caucho.config.Name;
+
 /**
  * Service which manages the Lucene search index and provides a
  * low-level search API.  Conceptually there are two indexes, the
@@ -99,7 +101,8 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	}
 
 	/** */
-	@Resource(mappedName="java:/SubEthaDS") DataSource ds;
+	@Current @Name("jdbc/subetha")
+	DataSource ds;
 
 	/** */
 	@Current Session mailSession;

@@ -7,8 +7,10 @@ package org.subethamail.core.util;
 
 import java.security.Principal;
 
-import javax.annotation.Resource;
+import javax.context.SessionScoped;
 import javax.ejb.SessionContext;
+import javax.inject.Current;
+import javax.inject.manager.Manager;
 
 import org.subethamail.common.NotFoundException;
 import org.subethamail.entity.Mail;
@@ -33,7 +35,8 @@ import org.subethamail.entity.i.PermissionException;
 public class PersonalBean extends EntityManipulatorBean
 {
 	/** */
-	@Resource protected SessionContext sessionContext;
+	@Current protected SessionContext sessionContext;
+	@Current protected Manager wbManager;
 	
 	/**
 	 * Obtains my personId from the security context, or null
@@ -41,7 +44,8 @@ public class PersonalBean extends EntityManipulatorBean
 	 */
 	protected Long getMyId()
 	{
-		Principal p = this.sessionContext.getCallerPrincipal();
+		//Principal p = this.sessionContext.getCallerPrincipal();
+		Principal p = wbManager.getInstanceByType(Principal.class);
 		
 		String name = p.getName();
 		

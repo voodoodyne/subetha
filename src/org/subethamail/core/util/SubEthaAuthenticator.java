@@ -15,6 +15,7 @@ import org.subethamail.entity.Person;
 import com.caucho.config.Name;
 import com.caucho.security.Authenticator;
 import com.caucho.security.Credentials;
+import com.caucho.security.PasswordCredentials;
 import com.caucho.server.security.CachingPrincipal;
 
 
@@ -38,11 +39,13 @@ public class SubEthaAuthenticator implements Authenticator
 	{
 		String idStr = user.getName();
 		Long id = Long.valueOf(idStr);
+		StringBuilder credPassword = new StringBuilder();
+		credPassword.append(((PasswordCredentials)credentials).getPassword());
 		
 		Person p = this.em.find(Person.class, id);
 		if (p == null)
 			return null;
-		else if (!p.checkPassword(credentials.toString()))
+		else if (!p.checkPassword(credPassword.toString()))
 			return null;
 		else
 		{

@@ -23,6 +23,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJBException;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
 
 import org.apache.commons.codec.binary.Base64;
@@ -84,6 +86,7 @@ public class EncryptorBean extends EntityManipulatorBean implements Encryptor
 	 * @see EncryptorManagement#start()
 	 */
 	@PostConstruct
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void start() throws Exception
 	{
 		// If we don't already have a key, generate one
@@ -99,6 +102,7 @@ public class EncryptorBean extends EntityManipulatorBean implements Encryptor
 		}
 		catch (NotFoundException ex)
 		{
+			if(log.isInfoEnabled()) log.info("Creating new cypher key for Encryptor, and storing it in the database");
 			Config cfg = new Config(KEY_CONFIG_ID, this.generateKey());
 			this.em.persist(cfg);
 		}

@@ -6,6 +6,7 @@
 package org.subethamail.web.action.auth;
 
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +84,7 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public boolean isLoggedIn()
 	{
-		return this.getCtx().getRequest().getUserPrincipal() != null;
+		return this.getPrincipal() != null;
 	}
 
 	/**
@@ -194,5 +195,14 @@ abstract public class AuthAction extends SubEthaAction
 			
 			return null;
 		}
+	}
+	/**
+	 * helper method to consolidate {@link Principal} acquisition
+	 * @return the current {@link Principal}
+	 */
+	protected Principal getPrincipal()
+	{
+		Principal p = this.getCtx().getRequest().getUserPrincipal();
+		return p;
 	}
 }

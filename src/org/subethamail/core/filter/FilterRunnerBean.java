@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.context.ApplicationScoped;
 import javax.inject.Current;
 import javax.inject.manager.Manager;
 import javax.mail.MessagingException;
@@ -31,6 +32,7 @@ import org.subethamail.entity.MailingList;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
+@ApplicationScoped
 public class FilterRunnerBean implements FilterRunner, FilterRegistry
 {
 	@Current Manager wbManager;

@@ -5,11 +5,8 @@
 
 package org.subethamail.web.action;
 
-import javax.inject.Current;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.tagonist.propertize.Property;
@@ -21,7 +18,6 @@ import org.tagonist.propertize.Property;
  */
 public class DeleteMessage extends AuthAction 
 {
-	@Current Archiver arch;
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(DeleteMessage.class);
@@ -33,6 +29,6 @@ public class DeleteMessage extends AuthAction
 	/** */
 	public void execute() throws Exception
 	{
-		this.listId = arch.deleteMail(this.msgId);
+		this.listId = Backend.instance().getArchiver().deleteMail(this.msgId);
 	}
 }

@@ -30,7 +30,7 @@ import org.subethamail.core.plugin.i.FilterRegistry;
  * 
  */
 
-public class Scanner
+public class ClassLoaderScanner
 {
 	@Current
 	BlueprintRegistry	blueReg;

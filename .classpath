@@ -29,8 +29,8 @@
 	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/javaee-16.jar" sourcepath="/RESIN_SRC"/>
 	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/javamail-141.jar"/>
 	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/jaxstream-15.jar"/>
-	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/resin.jar" sourcepath="/RESIN_SRC/modules"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/resin.jar" sourcepath="/RESIN_SRC/modules/resin/"/>
 	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/webutil.jar"/>
-	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/resin-kernel.jar" sourcepath="/RESIN_SRC/modules/kernel"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/resin-kernel.jar" sourcepath="/RESIN_SRC/modules/"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

@@ -76,7 +76,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	@Current Admin admin;
 	@Current AccountMgr accountMgr;
 
-	//TODO: Figure out why the injector is puking on this.
+	//TODO: Figure out why the injector is puking on this after the first time.
 	@SuppressWarnings("unchecked")
 	@InjectQueue
 	BlockingQueue q;	
@@ -364,7 +364,12 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 
-        Filter filt = (Filter)wbManager.getInstanceByName(className);
+        Filter filt;
+		try {
+			filt = (Filter)wbManager.getInstanceByType(Class.forName(className));
+		} catch (ClassNotFoundException e) {
+			throw new NotFoundException(e);
+		}
 
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
 

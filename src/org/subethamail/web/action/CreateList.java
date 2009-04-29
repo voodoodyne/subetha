@@ -8,7 +8,6 @@ package org.subethamail.web.action;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.inject.Current;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -18,8 +17,8 @@ import org.hibernate.validator.Length;
 import org.subethamail.common.SiteUtils;
 import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
-import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.entity.i.Validator;
+import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
@@ -31,8 +30,6 @@ import org.tagonist.propertize.Property;
  */
 public class CreateList extends AuthRequired 
 {
-	@Current
-	ListWizard listWiz;
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(CreateList.class);
@@ -126,7 +123,7 @@ public class CreateList extends AuthRequired
 		{
 			try
 			{
-				model.id = this.listWiz.createMailingList(listAddress, url, model.description, owners, model.blueprint);
+				model.id = Backend.instance().getListWizard().createMailingList(listAddress, url, model.description, owners, model.blueprint);
 			}
 			catch (InvalidListDataException ex)
 			{

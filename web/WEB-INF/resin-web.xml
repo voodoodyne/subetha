@@ -9,6 +9,9 @@
 	xmlns:queue="urn:java:org.subethamail.core.queue"
 	>
 
+  <logger name="com.caucho.config" level="severe"/>
+
+
 <!--  These (specifically the ResingLogin) seems to cause the injector to find multiple matches. Seems to work just letting the class be found automatically. -->
 <!--	<ss:ResinLogin/>-->
 <!--	<util:SubEthaAuthenticator/>-->

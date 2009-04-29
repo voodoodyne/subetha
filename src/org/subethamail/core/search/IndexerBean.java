@@ -39,6 +39,7 @@ import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
 
+import com.caucho.config.CauchoDeployment;
 import com.caucho.config.Name;
 
 /**
@@ -101,7 +102,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	}
 
 	/** */
-	@Current @Name("jdbc/subetha")
+	@Resource(name="java:comp/env/jdbc/subetha")
 	DataSource ds;
 
 	/** */

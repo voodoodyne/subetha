@@ -5,12 +5,9 @@
 
 package org.subethamail.web.action;
 
-import javax.inject.Current;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
-import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AuthCredentials;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.web.Backend;
@@ -25,8 +22,6 @@ import org.tagonist.propertize.Property;
  */
 public class EmailAddConfirm extends AuthAction 
 {
-	@Current AccountMgr accMgr;
-
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(EmailAddConfirm.class);
@@ -56,7 +51,7 @@ public class EmailAddConfirm extends AuthAction
 		{
 			try
 			{
-				AuthCredentials creds = accMgr.addEmail(model.token);
+				AuthCredentials creds = Backend.instance().getAccountMgr().addEmail(model.token);
 				
 				if (!this.isLoggedIn())
 					this.login(creds.getPrettyName(), creds.getPassword());

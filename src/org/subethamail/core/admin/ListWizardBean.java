@@ -83,12 +83,18 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	/**
 	 * @see ListWizard#createMailingList(InternetAddress, URL, String, InternetAddress[], String)
 	 */
+	@SuppressWarnings("unchecked")
 	@WebMethod
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
-		Blueprint blue = (Blueprint)wbManager.getInstanceByName(blueprintId);
-
-//		Blueprint blue = this.blueprints.get(blueprintId);
+		Blueprint blue = null;
+		Class<Blueprint> bc = null;
+		try {
+			bc = (Class<Blueprint>) Class.forName(blueprintId);
+			blue = (Blueprint)wbManager.getInstanceByType(bc);
+		}catch(ClassNotFoundException e){}
+		
+		if(blue==null) blue = (Blueprint)wbManager.getInstanceByName(blueprintId);
 
 		if (blue == null)
 			throw new IllegalStateException("Blueprint does not exist");

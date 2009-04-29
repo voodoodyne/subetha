@@ -7,8 +7,6 @@ package org.subethamail.core.util;
 
 import java.security.Principal;
 
-import javax.context.SessionScoped;
-import javax.ejb.SessionContext;
 import javax.inject.Current;
 import javax.inject.manager.Manager;
 
@@ -21,6 +19,9 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
+import com.caucho.security.SecurityContext;
+import com.caucho.security.SecurityContextException;
+
 /**
  * Base class for session EJBs which are called by authenticated
  * users.  Provides convenient methods to access who the user is.
@@ -31,21 +32,36 @@ import org.subethamail.entity.i.PermissionException;
  * out of the 2nd level cache.
  * 
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
 public class PersonalBean extends EntityManipulatorBean
 {
 	/** */
-	@Current protected SessionContext sessionContext;
 	@Current protected Manager wbManager;
+	//@Current protected SessionContext sessionContext;
+
 	
+//	@Current
+//	public void setSessionContext(SessionContext sc){
+//		if(this.sessionContext == null) this.sessionContext = sc;
+//	}
+//	
+
 	/**
 	 * Obtains my personId from the security context, or null
 	 * if there is no security context
 	 */
 	protected Long getMyId()
 	{
+		//TODO: Bug this with resin. The SessionContext was always null!
+		Principal p = null;
+	    try {
+	        p = SecurityContext.getUserPrincipal();
+	      } catch (SecurityContextException e) {
+	    	  throw new RuntimeException(e);
+	      }
 		//Principal p = this.sessionContext.getCallerPrincipal();
-		Principal p = wbManager.getInstanceByType(Principal.class);
+		//Principal p = wbManager.getInstanceByType(Principal.class);
 		
 		String name = p.getName();
 		

@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Email;
 import org.subethamail.core.acct.i.AccountMgr;
+import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
@@ -23,7 +24,6 @@ import org.tagonist.propertize.Property;
  */
 public class EmailAdd extends AuthRequired 
 {
-	@Current AccountMgr accMgr;
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(EmailAdd.class);
@@ -53,7 +53,7 @@ public class EmailAdd extends AuthRequired
 		{
 			try
 			{
-				accMgr.addEmailRequest(model.email);
+				Backend.instance().getAccountMgr().addEmailRequest(model.email);
 			}
 			catch (RuntimeException re)
 			{

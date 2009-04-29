@@ -5,11 +5,9 @@
 
 package org.subethamail.web.action;
 
-import javax.inject.Current;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.admin.i.Admin;
+import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.tagonist.propertize.Property;
 
@@ -20,7 +18,6 @@ import org.tagonist.propertize.Property;
  */
 public class DeleteList extends AuthRequired 
 {
-	@Current Admin admin;
 	/** */
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(DeleteList.class);
@@ -33,6 +30,6 @@ public class DeleteList extends AuthRequired
 	/** */
 	public void authExecute() throws Exception
 	{
-		this.wrongPassword = admin.deleteList(this.listId, this.password);
+		this.wrongPassword = Backend.instance().getAdmin().deleteList(this.listId, this.password);
 	}
 }

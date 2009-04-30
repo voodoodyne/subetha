@@ -19,7 +19,6 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.ejb.Stateless;
 import javax.inject.Current;
-import javax.inject.manager.Manager;
 import javax.jws.WebMethod;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -44,6 +43,7 @@ import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.FilterRegistry;
 import org.subethamail.core.queue.InjectQueue;
+import org.subethamail.core.util.InjectBeanHelper;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.EmailAddress;
@@ -80,8 +80,9 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	@SuppressWarnings("unchecked")
 	@InjectQueue
 	BlockingQueue q;	
-
-	@Current Manager wbManager;
+	
+	@Current InjectBeanHelper<Filter> fHelper;
+	
 
 	/*
 	 * (non-Javadoc)
@@ -344,7 +345,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 
 		for (Class<? extends Filter> filterClass: allFilters)
 		{
-			Filter filt = (Filter)wbManager.getInstanceByType(filterClass);
+			Filter filt = fHelper.getInstance(filterClass);
 			EnabledFilter enabledFilt = list.getEnabledFilters().get(filt.getClass().getName());
 			if (enabledFilt != null)
 				enabled.add(Transmute.enabledFilter(filt, enabledFilt));
@@ -364,13 +365,8 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 
-        Filter filt;
-		try {
-			filt = (Filter)wbManager.getInstanceByType(Class.forName(className));
-		} catch (ClassNotFoundException e) {
-			throw new NotFoundException(e);
-		}
-
+        Filter filt = fHelper.getInstance(className);
+        
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
 
 		if (enabled != null)
@@ -409,7 +405,10 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 
-        Filter filt = (Filter)wbManager.getInstanceByName(className);
+		Filter filt = fHelper.getInstance(className);
+		
+		if (filt == null)
+			throw new IllegalStateException("Filter does not exist or can't be created by inject manager");
 
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
 		if (enabled == null)

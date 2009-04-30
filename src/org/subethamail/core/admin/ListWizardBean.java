@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.context.ApplicationScoped;
 import javax.inject.Current;
-import javax.inject.manager.Manager;
 import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;
 
@@ -25,6 +24,7 @@ import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.core.plugin.i.BlueprintRegistry;
+import org.subethamail.core.util.InjectBeanHelper;
 import org.subethamail.core.util.Transmute;
 
 /**
@@ -41,8 +41,9 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 
 	/** */
 	@Current Admin admin;
-	@Current Manager wbManager;
 	
+	@Current InjectBeanHelper<Blueprint> bHelper;
+
 	/**
 	 * Key is blueprint classname.  Watch out for concurrency.
 	 */
@@ -56,7 +57,7 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 		if (log.isInfoEnabled())
 			log.info("Registering " + c.getName());
 
-		BlueprintData bpd = Transmute.blueprint((Blueprint)wbManager.getInstanceByType(c));
+		BlueprintData bpd = Transmute.blueprint(bHelper.getInstance(c));
 		this.blueprints.put(c.getName(), bpd);
 	}
 
@@ -83,19 +84,11 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	/**
 	 * @see ListWizard#createMailingList(InternetAddress, URL, String, InternetAddress[], String)
 	 */
-	@SuppressWarnings("unchecked")
 	@WebMethod
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
-		Blueprint blue = null;
-		Class<Blueprint> bc = null;
-		try {
-			bc = (Class<Blueprint>) Class.forName(blueprintId);
-			blue = (Blueprint)wbManager.getInstanceByType(bc);
-		}catch(ClassNotFoundException e){}
+		Blueprint blue = bHelper.getInstance(blueprintId);
 		
-		if(blue==null) blue = (Blueprint)wbManager.getInstanceByName(blueprintId);
-
 		if (blue == null)
 			throw new IllegalStateException("Blueprint does not exist");
 

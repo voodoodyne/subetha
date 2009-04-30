@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentMap;
 
 import javax.context.ApplicationScoped;
 import javax.inject.Current;
-import javax.inject.manager.Manager;
 import javax.mail.MessagingException;
 
 import org.apache.commons.logging.Log;
@@ -24,6 +23,7 @@ import org.subethamail.core.plugin.i.FilterRegistry;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.plugin.i.SendFilterContext;
+import org.subethamail.core.util.InjectBeanHelper;
 import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
@@ -35,7 +35,9 @@ import org.subethamail.entity.MailingList;
 @ApplicationScoped
 public class FilterRunnerBean implements FilterRunner, FilterRegistry
 {
-	@Current Manager wbManager;
+	@Current
+	protected InjectBeanHelper<Filter> fHelper;
+
 	/** */
 	private static Log log = LogFactory.getLog(FilterRunnerBean.class);
 
@@ -92,7 +94,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		{
 			try
 			{
-				Filter filter = (Filter)this.wbManager.getInstanceByName(enabled.getClassName());
+				Filter filter = fHelper.getInstance(enabled.getClassName());
 				if (filter == null)
 				{
 					// Log and ignore
@@ -141,7 +143,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		{
 			try 
 			{
-				Filter filter = (Filter)this.wbManager.getInstanceByName(enabled.getClassName());
+				Filter filter = fHelper.getInstance(enabled.getClassName());
 				if (filter == null)
 				{
 					// Log and ignore
@@ -178,7 +180,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		{
 			try 
 			{					
-				Filter filter = (Filter)this.wbManager.getInstanceByName(enabled.getClassName());
+				Filter filter = fHelper.getInstance(enabled.getClassName());
 				if (filter == null)
 				{
 					// Log and ignore

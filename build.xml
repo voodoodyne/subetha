@@ -33,7 +33,7 @@
 
 	<property name="resin.dir" location="/src/caucho/resin/" />
 	<property name="deploy.dir" location="${resin.dir}/webapps" />
-	<property name="expanded.dir" location="${deploy.dir}/${name}" />
+	<property name="expandedWar.dir" location="${deploy.dir}/${name}" />
 
 	<property name="javasrc.dir" location="src" />
 	<property name="web.dir" location="web" />
@@ -103,7 +103,7 @@
 			</classes>
 
 			<lib dir="${lib.dir}">
-				<exclude name="buildonly/**"/>
+				<exclude name="build-only/**"/>
 			</lib>
 		</war>
 	</target>
@@ -114,7 +114,7 @@
 
 	<target name="sync-deploy" depends="classes">
 		<property name="timeDriftLimit" value="100"/>
-		<sync todir="${expanded.dir}" granularity="${timeDriftLimit}" verbose="true" >
+		<sync todir="${expandedWar.dir}" granularity="${timeDriftLimit}" verbose="true" >
 			<fileset dir="${web.dir}" />
 			<preserveintarget>
 				<!-- resin crap -->
@@ -127,21 +127,46 @@
 			</preserveintarget>
 		</sync>
 		
-		<sync todir="${expanded.dir}/WEB-INF/classes" granularity="${timeDriftLimit}" verbose="true">
+		<sync todir="${expandedWar.dir}/WEB-INF/classes" granularity="${timeDriftLimit}" verbose="true">
 			<fileset dir="${build.classes.dir}" />
 			<preserveintarget>
 				<include name="META-INF/**" />
 			</preserveintarget>
 		</sync>
 		
-		<sync todir="${expanded.dir}/WEB-INF/classes/META-INF" granularity="${timeDriftLimit}" verbose="true">
+		<sync todir="${expandedWar.dir}/WEB-INF/classes/META-INF" granularity="${timeDriftLimit}" verbose="true">
 			<fileset dir="${javasrc.dir}/META-INF" />
 		</sync>
-		<sync todir="${expanded.dir}/WEB-INF/lib" verbose="true">
+		<sync todir="${expandedWar.dir}/WEB-INF/lib" verbose="true">
 			<fileset dir="${lib.dir}" >
-				<exclude name="**/buildonly/**" />
+				<exclude name="**/build-only/**" />
 			</fileset>
 		</sync>
+	</target>
+	
+	<target name="resin-deploy" depends="war">
+	    <taskdef name="resin-deploy" classname="com.caucho.ant.ResinDeploy">
+	        <classpath>
+	              <fileset dir="./lib">
+	                  <include name="/build-only/resin-ant.jar"/>
+	              </fileset>
+	        </classpath>
+	    </taskdef>
+		
+		<resindeploy warfile="${build.war.file}"/>
+	</target>
+	
+	<target name="precompile-jsp" description="precompile jsp">
+        <taskdef name="resin-jspc" classname="com.caucho.ant.Jspc">
+            <classpath>
+                  <fileset dir="./lib">
+                      <include name="/build-only/resin-ant.jar"/>
+                  </fileset>
+            </classpath>
+        </taskdef>
+
+        <resin-jspc rootDirectory="./web"/>
+		
 	</target>
 </project>
 

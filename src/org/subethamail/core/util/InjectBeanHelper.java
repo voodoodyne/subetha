@@ -9,6 +9,8 @@ public class InjectBeanHelper<T> {
 
 	@Current Manager mgr;
 	
+	public InjectBeanHelper(){}
+	
 	@SuppressWarnings("unchecked")
 	public T getInstance(String clazz){
 		T o = null;

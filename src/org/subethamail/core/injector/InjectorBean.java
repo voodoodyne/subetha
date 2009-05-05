@@ -98,6 +98,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector
 	public static final long MAX_SUBJECT_THREAD_PARENT_AGE_MILLIS = 1000L * 60L * 60L * 24L * 30L;
 
 	/** The "inbound queue" which processes injections */
+	@SuppressWarnings("unchecked")
 	//TODO: Figure out why the injector is puking on this.
 	@InjectQueue 
 	BlockingQueue inboundQueue;
@@ -204,6 +205,7 @@ public class InjectorBean extends EntityManipulatorBean implements Injector
 	/**
 	 * Factors out the exception catching.
 	 */
+	@SuppressWarnings("unchecked")
 	protected boolean injectImpl(String envelopeSender, String envelopeRecipient, InputStream mailData) throws MessagingException, LimitExceededException, IOException
 	{
 		if (log.isDebugEnabled())

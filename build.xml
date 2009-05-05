@@ -147,25 +147,33 @@
 	<target name="resin-deploy" depends="war">
 	    <taskdef name="resin-deploy" classname="com.caucho.ant.ResinDeploy">
 	        <classpath>
-	              <fileset dir="./lib">
-	                  <include name="/build-only/resin-ant.jar"/>
+	              <fileset dir="lib">
+	                  <include name="**"/>
 	              </fileset>
+                <fileset dir="${resin.dir}/lib/">
+	          	  	<include name="**"/>
+                </fileset>
 	        </classpath>
 	    </taskdef>
 		
-		<resindeploy warfile="${build.war.file}"/>
+		<resin-deploy warfile="${build.war.file}" server="127.0.0.1" 
+			 port="8080" user="subetha" password="subetha" 
+			 virtualhost="default" version="0.1" commitmessage="trying"/>
 	</target>
 	
 	<target name="precompile-jsp" description="precompile jsp">
         <taskdef name="resin-jspc" classname="com.caucho.ant.Jspc">
             <classpath>
-                  <fileset dir="./lib">
-                      <include name="/build-only/resin-ant.jar"/>
+                  <fileset dir="lib">
+                      <include name="**"/>
+                  </fileset>
+                  <fileset dir="${resin.dir}/lib/">
+            	  	<include name="**"/>
                   </fileset>
             </classpath>
         </taskdef>
 
-        <resin-jspc rootDirectory="./web"/>
+        <resin-jspc rootDirectory="web"/>
 		
 	</target>
 </project>

@@ -9,7 +9,13 @@
 	xmlns:queue="urn:java:org.subethamail.core.queue"
 	>
 
-  <logger name="com.caucho.config" level="severe"/>
+	<logger name="com.caucho" level="severe" />
+	<logger name="com.caucho.admin" level="severe" />
+	<logger name="com.caucho.config" level="finer" />
+	<logger name="com.caucho.config.j2ee" level="finest"/>
+	<logger name="com.caucho.config.inject" level="finest"/>
+	<logger name="com.caucho.loader" level="finer" />
+	<logger name="com.caucho.server" level="fine" />
 
 
 <!--  These (specifically the ResingLogin) seems to cause the injector to find multiple matches. Seems to work just letting the class be found automatically. -->

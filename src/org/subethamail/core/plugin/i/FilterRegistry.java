@@ -6,7 +6,6 @@
 package org.subethamail.core.plugin.i;
 
 import java.util.Collection;
-import java.util.Set;
 
 import javax.ejb.Local;
 

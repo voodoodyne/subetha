@@ -33,6 +33,7 @@ public class InjectListener extends EntityManipulatorBean implements MessageList
 	private static Log log = LogFactory.getLog(InjectListener.class);
 
 	/** */
+	@SuppressWarnings("unchecked")
 	//TODO: Figure out why the injector is puking on this.
 	@DeliveryQueue 
 	BlockingQueue outboundQueue ;//= new ArrayBlockingQueue<MailDelivery>(3);
@@ -54,6 +55,7 @@ public class InjectListener extends EntityManipulatorBean implements MessageList
 	/**
 	 * Looks up who gets that message and creates new queue entries.
 	 */
+	@SuppressWarnings("unchecked")
 	private void deliver(Long mailId)
 	{
 		if (log.isDebugEnabled())

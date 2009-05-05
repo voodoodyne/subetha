@@ -21,8 +21,6 @@ import org.subethamail.core.smtp.MessageListenerRegistry;
 import org.subethamail.smtp.TooMuchDataException;
 import org.subethamail.smtp.helper.SimpleMessageListener;
 
-import com.caucho.config.Service;
-
 /**
  * This acts as an SMTP listener and injects any interesting messages
  * into the Injector. 

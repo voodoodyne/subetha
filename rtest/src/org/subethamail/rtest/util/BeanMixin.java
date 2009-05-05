@@ -49,6 +49,7 @@ public class BeanMixin
 	/**
 	 * Establish administrator credentials
 	 */
+	@SuppressWarnings("unchecked")
 	public Object getInterface(Class clazz)
 	{
 		HessianProxyFactory fact = new HessianProxyFactory();

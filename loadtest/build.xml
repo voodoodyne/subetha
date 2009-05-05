@@ -8,7 +8,7 @@
 	entry point; imported by the top-level buildfile.
 -->
 
-<project name="loadtest" default="junit" basedir=".">
+<project name="loadtest" default="" basedir=".">
 
 	<property name="build.loadtest.classes.dir" location="${build.dir}/loadtest-classes" />
 	<property name="build.loadtest.jar.file" location="${build.dir}/loadtest.jar" />

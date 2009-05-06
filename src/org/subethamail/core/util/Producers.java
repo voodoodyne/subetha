@@ -3,7 +3,6 @@ package org.subethamail.core.util;
 import javax.annotation.Resource;
 import javax.context.ApplicationScoped;
 import javax.inject.Produces;
-import javax.inject.manager.InjectionPoint;
 import javax.mail.Session;
 import javax.sql.DataSource;
 
@@ -22,15 +21,15 @@ public class Producers {
 	DataSource ds;
 
 	@Resource(name="java:comp/env/mail")
-	Session ses;
+	Session ses = null;
 	
-	@Produces @Name("subetha")
-	Session	createMailSession(InjectionPoint ip){
+	@Produces //@Name("subetha")
+	Session	createMailSession(){
 		return this.ses;
 	}
 	
 	@Produces @Name("subetha")
-	DataSource createSubethaDS(InjectionPoint ip){
+	DataSource createSubethaDS(){
 		return this.ds;
 	}
 }

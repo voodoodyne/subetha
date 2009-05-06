@@ -316,7 +316,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 			ResultSet rs = null;
 			try
 			{
-				stmt = con.prepareStatement("select m.listId, m.id, m.sendernormal, m.subject, m.content from Mail m where m.hold is null");
+				stmt = con.prepareStatement("select m.listId, m.id, m.senderNormal, m.subject, m.content from Mail m where m.hold is null");
 				rs = stmt.executeQuery();
 
 				while (rs.next())

@@ -35,8 +35,8 @@ import org.subethamail.entity.MailingList;
 @ApplicationScoped
 public class FilterRunnerBean implements FilterRunner, FilterRegistry
 {
-	@Current
-	protected InjectBeanHelper<Filter> fHelper;
+	//@Current
+	protected InjectBeanHelper<Filter> fHelper = new InjectBeanHelper<Filter>();
 
 	/** */
 	private static Log log = LogFactory.getLog(FilterRunnerBean.class);

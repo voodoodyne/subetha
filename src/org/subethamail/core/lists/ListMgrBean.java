@@ -81,7 +81,8 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	@InjectQueue
 	BlockingQueue q;	
 	
-	@Current InjectBeanHelper<Filter> fHelper;
+	//@Current 
+	InjectBeanHelper<Filter> fHelper = new InjectBeanHelper<Filter>();
 	
 
 	/*

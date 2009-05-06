@@ -42,7 +42,8 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	/** */
 	@Current Admin admin;
 	
-	@Current InjectBeanHelper<Blueprint> bHelper;
+	//@Current 
+	InjectBeanHelper<Blueprint> bHelper = new InjectBeanHelper<Blueprint>();
 
 	/**
 	 * Key is blueprint classname.  Watch out for concurrency.

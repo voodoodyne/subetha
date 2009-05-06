@@ -18,18 +18,32 @@ import com.caucho.config.Name;
 public class Producers {
 
 	@Resource(name="java:comp/env/jdbc/subetha")
-	DataSource ds;
+	private DataSource ds;
 
-	@Resource(name="java:comp/env/mail")
-	Session ses = null;
+	@Resource(name="java:comp/env/outbound-mail")
+	private Session ses;
 	
-	@Produces //@Name("subetha")
-	Session	createMailSession(){
-		return this.ses;
-	}
+//	@Current
+//	Manager mgr;
+
+//	@Produces //@Name("subetha")
+//	public Session createMailSession(){
+//		return this.ses;
+//	}
 	
 	@Produces @Name("subetha")
-	DataSource createSubethaDS(){
+	public DataSource createSubethaDS(){
 		return this.ds;
 	}
+	
+	//Didn't work.
+//	@Produces
+//	public InjectBeanHelper<Filter> createFilterIBH(){
+//		return new InjectBeanHelper<Filter>(this.mgr);
+//	}
+//	
+//	@Produces
+//	public InjectBeanHelper<Blueprint> createBlueprintIBH(){
+//		return new InjectBeanHelper<Blueprint>(this.mgr);
+//	}
 }

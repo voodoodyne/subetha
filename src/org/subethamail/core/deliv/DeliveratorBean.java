@@ -7,6 +7,7 @@ package org.subethamail.core.deliv;
 
 import java.io.IOException;
 
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Current;
 import javax.jws.WebMethod;
@@ -48,7 +49,8 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 	@Current Detacher detacher;
 
 	/** */
-	@Current private Session mailSession;
+	@Resource(name="java:comp/env/outbound-mail") 
+	private Session mailSession;
 
 	/**
 	 * @see Deliverator#deliverToEmail(Long, String)

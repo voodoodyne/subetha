@@ -1,18 +1,17 @@
 package org.subethamail.core.util;
 
-import javax.inject.Current;
-import javax.inject.New;
 import javax.inject.manager.Manager;
 
 import com.caucho.config.inject.InjectManager;
 
-// TODO: Figure out why this isn't registered in the inject Manager
-@New
 public class InjectBeanHelper<T> {
 
-	@Current Manager mgr = InjectManager.create();
+	Manager mgr = InjectManager.create();
 	
-	public InjectBeanHelper(){}
+//	@Initializer
+//	public InjectBeanHelper(Manager m){
+//		this.mgr = m;
+//	}
 	
 	@SuppressWarnings("unchecked")
 	public T getInstance(String clazz){

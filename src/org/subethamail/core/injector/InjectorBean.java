@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Current;
 import javax.jws.WebMethod;
@@ -109,7 +110,8 @@ public class InjectorBean extends EntityManipulatorBean implements Injector
 	@Current PostOffice postOffice;
 
 	/** */
-	@Current private Session mailSession;
+	@Resource(name="java:comp/env/outbound-mail")
+	private Session mailSession;
 
 	/*
 	 * (non-Javadoc)

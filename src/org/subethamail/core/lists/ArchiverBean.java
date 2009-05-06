@@ -26,9 +26,9 @@ import java.util.zip.CheckedOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Current;
 import javax.jws.WebMethod;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -88,7 +88,8 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	private static Log log = LogFactory.getLog(ArchiverBean.class);
 
 	/** */
-	@Current private Session mailSession;
+	@Resource(name="java:comp/env/outbound-mail")
+	private Session mailSession;
 
 	/*
 	 * (non-Javadoc)

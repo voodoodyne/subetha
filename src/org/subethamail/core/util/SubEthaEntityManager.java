@@ -8,12 +8,18 @@ package org.subethamail.core.util;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.context.ApplicationScoped;
-import javax.inject.Current;
 import javax.inject.Initializer;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.FlushModeType;
+import javax.persistence.LockModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
@@ -41,23 +47,29 @@ import com.caucho.config.Name;
  * already defines a find() method that returns null.
  * 
  * @author Jeff Schnitzer
+ * @author Scott Hernandez
  */
 @ApplicationScoped
 @Name("subetha")
-public class SubEthaEntityManager extends EntityManagerWrapper
+public class SubEthaEntityManager implements EntityManager
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(SubEthaEntityManager.class);
 	
-	/**
-	 * A normal entity manager is wrapped, providing the new methods.
-	 */
+	/** The entity manager to use under the covers */
+	@Resource(name="java:comp/EntityManager") 
+	private EntityManager base;
+
+	/** Injection based construction */
 	@Initializer
-	public SubEthaEntityManager(@Current EntityManager base)
-	{
-		super(base);
+	public SubEthaEntityManager(){
+		//do nothing
 	}
-	
+
+	/** Manual Constructor (for "new" calls)*/
+	public SubEthaEntityManager(EntityManager b){
+		this.base = b;
+	}
 	/**
 	 * Similar to find(), but throws a NotFoundException instead of returning null
 	 * when the key does not exist.
@@ -635,5 +647,170 @@ public class SubEthaEntityManager extends EntityManagerWrapper
 		q.setMaxResults(count);
 		
 		return q.getResultList();
+	}
+
+
+	public void persist(Object arg0) {
+		this.base.persist(arg0);
+	}
+
+
+	public <T> T merge(T arg0) {
+		return this.base.merge(arg0);
+	}
+
+
+	public void remove(Object arg0) {
+		this.base.remove(arg0);
+	}
+
+
+	public <T> T find(Class<T> arg0, Object arg1) {
+		return this.base.find(arg0, arg1);
+	}
+
+
+	public <T> T getReference(Class<T> arg0, Object arg1) {
+		return this.base.getReference(arg0, arg1);
+	}
+
+
+	public void flush() {
+		this.base.flush();
+	}
+
+
+	public void setFlushMode(FlushModeType arg0) {
+		this.base.setFlushMode(arg0);
+	}
+
+
+	public FlushModeType getFlushMode() {
+		return this.base.getFlushMode();
+	}
+
+
+	public void lock(Object arg0, LockModeType arg1) {
+		this.base.lock(arg0, arg1);
+	}
+
+
+	public void refresh(Object arg0) {
+		this.base.refresh(arg0);
+	}
+
+
+	public void clear() {
+		this.base.clear();
+	}
+
+
+	public boolean contains(Object arg0) {
+		return this.base.contains(arg0);
+	}
+
+
+	public Query createQuery(String arg0) {
+		return this.base.createQuery(arg0);
+	}
+
+
+	public Query createNamedQuery(String arg0) {
+		return this.base.createNamedQuery(arg0);
+	}
+
+
+	public Query createNativeQuery(String arg0) {
+		return this.base.createNativeQuery(arg0);
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public Query createNativeQuery(String arg0, Class arg1) {
+		return this.base.createNativeQuery(arg0, arg1);
+	}
+
+
+	public Query createNativeQuery(String arg0, String arg1) {
+		return this.base.createNativeQuery(arg0, arg1);
+	}
+
+
+	public void joinTransaction() {
+		this.base.joinTransaction();
+	}
+
+
+	public Object getDelegate() {
+		return this.base.getDelegate();
+	}
+
+
+	public void close() {
+		this.base.clear();
+	}
+
+
+	public boolean isOpen() {
+		return this.base.isOpen();
+	}
+
+
+	public EntityTransaction getTransaction() {
+		return this.base.getTransaction();
+	}
+
+
+	public void clear(Object arg0) {
+		this.base.clear(arg0);
+	}
+
+
+	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2) {
+		return this.base.find(arg0, arg1, arg2);
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2, Map arg3) {
+		return this.base.find(arg0, arg1, arg2, arg3);
+	}
+
+
+	public EntityManagerFactory getEntityManagerFactory() {
+		return this.getEntityManagerFactory();
+	}
+
+
+	public LockModeType getLockMode(Object arg0) {
+		return this.base.getLockMode(arg0);
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public Map getProperties() {
+		return this.base.getProperties();
+	}
+
+
+	public Set<String> getSupportedProperties() {
+		return this.base.getSupportedProperties();
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public void lock(Object arg0, LockModeType arg1, Map arg2) {
+		this.base.lock(arg0, arg1, arg2);		
+	}
+
+
+	public void refresh(Object arg0, LockModeType arg1) {
+		this.base.refresh(arg0, arg1);		
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public void refresh(Object arg0, LockModeType arg1, Map arg2) {	
+		this.base.refresh(arg0, arg1, arg2);
 	}
 }

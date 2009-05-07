@@ -33,7 +33,6 @@ import org.subethamail.core.util.Transmute;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@ApplicationScoped
 public class ListWizardBean implements ListWizard, BlueprintRegistry
 {
 	/** */

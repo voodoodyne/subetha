@@ -17,19 +17,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.deliv.i.Deliverator;
-import org.subethamail.core.util.EntityManipulatorBean;
+import org.subethamail.core.util.SubEthaEntityManager;
+
+import com.caucho.config.Name;
 
 /**
  * Processes delivery queue messages by creating an actual STMP message
  * using JavaMail, relaying it through the deliverator.
  */
 @MessageDriven
-public class DeliveryListener extends EntityManipulatorBean implements MessageListener{
+public class DeliveryListener implements MessageListener{
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(DeliveryListener.class);
 
 	/** */
 	@Current Deliverator deliverator;
+
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
 
 	/**
 	 */

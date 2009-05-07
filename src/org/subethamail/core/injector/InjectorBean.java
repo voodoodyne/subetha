@@ -42,8 +42,8 @@ import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.InjectQueue;
-import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.core.util.OwnerAddress;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
@@ -53,12 +53,14 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.i.Permission;
 
+import com.caucho.config.Name;
+
 /**
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
 @Stateless(name="Injector")
-public class InjectorBean extends EntityManipulatorBean implements Injector
+public class InjectorBean implements Injector
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(InjectorBean.class);
@@ -112,6 +114,10 @@ public class InjectorBean extends EntityManipulatorBean implements Injector
 	/** */
 	@Resource(name="java:comp/env/outbound-mail")
 	private Session mailSession;
+
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
 
 	/*
 	 * (non-Javadoc)

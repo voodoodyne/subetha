@@ -10,19 +10,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
 import javax.mail.internet.InternetAddress;
-import javax.transaction.UserTransaction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Admin;
-import org.subethamail.core.util.EntityManipulatorBean;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Config;
+
+import com.caucho.config.Name;
 
 /**
  * This bean really is only used when run for the first time
@@ -46,7 +46,7 @@ import org.subethamail.entity.Config;
 
 //@Service
 //@ApplicationScoped
-public class BootstrapperBean extends EntityManipulatorBean
+public class BootstrapperBean
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(BootstrapperBean.class);
@@ -85,10 +85,12 @@ public class BootstrapperBean extends EntityManipulatorBean
 	public static final String BOOTSTRAPPED_CONFIG_ID = "bootstrapped";
 	
 	/** */
-	@EJB Admin admin;
+	@Current Admin admin;
 
-	@Current UserTransaction ut;
-	
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
+
 	/**
 	 * @see BootstrapperManagement#start()
 	 */

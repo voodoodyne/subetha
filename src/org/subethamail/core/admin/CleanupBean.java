@@ -12,9 +12,11 @@ import javax.annotation.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.core.util.EntityManipulatorBean;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.SubscriptionHold;
+
+import com.caucho.config.Name;
 
 /**
  * Service which wakes up once a night and performs cleanup operations.
@@ -24,7 +26,7 @@ import org.subethamail.entity.SubscriptionHold;
  * @author Scott Hernandez
  */
 @Named("cleanupBean")
-public class CleanupBean extends EntityManipulatorBean implements CleanupManagement, Runnable
+public class CleanupBean implements CleanupManagement, Runnable
 {
 	/** */
 	private static Logger log = LoggerFactory.getLogger(CleanupBean.class);
@@ -34,6 +36,10 @@ public class CleanupBean extends EntityManipulatorBean implements CleanupManagem
 
 	/** Keep held messages around for 7 days */
 	public static final long MAX_HELD_MSG_AGE_MILLIS = 1000L * 60L * 60L * 24L * 7L;
+
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
 
 	/*
 	 * (non-Javadoc)

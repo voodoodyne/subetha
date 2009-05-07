@@ -18,7 +18,6 @@ import java.util.List;
 import javax.annotation.Named;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Current;
 import javax.mail.MessagingException;
@@ -32,7 +31,7 @@ import org.subethamail.common.SearchException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.search.i.Indexer;
 import org.subethamail.core.search.i.SimpleResult;
-import org.subethamail.core.util.EntityManipulatorBean;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 
 import com.caucho.config.Name;
@@ -49,7 +48,7 @@ import com.caucho.config.Name;
  */
 
 @Named("indexerBean")
-public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer, Runnable
+public class IndexerBean implements IndexerManagement, Indexer, Runnable
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(IndexerBean.class);
@@ -70,7 +69,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	static IndexMgr index1 = new IndexMgr(new File(BASE_DIR, "1"));
 	static IndexMgr index2 = new IndexMgr(new File(BASE_DIR, "2"));
 
-	@EJB Indexer ind;
+	@Current Indexer ind;
 
 	@Override
 	public void run()
@@ -84,6 +83,10 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 
 	/** */
 	@Current Session mailSession;
+
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
 
 	/**
 	 * @return the currently in-use index manager.

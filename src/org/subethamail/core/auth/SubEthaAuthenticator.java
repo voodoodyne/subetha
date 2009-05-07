@@ -30,7 +30,8 @@ import com.caucho.security.PasswordCredentials;
 public class SubEthaAuthenticator implements Authenticator
 {
 	/** */
-	@Name("subetha") SubEthaEntityManager em;
+	@Name("subetha") 
+	SubEthaEntityManager em;
 	
 	/**
 	 * Authenticate the user by the password, returning null on failure.

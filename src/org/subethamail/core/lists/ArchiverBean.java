@@ -27,8 +27,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Current;
 import javax.jws.WebMethod;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -77,12 +77,12 @@ import com.sun.mail.util.LineInputStream;
 @Stateless(name="Archiver")
 public class ArchiverBean extends PersonalBean implements Archiver
 {
-	@EJB Deliverator deliverator;
-	@EJB FilterRunner filterRunner;
-	@EJB Detacher detacher;
-	@EJB ListMgr listManager;
-	@EJB Injector injector;
-	@EJB Indexer indexer;
+	@Current Deliverator deliverator;
+	@Current FilterRunner filterRunner;
+	@Current Detacher detacher;
+	@Current ListMgr listManager;
+	@Current Injector injector;
+	@Current Indexer indexer;
 
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(ArchiverBean.class);

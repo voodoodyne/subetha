@@ -22,18 +22,23 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.TrivialDataSource;
-import org.subethamail.core.util.EntityManipulatorBean;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Attachment;
 import org.subethamail.entity.Mail;
+
+import com.caucho.config.Name;
 
 /**
  * @author Jeff Schnitzer
  */
 @Stateless(name="Detacher")
-public class DetacherBean extends EntityManipulatorBean implements Detacher
+public class DetacherBean implements Detacher
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(DetacherBean.class);
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
 	
 	/*
 	 * (non-Javadoc)

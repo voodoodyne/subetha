@@ -33,8 +33,10 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
-import org.subethamail.core.util.EntityManipulatorBean;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Config;
+
+import com.caucho.config.Name;
 
 /**
  * Performs encryption and decryption using a constant key.  The
@@ -50,7 +52,7 @@ import org.subethamail.entity.Config;
  */
 
 @ApplicationScoped
-public class EncryptorBean extends EntityManipulatorBean implements Encryptor
+public class EncryptorBean implements Encryptor
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(EncryptorBean.class);
@@ -81,6 +83,10 @@ public class EncryptorBean extends EntityManipulatorBean implements Encryptor
 	// TODO: Find a better way to insure the database is initialized.
 	@Current
 	BootstrapperBean boot;
+
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
 	
 	/**
 	 * @see EncryptorManagement#start()

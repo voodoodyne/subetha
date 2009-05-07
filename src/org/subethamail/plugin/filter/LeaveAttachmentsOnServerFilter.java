@@ -8,7 +8,7 @@ package org.subethamail.plugin.filter;
 import java.io.IOException;
 import java.util.Enumeration;
 
-import javax.ejb.EJB;
+import javax.inject.Current;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
@@ -35,7 +35,7 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(LeaveAttachmentsOnServerFilter.class);
 
-	@EJB Archiver archiver;
+	@Current Archiver archiver;
 
 	/*
 	 * (non-Javadoc)

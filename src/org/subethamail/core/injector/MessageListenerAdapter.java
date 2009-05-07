@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.Local;
+import javax.inject.Current;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +36,8 @@ public class MessageListenerAdapter implements SimpleMessageListener, Lifecycle
 	
 	/**
 	 */
-	@EJB MessageListenerRegistry registry;
-	@EJB Injector injector;
+	@Current MessageListenerRegistry registry;
+	@Current Injector injector;
 
 	/**
 	 * @see Lifecycle#start()

@@ -27,8 +27,8 @@ import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
-import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.core.util.OwnerAddress;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
@@ -38,6 +38,8 @@ import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 
+import com.caucho.config.Name;
+
 /**
  * Implementation of the PostOffice interface.
  * 
@@ -45,7 +47,7 @@ import org.subethamail.entity.SubscriptionHold;
  * @author Scott Hernandez
  */
 @Stateless(name="PostOffice")
-public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
+public class PostOfficeBean implements PostOffice
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(PostOfficeBean.class);
@@ -55,6 +57,10 @@ public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 
 	/** */
 	@Current Encryptor encryptor;
+
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
 	
 	/** 
 	 * Builds a message from a velocity template, context, and some

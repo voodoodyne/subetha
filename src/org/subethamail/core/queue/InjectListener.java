@@ -17,9 +17,11 @@ import javax.jms.ObjectMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.core.util.EntityManipulatorBean;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Subscription;
+
+import com.caucho.config.Name;
 
 /**
  * Queue which takes the individual, stored messages and turns them into
@@ -28,7 +30,7 @@ import org.subethamail.entity.Subscription;
  * messages.
  */
 @MessageDriven
-public class InjectListener extends EntityManipulatorBean implements MessageListener{
+public class InjectListener implements MessageListener{
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(InjectListener.class);
 
@@ -37,6 +39,10 @@ public class InjectListener extends EntityManipulatorBean implements MessageList
 	//TODO: Figure out why the injector is puking on this.
 	@DeliveryQueue 
 	BlockingQueue outboundQueue ;//= new ArrayBlockingQueue<MailDelivery>(3);
+
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
 
 	/** */
 	public void onMessage(Message qMsg)

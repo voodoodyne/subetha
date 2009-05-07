@@ -7,7 +7,7 @@ package org.subethamail.plugin.filter;
 
 import java.io.IOException;
 
-import javax.ejb.EJB;
+import javax.inject.Current;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMultipart;
@@ -33,7 +33,7 @@ public class SendAsTextFilter extends GenericFilter
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(SendAsTextFilter.class);
 
-	@EJB Archiver archiver;
+	@Current Archiver archiver;
 
 	/*
 	 * (non-Javadoc)

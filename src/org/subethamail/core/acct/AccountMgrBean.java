@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Current;
 import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;
 
@@ -60,9 +60,9 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 
 	/**
 	 */
-	@EJB PostOffice postOffice;
-	@EJB Encryptor encryptor;
-	@EJB Admin admin;
+	@Current PostOffice postOffice;
+	@Current Encryptor encryptor;
+	@Current Admin admin;
 
 	/**
 	 * @see AccountMgr#getSelf()

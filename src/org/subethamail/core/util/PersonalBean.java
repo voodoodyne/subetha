@@ -5,9 +5,6 @@
 
 package org.subethamail.core.util;
 
-import javax.inject.Current;
-import javax.inject.manager.Manager;
-
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.auth.SubEthaPrincipal;
 import org.subethamail.entity.Mail;
@@ -18,6 +15,7 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
+import com.caucho.config.Name;
 import com.caucho.security.SecurityContext;
 import com.caucho.security.SecurityContextException;
 
@@ -33,10 +31,9 @@ import com.caucho.security.SecurityContextException;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-public class PersonalBean extends EntityManipulatorBean
+public class PersonalBean
 {
 	/** */
-	@Current protected Manager wbManager;
 	//@Current protected SessionContext sessionContext;
 
 	
@@ -45,6 +42,10 @@ public class PersonalBean extends EntityManipulatorBean
 //		if(this.sessionContext == null) this.sessionContext = sc;
 //	}
 //	
+
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
 
 	/**
 	 * Obtains my personId from the security context, or null

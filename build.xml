@@ -31,7 +31,7 @@
 	<property name="build.war.file" location="${build.dir}/${name}.war" />
 	<property name="build.client.file" location="${build.dir}/${name}-client.jar" />
 
-	<property name="resin.dir" location="/src/caucho/resin/" />
+	<property name="resin.dir" location="/java/resin-4.0.0/" />
 	<property name="deploy.dir" location="${resin.dir}/webapps" />
 	<property name="expandedWar.dir" location="${deploy.dir}/${name}" />
 

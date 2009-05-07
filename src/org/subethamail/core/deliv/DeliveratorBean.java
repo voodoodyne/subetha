@@ -26,19 +26,21 @@ import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.plugin.i.IgnoreException;
-import org.subethamail.core.util.EntityManipulatorBean;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 
+import com.caucho.config.Name;
+
 /**
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
 @Stateless
-public class DeliveratorBean extends EntityManipulatorBean implements Deliverator
+public class DeliveratorBean implements Deliverator
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(DeliveratorBean.class);
@@ -51,6 +53,10 @@ public class DeliveratorBean extends EntityManipulatorBean implements Deliverato
 	/** */
 	@Resource(name="java:comp/env/outbound-mail") 
 	private Session mailSession;
+
+	/** */
+	@Name("subetha")
+	protected SubEthaEntityManager em;
 
 	/**
 	 * @see Deliverator#deliverToEmail(Long, String)

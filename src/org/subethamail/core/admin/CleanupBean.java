@@ -8,6 +8,8 @@ package org.subethamail.core.admin;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Named;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.subethamail.core.util.EntityManipulatorBean;
@@ -21,6 +23,7 @@ import org.subethamail.entity.SubscriptionHold;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
+@Named("cleanupBean")
 public class CleanupBean extends EntityManipulatorBean implements CleanupManagement, Runnable
 {
 	/** */

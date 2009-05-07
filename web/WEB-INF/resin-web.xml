@@ -7,15 +7,16 @@
 	xmlns:util="urn:java:org.subethamail.core.util"
 	xmlns:ss="urn:java:org.subethamail.web.security"
 	xmlns:queue="urn:java:org.subethamail.core.queue"
+	xmlns:search="urn:org.subethamail.core.search"
 	>
 
 	<logger name="com.caucho" level="config" />
-<!--	<logger name="com.caucho.admin" level="severe" />-->
-<!--	<logger name="com.caucho.config" level="config" />-->
+	<logger name="com.caucho.admin" level="severe" />
+	<logger name="com.caucho.config" level="finest" />
 <!--	<logger name="com.caucho.config.j2ee" level="finest"/>-->
 <!--	<logger name="com.caucho.config.inject" level="finest"/>-->
-<!--	<logger name="com.caucho.loader" level="config" />-->
-<!--	<logger name="com.caucho.server" level="fine" />-->
+	<logger name="com.caucho.loader" level="fine" />
+	<logger name="com.caucho.server" level="fine" />
 
 
 <!--  These (specifically the ResingLogin) seems to cause the injector to find multiple matches. Seems to work just letting the class be found automatically. -->
@@ -32,13 +33,15 @@
 		type="org.subethamail.core.smtp.SMTPService"
 		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />
 
-	<!-- Run every night at 4am (base 0 below) -->
-<!--	<resin:ScheduledTask>-->
-<!--		<task>-->
-<!--			<adm:CleanupBean />-->
-<!--		</task>-->
-<!--		<cron>0 3 *</cron>-->
-<!--	</resin:ScheduledTask>-->
+	<!-- Every night at 4am run cleanup -->
+	<resin:ScheduledTask task="#{cleanupBean}">
+		<cron>0 4 *</cron>
+	</resin:ScheduledTask>
+
+	<!-- Every 5 minutes run the indexer-->
+	<resin:ScheduledTask task="#{indexerBean}">
+		<cron>5</cron>
+	</resin:ScheduledTask>
 
 	<!-- JMS -->
 	<jms:JmsConnectionFactory />

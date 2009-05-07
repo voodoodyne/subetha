@@ -14,18 +14,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
+import javax.annotation.Named;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Current;
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
@@ -51,17 +48,11 @@ import com.caucho.config.Name;
  * @author Scott Hernandez
  */
 
-// TODO: Add cron task in resin to do this.
-public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer
+@Named("indexerBean")
+public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer, Runnable
 {
 	/** */
 	private static Log log = LogFactory.getLog(IndexerBean.class);
-
-	/** Milliseconds before update after server start; 5 minutes */
-	static final long UPDATE_DELAY_MILLIS = 1000 * 60 * 5;
-
-	/** Milliseconds between updates; 1 hour */
-	static final long UPDATE_PERIOD_MILLIS = 1000 * 60 * 60;
 
 	/** The base dir under which everything is put */
 	static final File BASE_DIR = new File("/var/tmp/subetha/indexer");
@@ -79,24 +70,12 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	static IndexMgr index1 = new IndexMgr(new File(BASE_DIR, "1"));
 	static IndexMgr index2 = new IndexMgr(new File(BASE_DIR, "2"));
 
-	/** */
-	class UpdateTask extends TimerTask
+	@EJB Indexer ind;
+
+	@Override
+	public void run()
 	{
-		@Override
-		public void run()
-		{
-			try
-			{
-				Context ctx = new InitialContext();
-				Indexer ind = (Indexer)ctx.lookup(Indexer.JNDI_NAME);
-				ind.update();
-			}
-			catch (NamingException ex) { throw new RuntimeException(ex); }
-			catch (Exception ex)
-			{
-				log.error("Error during index update", ex);
-			}
-		}
+		this.update();
 	}
 
 	/** */
@@ -105,11 +84,6 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 
 	/** */
 	@Current Session mailSession;
-
-	/**
-	 * Timer used to schedule the service event.
-	 */
-	Timer timer = new Timer("Indexer", false);
 
 	/**
 	 * @return the currently in-use index manager.
@@ -179,9 +153,6 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 		log.info("Starting indexer service");
 
 		this.initialize();
-
-		// Schedule updates to repeat every hour, starting 5 minutes from now
-		this.timer.schedule(new UpdateTask(), UPDATE_DELAY_MILLIS, UPDATE_PERIOD_MILLIS);
 	}
 
 	/*
@@ -192,9 +163,6 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	public void stop() throws Exception
 	{
 		log.info("Stopping IndexerService");
-
-		this.timer.cancel();
-
 		getCurrentIndex().closeResources();
 	}
 

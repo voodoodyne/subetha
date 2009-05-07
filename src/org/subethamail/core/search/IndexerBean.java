@@ -79,7 +79,7 @@ public class IndexerBean extends EntityManipulatorBean implements IndexerManagem
 	}
 
 	/** */
-	@Name("subetha")
+	@Name("jdbc/subetha")
 	DataSource ds = null;
 
 	/** */

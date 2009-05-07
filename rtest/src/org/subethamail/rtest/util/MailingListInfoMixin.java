@@ -36,7 +36,7 @@ public class MailingListInfoMixin
 		
 		this.name = "List Name " + baseEmail;
 		this.email = baseEmail + "@localhost";
-		this.url = new URL("http://localhost:8080/se/list/" + baseEmail);
+		this.url = new URL(WebApp.BASEURL + "/list/" + baseEmail);
 		this.address = new InternetAddress(this.email, this.name);
 		this.description = "Test list description";
 		this.welcomeMessage = "Test list welcome message";

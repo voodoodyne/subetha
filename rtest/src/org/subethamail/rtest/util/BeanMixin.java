@@ -59,7 +59,7 @@ public class BeanMixin
 			fact.setPassword(this.getPassword());
 		}
 		
-		String url = "http://localhost:8080/api/" + clazz.getSimpleName();
+		String url = WebApp.HOSTPORT + "/api/" + clazz.getSimpleName();
 		
 		try
 		{

@@ -31,13 +31,10 @@ public class AdminMixin extends BeanMixin
 	/** */
 	public AdminMixin() throws Exception
 	{
-		// Need to fetch this as the unauthenticated identity
-		BeanMixin nobody = new BeanMixin();
-		this.id = nobody.getAccountMgr().authenticate(EMAIL, PASSWORD).getId();
 	}
 	
 	@Override
-	public String getPrincipalName() { return this.id.toString(); }
+	public String getPrincipalName() { return EMAIL; }
 	
 	@Override
 	public String getPassword() { return PASSWORD; }

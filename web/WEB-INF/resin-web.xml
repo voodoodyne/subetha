@@ -23,10 +23,10 @@
 <!--	<ss:ResinLogin/>-->
 <!--	<util:SubEthaAuthenticator/>-->
 
-	<resource
-		mbean-name="subetha:name=Cleanup"
-		type="org.subethamail.core.admin.CleanupBean"
-		mbean-interface="org.subethamail.core.admin.CleanupManagement" />
+<!--	<resource-->
+<!--		mbean-name="subetha:name=Cleanup"-->
+<!--		type="org.subethamail.core.admin.CleanupBean"-->
+<!--		mbean-interface="org.subethamail.core.admin.CleanupManagement" />-->
 
 	<resource
 		mbean-name="subetha:name=SMTPService"
@@ -34,14 +34,14 @@
 		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />
 
 	<!-- Every night at 4am run cleanup -->
-	<resin:ScheduledTask task="#{cleanupBean}">
-		<cron>0 4 *</cron>
-	</resin:ScheduledTask>
+<!--	<resin:ScheduledTask task="#{cleanupBean}">-->
+<!--		<cron>0 4 *</cron>-->
+<!--	</resin:ScheduledTask>-->
 
 	<!-- Every 5 minutes run the indexer-->
-	<resin:ScheduledTask task="#{indexerBean}">
-		<cron>5</cron>
-	</resin:ScheduledTask>
+<!--	<resin:ScheduledTask task="#{indexerBean}">-->
+<!--		<cron>5</cron>-->
+<!--	</resin:ScheduledTask>-->
 
 	<!-- JMS -->
 	<jms:JmsConnectionFactory />

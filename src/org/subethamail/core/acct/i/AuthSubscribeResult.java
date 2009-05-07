@@ -28,9 +28,9 @@ public class AuthSubscribeResult extends AuthCredentials
 	}
 
 	/** */
-	public AuthSubscribeResult(Long id, String prettyName, String password, Set<String> roles, SubscribeResult result, Long listId)
+	public AuthSubscribeResult(Long id, String email, String password, Set<String> roles, SubscribeResult result, Long listId)
 	{
-		super(id, prettyName, password, roles);
+		super(id, email, password);
 		
 		this.result = result;
 		this.listId = listId;

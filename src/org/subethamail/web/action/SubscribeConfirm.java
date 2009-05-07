@@ -45,7 +45,7 @@ public class SubscribeConfirm extends AuthAction
 				this.held = true;
 			}
 			
-			this.login(authResult.getPrettyName(), authResult.getPassword());
+			this.login(authResult.getEmail(), authResult.getPassword());
 		}
 		catch (BadTokenException ex)
 		{

@@ -54,7 +54,7 @@ public class EmailAddConfirm extends AuthAction
 				AuthCredentials creds = Backend.instance().getAccountMgr().addEmail(model.token);
 				
 				if (!this.isLoggedIn())
-					this.login(creds.getPrettyName(), creds.getPassword());
+					this.login(creds.getEmail(), creds.getPassword());
 			}
 			catch (BadTokenException ex)
 			{

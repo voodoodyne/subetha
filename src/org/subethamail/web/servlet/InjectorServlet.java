@@ -9,7 +9,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.inject.Current;
-import javax.security.auth.login.FailedLoginException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +24,7 @@ import org.subethamail.web.security.ResinLogin;
  * 
  * Parameters expected:
  * 
- * authId: the person id of a site administrator (this *or* authName must be specified)
- * authName: the email address of a site administrator (this *or* authId must be specified)
+ * authEmail: the email address of a site administrator
  * authPassword: the password for the site administrator account
  * from: the email address of the envelope sender
  * recipient: the email address of the envelope recipient
@@ -34,8 +32,6 @@ import org.subethamail.web.security.ResinLogin;
  * 
  * The result will be 200 OK if accepted, 500 if an error occurred.
  * A 599 will be returned if the recipient is unknown.
- * 
- * Note that authId *or* authName must be present, not both.
  * 
  * TODO:  make this a lot more efficient by using the content body
  * as the raw message bytes instead of requiring www-form-urlencoded 
@@ -49,8 +45,7 @@ public class InjectorServlet extends HttpServlet
 	@Current ResinLogin resinLogin;
 	
 	/** */
-	public static final String AUTH_ID_PARAM = "authId";
-	public static final String AUTH_NAME_PARAM = "authName";
+	public static final String AUTH_EMAIL_PARAM = "authEmail";
 	public static final String AUTH_PASS_PARAM = "authPassword";
 	public static final String FROM_PARAM = "from";
 	public static final String RECIPIENT_PARAM = "recipient";
@@ -67,35 +62,19 @@ public class InjectorServlet extends HttpServlet
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		String authId = request.getParameter(AUTH_ID_PARAM);
-		String authName = request.getParameter(AUTH_NAME_PARAM);
+		String authEmail = request.getParameter(AUTH_EMAIL_PARAM);
 		String authPass = request.getParameter(AUTH_PASS_PARAM);
 		String from = request.getParameter(FROM_PARAM);
 		String recipient = request.getParameter(RECIPIENT_PARAM);
 		String message = request.getParameter(MESSAGE_PARAM);
 		
-		if (authPass == null || from == null || recipient == null || message == null)
+		if (authEmail == null || authPass == null || from == null || recipient == null || message == null)
 			throw new ServletException("Missing parameter");
-		
-		if (authId == null && authName == null)
-			throw new ServletException("Missing parameter");
-		
-		if (authId != null && authName != null)
-			throw new ServletException("Cannot specify both authId and authName");
-		
-		// One way or another we need an authId
-		if (authName != null)
-		{
-			try
-			{
-				authId = accMgr.authenticate(authName, authPass).getId().toString();
-			}
-			catch (FailedLoginException ex) { throw new ServletException(ex); }
-		}
 		
 		try
 		{
-			this.resinLogin.login(authId, authPass, request);
+			if (!this.resinLogin.login(authEmail, authPass, request))
+				throw new ServletException("Bad email or password");
 			
 			if (!inj.inject(from, recipient, new ByteArrayInputStream(message.getBytes())))
 				response.sendError(SC_ADDRESS_UNKNOWN, "Recipient address unknown");

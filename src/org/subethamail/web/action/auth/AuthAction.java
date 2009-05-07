@@ -10,13 +10,14 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.Cookie;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.util.SubethaPrincipal;
+import org.subethamail.core.auth.SubEthaPrincipal;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
 import org.subethamail.web.security.ResinLogin;
@@ -58,12 +59,14 @@ abstract public class AuthAction extends SubEthaAction
 	public void login(String who, String password) throws LoginException
 	{
 		ResinLogin rl = Backend.instance().getLogin();
+		
 		rl.logout(this.getCtx().getRequest());
 		
 		if (log.isDebugEnabled())
 			log.debug("Successful authentication for:  " + who);
 		
-		rl.login(who, password, this.getCtx().getRequest());
+		if (!rl.login(who, password, this.getCtx().getRequest()))
+			throw new FailedLoginException("Bad username or password");
 	}
 	
 	/**
@@ -186,9 +189,9 @@ abstract public class AuthAction extends SubEthaAction
 	 * helper method to consolidate {@link Principal} acquisition
 	 * @return the current {@link Principal}
 	 */
-	protected SubethaPrincipal getPrincipal()
+	protected SubEthaPrincipal getPrincipal()
 	{
-		SubethaPrincipal p = (SubethaPrincipal) this.getCtx().getRequest().getUserPrincipal();
+		SubEthaPrincipal p = (SubEthaPrincipal)this.getCtx().getRequest().getUserPrincipal();
 		return p;
 	}
 }

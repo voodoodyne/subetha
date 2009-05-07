@@ -5,12 +5,11 @@
 
 package org.subethamail.core.util;
 
-import java.security.Principal;
-
 import javax.inject.Current;
 import javax.inject.manager.Manager;
 
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.auth.SubEthaPrincipal;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
@@ -54,25 +53,17 @@ public class PersonalBean extends EntityManipulatorBean
 	protected Long getMyId()
 	{
 		//TODO: Bug this with resin. The SessionContext was always null!
-		Principal p = null;
-	    try {
-	        p = SecurityContext.getUserPrincipal();
-	      } catch (SecurityContextException e) {
-	    	  throw new RuntimeException(e);
-	      }
 		//Principal p = this.sessionContext.getCallerPrincipal();
 		//Principal p = wbManager.getInstanceByType(Principal.class);
 		
-		String name = p.getName();
-		
-		if (name == null)
+		SubEthaPrincipal p = null;
+		try
 		{
-			return null;
+			p = (SubEthaPrincipal)SecurityContext.getUserPrincipal();
 		}
-		else
-		{
-			return Long.valueOf(name);
-		}
+		catch (SecurityContextException e) { throw new RuntimeException(e); }
+
+		return p.getId();
 	}
 	
 	/**

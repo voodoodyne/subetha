@@ -3,13 +3,14 @@
  * $Source: /cvsroot/Similarity4/src/java/com/similarity/util/SimilarityLoginModule.java,v $
  */
 
-package org.subethamail.core.util;
+package org.subethamail.core.auth;
 
 import java.security.Principal;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Person;
 
@@ -17,7 +18,6 @@ import com.caucho.config.Name;
 import com.caucho.security.Authenticator;
 import com.caucho.security.Credentials;
 import com.caucho.security.PasswordCredentials;
-import com.caucho.server.security.CachingPrincipal;
 
 
 /**
@@ -38,10 +38,11 @@ public class SubEthaAuthenticator implements Authenticator
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Principal authenticate(Principal prince, Credentials credentials, Object detail)
 	{
-
-		String email = prince instanceof SubethaPrincipal ? ((SubethaPrincipal)prince).getEmail() : prince.getName();
+		String email = prince.getName();
 
 		EmailAddress ea = this.em.findEmailAddress(email);
+		if (ea == null)
+			return null;
 
 		StringBuilder credPassword = new StringBuilder();
 		credPassword.append(((PasswordCredentials)credentials).getPassword());
@@ -52,21 +53,15 @@ public class SubEthaAuthenticator implements Authenticator
 		else if (!p.checkPassword(credPassword.toString()))
 			return null;
 		else
-		{
-			SubethaPrincipal sp = new SubethaPrincipal(p.getId().toString(), email);
-			for (String role: p.getRoles())
-				sp.addRole(role);
-			
-			return sp;
-		}
+			return new SubEthaPrincipal(p.getId(), email, p.getRoles());
 	}
 
 	/** */
 	public boolean isUserInRole(Principal user, String role)
 	{
-		CachingPrincipal p = (CachingPrincipal)user;
+		SubEthaPrincipal p = (SubEthaPrincipal)user;
 		
-		return p.isInRole(role);
+		return p.getRoles().contains(role);
 	}
 
 	/** */

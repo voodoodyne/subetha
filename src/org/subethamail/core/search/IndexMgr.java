@@ -12,8 +12,6 @@ import java.util.List;
 
 import javax.ejb.EJBException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -27,6 +25,8 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.RangeFilter;
 import org.apache.lucene.search.Searcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.search.i.SimpleHit;
 import org.subethamail.core.search.i.SimpleResult;
 
@@ -40,7 +40,7 @@ public class IndexMgr
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(IndexMgr.class);
+	private final static Logger log = LoggerFactory.getLogger(IndexMgr.class);
 	
 	/** */
 	static final String INDEX_DIR_NAME = "index";

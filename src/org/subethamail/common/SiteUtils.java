@@ -8,8 +8,8 @@ package org.subethamail.common;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -22,7 +22,7 @@ public class SiteUtils
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(SiteUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(SiteUtils.class);
 
 	/** Base context path for the subetha webapp */
 	public static final String WEBAPP_CONTEXT_PATH = "/se/";

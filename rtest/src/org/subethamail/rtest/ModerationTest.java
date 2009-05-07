@@ -10,8 +10,8 @@ import java.util.Collection;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.core.post.i.MailType;
@@ -29,7 +29,7 @@ public class ModerationTest extends SubEthaTestCase
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(ModerationTest.class);
+	private static Logger log = LoggerFactory.getLogger(ModerationTest.class);
 	
 	/** */
 	Injector injector;

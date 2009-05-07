@@ -5,9 +5,9 @@
 
 package org.subethamail.web.action;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
@@ -24,7 +24,7 @@ public class UserChangeName extends AuthRequired
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(UserChangeName.class);
+	private final static Logger log = LoggerFactory.getLogger(UserChangeName.class);
 	
 	/** */
 	public static class Model extends ErrorMapModel

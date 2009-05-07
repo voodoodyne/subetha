@@ -10,11 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.context.ApplicationScoped;
-import javax.inject.Current;
 import javax.mail.MessagingException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
@@ -39,7 +38,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	protected InjectBeanHelper<Filter> fHelper = new InjectBeanHelper<Filter>();
 
 	/** */
-	private static Log log = LogFactory.getLog(FilterRunnerBean.class);
+	private final static Logger log = LoggerFactory.getLogger(FilterRunnerBean.class);
 
 	/**
 	 * Key is filter classname.  Make sure we have concurrent access.

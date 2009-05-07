@@ -7,8 +7,8 @@ package org.subethamail.web.action;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -24,7 +24,7 @@ public class GetThreads extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(GetThreads.class);
+	private final static Logger log = LoggerFactory.getLogger(GetThreads.class);
 
 	public static class Model extends PaginateModel
 	{

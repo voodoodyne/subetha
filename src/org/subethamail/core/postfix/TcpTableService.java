@@ -11,14 +11,14 @@ import java.nio.charset.Charset;
 
 import javax.inject.Current;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.mina.common.IdleStatus;
 import org.apache.mina.common.IoHandlerAdapter;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.smtp.SMTPManagement;
 
@@ -34,10 +34,9 @@ public class TcpTableService implements TcpTableManagement
 {
 	@Current Injector injector;
 	@Current SMTPManagement smtpManagement;
-	
 
 	/** */
-	private static Log log = LogFactory.getLog(TcpTableService.class);
+	private final static Logger log = LoggerFactory.getLogger(TcpTableService.class);
 	
 	/** */
 	public static final int DEFAULT_PORT = 2502;	

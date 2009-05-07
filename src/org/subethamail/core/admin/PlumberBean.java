@@ -8,8 +8,8 @@ package org.subethamail.core.admin;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.admin.i.Plumber;
 import org.subethamail.core.post.PostOffice;
 
@@ -22,7 +22,7 @@ import org.subethamail.core.post.PostOffice;
 public class PlumberBean implements Plumber
 {
 	/** */
-	private static Log log = LogFactory.getLog(PlumberBean.class);
+	private final static Logger log = LoggerFactory.getLogger(PlumberBean.class);
 
 	@EJB PostOffice postOffice;
 

@@ -7,8 +7,8 @@ package org.subethamail.core.admin;
 
 import javax.ejb.Stateless;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Person;
@@ -26,7 +26,7 @@ public class JaasLoginBean extends EntityManipulatorBean implements JaasLogin
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(JaasLoginBean.class);
+	private final static Logger log = LoggerFactory.getLogger(JaasLoginBean.class);
 
 	/*
 	 * (non-Javadoc)

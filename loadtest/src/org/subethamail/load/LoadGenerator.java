@@ -21,8 +21,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Thread which creates a ton of SMTP messages and delivers them to a SMTP server. 
@@ -33,7 +33,7 @@ public class LoadGenerator extends Thread
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(LoadGenerator.class);
+	private static Logger log = LoggerFactory.getLogger(LoadGenerator.class);
 	
 	/** */
 	InternetAddress recipient;

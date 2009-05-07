@@ -38,8 +38,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
@@ -48,6 +46,8 @@ import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.TimeUtils;
 import org.subethamail.entity.i.Validator;
@@ -158,7 +158,7 @@ import org.subethamail.entity.i.Validator;
 public class Mail implements Serializable, Comparable<Mail>
 {
 	/** */
-	@Transient private static Log log = LogFactory.getLog(Mail.class);
+	@Transient private final static Logger log = LoggerFactory.getLogger(Mail.class);
 
 	/**
 	 * Possible moderation states

@@ -12,8 +12,8 @@ import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
@@ -35,7 +35,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
 public class StripAttachmentsFilter extends GenericFilter
 {
 	/** */
-	private static Log log = LogFactory.getLog(StripAttachmentsFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(StripAttachmentsFilter.class);
 	
 	public static final String ARG_MAXSIZEINKB = "Threshold in KB";
 

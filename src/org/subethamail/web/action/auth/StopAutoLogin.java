@@ -5,8 +5,8 @@
 
 package org.subethamail.web.action.auth;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Stops autologin.
@@ -17,7 +17,7 @@ public class StopAutoLogin extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(StopAutoLogin.class);
+	private final static Logger log = LoggerFactory.getLogger(StopAutoLogin.class);
 	
 	/**
 	 */

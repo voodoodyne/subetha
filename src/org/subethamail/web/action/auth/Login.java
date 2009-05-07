@@ -7,8 +7,8 @@ package org.subethamail.web.action.auth;
 
 import javax.security.auth.login.LoginException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tagonist.propertize.Property;
 
 /**
@@ -21,7 +21,7 @@ public class Login extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(Login.class);
+	private final static Logger log = LoggerFactory.getLogger(Login.class);
 	
 	/** */
 	public static class Model

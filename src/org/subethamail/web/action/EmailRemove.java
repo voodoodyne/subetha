@@ -5,8 +5,8 @@
 
 package org.subethamail.web.action;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.tagonist.propertize.Property;
@@ -21,7 +21,7 @@ public class EmailRemove extends AuthRequired
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(EmailRemove.class);
+	private final static Logger log = LoggerFactory.getLogger(EmailRemove.class);
 	
 	@Property String email = "";
 

@@ -16,8 +16,8 @@ import javax.inject.Current;
 import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
@@ -53,7 +53,7 @@ import org.subethamail.entity.i.PermissionException;
 public class AdminBean extends PersonalBean implements Admin
 {
 	/** */
-	private static Log log = LogFactory.getLog(AdminBean.class);
+	private final static Logger log = LoggerFactory.getLogger(AdminBean.class);
 
 	/**
 	 * The set of characters from which randomly generated

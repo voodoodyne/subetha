@@ -21,8 +21,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Validator;
 
 /**
@@ -37,7 +37,7 @@ import org.subethamail.entity.i.Validator;
 public class Attachment implements Serializable
 {
 	/** */
-	@Transient private static Log log = LogFactory.getLog(Attachment.class);
+	@Transient private final static Logger log = LoggerFactory.getLogger(Attachment.class);
 	
 	/** */
 	@Id

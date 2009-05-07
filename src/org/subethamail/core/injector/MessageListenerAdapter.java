@@ -12,8 +12,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Local;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.io.LimitExceededException;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.plugin.i.helper.Lifecycle;
@@ -32,7 +32,7 @@ import org.subethamail.smtp.helper.SimpleMessageListener;
 public class MessageListenerAdapter implements SimpleMessageListener, Lifecycle
 {
 	/** */
-	private static Log log = LogFactory.getLog(MessageListenerAdapter.class);
+	private final static Logger log = LoggerFactory.getLogger(MessageListenerAdapter.class);
 	
 	/**
 	 */

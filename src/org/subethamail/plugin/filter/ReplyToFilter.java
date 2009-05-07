@@ -9,8 +9,8 @@ import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
@@ -29,7 +29,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
 public class ReplyToFilter extends GenericFilter
 {
 	/** */
-	private static Log log = LogFactory.getLog(ReplyToFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(ReplyToFilter.class);
 	
 	public static final String ARG_MAILINGLIST = "MailingList";
 	public static final String ARG_EMAILADDRESS = "EmailAddress";

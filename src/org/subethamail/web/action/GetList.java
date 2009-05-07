@@ -5,8 +5,8 @@
 
 package org.subethamail.web.action;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -21,7 +21,7 @@ public class GetList extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(GetList.class);
+	private final static Logger log = LoggerFactory.getLogger(GetList.class);
 	
 	/** */
 	@Property Long listId;

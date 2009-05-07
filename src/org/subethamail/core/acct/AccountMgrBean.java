@@ -15,8 +15,8 @@ import javax.ejb.Stateless;
 import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AuthCredentials;
@@ -45,7 +45,7 @@ import org.subethamail.entity.Subscription;
 public class AccountMgrBean extends PersonalBean implements AccountMgr
 {
 	/** */
-	private static Log log = LogFactory.getLog(AccountMgrBean.class);
+	private final static Logger log = LoggerFactory.getLogger(AccountMgrBean.class);
 
 	/**
 	 * A known prefix so we know if decryption worked properly

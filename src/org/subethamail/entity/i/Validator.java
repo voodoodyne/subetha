@@ -5,8 +5,8 @@
 
 package org.subethamail.entity.i;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * For validating data at all tiers.  These constants also define
@@ -17,7 +17,7 @@ import org.apache.commons.logging.LogFactory;
 public class Validator
 {
 	/** */
-	private static Log log = LogFactory.getLog(Validator.class);
+	private final static Logger log = LoggerFactory.getLogger(Validator.class);
 
 	// Config
 	public static final int MAX_CONFIG_ID = 80;

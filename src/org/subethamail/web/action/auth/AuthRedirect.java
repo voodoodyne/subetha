@@ -5,8 +5,8 @@
 
 package org.subethamail.web.action.auth;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tagonist.RedirectException;
 
 /**
@@ -22,7 +22,7 @@ public class AuthRedirect extends AutoLogin
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(AuthRedirect.class);
+	private final static Logger log = LoggerFactory.getLogger(AuthRedirect.class);
 	
 	/**
 	 */

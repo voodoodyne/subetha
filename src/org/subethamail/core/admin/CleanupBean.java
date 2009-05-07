@@ -10,8 +10,8 @@ import java.util.List;
 
 import javax.annotation.Named;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.util.EntityManipulatorBean;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.SubscriptionHold;
@@ -27,7 +27,7 @@ import org.subethamail.entity.SubscriptionHold;
 public class CleanupBean extends EntityManipulatorBean implements CleanupManagement, Runnable
 {
 	/** */
-	private static Log log = LogFactory.getLog(CleanupBean.class);
+	private static Logger log = LoggerFactory.getLogger(CleanupBean.class);
 
 	/** Keep held subscriptions around for 30 days */
 	public static final long MAX_HELD_SUB_AGE_MILLIS = 1000L * 60L * 60L * 24L * 30L;

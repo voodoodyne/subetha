@@ -7,8 +7,8 @@ package org.subethamail.web.action;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.SearchException;
 import org.subethamail.core.lists.i.SearchHit;
 import org.subethamail.core.lists.i.SearchResult;
@@ -27,7 +27,7 @@ public class SearchArchive extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(SearchArchive.class);
+	private final static Logger log = LoggerFactory.getLogger(SearchArchive.class);
 
 	public static class Model extends PaginateModel
 	{

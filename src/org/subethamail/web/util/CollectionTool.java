@@ -7,8 +7,8 @@ package org.subethamail.web.util;
 
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -20,7 +20,7 @@ public class CollectionTool
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(CollectionTool.class);
+	private final static Logger log = LoggerFactory.getLogger(CollectionTool.class);
 
 	/**
 	 * Does the set contain the object?

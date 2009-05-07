@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.web.action.GetMessage;
 
@@ -44,7 +44,7 @@ import org.subethamail.web.action.GetMessage;
 public class PermissionImageServlet extends HttpServlet
 {
 	/** */
-	private static Log log = LogFactory.getLog(GetMessage.class);
+	private final static Logger log = LoggerFactory.getLogger(GetMessage.class);
 
 	/** */
 	public static final String PERMISSION_PARAM = "perm";

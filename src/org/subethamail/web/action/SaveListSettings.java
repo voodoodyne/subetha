@@ -11,9 +11,9 @@ import java.net.URL;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.entity.i.Validator;
@@ -31,7 +31,7 @@ public class SaveListSettings extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(SaveListSettings.class);
+	private final static Logger log = LoggerFactory.getLogger(SaveListSettings.class);
 	
 	/** */
 	public static class Model extends ErrorMapModel

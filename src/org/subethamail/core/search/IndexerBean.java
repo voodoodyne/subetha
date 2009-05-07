@@ -25,9 +25,9 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.sql.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.queryParser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.SearchException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.search.i.Indexer;
@@ -52,7 +52,7 @@ import com.caucho.config.Name;
 public class IndexerBean extends EntityManipulatorBean implements IndexerManagement, Indexer, Runnable
 {
 	/** */
-	private static Log log = LogFactory.getLog(IndexerBean.class);
+	private final static Logger log = LoggerFactory.getLogger(IndexerBean.class);
 
 	/** The base dir under which everything is put */
 	static final File BASE_DIR = new File("/var/tmp/subetha/indexer");

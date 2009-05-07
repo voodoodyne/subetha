@@ -7,9 +7,9 @@ package org.subethamail.core.util;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.app.Velocity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.caucho.config.Service;
 
@@ -23,7 +23,7 @@ import com.caucho.config.Service;
 public class VelocityService
 {
 	/** */
-	private static Log log = LogFactory.getLog(VelocityService.class);
+	private final static Logger log = LoggerFactory.getLogger(VelocityService.class);
 	
 	/**
 	 * Simply initialize the Velocity engine
@@ -46,7 +46,7 @@ public class VelocityService
 		}
 		catch (Exception ex)
 		{
-			log.fatal("Unable to initialize Velocity", ex);
+			log.error("Unable to initialize Velocity", ex);
 			throw new RuntimeException(ex);
 		}
 	}

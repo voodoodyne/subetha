@@ -7,12 +7,12 @@ package org.subethamail.core.search;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexModifier;
 import org.apache.lucene.index.Term;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Facade for an IndexModifier that provides a more sane view.
@@ -24,7 +24,7 @@ import org.apache.lucene.index.Term;
 public class Modifier
 {
 	/** */
-	private static Log log = LogFactory.getLog(Modifier.class);
+	private final static Logger log = LoggerFactory.getLogger(Modifier.class);
 	
 	/** */
 	public static final String FIELD_LIST_ID = "listId";

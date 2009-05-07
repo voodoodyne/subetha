@@ -18,8 +18,8 @@ import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.mail.smtp.SMTPMessage;
 
@@ -37,7 +37,7 @@ import com.sun.mail.smtp.SMTPMessage;
 public class SubEthaMessage extends SMTPMessage
 {
 	/** */
-	private static Log log = LogFactory.getLog(SubEthaMessage.class);
+	private final static Logger log = LoggerFactory.getLogger(SubEthaMessage.class);
 	
 	/** */
 	public static final String HDR_MESSAGE_ID = "Message-ID";

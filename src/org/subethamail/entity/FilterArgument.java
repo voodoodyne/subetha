@@ -15,12 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Validator;
 
 // In JBoss4, the copy of this in Config was sufficient to register
@@ -44,7 +44,7 @@ import org.subethamail.entity.i.Validator;
 public class FilterArgument implements Serializable, Comparable<FilterArgument>
 {
 	/** */
-	@Transient private static Log log = LogFactory.getLog(FilterArgument.class);
+	@Transient private final static Logger log = LoggerFactory.getLogger(FilterArgument.class);
 
 	/** */
 	@Id

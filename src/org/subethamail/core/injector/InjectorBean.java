@@ -27,8 +27,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
@@ -61,7 +61,7 @@ import org.subethamail.entity.i.Permission;
 public class InjectorBean extends EntityManipulatorBean implements Injector
 {
 	/** */
-	private static Log log = LogFactory.getLog(InjectorBean.class);
+	private final static Logger log = LoggerFactory.getLogger(InjectorBean.class);
 
 	/**
 	 * We bounce injected messages larger than this amount, in bytes.

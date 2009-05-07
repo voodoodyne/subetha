@@ -17,8 +17,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
@@ -47,7 +47,7 @@ import com.caucho.config.Name;
 public class SubEthaEntityManager extends EntityManagerWrapper
 {
 	/** */
-	private static Log log = LogFactory.getLog(SubEthaEntityManager.class);
+	private final static Logger log = LoggerFactory.getLogger(SubEthaEntityManager.class);
 	
 	/**
 	 * A normal entity manager is wrapped, providing the new methods.

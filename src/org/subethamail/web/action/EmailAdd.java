@@ -5,9 +5,9 @@
 
 package org.subethamail.web.action;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Email;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
@@ -23,7 +23,7 @@ public class EmailAdd extends AuthRequired
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(EmailAdd.class);
+	private final static Logger log = LoggerFactory.getLogger(EmailAdd.class);
 	
 	/** */
 	public static class Model extends ErrorMapModel

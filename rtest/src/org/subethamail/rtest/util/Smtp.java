@@ -10,8 +10,8 @@ import java.util.Iterator;
 
 import javax.mail.MessagingException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.wiser.Wiser;
@@ -26,7 +26,7 @@ import org.subethamail.wiser.WiserMessage;
 public class Smtp extends Wiser
 {
 	/** */
-	private static Log log = LogFactory.getLog(Smtp.class);
+	private static Logger log = LoggerFactory.getLogger(Smtp.class);
 
 	/** The port we use for dumbster */
 	public static final int PORT = 2525;

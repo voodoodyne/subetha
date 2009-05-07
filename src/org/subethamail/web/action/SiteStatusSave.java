@@ -11,8 +11,8 @@ import java.net.URL;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -28,7 +28,7 @@ public class SiteStatusSave extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(SiteStatusSave.class);
+	private final static Logger log = LoggerFactory.getLogger(SiteStatusSave.class);
 
 	public static class Model extends ErrorMapModel
 	{

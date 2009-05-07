@@ -19,10 +19,10 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;
@@ -48,7 +48,7 @@ import org.subethamail.entity.SubscriptionHold;
 public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 {
 	/** */
-	private static Log log = LogFactory.getLog(PostOfficeBean.class);
+	private final static Logger log = LoggerFactory.getLogger(PostOfficeBean.class);
 	
 	/** */
 	@Current Session mailSession;
@@ -78,7 +78,7 @@ public class PostOfficeBean extends EntityManipulatorBean implements PostOffice
 			}
 			catch (Exception ex)
 			{
-				log.fatal("Error merging " + kind.getTemplate(), ex);
+				log.error("Error merging " + kind.getTemplate(), ex);
 				throw new EJBException(ex);
 			}
 

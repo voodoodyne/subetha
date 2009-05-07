@@ -15,11 +15,11 @@ import java.sql.SQLException;
 
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.usertype.UserType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>Custom hibernate type that will store any java type that follows
@@ -55,7 +55,7 @@ public class AnyImmutableType implements UserType
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(AnyImmutableType.class);
+	private final static Logger log = LoggerFactory.getLogger(AnyImmutableType.class);
 
 	private static final int[] SQL_TYPES = new int[] {
 		Hibernate.STRING.sqlType(),

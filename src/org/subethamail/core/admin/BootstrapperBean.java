@@ -17,8 +17,8 @@ import javax.inject.Current;
 import javax.mail.internet.InternetAddress;
 import javax.transaction.UserTransaction;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.util.EntityManipulatorBean;
@@ -49,7 +49,7 @@ import org.subethamail.entity.Config;
 public class BootstrapperBean extends EntityManipulatorBean
 {
 	/** */
-	private static Log log = LogFactory.getLog(BootstrapperBean.class);
+	private final static Logger log = LoggerFactory.getLogger(BootstrapperBean.class);
 	
 	/**
 	 */

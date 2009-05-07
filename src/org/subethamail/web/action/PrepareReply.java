@@ -5,8 +5,8 @@
 
 package org.subethamail.web.action;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.web.Backend;
@@ -21,7 +21,7 @@ import org.tagonist.propertize.Property;
 public class PrepareReply extends PostMessage
 {
 	/** */
-	private static Log log = LogFactory.getLog(PrepareReply.class);
+	private final static Logger log = LoggerFactory.getLogger(PrepareReply.class);
 
 	public class Model extends PostMessage.Model
 	{

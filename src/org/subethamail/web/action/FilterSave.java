@@ -9,8 +9,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.Converter;
 import org.subethamail.core.lists.i.EnabledFilterData;
 import org.subethamail.core.plugin.i.FilterParameter;
@@ -38,7 +38,7 @@ public class FilterSave extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(FilterSave.class);
+	private final static Logger log = LoggerFactory.getLogger(FilterSave.class);
 
 	/** All the dynamic form data field names start with this */
 	public static final String FORM_FIELD_NAME_PREFIX = "form:";

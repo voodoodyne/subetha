@@ -5,8 +5,8 @@
 
 package org.subethamail.load;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
 
@@ -19,7 +19,7 @@ public class LoadTester
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(LoadTester.class);
+	private static Logger log = LoggerFactory.getLogger(LoadTester.class);
 	
 	/** */
 	CountingListener listener = new CountingListener();

@@ -11,10 +11,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A request to join a mailing list. 
@@ -43,7 +43,7 @@ public class SubscriptionHold extends SubscriptionBase
 {
 	/** */
 	@SuppressWarnings("unused")
-	@Transient private static Log log = LogFactory.getLog(SubscriptionHold.class);
+	@Transient private final static Logger log = LoggerFactory.getLogger(SubscriptionHold.class);
 	
 	/**
 	 */

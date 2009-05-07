@@ -5,8 +5,8 @@
 
 package org.subethamail.web.action;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -28,7 +28,7 @@ public class CheckPermission extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(CheckPermission.class);
+	private final static Logger log = LoggerFactory.getLogger(CheckPermission.class);
 	@Property Long listId;
 	
 	/** */

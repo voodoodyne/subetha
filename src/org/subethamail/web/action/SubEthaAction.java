@@ -12,10 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.Cookie;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.ClassValidator;
 import org.hibernate.validator.InvalidValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tagonist.AbstractAction;
 
 /**
@@ -26,7 +26,7 @@ import org.tagonist.AbstractAction;
 abstract public class SubEthaAction extends AbstractAction
 {
 	/** */
-	private static Log log = LogFactory.getLog(SubEthaAction.class);
+	private final static Logger log = LoggerFactory.getLogger(SubEthaAction.class);
 
 	/** Keep all the validators around */
 	private static Map<Class<?>, ClassValidator<?>> validators = new ConcurrentHashMap<Class<?>, ClassValidator<?>>();

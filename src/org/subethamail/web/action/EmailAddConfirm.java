@@ -5,9 +5,9 @@
 
 package org.subethamail.web.action;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.AuthCredentials;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.web.Backend;
@@ -24,7 +24,7 @@ public class EmailAddConfirm extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(EmailAddConfirm.class);
+	private final static Logger log = LoggerFactory.getLogger(EmailAddConfirm.class);
 	
 	public static class Model extends ErrorMapModel
 	{

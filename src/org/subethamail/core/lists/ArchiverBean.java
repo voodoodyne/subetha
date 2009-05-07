@@ -34,8 +34,8 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.ExportMessagesException;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.MailUtils;
@@ -85,7 +85,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	@EJB Indexer indexer;
 
 	/** */
-	private static Log log = LogFactory.getLog(ArchiverBean.class);
+	private final static Logger log = LoggerFactory.getLogger(ArchiverBean.class);
 
 	/** */
 	@Resource(name="java:comp/env/outbound-mail")

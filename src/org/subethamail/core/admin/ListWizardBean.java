@@ -15,8 +15,8 @@ import javax.inject.Current;
 import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.admin.i.DuplicateListDataException;
@@ -37,7 +37,7 @@ import org.subethamail.core.util.Transmute;
 public class ListWizardBean implements ListWizard, BlueprintRegistry
 {
 	/** */
-	private static Log log = LogFactory.getLog(ListWizardBean.class);
+	private final static Logger log = LoggerFactory.getLogger(ListWizardBean.class);
 
 	/** */
 	@Current Admin admin;

@@ -28,8 +28,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
@@ -53,7 +53,7 @@ import org.subethamail.entity.Config;
 public class EncryptorBean extends EntityManipulatorBean implements Encryptor
 {
 	/** */
-	private static Log log = LogFactory.getLog(EncryptorBean.class);
+	private final static Logger log = LoggerFactory.getLogger(EncryptorBean.class);
 	
 	/**
 	 * The name of the config value that holds the current encryption key.

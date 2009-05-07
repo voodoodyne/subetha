@@ -13,8 +13,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.security.PermitAll;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.smtp.helper.SimpleMessageListener;
 import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
@@ -37,7 +37,7 @@ import com.caucho.config.Service;
 public class SMTPService implements SMTPManagement, MessageListenerRegistry
 {
 	/** */
-	private static Log log = LogFactory.getLog(SMTPService.class);
+	private final static Logger log = LoggerFactory.getLogger(SMTPService.class);
 	
 	/** */
 	public static final int DEFAULT_PORT = 2500;

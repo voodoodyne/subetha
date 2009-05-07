@@ -11,8 +11,8 @@ import java.util.Set;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.core.lists.i.MassSubscribeType;
 import org.subethamail.web.Backend;
@@ -29,7 +29,7 @@ public class SubscribeMass extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(SubscribeMass.class);
+	private final static Logger log = LoggerFactory.getLogger(SubscribeMass.class);
 	
 	/** */
 	public static class Model extends ErrorMapModel

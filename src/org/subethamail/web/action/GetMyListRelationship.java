@@ -7,8 +7,8 @@ package org.subethamail.web.action;
 
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.MyListRelationship;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.web.Backend;
@@ -27,7 +27,7 @@ public class GetMyListRelationship extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(GetMyListRelationship.class);
+	private final static Logger log = LoggerFactory.getLogger(GetMyListRelationship.class);
 	
 	/** */
 	@Property Long listId;

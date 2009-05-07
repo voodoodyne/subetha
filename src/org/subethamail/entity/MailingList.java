@@ -29,13 +29,13 @@ import javax.persistence.OrderBy;
 import javax.persistence.QueryHint;
 import javax.persistence.Transient;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.validator.Email;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.SiteUtils;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
@@ -108,7 +108,7 @@ import org.subethamail.entity.i.Validator;
 public class MailingList implements Serializable, Comparable<MailingList>
 {
 	/** */
-	@Transient private static Log log = LogFactory.getLog(MailingList.class);
+	@Transient private final static Logger log = LoggerFactory.getLogger(MailingList.class);
 
 	/**
 	 * TreeSet requires a weird comparator because it uses the comparator

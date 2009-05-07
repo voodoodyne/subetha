@@ -8,8 +8,8 @@ package org.subethamail.rtest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.Self;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.core.util.VERPAddress;
@@ -29,7 +29,7 @@ public class EmailAddressTest extends SubEthaTestCase
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(EmailAddressTest.class);
+	private static Logger log = LoggerFactory.getLogger(EmailAddressTest.class);
 
 	/** */
 	AdminMixin admin;

@@ -15,8 +15,8 @@ import javax.security.auth.login.LoginException;
 import javax.servlet.http.Cookie;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.auth.SubEthaPrincipal;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
@@ -43,7 +43,7 @@ import org.subethamail.web.security.ResinLogin;
 abstract public class AuthAction extends SubEthaAction 
 {
 	/** */
-	private static Log log = LogFactory.getLog(AuthAction.class);
+	private final static Logger log = LoggerFactory.getLogger(AuthAction.class);
 	
 	/** Name of autologin cookie */
 	protected static final String AUTO_LOGIN_COOKIE_KEY = "subetha.auth";

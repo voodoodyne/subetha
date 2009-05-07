@@ -13,8 +13,8 @@ import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.Archiver;
@@ -33,7 +33,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
 public class LeaveAttachmentsOnServerFilter extends GenericFilter
 {
 	/** */
-	private static Log log = LogFactory.getLog(LeaveAttachmentsOnServerFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(LeaveAttachmentsOnServerFilter.class);
 
 	@EJB Archiver archiver;
 

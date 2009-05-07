@@ -17,8 +17,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
@@ -41,7 +41,7 @@ import org.subethamail.entity.Subscription;
 public class DeliveratorBean extends EntityManipulatorBean implements Deliverator
 {
 	/** */
-	private static Log log = LogFactory.getLog(DeliveratorBean.class);
+	private final static Logger log = LoggerFactory.getLogger(DeliveratorBean.class);
 
 	/** */
 	@Current FilterRunner filterRunner;

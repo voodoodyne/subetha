@@ -19,12 +19,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.validator.Length;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.Validator;
 
@@ -40,7 +40,7 @@ import org.subethamail.entity.i.Validator;
 public class Role implements Serializable, Comparable<Role>
 {
 	/** */
-	@Transient private static Log log = LogFactory.getLog(Role.class);
+	@Transient private final static Logger log = LoggerFactory.getLogger(Role.class);
 
 	/** */
 	@Transient public static final String OWNER_NAME = "Owner";

@@ -12,8 +12,8 @@ import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.plugin.i.Filter;
@@ -31,7 +31,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
 public class SendAsTextFilter extends GenericFilter
 {
 	/** */
-	private static Log log = LogFactory.getLog(SendAsTextFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(SendAsTextFilter.class);
 
 	@EJB Archiver archiver;
 

@@ -17,8 +17,8 @@ import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.acct.i.MyListRelationship;
@@ -62,7 +62,7 @@ import org.subethamail.entity.i.Permission;
 public class Transmute
 {
 	/** */
-	private static Log log = LogFactory.getLog(Transmute.class);
+	private final static Logger log = LoggerFactory.getLogger(Transmute.class);
 
 	/** */
 	public static List<BlueprintData> blueprints(Collection<Blueprint> rawColl)

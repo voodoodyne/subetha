@@ -17,8 +17,8 @@ import javax.mail.Part;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimePart;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.TrivialDataSource;
@@ -33,7 +33,7 @@ import org.subethamail.entity.Mail;
 public class DetacherBean extends EntityManipulatorBean implements Detacher
 {
 	/** */
-	private static Log log = LogFactory.getLog(DetacherBean.class);
+	private final static Logger log = LoggerFactory.getLogger(DetacherBean.class);
 	
 	/*
 	 * (non-Javadoc)

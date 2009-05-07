@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.Length;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
@@ -29,7 +29,7 @@ public class RoleSave extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(RoleSave.class);
+	private final static Logger log = LoggerFactory.getLogger(RoleSave.class);
 	
 	/** */
 	public static class Model extends ErrorMapModel

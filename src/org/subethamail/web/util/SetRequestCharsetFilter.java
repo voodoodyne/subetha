@@ -12,8 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
 public class SetRequestCharsetFilter extends AbstractFilter
 {
 	/** */
-	private static Log log = LogFactory.getLog(SetRequestCharsetFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(SetRequestCharsetFilter.class);
 	
 	/**
 	 */

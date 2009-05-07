@@ -5,8 +5,8 @@
 
 package org.subethamail.rtest.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Actually creates the person.
@@ -17,7 +17,7 @@ public class PersonMixin extends PersonInfoMixin
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(PersonMixin.class);
+	private static Logger log = LoggerFactory.getLogger(PersonMixin.class);
 
 	Long id;
 	

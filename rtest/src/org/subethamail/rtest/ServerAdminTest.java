@@ -12,8 +12,8 @@ import javax.mail.internet.InternetAddress;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.Utils;
 import org.subethamail.core.admin.i.SiteStatus;
 import org.subethamail.rtest.util.AdminMixin;
@@ -28,7 +28,7 @@ public class ServerAdminTest extends SubEthaTestCase
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(ServerAdminTest.class);
+	private static Logger log = LoggerFactory.getLogger(ServerAdminTest.class);
 
 	/** */
 	AdminMixin admin;

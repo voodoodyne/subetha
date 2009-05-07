@@ -16,8 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Base class for Subscription and SubscriptionHold 
@@ -29,7 +29,7 @@ import org.apache.commons.logging.LogFactory;
 public class SubscriptionBase implements Serializable
 {
 	/** */
-	@Transient private static Log log = LogFactory.getLog(SubscriptionBase.class);
+	@Transient private final static Logger log = LoggerFactory.getLogger(SubscriptionBase.class);
 	
 	/** */
 	@Id

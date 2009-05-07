@@ -5,8 +5,8 @@
 
 package org.subethamail.web.action;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.tagonist.propertize.Property;
@@ -20,7 +20,7 @@ public class GetMessage extends AuthAction
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(GetMessage.class);
+	private final static Logger log = LoggerFactory.getLogger(GetMessage.class);
 
 	/** */
 	@Property Long msgId;

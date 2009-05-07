@@ -15,8 +15,8 @@ import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
@@ -35,7 +35,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
 public class AppendFooterFilter extends GenericFilter
 {
 	/** */
-	private static Log log = LogFactory.getLog(AppendFooterFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(AppendFooterFilter.class);
 	
 	private static final String ARG_FOOTER = "Footer";
 	

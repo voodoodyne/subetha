@@ -6,8 +6,8 @@
 package org.subethamail.core.util;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -22,7 +22,7 @@ import org.apache.commons.logging.LogFactory;
 public class Base62
 {
 	/** */
-	private static Log log = LogFactory.getLog(Base62.class);
+	private final static Logger log = LoggerFactory.getLogger(Base62.class);
 
 	/** default constructor prevents util class from being created. */
 	private Base62() {}

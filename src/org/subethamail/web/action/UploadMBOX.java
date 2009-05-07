@@ -10,8 +10,8 @@ import java.util.List;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
@@ -26,7 +26,7 @@ import org.tagonist.propertize.Property;
 public class UploadMBOX extends AuthAction
 {
 	/** */
-	private static Log log = LogFactory.getLog(UploadMBOX.class);
+	private final static Logger log = LoggerFactory.getLogger(UploadMBOX.class);
 
 	/** */
 	public static class Model extends ErrorMapModel

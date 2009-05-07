@@ -14,8 +14,8 @@ import java.io.OutputStream;
 import javax.activation.DataContentHandler;
 import javax.activation.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This content handler stores an attachment id as ascii text.
@@ -32,7 +32,7 @@ public class DetachmentContentHandler implements DataContentHandler
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(DetachmentContentHandler.class);
+	private final static Logger log = LoggerFactory.getLogger(DetachmentContentHandler.class);
 
 	/*
 	 * (non-Javadoc)

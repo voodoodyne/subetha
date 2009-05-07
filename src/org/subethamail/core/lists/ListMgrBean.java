@@ -23,8 +23,8 @@ import javax.jws.WebMethod;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
@@ -68,7 +68,7 @@ import org.subethamail.entity.i.PermissionException;
 public class ListMgrBean extends PersonalBean implements ListMgr
 {
 	/** */
-	private static Log log = LogFactory.getLog(ListMgrBean.class);
+	private final static Logger log = LoggerFactory.getLogger(ListMgrBean.class);
 
 	/** */
 	@Current FilterRunner filterRunner;

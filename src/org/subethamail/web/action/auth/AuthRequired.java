@@ -5,8 +5,8 @@
 
 package org.subethamail.web.action.auth;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tagonist.ForwardException;
 
 /**
@@ -23,7 +23,7 @@ import org.tagonist.ForwardException;
 public class AuthRequired extends AutoLogin 
 {
 	/** */
-	private static Log log = LogFactory.getLog(AuthRequired.class);
+	private final static Logger log = LoggerFactory.getLogger(AuthRequired.class);
 	
 	/** */
 	public static final String LOGIN_REQUIRED_PAGE = "/login_required.jsp";

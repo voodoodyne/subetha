@@ -7,8 +7,8 @@ package org.subethamail.rtest.util;
 
 import java.net.MalformedURLException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.ListWizard;
@@ -33,7 +33,7 @@ public class BeanMixin
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(BeanMixin.class);
+	private static Logger log = LoggerFactory.getLogger(BeanMixin.class);
 
 	/** */
 	public BeanMixin() throws Exception

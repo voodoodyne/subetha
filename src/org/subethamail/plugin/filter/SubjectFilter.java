@@ -7,8 +7,8 @@ package org.subethamail.plugin.filter;
 
 import javax.mail.MessagingException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.Filter;
@@ -28,7 +28,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
 public class SubjectFilter extends GenericFilter
 {
 	/** */
-	private static Log log = LogFactory.getLog(SubjectFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(SubjectFilter.class);
 
 	public static final String ARG_SUBJECTPREFIX = "Subject";
 	

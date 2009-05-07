@@ -7,8 +7,8 @@ package org.subethamail.core.util;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
 public class VERPAddress
 {
 	/** */
-	private static Log log = LogFactory.getLog(VERPAddress.class);
+	private final static Logger log = LoggerFactory.getLogger(VERPAddress.class);
 	
 	/** This is the suffix of all VERP'd addresses, plus the '@' */
 	public static final String SUFFIX = "-bounce@";

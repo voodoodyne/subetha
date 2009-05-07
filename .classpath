@@ -33,6 +33,6 @@
 	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/resin.jar" sourcepath="/RESIN_SRC/modules/resin"/>
 	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/webutil.jar"/>
 	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/resin-kernel.jar" sourcepath="/RESIN_SRC/modules/kernel"/>
-	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/hessian.jar" sourcepath="/RESIN_SRC/modules/"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/hessian.jar" sourcepath="/RESIN_SRC/modules/hessian/"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

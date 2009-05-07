@@ -10,6 +10,7 @@ import java.security.Principal;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Person;
 
 import com.caucho.config.Name;
@@ -30,31 +31,33 @@ public class SubEthaAuthenticator implements Authenticator
 {
 	/** */
 	@Name("subetha") SubEthaEntityManager em;
-
+	
 	/**
 	 * Authenticate the user by the password, returning null on failure.
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Principal authenticate(Principal user, Credentials credentials, Object detail)
+	public Principal authenticate(Principal prince, Credentials credentials, Object detail)
 	{
-		String idStr = user.getName();
-		Long id = Long.valueOf(idStr);
+
+		String email = prince instanceof SubethaPrincipal ? ((SubethaPrincipal)prince).getEmail() : prince.getName();
+
+		EmailAddress ea = this.em.findEmailAddress(email);
+
 		StringBuilder credPassword = new StringBuilder();
 		credPassword.append(((PasswordCredentials)credentials).getPassword());
 		
-		Person p = this.em.find(Person.class, id);
+		Person p = ea.getPerson();
 		if (p == null)
 			return null;
 		else if (!p.checkPassword(credPassword.toString()))
 			return null;
 		else
 		{
-			CachingPrincipal prince = new CachingPrincipal(idStr);
-			
+			SubethaPrincipal sp = new SubethaPrincipal(p.getId().toString(), email);
 			for (String role: p.getRoles())
-				prince.addRole(role);
+				sp.addRole(role);
 			
-			return prince;
+			return sp;
 		}
 	}
 

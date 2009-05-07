@@ -16,9 +16,10 @@ import javax.servlet.http.Cookie;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.subethamail.core.acct.i.AuthCredentials;
+import org.subethamail.core.util.SubethaPrincipal;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
+import org.subethamail.web.security.ResinLogin;
 
 /**
  * Provides basic authentication services to action subclasses.
@@ -49,9 +50,6 @@ abstract public class AuthAction extends SubEthaAction
 	/** The j2ee security role for administrative users */
 	public final static String SITE_ADMIN_ROLE = "siteAdmin";
 	
-	/** Key in http session to the pretty auth name */
-	protected static final String AUTH_NAME_KEY = "subetha.authName";
-	
 	/**
 	 * Actually perform the login logic by calling into the JAAS stack.
 	 *
@@ -59,24 +57,13 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public void login(String who, String password) throws LoginException
 	{
-		Backend.instance().getLogin().logout(this.getCtx().getRequest());
-		
-		AuthCredentials creds = Backend.instance().getAccountMgr().authenticate(who, password);
+		ResinLogin rl = Backend.instance().getLogin();
+		rl.logout(this.getCtx().getRequest());
 		
 		if (log.isDebugEnabled())
 			log.debug("Successful authentication for:  " + who);
 		
-		this.markLoggedIn(creds);
-	}
-	
-	/**
-	 * Utility method that makes the user logged in as the specified credentials.
-	 */
-	protected void markLoggedIn(AuthCredentials creds)
-	{
-		Backend.instance().getLogin().login(creds.getId().toString(), creds.getPassword(), this.getCtx().getRequest());
-		
-		this.getCtx().getSession().setAttribute(AUTH_NAME_KEY, creds.getPrettyName());
+		rl.login(who, password, this.getCtx().getRequest());
 	}
 	
 	/**
@@ -101,7 +88,7 @@ abstract public class AuthAction extends SubEthaAction
 	public String getAuthName()
 	{
 		if (this.isLoggedIn())
-			return (String)this.getCtx().getSession().getAttribute(AUTH_NAME_KEY);
+			return getPrincipal().getEmail();
 		else
 			return null;
 	}
@@ -112,7 +99,6 @@ abstract public class AuthAction extends SubEthaAction
 	protected void logout()
 	{
 		Backend.instance().getLogin().logout(this.getCtx().getRequest());
-		this.getCtx().getSession().removeAttribute(AUTH_NAME_KEY);
 	}
 	
 	/**
@@ -200,9 +186,9 @@ abstract public class AuthAction extends SubEthaAction
 	 * helper method to consolidate {@link Principal} acquisition
 	 * @return the current {@link Principal}
 	 */
-	protected Principal getPrincipal()
+	protected SubethaPrincipal getPrincipal()
 	{
-		Principal p = this.getCtx().getRequest().getUserPrincipal();
+		SubethaPrincipal p = (SubethaPrincipal) this.getCtx().getRequest().getUserPrincipal();
 		return p;
 	}
 }

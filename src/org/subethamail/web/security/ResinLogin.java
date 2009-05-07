@@ -9,9 +9,10 @@ import javax.context.ApplicationScoped;
 import javax.inject.New;
 import javax.servlet.http.HttpServletRequest;
 
+import org.subethamail.core.util.SubethaPrincipal;
+
 import com.caucho.security.AbstractLogin;
 import com.caucho.security.Authenticator;
-import com.caucho.security.BasicPrincipal;
 import com.caucho.security.ClusterSingleSignon;
 import com.caucho.security.Credentials;
 import com.caucho.security.MemorySingleSignon;
@@ -51,7 +52,11 @@ public class ResinLogin extends AbstractLogin
 	}
 	
 	/**
+	 * 
 	 * Logs in the user/pass to the container, if the credentials are valid.
+	 * 
+	 * @param name the email address
+	 * @param pass	the cleartext password
 	 * 
 	 * @return true if success, false if the credentials were bad.
 	 */
@@ -59,7 +64,8 @@ public class ResinLogin extends AbstractLogin
 	{
 		Authenticator auth = this.getAuthenticator();
 		
-	    BasicPrincipal user = new BasicPrincipal(name);
+		/** send a null id, it will be fixed over there */
+	    SubethaPrincipal user = new SubethaPrincipal(null,name);
 
 	    Credentials credentials = new PasswordCredentials(pass);
 	    Principal principal = auth.authenticate(user, credentials, request);

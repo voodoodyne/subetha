@@ -31,6 +31,12 @@
 		type="org.subethamail.core.admin.CleanupBean"
 		mbean-interface="org.subethamail.core.admin.CleanupManagement" />
 
+<!--	Disabled for now, maybe a resin bug because it starts once in the Env load, and once in the webapp-->
+<!--	<resource-->
+<!--		mbean-name="subetha:name=SMTPService"-->
+<!--		type="org.subethamail.core.smtp.SMTPService"-->
+<!--		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />-->
+
 	<!-- Every night at 4am run cleanup -->
 	<resin:ScheduledTask task="#{cleanupBean}">
 		<cron>0 4 *</cron>

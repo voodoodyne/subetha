@@ -5,17 +5,22 @@
 package org.subethamail.core.smtp;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.security.PermitAll;
 import javax.context.ApplicationScoped;
+import javax.inject.Current;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.subethamail.common.io.LimitExceededException;
+import org.subethamail.core.injector.i.Injector;
+import org.subethamail.smtp.TooMuchDataException;
 import org.subethamail.smtp.helper.SimpleMessageListener;
 import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
@@ -36,23 +41,61 @@ import com.caucho.config.Service;
 
 @Service
 @ApplicationScoped
-public class SMTPService implements SMTPManagement, MessageListenerRegistry
+public class SMTPService implements SMTPManagement
 {
+	
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(SMTPService.class);
 	
 	/** */
 	public static final int DEFAULT_PORT = 2500;
 
-	/**
-	 * There is no ConcurrentHashSet, so we make up our own by mapping the
-	 * object to itself.
-	 */
-	private Map<SimpleMessageListener, SimpleMessageListener> listeners = new ConcurrentHashMap<SimpleMessageListener, SimpleMessageListener>();
+	/** Simple Listener used to collect mail for mailing lists  */
+	private SimpleMessageListener listener = new SimpleMessageListener (){
+		/**
+		 * @see SimpleMessageListener#accept(String, String)
+		 */
+		public boolean accept(String from, String recipient)
+		{
+			return injector.accept(recipient);
+		}
+
+		/**
+		 * @see SimpleMessageListener#deliver(String, String, InputStream)
+		 */
+		public void deliver(String from, String recipient, InputStream input) throws TooMuchDataException, IOException
+		{
+			try
+			{
+				if (!injector.inject(from, recipient, input))
+				{
+					if (log.isWarnEnabled())
+						log.warn("Accepted data no longer wanted for " + recipient);
+					
+					throw new RuntimeException("Data no longer wanted");
+				}
+			}
+			catch (LimitExceededException ex)
+			{
+				if (log.isWarnEnabled())
+					log.warn("Too much input data", ex);
+				
+				throw new TooMuchDataException();
+			}
+			catch (RuntimeException ex)
+			{
+				log.error("Some kind of error", ex);
+				throw ex;
+			}
+		}
+	};
 	
 	private int port = DEFAULT_PORT;
 	private String hostName = null;
 	private InetAddress binding = null;
+	
+	@Current 
+	Injector injector;
 	
 	private SMTPServer smtpServer;
 
@@ -66,30 +109,6 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 			this.port = Integer.parseInt(System.getProperty("org.subethamail.smtp.port"));
 		}
 		catch (Throwable ignored) {}
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.smtp.i.MessageListenerRegistry#register(org.subethamail.smtp.i.MessageListener)
-	 */
-	public void register(SimpleMessageListener listener)
-	{
-		if (log.isInfoEnabled())
-			log.info("Registering " + listener);
-		
-		this.listeners.put(listener, listener);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.smtp.i.MessageListenerRegistry#deregister(org.subethamail.smtp.i.MessageListener)
-	 */
-	public void deregister(SimpleMessageListener listener)
-	{
-		if (log.isInfoEnabled())
-			log.info("De-registering " + listener);
-		
-		this.listeners.remove(listener);
 	}
 	
 	/*
@@ -109,7 +128,10 @@ public class SMTPService implements SMTPManagement, MessageListenerRegistry
 
 		log.info("Starting SMTP service: " + (binding==null ? "*" : binding) + ":" + port);
 		
-		this.smtpServer = new SMTPServer(new SimpleMessageListenerAdapter(listeners.values()));
+		Collection<SimpleMessageListener> listeners = new ArrayList<SimpleMessageListener>(); 
+		listeners.add(listener);
+		this.smtpServer = new SMTPServer(new SimpleMessageListenerAdapter(listeners));
+		
 		this.smtpServer.setBindAddress(binding);
 		this.smtpServer.setPort(this.port);
 		

@@ -39,6 +39,11 @@
 	<property name="web.dir" location="web" />
 	<property name="lib.dir" location="lib" />
 
+	<tstamp/>
+	<tstamp>
+		<format property="YEAR" pattern="yyyy" />
+	</tstamp>
+
 	<path id="master.classpath">
 		<pathelement path="${java.class.path}" />
 		
@@ -51,11 +56,42 @@
 		</fileset>
 	</path>
 	
+	<path id="rtest.build.classpath">
+		<pathelement location="${build.client.file}" />
+		<path refid="master.classpath" />
+	</path>
+	
+	<path id="rtest.run.classpath">
+		<pathelement location="${build.dir}/rtest/rtest.jar" />
+		<path refid="rtest.build.classpath" />
+	</path>
+	
+	<target name="init">
+		<typedef resource="com/googlecode/svntask/svntask.xml">
+			<classpath>
+				<fileset dir="${base.dir}/lib">
+					<include name="svnkit.jar"/>
+					<include name="svntask.jar"/>
+				</fileset>
+			</classpath>
+		</typedef>
+
+		<svn><info path="${base.dir}" revisionProperty="revisionVersion" /></svn>
+
+		<!--  A hack because svnant does not respect Ant's properties can't be overwritten rule. -->
+		<property name="version" value="${revisionVersion}" />
+	</target>
+
+	<target name="init-dist">
+		<input addproperty="version" message="Version number?" />
+		<property name="dist.name" value="SubEtha-${version}" />
+	</target>
+
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
 	
- 	<target name="classes">
+ 	<target name="classes" depends="init">
 		<mkdir dir="${build.classes.dir}" />
  		
 		<javac srcdir="${javasrc.dir}"
@@ -174,7 +210,90 @@
         </taskdef>
 
         <resin-jspc rootDirectory="web"/>
-		
+	</target>
+
+ 	<target name="rtest-jar" depends="client">
+		<mkdir dir="${build.dir}/rtest/classes" />
+ 		
+		<javac
+			srcdir="${base.dir}/rtest/src"
+			destdir="${build.dir}/rtest/classes"
+			includeAntRuntime="false"
+			debug="${build.debug}"
+			deprecation="${build.deprecation}"
+			target="${ant.build.javac.target}"
+			source="${ant.build.javac.source}">
+
+			<classpath refid="rtest.build.classpath" />
+		</javac>
+ 		
+		<jar jarfile="${build.dir}/rtest/rtest.jar">
+			<fileset dir="${build.dir}/rtest/classes"/>
+			<fileset dir="${base.dir}/rtest/src/org/subethamail/rtest/msg">
+				<include name="**/*.msg"/>
+			</fileset>
+			<manifest>
+				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="junit" depends="rtest-jar">
+		<junit printsummary="yes" showoutput="yes" fork="yes">
+			<classpath refid="rtest.run.classpath"/>
+			
+			<syspropertyset>
+				<propertyref prefix="java.naming" />
+			</syspropertyset>
+			
+			<formatter type="plain" />
+			
+			<batchtest todir="${build.dir}">
+				<fileset dir="${build.dir}/rtest/classes">
+					<include name="**/*Test.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="junit-special" depends="rtest-jar">
+		<junit printsummary="true" showoutput="true" fork="true">
+			<classpath refid="rtest.run.classpath"/>
+			
+			<syspropertyset>
+				<propertyref prefix="java.naming" />
+			</syspropertyset>
+			
+			<formatter type="plain" />
+			
+			<batchtest todir="${build.dir}">
+				<fileset dir="${build.dir}/rtest/classes">
+					<include name="${junit.special.tests}" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	<target name="junit-debug" depends="rtest-jar">
+		<junit printsummary="yes" showoutput="yes" fork="yes">
+			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8001"/>
+			<!-- <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8001"/> -->
+
+			<classpath refid="rtest.run.classpath"/>
+			
+			<syspropertyset>
+				<propertyref prefix="java.naming" />
+			</syspropertyset>
+			
+			<formatter type="plain" />
+			
+			<batchtest todir="${build.dir}">
+				<fileset dir="${build.dir}/rtest/classes">
+					<include name="${junit.special.tests}" />
+				</fileset>
+			</batchtest>
+		</junit>
 	</target>
 </project>
 

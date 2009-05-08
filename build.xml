@@ -57,7 +57,7 @@
 	</path>
 	
 	<path id="rtest.build.classpath">
-		<pathelement location="${build.client.file}" />
+		<pathelement location="${build.classes.dir}" />
 		<path refid="master.classpath" />
 	</path>
 	

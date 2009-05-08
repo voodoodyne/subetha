@@ -13,7 +13,7 @@ package org.subethamail.core.postfix;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-public interface PostFixTcpTableManagement
+public interface PostfixTcpTableManagement
 {
 	/**
 	 * When the SMTP server starts, it will listen on this port.

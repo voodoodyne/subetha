@@ -30,7 +30,7 @@ import com.caucho.config.Service;
  * @author Scott Hernandez
  */
 @Service
-public class PostfixTcpTableService implements PostFixTcpTableManagement
+public class PostfixTcpTableService implements PostfixTcpTableManagement
 {
 	@Current Injector injector;
 	@Current SMTPManagement smtpManagement;

@@ -19,6 +19,8 @@ import javax.annotation.Named;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJBException;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -71,7 +73,7 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 
 	@Current Indexer ind;
 
-	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void run()
 	{
 		this.update();
@@ -202,6 +204,7 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.search.IndexerManagement#update()
 	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void update()
 	{
 		synchronized(updateMutex)

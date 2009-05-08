@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Named;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +47,7 @@ public class CleanupBean implements CleanupManagement, Runnable
 	 * (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void run()
 	{
 		this.cleanup();
@@ -54,6 +57,7 @@ public class CleanupBean implements CleanupManagement, Runnable
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.CleanupManagement#cleanup()
 	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void cleanup()
 	{
 		this.cleanupHeldSubscriptions();

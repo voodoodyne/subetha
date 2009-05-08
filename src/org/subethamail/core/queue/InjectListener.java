@@ -36,9 +36,8 @@ public class InjectListener implements MessageListener{
 
 	/** */
 	@SuppressWarnings("unchecked")
-	//TODO: Figure out why the injector is puking on this.
 	@DeliveryQueue 
-	BlockingQueue outboundQueue ;//= new ArrayBlockingQueue<MailDelivery>(3);
+	BlockingQueue outboundQueue;
 
 	/** */
 	@Name("subetha")
@@ -49,8 +48,8 @@ public class InjectListener implements MessageListener{
 	{
 		try
 		{
-			Long id = (Long) ((ObjectMessage)qMsg).getObject();
-			this.deliver(id);
+			InjectedQueueItem item = (InjectedQueueItem) ((ObjectMessage)qMsg).getObject();
+			this.deliver(item.getMailId());
 		}
 		catch (JMSException e)
 		{
@@ -91,7 +90,7 @@ public class InjectListener implements MessageListener{
 			{
 				try
 				{
-					this.outboundQueue.put(new MailDelivery(mailId, sub.getPerson().getId()));
+					this.outboundQueue.put(new DeliveryQueueItem(mailId, sub.getPerson().getId()));
 				}
 				catch (InterruptedException e)
 				{

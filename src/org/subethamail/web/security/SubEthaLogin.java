@@ -26,12 +26,12 @@ import com.caucho.security.SingleSignon;
  * @author Scott Hernandez
  */
 @ApplicationScoped
-public class ResinLogin extends AbstractLogin
+public class SubEthaLogin extends AbstractLogin
 {
 	/** Logger */
-	private static final Logger log = Logger.getLogger(ResinLogin.class.getName());
+	private static final Logger log = Logger.getLogger(SubEthaLogin.class.getName());
 
-	/** Need to use this because of problems with the {@link ClusterSingleSignon} one **/
+	/** Need to use this because of problems with the default {@link ClusterSingleSignon} **/
 	@New MemorySingleSignon ss;
 
 	/**

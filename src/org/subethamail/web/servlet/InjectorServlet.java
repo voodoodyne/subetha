@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.injector.i.Injector;
-import org.subethamail.web.security.ResinLogin;
+import org.subethamail.web.security.SubEthaLogin;
 
 /**
  * Servlet allows calling the injector with a very simple HTTP POST
@@ -42,7 +42,7 @@ public class InjectorServlet extends HttpServlet
 	@Current AccountMgr accMgr;
 	@Current Injector inj;
 	
-	@Current ResinLogin resinLogin;
+	@Current SubEthaLogin resinLogin;
 	
 	/** */
 	public static final String AUTH_EMAIL_PARAM = "authEmail";

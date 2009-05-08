@@ -2,21 +2,20 @@ package org.subethamail.core.queue;
 
 import java.io.Serializable;
 
-public class MailDelivery implements Serializable
+import org.subethamail.entity.Mail;
+
+public class InjectedQueueItem implements Serializable
 {
 	/**
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected Long personId;
 	protected Long mailId;
 	
-	public MailDelivery(Long mail, Long person)
+	public InjectedQueueItem(Mail mail)
 	{
-		this.personId = person;
-		this.mailId = mail;
+		this.mailId = mail.getId();
 	}
 	
 	public Long getMailId() { return this.mailId; }
-	public Long getPersonId() { return this.personId; }
 }

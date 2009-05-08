@@ -43,7 +43,7 @@ public class DeliveryListener implements MessageListener{
 	{
 		try
 		{
-			MailDelivery umdd = (MailDelivery)((ObjectMessage) qMsg).getObject();
+			DeliveryQueueItem umdd = (DeliveryQueueItem)((ObjectMessage) qMsg).getObject();
 
 			Long mailId = umdd.getMailId();
 			Long personId = umdd.getPersonId();

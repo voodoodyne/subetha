@@ -30,6 +30,7 @@ import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListDataPlus;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.InjectQueue;
+import org.subethamail.core.queue.InjectedQueueItem;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
@@ -72,7 +73,6 @@ public class AdminBean extends PersonalBean implements Admin
 	/** */
 	@Current PostOffice postOffice;
 
-	//TODO: Figure out why the injector is puking on this.	
 	@SuppressWarnings("unchecked")
 	@InjectQueue
 	BlockingQueue q;
@@ -507,7 +507,7 @@ public class AdminBean extends PersonalBean implements Admin
 			{
 				held.approve();
 				try {
-					this.q.put(held.getId());
+					this.q.put(new InjectedQueueItem(held));
 				} catch (InterruptedException e) {
 					log.error("Errror Que'n approved messageid",e);
 					throw new RuntimeException(e);

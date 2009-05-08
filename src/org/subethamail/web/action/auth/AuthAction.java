@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.core.auth.SubEthaPrincipal;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
-import org.subethamail.web.security.ResinLogin;
+import org.subethamail.web.security.SubEthaLogin;
 
 /**
  * Provides basic authentication services to action subclasses.
@@ -58,7 +58,7 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public void login(String who, String password) throws LoginException
 	{
-		ResinLogin rl = Backend.instance().getLogin();
+		SubEthaLogin rl = Backend.instance().getLogin();
 		
 		rl.logout(this.getCtx().getRequest());
 		

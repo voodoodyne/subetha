@@ -42,6 +42,7 @@ import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.InjectQueue;
+import org.subethamail.core.queue.InjectedQueueItem;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.VERPAddress;
@@ -102,7 +103,6 @@ public class InjectorBean implements Injector
 
 	/** The "inbound queue" which processes injections */
 	@SuppressWarnings("unchecked")
-	//TODO: Figure out why the injector is puking on this.
 	@InjectQueue 
 	BlockingQueue inboundQueue;
 	
@@ -383,7 +383,7 @@ public class InjectorBean implements Injector
 			
 			try
 			{
-				this.inboundQueue.put(mail.getId());
+				this.inboundQueue.put(new InjectedQueueItem(mail));
 			}
 			catch (InterruptedException ex)
 			{

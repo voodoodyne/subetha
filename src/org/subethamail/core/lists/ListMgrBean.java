@@ -43,6 +43,7 @@ import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.FilterRegistry;
 import org.subethamail.core.queue.InjectQueue;
+import org.subethamail.core.queue.InjectedQueueItem;
 import org.subethamail.core.util.InjectBeanHelper;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
@@ -76,7 +77,6 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	@Current Admin admin;
 	@Current AccountMgr accountMgr;
 
-	//TODO: Figure out why the injector is puking on this after the first time.
 	@SuppressWarnings("unchecked")
 	@InjectQueue
 	BlockingQueue q;	
@@ -677,7 +677,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 
 		mail.approve();
 
-		this.q.put(mail.getId());
+		this.q.put(new InjectedQueueItem(mail));
 //		this.queuer.queueForDelivery(mail.getId());
 
 		return mail.getList().getId();

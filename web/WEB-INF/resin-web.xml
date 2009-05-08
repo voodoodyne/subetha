@@ -17,6 +17,9 @@
 <!--	<logger name="com.caucho.config.inject" level="finest"/>-->
 <!--	<logger name="com.caucho.loader" level="fine" />-->
 <!--	<logger name="com.caucho.server" level="fine" />-->
+	<logger name="org.subethamail" level="finest" />
+	<logger name="org.subethamail.smtp" level="info" />
+	<logger name="org.hibernate" level="warning" />
 
 
 <!--  These (specifically the ResingLogin) seems to cause the injector to find multiple matches. Seems to work just letting the class be found automatically. -->
@@ -44,7 +47,6 @@
 	</resin:ScheduledTask>
 
 	<!-- Start now (in a few seconds)-->
-
 	<resin:ScheduledTask task="#{cleanupBean}">
 		<resin:delay>10s</resin:delay>
 	</resin:ScheduledTask>

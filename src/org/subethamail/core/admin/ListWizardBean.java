@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.context.ApplicationScoped;
 import javax.inject.Current;
 import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;

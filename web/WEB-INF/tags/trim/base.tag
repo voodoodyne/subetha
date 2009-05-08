@@ -40,7 +40,7 @@
 			</div>
 			
 			<div>
-				Powered by <a href="http://www.jboss.org/">JBoss</a>
+				Powered by <a href="http://www.caucho.com/resin/">Resin CanDI</a>
 			</div>
 		</div> <!-- footer -->
 	</body>

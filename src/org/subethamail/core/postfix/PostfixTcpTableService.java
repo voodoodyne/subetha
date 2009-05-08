@@ -30,13 +30,13 @@ import com.caucho.config.Service;
  * @author Scott Hernandez
  */
 @Service
-public class PostFixTcpTableService implements PostFixTcpTableManagement
+public class PostfixTcpTableService implements PostFixTcpTableManagement
 {
 	@Current Injector injector;
 	@Current SMTPManagement smtpManagement;
 
 	/** */
-	private final static Logger log = LoggerFactory.getLogger(PostFixTcpTableService.class);
+	private final static Logger log = LoggerFactory.getLogger(PostfixTcpTableService.class);
 	
 	/** */
 	public static final int DEFAULT_PORT = 2502;	

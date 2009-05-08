@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.security.PermitAll;
+import javax.context.ApplicationScoped;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import com.caucho.config.Service;
  */
 
 @Service
+@ApplicationScoped
 public class SMTPService implements SMTPManagement, MessageListenerRegistry
 {
 	/** */

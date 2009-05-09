@@ -36,7 +36,6 @@ import org.hibernate.annotations.SortType;
 import org.hibernate.validator.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.common.SiteUtils;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 import org.subethamail.entity.i.Validator;
@@ -280,9 +279,6 @@ public class MailingList implements Serializable, Comparable<MailingList>
 		if (value == null || value.length() > Validator.MAX_LIST_URL)
 			throw new IllegalArgumentException("Invalid url");
 
-		if (!SiteUtils.isValidListUrl(value))
-			throw new IllegalArgumentException("Invalid url");
-
 		if (log.isDebugEnabled())
 			log.debug("Setting url of " + this + " to " + value);
 
@@ -433,18 +429,20 @@ public class MailingList implements Serializable, Comparable<MailingList>
 	/**
 	 * @return the context root of the SubEtha web application, determined
 	 *  from the main URL.  Includes trailing /.
+	 *  
+	 *  Takes the list url and strips the last 2 parts 
+	 *  (http://server/se/list/listname -> http://server/se/)
 	 */
 	public String getUrlBase()
 	{
-		// Maybe this should be replaced with creating a URL and
-		// then replacing the path with WEBAPP_CONTEXT_PATH... but
-		// that's relatively quite expensive.
-
-		int pos = this.url.indexOf(SiteUtils.WEBAPP_CONTEXT_PATH);
-		if (pos < 0)
-			throw new IllegalStateException("Malformed list url");
-
-		return this.url.substring(0, pos + SiteUtils.WEBAPP_CONTEXT_PATH.length());
+		String[] parts = this.url.split("/");
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i = 0; i < parts.length-2; i++) {
+			sb.append(parts[i]).append("/");
+		}
+		
+		return sb.toString();
 	}
 
 	/**

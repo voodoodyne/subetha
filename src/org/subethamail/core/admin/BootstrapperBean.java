@@ -18,6 +18,7 @@ import javax.mail.internet.InternetAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.common.SiteUtils;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Config;
@@ -67,22 +68,16 @@ public class BootstrapperBean
 		catch (UnsupportedEncodingException ex) { throw new RuntimeException(ex); }
 	}
 	
-	private static final URL DEFAULT_SITE_URL;
-	static
-	{
-		try
-		{
-			DEFAULT_SITE_URL = new URL("http://needsconfiguration/se/");
-		}
-		catch (MalformedURLException ex) { throw new RuntimeException(ex); }
-	}
-	
 	private static final Integer VERSION_ID = 1;
 	
 	/**
 	 * The config id of a Boolean that lets us know if we've run or not.
 	 */
 	public static final String BOOTSTRAPPED_CONFIG_ID = "bootstrapped";
+	
+	@Current
+	SiteUtils siteUtils;
+
 	
 	/** */
 	@Current Admin admin;
@@ -175,15 +170,22 @@ public class BootstrapperBean
 			this.em.persist(cfg);
 		}
 		
+		URL defaultSiteUrl;
+		try {
+			defaultSiteUrl = new URL("http://needsconfiguration/se/" + siteUtils.getContextPath());
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+		
 		try
 		{
 			Config cfg = this.em.get(Config.class, Config.ID_SITE_URL);
 			if (cfg.getValue() == null)
-				cfg.setValue(DEFAULT_SITE_URL);
+				cfg.setValue(defaultSiteUrl);
 		}
 		catch (NotFoundException ex)
 		{
-			Config cfg = new Config(Config.ID_SITE_URL, DEFAULT_SITE_URL);
+			Config cfg = new Config(Config.ID_SITE_URL, defaultSiteUrl);
 			this.em.persist(cfg);
 		}
 	}

@@ -8,43 +8,39 @@ package org.subethamail.common;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.context.ApplicationScoped;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
 
 /**
  * Provides Subetha Site related helper methods
  * 
  * @author Scott Hernandez
  */
+@ApplicationScoped
 public class SiteUtils
 {
 	/** */
 	@SuppressWarnings("unused")
 	private final static Logger log = LoggerFactory.getLogger(SiteUtils.class);
-
-	/** Base context path for the subetha webapp */
-	public static final String WEBAPP_CONTEXT_PATH = "/se/";
 	
-	/** Path to the list servlet */
-	public static final String LIST_SERVLET_PATH = WEBAPP_CONTEXT_PATH + "list/";
 
-	/** default constructor prevents util class from being created. */
-	private SiteUtils() {}
-	
+	/** The context path */
+	private String contextPath;
+
 	/** 
 	 * Make sure that the list servlet path is the first thing after the domain.
 	 */
-	public static boolean isValidListUrl(URL url) 
+	public boolean isValidListUrl(URL url) 
 	{
-		return url.getPath().startsWith(LIST_SERVLET_PATH); 
+		return url.getPath().startsWith(getListServletPath()); 
 	}
 	
 	/** 
 	 * Make sure that the list servlet path is the first thing after the domain.
 	 */
-	public static boolean isValidListUrl(String url) 
+	public boolean isValidListUrl(String url) 
 	{
 		try
 		{
@@ -55,4 +51,15 @@ public class SiteUtils
 			return false;
 		}
 	}
+
+	public String getListServletPath(){
+		return getContextPath() + "list/";
+	}
+	/** @param the contextPath for this webapp/container*/
+	public void setContextPath(String contextPath) {
+		this.contextPath = contextPath;
+	}
+	
+	/** @returns the contextPath for this webapp/container*/
+	public String getContextPath(){ return this.contextPath;}
 }

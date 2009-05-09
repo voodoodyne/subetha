@@ -13,6 +13,7 @@ import javax.inject.Current;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.subethamail.common.SiteUtils;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.BootstrapperBean;
 import org.subethamail.core.admin.ScannerService;
@@ -62,6 +63,8 @@ public class Backend extends HttpServlet
 	@Current AccountMgr accountMgr;
 	@Current Archiver archiver;
 	
+	@Current SiteUtils siteUtils;
+	
 	/**
 	 * Allows us to login and logout to the container.
 	 */
@@ -80,7 +83,7 @@ public class Backend extends HttpServlet
 	public void init() throws ServletException
 	{
 		this.getServletContext().setAttribute(KEY, this);
-		
+		this.siteUtils.setContextPath(this.getServletContext().getContextPath());
 		singleton = this;
 	}
 
@@ -176,5 +179,10 @@ public class Backend extends HttpServlet
 		Package[] packages = Package.getPackages();
 		Arrays.sort(packages, cmp);
 		return packages;
+	}
+	/** @return the webapp context path ("/se/") */
+	public String getContextPath()
+	{
+		return siteUtils.getContextPath();
 	}
 }

@@ -1,3 +1,8 @@
+<!--
+	$Id:$
+	$URL: $
+-->
+
 <web-app xmlns="http://caucho.com/ns/resin"
 	xmlns:resin="urn:java:com.caucho.resin"
 	xmlns:cfg="urn:java:com.caucho.config"
@@ -9,7 +14,12 @@
 	xmlns:queue="urn:java:org.subethamail.core.queue"
 	xmlns:search="urn:org.subethamail.core.search"
 	>
+	
+<!--	Doesn't work-->
+<!-- 	<web-app id="/se"/>-->
 
+ 	<statistics-enable/>
+ 	
 	<logger name="com.caucho" level="config" />
 <!--	<logger name="com.caucho.admin" level="severe" />-->
 <!--	<logger name="com.caucho.config" level="finest" />-->

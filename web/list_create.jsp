@@ -2,6 +2,8 @@
 
 <t:action type="org.subethamail.web.action.auth.AuthRequired" />
 <c:set var="siteStatus" value="${backend.admin.siteStatus}" />
+<c:set var="contextPath" value="${backend.contextPath}" />
+
 
 <trim:main title="Create List">
 	<h1>Create List</h1>
@@ -64,8 +66,8 @@
 				<input id="url" name="url" id="url" type="text" size="60" onkeyup="enableSubmit();" value="${siteStatus.defaultSiteUrl}list/" />
 			</c:if>
 			
-			<div>Example: http://somedomain.com<strong>/se/list/</strong>announce</div>
-			<div>The URL <strong>must</strong> contain /se/list/ after the
+			<div>Example: http://somedomain.com<strong>${contextPath}list/</strong>announce</div>
+			<div>The URL <strong>must</strong> contain ${contextPath}list/ after the
 			domain</div>
 
 			<c:if test="${!empty model.errors.url}">

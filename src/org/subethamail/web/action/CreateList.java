@@ -8,6 +8,7 @@ package org.subethamail.web.action;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.inject.Current;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -33,6 +34,9 @@ public class CreateList extends AuthRequired
 	/** */
 	@SuppressWarnings("unused")
 	private final static Logger log = LoggerFactory.getLogger(CreateList.class);
+
+	@Current
+	SiteUtils siteUtils;
 	
 	/** */
 	public static class Model extends ErrorMapModel
@@ -83,8 +87,8 @@ public class CreateList extends AuthRequired
 		{
 			url = new URL(model.url);
 			
-			if (!SiteUtils.isValidListUrl(url))
-				model.setError("url", "List url must contain " + SiteUtils.LIST_SERVLET_PATH);
+			if (!siteUtils.isValidListUrl(url))
+				model.setError("url", "List url must contain " + siteUtils.getListServletPath());
 		}
 		catch (MalformedURLException ex)
 		{

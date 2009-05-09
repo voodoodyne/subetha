@@ -239,8 +239,8 @@
 		</jar>
 	</target>
 
-	<target name="junit" depends="rtest-jar">
-		<junit printsummary="yes" showoutput="yes" fork="yes">
+	<target name="junit" depends="rtest-jar, rtest-setup">
+		<junit printsummary="yes" showoutput="yes" fork="yes" dir="${build.dir}">
 			<classpath refid="rtest.run.classpath"/>
 			
 			<syspropertyset>
@@ -257,8 +257,8 @@
 		</junit>
 	</target>
 
-	<target name="junit-special" depends="rtest-jar">
-		<junit printsummary="true" showoutput="true" fork="true">
+	<target name="junit-special" depends="rtest-jar, rtest-setup">
+		<junit printsummary="true" showoutput="true" fork="true" dir="${build.dir}">
 			<classpath refid="rtest.run.classpath"/>
 			
 			<syspropertyset>
@@ -275,10 +275,14 @@
 		</junit>
 	</target>
 	
-	<target name="junit-debug" depends="rtest-jar">
-		<junit printsummary="yes" showoutput="yes" fork="yes">
-			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=8001"/>
-			<!-- <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8001"/> -->
+	<target name="rtest-setup" depends="war">
+		<mkdir dir="${build.dir}/resin/"/>
+		<unjar  src="${build.war.file}"  dest="${build.dir}/resin/" />
+	</target>
+	
+	<target name="junit-debug" depends="rtest-jar, rtest-setup">
+		<junit printsummary="yes" showoutput="yes" fork="yes" dir="${build.dir}/resin/">
+			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7890"/>
 
 			<classpath refid="rtest.run.classpath"/>
 			
@@ -296,4 +300,3 @@
 		</junit>
 	</target>
 </project>
-

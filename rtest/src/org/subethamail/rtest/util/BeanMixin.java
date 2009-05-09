@@ -5,10 +5,11 @@
 
 package org.subethamail.rtest.util;
 
-import java.net.MalformedURLException;
+import javax.inject.manager.Manager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.subethamail.common.ResinBridge;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.ListWizard;
@@ -18,7 +19,10 @@ import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.search.i.Indexer;
 
-import com.caucho.hessian.client.HessianProxyFactory;
+import com.caucho.resin.BeanEmbed;
+import com.caucho.resin.HttpEmbed;
+import com.caucho.resin.ResinEmbed;
+import com.caucho.resin.WebAppEmbed;
 
 /**
  * This class makes it easy to obtain and use the various
@@ -35,9 +39,30 @@ public class BeanMixin
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(BeanMixin.class);
 
+	public static ResinEmbed RESIN;
+	public static Manager MGR;
+
 	/** */
 	public BeanMixin() throws Exception
 	{
+		if(RESIN==null){
+		    ResinEmbed resin = new ResinEmbed();
+
+		    HttpEmbed http = new HttpEmbed(8181);
+		    resin.addPort(http);
+		    
+		    WebAppEmbed webApp = new WebAppEmbed("/se-test");
+		    webApp.setArchivePath("../subetha.war");
+		    ResinBridge rb = new ResinBridge();
+		    webApp.addBean(new BeanEmbed(rb, "resin-bridge"));
+
+		    resin.addWebApp(webApp);
+		    resin.start();
+
+		    //try to get the manager out :)
+		    MGR = rb.getManager();
+		    RESIN = resin;
+		}
 	}
 	
 	/** If this is null, clears all credentials */
@@ -52,20 +77,7 @@ public class BeanMixin
 	@SuppressWarnings("unchecked")
 	public Object getInterface(Class clazz)
 	{
-		HessianProxyFactory fact = new HessianProxyFactory();
-		if (this.getPrincipalName() != null)
-		{
-			fact.setUser(this.getPrincipalName());
-			fact.setPassword(this.getPassword());
-		}
-		
-		String url = WebApp.HOSTPORT + "/api/" + clazz.getSimpleName();
-		
-		try
-		{
-			return fact.create(clazz, url);
-		}
-		catch (MalformedURLException ex) { throw new RuntimeException(ex); }
+		return MGR.getInstanceByType(clazz);
 	}
 	
 	/** */

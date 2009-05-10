@@ -5,8 +5,6 @@
 
 package org.subethamail.core.util;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,20 +33,20 @@ public class VERPAddress
 	private final static Logger log = LoggerFactory.getLogger(VERPAddress.class);
 	
 	/** This is the suffix of all VERP'd addresses, plus the '@' */
-	public static final String SUFFIX = "-bounce@";
+	public static final String SUFFIX = "-b@";
 	
 	/** This preceeds the token in the address */
 	public static final String LEAD = "-verp-";
 	
 	/** */
 	String email;
-	String tokenHex;
+	String tokenEncoded;
 	
 	/** */
-	VERPAddress(String email, String tokenHex)
+	VERPAddress(String email, String tokenBase62)
 	{
 		this.email = email;
-		this.tokenHex = tokenHex;
+		this.tokenEncoded = tokenBase62;
 	}
 	
 	/**
@@ -64,19 +62,15 @@ public class VERPAddress
 	 */
 	public byte[] getToken()
 	{
-		try
-		{
-			return (byte[])Hex.decodeHex(this.tokenHex.toCharArray());
-		}
-		catch (DecoderException ex) { throw new RuntimeException(ex); }
+		return Base62.decode(this.tokenEncoded);
 	}
 
 	/**
-	 * @return The Hex encoded string.
+	 * @return The Base62 encoded string.
 	 */
 	public String getRawToken()
 	{
-		return this.tokenHex;
+		return this.tokenEncoded;
 	}
 
 	/**
@@ -98,12 +92,12 @@ public class VERPAddress
 			return null;
 
 		String email = addy.substring(0, leadIndex) + '@' + addy.substring(suffixIndex+SUFFIX.length());
-		String tokenHex = addy.substring(leadIndex+LEAD.length(), suffixIndex);
+		String tokenBase62 = addy.substring(leadIndex+LEAD.length(), suffixIndex);
 		
 		if (log.isDebugEnabled())
-			log.debug(addy + " becomes " + email + "/" + tokenHex);
+			log.debug(addy + " becomes " + email + "/" + tokenBase62);
 		
-		return new VERPAddress(email, tokenHex);
+		return new VERPAddress(email, tokenBase62);
 	}
 	
 	/**
@@ -114,7 +108,7 @@ public class VERPAddress
 		int atIndex = email.indexOf('@');
 		
 		return email.substring(0, atIndex)
-			+ LEAD + new String(Hex.encodeHex(token)) + SUFFIX 
+			+ LEAD + new String(Base62.encode(token)) + SUFFIX 
 			+ email.substring(atIndex+1);
 	}
 }

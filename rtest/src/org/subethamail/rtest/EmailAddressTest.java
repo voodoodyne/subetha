@@ -145,11 +145,10 @@ public class EmailAddressTest extends SubEthaTestCase
 	/** */
 	public void testVERPAddressParser() throws Exception
 	{
-		String verpAddress = "smtp-verp-6206c602c2e21f842635661d625ac3846eaddb97a0fdf57be59483dc0b07f325-bounce@subethamail.org";
+		String verpAddress = "smtp-verp-ABCD-b@subethamail.org";
 		VERPAddress addr = VERPAddress.getVERPBounce(verpAddress);
 		assertEquals("smtp@subethamail.org", addr.getEmail());
-		assertEquals("6206c602c2e21f842635661d625ac3846eaddb97a0fdf57be59483dc0b07f325", 
-						addr.getRawToken());
+		assertEquals("ABCD", addr.getRawToken());
 	}
 
 	/** */

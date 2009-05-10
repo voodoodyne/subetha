@@ -89,8 +89,9 @@ public class Backend extends HttpServlet
 		// TODO: Figure out a better way, maybe by using a new 
 		// service and listening for the singleton bean to get added to the inject manager?
 		Manager mgr = InjectManager.create();
-		Object o = mgr.getInstanceByName("resin-bridge");
-		if(o!= null) ((ResinBridge)o).setManager(mgr);
+		ResinBridge rb = (ResinBridge)mgr.getInstanceByName(ResinBridge.NAME);
+		if (rb != null)
+			rb.setManager(mgr);
 		
 		this.getServletContext().setAttribute(KEY, this);
 		this.siteUtils.setContextPath(this.getServletContext().getContextPath());

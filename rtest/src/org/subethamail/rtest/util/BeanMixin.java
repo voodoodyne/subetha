@@ -37,29 +37,30 @@ public class BeanMixin
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(BeanMixin.class);
 
-	public static ResinEmbed RESIN;
-	public static Manager MGR;
+	public static Manager resinInjectionManager;
 
 	/** */
 	public BeanMixin() throws Exception
 	{
-		if(RESIN==null){
-		    ResinEmbed resin = new ResinEmbed("conf/resin.xml");
+		if (resinInjectionManager == null)
+		{
+			ResinEmbed resin = new ResinEmbed("conf/resin.xml");
+			
+			ResinBridge rb = new ResinBridge();
+			resin.addBean(new BeanEmbed(rb, ResinBridge.NAME));
+			resin.start();
 
-//		    HttpEmbed http = new HttpEmbed(8181);
-//		    resin.addPort(http);
-		    
-//		    WebAppEmbed webApp = new WebAppEmbed("/se-test");
-//		    webApp.setArchivePath("../subetha.war");
-		    ResinBridge rb = new ResinBridge();
-		    resin.addBean(new BeanEmbed(rb, "resin-bridge"));
-//
-//		    resin.addWebApp(webApp);
-		    resin.start();
-
-		    //try to get the manager out :)
-		    MGR = rb.getManager();
-		    RESIN = resin;
+			for (int i=0; i<20; i++)
+			{
+				Thread.sleep(1);
+				resinInjectionManager = rb.getManager();
+			    
+				if (resinInjectionManager != null)
+					break;
+			}
+			
+			if (resinInjectionManager == null)
+				throw new IllegalStateException("Application failed to initialize in Resin");
 		}
 	}
 	
@@ -75,7 +76,7 @@ public class BeanMixin
 	@SuppressWarnings("unchecked")
 	public Object getInterface(Class clazz)
 	{
-		return MGR.getInstanceByType(clazz);
+		return resinInjectionManager.getInstanceByType(clazz);
 	}
 	
 	/** */

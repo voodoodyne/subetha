@@ -33,8 +33,10 @@
 
 
 <!--  These (specifically the ResinLogin) seems to cause the injector to find multiple matches. Seems to work just letting the class be found automatically. -->
-<!--	<ss:ResinLogin/>-->
+<!--	
+	<ss:ResinLogin/>
 	<auth:SubEthaAuthenticator/>
+-->
 
 	<resource
 		mbean-name="subetha:name=Cleanup"

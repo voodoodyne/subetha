@@ -49,16 +49,9 @@ public class BeanMixin
 			ResinBridge rb = new ResinBridge();
 			resin.addBean(new BeanEmbed(rb, ResinBridge.NAME));
 			resin.start();
-
-			for (int i=0; i<20; i++)
-			{
-				Thread.sleep(1);
-				resinInjectionManager = rb.getManager();
-			    
-				if (resinInjectionManager != null)
-					break;
-			}
 			
+			resinInjectionManager = rb.getManager();
+
 			if (resinInjectionManager == null)
 				throw new IllegalStateException("Application failed to initialize in Resin");
 		}

@@ -10,11 +10,9 @@ import java.util.Comparator;
 import java.util.Set;
 
 import javax.inject.Current;
-import javax.inject.manager.Manager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import org.subethamail.common.ResinBridge;
 import org.subethamail.common.SiteUtils;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.BootstrapperBean;
@@ -27,8 +25,6 @@ import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.web.security.SubEthaLogin;
-
-import com.caucho.config.inject.InjectManager;
 
 /**
  * Singleton which provides access to the backend EJBs.  
@@ -85,14 +81,7 @@ public class Backend extends HttpServlet
 	 */
 	@Override
 	public void init() throws ServletException
-	{
-		// TODO: Figure out a better way, maybe by using a new 
-		// service and listening for the singleton bean to get added to the inject manager?
-		Manager mgr = InjectManager.create();
-		ResinBridge rb = (ResinBridge)mgr.getInstanceByName(ResinBridge.NAME);
-		if (rb != null)
-			rb.setManager(mgr);
-		
+	{		
 		this.getServletContext().setAttribute(KEY, this);
 		this.siteUtils.setContextPath(this.getServletContext().getContextPath());
 		singleton = this;

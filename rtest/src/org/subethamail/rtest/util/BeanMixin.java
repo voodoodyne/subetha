@@ -50,6 +50,9 @@ public class BeanMixin
 			resin.addBean(new BeanEmbed(rb, ResinBridge.NAME));
 			resin.start();
 			
+			//this will set the inject manager from the webapp servlet into the ResinBridge
+			resin.request("GET /se/rtest-setup");
+			
 			resinInjectionManager = rb.getManager();
 
 			if (resinInjectionManager == null)

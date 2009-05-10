@@ -28,7 +28,7 @@
 
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
-	<property name="build.war.file" location="${build.dir}/${name}.war" />
+	<property name="build.war.file" location="${build.dir}/se.war" />
 	<property name="build.client.file" location="${build.dir}/${name}-client.jar" />
 
 	<property name="resin.dir" location="/java/resin-4.0.0/" />

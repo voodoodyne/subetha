@@ -9,7 +9,7 @@
 	xmlns:jms="urn:java:com.caucho.jms"
 	xmlns:ejb="urn:java:com.caucho.ejb"
 	xmlns:adm="urn:java:org.subethamail.core.admin"
-	xmlns:util="urn:java:org.subethamail.core.util"
+	xmlns:auth="urn:java:org.subethamail.core.auth"
 	xmlns:ss="urn:java:org.subethamail.web.security"
 	xmlns:queue="urn:java:org.subethamail.core.queue"
 	xmlns:search="urn:org.subethamail.core.search"
@@ -34,7 +34,7 @@
 
 <!--  These (specifically the ResinLogin) seems to cause the injector to find multiple matches. Seems to work just letting the class be found automatically. -->
 <!--	<ss:ResinLogin/>-->
-<!--	<util:SubEthaAuthenticator/>-->
+	<auth:SubEthaAuthenticator/>
 
 	<resource
 		mbean-name="subetha:name=Cleanup"

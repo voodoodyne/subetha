@@ -26,9 +26,6 @@ public class AdminMixin extends BeanMixin
 	public static final String PASSWORD = "password";
 	
 	/** */
-	Long id;
-
-	/** */
 	public AdminMixin() throws Exception
 	{
 	}

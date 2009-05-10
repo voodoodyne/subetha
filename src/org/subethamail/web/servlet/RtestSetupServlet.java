@@ -34,10 +34,9 @@ public class RtestSetupServlet extends HttpServlet
 		// service and listening for the singleton bean to get added to the inject manager?
 		ResinBridge rb = (ResinBridge)mgr.getInstanceByName(ResinBridge.NAME);
 		
-		if (rb != null) rb.setManager(mgr);
+		if (rb != null)
+			rb.setManager(mgr);
 		else
-			throw new ServletException(new IllegalStateException(
-					ResinBridge.NAME + " is not set in the inject manager"));
-		
+			throw new IllegalStateException(ResinBridge.NAME + " is not set in the inject manager");
 	}
 }

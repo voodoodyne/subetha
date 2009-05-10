@@ -5,6 +5,8 @@
 
 package org.subethamail.rtest.util;
 
+import java.util.Random;
+
 import javax.inject.manager.Manager;
 
 import org.slf4j.Logger;
@@ -18,9 +20,12 @@ import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.search.i.Indexer;
+import org.subethamail.web.security.SubEthaLogin;
 
 import com.caucho.resin.BeanEmbed;
 import com.caucho.resin.ResinEmbed;
+import com.caucho.server.connection.StubServletRequest;
+import com.caucho.server.dispatch.Invocation;
 
 /**
  * This class makes it easy to obtain and use the various
@@ -37,8 +42,9 @@ public class BeanMixin
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(BeanMixin.class);
 
-	public static Manager resinInjectionManager;
+	protected static Manager resinInjectionManager;
 
+	
 	/** */
 	public BeanMixin() throws Exception
 	{
@@ -58,6 +64,17 @@ public class BeanMixin
 			if (resinInjectionManager == null)
 				throw new IllegalStateException("Application failed to initialize in Resin");
 		}
+		
+		//whoa!
+		SubEthaLogin login = resinInjectionManager.getInstanceByType(SubEthaLogin.class);
+		
+		StubServletRequest req = new StubServletRequest();
+		Invocation invoc = new Invocation();
+		req.setInvocation(invoc);
+		invoc.setSessionId(String.valueOf(new Random().nextLong()));
+		
+		login.login(getPrincipalName(), getPassword(), req);
+		
 	}
 	
 	/** If this is null, clears all credentials */

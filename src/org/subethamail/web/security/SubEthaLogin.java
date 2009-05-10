@@ -54,7 +54,7 @@ public class SubEthaLogin extends AbstractLogin
 	    BasicPrincipal user = new BasicPrincipal(email);
 	    Credentials credentials = new PasswordCredentials(pass);
 	    
-	    Principal principal = auth.authenticate(user, credentials, request);
+	    Principal principal = auth.authenticate(user, credentials, null);
 
 	    if (log.isLoggable(Level.FINE))
 	      log.fine("authenticated: " + user + " -> " + principal);

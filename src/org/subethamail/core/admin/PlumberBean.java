@@ -54,13 +54,10 @@ public class PlumberBean implements Plumber
 		// If there was a port, separate the two
 		String port = null;
 		
-		int colon = host.indexOf(':');
-		if (colon > 0)
-		{
-			host = host.substring(colon + 1);
-			port = host.substring(0, colon);
-		}
-
+		String[] parts = host.split(":");		
+		host=parts[0];
+		if(parts.length > 1) port=parts[1];
+		
 		System.setProperty("mail.smtp.host", host);
 		System.setProperty("mail.smtp.port", port);
 	}

@@ -4,9 +4,7 @@ import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
 import javax.context.ApplicationScoped;
-import javax.inject.New;
 import javax.servlet.http.HttpServletRequest;
 
 import com.caucho.security.AbstractLogin;
@@ -16,7 +14,6 @@ import com.caucho.security.ClusterSingleSignon;
 import com.caucho.security.Credentials;
 import com.caucho.security.MemorySingleSignon;
 import com.caucho.security.PasswordCredentials;
-import com.caucho.security.SingleSignon;
 
 /**
  * Login class which makes programmatic login available.  You can inject
@@ -32,25 +29,12 @@ public class SubEthaLogin extends AbstractLogin
 	private static final Logger log = Logger.getLogger(SubEthaLogin.class.getName());
 
 	/** Need to use this because of problems with the default {@link ClusterSingleSignon} **/
-	@New MemorySingleSignon ss;
-
-	/**
-	 * Always use a {@link MemorySingleSignon} just for this module
-	 * 
-	 */
-	@Override
-	protected SingleSignon getSingleSignon()
-	{
-		return this.ss;
-	}
-
-	/** */
-	@PostConstruct
-	protected void postConstruct()
-	{
-		//just here for debugging.
-	    if (log.isLoggable(Level.FINE))
-		      log.fine("postConstruct(), ss=" + this.ss );
+	public SubEthaLogin(){
+		super();
+		
+		MemorySingleSignon mss =  new MemorySingleSignon(); //do it manually. :(
+		mss.init(); // call init since we aren't allowing the injection system to create the object.
+		this._singleSignon = mss;
 	}
 	
 	/**

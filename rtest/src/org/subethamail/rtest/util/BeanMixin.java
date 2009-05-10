@@ -20,9 +20,7 @@ import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.search.i.Indexer;
 
 import com.caucho.resin.BeanEmbed;
-import com.caucho.resin.HttpEmbed;
 import com.caucho.resin.ResinEmbed;
-import com.caucho.resin.WebAppEmbed;
 
 /**
  * This class makes it easy to obtain and use the various
@@ -46,17 +44,17 @@ public class BeanMixin
 	public BeanMixin() throws Exception
 	{
 		if(RESIN==null){
-		    ResinEmbed resin = new ResinEmbed();
+		    ResinEmbed resin = new ResinEmbed("conf/resin.xml");
 
-		    HttpEmbed http = new HttpEmbed(8181);
-		    resin.addPort(http);
+//		    HttpEmbed http = new HttpEmbed(8181);
+//		    resin.addPort(http);
 		    
-		    WebAppEmbed webApp = new WebAppEmbed("/se-test");
-		    webApp.setArchivePath("../subetha.war");
+//		    WebAppEmbed webApp = new WebAppEmbed("/se-test");
+//		    webApp.setArchivePath("../subetha.war");
 		    ResinBridge rb = new ResinBridge();
-		    webApp.addBean(new BeanEmbed(rb, "resin-bridge"));
-
-		    resin.addWebApp(webApp);
+		    resin.addBean(new BeanEmbed(rb, "resin-bridge"));
+//
+//		    resin.addWebApp(webApp);
 		    resin.start();
 
 		    //try to get the manager out :)

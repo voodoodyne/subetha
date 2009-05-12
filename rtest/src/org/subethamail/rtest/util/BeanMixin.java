@@ -5,13 +5,10 @@
 
 package org.subethamail.rtest.util;
 
-import java.util.Random;
-
-import javax.inject.manager.Manager;
+import java.net.MalformedURLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.common.ResinBridge;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.ListWizard;
@@ -20,12 +17,8 @@ import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.core.search.i.Indexer;
-import org.subethamail.web.security.SubEthaLogin;
 
-import com.caucho.resin.BeanEmbed;
-import com.caucho.resin.ResinEmbed;
-import com.caucho.server.connection.StubServletRequest;
-import com.caucho.server.dispatch.Invocation;
+import com.caucho.hessian.client.HessianProxyFactory;
 
 /**
  * This class makes it easy to obtain and use the various
@@ -42,39 +35,9 @@ public class BeanMixin
 	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(BeanMixin.class);
 
-	protected static Manager resinInjectionManager;
-
-	
 	/** */
 	public BeanMixin() throws Exception
 	{
-		if (resinInjectionManager == null)
-		{
-			ResinEmbed resin = new ResinEmbed("conf/resin.xml");
-			
-			ResinBridge rb = new ResinBridge();
-			resin.addBean(new BeanEmbed(rb, ResinBridge.NAME));
-			resin.start();
-			
-			//this will set the inject manager from the webapp servlet into the ResinBridge
-			resin.request("GET /se/rtest-setup");
-			
-			resinInjectionManager = rb.getManager();
-
-			if (resinInjectionManager == null)
-				throw new IllegalStateException("Application failed to initialize in Resin");
-		}
-		
-		//whoa!
-		SubEthaLogin login = resinInjectionManager.getInstanceByType(SubEthaLogin.class);
-		
-		StubServletRequest req = new StubServletRequest();
-		Invocation invoc = new Invocation();
-		req.setInvocation(invoc);
-		invoc.setSessionId(String.valueOf(new Random().nextLong()));
-		
-		login.login(getPrincipalName(), getPassword(), req);
-		
 	}
 	
 	/** If this is null, clears all credentials */
@@ -89,7 +52,20 @@ public class BeanMixin
 	@SuppressWarnings("unchecked")
 	public Object getInterface(Class clazz)
 	{
-		return resinInjectionManager.getInstanceByType(clazz);
+		HessianProxyFactory fact = new HessianProxyFactory();
+		if (this.getPrincipalName() != null)
+		{
+			fact.setUser(this.getPrincipalName());
+			fact.setPassword(this.getPassword());
+		}
+		
+		String url = WebApp.HOSTPORT + "/se/api/" + clazz.getSimpleName();
+		
+		try
+		{
+			return fact.create(clazz, url);
+		}
+		catch (MalformedURLException ex) { throw new RuntimeException(ex); }
 	}
 	
 	/** */

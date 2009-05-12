@@ -104,15 +104,4 @@
 		<servlet-name>PermissionImageServlet</servlet-name>
 		<url-pattern>/perm_img</url-pattern>
 	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>rTestSetup</servlet-name>
-		<servlet-class>org.subethamail.web.servlet.RtestSetupServlet</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>rTestSetup</servlet-name>
-		<url-pattern>/rtest-setup</url-pattern>
-	</servlet-mapping>
-
 </web-app>

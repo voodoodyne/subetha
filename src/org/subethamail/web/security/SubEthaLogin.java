@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 import javax.context.ApplicationScoped;
 import javax.servlet.http.HttpServletRequest;
 
-import com.caucho.security.AbstractLogin;
 import com.caucho.security.Authenticator;
+import com.caucho.security.BasicLogin;
 import com.caucho.security.BasicPrincipal;
 import com.caucho.security.ClusterSingleSignon;
 import com.caucho.security.Credentials;
@@ -23,16 +23,15 @@ import com.caucho.security.PasswordCredentials;
  * @author Scott Hernandez
  */
 @ApplicationScoped
-public class SubEthaLogin extends AbstractLogin
+public class SubEthaLogin extends BasicLogin
 {
 	/** Logger */
 	private static final Logger log = Logger.getLogger(SubEthaLogin.class.getName());
 
 	/** Need to use this because of problems with the default {@link ClusterSingleSignon} **/
-	public SubEthaLogin(){
-		super();
-		
-		MemorySingleSignon mss =  new MemorySingleSignon(); //do it manually. :(
+	public SubEthaLogin()
+	{
+		MemorySingleSignon mss =  new MemorySingleSignon(); // do it manually. :(
 		mss.init(); // call init since we aren't allowing the injection system to create the object.
 		this._singleSignon = mss;
 	}

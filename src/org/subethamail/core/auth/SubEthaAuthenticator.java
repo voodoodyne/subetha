@@ -10,6 +10,8 @@ import java.security.Principal;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Person;
@@ -29,6 +31,9 @@ import com.caucho.security.PasswordCredentials;
  */
 public class SubEthaAuthenticator implements Authenticator
 {
+	/** */
+	private static Logger log = LoggerFactory.getLogger(SubEthaAuthenticator.class);
+
 	/** */
 	@Name("subetha") 
 	SubEthaEntityManager em;
@@ -62,7 +67,12 @@ public class SubEthaAuthenticator implements Authenticator
 	{
 		SubEthaPrincipal p = (SubEthaPrincipal)user;
 		
-		return p.getRoles().contains(role);
+		boolean hasRole = p.getRoles().contains(role);
+		
+		if (log.isTraceEnabled())
+			log.trace("Checking " + p.getEmail() + " for role " + role + (hasRole ? " (yes)" : " (no)"));
+		
+		return hasRole;
 	}
 
 	/** */

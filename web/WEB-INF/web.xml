@@ -13,10 +13,10 @@
 	
 	<display-name>SubEtha Frontend</display-name>
 	
-	<error-page>
-		<error-code>500</error-code>
-		<location>/error.jsp</location>
-	</error-page>
+<!--	<error-page>-->
+<!--		<error-code>500</error-code>-->
+<!--		<location>/error.jsp</location>-->
+<!--	</error-page>-->
 	
 	<filter>
 		<filter-name>SetRequestCharsetFilter</filter-name>

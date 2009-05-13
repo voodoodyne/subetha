@@ -21,12 +21,16 @@
  	<statistics-enable/>
  	
 	<logger name="com.caucho" level="config" />
+	<logger name="com.caucho.hessian" level="finest" />
+	<logger name="com.caucho.security" level="finest" />
+	
 <!--	<logger name="com.caucho.admin" level="severe" />-->
 <!--	<logger name="com.caucho.config" level="finest" />-->
 <!--	<logger name="com.caucho.config.j2ee" level="finest"/>-->
 <!--	<logger name="com.caucho.config.inject" level="finest"/>-->
 <!--	<logger name="com.caucho.loader" level="fine" />-->
 <!--	<logger name="com.caucho.server" level="fine" />-->
+
 	<logger name="org.subethamail" level="finest" />
 	<logger name="org.subethamail.smtp" level="info" />
 	<logger name="org.hibernate" level="warning" />

@@ -59,4 +59,10 @@ public class SubEthaPrincipal implements Principal
 	{
 		return this.roles;
 	}
+	
+	/** */
+	public String toString()
+	{
+		return "SubEthaPrincipal {id=" + this.id + ", email=" + this.email + "}";
+	}
 }

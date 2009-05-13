@@ -277,7 +277,7 @@
 	
 	<target name="junit-debug" depends="rtest-jar">
 		<junit printsummary="yes" showoutput="yes" fork="yes" forkmode="once" dir="${resin.dir}/">
-			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7890"/>
+			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7891"/>
 
 			
 			<classpath refid="rtest.run.classpath"/>

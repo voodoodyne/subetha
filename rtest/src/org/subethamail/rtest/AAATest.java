@@ -37,6 +37,7 @@ public class AAATest extends TestCase
 	public void testFirstThing() throws Exception
 	{
 		AdminMixin admin = new AdminMixin();
+		admin.getPlumber().log("############# FIRST TEST RUN SUCCESSFULLY");
 	}
 	
 	/** */

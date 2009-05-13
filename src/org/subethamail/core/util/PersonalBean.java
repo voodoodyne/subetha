@@ -5,6 +5,9 @@
 
 package org.subethamail.core.util;
 
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.auth.SubEthaPrincipal;
 import org.subethamail.entity.Mail;
@@ -16,8 +19,6 @@ import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
 import com.caucho.config.Name;
-import com.caucho.security.SecurityContext;
-import com.caucho.security.SecurityContextException;
 
 /**
  * Base class for session EJBs which are called by authenticated
@@ -34,14 +35,7 @@ import com.caucho.security.SecurityContextException;
 public class PersonalBean
 {
 	/** */
-	//@Current protected SessionContext sessionContext;
-
-	
-//	@Current
-//	public void setSessionContext(SessionContext sc){
-//		if(this.sessionContext == null) this.sessionContext = sc;
-//	}
-//	
+	@Resource protected SessionContext sessionContext;
 
 	/** */
 	@Name("subetha")
@@ -54,15 +48,14 @@ public class PersonalBean
 	protected Long getMyId()
 	{
 		//TODO: Bug this with resin. The SessionContext was always null!
-		//Principal p = this.sessionContext.getCallerPrincipal();
-		//Principal p = wbManager.getInstanceByType(Principal.class);
+		SubEthaPrincipal p = (SubEthaPrincipal)this.sessionContext.getCallerPrincipal();
 		
-		SubEthaPrincipal p = null;
-		try
-		{
-			p = (SubEthaPrincipal)SecurityContext.getUserPrincipal();
-		}
-		catch (SecurityContextException e) { throw new RuntimeException(e); }
+//		SubEthaPrincipal p = null;
+//		try
+//		{
+//			p = (SubEthaPrincipal)SecurityContext.getUserPrincipal();
+//		}
+//		catch (SecurityContextException e) { throw new RuntimeException(e); }
 
 		return p.getId();
 	}

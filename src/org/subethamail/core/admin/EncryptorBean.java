@@ -25,7 +25,6 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJBException;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
 
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -79,11 +78,6 @@ public class EncryptorBean implements Encryptor
 		for (int i=0; i<KEY_LENGTH; i++)
 			IV[i] = (byte)(i+10);
 	}
-
-	
-	// TODO: Find a better way to insure the database is initialized.
-	@Current
-	BootstrapperBean boot;
 
 	/** */
 	@Name("subetha")

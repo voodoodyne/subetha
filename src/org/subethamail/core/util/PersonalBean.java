@@ -5,8 +5,7 @@
 
 package org.subethamail.core.util;
 
-import javax.annotation.Resource;
-import javax.ejb.SessionContext;
+import javax.inject.Current;
 
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.auth.SubEthaPrincipal;
@@ -35,11 +34,13 @@ import com.caucho.config.Name;
 public class PersonalBean
 {
 	/** */
-	@Resource protected SessionContext sessionContext;
+	//@Resource protected SessionContext sessionContext;
 
 	/** */
 	@Name("subetha")
 	protected SubEthaEntityManager em;
+	
+	@Current RequestPrincipalProvider principalHolder;
 
 	/**
 	 * Obtains my personId from the security context, or null
@@ -48,7 +49,7 @@ public class PersonalBean
 	protected Long getMyId()
 	{
 		//TODO: Bug this with resin. The SessionContext was always null!
-		SubEthaPrincipal p = (SubEthaPrincipal)this.sessionContext.getCallerPrincipal();
+//		SubEthaPrincipal p = (SubEthaPrincipal)this.sessionContext.getCallerPrincipal();
 		
 //		SubEthaPrincipal p = null;
 //		try
@@ -57,6 +58,10 @@ public class PersonalBean
 //		}
 //		catch (SecurityContextException e) { throw new RuntimeException(e); }
 
+		SubEthaPrincipal p = this.principalHolder.getPrincipal();
+		if (p == null)
+			throw new IllegalStateException("No prinicpal found");
+		
 		return p.getId();
 	}
 	

@@ -9,9 +9,11 @@ import java.security.Principal;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Current;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.subethamail.core.util.RequestPrincipalProvider;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Person;
@@ -38,6 +40,9 @@ public class SubEthaAuthenticator implements Authenticator
 	@Name("subetha") 
 	SubEthaEntityManager em;
 	
+	/** This request scoped object lets us track the principal for the first request */
+	@Current RequestPrincipalProvider principalHolder;
+	
 	/**
 	 * Authenticate the user by the password, returning null on failure.
 	 */
@@ -59,7 +64,11 @@ public class SubEthaAuthenticator implements Authenticator
 		else if (!p.checkPassword(credPassword.toString()))
 			return null;
 		else
-			return new SubEthaPrincipal(p.getId(), email, p.getRoles());
+		{
+			SubEthaPrincipal sep = new SubEthaPrincipal(p.getId(), email, p.getRoles());
+			this.principalHolder.setPrincipal(sep);
+			return sep;
+		}
 	}
 
 	/** */

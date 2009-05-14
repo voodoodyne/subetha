@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Resource;
 import javax.context.ApplicationScoped;
+import javax.inject.Current;
 import javax.inject.Initializer;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.EntityManager;
@@ -57,8 +57,7 @@ public class SubEthaEntityManager implements EntityManager
 	private final static Logger log = LoggerFactory.getLogger(SubEthaEntityManager.class);
 	
 	/** The entity manager to use under the covers */
-	@Resource(name="java:comp/EntityManager") 
-	private EntityManager base;
+	@Current private EntityManager base;
 
 	/** Injection based construction */
 	@Initializer

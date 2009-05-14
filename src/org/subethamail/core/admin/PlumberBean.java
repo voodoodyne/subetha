@@ -14,6 +14,8 @@ import org.subethamail.core.admin.i.Plumber;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.util.SubEthaEntityManager;
 
+import com.caucho.config.Name;
+
 /**
  * Implements some basic plumbing methods.
  * 
@@ -30,8 +32,7 @@ public class PlumberBean implements Plumber
 	//@Current SessionContext sessionContext;
 	
 	@Current PostOffice postOffice;
-	@Current SubEthaEntityManager em;
-
+	
 	/** Holds the mail config when overriding */
 	String mailSmtpHost;
 	String mailSmtpPort;

@@ -62,14 +62,17 @@ public class SubEthaEntityManager implements EntityManager
 
 	/** Injection based construction */
 	@Initializer
-	public SubEthaEntityManager(){
+	public SubEthaEntityManager()
+	{
 		//do nothing
 	}
 
-	/** Manual Constructor (for "new" calls)*/
-	public SubEthaEntityManager(EntityManager b){
+	/** Manual Constructor (for "new" calls) */
+	public SubEthaEntityManager(EntityManager b)
+	{
 		this.base = b;
 	}
+	
 	/**
 	 * Similar to find(), but throws a NotFoundException instead of returning null
 	 * when the key does not exist.

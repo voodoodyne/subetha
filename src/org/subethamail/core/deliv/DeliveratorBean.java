@@ -7,7 +7,6 @@ package org.subethamail.core.deliv;
 
 import java.io.IOException;
 
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Current;
 import javax.jws.WebMethod;
@@ -51,8 +50,7 @@ public class DeliveratorBean implements Deliverator
 	@Current Detacher detacher;
 
 	/** */
-	@Resource(name="java:comp/env/outbound-mail") 
-	private Session mailSession;
+	@Name("mta") Session mailSession;
 
 	/** */
 	@Name("subetha")

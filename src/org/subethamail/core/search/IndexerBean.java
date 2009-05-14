@@ -84,7 +84,7 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	DataSource ds = null;
 
 	/** */
-	@Current Session mailSession;
+	@Name("mta") Session mailSession;
 
 	/** */
 	@Name("subetha")

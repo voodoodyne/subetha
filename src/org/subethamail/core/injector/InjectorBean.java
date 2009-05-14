@@ -112,7 +112,7 @@ public class InjectorBean implements Injector
 	@Current PostOffice postOffice;
 
 	/** */
-	@Resource(name="java:comp/env/outbound-mail")
+	@Name("mta")
 	private Session mailSession;
 
 	/** */

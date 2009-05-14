@@ -1,7 +1,7 @@
 package org.subethamail.core.util;
 
 import javax.annotation.Resource;
-import javax.context.SessionScoped;
+import javax.context.ApplicationScoped;
 import javax.inject.Produces;
 import javax.mail.Session;
 import javax.sql.DataSource;
@@ -12,41 +12,29 @@ import com.caucho.config.Name;
  * Producers used for creating things with context. Yeah!
  * 
  * @author Scott Hernandez
- *
+ * @author Jeff Schnitzer
  */
-@SessionScoped
-public class Producers {
-
+@ApplicationScoped
+public class Producers
+{
+	/** Our application's data source */
 	//@Resource(name="java:comp/env/jdbc/subetha")
 	@Name("jdbc/subetha")
 	private DataSource ds;
 
-	@SuppressWarnings("unused")
-	@Resource(name="java:comp/env/outbound-mail")
-	private Session ses;
-	
-//	@Resource(name="java:comp/EntityManager") 
-//	private EntityManager em;
-
 	@Produces @Name("subetha")
-	public DataSource createSubethaDS(){
+	public DataSource getSubethaDS()
+	{
 		return this.ds;
 	}
 
+	/** The JavaMail session that connects to the outbound mta */
+	@Resource(name="java:comp/env/outbound-mail")
+	private Session mailSession;
 	
-//	@Produces @Name("subetha")
-//	public SubEthaEntityManager createEntityManager(){
-//		return new SubEthaEntityManager(this.em);
-//	}
-
-	//Didn't work.
-//	@Produces
-//	public InjectBeanHelper<Filter> createFilterIBH(){
-//		return new InjectBeanHelper<Filter>(this.mgr);
-//	}
-//	
-//	@Produces
-//	public InjectBeanHelper<Blueprint> createBlueprintIBH(){
-//		return new InjectBeanHelper<Blueprint>(this.mgr);
-//	}
+	@Produces @Name("mta")
+	public Session getMailSession()
+	{
+		return this.mailSession;
+	}
 }

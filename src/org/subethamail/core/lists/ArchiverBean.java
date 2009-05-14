@@ -26,7 +26,6 @@ import java.util.zip.CheckedOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Current;
 import javax.jws.WebMethod;
@@ -66,6 +65,7 @@ import org.subethamail.entity.Person;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
+import com.caucho.config.Name;
 import com.sun.mail.util.LineInputStream;
 
 /**
@@ -88,7 +88,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	private final static Logger log = LoggerFactory.getLogger(ArchiverBean.class);
 
 	/** */
-	@Resource(name="java:comp/env/outbound-mail")
+	@Name("mta")
 	private Session mailSession;
 
 	/*

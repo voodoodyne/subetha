@@ -53,7 +53,7 @@ public class PostOfficeBean implements PostOffice
 	private final static Logger log = LoggerFactory.getLogger(PostOfficeBean.class);
 	
 	/** */
-	@Current Session mailSession;
+	@Name("mta") Session mailSession;
 
 	/** */
 	@Current Encryptor encryptor;

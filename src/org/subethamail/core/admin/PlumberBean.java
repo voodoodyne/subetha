@@ -12,9 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.admin.i.Plumber;
 import org.subethamail.core.post.PostOffice;
-import org.subethamail.core.util.SubEthaEntityManager;
-
-import com.caucho.config.Name;
 
 /**
  * Implements some basic plumbing methods.

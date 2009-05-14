@@ -6,7 +6,7 @@
 package org.subethamail.core.admin;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Current;
+import javax.inject.New;
 
 /**
  * Simple service that starts the scanner.
@@ -16,7 +16,7 @@ import javax.inject.Current;
 //@Service
 public class ScannerService
 {
-	@Current 
+	@New 
 	BeanScanner scanner;
 	//ClassLoaderScanner scanner;
 	

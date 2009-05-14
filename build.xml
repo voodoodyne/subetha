@@ -63,6 +63,7 @@
 	
 	<path id="rtest.run.classpath">
 		<pathelement location="${build.dir}/rtest/rtest.jar" />
+		<pathelement location="${javasrc.dir}"/>	<!-- gets the hessian serializers -->
 		<path refid="rtest.build.classpath" />
 	</path>
 	

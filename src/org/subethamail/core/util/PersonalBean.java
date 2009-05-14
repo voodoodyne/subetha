@@ -15,7 +15,6 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
-import com.caucho.config.Name;
 import com.caucho.security.SecurityContext;
 import com.caucho.security.SecurityContextException;
 
@@ -37,7 +36,7 @@ public class PersonalBean
 	//@Resource protected SessionContext sessionContext;
 
 	/** */
-	@Name("subetha")
+	@SubEtha
 	protected SubEthaEntityManager em;
 	
 //	@Current RequestPrincipalProvider principalHolder;

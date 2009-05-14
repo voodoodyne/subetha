@@ -13,10 +13,10 @@ import javax.ejb.TransactionAttributeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.util.SubEthaEntityManager;
+import org.subethamail.core.util.SubEtha;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Person;
 
-import com.caucho.config.Name;
 import com.caucho.security.Authenticator;
 import com.caucho.security.Credentials;
 import com.caucho.security.PasswordCredentials;
@@ -35,7 +35,7 @@ public class SubEthaAuthenticator implements Authenticator
 	private static Logger log = LoggerFactory.getLogger(SubEthaAuthenticator.class);
 
 	/** */
-	@Name("subetha") 
+	@SubEtha
 	SubEthaEntityManager em;
 	
 //	/** This request scoped object lets us track the principal for the first request */

@@ -27,7 +27,9 @@ import org.subethamail.core.deliv.i.Deliverator;
 import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.post.OutboundMTA;
 import org.subethamail.core.util.SubEthaEntityManager;
+import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
@@ -54,10 +56,10 @@ public class DeliveratorBean implements Deliverator
 	@Current Detacher detacher;
 
 	/** */
-	@Name("mta") Session mailSession;
+	@OutboundMTA Session mailSession;
 
 	/** */
-	@Name("subetha")
+	@SubEtha
 	protected SubEthaEntityManager em;
 
 	/**

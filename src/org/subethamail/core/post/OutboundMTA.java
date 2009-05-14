@@ -3,7 +3,7 @@
  * $URL:$
  */
 
-package org.subethamail.core.queue;
+package org.subethamail.core.post;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -16,10 +16,10 @@ import java.lang.annotation.Target;
 import javax.inject.BindingType;
 
 /**
- * Binding Type (annotation) for our queues.
+ * Binding Type (annotation) for our mail session.
  * 
- * This binding type is attached to the configuration 
- * for the Queue, and the injection point it is used.
+ * This binding type is attached to the producer
+ * of the session, and the injection point it is used.
  * 
  * TODO: Put this back in place once the bug is fixed in 
  * resin.
@@ -32,5 +32,5 @@ import javax.inject.BindingType;
 @BindingType
 @Target({FIELD,METHOD,PARAMETER})
 @Retention(RUNTIME)
-public @interface DeliveryQueue
+public @interface OutboundMTA
 {}

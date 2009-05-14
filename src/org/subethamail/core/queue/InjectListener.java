@@ -17,6 +17,7 @@ import javax.jms.ObjectMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
+import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Subscription;
@@ -36,11 +37,12 @@ public class InjectListener implements MessageListener{
 
 	/** */
 	@SuppressWarnings("unchecked")
-	@DeliveryQueue 
+//	@DeliveryQueue 
+	@Name("delivery")
 	BlockingQueue outboundQueue;
 
 	/** */
-	@Name("subetha")
+	@SubEtha
 	protected SubEthaEntityManager em;
 
 	/** */

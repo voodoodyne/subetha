@@ -14,11 +14,10 @@ import javax.ejb.TransactionAttributeType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.SubscriptionHold;
-
-import com.caucho.config.Name;
 
 /**
  * Service which wakes up once a night and performs cleanup operations.
@@ -41,7 +40,7 @@ public class CleanupBean implements CleanupManagement, Runnable
 	public static final long MAX_HELD_MSG_AGE_MILLIS = 1000L * 60L * 60L * 24L * 7L;
 
 	/** */
-	@Name("subetha")
+	@SubEtha
 	protected SubEthaEntityManager em;
 
 	/*

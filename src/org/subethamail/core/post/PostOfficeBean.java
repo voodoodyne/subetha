@@ -29,6 +29,7 @@ import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.SubEthaEntityManager;
+import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
@@ -53,13 +54,13 @@ public class PostOfficeBean implements PostOffice
 	private final static Logger log = LoggerFactory.getLogger(PostOfficeBean.class);
 	
 	/** */
-	@Name("mta") Session mailSession;
+	@OutboundMTA Session mailSession;
 
 	/** */
 	@Current Encryptor encryptor;
 
 	/** */
-	@Name("subetha")
+	@SubEtha
 	protected SubEthaEntityManager em;
 	
 	/** 

@@ -6,6 +6,8 @@ import javax.inject.Produces;
 import javax.mail.Session;
 import javax.sql.DataSource;
 
+import org.subethamail.core.post.OutboundMTA;
+
 import com.caucho.config.Name;
 
 /**
@@ -22,7 +24,7 @@ public class Producers
 	@Name("jdbc/subetha")
 	private DataSource ds;
 
-	@Produces @Name("subetha")
+	@Produces @SubEtha
 	public DataSource getSubethaDS()
 	{
 		return this.ds;
@@ -32,7 +34,7 @@ public class Producers
 	@Resource(name="java:comp/env/outbound-mail")
 	private Session mailSession;
 	
-	@Produces @Name("mta")
+	@Produces @OutboundMTA
 	public Session getMailSession()
 	{
 		return this.mailSession;

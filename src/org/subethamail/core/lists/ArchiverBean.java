@@ -58,6 +58,7 @@ import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.core.lists.i.SearchHit;
 import org.subethamail.core.lists.i.SearchResult;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.post.OutboundMTA;
 import org.subethamail.core.search.i.Indexer;
 import org.subethamail.core.search.i.SimpleHit;
 import org.subethamail.core.search.i.SimpleResult;
@@ -70,7 +71,6 @@ import org.subethamail.entity.Person;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
-import com.caucho.config.Name;
 import com.sun.mail.util.LineInputStream;
 
 /**
@@ -96,7 +96,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	private final static Logger log = LoggerFactory.getLogger(ArchiverBean.class);
 
 	/** */
-	@Name("mta")
+	@OutboundMTA
 	private Session mailSession;
 
 	/*

@@ -15,9 +15,6 @@
 	xmlns:search="urn:org.subethamail.core.search"
 	>
 	
-<!--	Doesn't work-->
-<!-- 	<web-app id="/se"/>-->
-
  	<statistics-enable/>
  	
 	<logger name="com.caucho" level="config" />
@@ -36,12 +33,10 @@
 	<logger name="org.subethamail.smtp" level="info" />
 	<logger name="org.hibernate" level="warning" />
 
-
-<!--  These (specifically the ResinLogin) seems to cause the injector to find multiple matches. Seems to work just letting the class be found automatically. -->
-<!--	
-	<ss:ResinLogin/>
-	<auth:SubEthaAuthenticator/>
--->
+<!--  Needs a management interface to work-->
+<!--	<resource-->
+<!--		mbean-name="subetha:name=Bootstrapper"-->
+<!--		type="org.subethamail.core.admin.BootstrapperBean" />-->
 
 	<resource
 		mbean-name="subetha:name=Cleanup"
@@ -78,13 +73,15 @@
 	<jms:JmsConnectionFactory />
 
 	<jms:MemoryQueue>
-		<queue:DeliveryQueue/>
+<!--		<queue:DeliveryQueue/>-->
 		<Named>delivery</Named>
+		<resin:Name>delivery</resin:Name>
 	</jms:MemoryQueue>
 
 	<jms:MemoryQueue>
-		<queue:InjectQueue/>
-		<Named>injection</Named>
+<!--		<queue:InjectQueue/>-->
+		<Named>inject</Named>		
+		<resin:Name>inject</resin:Name>
 	</jms:MemoryQueue>
 
 	<ejb-message-bean class="org.subethamail.core.queue.DeliveryListener">
@@ -92,7 +89,7 @@
 	</ejb-message-bean>
 
 	<ejb-message-bean class="org.subethamail.core.queue.InjectListener">
-		<destination>#{injection}</destination>
+		<destination>#{inject}</destination>
 	</ejb-message-bean>
 
 	<database jndi-name="jdbc/subetha">
@@ -114,7 +111,7 @@
 		<smtp-host>localhost</smtp-host>
 		<smtp-port>25</smtp-port>
     </mail>
-	
+
 	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">
 		<protocol uri="hessian:"/>
 	</servlet-mapping>

@@ -19,9 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.deliv.i.Deliverator;
+import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
-
-import com.caucho.config.Name;
 
 /**
  * Processes delivery queue messages by creating an actual STMP message
@@ -38,7 +37,7 @@ public class DeliveryListener implements MessageListener
 	@Current Deliverator deliverator;
 
 	/** */
-	@Name("subetha")
+	@SubEtha
 	protected SubEthaEntityManager em;
 
 	/**

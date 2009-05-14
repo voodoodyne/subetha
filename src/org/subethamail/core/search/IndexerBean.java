@@ -31,9 +31,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SearchException;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.post.OutboundMTA;
 import org.subethamail.core.search.i.Indexer;
 import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.core.util.SubEthaEntityManager;
+import org.subethamail.core.util.SubEtha;
 import org.subethamail.entity.Mail;
 
 import com.caucho.config.Name;
@@ -83,10 +85,10 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	DataSource ds = null;
 
 	/** */
-	@Name("mta") Session mailSession;
+	@OutboundMTA Session mailSession;
 
 	/** */
-	@Name("subetha")
+	@SubEtha
 	protected SubEthaEntityManager em;
 
 	/**

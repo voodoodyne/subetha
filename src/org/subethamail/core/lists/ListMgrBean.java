@@ -45,7 +45,6 @@ import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.FilterRegistry;
-import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.queue.InjectedQueueItem;
 import org.subethamail.core.util.InjectBeanHelper;
 import org.subethamail.core.util.PersonalBean;
@@ -61,6 +60,8 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
+
+import com.caucho.config.Name;
 
 /**
  * Implementation of the ListMgr interface.
@@ -84,7 +85,8 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	@Current AccountMgr accountMgr;
 
 	@SuppressWarnings("unchecked")
-	@InjectQueue
+//	@InjectQueue
+	@Name("inject")
 	BlockingQueue q;	
 	
 	//@Current 

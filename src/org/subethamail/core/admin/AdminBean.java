@@ -31,7 +31,6 @@ import org.subethamail.core.admin.i.SiteStatus;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListDataPlus;
 import org.subethamail.core.post.PostOffice;
-import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.queue.InjectedQueueItem;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.PersonalBean;
@@ -46,6 +45,8 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
+
+import com.caucho.config.Name;
 
 /**
  * Implementation of the Admin interface.
@@ -78,7 +79,8 @@ public class AdminBean extends PersonalBean implements Admin
 	@Current PostOffice postOffice;
 
 	@SuppressWarnings("unchecked")
-	@InjectQueue
+//	@InjectQueue
+	@Name("inject")	
 	BlockingQueue q;
 
 	/**

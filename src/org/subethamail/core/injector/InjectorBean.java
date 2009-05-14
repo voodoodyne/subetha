@@ -41,10 +41,11 @@ import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.post.OutboundMTA;
 import org.subethamail.core.post.PostOffice;
-import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.queue.InjectedQueueItem;
 import org.subethamail.core.util.OwnerAddress;
+import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
@@ -106,7 +107,8 @@ public class InjectorBean implements Injector
 
 	/** The "inbound queue" which processes injections */
 	@SuppressWarnings("unchecked")
-	@InjectQueue 
+//	@InjectQueue 
+	@Name("inject")
 	BlockingQueue inboundQueue;
 	
 	@Current FilterRunner filterRunner;
@@ -115,11 +117,11 @@ public class InjectorBean implements Injector
 	@Current PostOffice postOffice;
 
 	/** */
-	@Name("mta")
+	@OutboundMTA
 	private Session mailSession;
 
 	/** */
-	@Name("subetha")
+	@SubEtha
 	protected SubEthaEntityManager em;
 
 	/*

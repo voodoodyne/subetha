@@ -12,7 +12,6 @@ import java.util.Set;
 
 import javax.context.ApplicationScoped;
 import javax.inject.Current;
-import javax.inject.Initializer;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -34,8 +33,6 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Validator;
 
-import com.caucho.config.Name;
-
 /**
  * The methods we add to a regular entity manager to give ourselves
  * a "prettier" interface.
@@ -49,7 +46,7 @@ import com.caucho.config.Name;
  * @author Scott Hernandez
  */
 @ApplicationScoped
-@Name("subetha")
+@SubEtha
 public class SubEthaEntityManager implements EntityManager
 {
 	/** */
@@ -58,19 +55,6 @@ public class SubEthaEntityManager implements EntityManager
 	/** The entity manager to use under the covers */
 	@Current private EntityManager base;
 
-	/** Injection based construction */
-	@Initializer
-	public SubEthaEntityManager()
-	{
-		//do nothing
-	}
-
-	/** Manual Constructor (for "new" calls) */
-	public SubEthaEntityManager(EntityManager b)
-	{
-		this.base = b;
-	}
-	
 	/**
 	 * Similar to find(), but throws a NotFoundException instead of returning null
 	 * when the key does not exist.

@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
+import javax.context.ApplicationScoped;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
@@ -20,10 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SiteUtils;
 import org.subethamail.core.admin.i.Admin;
+import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Config;
-
-import com.caucho.config.Name;
 
 /**
  * This bean really is only used when run for the first time
@@ -42,11 +42,11 @@ import com.caucho.config.Name;
  * @author Scott Hernandez
  */
 
-// TODO: Add @Service back once bug is fixed in Resin. For now this is triggered by 
+// TODO: Add @Service, (remove scope?) back once bug is fixed in Resin. For now this is triggered by 
 // the Backend Servlet (started with web container): http://bugs.caucho.com/view.php?id=3429
 
 //@Service
-//@ApplicationScoped
+@ApplicationScoped
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class BootstrapperBean
 {
@@ -84,7 +84,7 @@ public class BootstrapperBean
 	@Current Admin admin;
 
 	/** */
-	@Name("subetha")
+	@SubEtha
 	protected SubEthaEntityManager em;
 
 	/**

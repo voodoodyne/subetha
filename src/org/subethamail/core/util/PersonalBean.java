@@ -33,14 +33,13 @@ import com.caucho.security.SecurityContextException;
 public class PersonalBean
 {
 	/** */
+	// This injection doesn't work in Resin4
 	//@Resource protected SessionContext sessionContext;
 
 	/** */
 	@SubEtha
 	protected SubEthaEntityManager em;
 	
-//	@Current RequestPrincipalProvider principalHolder;
-
 	/**
 	 * Obtains my personId from the security context, or null
 	 * if there is no security context
@@ -56,10 +55,6 @@ public class PersonalBean
 		}
 		catch (SecurityContextException e) { throw new RuntimeException(e); }
 
-//		SubEthaPrincipal p = this.principalHolder.getPrincipal();
-//		if (p == null)
-//			throw new IllegalStateException("No prinicpal found");
-		
 		return p.getId();
 	}
 	

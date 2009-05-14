@@ -12,7 +12,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
-import javax.jws.WebMethod;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;

@@ -136,6 +136,7 @@
 			
 			<classes dir="${javasrc.dir}">
 				<include name="META-INF/**" />
+				<include name="**/*.vm" />
 			</classes>
 
 			<lib dir="${lib.dir}">

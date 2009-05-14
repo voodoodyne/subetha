@@ -74,7 +74,7 @@ public class SiteStatusSave extends AuthAction
 
 		Admin admin = Backend.instance().getAdmin();
 		admin.setPostmaster(address);
-		admin.setDefaultSiteUrl(url.toString());
+		admin.setDefaultSiteUrl(url);
 	}
 	
 }

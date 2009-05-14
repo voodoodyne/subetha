@@ -5,6 +5,7 @@
 
 package org.subethamail.core.util;
 
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -197,13 +198,13 @@ public class SubEthaEntityManager implements EntityManager
 	/**
 	 * Gets a mailing list with the specified url
 	 */
-	public MailingList getMailingListByURL(String url) throws NotFoundException
+	public MailingList getMailingList(URL url) throws NotFoundException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Finding MailingList with url " + url);
 		
 		Query q = this.createNamedQuery("MailingListByUrl");
-		q.setParameter("url", url);
+		q.setParameter("url", url.toString());
 		
 		try
 		{

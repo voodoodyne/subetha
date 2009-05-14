@@ -5,6 +5,7 @@
 
 package org.subethamail.core.admin.i;
 
+import java.net.URL;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -46,7 +47,7 @@ public interface Admin
 	 * @throws DuplicateListDataException if the address or url are already in use.
 	 * @throws InvalidListDataException if some of the list data can't be used.
 	 */
-	public Long createMailingList(InternetAddress address, String url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException;
+	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException;
 	
 	/**
 	 * Finds a person's id if the user exists, or creates a user account and
@@ -144,7 +145,7 @@ public interface Admin
 	/**
 	 * Sets list email address and URL.
 	 */
-	public void setListAddresses(Long listId, InternetAddress address, String url) throws NotFoundException, DuplicateListDataException, InvalidListDataException;
+	public void setListAddresses(Long listId, InternetAddress address, URL url) throws NotFoundException, DuplicateListDataException, InvalidListDataException;
 	
 	/**
 	 * Gets a list of all the lists on the system.
@@ -184,12 +185,12 @@ public interface Admin
 	/**
 	 * Sets the default site url.
 	 */
-	public void setDefaultSiteUrl(String url);
+	public void setDefaultSiteUrl(URL url);
 
 	/**
 	 * Gets the default site url.
 	 */
-	public String getDefaultSiteUrl();
+	public URL getDefaultSiteUrl();
 
 	/**
 	 * Sets the address of the site postmaster.

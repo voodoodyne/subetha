@@ -50,7 +50,7 @@ public class ServerAdminTest extends SubEthaTestCase
 		String uniqueString = Utils.uniqueString();
 		URL newUrl = new URL("http://" + uniqueString + "/");
 		
-		this.admin.getAdmin().setDefaultSiteUrl(newUrl.toString());
+		this.admin.getAdmin().setDefaultSiteUrl(newUrl);
 		
 		SiteStatus stat = this.admin.getAdmin().getSiteStatus();
 		

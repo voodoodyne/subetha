@@ -5,6 +5,8 @@
 
 package org.subethamail.rtest.util;
 
+import java.net.URL;
+
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -23,7 +25,7 @@ public class MailingListInfoMixin
 	String email;
 	String name;
 	InternetAddress address;
-	String url;
+	URL url;
 	String description;
 	String welcomeMessage;
 	
@@ -34,7 +36,7 @@ public class MailingListInfoMixin
 		
 		this.name = "List Name " + baseEmail;
 		this.email = baseEmail + "@localhost";
-		this.url = WebApp.BASEURL + "/list/" + baseEmail;
+		this.url = new URL(WebApp.BASEURL + "/list/" + baseEmail);
 		this.address = new InternetAddress(this.email, this.name);
 		this.description = "Test list description";
 		this.welcomeMessage = "Test list welcome message";
@@ -42,7 +44,7 @@ public class MailingListInfoMixin
 	
 	/** */
 	public String getEmail() { return this.email; }
-	public String getUrl() { return this.url; }
+	public URL getUrl() { return this.url; }
 	public InternetAddress getAddress() { return this.address; }
 	public String getDescription() { return this.description; }
 

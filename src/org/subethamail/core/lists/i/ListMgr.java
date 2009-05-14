@@ -5,6 +5,7 @@
 
 package org.subethamail.core.lists.i;
 
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,7 @@ public interface ListMgr
 	 * 
 	 * No access control.
 	 */
-	public Long lookup(String url) throws NotFoundException;
+	public Long lookup(URL url) throws NotFoundException;
 	
 	/**
 	 * Sets list name and description and whether or not subscriptions

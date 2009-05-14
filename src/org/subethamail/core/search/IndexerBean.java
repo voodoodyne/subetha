@@ -34,8 +34,8 @@ import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.post.OutboundMTA;
 import org.subethamail.core.search.i.Indexer;
 import org.subethamail.core.search.i.SimpleResult;
-import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.SubEtha;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 
 import com.caucho.config.Name;

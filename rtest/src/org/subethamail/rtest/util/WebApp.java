@@ -1,6 +1,7 @@
 package org.subethamail.rtest.util;
 
-public class WebApp {
+public class WebApp
+{
 	public static String HOSTPORT = "http://localhost:8080";
 	public static String BASEURL = HOSTPORT + "/se";
 

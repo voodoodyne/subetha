@@ -127,7 +127,7 @@ public class CreateList extends AuthRequired
 		{
 			try
 			{
-				model.id = Backend.instance().getListWizard().createMailingList(listAddress, url.toString(), model.description, owners, model.blueprint);
+				model.id = Backend.instance().getListWizard().createMailingList(listAddress, url, model.description, owners, model.blueprint);
 			}
 			catch (InvalidListDataException ex)
 			{

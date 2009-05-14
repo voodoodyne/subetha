@@ -97,7 +97,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#lookup(java.net.URL)
 	 */
-	public Long lookup(String url) throws NotFoundException
+	public Long lookup(URL url) throws NotFoundException
 	{
 		// Sometimes people looking for a list like "http://www.example.com/se/list"
 		// might type in "http://www.example.com/se/list/", so we will check for
@@ -106,39 +106,33 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 		// They might also type in "http://example.com/se/list", so we should
 		// try adding the www too.
 
-		URL parsed;
+		String stringified = url.toString();
 		try
 		{
-			parsed = new URL(url);
-		}
-		catch (MalformedURLException ex) { throw new IllegalArgumentException(ex); }
-		
-		try
-		{
-			return this.em.getMailingListByURL(parsed.toString()).getId();
+			return this.em.getMailingList(url).getId();
 		}
 		catch (NotFoundException ex)
 		{
-			if (url.endsWith("/"))
+			if (stringified.endsWith("/"))
 			{
 				try
 				{
-					parsed = new URL(url.substring(0, url.length()-1));
-					return this.em.getMailingListByURL(parsed.toString()).getId();
+					url = new URL(stringified.substring(0, stringified.length()-1));
+					return this.em.getMailingList(url).getId();
 				}
 				catch (MalformedURLException mux) { throw new RuntimeException(mux); }
 				catch (NotFoundException nfx) { throw ex; }	// throw the original anyways
 			}
-			else if (!parsed.getHost().startsWith("www."))
+			else if (!url.getHost().startsWith("www."))
 			{
 				try
 				{
-					int pivot = url.indexOf("//") + 2;
-					String firstPart = url.substring(0, pivot);
-					String secondPart = url.substring(pivot);
-					parsed = new URL(firstPart + "www." + secondPart);
+					int pivot = stringified.indexOf("//") + 2;
+					String firstPart = stringified.substring(0, pivot);
+					String secondPart = stringified.substring(pivot);
+					url = new URL(firstPart + "www." + secondPart);
 
-					return this.em.getMailingListByURL(parsed.toString()).getId();
+					return this.em.getMailingList(url).getId();
 				}
 				catch (MalformedURLException mux) { throw new RuntimeException(mux); }
 				catch (NotFoundException nfx) { throw ex; }	// throw the original anyways

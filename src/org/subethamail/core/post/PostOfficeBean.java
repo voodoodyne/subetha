@@ -28,8 +28,8 @@ import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.core.util.OwnerAddress;
-import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.SubEtha;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
@@ -38,8 +38,6 @@ import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
-
-import com.caucho.config.Name;
 
 /**
  * Implementation of the PostOffice interface.

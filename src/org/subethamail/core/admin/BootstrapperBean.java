@@ -76,9 +76,9 @@ public class BootstrapperBean
 	 */
 	public static final String BOOTSTRAPPED_CONFIG_ID = "bootstrapped";
 	
+	/** */
 	@Current
 	SiteUtils siteUtils;
-
 	
 	/** */
 	@Current Admin admin;

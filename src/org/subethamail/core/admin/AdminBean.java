@@ -680,7 +680,7 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setDefaultSiteUrl(java.net.URL)
 	 */
-	public void setDefaultSiteUrl(URL url)
+	public void setDefaultSiteUrl(String url)
 	{
 		this.em.setConfigValue(Config.ID_SITE_URL, url);
 	}
@@ -689,9 +689,10 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#getDefaultSiteUrl()
 	 */
-	public URL getDefaultSiteUrl()
+	public String getDefaultSiteUrl()
 	{
-		return (URL)this.em.findConfigValue(Config.ID_SITE_URL);
+		// Database might have java.net.URL from an old version of the code.
+		return this.em.findConfigValue(Config.ID_SITE_URL).toString();
 	}
 
 	/*

@@ -53,6 +53,7 @@ public class BeanMixin
 	public Object getInterface(Class clazz)
 	{
 		HessianProxyFactory fact = new HessianProxyFactory();
+		fact.setOverloadEnabled(true);
 		if (this.getPrincipalName() != null)
 		{
 			fact.setUser(this.getPrincipalName());

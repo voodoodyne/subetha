@@ -5,7 +5,6 @@
 
 package org.subethamail.core.admin.i;
 
-import java.net.URL;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -185,12 +184,12 @@ public interface Admin
 	/**
 	 * Sets the default site url.
 	 */
-	public void setDefaultSiteUrl(URL url);
+	public void setDefaultSiteUrl(String url);
 
 	/**
 	 * Gets the default site url.
 	 */
-	public URL getDefaultSiteUrl();
+	public String getDefaultSiteUrl();
 
 	/**
 	 * Sets the address of the site postmaster.

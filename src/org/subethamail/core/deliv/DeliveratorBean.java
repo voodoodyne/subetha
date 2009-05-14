@@ -28,15 +28,13 @@ import org.subethamail.core.filter.FilterRunner;
 import org.subethamail.core.injector.Detacher;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.post.OutboundMTA;
-import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.SubEtha;
+import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
-
-import com.caucho.config.Name;
 
 /**
  * @author Jeff Schnitzer

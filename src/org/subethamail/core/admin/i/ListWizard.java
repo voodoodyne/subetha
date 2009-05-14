@@ -5,7 +5,6 @@
 
 package org.subethamail.core.admin.i;
 
-import java.net.URL;
 import java.util.Collection;
 
 import javax.ejb.Local;
@@ -31,9 +30,9 @@ public interface ListWizard
 	/**
 	 * Creates a mailing list and configures it to a blueprint.  
 	 * 
-	 * @see Admin#createMailingList(InternetAddress, URL, String, InternetAddress[])
+	 * @see Admin#createMailingList(InternetAddress, String, String, InternetAddress[])
 	 * 
 	 * @param blueprint is the id of a blueprint object from getBlueprints().
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException;
+	public Long createMailingList(InternetAddress address, String url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException;
 }

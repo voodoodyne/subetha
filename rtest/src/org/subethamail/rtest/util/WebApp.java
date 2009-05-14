@@ -4,10 +4,13 @@ public class WebApp {
 	public static String HOSTPORT = "http://localhost:8080";
 	public static String BASEURL = HOSTPORT + "/se";
 
-	public static String getBaseUrl(){
+	public static String getBaseUrl()
+	{
 		return BASEURL;
 	}
-	public static String getHostPort(){
+	
+	public static String getHostPort()
+	{
 		return HOSTPORT;
 	}
 }

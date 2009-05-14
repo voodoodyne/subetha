@@ -109,7 +109,7 @@ public class SaveListSettings extends AuthAction
 				{
 					try
 					{
-						Backend.instance().getAdmin().setListAddresses(model.listId, listAddress, url);
+						Backend.instance().getAdmin().setListAddresses(model.listId, listAddress, url.toString());
 					}
 					catch (InvalidListDataException ex)
 					{

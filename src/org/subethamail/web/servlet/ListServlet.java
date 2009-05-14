@@ -6,7 +6,6 @@
 package org.subethamail.web.servlet;
 
 import java.io.IOException;
-import java.net.URL;
 
 import javax.inject.Current;
 import javax.servlet.RequestDispatcher;
@@ -44,11 +43,10 @@ public class ListServlet extends HttpServlet
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
 		String urlString = request.getRequestURL().toString();
-		URL url = new URL(urlString);
 		
 		try
 		{
-			Long listId = listMgr.lookup(url);
+			Long listId = listMgr.lookup(urlString);
 			
 			RequestDispatcher dispatcher = 
 				this.getServletContext().getRequestDispatcher(LIST_PAGE + "?" + ID_PARAM_NAME + "=" + listId);

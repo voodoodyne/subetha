@@ -96,14 +96,14 @@ public class AdminBean extends PersonalBean implements Admin
 	}
 
 	/**
-	 * @see Admin#createMailingList(InternetAddress, URL, String, InternetAddress[])
+	 * @see Admin#createMailingList(InternetAddress, String, String, InternetAddress[])
 	 */
-	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException
+	public Long createMailingList(InternetAddress address, String url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException
 	{
 		this.checkListAddresses(address, url);
 
 		// Then create the mailing list and attach the owners.
-		MailingList list = new MailingList(address.getAddress(), address.getPersonal(), url.toString(), description);
+		MailingList list = new MailingList(address.getAddress(), address.getPersonal(), url, description);
 		this.em.persist(list);
 		// TODO:  remove this code when http://opensource.atlassian.com/projects/hibernate/browse/HHH-1654
 		// is fixed.  This should be performed within the constructor of MailingList.
@@ -528,12 +528,12 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setListAddresses(java.lang.Long, javax.mail.internet.InternetAddress, java.net.URL)
 	 */
-	public void setListAddresses(Long listId, InternetAddress address, URL url) throws NotFoundException, DuplicateListDataException, InvalidListDataException
+	public void setListAddresses(Long listId, InternetAddress address, String url) throws NotFoundException, DuplicateListDataException, InvalidListDataException
 	{
 		MailingList list = this.em.get(MailingList.class, listId);
 
 		InternetAddress checkAddress = list.getEmail().equals(address.getAddress()) ? null : address;
-		URL checkUrl = list.getUrl().equals(url.toString()) ? null : url;
+		String checkUrl = list.getUrl().equals(url) ? null : url;
 		this.checkListAddresses(checkAddress, checkUrl);
 
 		list.setEmail(address.getAddress());
@@ -546,7 +546,7 @@ public class AdminBean extends PersonalBean implements Admin
 	 * @param address can be null to skip address checking
 	 * @param url can be null to skip url checking
 	 */
-	protected void checkListAddresses(InternetAddress address, URL url) throws DuplicateListDataException, InvalidListDataException
+	protected void checkListAddresses(InternetAddress address, String url) throws DuplicateListDataException, InvalidListDataException
 	{
 		boolean dupAddress = false;
 		boolean dupUrl = false;
@@ -574,7 +574,7 @@ public class AdminBean extends PersonalBean implements Admin
 
 			try
 			{
-				this.em.getMailingList(url);
+				this.em.getMailingListByURL(url);
 				dupUrl = true;
 			}
 			catch (NotFoundException ex) {}

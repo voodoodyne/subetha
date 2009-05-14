@@ -11,6 +11,8 @@ import java.sql.Blob;
 
 import javax.activation.DataHandler;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -32,6 +34,7 @@ import com.caucho.config.Name;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Detacher")
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class DetacherBean implements Detacher
 {
 	/** */

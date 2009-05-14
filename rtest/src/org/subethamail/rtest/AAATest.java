@@ -11,7 +11,9 @@ import junit.framework.TestSuite;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.subethamail.core.acct.i.Self;
 import org.subethamail.rtest.util.AdminMixin;
+import org.subethamail.rtest.util.PersonMixin;
 
 /**
  * Very basic tests that should be run first
@@ -38,6 +40,18 @@ public class AAATest extends TestCase
 	{
 		AdminMixin admin = new AdminMixin();
 		admin.getPlumber().log("############# FIRST TEST RUN SUCCESSFULLY");
+	}
+	
+	/** */
+	public void testSecondThing() throws Exception
+	{
+		AdminMixin admin = new AdminMixin();
+		
+		admin.getPlumber().log("############# CREATING MIXIN");
+		PersonMixin pers = new PersonMixin(admin);
+		
+		admin.getPlumber().log("############# GETTING SELF");
+		Self self = pers.getAccountMgr().getSelf();
 	}
 	
 	/** */

@@ -11,9 +11,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
-import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -51,6 +53,8 @@ import org.subethamail.entity.i.PermissionException;
  * @author Jeff Schnitzer
  */
 @Stateless(name="Admin")
+@RolesAllowed(Person.ROLE_ADMIN)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class AdminBean extends PersonalBean implements Admin
 {
 	/** */
@@ -94,7 +98,6 @@ public class AdminBean extends PersonalBean implements Admin
 	/**
 	 * @see Admin#createMailingList(InternetAddress, URL, String, InternetAddress[])
 	 */
-	@WebMethod
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException
 	{
 		this.checkListAddresses(address, url);
@@ -126,7 +129,6 @@ public class AdminBean extends PersonalBean implements Admin
 	/**
 	 * @see Admin#establishPerson(InternetAddress, String)
 	 */
-	@WebMethod
 	public Long establishPerson(InternetAddress address, String password)
 	{
 		return this.establishEmailAddress(address, password).getPerson().getId();
@@ -166,7 +168,6 @@ public class AdminBean extends PersonalBean implements Admin
 	/**
 	 * @see Admin#subscribeEmail(Long, InternetAddress, boolean, boolean)
 	 */
-	@WebMethod
 	public AuthSubscribeResult subscribeEmail(Long listId, InternetAddress address, boolean ignoreHold, boolean silent) throws NotFoundException
 	{
 		EmailAddress addy = this.establishEmailAddress(address, null);
@@ -185,7 +186,6 @@ public class AdminBean extends PersonalBean implements Admin
 	/**
 	 * @see Admin#subscribe(Long, Long, String, boolean)
 	 */
-	@WebMethod
 	public SubscribeResult subscribe(Long listId, Long personId, String email, boolean ignoreHold) throws NotFoundException
 	{
 		Person who = this.em.get(Person.class, personId);
@@ -281,7 +281,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#unsubscribe(java.lang.Long, Long)
 	 */
-	@WebMethod
 	public void unsubscribe(Long listId, Long personId) throws NotFoundException
 	{
 		Person who = this.em.get(Person.class, personId);
@@ -331,7 +330,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setSiteAdmin(java.lang.Long, boolean)
 	 */
-	@WebMethod
 	public void setSiteAdmin(Long personId, boolean value) throws NotFoundException
 	{
 		Person p = this.em.get(Person.class, personId);
@@ -346,7 +344,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setSiteAdmin(java.lang.String, boolean)
 	 */
-	@WebMethod
 	public void setSiteAdminByEmail(String email, boolean siteAdmin) throws NotFoundException
 	{
 		EmailAddress ea = this.em.getEmailAddress(email);
@@ -361,7 +358,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * @throws InterruptedException 
 	 * @see Admin#addEmail(Long, String)
 	 */
-	@WebMethod
 	public void addEmail(Long personId, String email) throws NotFoundException
 	{
 		EmailAddress addy = this.em.findEmailAddress(email);
@@ -392,7 +388,6 @@ public class AdminBean extends PersonalBean implements Admin
 	/**
 	 * @see Admin#merge(Long, Long)
 	 */
-	@WebMethod
 	public void merge(Long fromPersonId, Long toPersonId) throws NotFoundException
 	{
 		Person from = this.em.get(Person.class, fromPersonId);
@@ -492,7 +487,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * @see Admin#selfModerate(Long)
 	 */
 	@SuppressWarnings("unchecked")
-	@WebMethod
 	public int selfModerate(Long personId) throws NotFoundException
 	{
 		Person who = this.em.get(Person.class, personId);
@@ -524,7 +518,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#getSiteAdmins()
 	 */
-	@WebMethod
 	public List<PersonData> getSiteAdmins()
 	{
 		List<Person> siteAdmins = this.em.findSiteAdmins();
@@ -535,7 +528,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setListAddresses(java.lang.Long, javax.mail.internet.InternetAddress, java.net.URL)
 	 */
-	@WebMethod
 	public void setListAddresses(Long listId, InternetAddress address, URL url) throws NotFoundException, DuplicateListDataException, InvalidListDataException
 	{
 		MailingList list = this.em.get(MailingList.class, listId);
@@ -596,7 +588,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#getLists(int, int)
 	 */
-	@WebMethod
 	public List<ListData> getLists(int skip, int count)
 	{
 		return Transmute.mailingLists(this.em.findMailingLists(skip, count));
@@ -606,7 +597,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#getListsPlus(int, int)
 	 */
-	@WebMethod
 	public List<ListDataPlus> getListsPlus(int skip, int count) throws NotFoundException, PermissionException
 	{
 		List<MailingList> mailingLists = this.em.findMailingLists(skip, count);
@@ -626,7 +616,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#searchLists(java.lang.String, int, int)
 	 */
-	@WebMethod
 	public List<ListData> searchLists(String query, int skip, int count)
 	{
 		return Transmute.mailingLists(this.em.findMailingLists(query, skip, count));
@@ -636,7 +625,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#searchListsPlus(java.lang.String, int, int)
 	 */
-	@WebMethod
 	public List<ListDataPlus> searchListsPlus(String query, int skip, int count) throws NotFoundException, PermissionException
 	{
 		List<MailingList> mailingLists = this.em.findMailingLists(query, skip, count);
@@ -656,7 +644,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#countLists()
 	 */
-	@WebMethod
 	public int countLists()
 	{
 		return this.em.countLists();
@@ -666,7 +653,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#countLists(java.lang.String)
 	 */
-	@WebMethod
 	public int countListsQuery(String query)
 	{
 		return this.em.countLists(query);
@@ -676,7 +662,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#getSiteStatus()
 	 */
-	@WebMethod
 	public SiteStatus getSiteStatus()
 	{
 		return new SiteStatus(
@@ -693,7 +678,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setDefaultSiteUrl(java.net.URL)
 	 */
-	@WebMethod
 	public void setDefaultSiteUrl(URL url)
 	{
 		this.em.setConfigValue(Config.ID_SITE_URL, url);
@@ -703,7 +687,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#getDefaultSiteUrl()
 	 */
-	@WebMethod
 	public URL getDefaultSiteUrl()
 	{
 		return (URL)this.em.findConfigValue(Config.ID_SITE_URL);
@@ -713,7 +696,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setPostmaster(javax.mail.internet.InternetAddress)
 	 */
-	@WebMethod
 	public void setPostmaster(InternetAddress address)
 	{
 		this.em.setConfigValue(Config.ID_SITE_POSTMASTER, address);
@@ -723,7 +705,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#deleteList(java.lang.Long, java.lang.String)
 	 */
-	@WebMethod
 	public boolean deleteList(Long listId, String password) throws NotFoundException
 	{
 		Person me = this.getMe();

@@ -48,7 +48,6 @@ import com.caucho.config.Name;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-
 @Named("indexerBean")
 public class IndexerBean implements IndexerManagement, Indexer, Runnable
 {
@@ -93,7 +92,7 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	/**
 	 * @return the currently in-use index manager.
 	 */
-	static IndexMgr getCurrentIndex()
+	protected static IndexMgr getCurrentIndex()
 	{
 		if (USE2.exists())
 			return index2;
@@ -104,7 +103,7 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	/**
 	 * @return the index manager which is not in use.
 	 */
-	static IndexMgr getFallowIndex()
+	protected static IndexMgr getFallowIndex()
 	{
 		if (USE2.exists())
 			return index1;
@@ -116,7 +115,7 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	 * Sets which index becomes the current one by
 	 * modifying the existance of the USE2 file.
 	 */
-	void swapCurrentIndex() throws IOException
+	protected void swapCurrentIndex() throws IOException
 	{
 		if (USE2.exists())
 		{
@@ -153,6 +152,7 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	 */
 
 	@PostConstruct
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void start() throws Exception
 	{
 		log.info("Starting indexer service");
@@ -165,6 +165,7 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	 * @see org.subethamail.core.search.IndexerManagement#stop()
 	 */
 	@PreDestroy
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void stop() throws Exception
 	{
 		log.info("Stopping IndexerService");
@@ -204,7 +205,6 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.search.IndexerManagement#update()
 	 */
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void update()
 	{
 		synchronized(updateMutex)
@@ -281,7 +281,7 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	 * Avoids using hibernate so that the 2nd-level cache is not polluted with
 	 * a ton of crap.
 	 */
-	void indexAllMail(Modifier modifier) throws IOException
+	protected void indexAllMail(Modifier modifier) throws IOException
 	{
 		try
 		{

@@ -17,10 +17,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-import javax.annotation.Resource;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
-import javax.jws.WebMethod;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -61,6 +62,8 @@ import com.caucho.config.Name;
  * @author Scott Hernandez
  */
 @Stateless(name="Injector")
+@RolesAllowed(Person.ROLE_ADMIN)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class InjectorBean implements Injector
 {
 	/** */
@@ -123,7 +126,6 @@ public class InjectorBean implements Injector
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#accept(java.lang.String)
 	 */
-	@WebMethod
 	public boolean accept(String toAddress)
 	{
 		if (log.isDebugEnabled())

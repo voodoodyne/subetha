@@ -47,6 +47,7 @@ import com.caucho.config.Name;
 
 //@Service
 //@ApplicationScoped
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class BootstrapperBean
 {
 	/** */
@@ -90,7 +91,6 @@ public class BootstrapperBean
 	 * @see BootstrapperManagement#start()
 	 */
 	@PostConstruct
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void start() throws Exception
 	{
 		// If we haven't been bootstrapped, we need to run.
@@ -171,7 +171,8 @@ public class BootstrapperBean
 		}
 		
 		URL defaultSiteUrl;
-		try {
+		try
+		{
 			defaultSiteUrl = new URL("http://needsconfiguration/se/" + siteUtils.getContextPath());
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);

@@ -35,11 +35,16 @@ import com.caucho.security.SecurityContextException;
 public class RequestPrincipalProvider
 {
 	/** */
-	@SuppressWarnings("unused")
 	private final static Logger log = LoggerFactory.getLogger(RequestPrincipalProvider.class);
 
 	/** */
 	SubEthaPrincipal prince;
+	
+	/** */
+	public RequestPrincipalProvider()
+	{
+		log.debug("Constructing new RequestPrincipalProvider");
+	}
 	
 	/**
 	 * @return the current appropriate Principal, either because one was
@@ -47,9 +52,13 @@ public class RequestPrincipalProvider
 	 */
 	public SubEthaPrincipal getPrincipal()
 	{
+		log.debug("getting principal from " + super.toString());
+			
 		try
 		{
 			SubEthaPrincipal p = (SubEthaPrincipal)SecurityContext.getUserPrincipal();
+			if (log.isDebugEnabled())
+				log.debug("Principal obtained from SecurityContext is " + p + ", stored principal is " + this.prince);
 			
 			if (this.prince != null && p != null && this.prince != p)
 				throw new IllegalStateException("Principals did not match");
@@ -68,6 +77,9 @@ public class RequestPrincipalProvider
 	 */
 	public void setPrincipal(SubEthaPrincipal principal)
 	{
+		if (log.isDebugEnabled())
+			log.debug("Setting principal to " + principal + " on " + super.toString());
+		
 		this.prince = principal;
 	}
 }

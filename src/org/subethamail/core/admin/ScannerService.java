@@ -6,23 +6,26 @@
 package org.subethamail.core.admin;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.RunAs;
 import javax.inject.New;
 
+import org.subethamail.entity.Person;
+
 /**
- * 
- * Simple services that starts the scanner.
+ * Simple service that starts the scanner.
  * 
  * @author Scott Hernandez
- *
  */
 //@Service
+@RunAs(Person.ROLE_ADMIN)
 public class ScannerService
 {
 	//@New ClassLoaderScanner scanner;
 	@New BeanScanner scanner;
 	
 	@PostConstruct
-	public void postConstruct(){
+	public void postConstruct()
+	{
 		scanner.scan();
 	}
 }

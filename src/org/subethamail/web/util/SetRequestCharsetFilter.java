@@ -33,10 +33,14 @@ public class SetRequestCharsetFilter extends AbstractFilter
 		throws IOException, ServletException
 	{
 		if (log.isDebugEnabled())
-			log.debug("*** Starting filter for " + request.getRequestURI());
+			log.debug("vvv Starting filter for " + request.getRequestURI());
 		
 		if (request.getCharacterEncoding() == null)
 			request.setCharacterEncoding("UTF-8");
+		
 		chain.doFilter(request, response);
+		
+		if (log.isDebugEnabled())
+			log.debug("^^^ Ending filter for " + request.getRequestURI());
 	}
 }

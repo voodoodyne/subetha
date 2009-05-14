@@ -7,6 +7,8 @@
 package org.subethamail.core.queue;
 
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -26,7 +28,9 @@ import com.caucho.config.Name;
  * using JavaMail, relaying it through the deliverator.
  */
 @MessageDriven
-public class DeliveryListener implements MessageListener{
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
+public class DeliveryListener implements MessageListener
+{
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(DeliveryListener.class);
 

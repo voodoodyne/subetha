@@ -28,6 +28,7 @@ import com.caucho.config.Name;
  * @author Scott Hernandez
  */
 @Named("cleanupBean")
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class CleanupBean implements CleanupManagement, Runnable
 {
 	/** */
@@ -47,7 +48,6 @@ public class CleanupBean implements CleanupManagement, Runnable
 	 * (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void run()
 	{
 		this.cleanup();
@@ -57,7 +57,6 @@ public class CleanupBean implements CleanupManagement, Runnable
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.admin.CleanupManagement#cleanup()
 	 */
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void cleanup()
 	{
 		this.cleanupHeldSubscriptions();

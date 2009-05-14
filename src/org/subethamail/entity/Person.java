@@ -64,15 +64,19 @@ public class Person implements Serializable, Comparable<Person>
 {
 	/** */
 	@Transient private final static Logger log = LoggerFactory.getLogger(Person.class);
+	
+	/** */
+	public static final String ROLE_USER = "user";
+	public static final String ROLE_ADMIN = "siteAdmin";
 
 	/** */
-	static final Set<String> USER_ROLES = Collections.singleton("user");
+	static final Set<String> USER_ROLES = Collections.singleton(ROLE_USER);
 	static final Set<String> SITE_ADMIN_ROLES;
 	static
 	{
 		Set<String> roles = new HashSet<String>();
-		roles.add("user");
-		roles.add("siteAdmin");
+		roles.add(ROLE_USER);
+		roles.add(ROLE_ADMIN);
 
 		SITE_ADMIN_ROLES = Collections.unmodifiableSet(roles);
 	}

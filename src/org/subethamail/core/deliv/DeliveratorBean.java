@@ -7,7 +7,10 @@ package org.subethamail.core.deliv;
 
 import java.io.IOException;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
 import javax.jws.WebMethod;
 import javax.mail.Address;
@@ -39,6 +42,8 @@ import com.caucho.config.Name;
  * @author Scott Hernandez
  */
 @Stateless
+@RolesAllowed(Person.ROLE_ADMIN)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class DeliveratorBean implements Deliverator
 {
 	/** */
@@ -59,7 +64,6 @@ public class DeliveratorBean implements Deliverator
 	/**
 	 * @see Deliverator#deliverToEmail(Long, String)
 	 */
-	@WebMethod
 	public void deliverToEmail(Long mailId, String email) throws NotFoundException
 	{
 		EmailAddress ea = this.em.getEmailAddress(email);
@@ -71,7 +75,6 @@ public class DeliveratorBean implements Deliverator
 	/**
 	 * @see Deliverator#deliver(Long, Long)
 	 */
-	@WebMethod
 	public void deliver(Long mailId, Long personId) throws NotFoundException
 	{
 

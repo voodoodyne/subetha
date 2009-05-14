@@ -10,8 +10,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.security.RolesAllowed;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
-import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.core.plugin.i.BlueprintRegistry;
 import org.subethamail.core.util.InjectBeanHelper;
 import org.subethamail.core.util.Transmute;
+import org.subethamail.entity.Person;
 
 /**
  * Implementation of the ListWizard interface.
@@ -32,6 +35,8 @@ import org.subethamail.core.util.Transmute;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
+@RolesAllowed(Person.ROLE_ADMIN)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class ListWizardBean implements ListWizard, BlueprintRegistry
 {
 	/** */
@@ -74,7 +79,6 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	/**
 	 * @see ListWizard#getBlueprints()
 	 */
-	@WebMethod
 	public Collection<BlueprintData> getBlueprints()
 	{
 		return this.blueprints.values();
@@ -83,7 +87,6 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	/**
 	 * @see ListWizard#createMailingList(InternetAddress, URL, String, InternetAddress[], String)
 	 */
-	@WebMethod
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
 		Blueprint blue = bHelper.getInstance(blueprintId);

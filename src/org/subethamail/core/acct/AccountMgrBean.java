@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
-import javax.jws.WebMethod;
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -42,6 +44,8 @@ import org.subethamail.entity.Subscription;
  * @author Jeff Schnitzer
  */
 @Stateless(name="AccountMgr")
+@RolesAllowed(Person.ROLE_USER)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class AccountMgrBean extends PersonalBean implements AccountMgr
 {
 	/** */
@@ -67,7 +71,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	/**
 	 * @see AccountMgr#getSelf()
 	 */
-	@WebMethod
 	public Self getSelf()
 	{
 		log.debug("Getting self");
@@ -86,7 +89,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	/**
 	 * @see AccountMgr#setName(String)
 	 */
-	@WebMethod
 	public void setName(String newName)
 	{
 		log.debug("Setting name");
@@ -97,7 +99,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	/**
 	 * @see AccountMgr#setPassword(String)
 	 */
-	@WebMethod
 	public void setPassword(String newPassword)
 	{
 		log.debug("Setting password");
@@ -109,7 +110,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	/**
 	 * @see AccountMgr#addEmailRequest(String)
 	 */
-	@WebMethod
 	public void addEmailRequest(String newEmail)
 	{
 		// Send a token to the person's account
@@ -162,7 +162,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	/**
 	 * @see AccountMgr#removeEmail(String)
 	 */
-	@WebMethod
 	public void removeEmail(String email)
 	{
 		Person me = this.getMe();
@@ -185,7 +184,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	 * @see org.subethamail.core.acct.i.AccountMgr#getMyListRelationship(java.lang.Long)
 	 */
 	@PermitAll
-	@WebMethod
 	public MyListRelationship getMyListRelationship(Long listId) throws NotFoundException
 	{
 		MailingList ml = this.em.get(MailingList.class, listId);
@@ -200,7 +198,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	 * The token emailed is encrypted "listId:email:name".
 	 */
 	@PermitAll
-	@WebMethod
 	public void subscribeAnonymousRequest(Long listId, String email, String name) throws NotFoundException
 	{
 		// Send a token to the person's account
@@ -256,7 +253,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	/**
 	 * @see AccountMgr#subscribeMe(Long, String)
 	 */
-	@WebMethod
 	public SubscribeResult subscribeMe(Long listId, String email) throws NotFoundException
 	{
 		Person me = this.getMe();
@@ -286,7 +282,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	/**
 	 * @see AccountMgr#unsubscribeMe(Long)
 	 */
-	@WebMethod
 	public void unsubscribeMe(Long listId) throws NotFoundException
 	{
 		Person me = this.getMe();
@@ -298,7 +293,6 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	 * @see org.subethamail.core.acct.i.AccountMgr#forgotPassword(java.lang.String)
 	 */
 	@PermitAll
-	@WebMethod
 	public void forgotPassword(String email) throws NotFoundException
 	{
 		EmailAddress addy = this.em.getEmailAddress(email);

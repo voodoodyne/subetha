@@ -52,6 +52,7 @@ import com.caucho.config.Name;
  */
 
 @ApplicationScoped
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class EncryptorBean implements Encryptor
 {
 	/** */
@@ -92,7 +93,6 @@ public class EncryptorBean implements Encryptor
 	 * @see EncryptorManagement#start()
 	 */
 	@PostConstruct
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void start() throws Exception
 	{
 		// If we don't already have a key, generate one
@@ -118,7 +118,7 @@ public class EncryptorBean implements Encryptor
 	 * Randomly generates a new, base64-encoded key.  The raw key
 	 * will be 16 bytes long.
 	 */
-	String generateKey()
+	protected String generateKey()
 	{
 		byte[] generated = new byte[KEY_LENGTH];
 
@@ -131,7 +131,7 @@ public class EncryptorBean implements Encryptor
 	/**
 	 * @return the current key from the config
 	 */
-	byte[] getKey()
+	protected byte[] getKey()
 	{
 		String base64 = (String)this.em.findConfigValue(KEY_CONFIG_ID);
 		return Base64.decodeBase64(base64.getBytes());

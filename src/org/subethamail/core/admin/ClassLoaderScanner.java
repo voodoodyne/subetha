@@ -29,7 +29,6 @@ import org.subethamail.core.plugin.i.FilterRegistry;
  * @author Scott Hernandez
  * 
  */
-
 public class ClassLoaderScanner
 {
 	@Current

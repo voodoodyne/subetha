@@ -12,7 +12,6 @@ import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.security.PermitAll;
 import javax.context.ApplicationScoped;
 import javax.inject.Current;
 
@@ -115,7 +114,6 @@ public class SMTPService implements SMTPManagement
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.service.SMTPManagement#start()
 	 */
-	@PermitAll	
 	@PostConstruct
 	public void startServer() throws IOException
 	{
@@ -145,7 +143,6 @@ public class SMTPService implements SMTPManagement
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.service.SMTPManagement#stop()
 	 */
-	@PermitAll
 	@PreDestroy
 	public void stopServer()
 	{
@@ -158,7 +155,6 @@ public class SMTPService implements SMTPManagement
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.service.SMTPManagement#setPort(int)
 	 */
-	@PermitAll
 	public void setPort(int port)
 	{
 		if (this.smtpServer != null)
@@ -171,7 +167,6 @@ public class SMTPService implements SMTPManagement
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.service.SMTPManagement#getPort()
 	 */
-	@PermitAll
 	public int getPort()
 	{
 		return this.port;
@@ -182,7 +177,6 @@ public class SMTPService implements SMTPManagement
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.service.SMTPManagement#setHostName(java.lang.String)
 	 */
-	@PermitAll
 	public void setHostName(String hostname)
 	{
 		if (this.smtpServer != null)
@@ -195,13 +189,11 @@ public class SMTPService implements SMTPManagement
 	 * (non-Javadoc)
 	 * @see org.subethamail.smtp.service.SMTPManagement#getHostName()
 	 */
-	@PermitAll
 	public String getHostName()
 	{
 		return this.hostName;
 	}
 
-	@PermitAll
 	public InetAddress getBinding()
 	{
 		return this.binding;

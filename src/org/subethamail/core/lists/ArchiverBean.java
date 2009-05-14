@@ -26,7 +26,12 @@ import java.util.zip.CheckedOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
 import javax.jws.WebMethod;
 import javax.mail.MessagingException;
@@ -75,6 +80,9 @@ import com.sun.mail.util.LineInputStream;
  * @author Scott Hernandez
  */
 @Stateless(name="Archiver")
+@PermitAll
+@RunAs(Person.ROLE_ADMIN)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class ArchiverBean extends PersonalBean implements Archiver
 {
 	@Current Deliverator deliverator;
@@ -95,7 +103,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#sendTo(java.lang.Long, String email)
 	 */
-	@WebMethod
+	@RolesAllowed(Person.ROLE_USER)
 	public void sendTo(Long mailId, String email) throws NotFoundException
 	{
 		this.deliverator.deliverToEmail(mailId, email);
@@ -105,7 +113,6 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getThreads(java.lang.Long)
 	 */
-	@WebMethod
 	public List<MailSummary> getThreads(Long listId, int skip, int count) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
@@ -154,11 +161,11 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		Mail mail = this.getMailFor(mailId, Permission.VIEW_ARCHIVES);
 		return Transmute.mailThread(mail, mail.getList().getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES));
 	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#search(java.lang.Long, java.lang.String, int, int)
 	 */
-	@WebMethod
 	public SearchResult search(Long listId, String query, int skip, int count) throws NotFoundException, PermissionException, SearchException
 	{
 		Person me = this.getMe();
@@ -205,7 +212,6 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	/* (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#countMailByList(java.lang.Long)
 	 */
-	@WebMethod
 	public int countMailByList(Long listId)
 	{
 		return this.em.countMailByList(listId);
@@ -281,7 +287,6 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getAttachmentContentType(java.lang.Long)
 	 */
-	@WebMethod
 	public String getAttachmentContentType(Long attachmentId) throws NotFoundException, PermissionException
 	{
 		Attachment a = this.em.get(Attachment.class, attachmentId);
@@ -293,7 +298,6 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#getMail(java.lang.Long)
 	 */
-	@WebMethod
 	public MailData getMail(Long mailId) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
@@ -414,6 +418,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#post(java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
 	 */
+	@RolesAllowed(Person.ROLE_USER)
 	public void post(String fromAddress, Long listId, String subject, String body) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();
@@ -443,6 +448,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.Archiver#reply(java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
 	 */
+	@RolesAllowed(Person.ROLE_USER)
 	public Long reply(String fromAddress, Long msgId, String subject, String body) throws NotFoundException, PermissionException
 	{
 		Person me = this.getMe();

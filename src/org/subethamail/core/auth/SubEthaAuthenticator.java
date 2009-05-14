@@ -49,20 +49,29 @@ public class SubEthaAuthenticator implements Authenticator
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Principal authenticate(Principal prince, Credentials credentials, Object detail)
 	{
+		if (log.isDebugEnabled())
+			log.debug("Authenticating " + prince);
+			
 		String email = prince.getName();
 
 		EmailAddress ea = this.em.findEmailAddress(email);
 		if (ea == null)
+		{
+			log.debug("Email address not found: " + email);
 			return null;
+		}
 
 		StringBuilder credPassword = new StringBuilder();
 		credPassword.append(((PasswordCredentials)credentials).getPassword());
 		
 		Person p = ea.getPerson();
-		if (p == null)
+		if (!p.checkPassword(credPassword.toString()))
+		{
+			if (log.isDebugEnabled())
+				log.debug("Wrong password: " + credPassword);
+			
 			return null;
-		else if (!p.checkPassword(credPassword.toString()))
-			return null;
+		}
 		else
 		{
 			SubEthaPrincipal sep = new SubEthaPrincipal(p.getId(), email, p.getRoles());

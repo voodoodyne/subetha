@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.admin.i.Plumber;
 import org.subethamail.core.post.OutboundMTA;
-import org.subethamail.core.post.PostOffice;
 
 /**
  * Implements some basic plumbing methods.
@@ -39,7 +38,7 @@ public class PlumberBean implements Plumber
 	 *  on the current test host and port. */
 	@OutboundMTA Session mailSession;
 	
-	@Current PostOffice postOffice;
+	@Current TestMode testMode;
 	
 	/* (non-Javadoc)
 	 * @see Plumber#log(java.lang.String)
@@ -56,22 +55,36 @@ public class PlumberBean implements Plumber
 	@RolesAllowed("siteAdmin")
 	public void overrideSmtpServer(String host)
 	{
+		
+		String oldPort, oldHost, newHost, newPort;
+		// Backup the old values
+		oldHost = mailSession.getProperties().getProperty("mail.smtp.host");
+		oldPort = mailSession.getProperties().getProperty("mail.smtp.port");
+		
+		// If there was a port, separate the two
+		String[] parts = host.split(":");
+		newHost=parts[0];
+		
+		if(parts.length > 1) 
+		{
+			newPort=parts[1];
+		} 
+		else
+		{
+			throw new IllegalArgumentException("You must supply a 'host:port' string.");
+		}
+
+		if(oldHost.equals(newHost) && oldPort.equals(newPort))
+			return;
+		
 		if (this.mailSmtpHost != null)
 			throw new IllegalStateException("Smtp server override already in effect");
 
-		// Backup the old values
-		this.mailSmtpHost = System.getProperty("mail.smtp.host");
-		this.mailSmtpPort = System.getProperty("mail.smtp.port");
-		
-		// If there was a port, separate the two
-		String port = null;
-		
-		String[] parts = host.split(":");		
-		host=parts[0];
-		if(parts.length > 1) port=parts[1];
-		
-		mailSession.getProperties().setProperty("mail.smtp.host", host);
-		mailSession.getProperties().setProperty("mail.smtp.port", port);
+		//store old value, and update the overrides
+		this.mailSmtpHost = oldHost;
+		this.mailSmtpPort = oldPort;
+		mailSession.getProperties().setProperty("mail.smtp.host", newHost);
+		mailSession.getProperties().setProperty("mail.smtp.port", newPort);
 	}
 
 	/*
@@ -100,6 +113,6 @@ public class PlumberBean implements Plumber
 	@Override
 	public boolean setTestMode(boolean testMode)
 	{
-		return testMode ? postOffice.enableTestMode() : postOffice.disableTestMode();
+		return this.testMode.setTestMode(testMode);
 	}
 }

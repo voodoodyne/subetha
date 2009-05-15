@@ -24,6 +24,7 @@ import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.admin.TestMode;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
@@ -57,8 +58,9 @@ public class PostOfficeBean implements PostOffice
 	/** */
 	@Current Encryptor encryptor;
 
-	private boolean inTestMode = false;
-
+	/** */
+	@Current TestMode testMode;
+	
 	/** */
 	@SubEtha
 	protected SubEthaEntityManager em;
@@ -93,7 +95,7 @@ public class PostOfficeBean implements PostOffice
 			String mailBody = writer.toString();
 			
 			// If in dev mode, annotate the subject for unit tests
-			if (inTestMode)
+			if (testMode.isTesting())
 				mailSubject = kind.toString() + " " + mailSubject;
 
 			try
@@ -200,7 +202,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	protected String token(String tok)
 	{
-		return !this.inTestMode ? tok : Constant.DEBUG_TOKEN_BEGIN + tok + Constant.DEBUG_TOKEN_END;
+		return !this.testMode.isTesting() ? tok : Constant.DEBUG_TOKEN_BEGIN + tok + Constant.DEBUG_TOKEN_END;
 	}
 	
 	/**
@@ -423,19 +425,5 @@ public class PostOfficeBean implements PostOffice
 		builder.setTo(moderator);
 		builder.setFrom(sub.getList());
 		builder.send();
-	}
-
-	@Override
-	public boolean disableTestMode()
-	{
-		this.inTestMode = false;
-		return this.inTestMode;
-	}
-
-	@Override
-	public boolean enableTestMode()
-	{
-		this.inTestMode = true;
-		return this.inTestMode;
 	}
 }

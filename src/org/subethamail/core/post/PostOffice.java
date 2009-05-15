@@ -82,20 +82,4 @@ public interface PostOffice
 	 * @param unsub is true if this is an unsubscription result.
 	 */
 	public void sendModeratorSubscriptionNotice(EmailAddress moderator, Subscription sub, boolean unsub);
-
-	/**
-	 * Turns on test mode.
-	 * 
-	 * @return if in test mode.
-	 */
-	public boolean enableTestMode();
-
-	/**
-	 * Turns off test mode.
-	 * 
-	 * @return if in test mode.
-	 */
-	public boolean disableTestMode();
-	
-	
 }

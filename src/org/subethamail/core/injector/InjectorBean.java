@@ -478,7 +478,7 @@ public class InjectorBean implements Injector
 	 * @param list list whose owner(s) should receive the mail
 	 * @param msg is the message to forward
 	 */
-	private void handleOwnerMail(MailingList list, SubEthaMessage msg) throws MessagingException
+	protected void handleOwnerMail(MailingList list, SubEthaMessage msg) throws MessagingException
 	{
 		for (Subscription sub: list.getSubscriptions())
 		{
@@ -581,7 +581,7 @@ public class InjectorBean implements Injector
 	 *
 	 * When this completes, the mail may have a parent and children.
 	 */
-	void threadMail(Mail mail, SubEthaMessage msg) throws MessagingException
+	protected void threadMail(Mail mail, SubEthaMessage msg) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Threading mail " + mail);

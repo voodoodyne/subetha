@@ -48,14 +48,15 @@ public class PersonalBean
 	{
 //		SubEthaPrincipal p = (SubEthaPrincipal)this.sessionContext.getCallerPrincipal();
 		
-		SubEthaPrincipal p = null;
 		try
 		{
-			p = (SubEthaPrincipal)SecurityContext.getUserPrincipal();
+			SubEthaPrincipal p = (SubEthaPrincipal)SecurityContext.getUserPrincipal();
+			if (p == null)
+				return null;
+			else
+				return p.getId();
 		}
 		catch (SecurityContextException e) { throw new RuntimeException(e); }
-
-		return p.getId();
 	}
 	
 	/**

@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -45,6 +46,7 @@ import org.subethamail.entity.Subscription;
  */
 @Stateless(name="AccountMgr")
 @RolesAllowed(Person.ROLE_USER)
+@RunAs(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class AccountMgrBean extends PersonalBean implements AccountMgr
 {

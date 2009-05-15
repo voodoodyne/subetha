@@ -85,15 +85,15 @@ import com.sun.mail.util.LineInputStream;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class ArchiverBean extends PersonalBean implements Archiver
 {
+	/** */
+	private final static Logger log = LoggerFactory.getLogger(ArchiverBean.class);
+
 	@Current Deliverator deliverator;
 	@Current FilterRunner filterRunner;
 	@Current Detacher detacher;
 	@Current ListMgr listManager;
 	@Current Injector injector;
 	@Current Indexer indexer;
-
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(ArchiverBean.class);
 
 	/** */
 	@OutboundMTA

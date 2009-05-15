@@ -20,6 +20,7 @@
 	<logger name="com.caucho" level="config" />
 	<logger name="com.caucho.hessian" level="fine" />
 	<logger name="com.caucho.security" level="finest" />
+	<logger name="com.caucho.server.dispatch" level="finest" />
 <!--	<logger name="com.caucho.server.connection" level="finest" />-->
 	
 <!--	<logger name="com.caucho.admin" level="severe" />-->
@@ -124,10 +125,10 @@
 	<servlet-mapping url-pattern="/api/Injector" servlet-class="org.subethamail.core.injector.InjectorBean">
 		<protocol uri="hessian:"/>
 	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Archiver" servlet-class="org.subethamail.core.list.ArchiverBean">
+	<servlet-mapping url-pattern="/api/Archiver" servlet-class="org.subethamail.core.lists.ArchiverBean">
 		<protocol uri="hessian:"/>
 	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/ListMgr" servlet-class="org.subethamail.core.list.ListMgrBean">
+	<servlet-mapping url-pattern="/api/ListMgr" servlet-class="org.subethamail.core.lists.ListMgrBean">
 		<protocol uri="hessian:"/>
 	</servlet-mapping>
 	<servlet-mapping url-pattern="/api/Indexer" servlet-class="org.subethamail.core.search.IndexerBean">
@@ -136,29 +137,4 @@
 	<servlet-mapping url-pattern="/api/Plumber" servlet-class="org.subethamail.core.admin.PlumberBean">
 		<protocol uri="hessian:"/>
 	</servlet-mapping>		
-	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Admin" servlet-class="org.subethamail.core.admin.AdminBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/ListWizard" servlet-class="org.subethamail.core.admin.ListWizardBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Injector" servlet-class="org.subethamail.core.injector.InjectorBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Archiver" servlet-class="org.subethamail.core.list.ArchiverBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/ListMgr" servlet-class="org.subethamail.core.list.ListMgrBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Indexer" servlet-class="org.subethamail.core.search.IndexerBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Plumber" servlet-class="org.subethamail.core.admin.PlumberBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-  
 </web-app>

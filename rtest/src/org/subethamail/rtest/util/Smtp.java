@@ -50,8 +50,7 @@ public class Smtp extends Wiser
 		try
 		{
 			AdminMixin god = new AdminMixin();
-			god.getPlumber().overrideSmtpServer(host + ":" + PORT);
-			god.getPlumber().setTestMode(true);
+			god.getEegor().enableTestMode(host + ":" + PORT);
 		}
 		catch (Exception ex) { throw new RuntimeException(ex); }
 	}
@@ -63,8 +62,7 @@ public class Smtp extends Wiser
 		try
 		{
 			AdminMixin god = new AdminMixin();
-			god.getPlumber().restoreStmpServer();
-			god.getPlumber().setTestMode(false);
+			god.getEegor().disableTestMode();
 		}
 		catch (Exception ex) { throw new RuntimeException(ex); }
 

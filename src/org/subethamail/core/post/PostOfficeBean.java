@@ -24,7 +24,7 @@ import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.admin.TestMode;
+import org.subethamail.core.admin.i.EegorBringMeAnotherBrain;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
@@ -59,7 +59,7 @@ public class PostOfficeBean implements PostOffice
 	@Current Encryptor encryptor;
 
 	/** */
-	@Current TestMode testMode;
+	@Current EegorBringMeAnotherBrain brainBringer;
 	
 	/** */
 	@SubEtha
@@ -95,7 +95,7 @@ public class PostOfficeBean implements PostOffice
 			String mailBody = writer.toString();
 			
 			// If in dev mode, annotate the subject for unit tests
-			if (testMode.isTesting())
+			if (brainBringer.isTestModeEnabled())
 				mailSubject = kind.toString() + " " + mailSubject;
 
 			try
@@ -202,7 +202,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	protected String token(String tok)
 	{
-		return !this.testMode.isTesting() ? tok : Constant.DEBUG_TOKEN_BEGIN + tok + Constant.DEBUG_TOKEN_END;
+		return !this.brainBringer.isTestModeEnabled() ? tok : Constant.DEBUG_TOKEN_BEGIN + tok + Constant.DEBUG_TOKEN_END;
 	}
 	
 	/**

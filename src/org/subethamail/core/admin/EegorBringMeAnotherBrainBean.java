@@ -6,24 +6,25 @@
 package org.subethamail.core.admin;
 
 import javax.annotation.security.RolesAllowed;
-import javax.inject.Current;
+import javax.context.ApplicationScoped;
 import javax.mail.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.core.admin.i.Plumber;
+import org.subethamail.core.admin.i.EegorBringMeAnotherBrain;
 import org.subethamail.core.post.OutboundMTA;
 
 /**
- * Implements some basic plumbing methods.
+ * Implements some basic plumbing methods for testing.
  * 
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-public class PlumberBean implements Plumber
+@ApplicationScoped
+public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 {
 	/** */
-	private final static Logger log = LoggerFactory.getLogger(PlumberBean.class);
+	private final static Logger log = LoggerFactory.getLogger(EegorBringMeAnotherBrainBean.class);
 
 	// Neither of these work in resin 4.0.0
 	//@Resource SessionContext sessionContext;
@@ -38,8 +39,6 @@ public class PlumberBean implements Plumber
 	 *  on the current test host and port. */
 	@OutboundMTA Session mailSession;
 	
-	@Current TestMode testMode;
-	
 	/* (non-Javadoc)
 	 * @see Plumber#log(java.lang.String)
 	 */
@@ -47,42 +46,25 @@ public class PlumberBean implements Plumber
 	{
 		log.info(msg);
 	}
-
 	
 	/*
 	 * (non-Javadoc)
 	 */
 	@RolesAllowed("siteAdmin")
-	public void overrideSmtpServer(String host)
+	public void enableTestMode(String mtaHost)
 	{
-		
-		String oldPort, oldHost, newHost, newPort;
-		// Backup the old values
-		oldHost = mailSession.getProperties().getProperty("mail.smtp.host");
-		oldPort = mailSession.getProperties().getProperty("mail.smtp.port");
+		if (!this.isTestModeEnabled())
+		{
+			this.mailSmtpHost = mailSession.getProperties().getProperty("mail.smtp.host");
+			this.mailSmtpPort = mailSession.getProperties().getProperty("mail.smtp.port");
+		}
 		
 		// If there was a port, separate the two
-		String[] parts = host.split(":");
-		newHost=parts[0];
-		
-		if(parts.length > 1) 
-		{
-			newPort=parts[1];
-		} 
-		else
-		{
-			throw new IllegalArgumentException("You must supply a 'host:port' string.");
-		}
-
-		if(oldHost.equals(newHost) && oldPort.equals(newPort))
-			return;
-		
-		if (this.mailSmtpHost != null)
-			throw new IllegalStateException("Smtp server override already in effect");
+		String[] parts = mtaHost.split(":");
+		String newHost = parts[0];
+		String newPort = (parts.length > 1) ? parts[1] : "25";
 
 		//store old value, and update the overrides
-		this.mailSmtpHost = oldHost;
-		this.mailSmtpPort = oldPort;
 		mailSession.getProperties().setProperty("mail.smtp.host", newHost);
 		mailSession.getProperties().setProperty("mail.smtp.port", newPort);
 	}
@@ -91,11 +73,11 @@ public class PlumberBean implements Plumber
 	 * (non-Javadoc)
 	 */
 	@RolesAllowed("siteAdmin")
-	public void restoreStmpServer()
+	public void disableTestMode()
 	{
 		if (this.mailSmtpHost == null)
 		{
-			log.warn("No override in effect; ignoring restoreSmtpServer()");
+			log.warn("Test mode already disabled");
 		}
 		else
 		{
@@ -109,10 +91,9 @@ public class PlumberBean implements Plumber
 		}
 	}
 
-
-	@Override
-	public boolean setTestMode(boolean testMode)
+	/** */
+	public boolean isTestModeEnabled()
 	{
-		return this.testMode.setTestMode(testMode);
+		return this.mailSmtpHost != null;
 	}
 }

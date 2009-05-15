@@ -134,7 +134,7 @@
 	<servlet-mapping url-pattern="/api/Indexer" servlet-class="org.subethamail.core.search.IndexerBean">
 		<protocol uri="hessian:"/>
 	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Plumber" servlet-class="org.subethamail.core.admin.PlumberBean">
+	<servlet-mapping url-pattern="/api/EegorBringMeAnotherBrain" servlet-class="org.subethamail.core.admin.EegorBringMeAnotherBrainBean">
 		<protocol uri="hessian:"/>
 	</servlet-mapping>		
 </web-app>

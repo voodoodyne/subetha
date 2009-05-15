@@ -19,6 +19,9 @@ public abstract class PartData implements Serializable
 	int contentSize;
 	String name;
 	
+	/** Needed by Hessian */
+	protected PartData() {}
+	
 	/**
 	 */
 	public PartData(String type, String name, int size)

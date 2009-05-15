@@ -14,6 +14,10 @@ package org.subethamail.core.lists.i;
 public class InlinePartData extends PartData
 {
 	Object contents = null;
+	
+	/** Needed by Hessian */
+	public InlinePartData() {}
+	
 	/**
 	 */
 	public InlinePartData(Object contents, String type, String name, int size)

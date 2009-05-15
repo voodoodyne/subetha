@@ -74,7 +74,7 @@ public class InjectorTest extends SubEthaTestCase
 	}
 	
 	/** */
-	public void testHasVERP() throws Exception
+	public void ZtestHasVERP() throws Exception
 	{
 		this.admin.getAdmin().log("############### Starting testHasVERP()");
 		
@@ -97,7 +97,7 @@ public class InjectorTest extends SubEthaTestCase
 	}
 
 	/** */
-	public void testVERPBounceMessage() throws Exception
+	public void ZtestVERPBounceMessage() throws Exception
 	{
 		this.admin.getAdmin().log("############### Starting testVERPBounceMessage()");
 

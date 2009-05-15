@@ -17,6 +17,9 @@ public class SubscribedList extends ListData
 {
 	String roleName;
 	String deliverTo;
+	
+	/** Needed by Hessian */
+	protected SubscribedList() {}
 		
 	/**
 	 */

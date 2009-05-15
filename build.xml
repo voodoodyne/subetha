@@ -263,6 +263,7 @@
 	<target name="junit-special" depends="rtest-jar">
 		<junit printsummary="true" showoutput="true" fork="true" forkmode="once">
 			<jvmarg value="-Djava.util.logging.config.file=rtest/logging.properties"/>
+			
 			<classpath refid="rtest.run.classpath"/>
 			
 			<syspropertyset>

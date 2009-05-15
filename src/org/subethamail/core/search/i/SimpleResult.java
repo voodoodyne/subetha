@@ -21,6 +21,9 @@ public class SimpleResult implements Serializable
 	int total;
 	List<SimpleHit> hits;
 	
+	/** Needed by Hessian */
+	protected SimpleResult() {}
+	
 	/** */
 	public SimpleResult(int total, List<SimpleHit> hits)
 	{

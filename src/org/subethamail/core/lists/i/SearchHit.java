@@ -24,6 +24,9 @@ public class SearchHit implements Serializable
 	Date sentDate;
 	float score;
 
+	/** Needed by Hessian */
+	protected SearchHit() {}
+	
 	/**
 	 */
 	public SearchHit(

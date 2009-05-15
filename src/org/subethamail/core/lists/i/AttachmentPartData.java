@@ -14,6 +14,10 @@ package org.subethamail.core.lists.i;
 public class AttachmentPartData extends PartData
 {
 	Long id = null;
+	
+	/** Needed by Hessian */
+	protected AttachmentPartData() {}
+	
 	/**
 	 */
 	public AttachmentPartData(Long id, String type, String name, int size)

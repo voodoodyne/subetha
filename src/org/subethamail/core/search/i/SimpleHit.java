@@ -21,6 +21,9 @@ public class SimpleHit implements Serializable
 	Long id;
 	float score;
 	
+	/** Needed by Hessian */
+	public SimpleHit () {}
+	
 	/** */
 	public SimpleHit(Long id, float score)
 	{

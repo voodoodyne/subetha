@@ -13,6 +13,9 @@ package org.subethamail.core.lists.i;
 @SuppressWarnings("serial")
 public class TextPartData extends InlinePartData
 {
+	/** Needed by Hessian */
+	protected TextPartData() {}
+	
 	/**
 	 */
 	public TextPartData(String contents, String type, String name, int size)

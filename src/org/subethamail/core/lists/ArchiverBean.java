@@ -240,7 +240,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	 * @param msg The message to write
 	 * @param stream The stream to write to
 	 */
-	private void writeMessage(Mail mail, OutputStream stream) throws MessagingException, IOException
+	protected void writeMessage(Mail mail, OutputStream stream) throws MessagingException, IOException
 	{
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
 		try
@@ -482,7 +482,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	}
 
 	/** */
-	private SubEthaMessage craftMessage(MailingList toList, String fromAddress, String fromName, String subject, String body, boolean reply)
+	protected SubEthaMessage craftMessage(MailingList toList, String fromAddress, String fromName, String subject, String body, boolean reply)
 		throws MessagingException, IOException
 	{
 		Session session = Session.getDefaultInstance(new Properties());

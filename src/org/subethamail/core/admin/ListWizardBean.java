@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.security.RolesAllowed;
+import javax.context.ApplicationScoped;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Current;
@@ -35,6 +36,8 @@ import org.subethamail.entity.Person;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
+
+@ApplicationScoped
 @RolesAllowed(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class ListWizardBean implements ListWizard, BlueprintRegistry

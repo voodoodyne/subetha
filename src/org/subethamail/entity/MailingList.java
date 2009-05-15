@@ -165,12 +165,12 @@ public class MailingList implements Serializable, Comparable<MailingList>
 	//
 
 	/** The default role for new subscribers */
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="defaultRoleId", nullable=true)
 	Role defaultRole;
 
 	/** The role to consider anonymous (not subscribed) people */
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="anonymousRoleId", nullable=true)
 	Role anonymousRole;
 

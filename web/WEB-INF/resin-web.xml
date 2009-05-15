@@ -18,7 +18,7 @@
  	<statistics-enable/>
  	
 	<logger name="com.caucho" level="config" />
-<!--	<logger name="com.caucho.hessian" level="fine" />-->
+	<logger name="com.caucho.hessian" level="finest" />
 	<logger name="com.caucho.security" level="finest" />
 <!--	<logger name="com.caucho.server.dispatch" level="finest" />-->
 <!--	<logger name="com.caucho.server.connection" level="finest" />-->

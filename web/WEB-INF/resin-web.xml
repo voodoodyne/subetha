@@ -110,7 +110,7 @@
 
 	<mail jndi-name="java:comp/env/outbound-mail">
 		<smtp-host>localhost</smtp-host>
-		<smtp-port>2525</smtp-port>
+		<smtp-port>25</smtp-port>
     </mail>
 
 	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">

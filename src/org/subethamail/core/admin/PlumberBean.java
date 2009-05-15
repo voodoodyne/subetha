@@ -6,12 +6,14 @@
 package org.subethamail.core.admin;
 
 import javax.annotation.security.RolesAllowed;
+import javax.inject.Current;
 import javax.mail.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.admin.i.Plumber;
 import org.subethamail.core.post.OutboundMTA;
+import org.subethamail.core.post.PostOffice;
 
 /**
  * Implements some basic plumbing methods.
@@ -37,6 +39,8 @@ public class PlumberBean implements Plumber
 	 *  on the current test host and port. */
 	@OutboundMTA Session mailSession;
 	
+	@Current PostOffice postOffice;
+	
 	/* (non-Javadoc)
 	 * @see Plumber#log(java.lang.String)
 	 */
@@ -45,6 +49,7 @@ public class PlumberBean implements Plumber
 		log.info(msg);
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 */
@@ -89,5 +94,12 @@ public class PlumberBean implements Plumber
 			this.mailSmtpHost = null;
 			this.mailSmtpPort = null;
 		}
+	}
+
+
+	@Override
+	public boolean setTestMode(boolean testMode)
+	{
+		return testMode ? postOffice.enableTestMode() : postOffice.disableTestMode();
 	}
 }

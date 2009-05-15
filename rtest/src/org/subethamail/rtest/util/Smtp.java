@@ -47,24 +47,26 @@ public class Smtp extends Wiser
 		if (host == null)
 			host = "localhost";
 
-//		try
-//		{
-//			AdminMixin god = new AdminMixin();
-//			god.getPlumber().overrideSmtpServer(host + ":" + PORT);
-//		}
-//		catch (Exception ex) { throw new RuntimeException(ex); }
+		try
+		{
+			AdminMixin god = new AdminMixin();
+			god.getPlumber().overrideSmtpServer(host + ":" + PORT);
+			god.getPlumber().setTestMode(true);
+		}
+		catch (Exception ex) { throw new RuntimeException(ex); }
 	}
 
 	/** Take care of futzing the server side smtp config */
 	@Override
 	public void stop()
 	{
-//		try
-//		{
-//			AdminMixin god = new AdminMixin();
-//			god.getPlumber().restoreStmpServer();
-//		}
-//		catch (Exception ex) { throw new RuntimeException(ex); }
+		try
+		{
+			AdminMixin god = new AdminMixin();
+			god.getPlumber().restoreStmpServer();
+			god.getPlumber().setTestMode(false);
+		}
+		catch (Exception ex) { throw new RuntimeException(ex); }
 
 		super.stop();
 	}

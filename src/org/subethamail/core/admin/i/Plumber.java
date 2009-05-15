@@ -9,7 +9,7 @@ import javax.ejb.Local;
 
 
 /**
- * Miscellaneous administrative tools requiring god role.
+ * Miscellaneous administrative tools requiring admin role.
  * 
  * @author Jeff Schnitzer
  */
@@ -35,4 +35,13 @@ public interface Plumber
 	 * Restore default stmp server.
 	 */
 	public void restoreStmpServer();
+	
+	/**
+	 * Sets up test mode. Anything that needs to change for 
+	 * test to work
+	 * 
+	 * @param inTestMode to turn on, or off test mode. 
+	 * @return if in test mode.
+	 */
+	public boolean setTestMode(boolean inTestMode);
 }

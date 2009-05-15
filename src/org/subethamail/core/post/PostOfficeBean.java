@@ -57,6 +57,8 @@ public class PostOfficeBean implements PostOffice
 	/** */
 	@Current Encryptor encryptor;
 
+	private boolean inTestMode = false;
+
 	/** */
 	@SubEtha
 	protected SubEthaEntityManager em;
@@ -91,7 +93,7 @@ public class PostOfficeBean implements PostOffice
 			String mailBody = writer.toString();
 			
 			// If in dev mode, annotate the subject for unit tests
-			if (isDeveloperMode())
+			if (inTestMode)
 				mailSubject = kind.toString() + " " + mailSubject;
 
 			try
@@ -192,26 +194,13 @@ public class PostOfficeBean implements PostOffice
 			catch (MessagingException ex) { throw new RuntimeException(ex); }
 		}
 	}
-	
 	/**
-	 * @return true if we should annotate all outgoing messages to make
-	 *  unit tests and developers happy. 
-	 */
-	protected boolean isDeveloperMode()
-	{
-		return "true".equals(System.getProperty("org.subethamail.dev"));
-	}
-	
-	/**
-	 * Maybe modifies the token with developer information which can be picked out
-	 * by the unit tester.  Checks developer mode.
+	 * Maybe modifies the token with developer/test information which can be picked out
+	 * by the unit tester.
 	 */
 	protected String token(String tok)
 	{
-		if (isDeveloperMode())
-			return Constant.DEBUG_TOKEN_BEGIN + tok + Constant.DEBUG_TOKEN_END;
-		else
-			return tok;
+		return !this.inTestMode ? tok : Constant.DEBUG_TOKEN_BEGIN + tok + Constant.DEBUG_TOKEN_END;
 	}
 	
 	/**
@@ -434,5 +423,19 @@ public class PostOfficeBean implements PostOffice
 		builder.setTo(moderator);
 		builder.setFrom(sub.getList());
 		builder.send();
+	}
+
+	@Override
+	public boolean disableTestMode()
+	{
+		this.inTestMode = false;
+		return this.inTestMode;
+	}
+
+	@Override
+	public boolean enableTestMode()
+	{
+		this.inTestMode = true;
+		return this.inTestMode;
 	}
 }

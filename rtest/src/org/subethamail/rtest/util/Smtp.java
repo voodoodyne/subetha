@@ -28,7 +28,7 @@ public class Smtp extends Wiser
 	/** */
 	private static Logger log = LoggerFactory.getLogger(Smtp.class);
 
-	/** The port we use for dumbster */
+	/** The port we use for wiser */
 	public static final int PORT = 2525;
 
 	public Smtp()
@@ -47,24 +47,24 @@ public class Smtp extends Wiser
 		if (host == null)
 			host = "localhost";
 
-		try
-		{
-			AdminMixin god = new AdminMixin();
-			god.getPlumber().overrideSmtpServer(host + ":" + PORT);
-		}
-		catch (Exception ex) { throw new RuntimeException(ex); }
+//		try
+//		{
+//			AdminMixin god = new AdminMixin();
+//			god.getPlumber().overrideSmtpServer(host + ":" + PORT);
+//		}
+//		catch (Exception ex) { throw new RuntimeException(ex); }
 	}
 
 	/** Take care of futzing the server side smtp config */
 	@Override
 	public void stop()
 	{
-		try
-		{
-			AdminMixin god = new AdminMixin();
-			god.getPlumber().restoreStmpServer();
-		}
-		catch (Exception ex) { throw new RuntimeException(ex); }
+//		try
+//		{
+//			AdminMixin god = new AdminMixin();
+//			god.getPlumber().restoreStmpServer();
+//		}
+//		catch (Exception ex) { throw new RuntimeException(ex); }
 
 		super.stop();
 	}

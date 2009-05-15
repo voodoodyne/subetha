@@ -18,11 +18,10 @@
  	<statistics-enable/>
  	
 	<logger name="com.caucho" level="config" />
-	<logger name="com.caucho.hessian" level="fine" />
+<!--	<logger name="com.caucho.hessian" level="fine" />-->
 	<logger name="com.caucho.security" level="finest" />
-	<logger name="com.caucho.server.dispatch" level="finest" />
+<!--	<logger name="com.caucho.server.dispatch" level="finest" />-->
 <!--	<logger name="com.caucho.server.connection" level="finest" />-->
-	
 <!--	<logger name="com.caucho.admin" level="severe" />-->
 <!--	<logger name="com.caucho.config" level="finest" />-->
 <!--	<logger name="com.caucho.config.j2ee" level="finest"/>-->
@@ -110,7 +109,7 @@
 
 	<mail jndi-name="java:comp/env/outbound-mail">
 		<smtp-host>localhost</smtp-host>
-		<smtp-port>25</smtp-port>
+		<smtp-port>2525</smtp-port>
     </mail>
 
 	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">

@@ -173,7 +173,7 @@ public class BootstrapperBean
 		URL defaultSiteUrl;
 		try
 		{
-			defaultSiteUrl = new URL("http://needsconfiguration/se/" + siteUtils.getContextPath());
+			defaultSiteUrl = new URL("http://needsconfiguration/" + siteUtils.getContextPath());
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
 		}

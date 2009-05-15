@@ -185,4 +185,10 @@ public class Backend extends HttpServlet
 	{
 		return siteUtils.getContextPath();
 	}
+	/** @return {@link SiteUtils}*/
+	public SiteUtils getSiteUtils()
+	{
+		return siteUtils;
+	}
+	
 }

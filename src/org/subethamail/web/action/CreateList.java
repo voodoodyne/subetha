@@ -8,7 +8,6 @@ package org.subethamail.web.action;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.inject.Current;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -24,6 +23,8 @@ import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
 
+import com.caucho.config.inject.InjectManager;
+
 /**
  * Creates a mailing list.  The model starts and remains a CreateList.Model.
  * 
@@ -35,8 +36,9 @@ public class CreateList extends AuthRequired
 	@SuppressWarnings("unused")
 	private final static Logger log = LoggerFactory.getLogger(CreateList.class);
 
-	@Current
-	SiteUtils siteUtils;
+	//disabled till tagonist is inject aware, and all our actions work (not ambiguous) .
+	//@Current
+	//SiteUtils siteUtils = InjectManager.create();
 	
 	/** */
 	public static class Model extends ErrorMapModel
@@ -67,6 +69,8 @@ public class CreateList extends AuthRequired
 		@Property String blueprint = "";
 	}
 	
+	public CreateList()
+	{}
 	/** */
 	public void initialize()
 	{
@@ -86,6 +90,8 @@ public class CreateList extends AuthRequired
 		try
 		{
 			url = new URL(model.url);
+			
+			SiteUtils siteUtils = (InjectManager.create()).getInstanceByType(SiteUtils.class);
 			
 			if (!siteUtils.isValidListUrl(url))
 				model.setError("url", "List url must contain " + siteUtils.getListServletPath());

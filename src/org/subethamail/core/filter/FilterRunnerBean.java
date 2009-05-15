@@ -10,11 +10,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import javax.context.ApplicationScoped;
+import javax.inject.Current;
 import javax.mail.MessagingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.admin.ScannerService;
 import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
@@ -40,6 +42,9 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(FilterRunnerBean.class);
 
+	@Current
+	ScannerService ss;
+	
 	/**
 	 * Key is filter classname.  Make sure we have concurrent access.
 	 */
@@ -56,8 +61,8 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		if (log.isInfoEnabled())
 			log.info("Registering " + c.getName());
 		
-		this.filters.putIfAbsent(c.getName(), c);
-//		this.filterClasses.add(c);
+		//only add new ones, don't replace old ones.
+		this.filters.putIfAbsent(c.getName(), c); 
 	}
 
 	/**
@@ -76,6 +81,8 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	 */
 	public Collection<Class<? extends Filter>> getFilters()
 	{
+		//if we never scanned to get the entries, scan now.
+		if(this.filters.size() == 0) {ss.scan();}
 		return this.filters.values();
 	}
 

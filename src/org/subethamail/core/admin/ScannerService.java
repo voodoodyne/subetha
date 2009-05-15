@@ -6,7 +6,11 @@
 package org.subethamail.core.admin;
 
 import javax.annotation.PostConstruct;
+import javax.context.ApplicationScoped;
 import javax.inject.New;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Simple service that starts the scanner.
@@ -14,15 +18,36 @@ import javax.inject.New;
  * @author Scott Hernandez
  */
 //@Service
+@ApplicationScoped
 public class ScannerService
 {
-	@New 
+	/** */
+	private final static Logger log = LoggerFactory.getLogger(ScannerService.class);
+
+	@New
 	BeanScanner scanner;
 	//ClassLoaderScanner scanner;
 	
 	@PostConstruct
 	public void postConstruct()
 	{
-		scanner.scan();
+		try 
+		{
+			scan();
+		} catch (NullPointerException npe){
+			log.error("Error scanning for Filters and Blueprints!");
+			log.error(npe.getStackTrace().toString());
+			//continue as it will get run later if the scanning failed.
+		}
+		
 	}
+	
+	/**
+	 * Scans for classes and registers them {@link BeanScanner}
+	 */
+	public void scan()
+	{
+		this.scanner.scan();
+	}
+	
 }

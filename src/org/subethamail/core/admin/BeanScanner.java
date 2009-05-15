@@ -50,5 +50,5 @@ public class BeanScanner {
 		for (AbstractBean<? extends Blueprint> bean : blueBeans) {
 			blueReg.register((Class<? extends Blueprint>)bean.getTargetClass());
 		}
-}
+	}
 }

@@ -57,6 +57,10 @@ public class SiteUtils
 	}
 	/** @param the contextPath for this webapp/container*/
 	public void setContextPath(String contextPath) {
+		
+		if(!contextPath.startsWith("/")) contextPath = "/" + contextPath;
+		if(!contextPath.endsWith("/")) contextPath =  contextPath + "/";
+		
 		this.contextPath = contextPath;
 	}
 	

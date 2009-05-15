@@ -243,6 +243,7 @@
 
 	<target name="junit" depends="rtest-jar">
 		<junit printsummary="yes" showoutput="yes" fork="yes" forkmode="once">
+			<jvmarg value="-Djava.util.logging.config.file=rtest/logging.properties"/>
 			<classpath refid="rtest.run.classpath"/>
 			
 			<syspropertyset>
@@ -261,6 +262,7 @@
 
 	<target name="junit-special" depends="rtest-jar">
 		<junit printsummary="true" showoutput="true" fork="true" forkmode="once">
+			<jvmarg value="-Djava.util.logging.config.file=rtest/logging.properties"/>
 			<classpath refid="rtest.run.classpath"/>
 			
 			<syspropertyset>
@@ -280,7 +282,7 @@
 	<target name="junit-debug" depends="rtest-jar">
 		<junit printsummary="yes" showoutput="yes" fork="yes" forkmode="once">
 			<jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=7891"/>
-
+			<jvmarg value="-Djava.util.logging.config.file=rtest/logging.properties"/>
 			
 			<classpath refid="rtest.run.classpath"/>
 			

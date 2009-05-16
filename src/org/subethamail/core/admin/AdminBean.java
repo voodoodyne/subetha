@@ -721,24 +721,7 @@ public class AdminBean extends PersonalBean implements Admin
 		// Mails
 		// Roles
 		// EnabledFilters and FilterArguments
-		try
-		{
-			// Deleting the subs first is necessary because Hibernate is giving
-			// us PropertyValueException when trying to delete Roles.  You would
-			// think it should be smart enough to do this in proper order but
-			// apparently not.
-//			for (Subscription sub: list.getSubscriptions())
-//				this.em.remove(sub);
-//			
-//			list.getSubscriptions().clear();
-			
-			this.em.remove(list);
-		}
-		catch (RuntimeException ex)
-		{
-			log.error("Exception removing list", ex);
-			throw ex;
-		}
+		this.em.remove(list);
 
 		// TODO: replace this with resin/amber code
 		

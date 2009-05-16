@@ -74,7 +74,12 @@ public class Role implements Serializable, Comparable<Role>
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	Set<Permission> permissions;
 
-	/** */
+	/**
+	 * The presence of this relationship makes Hibernate smart enough to
+	 * delete a MailingList.  Without it, Roles are deleted before Subscriptions
+	 * and a not null constraint on Subscription.role is violated.  We don't
+	 * actually use this relationship.
+	 */
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="role")
 	Set<Subscription> subscriptions;
 

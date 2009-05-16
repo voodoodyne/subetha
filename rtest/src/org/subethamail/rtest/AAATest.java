@@ -38,7 +38,7 @@ public class AAATest extends TestCase
 	}
 	
 	/** */
-	public void testFirstThing() throws Exception
+	public void ZtestFirstThing() throws Exception
 	{
 		AdminMixin admin = new AdminMixin();
 		admin.getEegor().log("############# FIRST TEST RUN SUCCESSFULLY");
@@ -51,7 +51,7 @@ public class AAATest extends TestCase
 		smtp.start();
 		
 		AdminMixin admin = new AdminMixin();
-		admin.getAdmin().log("############# SECOND TEST RUNNING");
+		//admin.getAdmin().log("############# SECOND TEST RUNNING");
 		
 		PersonMixin pers = new PersonMixin(admin);
 		MailingListMixin ml = new MailingListMixin(admin, null);

@@ -7,6 +7,7 @@ package org.subethamail.core.admin;
 
 import javax.annotation.security.RolesAllowed;
 import javax.context.ApplicationScoped;
+import javax.inject.Current;
 import javax.mail.Session;
 
 import org.slf4j.Logger;
@@ -29,15 +30,19 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 	// Neither of these work in resin 4.0.0
 	//@Resource SessionContext sessionContext;
 	//@Current SessionContext sessionContext;
-	
-	/** Holds the mail config when overriding */
-	String mailSmtpHost;
-	String mailSmtpPort;
+
+	@Current Brain brain;
 	
 	/** TODO: This should be done using a Deployment Descriptors (JSR299) so that 
 	 *  the "test" Deployment Descriptor bings to a anouther mail session 
 	 *  on the current test host and port. */
 	@OutboundMTA Session mailSession;
+	
+	/** */
+	public EegorBringMeAnotherBrainBean()
+	{
+		log.debug("******************* Constructing another Igor!");
+	}
 	
 	/* (non-Javadoc)
 	 * @see Plumber#log(java.lang.String)
@@ -53,10 +58,12 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 	@RolesAllowed("siteAdmin")
 	public void enableTestMode(String mtaHost)
 	{
+		log.debug("#### Enabling with brain id " + brain.toString());
+		
 		if (!this.isTestModeEnabled())
 		{
-			this.mailSmtpHost = mailSession.getProperties().getProperty("mail.smtp.host");
-			this.mailSmtpPort = mailSession.getProperties().getProperty("mail.smtp.port");
+			this.brain.mailSmtpHost = mailSession.getProperties().getProperty("mail.smtp.host");
+			this.brain.mailSmtpPort = mailSession.getProperties().getProperty("mail.smtp.port");
 		}
 		
 		// If there was a port, separate the two
@@ -75,7 +82,9 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 	@RolesAllowed("siteAdmin")
 	public void disableTestMode()
 	{
-		if (this.mailSmtpHost == null)
+		log.debug("#### Disabling with brain id " + brain.toString());
+		
+		if (!this.isTestModeEnabled())
 		{
 			log.warn("Test mode already disabled");
 		}
@@ -83,17 +92,19 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 		{
 			log.info("Restoring base mail configuration");
 
-			mailSession.getProperties().setProperty("mail.smtp.host", this.mailSmtpHost);
-			mailSession.getProperties().setProperty("mail.smtp.port", this.mailSmtpPort);
+			mailSession.getProperties().setProperty("mail.smtp.host", this.brain.mailSmtpHost);
+			mailSession.getProperties().setProperty("mail.smtp.port", this.brain.mailSmtpPort);
 
-			this.mailSmtpHost = null;
-			this.mailSmtpPort = null;
+			this.brain.mailSmtpHost = null;
+			this.brain.mailSmtpPort = null;
 		}
 	}
 
 	/** */
 	public boolean isTestModeEnabled()
 	{
-		return this.mailSmtpHost != null;
+		log.debug("##### isTestModeEnabled(), brain id is " + brain.toString());
+		
+		return this.brain.mailSmtpHost != null;
 	}
 }

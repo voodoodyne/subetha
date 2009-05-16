@@ -30,7 +30,7 @@
 <!--	<logger name="com.caucho.loader" level="fine" />-->
 <!--	<logger name="com.caucho.server" level="fine" />-->
 
-<!--	<logger name="org.subethamail" level="finest" />-->
+	<logger name="org.subethamail" level="finest" />
 	<logger name="org.subethamail.smtp" level="severe" />
 	<logger name="org.hibernate" level="severe" />
 

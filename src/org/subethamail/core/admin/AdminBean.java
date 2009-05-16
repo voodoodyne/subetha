@@ -727,10 +727,10 @@ public class AdminBean extends PersonalBean implements Admin
 			// us PropertyValueException when trying to delete Roles.  You would
 			// think it should be smart enough to do this in proper order but
 			// apparently not.
-			for (Subscription sub: list.getSubscriptions())
-				this.em.remove(sub);
-			
-			list.getSubscriptions().clear();
+//			for (Subscription sub: list.getSubscriptions())
+//				this.em.remove(sub);
+//			
+//			list.getSubscriptions().clear();
 			
 			this.em.remove(list);
 		}

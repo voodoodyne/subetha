@@ -8,6 +8,7 @@ package org.subethamail.entity;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
@@ -71,6 +73,10 @@ public class Role implements Serializable, Comparable<Role>
 	@Column(name="perm", nullable=false)
 	@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
 	Set<Permission> permissions;
+
+	/** */
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="role")
+	Set<Subscription> subscriptions;
 
 	/**
 	 */

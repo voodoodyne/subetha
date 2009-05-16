@@ -35,7 +35,6 @@ import com.caucho.hessian.client.HessianProxyFactory;
 public class LoadGenerator extends Thread
 {
 	/** */
-	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(LoadGenerator.class);
 	
 	/** */
@@ -91,17 +90,20 @@ public class LoadGenerator extends Thread
 	/** */
 	public void run()
 	{
-		try
+		while (true)
 		{
-			while (true)
+			try
 			{
 				//System.out.println("Sending message");
 				Transport.send(this.message);
-				Thread.sleep(2000);
+				//Thread.sleep(1);
+			}
+			//catch (InterruptedException ex) { throw new RuntimeException(ex); }
+			catch (MessagingException ex)
+			{
+				log.debug("Exception sending mail", ex);
 			}
 		}
-		catch (InterruptedException ex) { throw new RuntimeException(ex); }
-		catch (MessagingException ex) { throw new RuntimeException(ex); }
 	}
 	
 	/** 
@@ -130,7 +132,8 @@ public class LoadGenerator extends Thread
 			String url = "http://localhost:8080/se/api/" + EegorBringMeAnotherBrain.class.getSimpleName();
 			
 			EegorBringMeAnotherBrain eegor = null;
-			try{
+			try
+			{
 				System.out.println("Creating eegor: " + url);
 				eegor = (EegorBringMeAnotherBrain)fact.create(EegorBringMeAnotherBrain.class, url);
 				
@@ -142,18 +145,19 @@ public class LoadGenerator extends Thread
 				System.out.println("Enabling test mode!");
 				eegor.enableTestMode("localhost:2525");
 				
-				for (int i = 0; i < 5; i++)
+				for (int i = 0; i < 50; i++)
 				{
 					System.out.println("Create LoadGen Thread!");
-					sleep(500);
 					(new Thread(new LoadGenerator(sender, recipient, attachment))).start();
 				}
 				
 				System.out.println("countingThread.join() -- waiting for end");
 				countingThread.join();
-			} finally {
+			}
+			finally
+			{
 				System.out.println("Disabling test mode!");
-				if(eegor != null) eegor.disableTestMode();
+				if (eegor != null) eegor.disableTestMode();
 			}
 		}
 	}

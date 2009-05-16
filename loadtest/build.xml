@@ -11,6 +11,7 @@
 <project name="loadtest" default="" basedir=".">
 	
 	<property file="user.properties" />
+	<property file="../user.properties" />
 	<property file="${user.home}/build.properties" />
 	<property file="../build.properties" />
 

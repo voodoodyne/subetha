@@ -26,25 +26,21 @@
 	<property name="loadtest.javasrc.dir" location="${loadtest.basedir}/src" />
 
 	<path id="loadtest.classpath">
-		<pathelement location="${build.smtp.api.file}" />
-		<pathelement location="${build.smtp.jar.file}" />
 		<fileset dir="../lib/">
-			<include name="**/**"/>
-		</fileset>
-
-		<fileset dir="${resin.dir}/lib">
 			<include name="**/*.jar"/>
 		</fileset>
 
+		<fileset dir="${resin.dir}/lib">
+			<include name="*.jar"/>
+		</fileset>
+		<path>
+			<pathelement path="../build/classes/"/>
+		</path>
 	</path>
 
 	<path id="loadtest.run.classpath">
 		<pathelement location="${build.loadtest.jar.file}" />
 		<path refid="loadtest.classpath" />
-		<fileset>
-			<include name="../build/"/>
-		</fileset>
-
 	</path>
 
  	<target name="loadtest-classes">
@@ -81,7 +77,7 @@
 	</target>
 
 	<target name="loadgen" depends="loadtest-jar">
-		<java classname="org.subethamail.load.LoadGenerator">
+		<java classname="org.subethamail.load.LoadGenerator" fork="true">
 			<arg value="${from}"/>
 			<arg value="${to}"/>
 			

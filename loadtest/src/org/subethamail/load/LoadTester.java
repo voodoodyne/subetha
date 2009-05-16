@@ -15,7 +15,7 @@ import org.subethamail.smtp.server.SMTPServer;
  * 
  * @author Jeff Schnitzer
  */
-public class LoadTester
+public class LoadTester implements Runnable
 {
 	/** */
 	@SuppressWarnings("unused")
@@ -26,15 +26,16 @@ public class LoadTester
 	SMTPServer server;
 	
 	/** */
-	public LoadTester() throws Exception
+	public LoadTester(String host, int port) throws Exception
 	{
 		this.server = new SMTPServer(new SimpleMessageListenerAdapter(this.listener));
-		this.server.setPort(2525);
-		this.server.setHostName("localhost");
+		this.server.setPort(port);
+		this.server.setHostName(host);
 	}
 	
 	/** */
-	public void start()
+	@Override
+	public void run()
 	{
 		this.server.start();
 		
@@ -67,7 +68,7 @@ public class LoadTester
 	/** */
 	public static void main(String[] args) throws Exception
 	{
-		LoadTester tester = new LoadTester();
-		tester.start();
+		LoadTester tester = new LoadTester("localhost",2525);
+		tester.run();
 	}
 }

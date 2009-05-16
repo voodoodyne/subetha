@@ -23,6 +23,9 @@ import javax.mail.internet.MimeMultipart;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.subethamail.core.admin.i.EegorBringMeAnotherBrain;
+
+import com.caucho.hessian.client.HessianProxyFactory;
 
 /**
  * Thread which creates a ton of SMTP messages and delivers them to a SMTP server. 
@@ -101,7 +104,11 @@ public class LoadGenerator extends Thread
 		catch (MessagingException ex) { throw new RuntimeException(ex); }
 	}
 	
-	/** */
+	/** 
+	 * Create a thread to listen for messages coming from threads generating load.
+	 * 
+	 * Note: This requires SubEtha running on port 2500!
+	 */
 	public static void main(String[] args) throws Exception
 	{
 		if (args.length < 2 || args.length > 3)
@@ -114,9 +121,40 @@ public class LoadGenerator extends Thread
 			InternetAddress recipient = new InternetAddress(args[1]);
 			
 			File attachment = (args.length == 3) ? new File(args[2]) : null;
+
+			HessianProxyFactory fact = new HessianProxyFactory();
+			fact.setOverloadEnabled(true);
+			fact.setUser("root@localhost");
+			fact.setPassword("password");
+
+			String url = "http://localhost:8080/se/api/" + EegorBringMeAnotherBrain.class.getSimpleName();
 			
-			LoadGenerator gen = new LoadGenerator(sender, recipient, attachment);
-			gen.run();
+			EegorBringMeAnotherBrain eegor = null;
+			try{
+				System.out.println("Creating eegor: " + url);
+				eegor = (EegorBringMeAnotherBrain)fact.create(EegorBringMeAnotherBrain.class, url);
+				
+				System.out.println("Creating wiser listener on port 2525!");
+				//this will start the listening wiser instance at port 2525
+				Thread countingThread  = new Thread(new LoadTester("localhost",2525));
+				countingThread.start();
+
+				System.out.println("Enabling test mode!");
+				eegor.enableTestMode("localhost:2525");
+				
+				for (int i = 0; i < 5; i++)
+				{
+					System.out.println("Create LoadGen Thread!");
+					sleep(500);
+					(new Thread(new LoadGenerator(sender, recipient, attachment))).start();
+				}
+				
+				System.out.println("countingThread.join() -- waiting for end");
+				countingThread.join();
+			} finally {
+				System.out.println("Disabling test mode!");
+				if(eegor != null) eegor.disableTestMode();
+			}
 		}
 	}
 }

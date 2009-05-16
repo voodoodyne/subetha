@@ -95,9 +95,9 @@ public class LoadGenerator extends Thread
 		{
 			while (true)
 			{
-				System.out.println("Sending message");
+				//System.out.println("Sending message");
 				Transport.send(this.message);
-				Thread.sleep(5000);
+				Thread.sleep(2000);
 			}
 		}
 		catch (InterruptedException ex) { throw new RuntimeException(ex); }

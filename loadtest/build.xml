@@ -77,7 +77,7 @@
 	</target>
 
 	<target name="loadgen" depends="loadtest-jar">
-		<java classname="org.subethamail.load.LoadGenerator" fork="true">
+		<java classname="org.subethamail.load.LoadGenerator"> 
 			<arg value="${from}"/>
 			<arg value="${to}"/>
 			

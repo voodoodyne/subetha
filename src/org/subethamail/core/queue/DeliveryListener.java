@@ -38,14 +38,12 @@ public class DeliveryListener implements MessageListener
 	 */
 	public void onMessage(Message qMsg)
 	{
-		DeliveryQueueItem umdd;
-		Long mailId , personId;
 		try
 		{
-			umdd = (DeliveryQueueItem)((ObjectMessage) qMsg).getObject();
+			DeliveryQueueItem umdd = (DeliveryQueueItem)((ObjectMessage)qMsg).getObject();
 
-			mailId = umdd.getMailId();
-			personId = umdd.getPersonId();
+			Long mailId = umdd.getMailId();
+			Long personId = umdd.getPersonId();
 
 			if (log.isDebugEnabled())
 				log.debug("Delivering mailId:" + mailId + " to personId:" + personId);
@@ -53,19 +51,17 @@ public class DeliveryListener implements MessageListener
 			try
 			{
 				this.deliverator.deliver(mailId, personId);
-				qMsg.acknowledge();
 			}
 			catch (NotFoundException ex)
 			{
-				// Just log a warning and accept the JMS message
-				if (log.isErrorEnabled())
-					log.error("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
+				// Just log a warning and accept the JMS message; this is a legit case
+				// when mail gets deleted.
+				if (log.isWarnEnabled())
+					log.warn("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
 			}
-//			catch (Exception e)
-//			{
-//				if (log.isErrorEnabled())
-//					log.error("Error processing message!", e);				
-//			}
+			
+			// This is not supposed to be relevant for MDBs
+			//qMsg.acknowledge();
 		}
 		catch (JMSException ex)
 		{

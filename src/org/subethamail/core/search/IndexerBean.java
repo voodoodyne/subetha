@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Named;
 import javax.annotation.PostConstruct;
@@ -64,8 +66,9 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	static final File USE2 = new File(BASE_DIR, "use2");
 
 	/** Synchronize on this object before updating or rebuilding the index */
-	static Object updateMutex = new Object();
-
+	private static ReentrantLock updateLock = new ReentrantLock();
+	private static ReentrantLock rebuildLock = new ReentrantLock();
+	
 	/**
 	 * One of two index managers will be active at a time
 	 */
@@ -180,26 +183,46 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	 */
 	public void rebuild()
 	{
-		synchronized(updateMutex)
+		try
 		{
-			log.info("Rebuilding all search indexes");
-
-			try
+			//get update lock first.
+			updateLock.tryLock(1, TimeUnit.MINUTES);
+			
+			//try to get a lock, if we don't get it, another thread is already rebuilding!
+			rebuildLock.tryLock(1,TimeUnit.MILLISECONDS);
 			{
-				IndexMgr mgr = getFallowIndex();
-
-				Modifier mod = mgr.modifyIndex(true);
-
-				log.info("Indexing all messages");
-				this.indexAllMail(mod);
-				mod.flush();
-				log.info(mod.docCount() + " total documents in index");
-
-				mod.close();
-
-				this.swapCurrentIndex();
+				log.info("Rebuilding all search indexes");
+	
+				try
+				{
+					IndexMgr mgr = getFallowIndex();
+	
+					Modifier mod = mgr.modifyIndex(true);
+	
+					log.info("Indexing all messages");
+					this.indexAllMail(mod);
+					mod.flush();
+					log.info(mod.docCount() + " total documents in index");
+	
+					mod.close();
+	
+					this.swapCurrentIndex();
+				}
+				catch (IOException ex) { throw new EJBException(ex); }
+				finally 
+				{
+					rebuildLock.unlock();
+				}
 			}
-			catch (IOException ex) { throw new EJBException(ex); }
+		}
+		catch (InterruptedException e)
+		{
+			if(log.isWarnEnabled())
+				log.warn("Error getting update lock; cancelling rebuild.");
+		}
+		finally
+		{
+			updateLock.unlock();
 		}
 	}
 
@@ -209,8 +232,10 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	 */
 	public void update()
 	{
-		synchronized(updateMutex)
+		try
 		{
+			//try to get a lock.
+			updateLock.tryLock(1, TimeUnit.MILLISECONDS);
 			log.info("Updating search index");
 
 			try
@@ -253,6 +278,15 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 				mod.close();
 			}
 			catch (IOException ex) { throw new EJBException(ex); }
+		}
+		catch (InterruptedException e)
+		{
+			if(log.isWarnEnabled())
+				log.warn("Error getting update lock; cancelling update.");
+		}
+		finally
+		{
+			updateLock.unlock();
 		}
 	}
 

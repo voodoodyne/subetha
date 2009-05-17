@@ -19,8 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.deliv.i.Deliverator;
-import org.subethamail.core.util.SubEtha;
-import org.subethamail.core.util.SubEthaEntityManager;
 
 /**
  * Processes delivery queue messages by creating an actual STMP message
@@ -36,37 +34,43 @@ public class DeliveryListener implements MessageListener
 	/** */
 	@Current Deliverator deliverator;
 
-	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
-
 	/**
 	 */
 	public void onMessage(Message qMsg)
 	{
+		DeliveryQueueItem umdd;
+		Long mailId , personId;
 		try
 		{
-			DeliveryQueueItem umdd = (DeliveryQueueItem)((ObjectMessage) qMsg).getObject();
+			umdd = (DeliveryQueueItem)((ObjectMessage) qMsg).getObject();
 
-			Long mailId = umdd.getMailId();
-			Long personId = umdd.getPersonId();
+			mailId = umdd.getMailId();
+			personId = umdd.getPersonId();
+
 			if (log.isDebugEnabled())
-				log.debug("Delivering mailId " + mailId + " to personId " + personId);
-	
+				log.debug("Delivering mailId:" + mailId + " to personId:" + personId);
+			
 			try
 			{
 				this.deliverator.deliver(mailId, personId);
+				qMsg.acknowledge();
 			}
 			catch (NotFoundException ex)
 			{
 				// Just log a warning and accept the JMS message
-				if (log.isWarnEnabled())
-					log.warn("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
-			}	
+				if (log.isErrorEnabled())
+					log.error("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
+			}
+			catch (Exception e)
+			{
+				if (log.isErrorEnabled())
+					log.error("Error processing message!", e);				
+			}
 		}
 		catch (JMSException ex)
 		{
-			log.error("Error getting data off queue",ex);
+			if (log.isErrorEnabled())
+				log.error("Error getting data out of message.",ex);
 		}
 	}
 }

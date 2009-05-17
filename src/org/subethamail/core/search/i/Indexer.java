@@ -5,8 +5,6 @@
 
 package org.subethamail.core.search.i;
 
-import javax.ejb.Local;
-
 import org.subethamail.common.SearchException;
 
 /**
@@ -17,12 +15,8 @@ import org.subethamail.common.SearchException;
  *
  * @author Jeff Schnitzer
  */
-@Local
 public interface Indexer
 {
-	/** */
-	public static final String JNDI_NAME = "subetha/IndexerBean/local";
-
 	/**
 	 * Queries the index for a specific mailing list.
 	 * 
@@ -37,4 +31,3 @@ public interface Indexer
 	 */
 	public void update();
 }
-

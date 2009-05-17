@@ -5,8 +5,6 @@
 
 package org.subethamail.core.deliv.i;
 
-import javax.ejb.Local;
-
 import org.subethamail.common.NotFoundException;
 
 /**
@@ -97,12 +95,8 @@ minutes.
  *
  * @author Jeff Schnitzer
  */
-@Local
 public interface Deliverator
 {
-	/** */
-	public static final String JNDI_NAME = "subetha/Deliverator/local";
-
 	/**
 	 * Actually delivers a piece of mail to a person, if they are
 	 * subscribed and have delivery enabled.  No queueing

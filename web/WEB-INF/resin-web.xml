@@ -30,9 +30,9 @@
 <!--	<logger name="com.caucho.loader" level="fine" />-->
 <!--	<logger name="com.caucho.server" level="fine" />-->
 
-<!--	<logger name="org.subethamail" level="finest" />-->
-<!--	<logger name="org.subethamail.smtp" level="severe" />-->
-<!--	<logger name="org.hibernate" level="severe" />-->
+	<logger name="org.subethamail" level="config" />
+	<logger name="org.subethamail.smtp" level="severe" />
+	<logger name="org.hibernate" level="severe" />
 
 <!--  Needs a management interface to work-->
 <!--	<resource-->
@@ -61,29 +61,29 @@
 	</resin:ScheduledTask>
 
 	<!-- Start now (in a few seconds)-->
-<!--	<resin:ScheduledTask task="#{cleanupBean}">-->
-<!--		<resin:delay>10s</resin:delay>-->
-<!--	</resin:ScheduledTask>-->
-<!---->
-<!--	<resin:ScheduledTask task="#{indexerBean}" >-->
-<!--		<resin:delay>20s</resin:delay>-->
-<!--	</resin:ScheduledTask>-->
+	<resin:ScheduledTask task="#{cleanupBean}">
+		<resin:delay>10s</resin:delay>
+	</resin:ScheduledTask>
+
+	<resin:ScheduledTask task="#{indexerBean}" >
+		<resin:delay>20s</resin:delay>
+	</resin:ScheduledTask>
 
 
 	<!-- JMS -->
 	<jms:JmsConnectionFactory />
 
-	<jms:MemoryQueue>
+	<jms:FileQueue>
 <!--		<queue:DeliveryQueue/>-->
 		<Named>delivery</Named>
 		<resin:Name>delivery</resin:Name>
-	</jms:MemoryQueue>
+	</jms:FileQueue>
 
-	<jms:MemoryQueue>
+	<jms:FileQueue>
 <!--		<queue:InjectQueue/>-->
 		<Named>inject</Named>		
 		<resin:Name>inject</resin:Name>
-	</jms:MemoryQueue>
+	</jms:FileQueue>
 
 	<ejb-message-bean class="org.subethamail.core.queue.DeliveryListener">
 		<destination>#{delivery}</destination>

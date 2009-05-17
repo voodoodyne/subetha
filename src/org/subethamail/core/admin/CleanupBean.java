@@ -7,6 +7,8 @@ package org.subethamail.core.admin;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Named;
 import javax.ejb.TransactionAttribute;
@@ -39,9 +41,12 @@ public class CleanupBean implements CleanupManagement, Runnable
 	/** Keep held messages around for 7 days */
 	public static final long MAX_HELD_MSG_AGE_MILLIS = 1000L * 60L * 60L * 24L * 7L;
 
+	private static ReentrantLock cleanupLock = new ReentrantLock();
+	
 	/** */
 	@SubEtha
 	protected SubEthaEntityManager em;
+
 
 	/*
 	 * (non-Javadoc)
@@ -49,7 +54,20 @@ public class CleanupBean implements CleanupManagement, Runnable
 	 */
 	public void run()
 	{
-		this.cleanup();
+		try
+		{
+			cleanupLock.tryLock(1, TimeUnit.MILLISECONDS);
+			this.cleanup();
+		}
+		catch (InterruptedException e)
+		{
+			if(log.isWarnEnabled())
+				log.warn("Error getting cleanup lock; cancelling scheduled cleanup.");
+		}
+		finally 
+		{
+			cleanupLock.unlock();
+		}
 	}
 
 	/*

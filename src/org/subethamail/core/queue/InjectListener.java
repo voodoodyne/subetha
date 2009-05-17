@@ -9,6 +9,8 @@ package org.subethamail.core.queue;
 import java.util.concurrent.BlockingQueue;
 
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -41,21 +43,47 @@ public class InjectListener implements MessageListener{
 	@Name("delivery")
 	BlockingQueue outboundQueue;
 
+	@SuppressWarnings("unchecked")
+//	@InjectQueue 
+	@Name("inject")
+	BlockingQueue myQueue;
+
 	/** */
 	@SubEtha
 	protected SubEthaEntityManager em;
 
 	/** */
+	@SuppressWarnings("unchecked")
 	public void onMessage(Message qMsg)
 	{
+		boolean failed = true; 
+		InjectedQueueItem item = null;
 		try
 		{
-			InjectedQueueItem item = (InjectedQueueItem) ((ObjectMessage)qMsg).getObject();
-			this.deliver(item.getMailId());
+			item = (InjectedQueueItem) ((ObjectMessage)qMsg).getObject();
+			try 
+			{
+				this.deliver(item.getMailId());
+				failed = false;
+			}
+			catch (Exception e) { /*Eat it. The finally block will retry.*/ }
 		}
 		catch (JMSException e)
 		{
-			log.error("Error getting object outa message (from queue)", e);
+			if(log.isErrorEnabled())
+				log.error("Error getting object outa message (from queue)", e);
+		}
+		finally
+		{
+			if(failed) try
+			{
+				myQueue.put(item);
+			}
+			catch (InterruptedException e)
+			{
+				if(log.isErrorEnabled())
+					log.error("Error requeing", e);				
+			}
 		}
 	}
 	
@@ -63,6 +91,7 @@ public class InjectListener implements MessageListener{
 	 * Looks up who gets that message and creates new queue entries.
 	 */
 	@SuppressWarnings("unchecked")
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	private void deliver(Long mailId)
 	{
 		if (log.isDebugEnabled())
@@ -90,13 +119,15 @@ public class InjectListener implements MessageListener{
 		{
 			if (sub.getDeliverTo() != null)
 			{
+				Long personId = sub.getPerson().getId();
 				try
 				{
-					this.outboundQueue.put(new DeliveryQueueItem(mailId, sub.getPerson().getId()));
+					this.outboundQueue.put(new DeliveryQueueItem(mailId, personId));
 				}
 				catch (InterruptedException e)
 				{
-					log.error("Error queuing delivery message",e);
+					log.error("Error queuing delivery messages for mail.id=" + mailId + " person.id=" + personId, e);
+					throw new RuntimeException(e);
 				}
 			}
 		}

@@ -6,6 +6,8 @@
 
 package org.subethamail.core.queue;
 
+import java.util.concurrent.BlockingQueue;
+
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -19,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.deliv.i.Deliverator;
+
+import com.caucho.config.Name;
 
 /**
  * Processes delivery queue messages by creating an actual STMP message
@@ -34,18 +38,25 @@ public class DeliveryListener implements MessageListener
 	/** */
 	@Current Deliverator deliverator;
 
+	@SuppressWarnings("unchecked")
+//	@DeliveryQueue 
+	@Name("delivery")
+	BlockingQueue myQueue;
+
 	/**
 	 */
+	@SuppressWarnings("unchecked")
 	public void onMessage(Message qMsg)
 	{
-		DeliveryQueueItem umdd;
+		boolean failed = true;
+		DeliveryQueueItem item = null;
 		Long mailId , personId;
 		try
 		{
-			umdd = (DeliveryQueueItem)((ObjectMessage) qMsg).getObject();
+			item = (DeliveryQueueItem)((ObjectMessage) qMsg).getObject();
 
-			mailId = umdd.getMailId();
-			personId = umdd.getPersonId();
+			mailId = item.getMailId();
+			personId = item.getPersonId();
 
 			if (log.isDebugEnabled())
 				log.debug("Delivering mailId:" + mailId + " to personId:" + personId);
@@ -58,6 +69,7 @@ public class DeliveryListener implements MessageListener
 			catch (NotFoundException ex)
 			{
 				// Just log a warning and accept the JMS message
+				// It possible the message/subscription has been deleted since we queued the orig request.
 				if (log.isErrorEnabled())
 					log.error("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
 			}
@@ -70,7 +82,21 @@ public class DeliveryListener implements MessageListener
 		catch (JMSException ex)
 		{
 			if (log.isErrorEnabled())
-				log.error("Error getting data out of message.",ex);
+				log.error("Error getting data out of message.", ex);
+		}
+		finally
+		{
+			if(failed) try
+			{
+				myQueue.put(item);
+			}
+			catch (InterruptedException e)
+			{
+				if(log.isErrorEnabled())
+					log.error("Error requeing", e);				
+			}
+
+			
 		}
 	}
 }

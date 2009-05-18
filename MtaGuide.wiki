@@ -1,0 +1,300 @@
+#labels Featured
+= SubEtha and your Mail Transport Agent =
+
+  SubEtha currently requires an external Mail Transport Agent (MTA) to actually receive mail from and deliver mail to the internet. While this may not be a requirement in the future, we will never ask you to replace your favorite MTA.
+
+  You should be able to use any MTA with SubEtha, but the integration instructions will be different for each.
+
+== Overview ==
+
+SubEtha is very smart about what to do with any mail that it gets hold of. SubEtha looks at the envelope sender and the envelope recipient and figures out the appropriate action. The only trick is getting the mail into the server. There are two ways this can work:
+  * Inject the method from a script
+  * Relay into SubEtha via SMTP (preferred!)
+
+Script injection is similar to how Mailman, Majordomo, EZMLM, and other mailing list managers work. You can directly inject a piece of mail by calling a SOAP method or a much simpler HTTP inject interface that SubEtha provides. This works, but it's often difficult to configure in MTAs, especially preserving the out-of-band sender envelope information.
+
+The preferred method of injecting mail into SubEtha is to relay mail into the server via SMTP. This is usually trivial to set up. SubEtha has it's own SMTP stack (by default running on port 2500 and can be overridden by the -Dorg.subethamail.smtp.port= system property at startup) which accepts messages and "does the right thing" with whatever it receives.
+
+In either case, your MTA must be instructed  *which* mail should be delivered to SubEtha (as opposed to local mailboxes). The options here vary by MTA.
+
+== Postfix ==
+
+There are three recommended ways to integrate Postfix with SubEtha.
+
+== Manual Postfix Mapping ==
+
+You can manually specify which addresses Postfix will relay into SubEtha. There are two types of addresses you can specify:
+
+  #  Whole domains, such that all addresses for that domain will be delivered to SubEtha. For example, all addresses at the domain  *lists.example.com*.
+  #  Full addresses of mailing lists. You can cherrypick specific email addresses, such as  *announce@example.com*
+
+The steps to configure Postfix.
+
+  #  Edit /etc/postfix/main.cf. Change or add these lines:
+		{{{
+
+		mydestination = ... example.com  # add example.com to existing line
+
+		transport_maps = hash:/etc/postfix/subetha_transport
+
+		local_recipient_maps = proxy:unix:passwd.byname $alias_maps hash:/etc/postfix/subetha_transport
+
+		}}}
+
+Note that local_recipient_maps must be defined after alias_maps.
+  
+  # Edit /etc/postfix/subetha_transport. Add these lines:
+
+
+		{{{
+
+		lists.example.com          smtp:[127.0.0.1]:2500
+		announce@example.com       smtp:[127.0.0.1]:2500
+
+		}}}
+
+
+This example forwards mail destined for any address @lists.example.com and mail to the specific address announce@example.com along to SubEtha. You can have as many domains, subdomains, and addresses as you wish. Don't forget to set up the appropriate MX records in DNS.
+
+Note that the destination (in this case 127.0.0.1) must be resolvable via DNS (not just /etc/hosts!) or as an IP address. Placing the address in brackets skips MX record resolution, which is highly recommended.
+    
+  #  Run "postmap /etc/postfix/subetha_transport".
+
+  #   *NOTE:* To specify full addresses like  *announce@example.com*, Postfix  *must* be configured to use  *-* as the user extension separator. This is not the postfix default. This configuration is unnecessary if whole subdomains (ie lists.example.com) are specified. It is also unnecessary if Automatic Postfix Mapping is used.
+
+  #   *ALSO NOTE:* You must put all domains on which you expect to run mailing lists in the  *mydestination* list.
+
+== Postfix with a Virtual Host based setup ==
+
+  This isn't an optimal solution, but postfix doesn't really offer any other way to configure things (that we were able to figure out) so that it works with a virtual host setup in postfix.
+
+  In this case, you have postfix running with your MX records pointing to Server A (takahe.whichever.com). On Server B (subetha.whichever.com), you setup SubEtha Mail SMTP server to listen on port 25 using the -Dorg.subethamail.smtp.port=25 switch during startup (I put it in my JBOSS_HOME/bin/run.conf).
+
+  Postfix *main.cf* setup as follows.
+  
+	{{{
+
+	myhostname = takahe.whichever.com
+	local_recipient_maps=
+	virtual_alias_maps = hash:/etc/postfix/virtual
+							
+
+	}}}
+
+
+The *virtual* file looks like this.
+
+	{{{
+
+	whichever.com                   anything
+	list@whichever.com              list@subetha.whichever.com
+							
+
+	}}}
+
+
+Now, make sure to run {{{cd /etc/postfix; postmap virtual}}}
+
+In SubEtha, set the *list settings* to be: list@subetha.whichever.com
+
+What this does is that all mail to the list gets forwarded from Server A to Server B. Any bounce emails are generated with the reply going directly to the subetha.whichever.com machine.
+
+  == Automatic Postfix Mapping ==
+
+This is still experimental. It is, however, very convenient.
+
+SubEtha provides correct values for the Postfix transport table through an implementation of the [http://www.postfix.org/tcp_table.5.html "Postfix tcp: map provider"]. This will automatically work for all addresses that SubEtha wants to claim, such as mailing list addresses, mailing list owner addresses, and VERPed bounce messages.
+
+On some systems (OSX), the tcp_table is not compiled in by default. In order to enable it, download the latest source, compile and then install postfix over your existing installation. Use the command: 'make makefiles CCARGS=-DSNAPSHOT; make; make install' and just answer the defaults during install.
+
+The steps are similar to manual postfix mapping, all configured in main.cf:
+    
+  #  Add any relevant domains to  *mydestination*. Only add whole domains, not individual list addresses
+
+Add these lines.
+		{{{
+
+		transport_maps = tcp:[127.0.0.1]:2502
+
+		local_recipient_maps = proxy:unix:passwd.byname $alias_maps tcp:[127.0.0.1]:2502
+
+		}}}
+
+  Note that local_recipient_maps must be defined after alias_maps.
+
+With this approach, /etc/postfix/transport is unnecessary. Also, the Postfix extension delimiter is irrelevant - SubEtha will correctly claim any appropriate messages, causing them to be relayed into SubEtha.
+
+== Sendmail ==
+  # Add your domain to *access* file:
+		{{{
+
+		DOMAIN.COM RELAY
+
+		}}}
+  # Add a mailertable in *mailertable* file:
+		{{{
+
+		DOMAIN.COM smtp:[IP]:PORT
+
+		}}}
+
+  #  Rehash the files:
+		{{{
+		makemap hash /etc/mail/access < /etc/mail/access }}}
+		makemap hash /etc/mail/mailertable < /etc/mail/mailertable
+		}}}
+  [http://www.subethamail.org/se/archive_msg.jsp?msgId=33658 "Another user shared his experiences on the users list."]
+
+== Exim ==
+
+  == v4.61 ==
+
+  This config will create a domain (or subdomain) filter to relay all messages to smtp://localhost:2500. To do this we create a fake email (sub)domain (@lists.localhost) while still allowing local delivery for @localhost addresses.
+
+  Make the following changes to etc/*exim.config*.
+
+  === Transports Section: ===
+		{{{
+		local_smtp_port_2500:
+		  driver = smtp
+		  port = 2500
+		  allow_localhost = true
+		  gethostbyname = true
+		  hosts=localhost
+		}}}
+
+*Notes*
+  * *gethostbyname*: This resolves hosts using alternate sources like etc/hosts instead of just through dns mx records.
+  * *allow_localhost*: This is usually not allowed to help keep mail-loops under control. :) Since we are running a totally different mail server on localhost:2500 we have no worries that the message will loop back into the same system.
+
+  === Routers Section: ===
+		{{{
+
+		subetha:
+		  driver=accept
+		  domains=lists.localhost
+		  self=send
+		  transport=local_smtp_port_2500
+		  
+		  no_more
+						
+
+		}}}
+ *Note*: I found while working with Cygwin that every time I changed etc/exim.config file the permissions were changed to my current windows account:
+		{{{
+
+		-rwx------+ 1 *skot* None 31250 May  8 20:48 /etc/exim.conf
+
+		}}}
+
+  This was problematic as exim was setup to run as a service and should have had the following permissions:
+
+		{{{
+
+		-rw-rw-r--+ 1 SYSTEM *root* 31250 May  8 20:48 /etc/exim.conf
+
+		}}}
+
+. To fix this problem I had to continuously re-run {{{exim-config}}}, or change the permissions manually.
+
+  == Qmail ==
+
+  
+  # Create a file /var/qmail/control/*smtproutes* and with the content:
+		{{{
+		domain.com:[IP MACHINE]:PORT
+		}}}
+In my setup, the file looks like:
+
+	{{{
+	domain.com:[127.0.0.1]:2500
+	}}}
+
+  #  Restart Qmail.
+
+== Microsoft Exchange ==
+The following instructions were adapted from Microsoft Technical documents [http://support.microsoft.com/kb/321721/ "KB321721"] and [http://www.microsoft.com/technet/prodtechnol/exchange/guides/POP3SvcE2k3/fa2007e3-9b6c-4bfa-bab9-5ccb0ca0a3e5.mspx?mfr=true "this one"]. The second one was particularly helpful.
+
+You can setup your SubEtha lists to exist publicly on a subdomain (lists.example.com) or have exchange pass through any domain for that matter.
+
+Hosting your SubEtha Lists on a (sub)domain (lists.example.com)
+
+  # Modify the Default Recipient Policy by adding your subdomain (i.e. lists.example.com) as a new non-primary address. Ensure that "This Exchange Organization is responsible for all mail delivery to this address." is unchecked for the new address.
+    * If prompted to change all address, choose no.
+  # Create a new SMTP Connector choosing "Forward all mail through this connector to the following smart hosts, providing the IP address of your SubEtha List Server as the address (i.e. [192.168.1.100])
+    * Add your local SMTP Virtual Server as a bridgehead server
+    * Select the Address Space tab and add a new SMTP address of your subdomain (lists.example.com). You can leave the cost at 1 and ensure that "Allow messages to be relayed to these domains" is checked.
+    * Modify your SubEtah startup script (run.bat) to set the org.subethamail.smtp.port property and set it to 25 (i.e. -Dorg.subethamail.smtp.port=25)
+    * Note: this is necessary because you cannot set the outbound port on the Exchange SMTP connector as far as I can tell. If anyone knows how to do this, please share
+  # Restart SubEtha
+
+You should now be able to send mail to your lists in the form of mylist@lists.example.com and your Exchange server will relay it to your SubEtha List Server.
+
+== Sharing your primary domain between Exchange Server and SubEtha ==
+
+When doing this you will not get all the features included in subetha. You will not get support for verp, and related features.
+
+This setup still requires that you treat your SubEtha List Server as a subdomain (lists.example.com), however, to the outside world your lists will be addressable via your primary domain (example.com)
+
+  # Create a Contact for each list using Active Directory Users and Computers. Uncheck "create an Exchange Email Address".
+    * Find your newly created Contacts, right-click and choose "Exchange Tasks." Then choose "Establish Email Address" and then click Modify to add a new external SMTP address of your full list address (i.e. subetha-interest@lists.example.com). Note the use of the subdomain
+    * I used a naming scheme for these contacts where I would always give them an alias ending in "-list". So, a SubEtha Interest list would be "subetha-list." Keep in mind that the alias you give to these contacts will be the public e-mail address for your lists. In essence, what were doing here is create an Exchange entry for your list with an email address of subetha-list@example.com which maps to the real list address of subetha-interest@lists.example.com.
+  # Add a new Email Addresses Recipient Policy adding your subdomain address as the primary address and ensuring that for this address "This Exchange Organization is responsible for all mail delivery to this address." is unchecked.
+  # Create a new SMTP Connector choosing "Forward all mail through this connector to the following smart hosts, providing the IP address of your SubEtha List Server as the address (i.e. [192.168.1.100])
+    * Add your local SMTP Virtual Server as a bridgehead server
+    * Select the Address Space tab and add a new SMTP address of your subdomain (lists.example.com). You can leave the cost at 1 and ensure that "Allow messages to be relayed to these domains" is checked.
+  # Modify your SubEtah startup script (run.bat) to set the org.subethamail.smtp.port property and set it to 25 (i.e. -Dorg.subethamail.smtp.port=25)
+    Note: this is necessary because you cannot set the outbound port on the Exchange SMTP connector as far as I can tell. If anyone knows how to do this, please share
+  # Restart SubEtha
+  # Modify your SubEtha lists to enable the Reply-To filter, unchecking Mailing List and adding the public address of your list (subetha@example.com) manually.
+
+You should now be able to send mail to your lists in the form of my-list@example.com and your Exchange server will relay it to your SubEtha List Server.
+
+I'm personally using the second option as I wanted the lists to be on my primary domain as far as the outside world was concerned. The first way also presented a problem as far as our spam filtering service was concerned so the second way worked out best for us. The downside in my opinion is that from an administrative standpoint, creating the Exchange contacts for each list is just an extra step, but since we have a pretty static environment, it will probably work out OK. On a final note, so that our Exchange users don't have to look at our lists in their address book, I checked "Hide from Exchange address list."
+
+== Apache James ==
+
+It is easy to make the SubEtha Integrating with Apache James.
+ 
+Let the mailet {{{RemoteDelivery}}} to relay the mail to SubEtha server, just follow these steps.
+ 
+1. Setup James normally by editing {{{ ${james_home}\apps\james\SAR-INF\config.xml }}}
+		{{{
+		 <postmaster>Postmaster@hosteddomain</postmaster>
+		 <servernames autodetect="true" autodetectIP="true">
+		   <servername>MyJamesMailServer</servername>
+		 </servernames>
+		 <!-- comment out lines below
+		 <mailet match="RemoteAddrNotInNetwork=127.0.0.1" class="ToProcessor">
+		   <processor> relay-denied </processor>
+			<notice>550 - Requested action not taken: relaying denied</notice>
+		 </mailet>
+		 -->
+		 }}}
+		 
+2. Create a *account* in James Server for the mail list address *mail_list*@hosteddomain
+		{{{
+		 telnet localhost 4555
+		 adduser mail_list 123
+		}}}
+		
+2. config a "RemoteDelivery" Mailet to relay the mail to SubEtha
+	{{{
+	<processor name="root">
+
+	<mailet match="RecipientIs=mail_list@hosteddomain" class="RemoteDelivery">
+		<!-- Other standard settings here. -->
+
+		<!-- this gateway is our SubEtha server -->
+		<gateway>127.0.0.1</gateway>
+		<gatewayPort>2500</gatewayPort>
+	</mailet>
+
+	<!-- One mailet per address, or just create one regex if you can. -->
+
+	</processor>
+	}}} 
+	
+  # Create a mail list via SubEtha matching the name specfied above. eg. {{{mail_list@hosteddomain}}}
+ 
+  # Send a mail to the list and check subetha to make sure the message is in the archives for the correct list.

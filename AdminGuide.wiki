@@ -78,15 +78,14 @@ If you are familiar with mailing list managers, SubEtha should be easy to master
     # The EmailAddress is removed from all lists (by setting subscription to "No Delivery") when the bounceCount reaches a threshold which is currently hard coded as 7.
 
 == Programming ==
+  Please see the ProgrammingGuide for more information.
 
   * SubEtha is a true three-tiered application. Nearly everything you can do from the website can be automated using the remote EJB interface. This interface is fully contained in core-api.jar.
 
   * SubEtha offers two kinds of plugins.
+    # *Filters* manipulate email either as it arrives or as it is sent (or both). Each filter defines a set of configuration parameters that list owners can set on a per-list basis.
+    # *Blueprints* initialize a new mailing list with a set of configuration options. This includes basic settings, enabled filters, filter arguments, roles, and permissions. No matter what blueprint a list is created with, list owners are free to reconfigure the list afterwards.
 
-    # Filters manipulate email either as it arrives or as it is sent (or both). Each filter defines a set of configuration parameters that list owners can set on a per-list basis.
+  * Plugins are hot-deployable without any configuration changes. Howerver, a new scan must be run in the admin, or the webapp must be restarted. SubEtha gracefully handles filters that have been enabled on lists but are subsequently removed.
 
-    # Blueprints initialize a new mailing list with a set of configuration options. This includes basic settings, enabled filters, filter arguments, roles, and permissions. No matter what blueprint a list is created with, list owners are free to reconfigure the list afterwards.
-
-  * Plugins are hot-deployable as JBoss services. SubEtha gracefully handles filters that have been enabled on lists but are subsequently removed from the JBoss instance - even at runtime.
-
-  * Plugins run inside the SubEtha JVM and run with site administrator privelage. Techncially this means they can do almost anything. We recommend you stick to the APIs in core-api.jar; any other API is considered internal and highly likely to change without notice.
+  * Plugins run inside the SubEtha JVM and run with site administrator privelage. Techncially this means they can do almost anything. We recommend you stick to the APIs; any other API is considered internal and highly likely to change without notice.

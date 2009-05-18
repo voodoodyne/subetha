@@ -81,11 +81,11 @@ If you are familiar with mailing list managers, SubEtha should be easy to master
 
   * SubEtha is a true three-tiered application. Nearly everything you can do from the website can be automated using the remote EJB interface. This interface is fully contained in core-api.jar.
 
-  * SubEtha offers two kinds of plugins:
+  * SubEtha offers two kinds of plugins.
 
-  * Filters manipulate email either as it arrives or as it is sent (or both). Each filter defines a set of configuration parameters that list owners can set on a per-list basis.
+    # Filters manipulate email either as it arrives or as it is sent (or both). Each filter defines a set of configuration parameters that list owners can set on a per-list basis.
 
-  * Blueprints initialize a new mailing list with a set of configuration options. This includes basic settings, enabled filters, filter arguments, roles, and permissions. No matter what blueprint a list is created with, list owners are free to reconfigure the list afterwards.
+    # Blueprints initialize a new mailing list with a set of configuration options. This includes basic settings, enabled filters, filter arguments, roles, and permissions. No matter what blueprint a list is created with, list owners are free to reconfigure the list afterwards.
 
   * Plugins are hot-deployable as JBoss services. SubEtha gracefully handles filters that have been enabled on lists but are subsequently removed from the JBoss instance - even at runtime.
 

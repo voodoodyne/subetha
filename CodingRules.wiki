@@ -1,7 +1,7 @@
 #labels Featured
 == SubEtha Coding Rules ==
 
-The coding rules are simple. Here is are ExclipseSettings for Eclipse (3.4+) code style settings, that you can import for the project.
+The coding rules are simple. Here is are EclipseSettings for Eclipse (3.4+) code style settings, that you can import for the project.
   
   * 4-space HARD tabs
  Most editors do this by default.  Trust the defaults.

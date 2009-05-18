@@ -1,0 +1,19 @@
+#labels Featured
+= Migrating from Mailman =
+
+Migrating from Mailman to SubEtha Mail is easy. Start off by creating your new list in SubEtha Mail and setting up all of the appropriate filters and list settings.
+
+Get the subscriber list and mbox file from your mailman installation. Obtain the .mbox file from ${mailman.home}/archives/${list.name}.mbox/${list.name}.mbox and use the ${mailman.home}/bin/list_members ${list.name} command to export the subscribers list.
+
+There are a few things to note before doing the final migration:
+
+  * Ensure that the mysqld [http://dev.mysql.com/doc/refman/5.0/en/packet-too-large.html "max_allowed_packet"] setting is large enough to accodimate the largest archived mail message you might have. During import, it makes sense to make this value some huge number (say 54M). Once you have done the import, you can set this back to a lower value (say 15M).
+
+  * If you are uploading a mbox file across the network, make sure that it is a fast network connection in order to not hit any timeouts as a result of things taking a long time.
+
+  
+Now you are ready to import the archives. Go to List Admin Menu->Import and upload your mbox file. If the import fails for any reason, please let us know. Also, do not worry if it fails, the import process is smart enough to see any saved messages and not re-import them when you try again.
+  
+Once the archives are available and you feel comfortable with that, copy/paste the subscriber list into List Admin Menu->Mass Subscribe. Chances are that you will just want to 'Silently subscribe' your members.
+
+Finally, shut down your mailman instance and re-configure your mail system to send messages to SubEtha.

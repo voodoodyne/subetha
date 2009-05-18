@@ -1,0 +1,117 @@
+= SubEtha Filters =
+
+= Understanding Filters =
+Filters in SubEtha are a powerful way to extend the functionality of the application. If you know Java, they are also fairly easy to implement. The beauty of the filters is that the web user interface is generated automatically from the declared parameters in the filter class. So, all you need to do is code the functionality of the filter and the configuration appears automatically in the web application.
+
+The filters that come with SubEtha live in the {{{org.subethamail.plugin.filter}}} package. They provide an excellent source of reference when developing your own filters. In fact, we will use the SubjectFilter as our example.
+
+In order to develop a filter, it must implement the Filter interface. Because of the automated registration process, which we suggest using, the class should have a public (no-args) constructor. Strictly speaking this is not a requirement but for the extend of this document we will be following that rule.
+
+{{{
+package org.subethamail.core.plugin.i;
+public interface Filter
+{
+	public String getName();
+	public String getDescription();
+	public FilterParameter[] getParameters();
+	
+	public void onInject(SubEthaMessage msg, FilterContext ctx) throws IgnoreException, HoldException, MessagingException;
+	
+	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException;
+
+	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException;
+}
+}}}
+
+To make things easier we suggest you extend out GenericFilter. Here is the top part of the SubejectFilter class.
+
+{{{
+public class SubjectFilter extends GenericFilter
+}}}
+
+Next define the filter parameters. These are used to build the user interface to configure your filter. It's helpful to look at the Javadoc for the FilterParameter/FilterParameterImpl class and interface. This is included in the distribution or since you probably have a development environment setup, you can build it yourself.
+
+{{{
+static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
+        new FilterParameterImpl(
+                        ARG_SUBJECTPREFIX,
+                        "The prefix text which is appended to the beginning of " +
+                        "the Subject of each message sent to the list.",
+                        "[${list.name}] ",
+                        1,
+                        true,
+                        null
+                )
+};
+}}}
+
+
+Another slightly more complex example of FilterParameter declarations is in the ReplyToFilter:
+
+{{{
+
+static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
+        new FilterParameterImpl(
+                        ARG_MAILINGLIST,
+                        "Checking this option will cause all replies to go to the mailing list.",
+                        Boolean.class,
+                        true
+                ),
+        new FilterParameterImpl(
+                        ARG_EMAILADDRESS,
+                        "Enter an email address to be used as the Reply-To for the mailing list.",
+                        String.class,
+                        ""
+                )
+};
+
+}}}
+
+When you look at the web interface for the configuration of that filter a checkbox is generated for the first FilterParameterImpl because it uses a Boolean.class as it's type.
+
+The last important decision you need to make is about when the filter is going to be run in the execution process. It's a pretty easy choice since you only have three different methods you can implement. The first one is {{{onInject()}}}. This is called when a message enters the system (Injector). If you modify the message at this point; whatever changes you make to the message ends up in the database. So, for instance, since we are changing the subject line in the SubjectFilter, we implement the {{{onInject()}}} method. The {{{onInject()}}} code for SubjectFilter looks like this:
+
+{{{
+@Override
+public void onInject(SubEthaMessage msg, FilterContext ctx) 
+        throws IgnoreException, HoldException, MessagingException
+{
+		if (log.isDebugEnabled())
+			log.debug("Subject Filter: onInject()");
+		
+		// get the parameter arguments
+		String subjectArg = (String) ctx.getArgument(ARG_SUBJECTPREFIX);
+
+		// do the expansion on the subjectArg
+		String expandedSubjectArg = ctx.expand(subjectArg);
+
+		// get the subject for the message
+		String subjectMsg = msg.getSubject();
+		if (subjectMsg == null)
+			subjectMsg = "";
+
+		// find any existing expandedSubjectArg's in the subjectMsg and remove them
+		subjectMsg = subjectMsg.replace(expandedSubjectArg, "");
+
+		// remove all duplicate Re: stuff and possibly insert the expandedSubjectArg in the
+		// right place.
+		subjectMsg = MailUtils.cleanRe(subjectMsg, expandedSubjectArg, false);
+
+		// set the subject on the message
+		msg.setSubject(subjectMsg);
+}
+}}}
+
+
+The second method is called before the message is sent out to the subscribers on the mailing list. The method to implement is called {{{onSend()}}}. The AppendFooterFilter class implements this method but doesn't implement {{{onInject()}}} because there is no need to store the appended filter in the archives, only to add it to outgoing messages.
+
+The third method is called before rendering the messages on the website in the archives. The method to implement is called {{{onArchiveRender()}}}. It looks very much like the first with the exception of the of the Context provided.
+
+Once you have compiled your filter, you can place the jar file into the classpath and it will be automatically picked up by SubEtha and loaded. Note that if you want to deploy your filter you must make sure it is found by the Injection Manager (by having {{{META-INF/beans.xml}}} in your jar or by specifying that your class should be loaded by the Injection Manager, specifically.
+
+META-INF/beans.xml example
+{{{
+<Beans xmlns="urn:java:ee"/>
+}}}
+
+Once again, just take a look at the way we do things in SubEtha. That should be a nice basis for you. If you have questions about specific problems you might be having, feel free to ask us for help on the developer list.

@@ -1,0 +1,24 @@
+== Avoiding Vogon Poetry ==
+
+Generally speaking, SubEtha tries to modify messages as little as possible as they are passed through the system. Hopefully this means the receiver will see the message in the same encoding and character set that it was sent with. However, there are a few cases where this might not be the case.
+  * The SubEtha web interface always uses UTF-8. All contents of Mail messages will be converted to this encoding before being rendered as HTML.
+
+  * SubEtha allows list administrators to use plugin modules called Mail Filters to arbitrarily manipulate the message stream. When a mail filter adds text or replaces text in a header, it (almost) always uses the Java platform default encoding. For example, a SubjectFilter may receive a message with the subject header encoded Shift-JIS, prepend "[ListName] ", and save the new header encoded with UTF-8.
+
+If you're running all your lists in your native language, you can ignore any of these settings and everything will probably work fine. However, we recommend the following, especially if you plan to host lists in multiple languages:
+  
+  * Set the JVM platform *default character encoding* to UTF-8
+     This will cause any text that SubEtha creates or modifies to be encoded in the most portable form possible.
+     HOW: In the jboss start script (look in ${jboss.dir}/bin/run.conf or run.sh or run.bat), set  JAVA_OPTS=-Dfile.encoding=UTF-8.
+  
+  * Make sure your *database tables* are UTF-8
+    While message content is stored as-is in the database as BLOBs, the Subject is also kept in a separate column for performance reasons. You'll want this to be encoded UTF-8. Fortunately most modern databases use UTF-8 by default.
+    HOW: This is, unfortunately, very specific to the database vendor. For MySQL, you want to include the following in your my.cnf config file:
+	{{{
+	[mysqld]
+	default-character-set=utf8
+	}}}
+   Note that you must set this  *before* you run SubEtha for the first time. SubEtha creates the database schema for you, and will happily create them with the wrong charset. If you do this wrong, either manually change the charset for each table (MySQL: alter table [tablename] character set=utf8) or drop the database and start again (this will delete your data!).
+
+  * Use *substitution filters* sparingly
+    The more you manipulate text, the more you risk replacing the original encoding of a message. In particular, avoid the Subject filter on lists that converse in multiple languages.

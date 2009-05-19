@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>subetha</name>
+	<name>Subetha</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -18,7 +18,7 @@
 		<link>
 			<name>resin-config</name>
 			<type>2</type>
-			<locationURI>RESIN_HOME/conf</locationURI>
+			<locationURI>SUBETHA_RESIN_HOME/conf</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

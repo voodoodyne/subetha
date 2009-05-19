@@ -7,7 +7,7 @@
 	xmlns:resin="urn:java:com.caucho.resin"
 	xmlns:cfg="urn:java:com.caucho.config"
 	xmlns:jms="urn:java:com.caucho.jms"
-	xmlns:ejb="urn:java:com.caucho.ejb"
+	xmlns:ejb="urn:java:com.caucho.ejb.cfg"
 	xmlns:adm="urn:java:org.subethamail.core.admin"
 	xmlns:auth="urn:java:org.subethamail.core.auth"
 	xmlns:ss="urn:java:org.subethamail.web.security"
@@ -85,10 +85,12 @@
 		<resin:Name>inject</resin:Name>
 	</jms:FileQueue>
 
+<!--	<ejb:MessageBeanConfig destinationName="inject" class="org.subethamail.core.queue.InjectListener"/>-->
+<!--	<ejb:MessageBeanConfig destinationName="delivery" class="org.subethamail.core.queue.DeliveryListener"/>-->
+
 	<ejb-message-bean class="org.subethamail.core.queue.DeliveryListener">
 		<destination>#{delivery}</destination>
 	</ejb-message-bean>
-
 	<ejb-message-bean class="org.subethamail.core.queue.InjectListener">
 		<destination>#{inject}</destination>
 	</ejb-message-bean>

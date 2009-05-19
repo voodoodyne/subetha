@@ -18,6 +18,7 @@ These instructions describe setting up a single, standalone instance of SubEtha.
 
 			<driver type="org.postgresql.Driver">
 				<url>jdbc:postgresql://localhost/subetha</url>
+				<!-- Best practice: Create a separate database user for this applicaiton -->
 				<user>yourdatabaseusername</user>
 				<password>yourpassword</password>
 			</driver>

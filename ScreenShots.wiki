@@ -1,0 +1,64 @@
+#labels Featured
+= SubEtha Screenshots =
+ 
+  * Welcome screen
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss1.png
+ 
+  * Landing page after login
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss2.png
+ 
+  * Site status. Available to site admins.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss3.png
+
+  * Edit site status.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss4.png
+
+  * Create a list. It is possible to select a blueprint for common types of mailing lists which makes configuration a snap.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss5.png
+
+  * List of lists.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss6.png
+ 
+  * List overview.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss7.png
+
+  * List settings.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss8.png
+ 
+  * List filters. It is even possible to write your own custom filters.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss9.png
+ 
+  * List of subscribers
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss10.png
+
+  * Define what roles and permissions are available on a list.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss11.png
+
+  * Nicely formatted and easy to read fully threaded archives. Also note they are searchable as well!
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss12.png
+
+ 
+  * Viewing a message in the archives.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss13.png
+
+  * Not logged in view of a list.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss14.png
+
+ 
+  * Search results. The result score is even displayed.
+ 
+ http://subetha.googlecode.com/svn/wiki/img/screenshots/ss15.png

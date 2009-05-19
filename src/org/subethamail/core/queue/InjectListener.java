@@ -9,6 +9,8 @@ package org.subethamail.core.queue;
 import java.util.concurrent.BlockingQueue;
 
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -31,6 +33,7 @@ import com.caucho.config.Name;
  * messages.
  */
 @MessageDriven
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class InjectListener implements MessageListener{
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(InjectListener.class);
@@ -48,14 +51,15 @@ public class InjectListener implements MessageListener{
 	/** */
 	public void onMessage(Message qMsg)
 	{
+		InjectedQueueItem item = null;
 		try
 		{
-			InjectedQueueItem item = (InjectedQueueItem) ((ObjectMessage)qMsg).getObject();
+			item = (InjectedQueueItem) ((ObjectMessage)qMsg).getObject();
 			this.deliver(item.getMailId());
 		}
 		catch (JMSException e)
 		{
-			log.error("Error getting object outa message (from queue)", e);
+			if(log.isErrorEnabled()) log.error("Error getting object outa message (from queue)", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -91,17 +95,17 @@ public class InjectListener implements MessageListener{
 		{
 			if (sub.getDeliverTo() != null)
 			{
+				Long personId = sub.getPerson().getId();
 				try
 				{
-					this.outboundQueue.put(new DeliveryQueueItem(mailId, sub.getPerson().getId()));
+					this.outboundQueue.put(new DeliveryQueueItem(mailId, personId));
 				}
 				catch (InterruptedException e)
 				{
-					log.error("Error queuing delivery message",e);
+					log.error("Error queuing delivery messages for mail.id=" + mailId + " person.id=" + personId, e);
 					throw new RuntimeException(e);
 				}
 			}
 		}
 	}
-	
 }

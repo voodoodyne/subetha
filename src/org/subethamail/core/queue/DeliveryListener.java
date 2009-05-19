@@ -3,8 +3,9 @@
  * $URL:  $
  */
 
-
 package org.subethamail.core.queue;
+
+import java.util.concurrent.BlockingQueue;
 
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
@@ -20,9 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.deliv.i.Deliverator;
 
+import com.caucho.config.Name;
+
 /**
  * Processes delivery queue messages by creating an actual STMP message
- * using JavaMail, relaying it through the deliverator.
+ * using JavaMail, relaying it through the {@link Deliverator}.
  */
 @MessageDriven
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -34,16 +37,23 @@ public class DeliveryListener implements MessageListener
 	/** */
 	@Current Deliverator deliverator;
 
+	@SuppressWarnings("unchecked")
+//	@DeliveryQueue 
+	@Name("delivery")
+	BlockingQueue myQueue;
+
 	/**
 	 */
 	public void onMessage(Message qMsg)
 	{
+		DeliveryQueueItem item = null;
+		Long mailId , personId;
 		try
 		{
-			DeliveryQueueItem umdd = (DeliveryQueueItem)((ObjectMessage)qMsg).getObject();
+			item = (DeliveryQueueItem)((ObjectMessage) qMsg).getObject();
 
-			Long mailId = umdd.getMailId();
-			Long personId = umdd.getPersonId();
+			mailId = item.getMailId();
+			personId = item.getPersonId();
 
 			if (log.isDebugEnabled())
 				log.debug("Delivering mailId:" + mailId + " to personId:" + personId);
@@ -54,14 +64,17 @@ public class DeliveryListener implements MessageListener
 			}
 			catch (NotFoundException ex)
 			{
-				// Just log a warning and accept the JMS message; this is a legit case
-				// when mail gets deleted.
+				// Just log a warning and accept the JMS message
+				// It possible the message/subscription has been deleted since we queued the orig request.
 				if (log.isWarnEnabled())
 					log.warn("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
 			}
-			
-			// This is not supposed to be relevant for MDBs
-			//qMsg.acknowledge();
+			catch (Exception e)
+			{
+				if (log.isErrorEnabled())
+					log.error("Error processing message!", e);
+				throw new RuntimeException(e);
+			}
 		}
 		catch (JMSException ex)
 		{

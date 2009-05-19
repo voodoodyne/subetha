@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Subetha</name>
+	<name>subetha</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -15,5 +15,10 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 	<linkedResources>
+		<link>
+			<name>resin-config</name>
+			<type>2</type>
+			<locationURI>RESIN_HOME/conf</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>

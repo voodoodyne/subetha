@@ -1,7 +1,8 @@
 #labels Featured
 = SubEtha Administration Guide =
-
 This document assumes you have read and understood the InstallGuide.
+
+<wiki:toc max_depth="2" />
 
 == Initial Administration ==
 

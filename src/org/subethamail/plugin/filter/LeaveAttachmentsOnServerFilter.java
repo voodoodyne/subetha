@@ -1,0 +1,102 @@
+/*
+ * $Id: StripAttachmentsFilter.java 415 2006-05-19 05:57:40Z jon $
+ * $URL: http://subetha.tigris.org/svn/subetha/trunk/plugin/src/org/subethamail/plugin/filter/StripAttachmentsFilter.java $
+ */
+
+package org.subethamail.plugin.filter;
+
+import java.io.IOException;
+import java.util.Enumeration;
+
+import javax.inject.Current;
+import javax.mail.Header;
+import javax.mail.MessagingException;
+import javax.mail.Part;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.subethamail.common.MailUtils;
+import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.lists.i.Archiver;
+import org.subethamail.core.plugin.i.Filter;
+import org.subethamail.core.plugin.i.FilterContext;
+import org.subethamail.core.plugin.i.SendFilterContext;
+import org.subethamail.core.plugin.i.helper.GenericFilter;
+
+/**
+ * This filter removes all attachments greater than a certain size immediately
+ * upon message injection. The attachments are never stored. The attachment can
+ * optionally be replaced with a message indicating what action was taken.
+ * 
+ * @author Scott Hernandez
+ */
+public class LeaveAttachmentsOnServerFilter extends GenericFilter
+{
+	/** */
+	private final static Logger log = LoggerFactory.getLogger(LeaveAttachmentsOnServerFilter.class);
+
+	@Current Archiver archiver;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.subethamail.core.plugin.i.Filter#getName()
+	 */
+	public String getName()
+	{
+		return "Leave Attachments on Server";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.subethamail.core.plugin.i.Filter#getDescription()
+	 */
+	public String getDescription()
+	{
+		return "Replace attachments in messages with a URL to a download page in the archives.";
+	}
+
+	/**
+	 * @see Filter#onSend(SubEthaMessage, FilterContext)
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws MessagingException
+	{
+		try
+		{
+			boolean didSomething = false;
+			
+			for (Part part: msg.getParts())
+			{
+				if (part.getContentType().startsWith(SubEthaMessage.DETACHMENT_MIME_TYPE))
+				{
+					Long id = (Long)part.getContent();
+					String contentType = part.getHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE)[0];
+					
+					// remove all headers
+					for (Enumeration<Header> e = part.getAllHeaders(); e.hasMoreElements();)
+					{
+						Header header = e.nextElement();
+						part.removeHeader(header.getName());
+					}
+					
+					String name = MailUtils.getNameFromContentType(contentType);
+					String attachmentUrl = ctx.getList().getUrlBase() + "attachment/" + id + "/" + name ;
+					
+					part.setText("This attachment was left behind at the server:\n     " + attachmentUrl + "\n");
+					part.setDisposition(Part.INLINE);
+					didSomething = true;
+				}
+			}
+			
+			if (didSomething) msg.save();
+		}
+		catch (IOException ioex)
+		{
+			if (log.isDebugEnabled())
+				log.debug("Error getting message parts", ioex);
+		}
+	}
+}

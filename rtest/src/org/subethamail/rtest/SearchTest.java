@@ -8,8 +8,8 @@ package org.subethamail.rtest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
@@ -24,7 +24,7 @@ public class SearchTest extends SubEthaTestCase
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(SearchTest.class);
+	private static Logger log = LoggerFactory.getLogger(SearchTest.class);
 
 	/** */
 	AdminMixin admin;

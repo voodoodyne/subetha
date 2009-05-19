@@ -1,0 +1,19 @@
+ehlo skot
+mail from:root@localhost
+rcpt to:hey@fakelist.com
+data
+
+From: Root <root@localhost>
+Subject:testie
+
+asfd
+asdf
+asfd
+safd
+
+.
+
+
+
+quit
+

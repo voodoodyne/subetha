@@ -1,0 +1,130 @@
+<!--
+	$Id:$
+	$URL: $
+-->
+
+<web-app xmlns="http://caucho.com/ns/resin"
+	xmlns:resin="urn:java:com.caucho.resin"
+	xmlns:cfg="urn:java:com.caucho.config"
+	xmlns:jms="urn:java:com.caucho.jms"
+	xmlns:ejb="urn:java:com.caucho.ejb.cfg"
+	xmlns:adm="urn:java:org.subethamail.core.admin"
+	xmlns:auth="urn:java:org.subethamail.core.auth"
+	xmlns:ss="urn:java:org.subethamail.web.security"
+	xmlns:queue="urn:java:org.subethamail.core.queue"
+	xmlns:search="urn:org.subethamail.core.search"
+	>
+	
+ 	<statistics-enable/>
+ 	
+	<logger name="com.caucho" level="config" />
+<!--	<logger name="com.caucho.hessian" level="fine" />-->
+<!--	<logger name="com.caucho.security" level="finest" />-->
+<!--	<logger name="com.caucho.server.dispatch" level="finest" />-->
+<!--	<logger name="com.caucho.server.connection" level="finest" />-->
+	
+<!--	<logger name="com.caucho.admin" level="severe" />-->
+<!--	<logger name="com.caucho.config" level="finest" />-->
+<!--	<logger name="com.caucho.config.j2ee" level="finest"/>-->
+<!--	<logger name="com.caucho.config.inject" level="finest"/>-->
+<!--	<logger name="com.caucho.loader" level="fine" />-->
+<!--	<logger name="com.caucho.server" level="fine" />-->
+
+	<logger name="org.subethamail" level="config" />
+	<logger name="org.subethamail.smtp" level="severe" />
+	<logger name="org.hibernate" level="severe" />
+
+<!--  Needs a management interface to work-->
+<!--	<resource-->
+<!--		mbean-name="subetha:name=Bootstrapper"-->
+<!--		type="org.subethamail.core.admin.BootstrapperBean" />-->
+
+	<resource
+		mbean-name="subetha:name=Cleanup"
+		type="org.subethamail.core.admin.CleanupBean"
+		mbean-interface="org.subethamail.core.admin.CleanupManagement" />
+
+<!--	Disabled for now, maybe a resin bug because it starts once in the Env load, and once in the webapp-->
+<!--	<resource-->
+<!--		mbean-name="subetha:name=SMTPService"-->
+<!--		type="org.subethamail.core.smtp.SMTPService"-->
+<!--		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />-->
+
+	<!-- Every night at 4am run cleanup -->
+	<resin:ScheduledTask task="#{cleanupBean}">
+		<cron>0 4 *</cron>
+	</resin:ScheduledTask>
+
+	<!-- Every 5 minutes run the indexer-->
+	<resin:ScheduledTask task="#{indexerBean}">
+		<cron>5</cron>
+	</resin:ScheduledTask>
+
+	<!-- Start now (in a few seconds)-->
+	<resin:ScheduledTask task="#{cleanupBean}">
+		<resin:delay>10s</resin:delay>
+	</resin:ScheduledTask>
+
+	<resin:ScheduledTask task="#{indexerBean}" >
+		<resin:delay>20s</resin:delay>
+	</resin:ScheduledTask>
+
+
+	<!-- JMS -->
+	<jms:JmsConnectionFactory />
+
+	<jms:FileQueue>
+<!--		<queue:DeliveryQueue/>-->
+		<Named>delivery</Named>
+		<resin:Name>delivery</resin:Name>
+	</jms:FileQueue>
+
+	<jms:FileQueue>
+<!--		<queue:InjectQueue/>-->
+		<Named>inject</Named>		
+		<resin:Name>inject</resin:Name>
+	</jms:FileQueue>
+
+<!--	<ejb:MessageBeanConfig destinationName="inject" class="org.subethamail.core.queue.InjectListener"/>-->
+<!--	<ejb:MessageBeanConfig destinationName="delivery" class="org.subethamail.core.queue.DeliveryListener"/>-->
+
+	<ejb-message-bean class="org.subethamail.core.queue.DeliveryListener">
+		<destination>#{delivery}</destination>
+	</ejb-message-bean>
+	<ejb-message-bean class="org.subethamail.core.queue.InjectListener">
+		<destination>#{inject}</destination>
+	</ejb-message-bean>
+
+	<ejb-server data-source="jdbc/subetha"
+		validate-database-schema="true" create-database-schema="true" />
+
+	<mail jndi-name="java:comp/env/outbound-mail">
+		<smtp-host>localhost</smtp-host>
+		<smtp-port>25</smtp-port>
+    </mail>
+
+	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Admin" servlet-class="org.subethamail.core.admin.AdminBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/ListWizard" servlet-class="org.subethamail.core.admin.ListWizardBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Injector" servlet-class="org.subethamail.core.injector.InjectorBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Archiver" servlet-class="org.subethamail.core.lists.ArchiverBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/ListMgr" servlet-class="org.subethamail.core.lists.ListMgrBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/Indexer" servlet-class="org.subethamail.core.search.IndexerBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>
+	<servlet-mapping url-pattern="/api/EegorBringMeAnotherBrain" servlet-class="org.subethamail.core.admin.EegorBringMeAnotherBrainBean">
+		<protocol uri="hessian:"/>
+	</servlet-mapping>		
+</web-app>

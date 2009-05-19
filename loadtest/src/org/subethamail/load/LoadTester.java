@@ -5,8 +5,8 @@
 
 package org.subethamail.load;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
 
@@ -15,26 +15,27 @@ import org.subethamail.smtp.server.SMTPServer;
  * 
  * @author Jeff Schnitzer
  */
-public class LoadTester
+public class LoadTester implements Runnable
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(LoadTester.class);
+	private static Logger log = LoggerFactory.getLogger(LoadTester.class);
 	
 	/** */
 	CountingListener listener = new CountingListener();
 	SMTPServer server;
 	
 	/** */
-	public LoadTester() throws Exception
+	public LoadTester(String host, int port) throws Exception
 	{
 		this.server = new SMTPServer(new SimpleMessageListenerAdapter(this.listener));
-		this.server.setPort(2525);
-		this.server.setHostName("localhost");
+		this.server.setPort(port);
+		this.server.setHostName(host);
 	}
 	
 	/** */
-	public void start()
+	@Override
+	public void run()
 	{
 		this.server.start();
 		
@@ -67,7 +68,7 @@ public class LoadTester
 	/** */
 	public static void main(String[] args) throws Exception
 	{
-		LoadTester tester = new LoadTester();
-		tester.start();
+		LoadTester tester = new LoadTester("localhost",2525);
+		tester.run();
 	}
 }

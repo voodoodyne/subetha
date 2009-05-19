@@ -7,16 +7,12 @@ package org.subethamail.rtest;
 
 import java.util.Collection;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.injector.i.Injector;
-import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
@@ -33,7 +29,7 @@ public class ModerationTest extends SubEthaTestCase
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(ModerationTest.class);
+	private static Logger log = LoggerFactory.getLogger(ModerationTest.class);
 	
 	/** */
 	Injector injector;
@@ -53,13 +49,11 @@ public class ModerationTest extends SubEthaTestCase
 	{
 		super.setUp();
 		
-		Context ctx = new InitialContext();
-		
-		this.injector = (Injector)ctx.lookup(InjectorRemote.JNDI_NAME);
-		
 		this.admin = new AdminMixin();
 		this.pers = new PersonMixin(this.admin);
 		this.pers2 = new PersonInfoMixin();
+		
+		this.injector = this.admin.getInjector();
 		
 		// This one moderates inbound messages but allows anyone to subscribe
 		this.ml = new MailingListMixin(this.admin, null, "org.subethamail.plugin.blueprint.TechnicalBlueprint");

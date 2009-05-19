@@ -8,8 +8,8 @@ package org.subethamail.rtest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
@@ -23,7 +23,7 @@ public class ArchiveTest extends SubEthaTestCase
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(ArchiveTest.class);
+	private static Logger log = LoggerFactory.getLogger(ArchiveTest.class);
 
 	/** */
 	AdminMixin admin;
@@ -51,14 +51,18 @@ public class ArchiveTest extends SubEthaTestCase
 		// Create two messages, one with subject one with body
 		byte[] rawMsg = this.createMessage(this.pers.getAddress(), this.ml.getAddress(), TEST_SUBJECT, TEST_BODY);
 		
+		this.admin.getEegor().log("### Calling Injector.inject()");
 		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
 		
+		this.admin.getEegor().log("### Calling Archiver.getThreads()");
 		Long mailId = this.admin.getArchiver().getThreads(this.ml.getId(), 0, 100).get(0).getId();
 		
+		this.admin.getEegor().log("### Calling Archiver.deleteMail()");
 		this.admin.getArchiver().deleteMail(mailId);
 		
 		try
 		{
+			this.admin.getEegor().log("### Calling Archiver.getMail()");
 			this.admin.getArchiver().getMail(mailId);
 			fail("able to get deleted mail");
 		}

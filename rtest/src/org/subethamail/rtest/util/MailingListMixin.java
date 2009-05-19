@@ -7,8 +7,8 @@ package org.subethamail.rtest.util;
 
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Easy way to create a mailing list from a unit test.
@@ -19,7 +19,7 @@ public class MailingListMixin extends MailingListInfoMixin
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(MailingListMixin.class);
+	private static Logger log = LoggerFactory.getLogger(MailingListMixin.class);
 
 	Long id;
 	InternetAddress[] initialOwners;

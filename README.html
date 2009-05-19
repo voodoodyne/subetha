@@ -33,6 +33,21 @@
 
 		<h2>Changes</h2>
 		<dl>
+			<dt>2.0</dt>
+			<dd>
+				<p>For 2.0, SubEtha was ported to Resin4.  No new features were added,
+				but many architectural changes were made.  Also, we've moved to google code.</p>
+				
+				<p>If you are upgrading from a previous version, these changes *must* be
+				made to the database (this are for MySQL, your database data types may be
+				different):</p>
+				
+				<ul>
+					<li>ALTER TABLE Mail CHANGE fromField sender TEXT;</li>
+					<li>ALTER TABLE Mail CHANGE envelopeSender senderNormal TEXT NOT NULL;</li>
+				</ul>
+			</dd>
+		
 			<dt>1.0.2</dt>
 			<dd>
 				<ul>

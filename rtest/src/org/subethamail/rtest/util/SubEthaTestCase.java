@@ -19,8 +19,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * All SubEtha tests require a running smtp server.
@@ -31,7 +31,7 @@ public class SubEthaTestCase extends TestCase
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(SubEthaTestCase.class);
+	private static Logger log = LoggerFactory.getLogger(SubEthaTestCase.class);
 
 	/** */
 	public static final String TEST_SUBJECT = "test subject";

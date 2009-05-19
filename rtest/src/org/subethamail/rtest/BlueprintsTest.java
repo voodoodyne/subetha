@@ -5,16 +5,12 @@
 
 package org.subethamail.rtest;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.injector.i.Injector;
-import org.subethamail.core.injector.i.InjectorRemote;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonInfoMixin;
@@ -28,7 +24,7 @@ public class BlueprintsTest extends SubEthaTestCase
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(BlueprintsTest.class);
+	private static Logger log = LoggerFactory.getLogger(BlueprintsTest.class);
 	
 	/** */
 	Injector injector;
@@ -46,14 +42,11 @@ public class BlueprintsTest extends SubEthaTestCase
 	{
 		super.setUp();
 		
-		Context ctx = new InitialContext();
-		
-		this.injector = (Injector)ctx.lookup(InjectorRemote.JNDI_NAME);
-		
 		this.admin = new AdminMixin();
 		this.pers = new PersonMixin(this.admin);
 		this.pers2 = new PersonInfoMixin();
 		
+		this.injector = this.admin.getInjector();
 	}
 	
 	/** */

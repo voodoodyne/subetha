@@ -10,8 +10,8 @@ import java.util.Iterator;
 
 import javax.mail.MessagingException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.wiser.Wiser;
@@ -26,9 +26,9 @@ import org.subethamail.wiser.WiserMessage;
 public class Smtp extends Wiser
 {
 	/** */
-	private static Log log = LogFactory.getLog(Smtp.class);
+	private static Logger log = LoggerFactory.getLogger(Smtp.class);
 
-	/** The port we use for dumbster */
+	/** The port we use for wiser */
 	public static final int PORT = 2525;
 
 	public Smtp()
@@ -50,7 +50,9 @@ public class Smtp extends Wiser
 		try
 		{
 			AdminMixin god = new AdminMixin();
-			god.getPlumber().overrideSmtpServer(host + ":" + PORT);
+			log.debug("Calling enableTestMode()");
+			god.getEegor().enableTestMode(host + ":" + PORT);
+			log.debug("Called enableTestMode()");
 		}
 		catch (Exception ex) { throw new RuntimeException(ex); }
 	}
@@ -62,7 +64,7 @@ public class Smtp extends Wiser
 		try
 		{
 			AdminMixin god = new AdminMixin();
-			god.getPlumber().restoreStmpServer();
+			god.getEegor().disableTestMode();
 		}
 		catch (Exception ex) { throw new RuntimeException(ex); }
 

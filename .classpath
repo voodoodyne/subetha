@@ -1,49 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="rtest/src"/>
+	<classpathentry kind="src" path="loadtest/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-jmx.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/lib/jboss-system.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-core-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/subethasmtp.jar" sourcepath="/SubethaSMTP/src"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-fileupload-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/velocity-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/cos.jar"/>
+	<classpathentry kind="lib" path="lib/mina-core-1.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-core.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-validator.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-commons-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/stripes.jar"/>
 	<classpathentry kind="lib" path="lib/tagonist.jar"/>
 	<classpathentry kind="lib" path="lib/standard.jar"/>
 	<classpathentry kind="lib" path="lib/jstl.jar"/>
-	<classpathentry kind="lib" path="lib/commons-fileupload-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/junit.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/velocity-1.5.jar"/>
-	<classpathentry kind="src" path="core/src"/>
-	<classpathentry kind="src" path="plugin/src"/>
-	<classpathentry kind="src" path="frontend/src"/>
-	<classpathentry kind="src" path="common/src"/>
-	<classpathentry kind="src" path="rtest/src"/>
-	<classpathentry kind="src" path="loadtest/src"/>
-	<classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.5.6.jar"/>
-	<classpathentry kind="lib" path="lib/subethasmtp.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/commons-logging.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-javaee.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jbossws-native-jaxws.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/mail.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-ejb3-ext-api.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jbossws-spi.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jbosssx-client.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-core.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/activation.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/ejb3-persistence.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/jboss-ejb3-core.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/mail-plugin.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-system-jmx-client.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-j2se.jar"/>
-	<classpathentry kind="lib" path="lib/mina-core-1.1.7.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-ejb3-core-client.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/jbosssx.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/hibernate-annotations.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-validator.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/hibernate-commons-annotations.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/jsp-api.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/common/lib/servlet-api.jar"/>
-	<classpathentry kind="var" path="SUBETHA_JBOSS_HOME/client/jboss-security-spi.jar"/>
+	<classpathentry kind="lib" path="lib/lucene-core-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/build-only/resin-ant.jar" sourcepath="C:/src/caucho/resin/artifacts/ant/src"/>
+	<classpathentry kind="lib" path="lib/build-only/junit-4.6.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/activation.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/javaee-16.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/javamail-141.jar"/>
+	<classpathentry kind="var" path="SUBETHA_RESIN_HOME/lib/resin.jar" sourcepath="/RESIN_SRC/modules/hessian/src"/>
 	<classpathentry kind="output" path="_eclipse"/>
 </classpath>

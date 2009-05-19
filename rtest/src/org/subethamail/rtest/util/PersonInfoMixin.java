@@ -7,8 +7,8 @@ package org.subethamail.rtest.util;
 
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.Utils;
 
 /**
@@ -18,7 +18,7 @@ public class PersonInfoMixin extends BeanMixin
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(PersonInfoMixin.class);
+	private static Logger log = LoggerFactory.getLogger(PersonInfoMixin.class);
 
 	String email;
 	String password;

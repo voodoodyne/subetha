@@ -8,8 +8,8 @@ package org.subethamail.rtest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.core.post.i.MailType;
@@ -30,7 +30,7 @@ public class SubscriptionTest extends SubEthaTestCase
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(SubscriptionTest.class);
+	private static Logger log = LoggerFactory.getLogger(SubscriptionTest.class);
 
 	/** */
 	BeanMixin nobody;

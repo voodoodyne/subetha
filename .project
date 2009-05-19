@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Subetha</name>
+	<name>subetha</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,29 +16,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>jboss-config</name>
+			<name>resin-config</name>
 			<type>2</type>
-			<locationURI>SUBETHA_JBOSS_HOME/server/default/conf</locationURI>
-		</link>
-		<link>
-			<name>jboss-deploy</name>
-			<type>2</type>
-			<locationURI>SUBETHA_JBOSS_HOME/server/default/deploy</locationURI>
-		</link>
-		<link>
-			<name>jboss-log</name>
-			<type>2</type>
-			<locationURI>SUBETHA_JBOSS_HOME/server/default/log</locationURI>
-		</link>
-		<link>
-			<name>jboss-tmp</name>
-			<type>2</type>
-			<locationURI>SUBETHA_JBOSS_HOME/server/default/tmp</locationURI>
-		</link>
-		<link>
-			<name>jboss-work</name>
-			<type>2</type>
-			<locationURI>SUBETHA_JBOSS_HOME/server/default/work</locationURI>
+			<locationURI>RESIN_HOME/conf</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

@@ -9,8 +9,8 @@ import java.net.URL;
 
 import javax.mail.internet.InternetAddress;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.subethamail.common.Utils;
 
 /**
@@ -20,7 +20,7 @@ public class MailingListInfoMixin
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(MailingListInfoMixin.class);
+	private static Logger log = LoggerFactory.getLogger(MailingListInfoMixin.class);
 
 	String email;
 	String name;
@@ -36,7 +36,7 @@ public class MailingListInfoMixin
 		
 		this.name = "List Name " + baseEmail;
 		this.email = baseEmail + "@localhost";
-		this.url = new URL("http://localhost:8080/se/list/" + baseEmail);
+		this.url = new URL(WebApp.BASEURL + "/list/" + baseEmail);
 		this.address = new InternetAddress(this.email, this.name);
 		this.description = "Test list description";
 		this.welcomeMessage = "Test list welcome message";

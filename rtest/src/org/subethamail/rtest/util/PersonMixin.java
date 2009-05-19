@@ -5,8 +5,8 @@
 
 package org.subethamail.rtest.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Actually creates the person.
@@ -17,15 +17,13 @@ public class PersonMixin extends PersonInfoMixin
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(PersonMixin.class);
+	private static Logger log = LoggerFactory.getLogger(PersonMixin.class);
 
 	Long id;
 	
 	/** */
 	public PersonMixin(AdminMixin adminMixin) throws Exception
 	{
-		super();
-		
 		this.id = adminMixin.getAdmin().establishPerson(this.address, this.password);
 	}
 	
@@ -34,6 +32,6 @@ public class PersonMixin extends PersonInfoMixin
 	
 	/** */
 	@Override
-	public String getPrincipalName() { return this.id.toString(); }
+	public String getPrincipalName() { return this.getEmail(); }
 	
 }

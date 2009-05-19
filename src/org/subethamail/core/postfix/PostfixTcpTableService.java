@@ -9,6 +9,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Current;
 
 import org.apache.mina.common.IdleStatus;
@@ -134,6 +136,7 @@ public class PostfixTcpTableService implements PostfixTcpTableManagement
 	}
 	
 	/** */
+	@PostConstruct
 	public void start() throws IOException
 	{
 		if (this.acceptor != null)
@@ -157,6 +160,7 @@ public class PostfixTcpTableService implements PostfixTcpTableManagement
 	}
 
 	/** */
+	@PreDestroy
 	public void stop()
 	{
 		log.info("Stopping TcpTable service");

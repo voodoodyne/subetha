@@ -1,8 +1,12 @@
 #labels Featured
 = SubEtha Administration Guide =
 
-This document assumes you have read and understood the [InstallInstructions]
-    
+This document assumes you have read and understood the InstallGuide.
+
+== Initial Administration ==
+
+After you have followed the InstallGuide, please make sure to up the Site Settings for your postmaster and the default URL. You can do this by logging in as a site admin and select the Edit button from the Site Status link on the left.
+
 == Concepts ==
 
 If you are familiar with mailing list managers, SubEtha should be easy to master. The basic ideas are that:
@@ -88,4 +92,4 @@ If you are familiar with mailing list managers, SubEtha should be easy to master
 
   * Plugins are hot-deployable without any configuration changes. Howerver, a new scan must be run in the admin, or the webapp must be restarted. SubEtha gracefully handles filters that have been enabled on lists but are subsequently removed.
 
-  * Plugins run inside the SubEtha JVM and run with site administrator privelage. Techncially this means they can do almost anything. We recommend you stick to the APIs; any other API is considered internal and highly likely to change without notice.
+  * Plugins run inside the SubEtha JVM and run with site administrator privelage. Technically this means they can do almost anything. We recommend you stick to the APIs; any other API is considered internal and highly likely to change without notice.

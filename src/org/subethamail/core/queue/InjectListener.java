@@ -34,7 +34,8 @@ import com.caucho.config.Name;
  */
 @MessageDriven
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class InjectListener implements MessageListener{
+public class InjectListener implements MessageListener
+{
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(InjectListener.class);
 
@@ -59,7 +60,7 @@ public class InjectListener implements MessageListener{
 		}
 		catch (JMSException e)
 		{
-			if(log.isErrorEnabled()) log.error("Error getting object outa message (from queue)", e);
+			log.error("Error getting object outa message (from queue)", e);
 			throw new RuntimeException(e);
 		}
 	}

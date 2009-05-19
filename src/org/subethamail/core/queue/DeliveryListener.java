@@ -46,14 +46,12 @@ public class DeliveryListener implements MessageListener
 	 */
 	public void onMessage(Message qMsg)
 	{
-		DeliveryQueueItem item = null;
-		Long mailId , personId;
 		try
 		{
-			item = (DeliveryQueueItem)((ObjectMessage) qMsg).getObject();
+			DeliveryQueueItem item = (DeliveryQueueItem)((ObjectMessage) qMsg).getObject();
 
-			mailId = item.getMailId();
-			personId = item.getPersonId();
+			Long mailId = item.getMailId();
+			Long personId = item.getPersonId();
 
 			if (log.isDebugEnabled())
 				log.debug("Delivering mailId:" + mailId + " to personId:" + personId);
@@ -68,12 +66,6 @@ public class DeliveryListener implements MessageListener
 				// It possible the message/subscription has been deleted since we queued the orig request.
 				if (log.isWarnEnabled())
 					log.warn("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
-			}
-			catch (Exception e)
-			{
-				if (log.isErrorEnabled())
-					log.error("Error processing message!", e);
-				throw new RuntimeException(e);
 			}
 		}
 		catch (JMSException ex)

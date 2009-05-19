@@ -1,0 +1,20 @@
+ehlo localhost
+mail from:scotthernandez@hotmail.com
+rcpt to:test@subethamail.org
+data
+
+To: test@subethamail.org
+From: scotthernandez@hotmail.com
+Subject:testie
+
+asfd
+asdf
+asfd
+safd
+
+.
+
+
+
+quit
+

@@ -1,9 +1,11 @@
 #labels Featured
-= SubEtha and your Mail Transport Agent =
+= Subetha and your Mail Transport Agent =
 
-  SubEtha currently requires an external Mail Transport Agent (MTA) to actually receive mail from and deliver mail to the internet. While this may not be a requirement in the future, we will never ask you to replace your favorite MTA.
+<wiki:toc max_depth="2"/>
 
-  You should be able to use any MTA with SubEtha, but the integration instructions will be different for each.
+SubEtha currently requires an external Mail Transport Agent (MTA) to actually receive mail from and deliver mail to the internet. While this may not be a requirement in the future, we will never ask you to replace your favorite MTA.
+
+You should be able to use any MTA with SubEtha, but the integration instructions will be different for each.
 
 == Overview ==
 
@@ -21,7 +23,7 @@ In either case, your MTA must be instructed  *which* mail should be delivered to
 
 There are three recommended ways to integrate Postfix with SubEtha.
 
-== Manual Postfix Mapping ==
+=== Manual Postfix Mapping ===
 
 You can manually specify which addresses Postfix will relay into SubEtha. There are two types of addresses you can specify:
 
@@ -64,7 +66,7 @@ Note that the destination (in this case 127.0.0.1) must be resolvable via DNS (n
 
   #   *ALSO NOTE:* You must put all domains on which you expect to run mailing lists in the  *mydestination* list.
 
-== Postfix with a Virtual Host based setup ==
+=== Postfix with a Virtual Host based setup ===
 
   This isn't an optimal solution, but postfix doesn't really offer any other way to configure things (that we were able to figure out) so that it works with a virtual host setup in postfix.
 
@@ -99,7 +101,7 @@ In SubEtha, set the *list settings* to be: list@subetha.whichever.com
 
 What this does is that all mail to the list gets forwarded from Server A to Server B. Any bounce emails are generated with the reply going directly to the subetha.whichever.com machine.
 
-  == Automatic Postfix Mapping ==
+=== Automatic Postfix Mapping ===
 
 This is still experimental. It is, however, very convenient.
 
@@ -147,13 +149,13 @@ With this approach, /etc/postfix/transport is unnecessary. Also, the Postfix ext
 
 == Exim ==
 
-  == v4.61 ==
+=== v4.61 ===
 
   This config will create a domain (or subdomain) filter to relay all messages to smtp://localhost:2500. To do this we create a fake email (sub)domain (@lists.localhost) while still allowing local delivery for @localhost addresses.
 
   Make the following changes to etc/*exim.config*.
 
-  === Transports Section: ===
+  ==== Transports Section: ====
 		{{{
 		local_smtp_port_2500:
 		  driver = smtp
@@ -167,7 +169,7 @@ With this approach, /etc/postfix/transport is unnecessary. Also, the Postfix ext
   * *gethostbyname*: This resolves hosts using alternate sources like etc/hosts instead of just through dns mx records.
   * *allow_localhost*: This is usually not allowed to help keep mail-loops under control. :) Since we are running a totally different mail server on localhost:2500 we have no worries that the message will loop back into the same system.
 
-  === Routers Section: ===
+  ==== Routers Section: ====
 		{{{
 
 		subetha:
@@ -199,7 +201,6 @@ With this approach, /etc/postfix/transport is unnecessary. Also, the Postfix ext
 
   == Qmail ==
 
-  
   # Create a file /var/qmail/control/*smtproutes* and with the content:
 		{{{
 		domain.com:[IP MACHINE]:PORT
@@ -230,7 +231,7 @@ Hosting your SubEtha Lists on a (sub)domain (lists.example.com)
 
 You should now be able to send mail to your lists in the form of mylist@lists.example.com and your Exchange server will relay it to your SubEtha List Server.
 
-== Sharing your primary domain between Exchange Server and SubEtha ==
+=== Sharing your primary domain between Exchange Server and SubEtha ===
 
 When doing this you will not get all the features included in subetha. You will not get support for verp, and related features.
 

@@ -14,9 +14,14 @@
 		<link rel="stylesheet" type="text/css" href="<c:url value="/css/color-scheme.css"/>" />
 		<link rel="stylesheet" type="text/css" href="<c:url value="/css/sortabletable.jsp"/>" />
 		<link rel="stylesheet" type="text/css" href="<c:url value="/css/subetha.css"/>" />
+		<link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery.autocomplete.css"/>" />
+		
 
 		<script type="text/javascript" src="<c:url value="/js/sortabletable.jsp"/>"></script>
 		<script type="text/javascript" src="<c:url value="/js/functions.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery-1.3.2.min.js"/>"></script>
+		<script type="text/javascript" src="<c:url value="/js/jquery.autocomplete.js"/>"></script>
+		
 	</head>
 	
 	<body>
@@ -34,7 +39,7 @@
 			</div> <!-- footerLHS -->
 			
 			<div>
-				<a href="http://subetha.tigris.org/">SubEtha Mail</a>
+				<a href="http://subethamail.org/">SubEtha Mail</a>
 				<a href="<c:url value="/version.jsp"/>">v<c:out value="${applicationScope.backend.version}"/></a>
 				is free software
 			</div>

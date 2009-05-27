@@ -233,21 +233,6 @@ public class InjectorBean implements Injector
 			return true;
 		}
 
-		// Note that this can stay null; there might not be a sender
-		InternetAddress senderAddy = null;
-
-		if (envelopeSender != null && envelopeSender.trim().length() > 0)
-		{
-			senderAddy = new InternetAddress(envelopeSender);
-
-			// Immediately check to see if the envelope sender is a verp address.  If it is,
-			// convert it into an -owner address.  This magic allows lists to subscribe to lists.
-			VERPAddress senderVerp = VERPAddress.getVERPBounce(senderAddy.getAddress());
-			if (senderVerp != null)
-				senderAddy = new InternetAddress(OwnerAddress.makeOwner(senderAddy.getAddress()));
-
-		}
-
 		// Check for -owner mail
 		String listForOwner = OwnerAddress.getList(envelopeRecipient);
 		if (listForOwner != null)
@@ -315,6 +300,9 @@ public class InjectorBean implements Injector
 			holdMsg = ex.getMessage();
 		}
 
+		// We need to know who the sender is to determine holdability
+		InternetAddress senderAddy = msg.getSenderWithFallback(envelopeSender);
+
 		// Find out if the message should be held for moderation
 		if (hold == null)
 		{
@@ -346,7 +334,7 @@ public class InjectorBean implements Injector
 		if (log.isDebugEnabled())
 			log.debug("Hold?  " + hold);
 
-		Mail mail = new Mail(senderAddy, msg, toList, hold);
+		Mail mail = new Mail(envelopeSender, msg, toList, hold);
 		this.em.persist(mail);
 
 		// Convert all binary attachments to references and then set the content
@@ -409,8 +397,6 @@ public class InjectorBean implements Injector
 
 		try
 		{
-			InternetAddress senderAddy = new InternetAddress(envelopeSender);
-
 			// Figure out which list this is for
 			MailingList toList = this.em.get(MailingList.class, listId);
 
@@ -455,7 +441,7 @@ public class InjectorBean implements Injector
 			if (sentDate == null)
 				sentDate = fallbackDate;
 
-			Mail mail = new Mail(senderAddy, msg, toList, hold, sentDate);
+			Mail mail = new Mail(envelopeSender, msg, toList, hold, sentDate);
 			this.em.persist(mail);
 
 			// Convert all binary attachments to references and then set the content

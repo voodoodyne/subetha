@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -300,5 +301,26 @@ public class SubEthaMessage extends SMTPMessage
 		}
 		
 		return buf.toString();
+	}
+	
+	/**
+	 * @return the first found of Sender, From, or envelope sender
+	 * @throws MessagingException 
+	 */
+	public InternetAddress getSenderWithFallback(String envelopeSender) throws MessagingException
+	{
+		// Convoluted process to determine sender.
+		// Check, in order:  Sender field, first entry of From field, envelope sender
+		InternetAddress senderField = (InternetAddress)this.getSender();
+		if (senderField == null)
+		{
+			Address[] froms = this.getFrom();
+			if (froms != null && froms.length > 0)
+				senderField = (InternetAddress)froms[0];
+			else
+				senderField = new InternetAddress(envelopeSender);
+		}
+		
+		return senderField;
 	}
 }

@@ -18,7 +18,6 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.ejb.EJBException;
-import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -272,7 +271,7 @@ public class Mail implements Serializable, Comparable<Mail>
 	 *
 	 * @see the other constructor
 	 */
-	public Mail(InternetAddress envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
+	public Mail(String envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
 	{
 		this(envelopeSender, msg, list, holdFor, msg.getSentDate());
 	}
@@ -288,7 +287,7 @@ public class Mail implements Serializable, Comparable<Mail>
 	 * @param holdFor can be null which means none required
 	 * @param sentDate is the date which should be used as the sent date.  If null, current time is chosen.
 	 */
-	public Mail(InternetAddress envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor, Date sentDate) throws MessagingException
+	public Mail(String envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor, Date sentDate) throws MessagingException
 	{
 		if (log.isDebugEnabled())
 			log.debug("Creating new mail");
@@ -310,16 +309,7 @@ public class Mail implements Serializable, Comparable<Mail>
 
 		// Convoluted process to determine sender.
 		// Check, in order:  Sender field, first entry of From field, envelope sender
-		Address senderField = msg.getSender();
-		if (senderField == null)
-		{
-			Address[] froms = msg.getFrom();
-			if (froms != null && froms.length > 0)
-				senderField = froms[0];
-			else
-				senderField = envelopeSender;
-		}
-		
+		InternetAddress senderField = msg.getSenderWithFallback(envelopeSender);
 		if (senderField == null)
 			this.setSender("");
 		else

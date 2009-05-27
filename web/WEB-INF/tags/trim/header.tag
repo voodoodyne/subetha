@@ -44,7 +44,7 @@
 		</div> <!-- locBar -->
 		
 		<span id="headerImg">
-			<a href="http://subetha.tigris.org/"><img src="<c:url value="/img/logo_mock_sm.jpg" />" alt="SubEtha Mail" /></a>
+			<a href="http://code.google.com/p/subetha/"><img src="<c:url value="/img/logo_mock_sm.jpg" />" alt="SubEtha Mail" /></a>
 		</span>
 		
 		<%-- Need to clean up the CSS for these parts --%>

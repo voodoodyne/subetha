@@ -100,7 +100,7 @@
 						<tr class="${color}">
 							<td colspan="4">
 								<div class="note">
-									${f:escapeText(p.note)}
+									NOTE: ${f:escapeText(p.note)}
 								</div>
 							</td>
 						</tr>

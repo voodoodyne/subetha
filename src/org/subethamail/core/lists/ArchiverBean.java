@@ -236,6 +236,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	}
 	/**
 	 * Writes a message out to the stream. First current filters are applied, and then message is written.
+	 * If an {@link IgnoreException} is thrown, ignore the message and return.
 	 *
 	 * @param msg The message to write
 	 * @param stream The stream to write to
@@ -249,7 +250,9 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		}
 		catch (IgnoreException e)
 		{
-			// FIXME: This is for skot.
+			if (log.isDebugEnabled())
+				log.debug("Ignoring mail " + mail, e);
+			return;
 		}
 		this.detacher.attach(msg);
 		msg.writeTo(stream);
@@ -502,7 +505,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	public void exportMessages(Long[] msgIds, ExportFormat format, OutputStream outStream) throws NotFoundException, PermissionException, ExportMessagesException
 	{
 		if(ExportFormat.XML.equals(format))
-			throw new ExportMessagesException("The XML format is supported, for now.");
+			throw new ExportMessagesException("The XML format is not supported, for now.");
 
 		ZipOutputStream zipOutputStream = null;
 
@@ -550,6 +553,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		}
 		catch (Exception e)
 		{
+			log.error("Error Exporting! ",e);
 			throw new ExportMessagesException("Error:" + e.getMessage());
 		}
 	}

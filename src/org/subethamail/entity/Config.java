@@ -30,7 +30,7 @@ import org.subethamail.entity.i.Validator;
 })
 
 /**
- * Contains a sitewide config parameter, key and value.
+ * Contains config parameter, key and value.
  *
  * @author Jeff Schnitzer
  */

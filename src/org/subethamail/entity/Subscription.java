@@ -63,7 +63,7 @@ import org.subethamail.entity.i.Validator;
 		),
 	@NamedQuery(
 		name="SubscribersOnListQuery", 
-		query="select sub from Subscription sub " +
+		query="select distinct sub from Subscription sub " +
 				"join sub.person.emailAddresses as email " +
 				"where sub.list.id = :listId and " +
 				"(sub.person.name like :name or email.id like :email) order by sub.person.name",
@@ -91,6 +91,12 @@ public class Subscription extends SubscriptionBase
 	/** */
 	@Column(nullable=false, length=Validator.MAX_SUBSCRIPTION_NOTE)
 	String note;
+	
+	/** */
+	@Column(nullable=false, length=Validator.MAX_SUBSCRIPTION_ACTIONNOTE)
+	String actionNote;
+
+	
 	
 	/**
 	 */
@@ -135,5 +141,18 @@ public class Subscription extends SubscriptionBase
 			log.debug("Setting note of " + this + " to " + value);
 		
 		this.note = value;
+	}
+
+	/**
+	 * A private system note for Administrators.
+	 */
+	public String getActionNote() { return this.actionNote; }
+	
+	public void setActionNote(String value)
+	{
+		if (log.isDebugEnabled())
+			log.debug("Setting note of " + this + " to " + value);
+		
+		this.actionNote = value;
 	}
 }

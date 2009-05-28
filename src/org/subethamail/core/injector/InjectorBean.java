@@ -300,36 +300,9 @@ public class InjectorBean implements Injector
 			holdMsg = ex.getMessage();
 		}
 
-		// We need to know who the sender is to determine holdability
-		InternetAddress senderAddy = msg.getSenderWithFallback(envelopeSender);
-
 		// Find out if the message should be held for moderation
 		if (hold == null)
-		{
-			// Figure out who sent it, if we know
-			Person author = null;
-
-			if (senderAddy != null)
-			{
-				EmailAddress addy = this.em.findEmailAddress(senderAddy.getAddress());
-				if (addy != null)
-					author = addy.getPerson();
-			}
-
-			if (log.isDebugEnabled())
-				log.debug("Message author is: " + author);
-
-			if (!toList.getPermissionsFor(author).contains(Permission.POST))
-			{
-				// No permission - if the user is anonymous, this is a SOFT hold (ie spam)
-				// If the user is actually a subscriber, let's make it a HARD hold so the
-				// moderators are alerted.
-				if (author != null && author.getSubscription(toList.getId()) != null)
-					hold = HoldType.HARD;
-				else
-					hold = HoldType.SOFT;
-			}
-		}
+			hold = this.holdOrNot(msg, envelopeSender, toList);
 
 		if (log.isDebugEnabled())
 			log.debug("Hold?  " + hold);
@@ -343,6 +316,7 @@ public class InjectorBean implements Injector
 
 		if (mail.getHold() != null)
 		{
+			InternetAddress senderAddy = msg.getSenderWithFallback(envelopeSender);
 			if (senderAddy != null)
 			{
 				// We don't want to send too many of these notification messages
@@ -386,6 +360,88 @@ public class InjectorBean implements Injector
 		return true;
 	}
 
+	/**
+	 * Note that holding a message is an "or" process, checking the
+	 * Sender field, each of the From fields (there can be more than
+	 * one), and the envelope sender.  Anything that allows the message
+	 * to go through is ok.  Also note that HARD overrides
+	 * SOFT.
+	 * 
+	 * @return the appropriate hold for the message to the given list, or null
+	 *  if no hold is necessary and the email can go through.
+	 */
+	protected HoldType holdOrNot(SubEthaMessage msg, String envelopeSender, MailingList toList) throws MessagingException
+	{
+		// Note that any and all of these fields could be null.
+		HoldType hold = this.holdOrNot((InternetAddress)msg.getSender(), toList);
+		if (hold == null)
+			return null;
+
+		for (Address addy: msg.getFrom())
+		{
+			HoldType fromHold = this.holdOrNot((InternetAddress)addy, toList);
+			if (fromHold == null)
+				return null;
+			else
+				hold = this.prioritize(hold, fromHold);
+		}
+		
+		InternetAddress envelope = new InternetAddress(envelopeSender);
+		HoldType envHold = this.holdOrNot(envelope, toList);
+		if (envHold == null)
+			return null;
+		else
+			return this.prioritize(hold, envHold);
+	}
+	
+	/**
+	 * The "priorities" of holds - HARD overrides SOFT, but null overrides both
+	 */
+	protected HoldType prioritize(HoldType a, HoldType b)
+	{
+		if (a == null || b == null)
+			return null;
+		else if (a.equals(HoldType.HARD) || b.equals(HoldType.HARD))
+			return HoldType.HARD;
+		else
+			return HoldType.SOFT;
+	}
+	
+	/**
+	 * @return the appropriate hold for the given sender to the specified list,
+	 *  or null if there should be no hold.
+	 */
+	protected HoldType holdOrNot(InternetAddress senderAddy, MailingList toList)
+	{
+		// Figure out who sent it, if we know
+		Person author = null;
+
+		if (senderAddy != null)
+		{
+			EmailAddress addy = this.em.findEmailAddress(senderAddy.getAddress());
+			if (addy != null)
+				author = addy.getPerson();
+		}
+
+		if (log.isDebugEnabled())
+			log.debug("Checking hold status for " + author + " to list " + toList.getName());
+
+		if (toList.getPermissionsFor(author).contains(Permission.POST))
+		{
+			return null;
+		}
+		else
+		{
+			// No permission - if the user is anonymous, this is a SOFT hold (ie spam)
+			// If the user is actually a subscriber, let's make it a HARD hold so the
+			// moderators are alerted.
+			if (author != null && author.getSubscription(toList.getId()) != null)
+				return HoldType.HARD;
+			else
+				return HoldType.SOFT;
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.i.Injector#importMessage(java.lang.Long, java.lang.String, java.io.InputStream, boolean, java.util.Date)

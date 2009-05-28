@@ -82,7 +82,7 @@ public class SubEthaTestCase extends TestCase
 	/**
 	 * Create the bytes of a slightly more complicated test message
 	 */
-	protected byte[] createMessage(InternetAddress from, InternetAddress to, String subject, String body) throws MessagingException, IOException
+	protected MimeMessage createMimeMessage(InternetAddress from, InternetAddress to, String subject, String body) throws MessagingException, IOException
 	{
 		MimeMessage msg = new MimeMessage(this.sess);
 		
@@ -91,6 +91,23 @@ public class SubEthaTestCase extends TestCase
 		msg.setSubject(subject);
 		msg.setText(body);
 		
+		return msg;
+	}
+	
+	/**
+	 * Create the bytes of a slightly more complicated test message
+	 */
+	protected byte[] createMessage(InternetAddress from, InternetAddress to, String subject, String body) throws MessagingException, IOException
+	{
+		MimeMessage msg = this.createMimeMessage(from, to, subject, body);
+		
+		return this.byteify(msg);
+	}
+	
+	/**
+	 */
+	protected byte[] byteify(MimeMessage msg) throws MessagingException, IOException
+	{
 		ByteArrayOutputStream buf = new ByteArrayOutputStream();
 		msg.writeTo(buf);
 		

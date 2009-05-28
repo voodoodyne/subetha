@@ -12,7 +12,6 @@ import junit.framework.TestSuite;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
@@ -32,7 +31,6 @@ public class ModerationTest extends SubEthaTestCase
 	private static Logger log = LoggerFactory.getLogger(ModerationTest.class);
 	
 	/** */
-	Injector injector;
 	AdminMixin admin;
 	MailingListMixin ml;
 	PersonMixin pers;
@@ -53,8 +51,6 @@ public class ModerationTest extends SubEthaTestCase
 		this.pers = new PersonMixin(this.admin);
 		this.pers2 = new PersonInfoMixin();
 		
-		this.injector = this.admin.getInjector();
-		
 		// This one moderates inbound messages but allows anyone to subscribe
 		this.ml = new MailingListMixin(this.admin, null, "org.subethamail.plugin.blueprint.TechnicalBlueprint");
 		
@@ -68,12 +64,12 @@ public class ModerationTest extends SubEthaTestCase
 	public void testHeldMailNotification() throws Exception
 	{
 		// Pers2 is not subscribed
-		this.injector.inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
+		this.admin.getInjector().inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
 		Thread.sleep(1000);
 		assertEquals(1, this.smtp.count(MailType.YOUR_MAIL_HELD));
 		
 		// A second try should not produce a held notification
-		this.injector.inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
+		this.admin.getInjector().inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
 		Thread.sleep(1000);
 		assertEquals(1, this.smtp.count(MailType.YOUR_MAIL_HELD));
 	}
@@ -81,7 +77,7 @@ public class ModerationTest extends SubEthaTestCase
 	/** */
 	public void testDiscard() throws Exception
 	{
-		this.injector.inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
+		this.admin.getInjector().inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
 		Thread.sleep(1000);
 		assertEquals(1, this.smtp.count(MailType.YOUR_MAIL_HELD));
 		
@@ -100,7 +96,7 @@ public class ModerationTest extends SubEthaTestCase
 	/** */
 	public void testManualApproval() throws Exception
 	{
-		this.injector.inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
+		this.admin.getInjector().inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
 		
 		Collection<MailHold> msgs = this.admin.getListMgr().getHeldMessages(this.ml.getId(), -1, -1);
 		MailHold msg = msgs.iterator().next();
@@ -113,7 +109,7 @@ public class ModerationTest extends SubEthaTestCase
 	/** */
 	public void testSelfApproval() throws Exception
 	{
-		this.injector.inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
+		this.admin.getInjector().inject(this.pers2.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
 		
 		this.pers.getAccountMgr().addEmailRequest(this.pers2.getEmail());
 		assertEquals(1, this.smtp.count(MailType.CONFIRM_EMAIL));

@@ -18,8 +18,6 @@
 	<property file="${user.home}/build.properties" />
 	<property file="build.properties" />
 
-	<property name="base.dir" location="." />
-
 	<property name="build.debug" value="on" />
 	<property name="build.deprecation" value="on" />
 
@@ -30,6 +28,8 @@
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.war.file" location="${build.dir}/se.war" />
 	<property name="build.client.file" location="${build.dir}/${name}-client.jar" />
+
+	<property name="docs.dir" value="${build.dir}/docs" />
 
 	<property name="resin.dir" location="/java/resin-4.0.0/" />
 	<property name="deploy.dir" location="${resin.dir}/webapps" />
@@ -77,7 +77,7 @@
 			</classpath>
 		</typedef>
 
-		<svn><info path="${base.dir}" revisionProperty="revisionVersion" /></svn>
+		<svn><info path="${basedir}" revisionProperty="revisionVersion" /></svn>
 
 		<!--  A hack because svnant does not respect Ant's properties can't be overwritten rule. -->
 		<property name="version" value="${revisionVersion}" />
@@ -195,7 +195,7 @@
 	    </taskdef>
 		
 		<resin-deploy warfile="${build.war.file}" server="127.0.0.1" 
-			 port="8080" user="subetha" password="subetha" 
+			 port="8080" user="admin" password="admin" 
 			 virtualhost="default" version="0.1" commitmessage="trying"/>
 	</target>
 	
@@ -218,7 +218,7 @@
 		<mkdir dir="${build.dir}/rtest/classes" />
  		
 		<javac
-			srcdir="${base.dir}/rtest/src"
+			srcdir="${basedir}/rtest/src"
 			destdir="${build.dir}/rtest/classes"
 			includeAntRuntime="false"
 			debug="${build.debug}"
@@ -231,7 +231,7 @@
  		
 		<jar jarfile="${build.dir}/rtest/rtest.jar">
 			<fileset dir="${build.dir}/rtest/classes"/>
-			<fileset dir="${base.dir}/rtest/src/org/subethamail/rtest/msg">
+			<fileset dir="${basedir}/rtest/src/org/subethamail/rtest/msg">
 				<include name="**/*.msg"/>
 			</fileset>
 			<manifest>
@@ -300,4 +300,39 @@
 			</batchtest>
 		</junit>
 	</target>
+	
+	<target name="build-docs" description="downloads docs from wiki and processes them into the build/docs dir">
+		<property name="wiki.baseurl" value="http://code.google.com/p/subetha/wiki"/>
+				
+		<mkdir dir="${docs.dir}"/>
+		
+		<get dest="${docs.dir}/AdminGuide.html" src="${wiki.baseurl}/AdminGuide?show=content"/>
+		<get dest="${docs.dir}/InstallGuide.html" src="${wiki.baseurl}/InstallGuide?show=content"/>
+		<get dest="${docs.dir}/MtaGuide.html" src="${wiki.baseurl}/MtaGuide?show=content"/>
+		<get dest="${docs.dir}/DeveloperGuide.html" src="${wiki.baseurl}/DeveloperGuide?show=content"/>
+		<get dest="${docs.dir}/MailmanMigration.html" src="${wiki.baseurl}/MailmanMigration?show=content"/>
+		<get dest="${docs.dir}/SubEtha.html" src="${wiki.baseurl}/SubEtha?show=content"/>
+		
+		<!-- Write simple xsl to transform links and style things a little nicer. Should replace the replaces below...  -->
+		<!--
+		<xslt extension="*.html" style="${basedir}/wiki2html-cleanup.xsl" 
+			basedir="${download.dir}" destdir="${docs.dir}" filenameparameter="filename">
+			<param name="baseurl" expression="${wiki.baseurl}"/>
+		</xslt>
+		-->
+		
+		<!-- Replace links in files -->
+		<replace dir="${docs.dir}" token="/p/subetha/wiki/AdminGuide" value="AdminGuide.html"/>
+		<replace dir="${docs.dir}" token="/p/subetha/wiki/InstallGuide" value="InstallGuide.html"/>
+		<replace dir="${docs.dir}" token="/p/subetha/wiki/MtaGuide" value="MtaGuide.html"/>
+		<replace dir="${docs.dir}" token="/p/subetha/wiki/DeveloperGuide" value="DeveloperGuide.html"/>
+		<replace dir="${docs.dir}" token="/p/subetha/wiki/MailmanMigration" value="MailmanMigration.html"/>
+		<replace dir="${docs.dir}" token="/p/subetha/wiki/SubEtha" value="SubEtha.html"/>
+		
+		<!-- link back to the wiki, if we haven't downloaded the content -->
+		<replace dir="${docs.dir}" token="/p/subetha/wiki" value="${wiki.baseurl}"/>
+
+		
+	</target>
+
 </project>

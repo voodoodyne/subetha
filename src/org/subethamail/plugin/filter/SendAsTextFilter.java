@@ -22,11 +22,13 @@ import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
 
 /**
- * This filter removes all attachments greater than a certain size immediately
- * upon message injection. The attachments are never stored. The attachment can
- * optionally be replaced with a message indicating what action was taken.
+ * This filter converts every message to simple plain text, although it leaves
+ * attachments intact.  If the message is multipart/alternative, the HTML version
+ * is removed and the plain is left as the master piece.  If the message is text/html,
+ * the body is replaced with a plain link to the archives.
  *
  * @author Scott Hernandez
+ * @author Jeff Schnitzer
  */
 public class SendAsTextFilter extends GenericFilter
 {

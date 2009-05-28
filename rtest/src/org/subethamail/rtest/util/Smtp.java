@@ -172,6 +172,14 @@ public class Smtp extends Wiser
 
 		return null;
 	}
+	
+	/**
+	 * @return the last message received
+	 */
+	public WiserMessage getLastMessage() throws MessagingException
+	{
+		return super.getMessages().get(super.getMessages().size() - 1);
+	}
 
 	/**
 	 * Gets an embedded token from a message.

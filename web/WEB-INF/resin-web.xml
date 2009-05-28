@@ -16,23 +16,8 @@
 	>
 	
  	<statistics-enable/>
- 	
-	<logger name="com.caucho" level="config" />
-<!--	<logger name="com.caucho.hessian" level="fine" />-->
-<!--	<logger name="com.caucho.security" level="finest" />-->
-<!--	<logger name="com.caucho.server.dispatch" level="finest" />-->
-<!--	<logger name="com.caucho.server.connection" level="finest" />-->
-	
-<!--	<logger name="com.caucho.admin" level="severe" />-->
-<!--	<logger name="com.caucho.config" level="finest" />-->
-<!--	<logger name="com.caucho.config.j2ee" level="finest"/>-->
-<!--	<logger name="com.caucho.config.inject" level="finest"/>-->
-<!--	<logger name="com.caucho.loader" level="fine" />-->
-<!--	<logger name="com.caucho.server" level="fine" />-->
 
-	<logger name="org.subethamail" level="config" />
-	<logger name="org.subethamail.smtp" level="severe" />
-	<logger name="org.hibernate" level="severe" />
+	<!-- DO NOT PUT LOGGING CONFIGURATION IN HERE, it overrides conf/resin.xml --> 	
 
 <!--  Needs a management interface to work-->
 <!--	<resource-->

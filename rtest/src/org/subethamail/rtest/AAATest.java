@@ -38,7 +38,7 @@ public class AAATest extends TestCase
 	}
 	
 	/** */
-	public void ZtestFirstThing() throws Exception
+	public void testFirstThing() throws Exception
 	{
 		AdminMixin admin = new AdminMixin();
 		admin.getEegor().log("############# FIRST TEST RUN SUCCESSFULLY");

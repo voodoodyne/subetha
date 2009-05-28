@@ -6,6 +6,8 @@
 package org.subethamail.rtest.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -113,4 +115,23 @@ public class SubEthaTestCase extends TestCase
 		
 		return buf.toByteArray();
 	}
+
+	/**
+	 * Create the bytes of a test message from a file.  The filename should not have
+	 * path info attached, that will get added here.
+	 */
+	protected byte[] createMessageFromFile(String filename) throws MessagingException, IOException
+	{
+		File f = new File("rtest/testdata", filename);
+		
+		byte[] result = new byte[(int)f.length()];
+		
+		FileInputStream in = new FileInputStream(f);
+		int count = in.read(result);
+
+		assert count == result.length;
+		
+		return result;
+	}
+	
 }

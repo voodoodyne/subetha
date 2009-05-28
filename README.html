@@ -12,33 +12,43 @@
 
 		<ul>
 			<li>
-				The <a href="www/install.html">complete install guide</a> if you downloaded
+				The <a href="docs/InstallGuide.html">install guide</a> if you downloaded
 				the standalone package.
-			</li>
-
-			<li>
-				The <a href="www/install-rtr.html">ready-to-run (RTR) install guide</a>
-				if you downloaded the distribution that includes JBoss.
 			</li>
 		</ul>
 
 		<p>
 			Note that you can upgrade any RTR version of SubEtha by copying the
-			newer subetha.ear file into ${jboss.dir}/server/default/deploy.
+			newer se.war file into ${resin.dir}/webapps/.
 		</p>
 
 		<p>
-			<strong>This version requires JBossAS 4.0.5.GA from the JEMS 1.2.0 GA installer.</strong>
+			<strong>This version requires Resin 4.0.</strong>
 		</p>
 
 		<h2>Changes</h2>
 		<dl>
 			<dt>2.0</dt>
 			<dd>
-				<p>For 2.0, SubEtha was ported to Resin4.  No new features were added,
-				but many architectural changes were made.  Also, we've moved to google code.</p>
+				<p>For 2.0, SubEtha was ported to Resin 4.0. </p>
+				<p>Many architectural changes were made but very few bug fixes or features were added (or needed :).</p>
+				<p>Also, we've moved to a new home at google code.</p>
 				
-				<p>If you are upgrading from a previous version, these changes *must* be
+				<p>Here are some of the changes to note:</p>
+				
+				<ul>
+					<li>Updated Libraries (Hibernate, Logging, SubethaSMTP)</li>
+					<li>Updated Packaging and Docs</li>
+					<li>Developed and Tested on MySQL and PostgresSQL</li>
+					<li>Allow "sent on behalf of" emails (ie. Sender: and From: are different)</li>
+					<li>Limited EnvelopeSender address length (and encoding; base-62 now)</li>
+					<li>Minor HTML changes on various pages.</li>
+					<li>Added Hessian Remote Protocol Support (removed "WS" remoting)</li>
+					<li>Indexing and Cleanup start shortly after deployment, and periodically as before.</li>
+					<li>Much smaller memory footprint, and quicker startup (less 5 seconds in some cases)</li>
+				</ul>
+
+				<p>If you are <b>upgrading</b> from a previous version, these changes *must* be
 				made to the database (these are for MySQL, your database data types may be
 				different):</p>
 				

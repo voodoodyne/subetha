@@ -311,7 +311,8 @@
 		<get dest="${docs.dir}/MtaGuide.html" src="${wiki.baseurl}/MtaGuide?show=content"/>
 		<get dest="${docs.dir}/DeveloperGuide.html" src="${wiki.baseurl}/DeveloperGuide?show=content"/>
 		<get dest="${docs.dir}/MailmanMigration.html" src="${wiki.baseurl}/MailmanMigration?show=content"/>
-		<get dest="${docs.dir}/SubEtha.html" src="${wiki.baseurl}/SubEtha?show=content"/>
+		<get dest="${docs.dir}/SubEtha.html" src="${wiki.baseurl}/SubEtha?show=content"/>		
+		<get dest="${docs.dir}/FAQ.html" src="${wiki.baseurl}/FaQ?show=content"/>
 		
 		<!-- Write simple xsl to transform links and style things a little nicer. Should replace the replaces below...  -->
 		<!--
@@ -328,6 +329,7 @@
 		<replace dir="${docs.dir}" token="/p/subetha/wiki/DeveloperGuide" value="DeveloperGuide.html"/>
 		<replace dir="${docs.dir}" token="/p/subetha/wiki/MailmanMigration" value="MailmanMigration.html"/>
 		<replace dir="${docs.dir}" token="/p/subetha/wiki/SubEtha" value="SubEtha.html"/>
+		<replace dir="${docs.dir}" token="/p/subetha/wiki/FaQ" value="FAQ.html"/>
 		
 		<!-- link back to the wiki, if we haven't downloaded the content -->
 		<replace dir="${docs.dir}" token="/p/subetha/wiki" value="${wiki.baseurl}"/>

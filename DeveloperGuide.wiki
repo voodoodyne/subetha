@@ -1,6 +1,8 @@
 #labels Featured
 = Setup Instructions for Development =
 
+<wiki:toc max_depth="3" />
+
 Developer setup instructions are the same as described in the InstallGuide. Take special note of the instructions below if you wish to run the unit tests, or build.
 
 == Eclipse Setup ==
@@ -15,12 +17,12 @@ Once you have the project checked out you need to define the location of *SUBETH
 === Building ===
 The next step is to build SubEtha. From the Java perspective, select Window->Show View->Ant. Right click in the Ant view and Add buildfiles. Then look for the top level SubEtha build file and add it. Once that is done, you can double click the 'deploy' target which will build SubEtha and install it in the right deployment directory location.
 
-== Suggested Eclipse Plugins ==
+=== Suggested Eclipse Plugins ===
   
   *  *Check Style*: [http://eclipse-cs.sourceforge.net/ "http://eclipse-cs.sourceforge.net/"]
   *  *Subclipse*: [http://subclipse.tigris.org/ "http://subclipse.tigris.org/"]
 
-== Linked Resources (Optional) ==
+=== Linked Resources (Optional) ===
 
 You can also setup Linked Resource support in eclipse so that you can edit the deployed files. These linked folders can also allow direct editing (in eclipse) for configuration files. To do this, please add a SUBETHA_RESIN_HOME variable to the workspace linked resources properties. These setting can be found at Window -> Preferences under the {{{General : Workspace : Linked Resources}}} section. Select New from the dialog and specify a name of RESIN_HOME to the home folder. The linked folders in the project are named "resin-X", where X points various places in the install directory.
 
@@ -55,7 +57,11 @@ The subdirectories correspond to various components:
 
   * web - The front end web application, packaged as a war. Contains JSPs and all other content, acts as a client to the core layer.
 
-== Running Regression Tests ==
+== Testing ==
+
+There are a number of tests that can run against subetha to verify the installation and to help with developement. All of these tests require that you run subetha while testing; we suggest not using it during tests as some site wide changes are made during the tests.
+
+=== Running Regression Tests ===
 
 How to run the JUnit regression tests from ant:
   * Make sure the code you want to test is deployed.  {{{ant deploy}}} will build the latest and deploy it.
@@ -68,7 +74,7 @@ How to run the JUnit regression tests from ant:
  
   * If you want to run the special unit test(s) in the debugger, run the  {{{ant junit-debug}}} target. The JVM will pause and wait until you attach with Eclipse.
 
-== Running Load Tests ==
+=== Running Load Tests ===
 You can run a test to put a little stress on your server. It will send a continuous stream of messages, and then count the number of recipients whom receive them. It is a not a scientific load test, but shows that the system can handle many concurrent requests.
 
   # Start Resin (w deployment) See the InstallGuide if you need help.
@@ -80,12 +86,7 @@ You can run a test to put a little stress on your server. It will send a continu
 }}}
   # Run the test. {{{ant genload}}}
   
-
-== Developing Filters ==
-  
-We have written directiong for DevelopingFilters. Filters are the core processing methods for changing messages as they are received and sent to user. You can write your own filters for making modifications to the incoming and outgoing mail streams in SubEtha. If you write a useful filter and you want to contribute it we would love to hear about it on the developers mailing list.
-
-== Interactive Testing ==
+=== Interactive Testing ===
 It is easy to interactively test SubEtha by injecting email from your mail client directly into an instance of SubEtha. The way to do it is to setup a mail account in your client with a *From:* address of a subscriber on the list, the *To:* address is an existing list email. Make sure the *outgoing mail server* is the SubEtha server and that it is running on *port 2500*.
 
 It is also very easy to connect to port 2500 and just talk to the mail server! In {{{rtest/testsmtpconv.txt}}} you will find a simple text file containing the client conversation which can be easy pasted into an open (telnet) connection.

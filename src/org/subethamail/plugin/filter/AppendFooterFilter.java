@@ -143,6 +143,7 @@ public class AppendFooterFilter extends GenericFilter
 					// mixed, and others cause problems
 					return;
 				}
+				
 				// and then append the footer to what should be a mixed.
 				MimeBodyPart part = new MimeBodyPart();
 				part.setText(expandedFooter);

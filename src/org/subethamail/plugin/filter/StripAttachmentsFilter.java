@@ -24,7 +24,7 @@ import org.subethamail.core.plugin.i.helper.FilterParameterImpl;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
 
 /**
- * This filter removes all attachments greater than a certain size
+ * This filter removes all binary attachments greater than a certain size
  * immediately upon message injection.  The attachments are never
  * stored.  The attachment can optionally be replaced with a message
  * indicating what action was taken.  

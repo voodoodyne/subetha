@@ -98,37 +98,30 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		
 		for (EnabledFilter enabled: list.getEnabledFilters().values())
 		{
-			try
+			Filter filter = fHelper.getInstance(enabled.getClassName());
+			if (filter == null)
 			{
-				Filter filter = fHelper.getInstance(enabled.getClassName());
-				if (filter == null)
+				// Log and ignore
+				this.logUnregisteredFilterError(enabled, list);
+			}
+			else
+			{
+				FilterContext ctx = new FilterContextImpl(enabled, filter, msg);
+				
+				try
 				{
-					// Log and ignore
-					this.logUnregisteredFilterError(enabled, list);
-				}
-				else
-				{
-					FilterContext ctx = new FilterContextImpl(enabled, filter, msg);
+					if (log.isDebugEnabled())
+						log.debug("Running filter " + filter);
 					
-					try
-					{
-						if (log.isDebugEnabled())
-							log.debug("Running filter " + filter);
-						
-						filter.onInject(msg, ctx);
-					}
-					catch (HoldException ex)
-					{
-						// We only track the first one
-						if (holdException == null)
-							holdException = ex;
-					}
-				}				
-			}
-			catch (Exception e)
-			{
-				log.error("Error in filter OnInject: ", e);
-			}
+					filter.onInject(msg, ctx);
+				}
+				catch (HoldException ex)
+				{
+					// We only track the first one
+					if (holdException == null)
+						holdException = ex;
+				}
+			}				
 		}
 		
 		if (holdException != null)
@@ -147,27 +140,20 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 
 		for (EnabledFilter enabled: list.getEnabledFilters().values())
 		{
-			try 
+			Filter filter = fHelper.getInstance(enabled.getClassName());
+			if (filter == null)
 			{
-				Filter filter = fHelper.getInstance(enabled.getClassName());
-				if (filter == null)
-				{
-					// Log and ignore
-					this.logUnregisteredFilterError(enabled, list);
-				}
-				else
-				{
-					SendFilterContext ctx = new SendFilterContextImpl(enabled, filter, msg, mail);
-					
-					if (log.isDebugEnabled())
-						log.debug("Running filter " + filter);
-					
-					filter.onSend(msg, ctx);
-				}
-			}			
-			catch (Exception e)
+				// Log and ignore
+				this.logUnregisteredFilterError(enabled, list);
+			}
+			else
 			{
-				log.error("Error in filter OnSend: ", e);
+				SendFilterContext ctx = new SendFilterContextImpl(enabled, filter, msg, mail);
+				
+				if (log.isDebugEnabled())
+					log.debug("Running filter " + filter);
+				
+				filter.onSend(msg, ctx);
 			}
 		}
 	}

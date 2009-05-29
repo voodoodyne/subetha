@@ -231,9 +231,6 @@
  		
 		<jar jarfile="${build.dir}/rtest/rtest.jar">
 			<fileset dir="${build.dir}/rtest/classes"/>
-			<fileset dir="${basedir}/rtest/src/org/subethamail/rtest/msg">
-				<include name="**/*.msg"/>
-			</fileset>
 			<manifest>
 				<attribute name="Specification-Version" value="${version}" />
 				<attribute name="Implementation-Version" value="${TODAY}" />

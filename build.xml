@@ -33,7 +33,7 @@
 
 	<property name="resin.dir" location="/java/resin-4.0.0/" />
 	<property name="deploy.dir" location="${resin.dir}/webapps" />
-	<property name="expandedWar.dir" location="${deploy.dir}/${name}" />
+	<property name="expandedWar.dir" location="${deploy.dir}/se" />
 
 	<property name="src.dir" location="src" />
 	<property name="web.dir" location="web" />
@@ -156,6 +156,7 @@
 
 	<target name="sync-deploy" depends="classes">
 		<property name="timeDriftLimit" value="100"/>
+		
 		<sync todir="${expandedWar.dir}" granularity="${timeDriftLimit}" verbose="true" >
 			<fileset dir="${web.dir}" />
 			<preserveintarget>
@@ -171,6 +172,9 @@
 		
 		<sync todir="${expandedWar.dir}/WEB-INF/classes" granularity="${timeDriftLimit}" verbose="true">
 			<fileset dir="${build.classes.dir}" />
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.java"/>
+			</fileset>
 			<preserveintarget>
 				<include name="META-INF/**" />
 			</preserveintarget>
@@ -179,6 +183,7 @@
 		<sync todir="${expandedWar.dir}/WEB-INF/classes/META-INF" granularity="${timeDriftLimit}" verbose="true">
 			<fileset dir="${src.dir}/META-INF" />
 		</sync>
+		
 		<sync todir="${expandedWar.dir}/WEB-INF/lib" verbose="true">
 			<fileset dir="${lib.dir}" >
 				<exclude name="**/build-only/**" />

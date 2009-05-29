@@ -24,11 +24,14 @@ import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
 
 /**
- * This filter removes all attachments greater than a certain size immediately
- * upon message injection. The attachments are never stored. The attachment can
- * optionally be replaced with a message indicating what action was taken.
+ * SubEtha actually detaches all binary attachments upon message injection and
+ * replaces them in the message with a special reference.  Then, when the message
+ * is sent outbound, the attachments are reattached.  This filter changes this
+ * behavior; instead of reattaching the attachment, a link to the archives is
+ * placed there instead.
  * 
  * @author Scott Hernandez
+ * @author Jeff Schnitzer
  */
 public class LeaveAttachmentsOnServerFilter extends GenericFilter
 {

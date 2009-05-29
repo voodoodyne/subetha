@@ -97,16 +97,23 @@ public class StripAttachmentsFilter extends GenericFilter
 	public void onInject(SubEthaMessage msg, FilterContext ctx)
 		throws IgnoreException, HoldException, MessagingException
 	{
-
 		int maxKB = Integer.parseInt(ctx.getArgument(ARG_MAXSIZEINKB).toString());
 
 		String msgContent = (String) ctx.getArgument(ARG_MSG);
 		String expandedMsg = ctx.expand(msgContent);
  
+		boolean changed = false;
 		try 
 		{
-			for (Part p : msg.getParts())
+			for (Part p: msg.getParts())
 			{
+				if (p.getContentType().startsWith("text/") && !Part.ATTACHMENT.equals(p.getDisposition()))
+					continue;
+				
+				if (p.getContentType().startsWith("multipart/"))
+					continue;
+				
+				// Hopefully this means it is some sort of binary time
 				if (p.getSize() > (maxKB * 1024)) 
 				{
 					if (log.isDebugEnabled())
@@ -119,15 +126,17 @@ public class StripAttachmentsFilter extends GenericFilter
 						p.removeHeader(header.getName());
 					}
 	
-					p.setText(expandedMsg);		
+					p.setText(expandedMsg);
+					changed = true;
 				}
 			}
-			msg.save();
+			
+			if (changed)
+				msg.save();
 		}
 		catch (IOException ioex)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Error getting message parts" + ioex);					
+			throw new RuntimeException(ioex);
 		}
 	}
 }

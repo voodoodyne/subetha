@@ -168,38 +168,6 @@ public class FilteringTest extends SubEthaTestCase
 		this.expectPlainAndHtmlUnmolested();
 	}
 
-	/** Should be no different than without the filter */
-	public void testSendAsTextPlain() throws Exception
-	{
-		this.admin.getListMgr().setFilterDefault(this.ml.getId(), "org.subethamail.plugin.filter.SendAsTextFilter");
-
-		this.expectPlain("plain-only.msg");
-	}
-
-	/** Should come out as a single text part with a url to the archives */
-	public void testSendAsTextHtml() throws Exception
-	{
-		this.admin.getListMgr().setFilterDefault(this.ml.getId(), "org.subethamail.plugin.filter.SendAsTextFilter");
-
-		byte[] rawMsg = this.createMessageFromFile("html-only.msg");
-		
-		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), this.ml.getEmail(), rawMsg);
-		Thread.sleep(1000);
-		
-		MimeMessage msg = this.smtp.getLastMessage().getMimeMessage();
-		assertEquals(TEST_SUBJECT, msg.getSubject());
-		assert msg.getContentType().startsWith("text/plain");
-		assert msg.getContent().toString().startsWith("Parts of this message");
-	}
-
-	/** Should no longer be multipart, should be a simple text msg */
-	public void testSendAsTextPlainAndHtml() throws Exception
-	{
-		this.admin.getListMgr().setFilterDefault(this.ml.getId(), "org.subethamail.plugin.filter.SendAsTextFilter");
-
-		this.expectPlain("plain-and-html.msg");
-	}
-	
 	/** */
 	public static Test suite()
 	{

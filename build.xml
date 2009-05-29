@@ -35,7 +35,7 @@
 	<property name="deploy.dir" location="${resin.dir}/webapps" />
 	<property name="expandedWar.dir" location="${deploy.dir}/${name}" />
 
-	<property name="javasrc.dir" location="src" />
+	<property name="src.dir" location="src" />
 	<property name="web.dir" location="web" />
 	<property name="lib.dir" location="lib" />
 
@@ -44,11 +44,20 @@
 		<format property="YEAR" pattern="yyyy" />
 	</tstamp>
 
-	<path id="master.classpath">
-		<pathelement path="${java.class.path}" />
-		
+	<path id="master.classpath">		
 		<fileset dir="${lib.dir}">
 			<include name="**/*.jar" />
+		</fileset>
+
+		<fileset dir="${resin.dir}/lib">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<path id="javadoc.classpath">		
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+			<exclude name="build-only/**"/>
 		</fileset>
 
 		<fileset dir="${resin.dir}/lib">
@@ -63,7 +72,7 @@
 	
 	<path id="rtest.run.classpath">
 		<pathelement location="${build.dir}/rtest/rtest.jar" />
-		<pathelement location="${javasrc.dir}"/>	<!-- gets the hessian serializers -->
+		<pathelement location="${src.dir}"/>	<!-- gets the hessian serializers -->
 		<path refid="rtest.build.classpath" />
 	</path>
 	
@@ -83,11 +92,6 @@
 		<property name="version" value="${revisionVersion}" />
 	</target>
 
-	<target name="init-dist">
-		<input addproperty="version" message="Version number?" />
-		<property name="dist.name" value="SubEtha-${version}" />
-	</target>
-
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
@@ -95,7 +99,7 @@
  	<target name="classes" depends="init">
 		<mkdir dir="${build.classes.dir}" />
  		
-		<javac srcdir="${javasrc.dir}"
+		<javac srcdir="${src.dir}"
 				destdir="${build.classes.dir}"
 				debug="${build.debug}"
 				deprecation="${build.deprecation}"
@@ -135,7 +139,7 @@
 			
 			<classes dir="${build.classes.dir}" />
 			
-			<classes dir="${javasrc.dir}">
+			<classes dir="${src.dir}">
 				<include name="META-INF/**" />
 				<include name="**/*.vm" />
 			</classes>
@@ -173,7 +177,7 @@
 		</sync>
 		
 		<sync todir="${expandedWar.dir}/WEB-INF/classes/META-INF" granularity="${timeDriftLimit}" verbose="true">
-			<fileset dir="${javasrc.dir}/META-INF" />
+			<fileset dir="${src.dir}/META-INF" />
 		</sync>
 		<sync todir="${expandedWar.dir}/WEB-INF/lib" verbose="true">
 			<fileset dir="${lib.dir}" >
@@ -232,7 +236,7 @@
 		<jar jarfile="${build.dir}/rtest/rtest.jar">
 			<fileset dir="${build.dir}/rtest/classes"/>
 			<manifest>
-				<attribute name="Specification-Version" value="${version}" />
+				<attribute name="Specification-Version" value="${build.version}" />
 				<attribute name="Implementation-Version" value="${TODAY}" />
 			</manifest>
 		</jar>
@@ -332,6 +336,67 @@
 		<replace dir="${docs.dir}" token="/p/subetha/wiki" value="${wiki.baseurl}"/>
 
 		
+	</target>
+
+	<target name="javadoc" depends="init-dist, classes">
+		<javadoc
+			destdir="${build.dir}/javadoc"
+			packagenames="*"
+			classpathref="javadoc.classpath"
+			author="true"
+			version="true"
+			Windowtitle="SubEtha Javadoc"
+		>
+			<fileset dir="${src.dir}"/>
+			<doctitle><![CDATA[<h1>SubEtha</h1>]]></doctitle>
+			<bottom><![CDATA[<i>Copyright &#169; ${YEAR} SubEtha. All Rights Reserved. Build version: ${build.version}</i>]]></bottom>
+		</javadoc>
+	</target>
+	
+	<target name="init-dist">
+		<input addproperty="build.version" message="Version number?" />
+		<property name="dist.name" value="SubEtha-${build.version}" />
+
+		<property name="build.dist.dir" location="${build.dir}/${name}-${build.version}"/>
+		<property name="build.dist.zip" location="${build.dir}/${dist.name}.zip"/>
+	</target>
+
+	<target name="dist" depends="clean, init-dist, war, build-docs">
+		<copy todir="${build.dist.dir}">
+			<fileset dir="${build.dir}">
+				<include name="*.war" />
+			</fileset>
+			
+			<fileset dir="${build.dir}">
+				<include name="javadoc/**" />
+				<include name="docs/**" />
+				
+			</fileset>
+
+			<fileset dir=".">
+				<include name="README.html" />
+				<include name="LICENSE.txt" />
+				<include name="build.xml" />
+				<include name="build.properties" />
+				<include name=".project" />
+				<include name=".classpath" />
+				
+				<include name="lib/**" />
+				<include name="src/**" />
+				<include name="rtest/**" />
+				<include name="loadtest/**" />
+				<include name="web/**" />
+
+				<exclude name="**/.svn"/>
+			</fileset>
+		</copy>
+
+		<dirname property="build.dist.dir.dirname" file="${build.dist.dir}" />
+		<basename property="build.dist.dir.basename" file="${build.dist.dir}" />
+		
+		<zip zipfile="${build.dist.zip}" basedir="${build.dist.dir.dirname}">
+			<include name="${build.dist.dir.basename}/**" />
+		</zip>
 	</target>
 
 </project>

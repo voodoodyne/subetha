@@ -52,8 +52,8 @@ import com.caucho.config.Name;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@Named("indexerBean")
-public class IndexerBean implements IndexerManagement, Indexer, Runnable
+@Named("indexer")
+public class IndexerBean implements IndexerManagement, Indexer
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(IndexerBean.class);
@@ -76,12 +76,6 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	static IndexMgr index2 = new IndexMgr(new File(BASE_DIR, "2"));
 
 	@Current Indexer ind;
-
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void run()
-	{
-		this.update();
-	}
 
 	/** */
 	@Name("jdbc/subetha")
@@ -230,6 +224,7 @@ public class IndexerBean implements IndexerManagement, Indexer, Runnable
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.search.IndexerManagement#update()
 	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void update()
 	{
 		try

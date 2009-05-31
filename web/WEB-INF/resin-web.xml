@@ -36,24 +36,13 @@
 <!--		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />-->
 
 	<!-- Every night at 4am run cleanup -->
-	<resin:ScheduledTask task="#{cleanupBean}">
-		<cron>0 4 *</cron>
-	</resin:ScheduledTask>
+	<resin:ScheduledTask method="#{cleanup.cleanup}" cron="0 4 *"/>
+
+	<!-- ...and might as well cleanup now (in a few seconds) -->
+	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s"/>
 
 	<!-- Every 5 minutes run the indexer-->
-	<resin:ScheduledTask task="#{indexerBean}">
-		<cron>5</cron>
-	</resin:ScheduledTask>
-
-	<!-- Start now (in a few seconds)-->
-	<resin:ScheduledTask task="#{cleanupBean}">
-		<resin:delay>10s</resin:delay>
-	</resin:ScheduledTask>
-
-	<resin:ScheduledTask task="#{indexerBean}" >
-		<resin:delay>20s</resin:delay>
-	</resin:ScheduledTask>
-
+	<resin:ScheduledTask method="#{indexer.update}" delay="20s" period="5m"/>
 
 	<!-- JMS -->
 	<jms:JmsConnectionFactory />

@@ -28,9 +28,9 @@ import org.subethamail.entity.SubscriptionHold;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@Named("cleanupBean")
+@Named("cleanup")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class CleanupBean implements CleanupManagement, Runnable
+public class CleanupBean
 {
 	/** */
 	private static Logger log = LoggerFactory.getLogger(CleanupBean.class);
@@ -49,15 +49,14 @@ public class CleanupBean implements CleanupManagement, Runnable
 
 
 	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Runnable#run()
+	 * Why is this locking needed?  -Jeff 
 	 */
-	public void run()
+	public void cleanup()
 	{
 		try
 		{
 			cleanupLock.tryLock(1, TimeUnit.MILLISECONDS);
-			this.cleanup();
+			this.actuallyCleanup();
 		}
 		catch (InterruptedException e)
 		{
@@ -70,11 +69,10 @@ public class CleanupBean implements CleanupManagement, Runnable
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.admin.CleanupManagement#cleanup()
+	/**
+	 * Does the real work.
 	 */
-	public void cleanup()
+	public void actuallyCleanup()
 	{
 		this.cleanupHeldSubscriptions();
 		this.cleanupHeldMail();

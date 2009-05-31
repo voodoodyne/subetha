@@ -7,8 +7,6 @@ package org.subethamail.core.admin;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.annotation.Named;
 import javax.ejb.TransactionAttribute;
@@ -19,11 +17,14 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
+import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 
 /**
- * Service which wakes up once a night and performs cleanup operations.
- * Old held messages and held subscriptions are pruned.
+ * Performs cleanup operations by pruning (old) held messages and subscriptions.
+ * 
+ * This is scheduled (by a {@ling ScheduledTask}) daily.
+ *
  *
  * @author Jeff Schnitzer
  * @author Scott Hernandez
@@ -41,41 +42,35 @@ public class CleanupBean
 	/** Keep held messages around for 7 days */
 	public static final long MAX_HELD_MSG_AGE_MILLIS = 1000L * 60L * 60L * 24L * 7L;
 
-	private static ReentrantLock cleanupLock = new ReentrantLock();
+	private static volatile boolean isRunning = false;
 	
 	/** */
 	@SubEtha
 	protected SubEthaEntityManager em;
 
 
-	/*
-	 * Why is this locking needed?  -Jeff 
-	 */
+	/**
+	 * Cleans up held {@link Subscription}s and {@link Mail}
+	 **/
 	public void cleanup()
 	{
 		try
 		{
-			cleanupLock.tryLock(1, TimeUnit.MILLISECONDS);
-			this.actuallyCleanup();
-		}
-		catch (InterruptedException e)
-		{
-			if(log.isWarnEnabled())
-				log.warn("Error getting cleanup lock; cancelling scheduled cleanup.");
+			if(!isRunning)
+			{
+				isRunning = true;
+				this.cleanupHeldSubscriptions();
+				this.cleanupHeldMail();
+			}
+			else
+			{
+				log.warn("Attempted to start cleanup while one is already running; skipping cleanup.");				
+			}
 		}
 		finally 
 		{
-			cleanupLock.unlock();
+			isRunning = false;
 		}
-	}
-
-	/**
-	 * Does the real work.
-	 */
-	public void actuallyCleanup()
-	{
-		this.cleanupHeldSubscriptions();
-		this.cleanupHeldMail();
 	}
 
 	/**

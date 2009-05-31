@@ -14,20 +14,11 @@
 	xmlns:queue="urn:java:org.subethamail.core.queue"
 	xmlns:search="urn:org.subethamail.core.search"
 	>
-	
- 	<statistics-enable/>
-
-	<!-- DO NOT PUT LOGGING CONFIGURATION IN HERE, it overrides conf/resin.xml --> 	
 
 <!--  Needs a management interface to work-->
 <!--	<resource-->
 <!--		mbean-name="subetha:name=Bootstrapper"-->
 <!--		type="org.subethamail.core.admin.BootstrapperBean" />-->
-
-	<resource
-		mbean-name="subetha:name=Cleanup"
-		type="org.subethamail.core.admin.CleanupBean"
-		mbean-interface="org.subethamail.core.admin.CleanupManagement" />
 
 <!--	Disabled for now, maybe a resin bug because it starts once in the Env load, and once in the webapp-->
 <!--	<resource-->
@@ -36,12 +27,11 @@
 <!--		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />-->
 
 	<!-- Every night at 4am run cleanup -->
-	<resin:ScheduledTask method="#{cleanup.cleanup}" cron="0 4 *"/>
+	<!-- ...and might as now too (in a few seconds) -->
+	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" cron="0 4 *"/>
 
-	<!-- ...and might as well cleanup now (in a few seconds) -->
-	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s"/>
-
-	<!-- Every 5 minutes run the indexer-->
+	<!-- Every 5 minutes run the indexer -->
+	<!-- ...and might as now too (in a few seconds) -->
 	<resin:ScheduledTask method="#{indexer.update}" delay="20s" period="5m"/>
 
 	<!-- JMS -->

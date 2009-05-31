@@ -43,17 +43,17 @@ import org.subethamail.entity.Mail;
 import com.caucho.config.Name;
 
 /**
- * Service which manages the Lucene search index and provides a
+ * Manages the Lucene search index and provides a
  * low-level search API.  Conceptually there are two indexes, the
  * current index (which is used for searching) and the fallow index
  * (which is either nonexistant or in the process of being built).
- * This allows rebuilds and searches to peacefully co-occur.
+ * This allows searches even during the rebuilding of a whole new index.
  *
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
 @Named("indexer")
-public class IndexerBean implements IndexerManagement, Indexer
+public class IndexerBean implements Indexer
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(IndexerBean.class);
@@ -65,7 +65,7 @@ public class IndexerBean implements IndexerManagement, Indexer
 	/** If this file exists, use index2 instead of index1 */
 	static final File USE2 = new File(BASE_DIR, "use2");
 
-	/** Synchronize on this object before updating or rebuilding the index */
+	/** The appropriate locks for updating or rebuilding the index */
 	private static ReentrantLock updateLock = new ReentrantLock();
 	private static ReentrantLock rebuildLock = new ReentrantLock();
 	
@@ -154,7 +154,7 @@ public class IndexerBean implements IndexerManagement, Indexer
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void start() throws Exception
 	{
-		log.info("Starting indexer service");
+		log.info("Starting indexer");
 
 		this.initialize();
 	}
@@ -167,7 +167,7 @@ public class IndexerBean implements IndexerManagement, Indexer
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void stop() throws Exception
 	{
-		log.info("Stopping IndexerService");
+		log.info("Stopping indexer");
 		getCurrentIndex().closeResources();
 	}
 
@@ -181,42 +181,43 @@ public class IndexerBean implements IndexerManagement, Indexer
 		{
 			//get update lock first.
 			updateLock.tryLock(1, TimeUnit.MINUTES);
-			
-			//try to get a lock, if we don't get it, another thread is already rebuilding!
-			rebuildLock.tryLock(1,TimeUnit.MILLISECONDS);
+			try
 			{
+				//try to get a lock, if we don't get it, another thread is already rebuilding!
+				rebuildLock.tryLock(0,TimeUnit.SECONDS);
+
 				log.info("Rebuilding all search indexes");
-	
-				try
-				{
-					IndexMgr mgr = getFallowIndex();
-	
-					Modifier mod = mgr.modifyIndex(true);
-	
-					log.info("Indexing all messages");
-					this.indexAllMail(mod);
-					mod.flush();
-					log.info(mod.docCount() + " total documents in index");
-	
-					mod.close();
-	
-					this.swapCurrentIndex();
-				}
-				catch (IOException ex) { throw new EJBException(ex); }
-				finally 
-				{
-					rebuildLock.unlock();
-				}
+
+				IndexMgr mgr = getFallowIndex();
+
+				Modifier mod = mgr.modifyIndex(true);
+
+				log.info("Indexing all messages");
+				this.indexAllMail(mod);
+				mod.flush();
+				log.info(mod.docCount() + " total documents in index");
+
+				mod.close();
+
+				this.swapCurrentIndex();
+			}
+			catch (InterruptedException e)
+			{
+				log.warn("An index rebuild is already going; skipping rebuild.", e);
+			}
+			catch (IOException ex) { throw new EJBException(ex); }
+			finally 
+			{
+				if(rebuildLock.isHeldByCurrentThread()) rebuildLock.unlock();
 			}
 		}
 		catch (InterruptedException e)
 		{
-			if(log.isWarnEnabled())
-				log.warn("Error getting update lock; cancelling rebuild.");
+			log.warn("Waited for update to finish but it didn't within 1m; cancelling rebuild.", e);
 		}
 		finally
 		{
-			updateLock.unlock();
+			if(updateLock.isHeldByCurrentThread()) updateLock.unlock();
 		}
 	}
 
@@ -276,12 +277,11 @@ public class IndexerBean implements IndexerManagement, Indexer
 		}
 		catch (InterruptedException e)
 		{
-			if(log.isWarnEnabled())
-				log.warn("Error getting update lock; cancelling update.");
+			log.warn("The index is currently being updated; skipping new update.");
 		}
 		finally
 		{
-			updateLock.unlock();
+			if(updateLock.isHeldByCurrentThread()) updateLock.unlock();
 		}
 	}
 

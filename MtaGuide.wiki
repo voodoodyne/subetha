@@ -165,7 +165,7 @@ With this approach, /etc/postfix/transport is unnecessary. Also, the Postfix ext
 		  hosts=localhost
 		}}}
 
-*Notes*
+Notes:
   * *gethostbyname*: This resolves hosts using alternate sources like etc/hosts instead of just through dns mx records.
   * *allow_localhost*: This is usually not allowed to help keep mail-loops under control. :) Since we are running a totally different mail server on localhost:2500 we have no worries that the message will loop back into the same system.
 
@@ -182,7 +182,7 @@ With this approach, /etc/postfix/transport is unnecessary. Also, the Postfix ext
 						
 
 		}}}
- *Note*: I found while working with Cygwin that every time I changed etc/exim.config file the permissions were changed to my current windows account:
+*Note* - I found while working with Cygwin that every time I changed etc/exim.config file the permissions were changed to my current windows account:
 		{{{
 
 		-rwx------+ 1 *skot* None 31250 May  8 20:48 /etc/exim.conf

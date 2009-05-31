@@ -308,38 +308,30 @@
 	</target>
 	
 	<target name="build-docs" description="downloads docs from wiki and processes them into the build/docs dir">
+		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+		
 		<property name="wiki.baseurl" value="http://code.google.com/p/subetha/wiki"/>
 				
 		<mkdir dir="${docs.dir}"/>
+
+		<property name="wiki.files" value="AdminGuide,InstallGuide,MtaGuide,DeveloperGuide,MailmanMigration,SubEtha,FaQ" />
 		
-		<get dest="${docs.dir}/AdminGuide.html" src="${wiki.baseurl}/AdminGuide?show=content"/>
-		<get dest="${docs.dir}/InstallGuide.html" src="${wiki.baseurl}/InstallGuide?show=content"/>
-		<get dest="${docs.dir}/MtaGuide.html" src="${wiki.baseurl}/MtaGuide?show=content"/>
-		<get dest="${docs.dir}/DeveloperGuide.html" src="${wiki.baseurl}/DeveloperGuide?show=content"/>
-		<get dest="${docs.dir}/MailmanMigration.html" src="${wiki.baseurl}/MailmanMigration?show=content"/>
-		<get dest="${docs.dir}/SubEtha.html" src="${wiki.baseurl}/SubEtha?show=content"/>		
-		<get dest="${docs.dir}/FAQ.html" src="${wiki.baseurl}/FaQ?show=content"/>
-		
-		<!-- Write simple xsl to transform links and style things a little nicer. Should replace the replaces below...  -->
-		<!--
-		<xslt extension="*.html" style="${basedir}/wiki2html-cleanup.xsl" 
-			basedir="${download.dir}" destdir="${docs.dir}" filenameparameter="filename">
-			<param name="baseurl" expression="${wiki.baseurl}"/>
-		</xslt>
-		-->
+		<!-- Get files from wiki-->
+		<for list="${wiki.files}" param="wiki.page" parallel="yes">
+		  <sequential>
+			<get dest="${docs.dir}/@{wiki.page}.html" src="${wiki.baseurl}/@{wiki.page}?show=content"/>
+		  </sequential>
+		</for>
 		
 		<!-- Replace links in files -->
-		<replace dir="${docs.dir}" token="/p/subetha/wiki/AdminGuide" value="AdminGuide.html"/>
-		<replace dir="${docs.dir}" token="/p/subetha/wiki/InstallGuide" value="InstallGuide.html"/>
-		<replace dir="${docs.dir}" token="/p/subetha/wiki/MtaGuide" value="MtaGuide.html"/>
-		<replace dir="${docs.dir}" token="/p/subetha/wiki/DeveloperGuide" value="DeveloperGuide.html"/>
-		<replace dir="${docs.dir}" token="/p/subetha/wiki/MailmanMigration" value="MailmanMigration.html"/>
-		<replace dir="${docs.dir}" token="/p/subetha/wiki/SubEtha" value="SubEtha.html"/>
-		<replace dir="${docs.dir}" token="/p/subetha/wiki/FaQ" value="FAQ.html"/>
+		<for list="${wiki.files}" param="wiki.page">
+		  <sequential>
+			<replace dir="${docs.dir}" token="/p/subetha/wiki/${wiki.page}" value="@{wiki.page}.html"/>
+		  </sequential>
+		</for>
 		
 		<!-- link back to the wiki, if we haven't downloaded the content -->
 		<replace dir="${docs.dir}" token="/p/subetha/wiki" value="${wiki.baseurl}"/>
-
 		
 	</target>
 

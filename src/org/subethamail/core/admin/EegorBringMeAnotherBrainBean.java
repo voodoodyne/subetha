@@ -5,6 +5,7 @@
 
 package org.subethamail.core.admin;
 
+import javax.annotation.Named;
 import javax.annotation.security.RolesAllowed;
 import javax.context.ApplicationScoped;
 import javax.inject.Current;
@@ -22,6 +23,7 @@ import org.subethamail.core.post.OutboundMTA;
  * @author Scott Hernandez
  */
 @ApplicationScoped
+@Named("eegor")
 public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 {
 	/** */
@@ -37,12 +39,6 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 	 *  the "test" Deployment Descriptor bings to a anouther mail session 
 	 *  on the current test host and port. */
 	@OutboundMTA Session mailSession;
-	
-	/** */
-	public EegorBringMeAnotherBrainBean()
-	{
-		log.debug("******************* Constructing another Igor!");
-	}
 	
 	/* (non-Javadoc)
 	 * @see Plumber#log(java.lang.String)

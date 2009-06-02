@@ -232,7 +232,7 @@ public class IndexerBean implements Indexer
 		{
 			//try to get a lock.
 			updateLock.tryLock(1, TimeUnit.MILLISECONDS);
-			log.info("Updating search index");
+			log.debug("Updating search index");
 
 			try
 			{
@@ -246,12 +246,12 @@ public class IndexerBean implements Indexer
 
 				Modifier mod = mgr.modifyIndex(false);
 
-				if (log.isInfoEnabled())
-					log.info("Fetching archived entries since " + since);
+				if (log.isDebugEnabled())
+					log.debug("Fetching archived entries since " + since);
 
 				List<Mail> indexMail = this.em.findMailSince(since);
-				if (log.isInfoEnabled())
-					log.info(indexMail.size() + " messages to index");
+				if (log.isDebugEnabled())
+					log.debug(indexMail.size() + " messages to index");
 
 				for (Mail m: indexMail)
 				{
@@ -268,8 +268,8 @@ public class IndexerBean implements Indexer
 
 				mod.flush();
 
-				if (log.isInfoEnabled())
-					log.info(mod.docCount() + " total documents in index");
+				if (log.isDebugEnabled())
+					log.debug(mod.docCount() + " total documents in index");
 
 				mod.close();
 			}
@@ -281,7 +281,8 @@ public class IndexerBean implements Indexer
 		}
 		finally
 		{
-			if(updateLock.isHeldByCurrentThread()) updateLock.unlock();
+			if (updateLock.isHeldByCurrentThread())
+				updateLock.unlock();
 		}
 	}
 

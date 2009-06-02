@@ -53,7 +53,11 @@ public class SubEthaTestCase extends TestCase
 		
 		this.smtp = new Smtp();
 		this.smtp.start();
-		this.sess = Session.getDefaultInstance(new Properties());		
+		
+		Properties props = new Properties();
+		props.setProperty("mail.smtp.host", "localhost");
+		props.setProperty("mail.smtp.port", "2500");
+		this.sess = Session.getDefaultInstance(props);		
 	}
 	
 	/** */
@@ -79,6 +83,14 @@ public class SubEthaTestCase extends TestCase
 	protected byte[] createMessage(InternetAddress from, InternetAddress to) throws MessagingException, IOException
 	{
 		return this.createMessage(from, to, TEST_SUBJECT, TEST_BODY);
+	}
+	
+	/**
+	 * Create the bytes of a slightly more complicated test message
+	 */
+	protected MimeMessage createMimeMessage(InternetAddress from, InternetAddress to) throws MessagingException, IOException
+	{
+		return this.createMimeMessage(from, to, TEST_SUBJECT, TEST_BODY);
 	}
 	
 	/**

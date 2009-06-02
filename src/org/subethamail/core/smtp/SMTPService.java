@@ -5,10 +5,8 @@
 package org.subethamail.core.smtp;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.net.UnknownHostException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -17,20 +15,22 @@ import javax.inject.Current;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.common.io.LimitExceededException;
-import org.subethamail.core.injector.i.Injector;
-import org.subethamail.smtp.TooMuchDataException;
-import org.subethamail.smtp.helper.SimpleMessageListener;
-import org.subethamail.smtp.helper.SimpleMessageListenerAdapter;
 import org.subethamail.smtp.server.SMTPServer;
 
 import com.caucho.config.Service;
 
 /**
- * SubEtha's JBoss adapter for SubEthaSMTP.  The default port is 2500.  This
- * port can be overriden by a system property:
+ * SubEtha's adapter for SubEthaSMTP.  The default port is 2500 and by
+ * default it binds to all addresses.  This can be overriden by system properties:
  * 
  * -Dorg.subethamail.smtp.port=NNN
+ * -Dorg.subethamail.smtp.bind=ip_address_or_hostname
+ * 
+ * Note that this also handles a default destination for mail that is
+ * not accepted by this server.  If defined, all unclaimed mail will
+ * be sent there.  Note that mail can have multiple recipients, in which
+ * case it may get split and sent both locally and remotely (multiple times,
+ * even).  This is a configuration value set in the administration interface.
  * 
  * @author Ian McFarland
  * @author Jeff Schnitzer
@@ -42,61 +42,20 @@ import com.caucho.config.Service;
 @ApplicationScoped
 public class SMTPService implements SMTPManagement
 {
-	
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(SMTPService.class);
 	
 	/** */
 	public static final int DEFAULT_PORT = 2500;
 
-	/** Simple Listener used to collect mail for mailing lists  */
-	private SimpleMessageListener listener = new SimpleMessageListener (){
-		/**
-		 * @see SimpleMessageListener#accept(String, String)
-		 */
-		public boolean accept(String from, String recipient)
-		{
-			return injector.accept(recipient);
-		}
-
-		/**
-		 * @see SimpleMessageListener#deliver(String, String, InputStream)
-		 */
-		public void deliver(String from, String recipient, InputStream input) throws TooMuchDataException, IOException
-		{
-			try
-			{
-				if (!injector.inject(from, recipient, input))
-				{
-					if (log.isWarnEnabled())
-						log.warn("Accepted data no longer wanted for " + recipient);
-					
-					throw new RuntimeException("Data no longer wanted");
-				}
-			}
-			catch (LimitExceededException ex)
-			{
-				if (log.isWarnEnabled())
-					log.warn("Too much input data", ex);
-				
-				throw new TooMuchDataException();
-			}
-			catch (RuntimeException ex)
-			{
-				log.error("Some kind of error", ex);
-				throw ex;
-			}
-		}
-	};
-	
 	private int port = DEFAULT_PORT;
 	private String hostName = null;
 	private InetAddress binding = null;
 	
-	@Current 
-	Injector injector;
-	
 	private SMTPServer smtpServer;
+	
+	/** By getting this through injection, it gets populated with cool stuff */
+	@Current private SMTPHandler smtpHandler;
 
 	/**
 	 * Constructor looks for a port override via -Dorg.subethamail.smtp.port=NNN
@@ -108,6 +67,14 @@ public class SMTPService implements SMTPManagement
 			this.port = Integer.parseInt(System.getProperty("org.subethamail.smtp.port"));
 		}
 		catch (Throwable ignored) {}
+		
+		try
+		{
+			String bindAddress = System.getProperty("org.subethamail.smtp.bind");
+			if (bindAddress != null && !"0.0.0.0".equals(bindAddress))
+				binding = InetAddress.getByName(bindAddress);
+		}
+		catch (UnknownHostException ignored) {}
 	}
 	
 	/*
@@ -115,22 +82,16 @@ public class SMTPService implements SMTPManagement
 	 * @see org.subethamail.smtp.service.SMTPManagement#start()
 	 */
 	@PostConstruct
-	public void startServer() throws IOException
+	public void start() throws IOException
 	{
 		if (this.smtpServer != null)
 			throw new IllegalStateException("SMTPServer already running");
 		
-		String bindAddress = System.getProperty("jboss.bind.address");
-		if (bindAddress != null && !"0.0.0.0".equals(bindAddress))
-			binding = InetAddress.getByName(bindAddress);
-
-		log.info("Starting SMTP service: " + (binding==null ? "*" : binding) + ":" + port);
+		log.info("Starting SMTP service: " + (this.binding==null ? "*" : this.binding) + ":" + this.port);
 		
-		Collection<SimpleMessageListener> listeners = new ArrayList<SimpleMessageListener>(); 
-		listeners.add(listener);
-		this.smtpServer = new SMTPServer(new SimpleMessageListenerAdapter(listeners));
+		this.smtpServer = new SMTPServer(this.smtpHandler);
 		
-		this.smtpServer.setBindAddress(binding);
+		this.smtpServer.setBindAddress(this.binding);
 		this.smtpServer.setPort(this.port);
 		
 		if (this.hostName != null)
@@ -144,7 +105,7 @@ public class SMTPService implements SMTPManagement
 	 * @see org.subethamail.smtp.service.SMTPManagement#stop()
 	 */
 	@PreDestroy
-	public void stopServer()
+	public void stop()
 	{
 		log.info("Stopping SMTP service");
 		this.smtpServer.stop();

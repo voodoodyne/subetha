@@ -15,17 +15,6 @@
 	xmlns:search="urn:org.subethamail.core.search"
 	>
 
-<!--  Needs a management interface to work-->
-<!--	<resource-->
-<!--		mbean-name="subetha:name=Bootstrapper"-->
-<!--		type="org.subethamail.core.admin.BootstrapperBean" />-->
-
-<!--	Disabled for now, maybe a resin bug because it starts once in the Env load, and once in the webapp-->
-<!--	<resource-->
-<!--		mbean-name="subetha:name=SMTPService"-->
-<!--		type="org.subethamail.core.smtp.SMTPService"-->
-<!--		mbean-interface="org.subethamail.core.smtp.SMTPManagement" />-->
-
 	<!-- Every night at 4am run cleanup -->
 	<!-- ...and might as now too (in a few seconds) -->
 	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" cron="0 4 *"/>

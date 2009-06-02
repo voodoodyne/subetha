@@ -105,6 +105,16 @@ public class SubEthaEntityManager implements EntityManager
 	}
 	
 	/**
+	 * Deletes a config value if it exists
+	 */
+	public void removeConfigValue(String id)
+	{
+		Config cfg = this.find(Config.class, id);
+		if (cfg != null)
+			this.remove(cfg);
+	}
+	
+	/**
 	 * Finds an email address with the specified address.  Normalizes
 	 * the address properly before querying.
 	 */

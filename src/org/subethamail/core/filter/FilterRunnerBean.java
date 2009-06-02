@@ -36,11 +36,11 @@ import org.subethamail.entity.MailingList;
 @ApplicationScoped
 public class FilterRunnerBean implements FilterRunner, FilterRegistry
 {
-	//@Current
-	protected InjectBeanHelper<Filter> fHelper = new InjectBeanHelper<Filter>();
-
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(FilterRunnerBean.class);
+
+	//@Current
+	protected InjectBeanHelper<Filter> fHelper = new InjectBeanHelper<Filter>();
 
 	@Current
 	ScannerService ss;
@@ -82,7 +82,9 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	public Collection<Class<? extends Filter>> getFilters()
 	{
 		//if we never scanned to get the entries, scan now.
-		if(this.filters.size() == 0) {ss.scan();}
+		if (this.filters.size() == 0)
+			this.ss.scan();
+		
 		return this.filters.values();
 	}
 

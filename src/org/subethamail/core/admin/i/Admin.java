@@ -196,6 +196,11 @@ public interface Admin
 	 * Sets the address of the site postmaster.
 	 */
 	public void setPostmaster(InternetAddress address);
+	
+	/**
+	 * Sets the fallthrough host, or null to clear it.
+	 */
+	public void setFallthroughHost(String host);
 
 	/**
 	 * Deletes a mailing list.  Must be called by siteAdmin.

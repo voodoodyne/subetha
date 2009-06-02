@@ -34,7 +34,9 @@ public class ScannerService
 		try 
 		{
 			scan();
-		} catch (NullPointerException npe){
+		}
+		catch (NullPointerException npe)
+		{
 			log.error("Error scanning for Filters and Blueprints!");
 			log.error(npe.getStackTrace().toString());
 			//continue as it will get run later if the scanning failed.

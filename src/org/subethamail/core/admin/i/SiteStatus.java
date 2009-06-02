@@ -27,6 +27,7 @@ public class SiteStatus implements Serializable
 	/** Some site config params */
 	URL defaultSiteUrl;
 	InternetAddress postmasterEmail;
+	String fallthroughHost;
 	
 	protected SiteStatus()
 	{
@@ -35,7 +36,7 @@ public class SiteStatus implements Serializable
 
 	/** */
 	public SiteStatus(String encoding, int listCount, int personCount, int mailCount,
-						URL defaultSiteUrl, InternetAddress postmasterEmail)
+						URL defaultSiteUrl, InternetAddress postmasterEmail, String fallthroughHost)
 	{
 		this.defaultCharset = encoding;
 		this.listCount = listCount;
@@ -44,6 +45,7 @@ public class SiteStatus implements Serializable
 		
 		this.defaultSiteUrl = defaultSiteUrl;
 		this.postmasterEmail = postmasterEmail;
+		this.fallthroughHost = fallthroughHost;
 	}
 
 	/** */
@@ -80,5 +82,11 @@ public class SiteStatus implements Serializable
 	public InternetAddress getPostmasterEmail()
 	{
 		return this.postmasterEmail;
+	}
+	
+	/** */
+	public String getFallthroughHost()
+	{
+		return this.fallthroughHost;
 	}
 }

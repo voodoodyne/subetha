@@ -672,7 +672,8 @@ public class AdminBean extends PersonalBean implements Admin
 				this.em.countPeople(),
 				this.em.countMail(),
 				(URL)this.em.findConfigValue(Config.ID_SITE_URL),
-				(InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER)
+				(InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER),
+				(String)this.em.findConfigValue(Config.ID_FALLTHROUGH_HOST)
 			);
 	}
 
@@ -736,5 +737,15 @@ public class AdminBean extends PersonalBean implements Admin
 		// TODO:  rebuild the search index?
 
 		return true;
+	}
+
+	/* */
+	@Override
+	public void setFallthroughHost(String host)
+	{
+		if (host != null)
+			this.em.setConfigValue(Config.ID_FALLTHROUGH_HOST, host);
+		else
+			this.em.removeConfigValue(Config.ID_FALLTHROUGH_HOST);
 	}
 }

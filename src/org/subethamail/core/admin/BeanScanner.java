@@ -27,11 +27,9 @@ import com.caucho.config.inject.InjectManager;
  * the application is deployed.
  * 
  * @author Scott Hernandez
- * 
  */
-
-public class BeanScanner {
-
+public class BeanScanner
+{
 	@Current
 	BlueprintRegistry	blueReg;
 	
@@ -39,15 +37,22 @@ public class BeanScanner {
 	FilterRegistry		filtReg;
 
 	@Current Manager 	mgr;
+	
+	/** */
 	@SuppressWarnings("unchecked")
-	public void scan(){
+	public void scan()
+	{
 		Set<AbstractBean<? extends Filter>> filtBeans = ((InjectManager)mgr).resolve(Filter.class, null);
-		for (AbstractBean<? extends Filter> bean : filtBeans) {
+		
+		for (AbstractBean<? extends Filter> bean : filtBeans)
+		{
 			filtReg.register((Class<? extends Filter>)bean.getTargetClass());
 		}
 		
 		Set<AbstractBean<? extends Blueprint>> blueBeans = ((InjectManager)mgr).resolve(Blueprint.class, null);
-		for (AbstractBean<? extends Blueprint> bean : blueBeans) {
+		
+		for (AbstractBean<? extends Blueprint> bean : blueBeans)
+		{
 			blueReg.register((Class<? extends Blueprint>)bean.getTargetClass());
 		}
 	}

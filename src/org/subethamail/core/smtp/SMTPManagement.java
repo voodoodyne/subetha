@@ -37,7 +37,6 @@ public interface SMTPManagement
 	 */
 	public void setHostName(String hostname);
 	
-	// TODO: Update default bind address to resin bind address
 	/**
 	 * The address which the server is bound to. We first attempt to
 	 * lookup the 'jboss.bind.address' system property. If it is null
@@ -49,10 +48,10 @@ public interface SMTPManagement
 	 * Starts the server. 
 	 * @throws IOException 
 	 */
-	public void startServer() throws IOException;
+	public void start() throws IOException;
 	
 	/**
 	 * Stops the server. 
 	 */
-	public void stopServer();
+	public void stop();
 }

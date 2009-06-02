@@ -93,7 +93,8 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	 */
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
-		if(this.blueprints.size() == 0) {ss.scan();}
+		if (this.blueprints.size() == 0)
+			ss.scan();
 		
 		Blueprint blue = bHelper.getInstance(blueprintId);
 		

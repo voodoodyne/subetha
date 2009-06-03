@@ -1,6 +1,5 @@
 package org.subethamail.core.util;
 
-import javax.annotation.Resource;
 import javax.context.ApplicationScoped;
 import javax.inject.Produces;
 import javax.mail.Session;
@@ -20,7 +19,6 @@ import com.caucho.config.Name;
 public class Producers
 {
 	/** Our application's data source */
-	//@Resource(name="java:comp/env/jdbc/subetha")
 	@Name("jdbc/subetha")
 	private DataSource ds;
 
@@ -31,7 +29,7 @@ public class Producers
 	}
 
 	/** The JavaMail session that connects to the outbound mta */
-	@Resource(name="java:comp/env/outbound-mail")
+	@Name("outbound")
 	private Session mailSession;
 	
 	@Produces @OutboundMTA

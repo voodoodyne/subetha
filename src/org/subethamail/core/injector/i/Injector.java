@@ -71,5 +71,11 @@ public interface Injector
 	 * @throws NotFoundException if the list id is not a valid list
 	 */
 	public Date importMessage(Long listId, String envelopeSender, InputStream mailData, boolean ignoreDuplicate, Date fallbackDate) throws NotFoundException;
+	
+	/**
+	 * @return the host (and possibly port) of the fallthrough host, or null if none is configured.
+	 *  Examples:  localhost, otherserver:2525
+	 */
+	public String getFallthroughHost();
 }
 

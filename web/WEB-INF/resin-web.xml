@@ -17,11 +17,11 @@
 
 	<!-- Every night at 4am run cleanup -->
 	<!-- ...and might as now too (in a few seconds) -->
-	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" cron="0 4 *"/>
+<!--	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" cron="0 4 *"/>-->
 
 	<!-- Every 5 minutes run the indexer -->
 	<!-- ...and might as now too (in a few seconds) -->
-	<resin:ScheduledTask method="#{indexer.update}" delay="20s" period="5m"/>
+<!--	<resin:ScheduledTask method="#{indexer.update}" delay="20s" period="5m"/>-->
 
 	<!-- JMS -->
 	<jms:JmsConnectionFactory />
@@ -50,11 +50,6 @@
 
 	<ejb-server data-source="jdbc/subetha"
 		validate-database-schema="true" create-database-schema="true" />
-
-	<mail jndi-name="java:comp/env/outbound-mail">
-		<smtp-host>localhost</smtp-host>
-		<smtp-port>25</smtp-port>
-    </mail>
 
 	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">
 		<protocol uri="hessian:"/>

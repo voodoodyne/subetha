@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonInfoMixin;
-import org.subethamail.rtest.util.Smtp;
 import org.subethamail.rtest.util.SubEthaTestCase;
+import org.subethamail.wiser.Wiser;
 
 /**
  * Testing the fallthrough mechanism.
@@ -35,7 +35,7 @@ public class FallthroughTest extends SubEthaTestCase
 	public static final int FALLTHROUGH_PORT = 2526;
 
 	/** */
-	Smtp fallthrough;
+	Wiser fallthrough;
 	AdminMixin admin;
 	MailingListMixin ml;
 	PersonInfoMixin pers;
@@ -48,8 +48,7 @@ public class FallthroughTest extends SubEthaTestCase
 	{
 		super.setUp();
 		
-		this.fallthrough = new Smtp();
-		this.fallthrough.setPort(FALLTHROUGH_PORT);
+		this.fallthrough = new Wiser(FALLTHROUGH_PORT);
 		this.fallthrough.start();
 		
 		this.admin = new AdminMixin();
@@ -73,8 +72,9 @@ public class FallthroughTest extends SubEthaTestCase
 	{
 		MimeMessage msg = this.createMimeMessage(this.pers.getAddress(), this.ml.getAddress());
 		Transport.send(msg);
+		Thread.sleep(1000);
 		
-		assertEquals(0, this.fallthrough.countSubject(TEST_SUBJECT));
+		assertEquals(0, this.fallthrough.getMessages().size());
 		assertEquals(0, this.smtp.countSubject(TEST_SUBJECT));
 		assertEquals(1, this.admin.getArchiver().countMailByList(this.ml.getId()));
 	}
@@ -87,8 +87,9 @@ public class FallthroughTest extends SubEthaTestCase
 		MimeMessage msg = this.createMimeMessage(this.pers.getAddress(), this.ml.getAddress());
 		msg.addRecipient(RecipientType.TO, ml2.getAddress());
 		Transport.send(msg);
+		Thread.sleep(1000);
 		
-		assertEquals(0, this.fallthrough.countSubject(TEST_SUBJECT));
+		assertEquals(0, this.fallthrough.getMessages().size());
 		assertEquals(0, this.smtp.countSubject(TEST_SUBJECT));
 		assertEquals(1, this.admin.getArchiver().countMailByList(this.ml.getId()));
 		assertEquals(1, this.admin.getArchiver().countMailByList(ml2.getId()));
@@ -101,8 +102,9 @@ public class FallthroughTest extends SubEthaTestCase
 		
 		MimeMessage msg = this.createMimeMessage(this.pers.getAddress(), pers2.getAddress());
 		Transport.send(msg);
+		Thread.sleep(1000);
 		
-		assertEquals(1, this.fallthrough.countSubject(TEST_SUBJECT));
+		assertEquals(1, this.fallthrough.getMessages().size());
 		assertEquals(0, this.smtp.countSubject(TEST_SUBJECT));
 		assertEquals(0, this.admin.getArchiver().countMailByList(this.ml.getId()));
 	}
@@ -116,8 +118,9 @@ public class FallthroughTest extends SubEthaTestCase
 		MimeMessage msg = this.createMimeMessage(this.pers.getAddress(), pers2.getAddress());
 		msg.addRecipient(RecipientType.TO, pers3.getAddress());
 		Transport.send(msg);
+		Thread.sleep(1000);
 		
-		assertEquals(2, this.fallthrough.countSubject(TEST_SUBJECT));
+		assertEquals(2, this.fallthrough.getMessages().size());
 		assertEquals(0, this.smtp.countSubject(TEST_SUBJECT));
 		assertEquals(0, this.admin.getArchiver().countMailByList(this.ml.getId()));
 	}
@@ -130,8 +133,9 @@ public class FallthroughTest extends SubEthaTestCase
 		MimeMessage msg = this.createMimeMessage(this.pers.getAddress(), this.ml.getAddress());
 		msg.addRecipient(RecipientType.TO, pers2.getAddress());
 		Transport.send(msg);
+		Thread.sleep(1000);
 		
-		assertEquals(1, this.fallthrough.countSubject(TEST_SUBJECT));
+		assertEquals(1, this.fallthrough.getMessages().size());
 		assertEquals(0, this.smtp.countSubject(TEST_SUBJECT));
 		assertEquals(1, this.admin.getArchiver().countMailByList(this.ml.getId()));
 	}

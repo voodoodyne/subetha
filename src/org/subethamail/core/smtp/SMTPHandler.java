@@ -12,9 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.client.SMTPException;
 import org.subethamail.client.SmartClient;
 import org.subethamail.core.injector.i.Injector;
-import org.subethamail.core.util.SubEtha;
-import org.subethamail.core.util.SubEthaEntityManager;
-import org.subethamail.entity.Config;
 import org.subethamail.smtp.MessageContext;
 import org.subethamail.smtp.MessageHandler;
 import org.subethamail.smtp.MessageHandlerFactory;
@@ -57,7 +54,6 @@ public class SMTPHandler implements MessageHandlerFactory
 		
 	/** */
 	protected @Current Injector injector;
-	protected @SubEtha SubEthaEntityManager em;
 
 	/** */
 	public SMTPHandler()
@@ -210,7 +206,7 @@ public class SMTPHandler implements MessageHandlerFactory
 		{
 			if (this.fallthroughHost == null)
 			{
-				String hostAndPort = (String)em.findConfigValue(Config.ID_FALLTHROUGH_HOST);
+				String hostAndPort = injector.getFallthroughHost();
 				if (hostAndPort != null)
 				{
 					String[] split = hostAndPort.split(":");

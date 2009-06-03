@@ -29,16 +29,15 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(EegorBringMeAnotherBrainBean.class);
 
-	// Neither of these work in resin 4.0.0
-	//@Resource SessionContext sessionContext;
-	//@Current SessionContext sessionContext;
-
+	/** See the javadocs for Brain to see why this silly thing exists */
 	@Current Brain brain;
 	
 	/** TODO: This should be done using a Deployment Descriptors (JSR299) so that 
-	 *  the "test" Deployment Descriptor bings to a anouther mail session 
+	 *  the "test" Deployment Descriptor binds to a another mail session 
 	 *  on the current test host and port. */
-	@OutboundMTA Session mailSession;
+	//@Name("outbound")
+	@OutboundMTA
+	Session mailSession;
 	
 	/* (non-Javadoc)
 	 * @see Plumber#log(java.lang.String)
@@ -58,8 +57,8 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 		
 		if (!this.isTestModeEnabled())
 		{
-			this.brain.mailSmtpHost = mailSession.getProperties().getProperty("mail.smtp.host");
-			this.brain.mailSmtpPort = mailSession.getProperties().getProperty("mail.smtp.port");
+			this.brain.mailSmtpHost = this.mailSession.getProperties().getProperty("mail.smtp.host");
+			this.brain.mailSmtpPort = this.mailSession.getProperties().getProperty("mail.smtp.port");
 		}
 		
 		// If there was a port, separate the two
@@ -68,8 +67,8 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 		String newPort = (parts.length > 1) ? parts[1] : "25";
 
 		//store old value, and update the overrides
-		mailSession.getProperties().setProperty("mail.smtp.host", newHost);
-		mailSession.getProperties().setProperty("mail.smtp.port", newPort);
+		this.mailSession.getProperties().setProperty("mail.smtp.host", newHost);
+		this.mailSession.getProperties().setProperty("mail.smtp.port", newPort);
 	}
 
 	/*
@@ -88,8 +87,8 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 		{
 			log.info("Restoring base mail configuration");
 
-			mailSession.getProperties().setProperty("mail.smtp.host", this.brain.mailSmtpHost);
-			mailSession.getProperties().setProperty("mail.smtp.port", this.brain.mailSmtpPort);
+			this.mailSession.getProperties().setProperty("mail.smtp.host", this.brain.mailSmtpHost);
+			this.mailSession.getProperties().setProperty("mail.smtp.port", this.brain.mailSmtpPort);
 
 			this.brain.mailSmtpHost = null;
 			this.brain.mailSmtpPort = null;

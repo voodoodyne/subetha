@@ -175,7 +175,8 @@ public class SMTPService
 	}
 
 	/**
-	 * The address which the server is bound to.
+	 * The host to which all non-list mail that goes through the SMTP intake
+	 * is forwarded.  Null means all non-list mail will be rejected.
 	 */
 	public String getFallbackHost()
 	{
@@ -183,13 +184,13 @@ public class SMTPService
 	}
 	
 	/**
-	 * The address which the server is bound to.
+	 * The host to which all non-list mail that goes through the SMTP intake
+	 * is forwarded.  Null means all non-list mail will be rejected.
+	 * 
+	 * This can be set while the server is running.
 	 */
 	public void setFallbackHost(String value)
 	{
-		if (this.smtpServer != null)
-			throw new IllegalStateException("SMTPServer already running");
-		
 		this.fallbackHost = value;
 	}
 }

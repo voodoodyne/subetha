@@ -60,7 +60,9 @@
 
   * What about 8bit MIME?
 
-  JavaMail will parse messages in 8BITMIME just fine. However, by default, JavaMail does not send mail in 8BITMIME. This can be turned on by setting the attribute {{{mail.smtp.allow8bitmime}}} to {{{true}}} in the {{{<mail ...>}}} configuration (see the InstallGuide for the location to do this). We DO NOT recommend doing this with the current version of JavaMail. We have found at least one bug whereby quoted-printable content with nonascii characters will have it's header changed to "8bit" without updating the actual contents. If this defect in JavaMail is corrected, this FAQ entry will change.
+  JavaMail will parse messages in 8BITMIME just fine. However, by default, JavaMail does not send mail in 8BITMIME. This can be turned on by setting the attribute {{{mail.smtp.allow8bitmime}}} to {{{true}}} in the {{{<mail ...>}}} configuration (see example-subetha.xml). 
+
+  There have been known bugs in past version of JavaMail (see [http://osdir.com/ml/java.sun.javamail.general/2006-05/msg00030.html here]) which made seriously broke this setting.  Release notes suggest this may have been fixed in JavaMail 1.4.1, which is included with Resin 4.0.0.  Enable at your own risk.
 
 == Design Questions ==
 

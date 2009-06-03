@@ -3,6 +3,7 @@
 = Apache James =
 
 Let the mailet {{{RemoteDelivery}}} to relay the mail to SubEtha server, just follow these steps.
+
  
 1. Setup James normally by editing {{{ ${james_home}\apps\james\SAR-INF\config.xml }}}
   {{{

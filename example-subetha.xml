@@ -19,7 +19,10 @@
 	<mail name="outbound">
 		<smtp-host>localhost</smtp-host>
 		<smtp-port>2525</smtp-port>
-    </mail>
+		<!-- See http://code.google.com/p/subetha/wiki/FaQ - enable at your own risk
+		<properties>mail.smtp.allow8bitmime=true</properties>
+		-->
+	</mail>
 
 	<!-- 
 		Your database.  SubEtha will create the schema when it first connects.

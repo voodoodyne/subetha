@@ -14,22 +14,6 @@
   <logger name="org.subethamail" level="finest" />
   }}}
 
-== Huh, Ads ==
-
-  * What's with the google ad?
-
-  Developing SubEtha was a major effort, requiring several months of fulltime work by several engineers motivated by the bizarre notion "wouldn't it be cool!" The thought that we might be able to get beer money out of this project didn't occur to us until long after the fact.
-
-  Rather than asking for donations, we've added the least obtrusive google ad we could find to the dead space under the menus. We hope it's not too irritating, but if it is, you are welcome to remove it. We won't be upset.
-
-  * How do I remove the google ad?
-
-  Run the system at least once (to unpack the war), then edit the file ${resin.dir}/webapps/se/WEB-INF/tags/trim/list.tag.  There is a comment next to the HTML that you should remove.
-
-  * Can't you just make that a config option?
-
-  Come now. We went through all this trouble to write SubEtha, the least you can do is put a little effort into your mean (mean!) attempts to circumvent our beer money collection scheme.
-
 == Tech Specs ==
 
   * What JDK version does SubEtha require?
@@ -71,3 +55,19 @@
     # They're huge, and we don't want to have to parse them when we're rendering the archive page, or really ever. 
     # They need to be accessed separately as links from the archives anyways.
     # Message bodies without attachments are small enough to store in the 2nd level cache, making archive reading fast and scalable.
+
+== Huh, Ads ==
+
+  * What's with the google ad?
+
+  Developing SubEtha was a major effort, requiring several months of fulltime work by several engineers motivated by the bizarre notion "wouldn't it be cool!" The thought that we might be able to get beer money out of this project didn't occur to us until long after the fact.
+
+  Rather than asking for donations, we've added the least obtrusive google ad we could find to the dead space under the menus. We hope it's not too irritating, but if it is, you are welcome to remove it. We won't be upset.
+
+  * How do I remove the google ad?
+
+  Run the system at least once (to unpack the war), then edit the file ${resin.dir}/webapps/se/WEB-INF/tags/trim/list.tag.  There is a comment next to the HTML that you should remove.
+
+  * Can't you just make that a config option?
+
+  Come now. We went through all this trouble to write SubEtha, the least you can do is put a little effort into your mean (mean!) attempts to circumvent our beer money collection scheme.

@@ -15,5 +15,8 @@ This option allows multiple version to be deployed with the latest one in use. T
 This option allows the application to be deployed across a cluster easily. In this case, special attention must be made to also deploy the configuration across the cluster (or at least each node in the cluster manually, if there are differences).
 
 [http://caucho.com/resin/doc/webapp-deploy.xtp#Deploying%20to%20a%20live%20server%20without%20interruption resin-docs]
+
 == isolated webapp ==
 This options requires creating a new {{{<web-app-deployment ...>}}} in ${resin.dir}/conf/resin.xml.
+
+[http://caucho.com/resin/doc/webapp-deploy.xtp#Custom%20web-app%20with%20.war%20file resin-docs]

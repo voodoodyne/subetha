@@ -18,4 +18,4 @@ This only allows you to relay whole domains into SubEtha.  You cannot have list 
   makemap hash /etc/mail/mailertable < /etc/mail/mailertable
   }}}
 
-[http://www.subethamail.org/se/archive_msg.jsp?msgId=33658 "Another user shared his experiences on the users list."]
+This may not work if you are running SubEtha and Sendmail on the same machine.  See [http://www.subethamail.org/se/archive_msg.jsp?msgId=33658 this user's experience].

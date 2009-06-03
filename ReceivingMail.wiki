@@ -1,0 +1,51 @@
+#summary How to get mail into SubEtha in the first place
+
+= Receiving Mail =
+
+You've followed the InstallGuide and now you have a properly configured instance of SubEtha running on your host.  Only one question remains - how does mail get into SubEtha in the first place?
+
+There are four general strategies, arranged here in order of increasing complexity:
+
+== Take All Mail ==
+
+The simplest solution is to run SubEtha's SMTP server on port 25 and accept all mail for your domains that contain lists.  Mail for addresses that are not SubEtha lists will be rejected.
+
+The advantage of this approach is that you don't need to touch the configuration of Postfix Exim, etc.  Create your MX records, run SubEtha, and go.  On Unix-derived systems, you might need some help UsingPort25.
+
+The downside of this approach is that you cannot have mailing lists on the same domain that you have personal mailboxes; for example, you cannot have somelist@example.com and yourpersonalmailbox@example.com.  You would need to have @example.com point to your normal MTA and create one or more separate domains for lists, for example @lists.example.com.
+
+== Use Fallback Host ==
+
+SubEtha 2.x introduces a new way to handle mail.  If you Take All Mail as above, you can also configure a "fallback host" to which SubEtha will direct all mail which is not intended for SubEtha.
+
+Let's say you have several lists running @example.com but also have personal mailboxes @example.com running under your local MTA (say, Postfix).
+
+  # Configure your MTA to run on a port other than 25 (say, 2525).
+  # Configure SubEtha to run on port 25 (see UsingPort25).
+  # Configure a fallback host of "localhost:2525" (see [http://subetha.googlecode.com/svn/trunk/example-subetha.xml example-subetha.xml]).
+
+ Now, when a piece of mail arrives at SubEtha:
+
+  * If it is for somelist@example.com, SubEtha will process it approprately.
+  * If it is for yourpersonalmailbox@example.com, SubEtha will proxy it to the fallback host.
+  * If it is for both somelist@example.com and yourpersonalmailbox@example.com, SubEtha makes two copies and handles them appropriately.
+  * If it is for a mailbox that does not exist at the fallback host, SubEtha rejects the recipient during the SMTP exchange.
+
+The downsides of this approach:
+
+  * This is a new feature, caveat emptor.
+  * Since your MTA sees SubEtha as the originating IP address of the connection, it may confuse spam-fighting features like DNS blocklists and SPF enforcement.  You should turn these off.
+
+== Configure Your MTA To Relay Mail Into SubEtha ==
+
+If you aren't comfortable running SubEtha publicly on port 25, or you have special needs that require your MTA to be the initial recipient of mail, it is possible to put SubEtha behind your MTA.  This is significantly more complicated than the above approaches and requires a considerable amount of MTA-specific configuration.
+
+The general strategy is that you tell your MTA that it should relay mail into SubEtha's SMTP server running on port 2500.  Depending on the MTA you might be able to relay whole domains (ie, @lists.example.com) or specific individual mailboxes (somelist@example.com).
+
+For more info, pick your MTA:  UsingPostfix, UsingSendmail, UsingExim, UsingQmail, UsingMicrosoftExchange, and UsingApacheJames.
+
+== Use An Injection Script ==
+
+Script injection is similar to how Mailman, Majordomo, EZMLM, and other mailing list managers work. You can directly inject a piece of mail by calling a method on SubEtha's remote API or a much simpler HTTP inject interface that SubEtha provides. This works, but it's often difficult to configure in MTAs, especially preserving the out-of-band sender envelope information.
+
+You can find a [http://subetha.googlecode.com/svn/trunk/bin/inject.py simple python script] that does injection in the bin directory of the distribution.  Installing it into your MTA is an excercise for the reader.

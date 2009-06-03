@@ -6,10 +6,10 @@
 Developer setup instructions are the same as described in the InstallGuide. Take special note of the instructions below if you wish to run the unit tests, or build.
 
 == Eclipse Setup ==
-The core developers use [http://eclipse.org/ "Eclipse"] as their IDE (some would say for lack of something better). We suggest you do as well; to fit in if for now other reason. =)
+The core developers use [http://eclipse.org/ Eclipse] as their IDE (some would say for lack of something better).
 
 === SVN Checkout ===
-In order to setup Eclipse, you should first make sure to install the [http://subclipse.tigris.org/ "Subclipse"] plugin. Once you have installed that plugin. Select File->Import->Checkout projects from SVN. Select "Create a new repository location". Enter the URL for SubEtha's repository: {{{http://subetha.googlecode.com/svn/trunk}}}
+In order to setup Eclipse, you should first make sure to install the [http://subclipse.tigris.org/ Subclipse] plugin. Once you have installed that plugin. Select File->Import->Checkout projects from SVN. Select "Create a new repository location". Enter the URL for SubEtha's repository: {{{http://subetha.googlecode.com/svn/trunk}}}
 
 === Resin Classpath Variable ===
 Once you have the project checked out you need to define the location of *SUBETHA_RESIN_HOME* in Eclipse. Select Project->Properties. Java Build Path->Add Variable. Configure Variables->New and set the name to *SUBETHA_RESIN_HOME* and the folder location where you installed RESIN. Now, Eclipse should properly find all the right libraries it needs.
@@ -19,8 +19,8 @@ The next step is to build SubEtha. From the Java perspective, select Window->Sho
 
 === Suggested Eclipse Plugins ===
   
-  *  *Check Style*: [http://eclipse-cs.sourceforge.net/ "http://eclipse-cs.sourceforge.net/"]
-  *  *Subclipse*: [http://subclipse.tigris.org/ "http://subclipse.tigris.org/"]
+  *  [http://subclipse.tigris.org/ Subclipse]
+  *  [http://eclipse-cs.sourceforge.net/ Check Style]
 
 === Linked Resources (Optional) ===
 
@@ -41,15 +41,15 @@ The subdirectories correspond to various components:
  
   * src - The main source tree for the application. Sub-sections are broken up as described below.
  
-  * src/.../*i* - Interface (API) layer 
+  * src/.../i/... - Public interface (API) layer which gets packaged into subetha-client.jar.  Can be called remotely.
 
-  * src/.../*common* - A common jar of utility classes, shared by all components. Includes some constants defined for the data model.
+  * src/.../common/... - Common utility classes, shared by all components.
 
-  * src/.../*core* - The core business logic, implemented as a set of session EJBs. There may also be some service EJBs here. There is also a special component built, a sar, which contains thirdparty jars and some configuration instructions to JBoss.
+  * src/.../core/... - The core business logic, implemented as a set of EJBs and "web beans".
 
-  * src/.../*plugin* - Implementation of all the plugins distributed with SubEtha. Note that the plugin interfaces are part of core and built into the core api jar.
+  * src/.../plugin/... - Implementation of all the plugins distributed with SubEtha. Note that the plugin interfaces are part of core and built into the core api jar.
 
-  * src/.../*entity* - The data model. Contains EJB3 entity beans and a simple session EJB Data Access Object pattern. All queries are defined here as well.
+  * src/.../entity/... - The data model. Contains EJB3 entity beans and all queries.
 
   * rtest - All junit regression testing code and instructions. JUnit tests are remote clients to the core ejb interface.
 
@@ -65,7 +65,8 @@ There are a number of tests that can run against subetha to verify the installat
 
 How to run the JUnit regression tests from ant:
   * Make sure the code you want to test is deployed.  {{{ant deploy}}} will build the latest and deploy it.
-  * Make sure port 2500 and 2525 are free; the unit tests start a mock SMTP server on port 2525.
+  * SubEtha must be running its SMTP service on port 2500.
+  * Make sure port 2525 and 2526 are free; the unit tests start mock SMTP servers on these ports.
  
   * Start Resin. The unit tests are run against the live container. 
   * Run  {{{ant junit}}}. All your regression tests will run.

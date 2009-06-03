@@ -22,7 +22,7 @@ import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.injector.i.Injector;
-import org.subethamail.core.smtp.SMTPManagement;
+import org.subethamail.core.smtp.SMTPService;
 
 import com.caucho.config.Service;
 
@@ -35,7 +35,7 @@ import com.caucho.config.Service;
 public class PostfixTcpTableService implements PostfixTcpTableManagement
 {
 	@Current Injector injector;
-	@Current SMTPManagement smtpManagement;
+	@Current SMTPService smtpService;
 
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(PostfixTcpTableService.class);
@@ -95,12 +95,11 @@ public class PostfixTcpTableService implements PostfixTcpTableManagement
 			boolean accepted = injector.accept(line);
 			if (accepted)
 			{
-				int smtpPort = smtpManagement.getPort();
-				InetAddress binding = smtpManagement.getBinding();
+				int smtpPort = smtpService.getPort();
+				
+				InetAddress binding = smtpService.getBinding();
 				if (binding == null)
-				{
 					binding = InetAddress.getLocalHost();
-				}
 
 				session.write("200 smtp:[" + binding.getHostAddress() + "]:" + smtpPort);
 			}

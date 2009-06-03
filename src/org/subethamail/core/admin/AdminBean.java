@@ -32,6 +32,7 @@ import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListDataPlus;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.InjectedQueueItem;
+import org.subethamail.core.smtp.SMTPService;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
@@ -82,6 +83,9 @@ public class AdminBean extends PersonalBean implements Admin
 //	@InjectQueue
 	@Name("inject")	
 	BlockingQueue q;
+
+	/** Needed to get/set the fallback host */
+	@Current SMTPService smtpService;
 
 	/**
 	 * For generating random passwords.
@@ -673,7 +677,7 @@ public class AdminBean extends PersonalBean implements Admin
 				this.em.countMail(),
 				(URL)this.em.findConfigValue(Config.ID_SITE_URL),
 				(InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER),
-				(String)this.em.findConfigValue(Config.ID_FALLTHROUGH_HOST)
+				this.smtpService.getFallbackHost()
 			);
 	}
 
@@ -741,11 +745,8 @@ public class AdminBean extends PersonalBean implements Admin
 
 	/* */
 	@Override
-	public void setFallthroughHost(String host)
+	public void setFallbackHost(String host)
 	{
-		if (host != null)
-			this.em.setConfigValue(Config.ID_FALLTHROUGH_HOST, host);
-		else
-			this.em.removeConfigValue(Config.ID_FALLTHROUGH_HOST);
+		this.smtpService.setFallbackHost(host);
 	}
 }

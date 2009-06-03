@@ -5,13 +5,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Current;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.client.SMTPException;
 import org.subethamail.client.SmartClient;
-import org.subethamail.core.injector.i.Injector;
 import org.subethamail.smtp.MessageContext;
 import org.subethamail.smtp.MessageHandler;
 import org.subethamail.smtp.MessageHandlerFactory;
@@ -53,11 +50,12 @@ public class SMTPHandler implements MessageHandlerFactory
 	static final int DATA_DEFERRED_SIZE = 1024 * 1024 * 10;
 		
 	/** */
-	protected @Current Injector injector;
+	protected SMTPService smtpService;
 
 	/** */
-	public SMTPHandler()
+	public SMTPHandler(SMTPService service)
 	{
+		this.smtpService = service;
 	}
 
 	/* */
@@ -76,7 +74,7 @@ public class SMTPHandler implements MessageHandlerFactory
 		String from;
 		
 		List<String> ourLists = new ArrayList<String>();
-		SmartClient fallthroughHost;
+		SmartClient fallbackConnection;
 		
 		/** */
 		Handler(MessageContext ctx)
@@ -95,13 +93,13 @@ public class SMTPHandler implements MessageHandlerFactory
 		@Override
 		public void recipient(String recipient) throws RejectException
 		{
-			if (injector.accept(recipient))
+			if (smtpService.getInjector().accept(recipient))
 			{
 				this.ourLists.add(recipient);
 			}
 			else
 			{
-				SmartClient client = this.getFallthroughHost();
+				SmartClient client = this.getFallbackConnection();
 				if (client == null)
 				{
 					// No defaulting config, reject it
@@ -194,19 +192,19 @@ public class SMTPHandler implements MessageHandlerFactory
 		@Override
 		public void done()
 		{
-			if (this.fallthroughHost != null)
-				this.fallthroughHost.close();
+			if (this.fallbackConnection != null)
+				this.fallbackConnection.close();
 		}
 
 		/** 
 		 * Gets the current connection to the remote host, or creates one.
 		 * @throws RejectException if something goes wrong connecting to the backend 
 		 */
-		SmartClient getFallthroughHost() throws RejectException
+		SmartClient getFallbackConnection() throws RejectException
 		{
-			if (this.fallthroughHost == null)
+			if (this.fallbackConnection == null)
 			{
-				String hostAndPort = injector.getFallthroughHost();
+				String hostAndPort = smtpService.getFallbackHost();
 				if (hostAndPort != null)
 				{
 					String[] split = hostAndPort.split(":");
@@ -214,7 +212,7 @@ public class SMTPHandler implements MessageHandlerFactory
 					
 					try
 					{
-						this.fallthroughHost = new SmartClient(split[0], port, this.ctx.getSMTPServer().getHostName());
+						this.fallbackConnection = new SmartClient(split[0], port, this.ctx.getSMTPServer().getHostName());
 					}
 					catch (IOException e)
 					{
@@ -223,7 +221,7 @@ public class SMTPHandler implements MessageHandlerFactory
 				}
 			}
 			
-			return this.fallthroughHost;
+			return this.fallbackConnection;
 		}
 		
 		/** Makes a nice list of deliverers based on who wants our data */
@@ -232,10 +230,10 @@ public class SMTPHandler implements MessageHandlerFactory
 			List<Deliverer> result = new ArrayList<Deliverer>(this.ourLists.size() + 1);
 			
 			for (String list: this.ourLists)
-				result.add(new OurDeliverer(injector, this.from, list));
+				result.add(new OurDeliverer(smtpService.getInjector(), this.from, list));
 			
-			if (this.fallthroughHost != null && this.fallthroughHost.sentTo())
-				result.add(new FallthroughDeliverer(this.fallthroughHost));
+			if (this.fallbackConnection != null && this.fallbackConnection.sentTo())
+				result.add(new FallbackDeliverer(this.fallbackConnection));
 			
 			return result;
 		}

@@ -48,7 +48,6 @@ import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.VERPAddress;
-import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
@@ -768,12 +767,5 @@ public class InjectorBean implements Injector
 					break;
 			}
 		}
-	}
-
-	/* */
-	@Override
-	public String getFallthroughHost()
-	{
-		return (String)this.em.findConfigValue(Config.ID_FALLTHROUGH_HOST);
 	}
 }

@@ -200,7 +200,7 @@ public interface Admin
 	/**
 	 * Sets the fallthrough host, or null to clear it.
 	 */
-	public void setFallthroughHost(String host);
+	public void setFallbackHost(String host);
 
 	/**
 	 * Deletes a mailing list.  Must be called by siteAdmin.

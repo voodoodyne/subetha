@@ -49,27 +49,8 @@
 						The default url for the site, included in the text of
 						"forgot your password" et al emails.
 					</div>
-					<div><small>Example: http://www.example.com/se/</small></td>
-			</tr>
-			<tr>
-				<td>Fallthrough Mail Host</td>
-				<td	<c:if test="${!empty model.errors.fallthroughHost}">
-						class="error"
-					</c:if>>
-					<input type="text" size="40" name="fallthroughHost" value="<c:out value="${siteStatus.fallthroughHost}"/>" />
-					<c:if test="${!empty model.errors.fallthroughHost}">
-						<p class="error"><c:out value="${model.errors.fallthroughHost}" /></p>
-					</c:if>
+					<div><small>Example: http://www.example.com/se/</small></div>
 				</td>
-				<td>
-					<div>
-						If specified, SubEtha will proxy to another host all SMTP exchanges
-						which are not intended for active lists on this server.
-						This allows you to run SubEtha on port 25, facing the world,
-						in concert with your MTA but without altering your MTA configuration.
-						See the administration documentation for more details.
-					</div>
-					<div><small>Example: localhost:2525</small></td>
 			</tr>
 			</tbody>
 		</table>

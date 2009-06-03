@@ -8,6 +8,7 @@
 
 <web-app xmlns="http://caucho.com/ns/resin"
 	xmlns:resin="urn:java:com.caucho.resin"
+	xmlns:smtp="urn:java:org.subethamail.core.smtp"
 	>
 	
 	<!--
@@ -40,7 +41,27 @@
 			<user>subetha</user>
 			<password>subetha</password>
 		</driver>
-	</database>		
+	</database>	
+	-->
+
+	<!-- DO NOT UNCOMMENT ON ANYTHING BELOW THIS LINE, IT REQUIRES A FUTURE VERSION OF RESIN -->
+
+	<!--
+		This lets you override the parameters of the builtin SMTP server.  All
+		of the fields are optional.
+
+		A note about fallbackHost:  If specified, SubEtha will proxy
+		to another host all SMTP exchanges which are not intended
+		for active lists on this server.  This allows you to run SubEtha
+		on port 25, facing the world, in concert with your MTA but without
+		altering your MTA configuration. See the administration documentation
+		for more details.
+
+	<smtp:SMTPService>
+		<port>2500</port>
+		<bindAddress>yourinterface</bindAddress>
+		<fallbackHost>localhost:2525</fallbackHost>
+	</smtp:SMTPService>
 	-->
 
 </web-app>

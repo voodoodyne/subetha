@@ -44,7 +44,6 @@ public class Config implements Serializable, Comparable<Config>
 
 	public static final String ID_SITE_POSTMASTER = "sitePostmaster";
 	public static final String ID_SITE_URL = "siteUrl";
-	public static final String ID_FALLTHROUGH_HOST = "smtpDefaultHost";
 
 	/** */
 	@Id

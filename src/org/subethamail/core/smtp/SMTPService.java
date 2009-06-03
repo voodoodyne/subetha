@@ -15,32 +15,28 @@ import javax.inject.Current;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.subethamail.core.injector.i.Injector;
 import org.subethamail.smtp.server.SMTPServer;
-
-import com.caucho.config.Service;
 
 /**
  * SubEtha's adapter for SubEthaSMTP.  The default port is 2500 and by
- * default it binds to all addresses.  This can be overriden by system properties:
+ * default it binds to all addresses.  This can be overriden by setting
+ * the various properties in the subetha.xml configuration file.
  * 
- * -Dorg.subethamail.smtp.port=NNN
- * -Dorg.subethamail.smtp.bind=ip_address_or_hostname
- * 
- * Note that this also handles a default destination for mail that is
+ * Note that this also handles a fallback destination for mail that is
  * not accepted by this server.  If defined, all unclaimed mail will
  * be sent there.  Note that mail can have multiple recipients, in which
  * case it may get split and sent both locally and remotely (multiple times,
- * even).  This is a configuration value set in the administration interface.
+ * even).
  * 
  * @author Ian McFarland
  * @author Jeff Schnitzer
  * @author Jon Stevens
  * @author Scott Hernandez
  */
-
-@Service
+//@Service
 @ApplicationScoped
-public class SMTPService implements SMTPManagement
+public class SMTPService
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(SMTPService.class);
@@ -48,38 +44,31 @@ public class SMTPService implements SMTPManagement
 	/** */
 	public static final int DEFAULT_PORT = 2500;
 
+	/** */
 	private int port = DEFAULT_PORT;
 	private String hostName = null;
-	private InetAddress binding = null;
+	private String bindAddress = null;
+	private String fallbackHost = null;
 	
+	/** */
 	private SMTPServer smtpServer;
 	
-	/** By getting this through injection, it gets populated with cool stuff */
-	@Current private SMTPHandler smtpHandler;
+	/** */
+	@Current Injector injector;
 
 	/**
-	 * Constructor looks for a port override via -Dorg.subethamail.smtp.port=NNN
 	 */
 	public SMTPService()
 	{
-		try
-		{
-			this.port = Integer.parseInt(System.getProperty("org.subethamail.smtp.port"));
-		}
-		catch (Throwable ignored) {}
-		
-		try
-		{
-			String bindAddress = System.getProperty("org.subethamail.smtp.bind");
-			if (bindAddress != null && !"0.0.0.0".equals(bindAddress))
-				binding = InetAddress.getByName(bindAddress);
-		}
-		catch (UnknownHostException ignored) {}
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.smtp.service.SMTPManagement#start()
+	/** This is used privately by the Handler */
+	Injector getInjector()
+	{
+		return this.injector;
+	}
+	
+	/**
 	 */
 	@PostConstruct
 	public void start() throws IOException
@@ -87,11 +76,14 @@ public class SMTPService implements SMTPManagement
 		if (this.smtpServer != null)
 			throw new IllegalStateException("SMTPServer already running");
 		
-		log.info("Starting SMTP service: " + (this.binding==null ? "*" : this.binding) + ":" + this.port);
+		log.info("Starting SMTP service: " + (this.bindAddress==null ? "*" : this.bindAddress) + ":" + this.port);
 		
-		this.smtpServer = new SMTPServer(this.smtpHandler);
+		this.smtpServer = new SMTPServer(new SMTPHandler(this));
+
+		InetAddress binding = this.getBinding();
+		if (binding != null)
+			this.smtpServer.setBindAddress(binding);
 		
-		this.smtpServer.setBindAddress(this.binding);
 		this.smtpServer.setPort(this.port);
 		
 		if (this.hostName != null)
@@ -99,10 +91,23 @@ public class SMTPService implements SMTPManagement
 		
 		this.smtpServer.start();
 	}
+	
+	/** @return a more processed form of the address, or null if none can be determined */
+	public InetAddress getBinding()
+	{
+		if (this.bindAddress != null)
+		{
+			try
+			{
+				return InetAddress.getByName(this.bindAddress);
+			}
+			catch (UnknownHostException ignored) {}
+		}
+		
+		return null;
+	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.smtp.service.SMTPManagement#stop()
+	/**
 	 */
 	@PreDestroy
 	public void stop()
@@ -112,9 +117,8 @@ public class SMTPService implements SMTPManagement
 		this.smtpServer = null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.smtp.service.SMTPManagement#setPort(int)
+	/**
+	 * This can only be set on a stopped service.
 	 */
 	public void setPort(int port)
 	{
@@ -124,19 +128,16 @@ public class SMTPService implements SMTPManagement
 		this.port = port;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.smtp.service.SMTPManagement#getPort()
+	/**
+	 * When the SMTP server starts, it will listen on this port.
 	 */
 	public int getPort()
 	{
 		return this.port;
 	}
 
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.smtp.service.SMTPManagement#setHostName(java.lang.String)
+	/**
+	 * Sets the hostname the SMTP service reports.  If null, one is guessed at.
 	 */
 	public void setHostName(String hostname)
 	{
@@ -146,17 +147,49 @@ public class SMTPService implements SMTPManagement
 		this.hostName = hostname;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.smtp.service.SMTPManagement#getHostName()
+	/**
+	 * The hostname the SMTP service reports.  Defaults to null (system takes a guess).
 	 */
 	public String getHostName()
 	{
 		return this.hostName;
 	}
 
-	public InetAddress getBinding()
+	/**
+	 * The address which the server is bound to.
+	 */
+	public String getBindAddress()
 	{
-		return this.binding;
+		return this.bindAddress;
+	}
+	
+	/**
+	 * The address which the server is bound to.
+	 */
+	public void setBindAddress(String addy)
+	{
+		if (this.smtpServer != null)
+			throw new IllegalStateException("SMTPServer already running");
+		
+		this.bindAddress = addy;
+	}
+
+	/**
+	 * The address which the server is bound to.
+	 */
+	public String getFallbackHost()
+	{
+		return this.fallbackHost;
+	}
+	
+	/**
+	 * The address which the server is bound to.
+	 */
+	public void setFallbackHost(String value)
+	{
+		if (this.smtpServer != null)
+			throw new IllegalStateException("SMTPServer already running");
+		
+		this.fallbackHost = value;
 	}
 }

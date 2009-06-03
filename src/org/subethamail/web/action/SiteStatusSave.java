@@ -5,10 +5,8 @@
 
 package org.subethamail.web.action;
 
-import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -36,7 +34,6 @@ public class SiteStatusSave extends AuthAction
 	{
 		@Property String postmasterEmail;
 		@Property String defaultSiteUrl;
-		@Property String fallthroughHost;
 	}
 	
 	/** */
@@ -75,44 +72,9 @@ public class SiteStatusSave extends AuthAction
 			return;
 		}
 
-		// Check the fallthrough host
-		model.fallthroughHost = model.fallthroughHost.trim();
-		if (model.fallthroughHost.length() > 0)
-		{
-			String[] fallthroughSplit = model.fallthroughHost.split(":");
-			
-			try
-			{
-				InetAddress.getByName(fallthroughSplit[0]);
-			}
-			catch (UnknownHostException ex)
-			{
-				model.setError("fallthroughHost", "Unknown host");
-				return;
-			}
-			
-			if (fallthroughSplit.length > 1)
-			{
-				try
-				{
-					Integer.parseInt(fallthroughSplit[1]);
-				}
-				catch (NumberFormatException ex)
-				{
-					model.setError("fallthroughHost", "Invalid port #");
-					return;
-				}
-			}
-		}
-		
 		Admin admin = Backend.instance().getAdmin();
 		admin.setPostmaster(address);
 		admin.setDefaultSiteUrl(url);
-		
-		if (model.fallthroughHost.length() > 0)
-			admin.setFallthroughHost(model.fallthroughHost);
-		else
-			admin.setFallthroughHost(null);
 	}
 	
 }

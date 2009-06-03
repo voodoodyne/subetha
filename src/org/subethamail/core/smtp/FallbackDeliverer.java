@@ -12,13 +12,13 @@ import org.subethamail.smtp.TooMuchDataException;
  * 
  * @author Jeff Schnitzer
  */
-public class FallthroughDeliverer implements Deliverer
+public class FallbackDeliverer implements Deliverer
 {
 	/** */
 	protected SmartClient client;
 
 	/** */
-	public FallthroughDeliverer(SmartClient client)
+	public FallbackDeliverer(SmartClient client)
 	{
 		this.client = client;
 	}

@@ -25,44 +25,44 @@ import org.subethamail.wiser.Wiser;
  * 
  * @author Jeff Schnitzer
  */
-public class FallthroughTest extends SubEthaTestCase
+public class FallbackTest extends SubEthaTestCase
 {
 	/** */
 	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(FallthroughTest.class);
+	private static Logger log = LoggerFactory.getLogger(FallbackTest.class);
 	
 	/** */
-	public static final int FALLTHROUGH_PORT = 2526;
+	public static final int FALLBACK_PORT = 2526;
 
 	/** */
-	Wiser fallthrough;
+	Wiser fallback;
 	AdminMixin admin;
 	MailingListMixin ml;
 	PersonInfoMixin pers;
 	
 	/** */
-	public FallthroughTest(String name) { super(name); }
+	public FallbackTest(String name) { super(name); }
 	
 	/** */
 	protected void setUp() throws Exception
 	{
 		super.setUp();
 		
-		this.fallthrough = new Wiser(FALLTHROUGH_PORT);
-		this.fallthrough.start();
+		this.fallback = new Wiser(FALLBACK_PORT);
+		this.fallback.start();
 		
 		this.admin = new AdminMixin();
 		this.ml = new MailingListMixin(this.admin, null);
 		this.pers = new PersonInfoMixin();
 		
-		this.admin.getAdmin().setFallthroughHost("localhost:" + FALLTHROUGH_PORT);
+		this.admin.getAdmin().setFallbackHost("localhost:" + FALLBACK_PORT);
 	}
 	
 	/** */
 	protected void tearDown() throws Exception
 	{
-		this.fallthrough.stop();
-		this.admin.getAdmin().setFallthroughHost(null);
+		this.fallback.stop();
+		this.admin.getAdmin().setFallbackHost(null);
 		
 		super.tearDown();
 	}
@@ -74,7 +74,7 @@ public class FallthroughTest extends SubEthaTestCase
 		Transport.send(msg);
 		Thread.sleep(1000);
 		
-		assertEquals(0, this.fallthrough.getMessages().size());
+		assertEquals(0, this.fallback.getMessages().size());
 		assertEquals(0, this.smtp.countSubject(TEST_SUBJECT));
 		assertEquals(1, this.admin.getArchiver().countMailByList(this.ml.getId()));
 	}
@@ -89,7 +89,7 @@ public class FallthroughTest extends SubEthaTestCase
 		Transport.send(msg);
 		Thread.sleep(1000);
 		
-		assertEquals(0, this.fallthrough.getMessages().size());
+		assertEquals(0, this.fallback.getMessages().size());
 		assertEquals(0, this.smtp.countSubject(TEST_SUBJECT));
 		assertEquals(1, this.admin.getArchiver().countMailByList(this.ml.getId()));
 		assertEquals(1, this.admin.getArchiver().countMailByList(ml2.getId()));
@@ -104,7 +104,7 @@ public class FallthroughTest extends SubEthaTestCase
 		Transport.send(msg);
 		Thread.sleep(1000);
 		
-		assertEquals(1, this.fallthrough.getMessages().size());
+		assertEquals(1, this.fallback.getMessages().size());
 		assertEquals(0, this.smtp.countSubject(TEST_SUBJECT));
 		assertEquals(0, this.admin.getArchiver().countMailByList(this.ml.getId()));
 	}
@@ -120,7 +120,7 @@ public class FallthroughTest extends SubEthaTestCase
 		Transport.send(msg);
 		Thread.sleep(1000);
 		
-		assertEquals(2, this.fallthrough.getMessages().size());
+		assertEquals(2, this.fallback.getMessages().size());
 		assertEquals(0, this.smtp.countSubject(TEST_SUBJECT));
 		assertEquals(0, this.admin.getArchiver().countMailByList(this.ml.getId()));
 	}
@@ -135,7 +135,7 @@ public class FallthroughTest extends SubEthaTestCase
 		Transport.send(msg);
 		Thread.sleep(1000);
 		
-		assertEquals(1, this.fallthrough.getMessages().size());
+		assertEquals(1, this.fallback.getMessages().size());
 		assertEquals(0, this.smtp.countSubject(TEST_SUBJECT));
 		assertEquals(1, this.admin.getArchiver().countMailByList(this.ml.getId()));
 	}
@@ -143,6 +143,6 @@ public class FallthroughTest extends SubEthaTestCase
 	/** */
 	public static Test suite()
 	{
-		return new TestSuite(FallthroughTest.class);
+		return new TestSuite(FallbackTest.class);
 	}
 }

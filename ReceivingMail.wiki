@@ -1,4 +1,5 @@
 #summary How to get mail into SubEtha in the first place
+#labels Featured
 
 You've followed the InstallGuide and now you have a properly configured instance of SubEtha running on your host.  Only one question remains - how does mail get into SubEtha in the first place?
 

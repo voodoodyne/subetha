@@ -56,7 +56,7 @@
   
   SubEtha's text strings (ie: web interface, error messages, etc.) haven't been internationalized with different languages (yet), but SubEtha should pass messages through written in any language with any character encoding. There are two exceptions to this: Email is always rendered as UTF-8 in the web archives, and list owners may install filters which replace text in the mail message. All substituted text is encoded with the platform default character set.
 
-  We *strongly recommend* that you set your JVM's default character set to UTF-8. You should read a more thorough discussion of [I18N"internationalization issues in SubEtha"].
+  We *strongly recommend* that you set your JVM's default character set to UTF-8. Please read a more thorough discussion of [I18N] issues in SubEtha.
 
   * What about 8bit MIME?
 

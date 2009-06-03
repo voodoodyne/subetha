@@ -11,11 +11,11 @@ Make the following changes to etc/*exim.config*.
 ==== Transports Section: ====
   {{{
   local_smtp_port_2500:
-  driver = smtp
-  port = 2500
-  allow_localhost = true
-  gethostbyname = true
-  hosts=localhost
+    driver = smtp
+    port = 2500
+    allow_localhost = true
+    gethostbyname = true
+    hosts=localhost
   }}}
 
 Notes:

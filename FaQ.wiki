@@ -9,7 +9,7 @@
 	
   * My system is too quiet, I want more debug output in the console!
     
-  Well, you asked for it and here it comes. Drink from the firehose by editing any resin config file ${RESIN_HOME}/conf/subetha.xml (or ${RESIN_HOME}/webapps/se/subetha.xml)
+  Well, you asked for it and here it comes. Drink from the firehose by editing any ResinConfiguration file (ie ${RESIN_HOME}/conf/resin.xml or ${RESIN_HOME}/conf/subetha.xml)
   {{{
   <logger name="org.subethamail" level="finest" />
   }}}

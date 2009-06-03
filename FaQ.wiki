@@ -5,95 +5,69 @@
 
   * I just sent a message to a list and it isn't showing up in the archives during a search!
 
-    This is because the thread which re-indexes the archives runs about every ten minutes or so. Just give it some time and the message will show up.
+  This is because the thread which re-indexes the archives runs about every ten minutes or so. Just give it some time and the message will show up.
 	
   * My system is too quiet, I want more debug output in the console!
     
-	Well, you asked for it and here it comes. Go ahead and add some more logger instructions by editing either ${RESIN_HOME}/conf/resin.xml or ${RESIN_HOME}/webapp/se/WEB-INF/resin-web.xml
-	{{{
-		<logger name="org.subethamail" level="finest" />
-		<logger name="org.subethamail.smtp" level="finest" />		
-	}}}
-
-== General ==
-
-  * How does SubEtha compare to Mailman?
-
-     Both are open source mailing list managers. 
-  
-  In Mailman's favor
-    * Mailman is a much more mature application. SubEtha is relatively new and might possibly still have bugs.
-    * Mailman has a known performance profile. While SubEtha should scale well, there are not yet any large SubEtha installations, so performance is still unproven.
-    * Mailman has a very large user community. SubEtha is just getting started.
-    * Mailman has a smaller memory footprint. SubEtha requires a Java appserver. However, it should be noted that Mailman's qrunner footprint is not especially svelte, and JBoss can be slimmed down considerably in a low-traffic environment.
-    * Mailman has all the little quirky configuration options that only comes from years of obscure user requests and patching.
-
-  In SubEtha's favor
-    * Features! SubEtha offers virtual domains, role-based permissions, keeping attachments on the server, searchable archives, and the ability for users to have multiple email addresses, among many others. The only major feature present in Mailman but missing in SubEtha is digest mode.
-    * Usability. SubEtha works like a reasonably modern web application. Mailman's interface is... antiquated.
-    * Pluggability, automation, and integration. You can write a wide variety of plugins for SubEtha, and SubEtha exposes much of it's internal machination as a public API. You can plug in your own quirky obscure behaviors without patching the core.
-    * Theoretical scalablity. In theory, SubEtha should easily scale into a cluster of dozens of machines. However, nobody has tried this yet - if you do, we want to hear from you.
-    * SubEtha stores data in a database rather than using the filesystem, although some people view this as a disadvantage.
-    * SubEtha runs on Windows. Yeah, we know, some people view this as a disadvantage :-)
-
-    We would like to think that SubEtha significantly raises the bar for what users expect a mailing list manager to do. However, this is new software; expect a few rough edges.
-
+  Well, you asked for it and here it comes. Drink from the firehose by editing ${RESIN_HOME}/conf/resin.xml
+  {{{
+  <logger name="org.subethamail" level="finest" />
+  }}}
 
 == Huh, Ads ==
 
   * What's with the google ad?
 
-    Developing SubEtha was a major effort, requiring several months of fulltime work by several engineers motivated by the bizarre notion "wouldn't it be cool!" The thought that we might be able to get beer money out of this project didn't occur to us until long after the fact.
+  Developing SubEtha was a major effort, requiring several months of fulltime work by several engineers motivated by the bizarre notion "wouldn't it be cool!" The thought that we might be able to get beer money out of this project didn't occur to us until long after the fact.
 
-    Rather than asking for donations, we've added the least obtrusive google ad we could find to the dead space under the menus. We hope it's not too irritating, but if it is, you are welcome to remove it. We won't be upset.
+  Rather than asking for donations, we've added the least obtrusive google ad we could find to the dead space under the menus. We hope it's not too irritating, but if it is, you are welcome to remove it. We won't be upset.
 
   * How do I remove the google ad?
-    # Live System (requires editing each time the webapp is deployed)    
-	  * The easiest way is to edit the "exploded" packaging of SubEtha. Edit the JSP file that contains the offending HTML. Note that .ear and .war files are simply standard zip files with different extensions.
-	  * Edit the file /webapps/se/WEB-INF/tags/trim/list.tag. There is a comment next to the HTML that you should remove.
-    # Edit the source, and rebuild/deploy
-      *Alternatively, you could check out the source code, make the change to list.tag, and build SubEtha yourself. This is easier than you might think, and we developers will even be happy to help you. In summary - install JDK1.5, install Resin, install Ant, checkout SubEtha (either the tagged version you want or trunk, which is almost always safe), edit build.properties to point to the webapp dir, and run ant.
- 
+
+  Run the system at least once (to unpack the war), then edit the file ${resin.dir}/webapps/se/WEB-INF/tags/trim/list.tag.  There is a comment next to the HTML that you should remove.
+
   * Can't you just make that a config option?
 
-    Come now. We went through all this trouble to write SubEtha, the least you can do is put a little effort into your mean (mean!) attempts to circumvent our beer money collection scheme. Um, to date (after more than 2 years), we still don't have beer money from this project.
+  Come now. We went through all this trouble to write SubEtha, the least you can do is put a little effort into your mean (mean!) attempts to circumvent our beer money collection scheme.
 
 == Tech Specs ==
 
   * What JDK version does SubEtha require?
-     SubEtha requires JDK1.5 or later.
+
+  SubEtha requires JDK1.5 or later.
  
   * What Resin version does SubEtha require?
-    Resin 4.0.0 (or possibly newer)
+
+  Resin 4.0.0 (or possibly newer)
  
   * Does SubEtha run on other J2EE appservers?
-    Not currently. SubEtha uses a fair amount of JBoss-specific code both in places where the J2EE spec is incomplete (or useless, ie authorization) and in places where it was very convenient (ie @Service beans and Message-Driven POJOs).
 
-    We view the appserver not as an operating system in which users run applications, but as a large library around which applications like SubEtha are built. Users install SubEtha; they should not have to care what components power it.
+  Not currently.  J2EE portability is a myth - it's possible to port an application, but it takes a lot of work.  We know, we migrated from JBoss to Resin in early 2009.  You're welcome to try, but it's pretty pointless - Resin is a wonderful environment.
 
   * Which databases does SubEtha support?
 
-    Any that work with JBoss EJB3 (aka Hibernate) and provide reasonable BLOB support. The developers use MySQL and Postgres.
+  Any that work with Hibernate and provide reasonable BLOB support. The developers use MySQL and Postgres.
  
   * Does SubEtha work with my Mail Transport Agent (eg Postfix, Sendmail, Exim, Qmail)?
 
-    Yes, in fact, SubEtha currently requires an external MTA to deliver mail. The developers all use Postfix, but any MTA should work. See the MtaGuide. In the future, it will be possible to use SubEtha without an MTA.
+  Yes, in fact, SubEtha currently requires an external MTA to deliver mail. The developers all use Postfix, but any MTA should work. See the MtaGuide. In the future, it may be possible to use SubEtha without an MTA.
  
   * Does SubEtha support i18n (internationalization)?
   
-    SubEtha's text strings (ie: web interface, error messages, etc.) haven't been internationalized with different languages (yet), but SubEtha should pass messages through written in any language with any character encoding. There are two exceptions to this: Email is always rendered as UTF-8 in the web archives, and list owners may install filters which replace text in the mail message. All substituted text is encoded with the platform default character set.
+  SubEtha's text strings (ie: web interface, error messages, etc.) haven't been internationalized with different languages (yet), but SubEtha should pass messages through written in any language with any character encoding. There are two exceptions to this: Email is always rendered as UTF-8 in the web archives, and list owners may install filters which replace text in the mail message. All substituted text is encoded with the platform default character set.
 
-    We  *strongly recommend* that you set your JVM's default character set to UTF-8. You should read a more thorough discussion of [I18N"internationalization issues in SubEtha"].
+  We *strongly recommend* that you set your JVM's default character set to UTF-8. You should read a more thorough discussion of [I18N"internationalization issues in SubEtha"].
 
   * What about 8bit MIME?
 
-    JavaMail will parse messages in 8BITMIME just fine. However, by default, JavaMail does not send mail in 8BITMIME. This can be turned on in ${jboss.dir}/server/default/deploy/mail-service.xml by setting the attribute mail.smtp.allow8bitmime=true. We DO NOT recommend doing this with the current version of JavaMail. We have found at least one bug whereby quoted-printable content with nonascii characters will have it's header changed to "8bit" without updating the actual contents. If this defect in JavaMail is corrected, this FAQ entry will change.
+  JavaMail will parse messages in 8BITMIME just fine. However, by default, JavaMail does not send mail in 8BITMIME. This can be turned on in ${jboss.dir}/server/default/deploy/mail-service.xml by setting the attribute mail.smtp.allow8bitmime=true. We DO NOT recommend doing this with the current version of JavaMail. We have found at least one bug whereby quoted-printable content with nonascii characters will have it's header changed to "8bit" without updating the actual contents. If this defect in JavaMail is corrected, this FAQ entry will change.
 
+  You may have noticed by the reference to JBoss that this FAQ entry is obsolete and needs to be revised.
 
 == Design Questions ==
 
   * Why does SubEtha store attachments in a separate table?
-	We have a few reasons:
+  We have a few reasons:
     # They're huge, and we don't want to have to parse them when we're rendering the archive page, or really ever. 
     # They need to be accessed separately as links from the archives anyways.
     # Message bodies without attachments are small enough to store in the 2nd level cache, making archive reading fast and scalable.

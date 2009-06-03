@@ -13,8 +13,8 @@ These instructions describe setting up a single, standalone instance of SubEtha.
   # Copy [http://subetha.googlecode.com/svn/trunk/example-subetha.xml example-subetha.xml] to ${resin.dir}/conf/subetha.xml (renaming the file)
     * Edit the configuration in this file
 
-== Integrate with your MTA ==
-Please see the MtaGuide for specific instructions for your mail server.
+== Receiving Mail ==
+Please see ReceivingMail for specific instructions on how to integrate with your mail MTA.
 
 == Startup ==
 Start up Resin by running ${resin.dir}/bin/resin.sh or resin.bat. The default web interface is http://localhost:8080/se/. When SubEtha runs for the first time, it creates a site administrator account named "*root@localhost*", with the password "*password*".

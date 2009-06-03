@@ -4,38 +4,19 @@
 These instructions describe setting up a single, standalone instance of SubEtha.  You should have have installed JDK 1.5+ and whatever database you intend to use (MySQL and PostgreSQL are tested by the application developers, but any DB supported by Hibernate should work).
 
 = Install Steps =
-  # Install Resin 4.0.0 (or greater).  The resin install directory is in this document as ${resin.dir}.
+
   # Create an empty database in your database server.  Note that SubEtha will create the database tables for you when it runs for the first time.
-  # Set up the JDBC data source in Resin. Edit ${resin.dir}/conf/resin.xml and add the following section anywhere under the root level:
-  {{{
-	<resin>
-		<!-- blah blah blah -->
-
-		<database jndi-name="jdbc/subetha">
-			<ping>true</ping>
-			<ping-interval>0</ping-interval>
-			<ping-query>select 1;</ping-query>
-
-			<driver type="org.postgresql.Driver">
-				<url>jdbc:postgresql://localhost/subetha</url>
-				<!-- Best practice: Create a separate database user for this applicaiton -->
-				<user>yourdatabaseusername</user>
-				<password>yourpassword</password>
-			</driver>
-		</database>
-
-		<!-- blah blah blah -->
-	</resin>
-   }}}
-  #  Copy the appropriate JDBC driver jar for your database into ${resin.dir}/lib.
-  #  Copy se.war to ${resin.dir}/webapps/
+  # Download and install Resin 4.0.0 (or greater) as per the Resin instructions.  The resin install directory is in this document as ${resin.dir}.
+  # Download and copy the appropriate JDBC driver jar for your database into ${resin.dir}/lib.
+  # Download and unzip SubEtha into a temporary directory.
+  # Copy se.war to ${resin.dir}/webapps/
+  # Copy example-subetha.xml to ${resin.dir}/conf/subetha.xml (renaming the file)
+    * Edit the configuration in this file
 
 == Integrate with your MTA ==
-
 Please see the MtaGuide for specific instructions for your mail server.
 
 == Startup ==
-
 Start up Resin by running ${resin.dir}/bin/resin.sh or resin.bat. The default web interface is http://localhost:8080/se/. When SubEtha runs for the first time, it creates a site administrator account named "*root@localhost*", with the password "*password*".
 
 *Change the administrator password immediately*. This can be done from the web interface. In addition, change the site properties as described in the AdminGuide.

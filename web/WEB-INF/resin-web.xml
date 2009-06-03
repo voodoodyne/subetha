@@ -17,11 +17,11 @@
 
 	<!-- Every night at 4am run cleanup -->
 	<!-- ...and might as now too (in a few seconds) -->
-<!--	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" cron="0 4 *"/>-->
+	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" cron="0 4 *"/>
 
-	<!-- Every 5 minutes run the indexer -->
+	<!-- Every 15 minutes run the indexer -->
 	<!-- ...and might as now too (in a few seconds) -->
-<!--	<resin:ScheduledTask method="#{indexer.update}" delay="20s" period="5m"/>-->
+	<resin:ScheduledTask method="#{indexer.update}" delay="30s" period="15m"/>
 
 	<!-- JMS -->
 	<jms:JmsConnectionFactory />

@@ -9,7 +9,7 @@
 	
   * My system is too quiet, I want more debug output in the console!
     
-  Well, you asked for it and here it comes. Drink from the firehose by editing ${RESIN_HOME}/conf/resin.xml
+  Well, you asked for it and here it comes. Drink from the firehose by editing any resin config file ${RESIN_HOME}/conf/subetha.xml (or ${RESIN_HOME}/webapps/se/subetha.xml)
   {{{
   <logger name="org.subethamail" level="finest" />
   }}}
@@ -60,9 +60,7 @@
 
   * What about 8bit MIME?
 
-  JavaMail will parse messages in 8BITMIME just fine. However, by default, JavaMail does not send mail in 8BITMIME. This can be turned on in ${jboss.dir}/server/default/deploy/mail-service.xml by setting the attribute mail.smtp.allow8bitmime=true. We DO NOT recommend doing this with the current version of JavaMail. We have found at least one bug whereby quoted-printable content with nonascii characters will have it's header changed to "8bit" without updating the actual contents. If this defect in JavaMail is corrected, this FAQ entry will change.
-
-  You may have noticed by the reference to JBoss that this FAQ entry is obsolete and needs to be revised.
+  JavaMail will parse messages in 8BITMIME just fine. However, by default, JavaMail does not send mail in 8BITMIME. This can be turned on by setting the attribute {{{mail.smtp.allow8bitmime}}} to {{{true}}} in the {{{<mail ...>}}} configuration (see the InstallGuide for the location to do this). We DO NOT recommend doing this with the current version of JavaMail. We have found at least one bug whereby quoted-printable content with nonascii characters will have it's header changed to "8bit" without updating the actual contents. If this defect in JavaMail is corrected, this FAQ entry will change.
 
 == Design Questions ==
 

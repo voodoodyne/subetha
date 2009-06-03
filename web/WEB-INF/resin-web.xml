@@ -15,6 +15,8 @@
 	xmlns:search="urn:org.subethamail.core.search"
 	>
 
+	<resin:import path="${resin.root}/conf/subetha.xml" optional="true" />
+	
 	<!-- Every night at 4am run cleanup -->
 	<!-- ...and might as now too (in a few seconds) -->
 	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" cron="0 4 *"/>

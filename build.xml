@@ -308,7 +308,7 @@
 	</target>
 	
 	<target name="build-docs" description="downloads docs from wiki and processes them into the build/docs dir">
-		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+		<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="master.classpath"/>
 		
 		<property name="wiki.baseurl" value="http://code.google.com/p/subetha/wiki"/>
 				
@@ -367,24 +367,23 @@
 			<fileset dir="${build.dir}">
 				<include name="javadoc/**" />
 				<include name="docs/**" />
-				
 			</fileset>
 
 			<fileset dir=".">
 				<include name="README.html" />
 				<include name="LICENSE.txt" />
+				<include name="example-subetha.xml" />
 				<include name="build.xml" />
 				<include name="build.properties" />
 				<include name=".project" />
 				<include name=".classpath" />
 				
+				<include name="bin/**" />
 				<include name="lib/**" />
 				<include name="src/**" />
 				<include name="rtest/**" />
 				<include name="loadtest/**" />
 				<include name="web/**" />
-
-				<exclude name="**/.svn"/>
 			</fileset>
 		</copy>
 

@@ -1,0 +1,46 @@
+<!--
+	This file should be copied to ${resin.home}/conf/subetha.xml.
+	
+	Note that nearly all properties are simply setter methods on the
+	appropriate objects; you can look at the javadocs for your
+	JDBC drivers, etc for more configuration options.
+-->
+
+<web-app xmlns="http://caucho.com/ns/resin"
+	xmlns:resin="urn:java:com.caucho.resin"
+	>
+	
+	<!--
+		Your MTA which can send outbound mail.  SubEtha relies on
+		an external MTA such as Postfix, Exim, or Sendmail to do this.
+		Ensure that your MTA allows SubEtha to relay through it.
+	-->
+	<mail name="outbound">
+		<smtp-host>localhost</smtp-host>
+		<smtp-port>2525</smtp-port>
+    </mail>
+
+	<!-- 
+		Your database.  SubEtha will create the schema when it first connects.
+	-->
+	<database jndi-name="jdbc/subetha">
+		<driver type="org.postgresql.ds.PGConnectionPoolDataSource">
+			<serverName>localhost</serverName>
+			<databaseName>subetha</databaseName>
+			<user>subetha</user>
+			<password>subetha</password>
+		</driver>
+	</database>
+
+	<!-- Here is a version for MySQL:
+	
+	<database jndi-name="jdbc/subetha">
+		<driver type="com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource">
+			<url>jdbc:mysql://localhost:3306/subetha</url>
+			<user>subetha</user>
+			<password>subetha</password>
+		</driver>
+	</database>		
+	-->
+
+</web-app>

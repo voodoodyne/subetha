@@ -1,0 +1,42 @@
+#summary Integrating SubEtha with Microsoft Exchange
+
+= Microsoft Exchange =
+
+The following instructions were adapted from Microsoft Technical documents [http://support.microsoft.com/kb/321721/ KB321721] and [http://www.microsoft.com/technet/prodtechnol/exchange/guides/POP3SvcE2k3/fa2007e3-9b6c-4bfa-bab9-5ccb0ca0a3e5.mspx?mfr=true this particularly helpful one].
+
+You can setup your SubEtha lists to exist publicly on a subdomain (lists.example.com) or have exchange pass through any domain for that matter.
+
+Hosting your SubEtha Lists on a (sub)domain (lists.example.com)
+
+  # Modify the Default Recipient Policy by adding your subdomain (i.e. lists.example.com) as a new non-primary address. Ensure that "This Exchange Organization is responsible for all mail delivery to this address." is unchecked for the new address.
+    * If prompted to change all address, choose no.
+  # Create a new SMTP Connector choosing "Forward all mail through this connector to the following smart hosts, providing the IP address of your SubEtha List Server as the address (i.e. [192.168.1.100])
+    * Add your local SMTP Virtual Server as a bridgehead server
+    * Select the Address Space tab and add a new SMTP address of your subdomain (lists.example.com). You can leave the cost at 1 and ensure that "Allow messages to be relayed to these domains" is checked.
+    * Modify your SubEtah startup script (run.bat) to set the org.subethamail.smtp.port property and set it to 25 (i.e. -Dorg.subethamail.smtp.port=25)
+    * Note: this is necessary because you cannot set the outbound port on the Exchange SMTP connector as far as I can tell. If anyone knows how to do this, please share
+  # Restart SubEtha
+
+You should now be able to send mail to your lists in the form of mylist@lists.example.com and your Exchange server will relay it to your SubEtha List Server.
+
+== Sharing your primary domain between Exchange Server and SubEtha ==
+
+When doing this you will not get all the features included in subetha. You will not get support for verp, and related features.
+
+This setup still requires that you treat your SubEtha List Server as a subdomain (lists.example.com), however, to the outside world your lists will be addressable via your primary domain (example.com)
+
+  # Create a Contact for each list using Active Directory Users and Computers. Uncheck "create an Exchange Email Address".
+    * Find your newly created Contacts, right-click and choose "Exchange Tasks." Then choose "Establish Email Address" and then click Modify to add a new external SMTP address of your full list address (i.e. subetha-interest@lists.example.com). Note the use of the subdomain
+    * I used a naming scheme for these contacts where I would always give them an alias ending in "-list". So, a SubEtha Interest list would be "subetha-list." Keep in mind that the alias you give to these contacts will be the public e-mail address for your lists. In essence, what were doing here is create an Exchange entry for your list with an email address of subetha-list@example.com which maps to the real list address of subetha-interest@lists.example.com.
+  # Add a new Email Addresses Recipient Policy adding your subdomain address as the primary address and ensuring that for this address "This Exchange Organization is responsible for all mail delivery to this address." is unchecked.
+  # Create a new SMTP Connector choosing "Forward all mail through this connector to the following smart hosts, providing the IP address of your SubEtha List Server as the address (i.e. [192.168.1.100])
+    * Add your local SMTP Virtual Server as a bridgehead server
+    * Select the Address Space tab and add a new SMTP address of your subdomain (lists.example.com). You can leave the cost at 1 and ensure that "Allow messages to be relayed to these domains" is checked.
+  # Modify your SubEtah startup script (run.bat) to set the org.subethamail.smtp.port property and set it to 25 (i.e. -Dorg.subethamail.smtp.port=25)
+    Note: this is necessary because you cannot set the outbound port on the Exchange SMTP connector as far as I can tell. If anyone knows how to do this, please share
+  # Restart SubEtha
+  # Modify your SubEtha lists to enable the Reply-To filter, unchecking Mailing List and adding the public address of your list (subetha@example.com) manually.
+
+You should now be able to send mail to your lists in the form of my-list@example.com and your Exchange server will relay it to your SubEtha List Server.
+
+I'm personally using the second option as I wanted the lists to be on my primary domain as far as the outside world was concerned. The first way also presented a problem as far as our spam filtering service was concerned so the second way worked out best for us. The downside in my opinion is that from an administrative standpoint, creating the Exchange contacts for each list is just an extra step, but since we have a pretty static environment, it will probably work out OK. On a final note, so that our Exchange users don't have to look at our lists in their address book, I checked "Hide from Exchange address list."

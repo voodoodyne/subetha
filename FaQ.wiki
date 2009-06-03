@@ -42,7 +42,7 @@
  
   * Does SubEtha run on other J2EE appservers?
 
-  Not currently.  J2EE portability is a myth - it's possible to port an application, but it takes a lot of work.  We know, we migrated from JBoss to Resin in early 2009.  You're welcome to try, but it's pretty pointless - Resin is a wonderful environment.
+  Not currently.  J2EE portability is a myth - it's possible to port an application, but it takes a lot of work.  We know, we migrated from JBoss to Resin in early 2009.  See WhyResin.
 
   * Which databases does SubEtha support?
 
@@ -50,7 +50,7 @@
  
   * Does SubEtha work with my Mail Transport Agent (eg Postfix, Sendmail, Exim, Qmail)?
 
-  Yes, in fact, SubEtha currently requires an external MTA to deliver mail. The developers all use Postfix, but any MTA should work. See the MtaGuide. In the future, it may be possible to use SubEtha without an MTA.
+  Yes.  There are two aspects to this:  One, SubEtha currently requires an MTA to actually deliver outbound mail.  Two, SubEtha can run behind your MTA when ReceivingMail.  In the future, it may be possible to use SubEtha without an MTA entirely.
  
   * Does SubEtha support i18n (internationalization)?
   

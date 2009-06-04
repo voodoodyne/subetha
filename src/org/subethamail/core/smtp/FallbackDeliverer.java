@@ -3,9 +3,9 @@ package org.subethamail.core.smtp;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.subethamail.client.SmartClient;
 import org.subethamail.smtp.RejectException;
 import org.subethamail.smtp.TooMuchDataException;
+import org.subethamail.smtp.client.SmartClient;
 
 /**
  * Deliverer which delivers to a SmartClient

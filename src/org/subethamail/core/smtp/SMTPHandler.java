@@ -7,13 +7,13 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.client.SMTPException;
-import org.subethamail.client.SmartClient;
 import org.subethamail.smtp.MessageContext;
 import org.subethamail.smtp.MessageHandler;
 import org.subethamail.smtp.MessageHandlerFactory;
 import org.subethamail.smtp.RejectException;
 import org.subethamail.smtp.TooMuchDataException;
+import org.subethamail.smtp.client.SMTPException;
+import org.subethamail.smtp.client.SmartClient;
 import org.subethamail.smtp.io.DeferredFileOutputStream;
 
 /**

@@ -31,6 +31,8 @@ public class OurDeliverer implements Deliverer
 	@Override
 	public void deliver(InputStream data) throws RejectException, TooMuchDataException, IOException
 	{
-		this.injector.inject(this.from, this.to, data);
+		boolean accepted = this.injector.inject(this.from, this.to, data);
+		if (!accepted)
+			throw new RejectException("Not accepted for " + this.to);
 	}
 }

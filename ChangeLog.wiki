@@ -11,6 +11,7 @@ For specific instructions to upgrade between versions, see UpgradingVersions.
  * We've moved to a new home at google code.
 
  * Here are some of the changes to note:
+   * Added fallback smtp host for a new integration option
    * Updated libraries (Hibernate, Logging, SubethaSMTP)
    * Updated packaging and docs
    * Developed and tested on MySQL and PostgresSQL

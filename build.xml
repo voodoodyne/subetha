@@ -343,6 +343,7 @@
 			author="true"
 			version="true"
 			Windowtitle="SubEtha Javadoc"
+			useexternalfile="true"
 		>
 			<fileset dir="${src.dir}">
 				<include name="**/*.java" />

@@ -56,6 +56,7 @@ public class CleanupBean
 	 **/
 	public void cleanup()
 	{
+		log.debug("Starting cleanup");				
 		try
 		{
 			if(!isRunning)

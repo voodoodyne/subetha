@@ -39,6 +39,15 @@
 	<property name="web.dir" location="web" />
 	<property name="lib.dir" location="lib" />
 
+	<typedef resource="com/googlecode/svntask/svntask.xml">
+		<classpath>
+			<fileset dir="${lib.dir}">
+				<include name="**/svnkit.jar"/>
+				<include name="**/svntask.jar"/>
+			</fileset>
+		</classpath>
+	</typedef>
+
 	<tstamp/>
 	<tstamp>
 		<format property="YEAR" pattern="yyyy" />
@@ -77,15 +86,6 @@
 	</path>
 	
 	<target name="init">
-		<typedef resource="com/googlecode/svntask/svntask.xml">
-			<classpath>
-				<fileset dir="${lib.dir}">
-					<include name="**/svnkit.jar"/>
-					<include name="**/svntask.jar"/>
-				</fileset>
-			</classpath>
-		</typedef>
-
 		<svn><info path="${basedir}" revisionProperty="revisionVersion" /></svn>
 
 		<!--  A hack because svnant does not respect Ant's properties can't be overwritten rule. -->
@@ -308,30 +308,34 @@
 	</target>
 	
 	<target name="build-docs" description="downloads docs from wiki and processes them into the build/docs dir">
-		<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="master.classpath"/>
+		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
 		
-		<property name="wiki.baseurl" value="http://code.google.com/p/subetha/wiki"/>
+		<property name="gc.name" value="subetha"/>
+		
+		<property name="wiki.baseurl" value="http://code.google.com/p/${gc.name}/wiki"/>
 				
 		<mkdir dir="${docs.dir}"/>
-
-		<property name="wiki.files" value="AdminGuide,InstallGuide,MtaGuide,DeveloperGuide,MailmanMigration,SubEtha,FaQ" />
+		
+		<svn><ls repository="http://${gc.name}.googlecode.com/svn" path="wiki" filterType="file" filterContains=".wiki"/></svn>
+		<propertyregex property="wiki.pages" input="${svn.ls}" regexp="\.wiki" replace=""/> 
+		<echo message="Getting wiki pages: ${wiki.pages}"/>
 		
 		<!-- Get files from wiki-->
-		<for list="${wiki.files}" param="wiki.page" parallel="yes">
+		<for list="${wiki.pages}" param="wiki.page" parallel="yes">
 		  <sequential>
 			<get dest="${docs.dir}/@{wiki.page}.html" src="${wiki.baseurl}/@{wiki.page}?show=content"/>
 		  </sequential>
 		</for>
 		
 		<!-- Replace links in files -->
-		<for list="${wiki.files}" param="wiki.page">
+		<for list="${wiki.pages}" param="wiki.page">
 		  <sequential>
-			<replace dir="${docs.dir}" token="/p/subetha/wiki/${wiki.page}" value="@{wiki.page}.html"/>
+			<replace dir="${docs.dir}" token="/p/${gc.name}/wiki/${wiki.page}" value="@{wiki.page}.html"/>
 		  </sequential>
 		</for>
 		
 		<!-- link back to the wiki, if we haven't downloaded the content -->
-		<replace dir="${docs.dir}" token="/p/subetha/wiki" value="${wiki.baseurl}"/>
+		<replace dir="${docs.dir}" token="/p/${gc.name}/wiki" value="${wiki.baseurl}"/>
 		
 	</target>
 

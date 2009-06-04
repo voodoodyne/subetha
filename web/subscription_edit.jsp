@@ -23,7 +23,17 @@
 					<tr>
 						<th>Name</th>
 						<td>
-							<c:out value="${model.data.name}" />
+							<c:choose>
+								<c:when test="${!empty model.data.name}">
+									<c:out value="${model.data.name}" />
+								</c:when>
+								<c:otherwise>
+									<input type="text" id="name" name="name" value=""/>
+									<c:if test="${!empty model.errors.name}">
+										<p class="error"><c:out value="${model.errors.name}" /></p>
+									</c:if>
+								</c:otherwise>
+							</c:choose>
 						</td>
 					</tr>
 					<tr>
@@ -87,6 +97,7 @@
 									<c:otherwise>
 										<div class="note">
 											${f:escapeText(model.data.note)}
+										</div>
 									</c:otherwise>
 								</c:choose>
 							</td>

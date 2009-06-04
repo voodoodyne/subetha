@@ -32,6 +32,7 @@ public class SaveSubscription extends AuthAction
 		/** */
 		@Property Long listId;
 		@Property Long personId;
+		@Property String name;
 		
 		/** starts as null, will be set if it was part of the save form UI */
 		@Property String deliverTo;
@@ -75,6 +76,11 @@ public class SaveSubscription extends AuthAction
 			if (model.note != null)
 			{
 				Backend.instance().getListMgr().setSubscriptionNote(model.listId, model.personId, model.note);
+			}
+			
+			if (model.name != null)
+			{
+				Backend.instance().getListMgr().setSubscriberName(model.listId, model.personId, model.name);
 			}
 		}
 		else

@@ -356,7 +356,7 @@
 	
 	<target name="init-dist">
 		<input addproperty="build.version" message="Version number?" />
-		<property name="dist.name" value="SubEtha-${build.version}" />
+		<property name="dist.name" value="${name}-${build.version}" />
 
 		<property name="build.dist.dir" location="${build.dir}/${name}-${build.version}"/>
 		<property name="build.dist.zip" location="${build.dir}/${dist.name}.zip"/>

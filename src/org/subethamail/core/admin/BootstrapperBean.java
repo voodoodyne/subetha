@@ -87,9 +87,7 @@ public class BootstrapperBean
 	@SubEtha
 	protected SubEthaEntityManager em;
 
-	/**
-	 * @see BootstrapperManagement#start()
-	 */
+	/* */
 	@PostConstruct
 	public void start() throws Exception
 	{

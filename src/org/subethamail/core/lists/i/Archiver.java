@@ -9,8 +9,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import javax.ejb.Local;
-
 import org.subethamail.common.ExportMessagesException;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.NotFoundException;
@@ -23,12 +21,8 @@ import org.subethamail.entity.i.PermissionException;
  * @author Jeff Schnitzer
  * @author scotthernandez
  */
-@Local
 public interface Archiver
 {
-	/** */
-	public static final String JNDI_NAME = "subetha/Archiver/local";
-
 	/**
 	 * Requires Permission.VIEW_ARCHIVES
 	 * 
@@ -83,7 +77,6 @@ public interface Archiver
 	/**
 	 * Requires Permission.VIEW_ARCHIVES
 	 * Writes the Attachement to the stream.
-	 * @return a byte[] of the message as it would be sent to the user.
 	 */
 	public void writeAttachment(Long attachmentId, OutputStream stream) throws NotFoundException, PermissionException;
 
@@ -125,14 +118,13 @@ public interface Archiver
 	 * @param msgIds The messages to write out
 	 * @param format The format to write out
 	 * @param outStream The stream to write to
-	 * @throws  
 	 */
 	public void exportMessages(Long[] msgIds, ExportFormat format, OutputStream outStream) throws NotFoundException, PermissionException, ExportMessagesException;
 	
 	/**
 	 * Exports the list messages to the output stream given.
 	 * 
-	 * @param msgIds The messages to write out
+	 * @param listId The list owning the messages to write out
 	 * @param format The format to write out
 	 * @param outStream The stream to write to
 	 */

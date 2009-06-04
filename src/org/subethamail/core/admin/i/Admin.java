@@ -8,7 +8,6 @@ package org.subethamail.core.admin.i;
 import java.net.URL;
 import java.util.List;
 
-import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 
 import org.subethamail.common.NotFoundException;
@@ -24,12 +23,8 @@ import org.subethamail.entity.i.PermissionException;
  * 
  * @author Jeff Schnitzer
  */
-@Local
 public interface Admin
 {
-	/** */
-	public static final String JNDI_NAME = "subetha/Admin/local";
-
 	/**
 	 * Puts an arbitrary string in the server log, useful for clients (especially
 	 * unit tests) to delineate method calls.

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.HoldException;
@@ -62,16 +61,16 @@ public class SubjectFilter extends GenericFilter
 		return "Appends text to the beginning of the Subject header on incoming messages.";
 	}
 	
-	/**
-	 * @see PluginFactory#getParameters()
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#getParameters()
 	 */
 	public FilterParameter[] getParameters()
 	{
 		return PARAM_DEFS;
 	}
 
-	/**
-	 * @see Filter#onSend(SubEthaMessage msg, FilterContext ctx)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onInject(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.FilterContext)
 	 */
 	@Override
 	public void onInject(SubEthaMessage msg, FilterContext ctx) 

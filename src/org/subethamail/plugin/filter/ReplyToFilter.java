@@ -12,7 +12,6 @@ import javax.mail.internet.InternetAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.plugin.i.SendFilterContext;
@@ -68,16 +67,16 @@ public class ReplyToFilter extends GenericFilter
 		return "Set the Reply-To to the mailing list or an email address.";
 	}
 	
-	/**
-	 * @see PluginFactory#getParameters()
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#getParameters()
 	 */
 	public FilterParameter[] getParameters()
 	{
 		return PARAM_DEFS;
 	}
 
-	/**
-	 * @see Filter#onSend(SubEthaMessage, SendFilterContext)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onSend(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.SendFilterContext)
 	 */
 	@Override
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException

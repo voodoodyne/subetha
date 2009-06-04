@@ -31,7 +31,7 @@ public interface FilterParameter
 	 * Object type (ie java.lang.Boolean, not boolean), Strings,
 	 * and Enums.  You can also have more complicated classes
 	 * as long as they follow the constraints of
-	 * @see org.subethamail.entity.type.AnyImmutableType</p>
+	 * @see org.subethamail.entity.type.AnyImmutableType </p>
 	 *
 	 * <p>A quick recap:  the object must be immutable, must
 	 * implement toString(), must have a static valueOf(String)

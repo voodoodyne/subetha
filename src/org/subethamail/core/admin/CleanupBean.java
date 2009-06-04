@@ -20,10 +20,12 @@ import org.subethamail.entity.Mail;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 
+import com.caucho.resources.ScheduledTask;
+
 /**
  * Performs cleanup operations by pruning (old) held messages and subscriptions.
  * 
- * This is scheduled (by a {@ling ScheduledTask}) daily.
+ * This is scheduled (by a {@link ScheduledTask}) daily.
  *
  *
  * @author Jeff Schnitzer

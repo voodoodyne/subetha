@@ -18,7 +18,6 @@ import javax.mail.internet.MimeMultipart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.plugin.i.SendFilterContext;
@@ -88,17 +87,13 @@ public class AppendFooterFilter extends GenericFilter
 		return "Text which is appended to the bottom of each message to the list.";
 	}
 	
-	/**
-	 * @see PluginFactory#getParameters()
-	 */
+	/* */
 	public FilterParameter[] getParameters()
 	{
 		return PARAM_DEFS;
 	}
 
-	/**
-	 * @see Filter#onSend(SubEthaMessage, SendFilterContext)
-	 */
+	/* */
 	@Override
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException
 	{

@@ -4,6 +4,7 @@
  */
 
 package org.subethamail.core.plugin.i;
+
 /**
  * This local interface allows blueprints to be registered
  * 

@@ -7,7 +7,6 @@ package org.subethamail.core.injector;
 
 import java.io.IOException;
 
-import javax.ejb.Local;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimePart;
 
@@ -24,12 +23,8 @@ import org.subethamail.entity.Mail;
  *
  * @author Jeff Schnitzer
  */
-@Local
 public interface Detacher
 {
-	/** */
-	public static final String JNDI_NAME = "subetha/Detacher/local";
-
 	/**
 	 * Removes attachments from the mime message, stores the attachments
 	 * as blobs, and substitutes in a special content type that indicates

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ejb.Local;
 import javax.mail.internet.InternetAddress;
 
 import org.subethamail.common.NotFoundException;
@@ -26,12 +25,8 @@ import org.subethamail.entity.i.PermissionException;
  *
  * @author Jeff Schnitzer
  */
-@Local
 public interface ListMgr
 {
-	/** */
-	public static final String JNDI_NAME = "subetha/ListMgr/local";
-
 	/**
 	 * Finds the id for a particular list URL.
 	 * 

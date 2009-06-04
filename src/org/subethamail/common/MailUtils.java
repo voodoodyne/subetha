@@ -190,7 +190,7 @@ public class MailUtils
 	/**
 	 * Removes Re: and friends from the beginning of a subject line.
 	
-	 * @param a subject that might or might not start with reply prefixes.
+	 * @param subject a subject that might or might not start with reply prefixes.
 	 * 
 	 * @return the subject without the reply prefixes.
 	 */
@@ -210,7 +210,7 @@ public class MailUtils
 	/**
 	 * Pass in either a comma and/or newline separated list of emails and it returns a list of InternetAddress
 	 * @param input
-	 * @return
+	 * @return the internet addresses contained in the text input
 	 * @throws AddressException if there is an error parsing the emails.
 	 */
 	public static InternetAddress[] parseMassSubscribe(String input) throws AddressException

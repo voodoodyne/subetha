@@ -238,7 +238,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	 * Writes a message out to the stream. First current filters are applied, and then message is written.
 	 * If an {@link IgnoreException} is thrown, ignore the message and return.
 	 *
-	 * @param msg The message to write
+	 * @param mail The message to write
 	 * @param stream The stream to write to
 	 */
 	protected void writeMessage(Mail mail, OutputStream stream) throws MessagingException, IOException

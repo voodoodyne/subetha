@@ -7,15 +7,12 @@ package org.subethamail.core.plugin.i;
 
 import java.util.Collection;
 
-import javax.ejb.Local;
-
 /**
  * This local interface allows filters to be registered.
  *
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@Local
 public interface FilterRegistry
 {
 	/**

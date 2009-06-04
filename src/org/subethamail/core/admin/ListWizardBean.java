@@ -57,9 +57,7 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	 */
 	Map<String,BlueprintData> blueprints = new ConcurrentHashMap<String, BlueprintData>();
 	
-	/**
-	 * @see BlueprintRegistry#register(Blueprint)
-	 */
+	/* */
 	public void register(Class<? extends Blueprint> c)
 	{
 		if (log.isInfoEnabled())
@@ -69,9 +67,7 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 		this.blueprints.put(c.getName(), bpd);
 	}
 
-	/**
-	 * @see BlueprintRegistry#deregister(Blueprint)
-	 */
+	/* */
 	public void deregister(Class<? extends Blueprint> c)
 	{
 		if (log.isInfoEnabled())
@@ -80,17 +76,13 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 		this.blueprints.remove(c.getName());
 	}
 
-	/**
-	 * @see ListWizard#getBlueprints()
-	 */
+	/* */
 	public Collection<BlueprintData> getBlueprints()
 	{
 		return this.blueprints.values();
 	}
 
-	/**
-	 * @see ListWizard#createMailingList(InternetAddress, URL, String, InternetAddress[], String)
-	 */
+	/* */
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
 		log.debug("Creating ML from " + super.toString() + ", blueprints are: " + this.blueprints);

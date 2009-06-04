@@ -24,8 +24,9 @@ import org.subethamail.core.plugin.i.SendFilterContext;
  */
 public abstract class GenericFilter implements Filter
 {
-	/**
-	 * @see Filter#getParameters()
+	
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.Filter#getParameters()
 	 */
 	public FilterParameter[] getParameters()
 	{
@@ -33,22 +34,22 @@ public abstract class GenericFilter implements Filter
 		return defs;
 	}
 	
-	/**
-	 * @see Filter#onInject(SubEthaMessage, FilterContext)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.Filter#onInject(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.FilterContext)
 	 */
 	public void onInject(SubEthaMessage msg, FilterContext ctx) throws IgnoreException, HoldException, MessagingException
 	{
 	}
 	
-	/**
-	 * @see Filter#onSend(SubEthaMessage, SendFilterContext)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.Filter#onSend(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.SendFilterContext)
 	 */
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException
 	{
 	}
 
-	/**
-	 * @see Filter#onArchiveRender(SubEthaMessage, ArchiveRenderFilterContext)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.Filter#onArchiveRender(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.ArchiveRenderFilterContext)
 	 */
 	public void onArchiveRender(SubEthaMessage msg, ArchiveRenderFilterContext ctx) throws MessagingException
 	{

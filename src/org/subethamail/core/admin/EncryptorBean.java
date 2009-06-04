@@ -82,9 +82,7 @@ public class EncryptorBean implements Encryptor
 	@SubEtha
 	protected SubEthaEntityManager em;
 	
-	/**
-	 * @see EncryptorManagement#start()
-	 */
+	/* */
 	@PostConstruct
 	public void start() throws Exception
 	{
@@ -130,9 +128,7 @@ public class EncryptorBean implements Encryptor
 		return Base64.decodeBase64(base64.getBytes());
 	}
 	
-	/**
-	 * @see Encryptor#encrypt(byte[])
-	 */
+	/* */
 	public byte[] encrypt(byte[] plainText)
 	{
 		if (log.isDebugEnabled())
@@ -150,9 +146,7 @@ public class EncryptorBean implements Encryptor
 		catch (GeneralSecurityException ex) { throw new EJBException(ex); }
 	}
 
-	/**
-	 * @see Encryptor#decrypt(byte[])
-	 */
+	/* */
 	public byte[] decrypt(byte[] cipherText) throws GeneralSecurityException
 	{
 		try
@@ -172,9 +166,7 @@ public class EncryptorBean implements Encryptor
 		catch (Exception ex) { throw new GeneralSecurityException(ex); }
 	}
 
-	/**
-	 * @see Encryptor#encryptString(String)
-	 */
+	/* */
 	public byte[] encryptString(String plainText)
 	{
 		if (log.isDebugEnabled())
@@ -202,17 +194,13 @@ public class EncryptorBean implements Encryptor
 		return this.encrypt(buf.toByteArray());
 	}
 
-	/**
-	 * @see Encryptor#decryptString(byte[])
-	 */
+	/* */
 	public String decryptString(byte[] cipherText) throws GeneralSecurityException
 	{
 		return this.decryptString(cipherText, Long.MAX_VALUE);
 	}
 	
-	/**
-	 * @see Encryptor#decryptString(byte[], long)
-	 */
+	/* */
 	public String decryptString(byte[] cipherText, long maxAgeMillis) throws GeneralSecurityException, ExpiredException
 	{
 		byte[] plainText = this.decrypt(cipherText);
@@ -243,9 +231,7 @@ public class EncryptorBean implements Encryptor
 	}
 	
 
-	/**
-	 * @see Encryptor#encryptList(List)
-	 */
+	/* */
 	public byte[] encryptList(List<String> parts)
 	{
 		ByteArrayOutputStream buf = new ByteArrayOutputStream();
@@ -271,17 +257,13 @@ public class EncryptorBean implements Encryptor
 		return this.encrypt(buf.toByteArray());
 	}
 
-	/**
-	 * @see Encryptor#decryptList(byte[])
-	 */
+	/* */
 	public List<String> decryptList(byte[] cipherText) throws GeneralSecurityException
 	{
 		return this.decryptList(cipherText, Long.MAX_VALUE);
 	}
 	
-	/**
-	 * @see Encryptor#decryptList(byte[], long)
-	 */
+	/* */
 	public List<String> decryptList(byte[] cipherText, long maxAgeMillis) throws GeneralSecurityException, ExpiredException
 	{
 		byte[] plainText = this.decrypt(cipherText);

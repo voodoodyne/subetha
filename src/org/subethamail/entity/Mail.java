@@ -268,8 +268,6 @@ public class Mail implements Serializable, Comparable<Mail>
 
 	/**
 	 * Pulls the date out of the message.
-	 *
-	 * @see the other constructor
 	 */
 	public Mail(String envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor) throws MessagingException
 	{

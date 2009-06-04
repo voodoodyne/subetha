@@ -8,8 +8,6 @@ package org.subethamail.core.injector.i;
 import java.io.InputStream;
 import java.util.Date;
 
-import javax.ejb.Local;
-
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.io.LimitExceededException;
 
@@ -18,12 +16,8 @@ import org.subethamail.common.io.LimitExceededException;
  *
  * @author Jeff Schnitzer
  */
-@Local
 public interface Injector
 {
-	/** */
-	public static final String JNDI_NAME = "subetha/Injector/local";
-	
 	/**
 	 * @return true of the address is intended for us, ie, it is for
 	 *  a known mailing list or it is a VERP bounce.

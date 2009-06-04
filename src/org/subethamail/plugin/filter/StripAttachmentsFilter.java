@@ -15,7 +15,6 @@ import javax.mail.Part;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.HoldException;
@@ -81,16 +80,16 @@ public class StripAttachmentsFilter extends GenericFilter
 		return "Eliminates attachments larger than a certain size on incoming mail. These attachments will be lost forever.";
 	}
 	
-	/**
-	 * @see PluginFactory#getParameters()
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#getParameters()
 	 */
 	public FilterParameter[] getParameters()
 	{
 		return PARAM_DEFS;
 	}
 
-	/**
-	 * @see Filter#onInject(SubEthaMessage, FilterContext)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onInject(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.FilterContext)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")

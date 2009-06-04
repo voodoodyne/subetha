@@ -52,18 +52,23 @@ public class SiteUtils
 		}
 	}
 
-	public String getListServletPath(){
+	public String getListServletPath()
+	{
 		return getContextPath() + "list/";
 	}
-	/** @param the contextPath for this webapp/container*/
-	public void setContextPath(String contextPath) {
+	
+	/** @param contextPath is the contextPath for this webapp/container */
+	public void setContextPath(String contextPath)
+	{
+		if (!contextPath.startsWith("/"))
+			contextPath = "/" + contextPath;
 		
-		if(!contextPath.startsWith("/")) contextPath = "/" + contextPath;
-		if(!contextPath.endsWith("/")) contextPath =  contextPath + "/";
+		if (!contextPath.endsWith("/"))
+			contextPath =  contextPath + "/";
 		
 		this.contextPath = contextPath;
 	}
 	
-	/** @returns the contextPath for this webapp/container*/
-	public String getContextPath(){ return this.contextPath;}
+	/** @return the contextPath for this webapp/container */
+	public String getContextPath() { return this.contextPath; }
 }

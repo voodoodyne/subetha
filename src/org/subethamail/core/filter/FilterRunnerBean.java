@@ -53,9 +53,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	// TODO: try to use the above concurrent map to get rid of this; when I did I get NPEs on put
 //	Set<Class<? extends Filter>> filterClasses = new HashSet<Class<? extends Filter>>();
 	
-	/**
-	 * @see FilterRegistry#register(Filter)
-	 */
+	/* */
 	public void register(Class<? extends Filter> c)
 	{
 		if (log.isInfoEnabled())
@@ -65,9 +63,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		this.filters.putIfAbsent(c.getName(), c); 
 	}
 
-	/**
-	 * @see FilterRegistry#deregister(Filter)
-	 */
+	/* */
 	public void deregister(Class<? extends Filter> c)
 	{
 		if (log.isInfoEnabled())
@@ -76,17 +72,13 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		this.filters.remove(c.getName());
 	}
 
-	/**
-	 * @see FilterRegistry#getFilters()
-	 */
+	/* */
 	public Collection<Class<? extends Filter>> getFilters()
 	{
 		return this.filters.values();
 	}
 
-	/**
-	 * @see FilterRunner#onInject(SubEthaMessage, MailingList)
-	 */
+	/* */
 	public void onInject(SubEthaMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException
 	{
 		if (log.isDebugEnabled())
@@ -126,9 +118,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 			throw holdException;
 	}
 
-	/**
-	 * @see FilterRunner#onSend(SubEthaMessage, Mail)
-	 */
+	/* */
 	public void onSend(SubEthaMessage msg, Mail mail) throws IgnoreException, MessagingException
 	{
 		MailingList list = mail.getList();
@@ -156,9 +146,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		}
 	}
 
-	/**
-	 * @see FilterRunner#onArchiveRender(SubEthaMessage, Mail)
-	 */
+	/* */
 	public void onArchiveRender(SubEthaMessage msg, Mail mail) throws MessagingException
 	{
 		MailingList list = mail.getList();
@@ -190,9 +178,9 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 			{
 				log.error("Error in filter OnArchiveRender: ", e);
 			}
-
 		}
 	}
+	
 	/**
 	 * Puts a nasty note in the logs when we find a plugin which has been
 	 * enabled on a list but is not (or no longer) registered.  It's not

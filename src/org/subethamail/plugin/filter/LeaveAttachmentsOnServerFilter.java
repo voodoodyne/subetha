@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.Archiver;
-import org.subethamail.core.plugin.i.Filter;
-import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.core.plugin.i.helper.GenericFilter;
 
@@ -60,8 +58,8 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter
 		return "Replace attachments in messages with a URL to a download page in the archives.";
 	}
 
-	/**
-	 * @see Filter#onSend(SubEthaMessage, FilterContext)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.plugin.i.helper.GenericFilter#onSend(org.subethamail.common.SubEthaMessage, org.subethamail.core.plugin.i.SendFilterContext)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")

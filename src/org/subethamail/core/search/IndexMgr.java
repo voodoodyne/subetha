@@ -86,7 +86,7 @@ public class IndexMgr
 	}
 	
 	/**
-	 * @returns the time at which the last index modification was begun.
+	 * @return the time at which the last index modification was begun.
 	 */
 	public long getLastModified()
 	{

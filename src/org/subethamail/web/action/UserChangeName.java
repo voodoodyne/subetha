@@ -18,7 +18,7 @@ import org.tagonist.propertize.Property;
  * Changes a user's name.
  * 
  * @author Jon Stevens
- * @Aauthor Jeff Schnitzer
+ * @author Jeff Schnitzer
  */
 public class UserChangeName extends AuthRequired 
 {

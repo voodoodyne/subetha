@@ -347,7 +347,10 @@
 			version="true"
 			Windowtitle="SubEtha Javadoc"
 		>
-			<fileset dir="${src.dir}"/>
+			<fileset dir="${src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+
 			<doctitle><![CDATA[<h1>SubEtha</h1>]]></doctitle>
 			<bottom><![CDATA[<i>Copyright &#169; ${YEAR} SubEtha. All Rights Reserved. Build version: ${build.version}</i>]]></bottom>
 		</javadoc>

@@ -8,8 +8,6 @@ package org.subethamail.core.admin.i;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
-import javax.ejb.Local;
-
 /**
  * Encrypts and decrypts strings using an internal key.  The key
  * will be randomly generated but otherwise remains constant.
@@ -20,12 +18,8 @@ import javax.ejb.Local;
  * 
  * @author Jeff Schnitzer
  */
-@Local
 public interface Encryptor
 {
-	/** */
-	public static final String JNDI_NAME = "subetha/Encryptor/local";
-
 	/**
 	 * Encrypts some bytes.  It will be AES encrypted to binary.
 	 */

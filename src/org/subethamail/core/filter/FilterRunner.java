@@ -5,14 +5,15 @@
 
 package org.subethamail.core.filter;
 
-import javax.ejb.Local;
 import javax.mail.MessagingException;
 
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
+import org.subethamail.core.plugin.i.SendFilterContext;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
 
@@ -21,12 +22,8 @@ import org.subethamail.entity.MailingList;
  *
  * @author Jeff Schnitzer
  */
-@Local
 public interface FilterRunner
 {
-	/** */
-	public static final String JNDI_NAME = "subetha/FilterRunner/local";
-
 	/**
 	 * Runs the message through all the filters associated with the list.
 	 * Note that the Mail does not exist yet.
@@ -38,14 +35,14 @@ public interface FilterRunner
 	/**
 	 * Runs the message through all the filters associated with the list.
 	 * 
-	 * @see Filter#onSend(SubEthaMessage, FilterContext)
+	 * @see Filter#onSend(SubEthaMessage, SendFilterContext)
 	 */
 	public void onSend(SubEthaMessage msg, Mail mail) throws IgnoreException, MessagingException;
 
 	/**
 	 * Runs the message through all the filters associated with the list.
 	 * 
-	 * @see Filter#onArchiveRender(SubEthaMessage, FilterContext)
+	 * @see Filter#onArchiveRender(SubEthaMessage, ArchiveRenderFilterContext)
 	 */
 	public void onArchiveRender(SubEthaMessage msg, Mail mail) throws MessagingException;
 }

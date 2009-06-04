@@ -5,8 +5,6 @@
 
 package org.subethamail.core.post;
 
-import javax.ejb.Local;
-
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
@@ -20,12 +18,8 @@ import org.subethamail.entity.SubscriptionHold;
  *
  * @author Jeff Schnitzer
  */
-@Local
 public interface PostOffice
 {
-	/** */
-	public static final String JNDI_NAME = "subetha/PostOffice/local";
-	
 	/**
 	 * Notifies the user that they are now the pround owner of a
 	 * bouncing new baby mailing list.

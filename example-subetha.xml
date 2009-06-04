@@ -48,13 +48,13 @@
 	-->
 
 	<!-- 
-		DO NOT UNCOMMENT ON ANYTHING BELOW THIS LINE ON RESIN 4.0.0
+		DO NOT UNCOMMENT ANYTHING BELOW THIS LINE ON RESIN 4.0.0
 		
 		IT SHOULD WORK ON RESIN 4.0.1
 		
 		Yes, this means you cannot change the port, bind address, or set
 		a fallback host on Resin 4.0.0.  There is a way, but it is a
-		temporary workaround - ask on the mailing list.
+		temporary workaround - ask on the subetha user mailing list.
 	-->
 
 	<!--

@@ -47,7 +47,11 @@
 	</database>	
 	-->
 
-	<!-- DO NOT UNCOMMENT ON ANYTHING BELOW THIS LINE, IT REQUIRES A FUTURE VERSION OF RESIN -->
+	<!-- 
+		DO NOT UNCOMMENT ON ANYTHING BELOW THIS LINE ON RESIN 4.0.0
+		
+		IT MIGHT WORK ON 4.0.1, CHECK THE MAILING LIST 
+	-->
 
 	<!--
 		This lets you override the parameters of the builtin SMTP server.  All

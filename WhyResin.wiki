@@ -2,7 +2,7 @@
 
 = "What's Resin?" =
 
-SubEtha was originally written on JBoss4, but the we are longtime users - dating all the way back to the days of JBoss2.  It was with some great dismay that we watched successive versions of JBoss take longer to start up, get increasingly more complicated to configure, and replace countless old bugs with new ones.  After RedHat bought JBoss, free public support virtually dried up, while the degenerating state of the documentation and near-untraceability of AOP code left the average opensource developer with few recourses.  The eternally-delayed (and botched) release of JBoss5 sent us scurrying for a new platform - and it wasn't going to be Ruby.
+SubEtha was originally written on JBoss4, but we are longtime users - dating all the way back to the days of JBoss2.  It was with some great dismay that we watched successive versions of JBoss take longer to start up, get increasingly more complicated to configure, and replace countless old bugs with new ones.  After RedHat bought JBoss, free public support virtually dried up, while the degenerating state of the documentation and near-untraceability of AOP code left the average opensource developer with few recourses.  The eternally-delayed (and botched) release of JBoss5 sent us scurrying for a new platform - and it wasn't going to be Ruby.
 
 Despite a ten-year history, Caucho's [http://www.caucho.com/ Resin] is the coolest little appserver that you've probably never heard of.  While other J2EE products either died or grew fat and bloated, Resin remains svelte, fast, and developer-friendly.
 

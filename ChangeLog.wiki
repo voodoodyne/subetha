@@ -28,7 +28,7 @@ different):
 {{{
   ALTER TABLE Mail CHANGE fromField sender TEXT;
   ALTER TABLE Mail CHANGE envelopeSender senderNormal TEXT NOT NULL;
-}}
+}}}
 
 == 1.0.2 ==
 

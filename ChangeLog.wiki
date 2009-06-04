@@ -1,4 +1,5 @@
 #summary Changes between releases
+#labels Featured
 
 For specific instructions to upgrade between versions, see UpgradingVersions.
 

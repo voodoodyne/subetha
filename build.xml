@@ -361,7 +361,7 @@
 		<property name="build.dist.zip" location="${build.dir}/${dist.name}.zip"/>
 	</target>
 
-	<target name="dist" depends="clean, init-dist, war, build-docs">
+	<target name="dist" depends="clean, init-dist, war, build-docs, javadoc">
 		<copy todir="${build.dist.dir}">
 			<fileset dir="${build.dir}">
 				<include name="*.war" />

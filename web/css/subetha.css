@@ -53,6 +53,10 @@ pre {
 	font-size: 170%;
 }
 
+.locBar * {
+	padding-right: 0px;
+}
+
 .sideBox {
 	margin-top: 0mm;
 	width: 12em;

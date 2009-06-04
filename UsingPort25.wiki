@@ -16,4 +16,4 @@ iptables -t nat -A PREROUTING -i eth0 -p tcp -m tcp --dport 25 -j REDIRECT --to-
 
 == OSX/BSD ipfw ==
 
-You get to fill in this part.  Yes, you.
+ipfw add fwd 127.0.0.1,25 tcp from any to 127.0.0.1 2500 in

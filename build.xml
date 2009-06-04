@@ -4,10 +4,7 @@
 	$Id$
 	$URL$
 
-	Top-level build file for SubEtha  Imports build files for the
-	various modules, so this is the only entry point.
-	
-	To run the junit tests, you must copy junit.jar into ANT_HOME/lib.
+	Master build file for SubEtha.
 -->
 
 <project name="subetha" default="war" basedir=".">

@@ -21,8 +21,9 @@
 	<property name="build.debug" value="on" />
 	<property name="build.deprecation" value="on" />
 
-	<property name="ant.build.javac.target" value="1.5" />
-	<property name="ant.build.javac.source" value="1.5" />
+	<property name="ant.build.javac.target" value="1.6" />
+	<property name="ant.build.javac.source" value="1.6" />
+	<property name="ant.build.javac.encoding" value="UTF-8" />
 
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
@@ -231,9 +232,7 @@
 			destdir="${build.dir}/rtest/classes"
 			includeAntRuntime="false"
 			debug="${build.debug}"
-			deprecation="${build.deprecation}"
-			target="${ant.build.javac.target}"
-			source="${ant.build.javac.source}">
+			deprecation="${build.deprecation}">
 
 			<classpath refid="rtest.build.classpath" />
 		</javac>
@@ -308,7 +307,7 @@
 	</target>
 	
 	<target name="build-docs" description="downloads docs from wiki and processes them into the build/docs dir">
-		<taskdef resource="net/sf/antcontrib/antlib.xml"/>
+		<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="master.classpath"/>
 		
 		<property name="gc.name" value="subetha"/>
 		

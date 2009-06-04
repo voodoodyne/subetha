@@ -154,12 +154,8 @@ public class EmailAddressTest extends SubEthaTestCase
 	/** */
 	protected void assertEmailInSelf(String email, Self me)
 	{
-		for (String selfEmail: me.getEmailAddresses())
-		{
-			if (selfEmail.equals(email))
-				return;
-		}
-		
+		if(me.getEmailAddresses().contains(email)) return;
+
 		fail("Missing " + email + " from " + me);
 	}
 	

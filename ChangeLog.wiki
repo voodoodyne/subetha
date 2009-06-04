@@ -13,6 +13,8 @@ For specific instructions to upgrade between versions, see UpgradingVersions.
 
  * Here are some of the changes to note:
    * Added fallback smtp host for a new integration option
+   * Site admins can change user's names
+   * List owners can change subscribed user's names but only if the names are empty
    * Updated libraries (Hibernate, Logging, SubethaSMTP)
    * Updated packaging and docs
    * Developed and tested on MySQL and PostgresSQL

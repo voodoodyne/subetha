@@ -26,6 +26,13 @@ public class PermissionException extends Exception
 		
 		this.needed = needed;
 	}
+
+	public PermissionException(Permission needed, String extra)
+	{
+		super("Requires permission " + needed + ". " + extra);
+		
+		this.needed = needed;
+	}
 	
 	/**
 	 */
@@ -34,4 +41,3 @@ public class PermissionException extends Exception
 		return this.needed;
 	}
 }
-

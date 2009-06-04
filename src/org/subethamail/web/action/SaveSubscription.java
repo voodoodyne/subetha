@@ -80,7 +80,7 @@ public class SaveSubscription extends AuthAction
 			
 			if (model.name != null)
 			{
-				Backend.instance().getListMgr().setSubscriberName(model.listId, model.personId, model.name);
+				Backend.instance().getAdmin().setPersonName(model.personId, model.name);
 			}
 		}
 		else

@@ -785,28 +785,6 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.subethamail.core.lists.i.ListMgr#setSubscriberName(java.lang.Long, java.lang.Long, java.lang.String)
-	 */
-	public void setSubscriberName(Long listId, Long personId, String name) throws NotFoundException, PermissionException
-	{
-		Subscription sub = this.getSubscriptionFor(listId, personId, Permission.EDIT_SUBSCRIPTIONS, getMe());
-		Person me = getMe();
-		boolean nameEmpty = "".equals(sub.getPerson().getName());
-		
-		if(me.isSiteAdmin() || ( me.getSubscription(listId) != null && 
-								 me.getSubscription(listId).getRole().isOwner() && 
-								 nameEmpty))
-		{
-			sub.getPerson().setName(name.trim());			
-		}
-		else
-		{
-			throw new PermissionException(Permission.EDIT_SUBSCRIPTIONS, "The Permission check succeeded, but another check was done and failed.");
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#getSubscription(java.lang.Long, java.lang.Long)
 	 */
 	public SubscriberData getSubscription(Long listId, Long personId) throws NotFoundException, PermissionException

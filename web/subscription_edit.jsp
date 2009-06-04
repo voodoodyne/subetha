@@ -24,14 +24,14 @@
 						<th>Name</th>
 						<td>
 							<c:choose>
-								<c:when test="${!empty model.data.name}">
-									<c:out value="${model.data.name}" />
-								</c:when>
-								<c:otherwise>
-									<input type="text" id="name" name="name" value=""/>
+								<c:when test="${auth.siteAdmin or myList.role.owner and empty model.data.name}">
+									<input type="text" id="name" name="name" value="${model.name}"/>
 									<c:if test="${!empty model.errors.name}">
 										<p class="error"><c:out value="${model.errors.name}" /></p>
 									</c:if>
+								</c:when>
+								<c:otherwise>
+									<c:out value="${model.data.name}" />
 								</c:otherwise>
 							</c:choose>
 						</td>

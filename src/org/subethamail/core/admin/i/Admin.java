@@ -204,4 +204,16 @@ public interface Admin
 	 * @return true if the password was correct and the list was deleted, false if it was incorrect.
 	 */
 	public boolean deleteList(Long listId, String password) throws NotFoundException;
+
+	/**
+	 * Sets the name of a person.  This can only be called in two cases:
+	 * <ol><li>By any site administrator</li>
+	 * <li>By owners of lists the person is subscribed to, but only when the person name is empty</li></ol>
+	 * 
+	 * @param personId The person whose name to set
+	 * @param name The name to set to
+	 * @throws NotFoundException if the person does not exist
+	 * @throws PermissionException if you aren't allowed to do this
+	 */
+	public void setPersonName(Long personId, String name) throws NotFoundException, PermissionException;
 }

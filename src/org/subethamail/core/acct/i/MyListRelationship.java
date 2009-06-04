@@ -8,6 +8,7 @@ package org.subethamail.core.acct.i;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.entity.i.Permission;
 
 
@@ -24,8 +25,10 @@ public class MyListRelationship implements Serializable
 	String listName;
 	String listEmail;
 	Set<Permission> perms;
-	boolean subscribed;
 	String deliverTo;
+
+	/** Will be null if user does not have a subscription */
+	RoleData role;
 	
 	protected MyListRelationship()
 	{
@@ -39,15 +42,15 @@ public class MyListRelationship implements Serializable
 					String listName,
 					String listEmail,
 					Set<Permission> permissions,
-					boolean subscribed,
-					String deliverTo)
+					String deliverTo,
+					RoleData role)
 	{
 		this.listId = listId;
 		this.listName = listName;
 		this.listEmail = listEmail;
 		this.perms = permissions;
-		this.subscribed = subscribed;
 		this.deliverTo = deliverTo;
+		this.role = role;
 	}
 
 	/** */
@@ -75,8 +78,11 @@ public class MyListRelationship implements Serializable
 	}
 
 	/** 
+	 * Note that list owners and site admins have all permissions, so
+	 * this value might differ from the value of getRole().getPermissions().
+	 * There can be permissions even when not subscribed.
+	 *  
 	 * @return the actual permissions of this user on the list.
-	 * Note that list owners and site admins have all permissions.
 	 */
 	public Set<Permission> getPerms()
 	{
@@ -92,6 +98,12 @@ public class MyListRelationship implements Serializable
 	/** */
 	public boolean isSubscribed()
 	{
-		return this.subscribed;
+		return this.role != null;
+	}
+	
+	/** Will be null if user is not subscribed */
+	public RoleData getRole()
+	{
+		return this.role;
 	}
 }

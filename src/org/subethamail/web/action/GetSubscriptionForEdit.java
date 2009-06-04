@@ -37,6 +37,7 @@ public class GetSubscriptionForEdit extends AuthAction
 		
 		model.deliverTo = model.data.getDeliverTo();
 		model.note = model.data.getNote();
+		model.name = model.data.getName();
 		
 		RoleData role = model.data.getRole();
 		

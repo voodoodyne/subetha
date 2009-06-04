@@ -181,8 +181,8 @@ public class Transmute
 				rawList.getName(),
 				rawList.getEmail(),
 				perms,
-				rawSub != null,
-				deliverTo == null ? null : deliverTo.getId());
+				deliverTo == null ? null : deliverTo.getId(),
+				rawSub == null ? null : role(rawSub.getRole()));
 	}
 
 	/**

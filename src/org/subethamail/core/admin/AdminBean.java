@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -101,8 +102,8 @@ public class AdminBean extends PersonalBean implements Admin
 			log.info("CLIENT:  " + msg);
 	}
 
-	/**
-	 * @see Admin#createMailingList(InternetAddress, URL, String, InternetAddress[])
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#createMailingList(javax.mail.internet.InternetAddress, java.net.URL, java.lang.String, javax.mail.internet.InternetAddress[])
 	 */
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners) throws DuplicateListDataException, InvalidListDataException
 	{
@@ -132,8 +133,8 @@ public class AdminBean extends PersonalBean implements Admin
 		return list.getId();
 	}
 
-	/**
-	 * @see Admin#establishPerson(InternetAddress, String)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#establishPerson(javax.mail.internet.InternetAddress, java.lang.String)
 	 */
 	public Long establishPerson(InternetAddress address, String password)
 	{
@@ -171,8 +172,8 @@ public class AdminBean extends PersonalBean implements Admin
 		}
 	}
 
-	/**
-	 * @see Admin#subscribeEmail(Long, InternetAddress, boolean, boolean)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#subscribeEmail(java.lang.Long, javax.mail.internet.InternetAddress, boolean, boolean)
 	 */
 	public AuthSubscribeResult subscribeEmail(Long listId, InternetAddress address, boolean ignoreHold, boolean silent) throws NotFoundException
 	{
@@ -189,8 +190,8 @@ public class AdminBean extends PersonalBean implements Admin
 				listId);
 	}
 
-	/**
-	 * @see Admin#subscribe(Long, Long, String, boolean)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#subscribe(java.lang.Long, java.lang.Long, java.lang.String, boolean)
 	 */
 	public SubscribeResult subscribe(Long listId, Long personId, String email, boolean ignoreHold) throws NotFoundException
 	{
@@ -360,9 +361,8 @@ public class AdminBean extends PersonalBean implements Admin
 	}
 
 
-	/**
-	 * @throws InterruptedException 
-	 * @see Admin#addEmail(Long, String)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#addEmail(java.lang.Long, java.lang.String)
 	 */
 	public void addEmail(Long personId, String email) throws NotFoundException
 	{
@@ -391,8 +391,8 @@ public class AdminBean extends PersonalBean implements Admin
 		this.selfModerate(who.getId());
 	}
 
-	/**
-	 * @see Admin#merge(Long, Long)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#merge(java.lang.Long, java.lang.Long)
 	 */
 	public void merge(Long fromPersonId, Long toPersonId) throws NotFoundException
 	{
@@ -488,9 +488,8 @@ public class AdminBean extends PersonalBean implements Admin
 		this.em.remove(from);
 	}
 
-	/**
-	 * @throws InterruptedException 
-	 * @see Admin#selfModerate(Long)
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#selfModerate(java.lang.Long)
 	 */
 	@SuppressWarnings("unchecked")
 	public int selfModerate(Long personId) throws NotFoundException
@@ -743,10 +742,56 @@ public class AdminBean extends PersonalBean implements Admin
 		return true;
 	}
 
-	/* */
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#setFallbackHost(java.lang.String)
+	 */
 	@Override
 	public void setFallbackHost(String host)
 	{
 		this.smtpService.setFallbackHost(host);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#setPersonName(java.lang.Long, java.lang.String)
+	 */
+	@PermitAll
+	public void setPersonName(Long personId, String name) throws NotFoundException, PermissionException
+	{
+		Person pers = this.em.get(Person.class, personId);
+		
+		// Let's just cut this out right now
+		if (pers.getName().equals(name))
+			return;
+		
+		Person me = getMe();
+		
+		// Easy case, are we an admin?  No prob.
+		if (me.isSiteAdmin())
+		{
+			pers.setName(name.trim());
+			return;
+		}
+		
+		// The special case (owners of lists to which the person is subscribed) only
+		// works if the Person does not already have a name.
+		if (pers.getName().trim().length() > 0)
+			throw new PermissionException(Permission.EDIT_SUBSCRIPTIONS, "User already has a name and you can't replace it");
+
+		// If the user is subscribed to any lists that we are an owner for
+		for (Subscription mySub: me.getSubscriptions().values())
+		{
+			if (mySub.getRole().isOwner())
+			{
+				if (pers.getSubscriptions().containsKey(mySub.getList().getId()))
+				{
+					pers.setName(name.trim());
+					return;
+				}
+			}
+		}
+		
+		// Fallthrough case is that we were not an appropriate list owner, too bad
+		throw new PermissionException(Permission.EDIT_SUBSCRIPTIONS, "You are not allowed to change this user's name");
+	}
+
 }

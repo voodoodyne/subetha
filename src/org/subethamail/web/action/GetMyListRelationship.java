@@ -10,6 +10,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.MyListRelationship;
+import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -36,6 +37,7 @@ public class GetMyListRelationship extends AuthAction
 	@Property PermissionWrapper perms;
 	@Property boolean subscribed;
 	@Property String deliverTo;
+	@Property RoleData role;
 	
 	@Property Set<Permission> rawPerms;
 		
@@ -48,6 +50,7 @@ public class GetMyListRelationship extends AuthAction
 		this.perms = new PermissionWrapper(data.getPerms());
 		this.subscribed = data.isSubscribed();
 		this.deliverTo = data.getDeliverTo();
+		this.role = data.getRole();
 		
 		this.rawPerms = data.getPerms();
 	}

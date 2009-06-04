@@ -1,0 +1,19 @@
+#summary Instructions for version upgrades
+#labels Featured
+
+= Upgrading =
+
+From 2.0 on, the general upgrade process is to download the SubEtha distribution, unzip it, and copy *se.war* to ${RESIN_HOME}/webapps.  Some specific version upgrades listed here in this file will have additional instructions.
+
+== 1.x -> 2.0 ==
+
+Two columns were renamed in the database schema but no other changes were made.
+ * Mail.fromField -> Mail.sender
+ * Mail.envelopeSender -> Mail.senderNormal
+
+Script for MySQL:
+
+{{{
+  ALTER TABLE Mail CHANGE fromField sender TEXT;
+  ALTER TABLE Mail CHANGE envelopeSender senderNormal TEXT NOT NULL;
+}}}

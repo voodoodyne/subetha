@@ -110,22 +110,26 @@ public class DeliveratorBean implements Deliverator
 			Address destination = new InternetAddress(emailAddress.getId());
 			SubEthaMessage msg = new SubEthaMessage(this.mailSession, mail.getContent());
 
+			String listEmail = mail.getList().getEmail();
+			
 			if (log.isDebugEnabled())
 				log.debug("Delivering msg of contentType " + msg.getContentType());
 
 			// Add an X-Loop header to prevent mail loops, the other
 			// end is tested on injection.
-			msg.addXLoop(mail.getList().getEmail());
+			msg.addXLoop(listEmail);
 
 			// Precedence: list
 			msg.setHeader(SubEthaMessage.HDR_PRECEDENCE, "list");
 
 			// Set up the VERP bounce address
 			byte[] token = this.encryptor.encryptString(emailAddress.getId());
-			String verp = VERPAddress.encodeVERP(mail.getList().getEmail(), token);
+			String verp = VERPAddress.encodeVERP(listEmail, token);
 			msg.setEnvelopeFrom(verp);
 			msg.setHeader(SubEthaMessage.HDR_ERRORS_TO, verp);
-			msg.setHeader(SubEthaMessage.HDR_SENDER, verp);
+			
+			//Sender is always the list address. This is so that lists can send to other lists. 
+			msg.setHeader(SubEthaMessage.HDR_SENDER, listEmail);
 
 			this.filterRunner.onSend(msg, mail);
 

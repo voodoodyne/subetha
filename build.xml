@@ -122,6 +122,10 @@
 				<include name="org/subethamail/common/**" />
 				<include name="org/subethamail/**/i/**" />
 			</fileset>
+			<manifest>
+				<attribute name="Specification-Version" value="${build.version}" />
+				<attribute name="Implementation-Version" value="${TODAY}" />
+			</manifest>
 		</jar>
 	</target>
 	
@@ -134,7 +138,7 @@
 			<fileset dir="${web.dir}">
 				<exclude name="WEB-INF/**" />
 			</fileset>
-			
+
 			<classes dir="${build.classes.dir}" />
 			
 			<classes dir="${src.dir}">
@@ -152,6 +156,10 @@
 		<copy file="${build.war.file}" todir="${deploy.dir}" />
 	</target>
 
+	<target name="deploy-dist" depends="clean, init-dist, war">
+		<copy file="${build.war.file}" todir="${deploy.dir}" />
+	</target>
+	
 	<target name="sync-deploy" depends="classes">
 		<property name="timeDriftLimit" value="100"/>
 		

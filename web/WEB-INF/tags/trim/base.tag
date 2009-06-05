@@ -42,7 +42,7 @@
 			</div>
 			
 			<div>
-				Powered by <a href="http://www.caucho.com/resin/">Resin CanDI</a>
+				Powered by <a href="http://www.caucho.com/resin/">Caucho Resin</a>
 			</div>
 		</div> <!-- footer -->
 	</body>

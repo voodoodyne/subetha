@@ -1,9 +1,5 @@
 <!--
 	This file should be copied to ${resin.home}/conf/subetha.xml.
-	
-	Note that nearly all properties are simply setter methods on the
-	appropriate objects; you can look at the javadocs for your
-	JDBC drivers, etc for more configuration options.
 -->
 
 <web-app xmlns="http://caucho.com/ns/resin"
@@ -26,6 +22,11 @@
 
 	<!-- 
 		Your database.  SubEtha will create the schema when it first connects.
+
+	
+		Note that nearly all driver properties are simply setter methods on the
+		appropriate objects; you can look at the javadocs for your
+		JDBC drivers for more configuration options.
 	-->
 	<database jndi-name="jdbc/subetha">
 		<driver type="org.postgresql.ds.PGConnectionPoolDataSource">

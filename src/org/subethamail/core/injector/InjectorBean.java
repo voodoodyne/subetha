@@ -378,13 +378,17 @@ public class InjectorBean implements Injector
 		if (hold == null)
 			return null;
 
-		for (Address addy: msg.getFrom())
+		Address[] froms = msg.getFrom();
+		if (froms != null)
 		{
-			HoldType fromHold = this.holdOrNot((InternetAddress)addy, toList);
-			if (fromHold == null)
-				return null;
-			else
-				hold = this.prioritize(hold, fromHold);
+			for (Address addy: froms)
+			{
+				HoldType fromHold = this.holdOrNot((InternetAddress)addy, toList);
+				if (fromHold == null)
+					return null;
+				else
+					hold = this.prioritize(hold, fromHold);
+			}
 		}
 		
 		InternetAddress envelope = new InternetAddress(envelopeSender);

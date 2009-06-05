@@ -15,15 +15,12 @@
 	<mail name="outbound">
 		<smtp-host>localhost</smtp-host>
 		<smtp-port>25</smtp-port>
-		<!-- See http://code.google.com/p/subetha/wiki/FaQ - enable at your own risk
-		<properties>mail.smtp.allow8bitmime=true</properties>
-		-->
+		<properties>mail.smtp.allow8bitmime=true</properties> <!-- See the FaQ -->
 	</mail>
 
 	<!-- 
 		Your database.  SubEtha will create the schema when it first connects.
 
-	
 		Note that nearly all driver properties are simply setter methods on the
 		appropriate objects; you can look at the javadocs for your
 		JDBC drivers for more configuration options.

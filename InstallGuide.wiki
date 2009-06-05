@@ -6,7 +6,7 @@ These instructions describe setting up a single, standalone instance of SubEtha.
 = Install Steps =
 
   # Create an empty database in your database server.  Note that SubEtha will create the database tables for you when it runs for the first time.
-  # Download and install Resin 4.0.0 (or greater) as per the Resin instructions.  The resin install directory is in this document as ${resin.dir}.
+  # [http://caucho.com/resin/download/ Download] and install [http://caucho.com/resin/ Resin] 4.0.0 (or greater) as per the Resin instructions.  The resin install directory is in this document as ${resin.dir}.
   # Download and copy the appropriate JDBC driver jar for your database into ${resin.dir}/lib.
   # Download and unzip the SubEtha distribution into a temporary directory.
   # Copy se.war to ${resin.dir}/webapps/

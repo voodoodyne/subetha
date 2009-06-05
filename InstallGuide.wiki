@@ -25,4 +25,6 @@ The default web interface is http://localhost:8080/se/. When SubEtha runs for th
 
 *Change the administrator password immediately*. This can be done from the web interface. In addition, change the site properties as described in the AdminGuide.
 
+http://subetha.googlecode.com/svn/wiki/img/subetha_admin_login.png
+
 You are now ready to continue with the AdminGuide.

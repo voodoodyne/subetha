@@ -3,11 +3,13 @@
 
 = Upgrading =
 
-From 2.0 on, the general upgrade process is to download the SubEtha distribution, unzip it, and copy *se.war* to ${RESIN_HOME}/webapps.  Some specific version upgrades listed here in this file will have additional instructions.
+From 2.0 on, the general upgrade is to follow the InstallGuide (please note the change to resin from jboss), skipping the database creation. The notes below describe the schema changes for the upgrade if you already have the database, and existing data. The app-server install, and setup has completely changes between the 1.X -> XXX distributions. 
 
 == 1.x -> 2.0 ==
 
-Two columns were renamed in the database schema but no other changes were made.
+Please follow the InstallGuide and then make the changes noted below for the database schema.
+
+Two columns were renamed in the database schema but no other changes were made from the.
  * Mail.fromField -> Mail.sender
  * Mail.envelopeSender -> Mail.senderNormal
 

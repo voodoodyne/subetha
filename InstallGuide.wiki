@@ -17,7 +17,7 @@ These instructions describe setting up a single, standalone instance of SubEtha.
 Please see ReceivingMail for specific instructions on how to integrate with your mail MTA.
 
 == Startup ==
-Start up Resin by running ${resin.dir}/bin/resin.sh or resin.bat. The default web interface is http://localhost:8080/se/. When SubEtha runs for the first time, it creates a site administrator account named "*root@localhost*", with the password "*password*".
+Start up Resin by running ${resin.dir}/bin/resin.sh or ${resin.dir}/resin.exe. The default web interface is http://localhost:8080/se/. When SubEtha runs for the first time, it creates a site administrator account named "*root@localhost*", with the password "*password*".
 
 *Change the administrator password immediately*. This can be done from the web interface. In addition, change the site properties as described in the AdminGuide.
 

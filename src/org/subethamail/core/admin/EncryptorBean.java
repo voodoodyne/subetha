@@ -41,14 +41,11 @@ import org.subethamail.entity.Config;
  * key is set as a config value.  If the key doesn't exist when
  * the service is started, a random key is generated.
  * 
- * The BootstrapperBean is a dependency that must be init'd first.
- * 
  * Note that this bean does NOT have a remote interface.
  * 
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-
 @ApplicationScoped
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class EncryptorBean implements Encryptor
@@ -99,7 +96,7 @@ public class EncryptorBean implements Encryptor
 		}
 		catch (NotFoundException ex)
 		{
-			if(log.isInfoEnabled()) log.info("Creating new cypher key for Encryptor, and storing it in the database");
+			if (log.isInfoEnabled()) log.info("Creating new cypher key for Encryptor, and storing it in the database");
 			Config cfg = new Config(KEY_CONFIG_ID, this.generateKey());
 			this.em.persist(cfg);
 		}

@@ -3,7 +3,7 @@
 
 <wiki:toc max_depth="3" />
 
-Developer setup instructions are the same as described in the InstallGuide. Take special note of the instructions below if you wish to run the unit tests, or build.
+Developer setup instructions are the same as described in the InstallGuide. Take special note of the instructions below if you wish to run the unit tests, or build.  For a quick description of SubEtha's architecture, see [http://blog.caucho.com/?p=209 this blog entry] written by Scott Ferguson (of Caucho).
 
 == Eclipse Setup ==
 The core developers use [http://eclipse.org/ Eclipse] as their IDE (some would say for lack of something better).

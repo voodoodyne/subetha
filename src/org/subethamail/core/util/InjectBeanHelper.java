@@ -17,6 +17,7 @@ public class InjectBeanHelper<T>
 	// this.mgr = m;
 	// }
 
+	/** */
 	@SuppressWarnings("unchecked")
 	public T getInstance(String clazz)
 	{
@@ -27,16 +28,17 @@ public class InjectBeanHelper<T>
 			tc = (Class<? extends T>) Class.forName(clazz);
 			o = this.mgr.getInstanceByType(tc);
 		}
-		catch (ClassNotFoundException e)
-		{
-		}
+		catch (ClassNotFoundException e) { /* ignored */ }
 
 		if (o == null)
+		{
 			o = (T) this.mgr.getInstanceByName(clazz);
+		}
 
 		return o;
 	}
 
+	/** */
 	public T getInstance(Class<? extends T> clazz)
 	{
 		return this.mgr.getInstanceByType(clazz);

@@ -9,7 +9,7 @@ import org.subethamail.smtp.TooMuchDataException;
 
 /**
  * Deliverer which injects to a subetha mailing list
- * 
+ *
  * @author Jeff Schnitzer
  */
 public class OurDeliverer implements Deliverer
@@ -28,7 +28,6 @@ public class OurDeliverer implements Deliverer
 	}
 
 	/* */
-	@Override
 	public void deliver(InputStream data) throws RejectException, TooMuchDataException, IOException
 	{
 		boolean accepted = this.injector.inject(this.from, this.to, data);

@@ -82,7 +82,7 @@ public class AdminBean extends PersonalBean implements Admin
 
 	@SuppressWarnings("unchecked")
 //	@InjectQueue
-	@Name("inject")	
+	@Name("inject")
 	BlockingQueue q;
 
 	/** Needed to get/set the fallback host */
@@ -251,7 +251,7 @@ public class AdminBean extends PersonalBean implements Admin
 				// Send mail to anyone that can approve
 				for (Subscription maybeModerator: list.getSubscriptions())
 					if (maybeModerator.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS)
-							&& maybeModerator.getDeliverTo() != null)
+							&& (maybeModerator.getDeliverTo() != null))
 						this.postOffice.sendModeratorSubscriptionHeldNotice(maybeModerator.getDeliverTo(), hold);
 
 				return SubscribeResult.HELD;
@@ -272,7 +272,7 @@ public class AdminBean extends PersonalBean implements Admin
 					// Notify anyone with APPROVE_SUBSCRIPTIONS
 					for (Subscription maybeNotify: list.getSubscriptions())
 						if (maybeNotify.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS)
-								&& maybeNotify.getDeliverTo() != null)
+								&& (maybeNotify.getDeliverTo() != null))
 							this.postOffice.sendModeratorSubscriptionNotice(maybeNotify.getDeliverTo(), sub, false);
 				}
 
@@ -312,7 +312,7 @@ public class AdminBean extends PersonalBean implements Admin
 		// Notify anyone with APPROVE_SUBSCRIPTIONS
 		for (Subscription maybeNotify: list.getSubscriptions())
 			if (maybeNotify.getRole().getPermissions().contains(Permission.APPROVE_SUBSCRIPTIONS)
-					&& maybeNotify.getDeliverTo() != null)
+					&& (maybeNotify.getDeliverTo() != null))
 				this.postOffice.sendModeratorSubscriptionNotice(maybeNotify.getDeliverTo(), sub, true);
 	}
 
@@ -372,7 +372,7 @@ public class AdminBean extends PersonalBean implements Admin
 		// the person, or addy is already associated with someone else.
 
 		// Lets quickly handle the case were we don't have to do anything
-		if (addy != null && addy.getPerson().getId().equals(personId))
+		if ((addy != null) && addy.getPerson().getId().equals(personId))
 			return;
 
 		Person who = this.em.get(Person.class, personId);
@@ -728,7 +728,7 @@ public class AdminBean extends PersonalBean implements Admin
 		this.em.remove(list);
 
 		// TODO: replace this with resin/amber code
-		
+
 		// Cascading persistence is not smart enough when dealing with the 2nd
 		// level cache; for instance, Person objects have cached relationships
 		// to (now defunct) Subscription objects.  We can just hit the problem
@@ -745,7 +745,6 @@ public class AdminBean extends PersonalBean implements Admin
 	/* (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#setFallbackHost(java.lang.String)
 	 */
-	@Override
 	public void setFallbackHost(String host)
 	{
 		this.smtpService.setFallbackHost(host);
@@ -758,20 +757,20 @@ public class AdminBean extends PersonalBean implements Admin
 	public void setPersonName(Long personId, String name) throws NotFoundException, PermissionException
 	{
 		Person pers = this.em.get(Person.class, personId);
-		
+
 		// Let's just cut this out right now
 		if (pers.getName().equals(name))
 			return;
-		
-		Person me = getMe();
-		
+
+		Person me = this.getMe();
+
 		// Easy case, are we an admin?  No prob.
 		if (me.isSiteAdmin())
 		{
 			pers.setName(name.trim());
 			return;
 		}
-		
+
 		// The special case (owners of lists to which the person is subscribed) only
 		// works if the Person does not already have a name.
 		if (pers.getName().trim().length() > 0)
@@ -789,7 +788,7 @@ public class AdminBean extends PersonalBean implements Admin
 				}
 			}
 		}
-		
+
 		// Fallthrough case is that we were not an appropriate list owner, too bad
 		throw new PermissionException(Permission.EDIT_SUBSCRIPTIONS, "You are not allowed to change this user's name");
 	}

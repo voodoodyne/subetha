@@ -10,10 +10,10 @@ import javax.context.ApplicationScoped;
 /**
  * This is really stupid.  Resin4 has a bug with @ApplicationScoped objects
  * that are also mapped as hessian services.  In that case, it seems to create
- * multiple instanes of the object rather than a singleton.
- * 
+ * multiple instances of the object rather than a singleton.
+ *
  * This is an *actual* singleton which holds the info we need.
- * 
+ *
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */

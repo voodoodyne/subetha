@@ -18,7 +18,7 @@
 
   * What JDK version does SubEtha require?
 
-  SubEtha requires JDK1.5 or later.
+  SubEtha requires JDK1.6 or later.
  
   * What Resin version does SubEtha require?
 

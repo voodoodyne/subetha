@@ -1,7 +1,7 @@
 #labels Featured
 = How to Install SubEtha =
 
-These instructions describe setting up a single, standalone instance of SubEtha.  You should have have installed JDK 1.5+ and whatever database you intend to use (MySQL and PostgreSQL are tested by the application developers, but any DB supported by Hibernate - with blob object support - should work).
+These instructions describe setting up a single, standalone instance of SubEtha.  You should have have installed JDK 1.6+ and whatever database you intend to use (MySQL and PostgreSQL are tested by the application developers, but any DB supported by Hibernate - with blob object support - should work).
 
 = Install Steps =
 

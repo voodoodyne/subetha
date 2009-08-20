@@ -22,7 +22,7 @@
  
   * What Resin version does SubEtha require?
 
-  Resin 4.0.0 (or possibly newer)
+  Currently Resin 4.0.0.  Due to evolution of the JSR299 CanDI spec, we will need to make a new release of SubEtha for the next functioning version of Resin; 4.0.1 unfortunately contains showstopper bugs.  4.0.2 is likely.
  
   * Does SubEtha run on other J2EE appservers?
 

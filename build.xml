@@ -82,7 +82,7 @@
 		<pathelement location="${src.dir}"/>	<!-- gets the hessian serializers -->
 		<path refid="rtest.build.classpath" />
 	</path>
-	
+
 	<target name="init">
 		<svn><info path="${basedir}" revisionProperty="revisionVersion" /></svn>
 
@@ -407,4 +407,27 @@
 		</zip>
 	</target>
 
+	<!-- Note this doesn't work.  See https://forum.hibernate.org/viewtopic.php?uid=482&f=6&t=999592&start=0 -->
+	<target name="ddl" depends="classes">
+		<mkdir dir="${build.dir}/ddl" />
+		
+		<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" 
+			classpathref="rtest.build.classpath" />
+		
+		<hibernatetool destdir="${build.dir}/ddl">
+			<classpath>
+				<path refid="rtest.build.classpath" />
+				<path location="${src.dir}" />
+			</classpath>
+			
+			<!-- This property seems to be ignored -->
+			<property key="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
+			
+			<!-- This manages to convey the dialect -->
+			<jpaconfiguration persistenceunit="subetha" propertyfile="mysql5.properties"/>
+	
+			<!-- This generates a 0-byte file.  It's broken. -->
+			<hbm2ddl export="false" format="true" outputfilename="mysql5.sql" />
+		</hibernatetool>
+	</target>
 </project>

@@ -6,7 +6,7 @@ These instructions describe setting up a single, standalone instance of SubEtha.
 = Install Steps =
 
   # Create an *empty database* called 'subetha' in your database server (UTF-8 is a good choice -> [I18N]). Note that SubEtha will create the database tables for you when it runs for the first time.
-  # [http://caucho.com/download/ Download] and *install [http://caucho.com/resin/ Resin]* 4.0.0 open source edition (NOT 4.0.1, you must use exactly 4.0.0) as per the Resin instructions.  The resin install directory is in this document as ${resin.dir}.
+  # [http://caucho.com/download/ Download] and *install [http://www.caucho.com/download/resin-4.0.0.zip Resin] 4.0.0* open source edition (NOT 4.0.1/2, you must use exactly 4.0.0) as per the Resin instructions.  The resin install directory is in this document as ${resin.dir}.
   # Download and copy the appropriate *JDBC driver* jar for your database into ${resin.dir}/lib. [http://dev.mysql.com/downloads/connector/j/ MySQL] (*Note*: we recommend using a 5.1 [http://downloads.mysql.com/snapshots.php#connector-j snapshot] because 5.1.7 has some pretty serious [http://downloads.mysql.com/snapshots.php#connector-j issues]). [http://jdbc.postgresql.org/download.html Postgres]
   # Download and unzip the SubEtha distribution into a temporary directory.
   # Copy se.war to *${resin.dir}/webapps/*

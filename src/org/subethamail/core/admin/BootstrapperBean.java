@@ -10,10 +10,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
-import javax.context.ApplicationScoped;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -42,10 +42,12 @@ import org.subethamail.entity.Config;
  * @author Scott Hernandez
  */
 
-// TODO: Add @Service, (remove scope?) back once bug is fixed in Resin. For now this is triggered by 
-// the Backend Servlet (started with web container): http://bugs.caucho.com/view.php?id=3429
+// TODO: Add @Service, (remove scope?) put back once bug is fixed in Resin. For now this is triggered by 
+// the Backend Servlet (started with web container via web.xml): http://bugs.caucho.com/view.php?id=3429
+// skot-2010/01/13 This bug has been closed but you still cannot use a hibernate session with a @Startup/Service object.
 
-//@Service
+
+//@Startup
 @ApplicationScoped
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class BootstrapperBean
@@ -77,15 +79,13 @@ public class BootstrapperBean
 	public static final String BOOTSTRAPPED_CONFIG_ID = "bootstrapped";
 	
 	/** */
-	@Current
-	SiteUtils siteUtils;
+	@Inject SiteUtils siteUtils;
 	
 	/** */
-	@Current Admin admin;
+	@Inject Admin admin;
 
 	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject @SubEtha protected SubEthaEntityManager em;
 
 	/* */
 	@PostConstruct

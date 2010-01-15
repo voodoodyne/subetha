@@ -8,7 +8,7 @@ package org.subethamail.web.servlet;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +28,7 @@ import org.subethamail.entity.i.PermissionException;
 public class ArchiveServlet extends HttpServlet
 {
 
-	@Current Archiver arch;
+	@Inject Archiver arch;
 	public final static String MODE_VIEW = "view";
 
 	public final static String MODE_DOWNLOAD = "download";

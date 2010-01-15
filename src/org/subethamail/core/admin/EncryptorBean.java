@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Random;
 
 import javax.annotation.PostConstruct;
-import javax.context.ApplicationScoped;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -25,6 +24,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJBException;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -76,6 +77,7 @@ public class EncryptorBean implements Encryptor
 	}
 
 	/** */
+	@Inject
 	@SubEtha
 	protected SubEthaEntityManager em;
 	

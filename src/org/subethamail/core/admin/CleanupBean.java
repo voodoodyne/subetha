@@ -8,9 +8,9 @@ package org.subethamail.core.admin;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Named;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ import com.caucho.resources.ScheduledTask;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@Named("cleanup")
+//@Named("cleanup")
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class CleanupBean
 {
@@ -47,6 +47,7 @@ public class CleanupBean
 	private static volatile boolean isRunning = false;
 	
 	/** */
+	@Inject
 	@SubEtha
 	protected SubEthaEntityManager em;
 

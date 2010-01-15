@@ -13,6 +13,7 @@ import javax.activation.DataHandler;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -39,6 +40,7 @@ public class DetacherBean implements Detacher
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(DetacherBean.class);
 	/** */
+	@Inject
 	@SubEtha
 	protected SubEthaEntityManager em;
 	

@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.annotation.Named;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJBException;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.sql.DataSource;
@@ -40,8 +40,6 @@ import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 
-import com.caucho.config.Name;
-
 /**
  * Manages the Lucene search index and provides a
  * low-level search API.  Conceptually there are two indexes, the
@@ -52,7 +50,7 @@ import com.caucho.config.Name;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@Named("indexer")
+//@Named("indexer")
 public class IndexerBean implements Indexer
 {
 	/** */
@@ -75,17 +73,18 @@ public class IndexerBean implements Indexer
 	static IndexMgr index1 = new IndexMgr(new File(BASE_DIR, "1"));
 	static IndexMgr index2 = new IndexMgr(new File(BASE_DIR, "2"));
 
-	@Current Indexer ind;
+	@Inject Indexer ind;
 
 	/** */
-	@Name("jdbc/subetha")
+	@Inject
+	@Named("jdbc/subetha")
 	DataSource ds = null;
 
 	/** */
-	@OutboundMTA Session mailSession;
+	@Inject @OutboundMTA Session mailSession;
 
 	/** */
-	@SubEtha
+	@Inject @SubEtha
 	protected SubEthaEntityManager em;
 
 	/**

@@ -6,8 +6,8 @@
 package org.subethamail.core.admin;
 
 import javax.annotation.PostConstruct;
-import javax.context.ApplicationScoped;
-import javax.inject.New;
+import javax.enterprise.inject.New;
+import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Scott Hernandez
  */
-//@Service
-@ApplicationScoped
+//@Startup
+@Singleton
 public class ScannerService
 {
 	/** */
@@ -26,7 +26,6 @@ public class ScannerService
 
 	@New
 	BeanScanner scanner;
-	//ClassLoaderScanner scanner;
 	
 	@PostConstruct
 	public void postConstruct()
@@ -49,7 +48,6 @@ public class ScannerService
 	 */
 	public void scan()
 	{
-		this.scanner.scan();
+		this.scanner.registerScannedClasses();
 	}
-	
 }

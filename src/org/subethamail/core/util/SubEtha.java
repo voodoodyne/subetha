@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.inject.BindingType;
+import javax.inject.Qualifier;
 import javax.persistence.EntityManager;
 
 /**
@@ -31,7 +31,7 @@ import javax.persistence.EntityManager;
  * @author Scott Hernandez
  */
 
-@BindingType
+@Qualifier
 @Target({TYPE,FIELD,METHOD,PARAMETER})
 @Retention(RUNTIME)
 public @interface SubEtha

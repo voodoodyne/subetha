@@ -5,6 +5,8 @@
 
 package org.subethamail.core.util;
 
+import javax.inject.Inject;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.auth.SubEthaPrincipal;
 import org.subethamail.entity.Mail;
@@ -37,6 +39,7 @@ public class PersonalBean
 	//@Resource protected SessionContext sessionContext;
 
 	/** */
+	@Inject
 	@SubEtha
 	protected SubEthaEntityManager em;
 	

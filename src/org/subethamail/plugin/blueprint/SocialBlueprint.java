@@ -8,7 +8,7 @@ package org.subethamail.plugin.blueprint;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.inject.Current;
+import javax.inject.Inject;
 
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.lists.i.ListMgr;
@@ -28,7 +28,7 @@ import org.subethamail.plugin.filter.ReplyToFilter;
  */
 public class SocialBlueprint implements Blueprint
 {
-	@Current ListMgr listMgr;
+	@Inject ListMgr listMgr;
 
 	/** */
 	public String getName()

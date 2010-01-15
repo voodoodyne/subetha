@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -52,7 +52,7 @@ public class SubEthaEntityManager implements EntityManager
 	private final static Logger log = LoggerFactory.getLogger(SubEthaEntityManager.class);
 	
 	/** The entity manager to use under the covers */
-	@Current private EntityManager base;
+	@Inject private EntityManager base;
 
 	/**
 	 * Similar to find(), but throws a NotFoundException instead of returning null

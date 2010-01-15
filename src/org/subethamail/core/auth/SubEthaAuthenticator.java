@@ -9,6 +9,7 @@ import java.security.Principal;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ public class SubEthaAuthenticator implements Authenticator
 	private static Logger log = LoggerFactory.getLogger(SubEthaAuthenticator.class);
 
 	/** */
+	@Inject
 	@SubEtha
 	SubEthaEntityManager em;
 	

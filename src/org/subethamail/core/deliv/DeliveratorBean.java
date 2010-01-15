@@ -11,7 +11,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -49,16 +49,15 @@ public class DeliveratorBean implements Deliverator
 	private final static Logger log = LoggerFactory.getLogger(DeliveratorBean.class);
 
 	/** */
-	@Current FilterRunner filterRunner;
-	@Current Encryptor encryptor;
-	@Current Detacher detacher;
+	@Inject FilterRunner filterRunner;
+	@Inject Encryptor encryptor;
+	@Inject Detacher detacher;
 
 	/** */
-	@OutboundMTA Session mailSession;
+	@Inject @OutboundMTA Session mailSession;
 
 	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject	@SubEtha protected SubEthaEntityManager em;
 
 	/**
 	 * @see Deliverator#deliverToEmail(Long, String)

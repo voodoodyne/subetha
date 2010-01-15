@@ -7,7 +7,7 @@ package org.subethamail.web.servlet;
 
 import java.io.IOException;
 
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +27,7 @@ import org.subethamail.entity.i.PermissionException;
 @SuppressWarnings("serial")
 public class AttachmentServlet extends HttpServlet
 {
-	@Current Archiver archiver;
+	@Inject Archiver archiver;
 
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)

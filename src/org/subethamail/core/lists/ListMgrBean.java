@@ -22,7 +22,7 @@ import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -45,6 +45,7 @@ import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.FilterRegistry;
+import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.queue.InjectedQueueItem;
 import org.subethamail.core.util.InjectBeanHelper;
 import org.subethamail.core.util.PersonalBean;
@@ -60,8 +61,6 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
-
-import com.caucho.config.Name;
 
 /**
  * Implementation of the ListMgr interface.
@@ -79,17 +78,18 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	private final static Logger log = LoggerFactory.getLogger(ListMgrBean.class);
 
 	/** */
-	@Current FilterRunner filterRunner;
-	@Current FilterRegistry filterReg;
-	@Current Admin admin;
-	@Current AccountMgr accountMgr;
+	@Inject FilterRunner filterRunner;
+	@Inject FilterRegistry filterReg;
+	@Inject Admin admin;
+	@Inject AccountMgr accountMgr;
 
 	@SuppressWarnings("unchecked")
-//	@InjectQueue
-	@Name("inject")
+	@InjectQueue
+	@Inject
+//	@Named("inject")
 	BlockingQueue q;	
 	
-	//@Current 
+	@Inject 
 	InjectBeanHelper<Filter> fHelper = new InjectBeanHelper<Filter>();
 	
 
@@ -360,7 +360,12 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 
-        Filter filt = fHelper.getInstance(className);
+        Filter filt = null;
+		try {
+			filt = fHelper.getInstance(className);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
         
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
 
@@ -399,10 +404,15 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	{
 		MailingList list = this.getListFor(listId, Permission.EDIT_FILTERS);
 
-		Filter filt = fHelper.getInstance(className);
+		Filter filt = null;
+		try {
+			filt = fHelper.getInstance(className);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		
 		if (filt == null)
-			throw new IllegalStateException("Filter does not exist or can't be created by inject manager");
+			throw new IllegalStateException("Filter does not exist or can't be created by inject manager - " + className);
 
 		EnabledFilter enabled = list.getEnabledFilters().get(className);
 		if (enabled == null)

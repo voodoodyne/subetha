@@ -11,7 +11,7 @@ import java.nio.charset.Charset;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Current;
+import javax.inject.Inject;
 
 import org.apache.mina.common.IdleStatus;
 import org.apache.mina.common.IoHandlerAdapter;
@@ -34,8 +34,8 @@ import com.caucho.config.Service;
 @Service
 public class PostfixTcpTableService implements PostfixTcpTableManagement
 {
-	@Current Injector injector;
-	@Current SMTPService smtpService;
+	@Inject Injector injector;
+	@Inject SMTPService smtpService;
 
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(PostfixTcpTableService.class);

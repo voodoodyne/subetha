@@ -29,15 +29,13 @@
 	<jms:JmsConnectionFactory />
 
 	<jms:FileQueue>
-<!--		<queue:DeliveryQueue/>-->
+		<queue:DeliveryQueue/>
 		<Named>delivery</Named>
-		<resin:Name>delivery</resin:Name>
 	</jms:FileQueue>
 
 	<jms:FileQueue>
-<!--		<queue:InjectQueue/>-->
+		<queue:InjectQueue/>
 		<Named>inject</Named>		
-		<resin:Name>inject</resin:Name>
 	</jms:FileQueue>
 
 <!--	<ejb:MessageBeanConfig destinationName="inject" class="org.subethamail.core.queue.InjectListener"/>-->
@@ -52,29 +50,29 @@
 
 	<ejb-server data-source="jdbc/subetha"
 		validate-database-schema="true" create-database-schema="true" />
-
-	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Admin" servlet-class="org.subethamail.core.admin.AdminBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/ListWizard" servlet-class="org.subethamail.core.admin.ListWizardBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Injector" servlet-class="org.subethamail.core.injector.InjectorBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Archiver" servlet-class="org.subethamail.core.lists.ArchiverBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/ListMgr" servlet-class="org.subethamail.core.lists.ListMgrBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/Indexer" servlet-class="org.subethamail.core.search.IndexerBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>
-	<servlet-mapping url-pattern="/api/EegorBringMeAnotherBrain" servlet-class="org.subethamail.core.admin.EegorBringMeAnotherBrainBean">
-		<protocol uri="hessian:"/>
-	</servlet-mapping>		
+<!---->
+<!--	<servlet-mapping url-pattern="/api/AccountMgr" servlet-class="org.subethamail.core.acct.AccountMgrBean">-->
+<!--		<protocol uri="hessian:"/>-->
+<!--	</servlet-mapping>-->
+<!--	<servlet-mapping url-pattern="/api/Admin" servlet-class="org.subethamail.core.admin.AdminBean">-->
+<!--		<protocol uri="hessian:"/>-->
+<!--	</servlet-mapping>-->
+<!--	<servlet-mapping url-pattern="/api/ListWizard" servlet-class="org.subethamail.core.admin.ListWizardBean">-->
+<!--		<protocol uri="hessian:"/>-->
+<!--	</servlet-mapping>-->
+<!--	<servlet-mapping url-pattern="/api/Injector" servlet-class="org.subethamail.core.injector.InjectorBean">-->
+<!--		<protocol uri="hessian:"/>-->
+<!--	</servlet-mapping>-->
+<!--	<servlet-mapping url-pattern="/api/Archiver" servlet-class="org.subethamail.core.lists.ArchiverBean">-->
+<!--		<protocol uri="hessian:"/>-->
+<!--	</servlet-mapping>-->
+<!--	<servlet-mapping url-pattern="/api/ListMgr" servlet-class="org.subethamail.core.lists.ListMgrBean">-->
+<!--		<protocol uri="hessian:"/>-->
+<!--	</servlet-mapping>-->
+<!--	<servlet-mapping url-pattern="/api/Indexer" servlet-class="org.subethamail.core.search.IndexerBean">-->
+<!--		<protocol uri="hessian:"/>-->
+<!--	</servlet-mapping>-->
+<!--	<servlet-mapping url-pattern="/api/EegorBringMeAnotherBrain" servlet-class="org.subethamail.core.admin.EegorBringMeAnotherBrainBean">-->
+<!--		<protocol uri="hessian:"/>-->
+<!--	</servlet-mapping>		-->
 </web-app>

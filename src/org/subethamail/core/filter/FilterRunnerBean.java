@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.context.ApplicationScoped;
-import javax.inject.Current;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.mail.MessagingException;
 
 import org.slf4j.Logger;
@@ -39,10 +39,10 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(FilterRunnerBean.class);
 
-	//@Current
+	@Inject
 	protected InjectBeanHelper<Filter> fHelper = new InjectBeanHelper<Filter>();
 
-	@Current
+	@Inject
 	ScannerService ss;
 	
 	/**
@@ -88,7 +88,13 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		
 		for (EnabledFilter enabled: list.getEnabledFilters().values())
 		{
-			Filter filter = fHelper.getInstance(enabled.getClassName());
+			Filter filter = null;
+			try {
+				filter = fHelper.getInstance(enabled.getClassName());
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (filter == null)
 			{
 				// Log and ignore
@@ -128,7 +134,13 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 
 		for (EnabledFilter enabled: list.getEnabledFilters().values())
 		{
-			Filter filter = fHelper.getInstance(enabled.getClassName());
+			Filter filter = null;
+			try {
+				filter = fHelper.getInstance(enabled.getClassName());
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (filter == null)
 			{
 				// Log and ignore

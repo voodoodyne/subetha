@@ -7,7 +7,13 @@ package org.subethamail.web.action;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Set;
 
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.util.AnnotationLiteral;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -37,7 +43,7 @@ public class CreateList extends AuthRequired
 	private final static Logger log = LoggerFactory.getLogger(CreateList.class);
 
 	//disabled till tagonist is inject aware, and all our actions work (not ambiguous) .
-	//@Current
+	//@Inject
 	//SiteUtils siteUtils = InjectManager.create();
 	
 	/** */
@@ -78,6 +84,7 @@ public class CreateList extends AuthRequired
 	}
 	
 	/** */
+	@SuppressWarnings("unchecked")
 	public void authExecute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();
@@ -91,7 +98,11 @@ public class CreateList extends AuthRequired
 		{
 			url = new URL(model.url);
 			
-			SiteUtils siteUtils = (InjectManager.create()).getInstanceByType(SiteUtils.class);
+			BeanManager mgr = InjectManager.getCurrent();
+			Set<Bean<?>> beans = mgr.getBeans(SiteUtils.class, new AnnotationLiteral<Any>(){});
+			Bean<SiteUtils> suBean = (Bean<SiteUtils>) beans.iterator().next();
+			CreationalContext<SiteUtils> cc = mgr.createCreationalContext(suBean);
+			SiteUtils siteUtils = (SiteUtils) mgr.getReference(suBean, SiteUtils.class, cc);
 			
 			if (!siteUtils.isValidListUrl(url))
 				model.setError("url", "List url must contain " + siteUtils.getListServletPath());

@@ -11,6 +11,7 @@ import java.util.concurrent.BlockingQueue;
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -24,12 +25,10 @@ import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Subscription;
 
-import com.caucho.config.Name;
-
 /**
  * Queue which takes the individual, stored messages and turns them into
  * a series of delivery queue messages.  This could take a while; any
- * individual message may get turned into thousands of outboud queue
+ * individual message may get turned into thousands of out-bound queue
  * messages.
  */
 @MessageDriven
@@ -41,11 +40,13 @@ public class InjectListener implements MessageListener
 
 	/** */
 	@SuppressWarnings("unchecked")
-//	@DeliveryQueue 
-	@Name("delivery")
+	@Inject
+	@DeliveryQueue 
+//	@Named("delivery")
 	BlockingQueue outboundQueue;
 
 	/** */
+	@Inject
 	@SubEtha
 	protected SubEthaEntityManager em;
 

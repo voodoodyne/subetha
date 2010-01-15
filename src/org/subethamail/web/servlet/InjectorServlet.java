@@ -8,7 +8,7 @@ package org.subethamail.web.servlet;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,10 +39,10 @@ import org.subethamail.web.security.SubEthaLogin;
 @SuppressWarnings("serial")
 public class InjectorServlet extends HttpServlet
 {
-	@Current AccountMgr accMgr;
-	@Current Injector inj;
+	@Inject AccountMgr accMgr;
+	@Inject Injector inj;
 	
-	@Current SubEthaLogin resinLogin;
+	@Inject SubEthaLogin resinLogin;
 	
 	/** */
 	public static final String AUTH_EMAIL_PARAM = "authEmail";

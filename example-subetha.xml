@@ -1,11 +1,28 @@
 <!--
 	This file should be copied to ${resin.home}/conf/subetha.xml.
+	It will be included when the web-app config is loaded by reading resin-web.xml
 -->
 
 <web-app xmlns="http://caucho.com/ns/resin"
 	xmlns:resin="urn:java:com.caucho.resin"
 	xmlns:smtp="urn:java:org.subethamail.core.smtp"
 	>
+
+	<!--
+		This lets you override the parameters of the builtin SMTP server.  All
+		of the fields are optional.
+
+		A note about fallbackHost:  If specified, SubEtha will proxy
+		to another host all SMTP exchanges which are not intended
+		for active lists on this server.  This allows you to run SubEtha
+		on port 25, facing the world, in concert with your MTA but without
+		altering your MTA configuration. See the administration documentation
+		for more details. 
+	-->
+	
+	<smtp:SMTPService>
+		<port>2500</port>
+	</smtp:SMTPService>
 	
 	<!--
 		Your MTA which can send outbound mail.  SubEtha relies on
@@ -31,6 +48,7 @@
 			<databaseName>subetha</databaseName>
 			<user>subetha</user>
 			<password>subetha</password>
+			<portNumber>5432</portNumber> <!--  might be 5433 for 8.4 (with 8.3 legacy upgrade) -->			
 		</driver>
 	</database>
 
@@ -44,33 +62,4 @@
 		</driver>
 	</database>	
 	-->
-
-	<!-- 
-		DO NOT UNCOMMENT ANYTHING BELOW THIS LINE ON RESIN 4.0.0
-		
-		IT SHOULD WORK ON RESIN 4.0.1
-		
-		Yes, this means you cannot change the port, bind address, or set
-		a fallback host on Resin 4.0.0.  There is a way, but it is a
-		temporary workaround - ask on the subetha user mailing list.
-	-->
-
-	<!--
-		This lets you override the parameters of the builtin SMTP server.  All
-		of the fields are optional.
-
-		A note about fallbackHost:  If specified, SubEtha will proxy
-		to another host all SMTP exchanges which are not intended
-		for active lists on this server.  This allows you to run SubEtha
-		on port 25, facing the world, in concert with your MTA but without
-		altering your MTA configuration. See the administration documentation
-		for more details.
-
-	<smtp:SMTPService>
-		<port>2500</port>
-		<bindAddress>yourinterface</bindAddress>
-		<fallbackHost>localhost:2525</fallbackHost>
-	</smtp:SMTPService>
-	-->
-
 </web-app>

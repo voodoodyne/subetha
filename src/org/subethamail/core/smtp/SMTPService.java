@@ -86,8 +86,8 @@ public class SMTPService
 		
 		this.smtpServer.setPort(this.port);
 		
-		if (this.hostName != null)
-			this.smtpServer.setHostName(this.hostName);
+		if (this.hostName != null  && !"".equals(this.hostName.trim()) )
+			this.smtpServer.setHostName(this.hostName.trim());
 		
 		this.smtpServer.start();
 	}

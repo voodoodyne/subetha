@@ -21,7 +21,7 @@ If you are familiar with mailing list managers, SubEtha should be easy to master
   * Any time a user wishes to add a new email address to their account (either manually or by subscribing to a mailing list), a roundtrip confirmation using a token is required.
   * Confirmation tokens are completely stateless; no changes are made on the server until the token is confirmed. If a token is lost or sent to the wrong address, simply repeat the add/signup process.
   * Some accounts are designated as Site Administrators. In addition to the ability to create mailiing lists, site administrators have full permissions on all mailing lists.
-  * Only Site Administrators can grant or revoke the Site Administrator privelage.
+  * Only Site Administrators can grant or revoke the Site Administrator privilege.
 
 == Mailing Lists ==
 
@@ -90,4 +90,4 @@ If you are familiar with mailing list managers, SubEtha should be easy to master
     # *Filters* manipulate email either as it arrives or as it is sent (or both). Each filter defines a set of configuration parameters that list owners can set on a per-list basis.  See DevelopingFilters.
     # *Blueprints* initialize a new mailing list with a set of configuration options. This includes basic settings, enabled filters, filter arguments, roles, and permissions. No matter what blueprint a list is created with, list owners are free to reconfigure the list afterwards.
 
-  * Plugins run inside the SubEtha JVM and run with site administrator privelage. Technically this means they can do almost anything. We recommend you stick to the APIs; any other API is considered internal and highly likely to change without notice.
+  * Plugins run inside the SubEtha JVM and run with site administrator privilege. Technically this means they can do almost anything. We recommend you stick to the APIs; any other API is considered internal and highly likely to change without notice.

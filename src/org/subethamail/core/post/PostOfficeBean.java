@@ -11,7 +11,7 @@ import java.net.URL;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -56,10 +56,10 @@ public class PostOfficeBean implements PostOffice
 	@OutboundMTA Session mailSession;
 
 	/** */
-	@Current Encryptor encryptor;
+	@Inject Encryptor encryptor;
 
 	/** */
-	@Current EegorBringMeAnotherBrain brainBringer;
+	@Inject EegorBringMeAnotherBrain brainBringer;
 	
 	/** */
 	@SubEtha

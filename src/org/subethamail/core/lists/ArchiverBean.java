@@ -32,7 +32,7 @@ import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -88,12 +88,12 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(ArchiverBean.class);
 
-	@Current Deliverator deliverator;
-	@Current FilterRunner filterRunner;
-	@Current Detacher detacher;
-	@Current ListMgr listManager;
-	@Current Injector injector;
-	@Current Indexer indexer;
+	@Inject Deliverator deliverator;
+	@Inject FilterRunner filterRunner;
+	@Inject Detacher detacher;
+	@Inject ListMgr listManager;
+	@Inject Injector injector;
+	@Inject Indexer indexer;
 
 	/** */
 	@OutboundMTA

@@ -24,7 +24,7 @@ import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Subscription;
 
-import com.caucho.config.Name;
+import javax.inject.Named;
 
 /**
  * Queue which takes the individual, stored messages and turns them into
@@ -42,7 +42,7 @@ public class InjectListener implements MessageListener
 	/** */
 	@SuppressWarnings("unchecked")
 //	@DeliveryQueue 
-	@Name("delivery")
+	@Named("delivery")
 	BlockingQueue outboundQueue;
 
 	/** */

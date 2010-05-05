@@ -334,7 +334,7 @@
 		<!-- Replace links in files -->
 		<for list="${wiki.pages}" param="wiki.page">
 		  <sequential>
-			<replace dir="${docs.dir}" token="/p/${gc.name}/wiki/${wiki.page}" value="@{wiki.page}.html"/>
+			<replace dir="${docs.dir}" token="/p/${gc.name}/wiki/@{wiki.page}" value="@{wiki.page}.html"/>
 		  </sequential>
 		</for>
 		

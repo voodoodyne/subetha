@@ -8,7 +8,7 @@ package org.subethamail.core.admin;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Named;
+import javax.inject.Named;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 

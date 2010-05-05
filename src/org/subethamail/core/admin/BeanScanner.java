@@ -5,18 +5,14 @@
 
 package org.subethamail.core.admin;
 
-import java.util.Set;
-
-import javax.inject.Current;
-import javax.inject.manager.Manager;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 
 import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.core.plugin.i.BlueprintRegistry;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterRegistry;
-
-import com.caucho.config.inject.AbstractBean;
-import com.caucho.config.inject.InjectManager;
 
 
 /**
@@ -30,30 +26,23 @@ import com.caucho.config.inject.InjectManager;
  */
 public class BeanScanner
 {
-	@Current
-	BlueprintRegistry	blueReg;
-	
-	@Current
-	FilterRegistry		filtReg;
+	@Inject	BlueprintRegistry	blueReg;
+	@Inject	FilterRegistry		filtReg;
 
-	@Current Manager 	mgr;
+	/* Changed behavior to scan on creation, not method call. */
+	@Inject @Any Instance<Filter> _filters;
+	@Inject @Any Instance<Blueprint> _blueprints;
 	
-	/** */
-	@SuppressWarnings("unchecked")
-	public void scan()
+	/** Just registers classes. */
+	public void registerScannedClasses()
 	{
-		Set<AbstractBean<? extends Filter>> filtBeans = ((InjectManager)mgr).resolve(Filter.class, null);
-		
-		for (AbstractBean<? extends Filter> bean : filtBeans)
+		for (Filter filt: _filters)
 		{
-			filtReg.register((Class<? extends Filter>)bean.getTargetClass());
+			filtReg.register(filt.getClass());
 		}
-		
-		Set<AbstractBean<? extends Blueprint>> blueBeans = ((InjectManager)mgr).resolve(Blueprint.class, null);
-		
-		for (AbstractBean<? extends Blueprint> bean : blueBeans)
+		for (Blueprint print: _blueprints)
 		{
-			blueReg.register((Class<? extends Blueprint>)bean.getTargetClass());
+			blueReg.register(print.getClass());
 		}
 	}
 }

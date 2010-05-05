@@ -8,7 +8,7 @@ package org.subethamail.web.servlet;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +35,7 @@ public class ListServlet extends HttpServlet
 	
 	public static final String BAD_LIST_PAGE = "/list_unknown.jsp";
 
-	@Current ListMgr listMgr;
+	@Inject ListMgr listMgr;
 	
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#service(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)

@@ -8,7 +8,7 @@ package org.subethamail.common;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

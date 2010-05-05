@@ -10,8 +10,8 @@ import java.net.UnknownHostException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.context.ApplicationScoped;
-import javax.inject.Current;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +54,7 @@ public class SMTPService
 	private SMTPServer smtpServer;
 	
 	/** */
-	@Current Injector injector;
+	@Inject Injector injector;
 
 	/**
 	 */

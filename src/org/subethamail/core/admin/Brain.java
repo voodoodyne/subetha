@@ -5,7 +5,7 @@
 
 package org.subethamail.core.admin;
 
-import javax.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * This is really stupid.  Resin4 has a bug with @ApplicationScoped objects

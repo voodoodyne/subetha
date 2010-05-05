@@ -21,7 +21,8 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -56,7 +57,6 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.i.Permission;
 
-import com.caucho.config.Name;
 
 /**
  * @author Jeff Schnitzer
@@ -108,13 +108,13 @@ public class InjectorBean implements Injector
 	/** The "inbound queue" which processes injections */
 	@SuppressWarnings("unchecked")
 //	@InjectQueue 
-	@Name("inject")
+	@Named("inject")
 	BlockingQueue inboundQueue;
 	
-	@Current FilterRunner filterRunner;
-	@Current Encryptor encryptor;
-	@Current Detacher detacher;
-	@Current PostOffice postOffice;
+	@Inject FilterRunner filterRunner;
+	@Inject Encryptor encryptor;
+	@Inject Detacher detacher;
+	@Inject PostOffice postOffice;
 
 	/** */
 	@OutboundMTA

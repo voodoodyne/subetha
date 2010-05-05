@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
 
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
@@ -51,24 +51,24 @@ public class Backend extends HttpServlet
 	
 	// TODO: Fix when services work. 
 	// For now, make sure these are first.
-	@Current BootstrapperBean bootstrap;
-	@Current ScannerService scanner;
+	@Inject BootstrapperBean bootstrap;
+	@Inject ScannerService scanner;
 	
 	/** Stateless session EJB references are all thread-safe */
-	@Current Injector injector;
-	@Current Admin admin;
-	@Current Encryptor encryptor;
-	@Current ListWizard listWizard;
-	@Current ListMgr listMgr;
-	@Current AccountMgr accountMgr;
-	@Current Archiver archiver;
+	@Inject Injector injector;
+	@Inject Admin admin;
+	@Inject Encryptor encryptor;
+	@Inject ListWizard listWizard;
+	@Inject ListMgr listMgr;
+	@Inject AccountMgr accountMgr;
+	@Inject Archiver archiver;
 	
-	@Current SiteUtils siteUtils;
+	@Inject SiteUtils siteUtils;
 	
 	/**
 	 * Allows us to login and logout to the container.
 	 */
-	@Current SubEthaLogin resinLogin;
+	@Inject SubEthaLogin resinLogin;
 	
 	/**
 	 * Obtain the current instance.

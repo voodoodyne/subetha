@@ -10,10 +10,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
-import javax.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -77,11 +77,11 @@ public class BootstrapperBean
 	public static final String BOOTSTRAPPED_CONFIG_ID = "bootstrapped";
 	
 	/** */
-	@Current
+	@Inject
 	SiteUtils siteUtils;
 	
 	/** */
-	@Current Admin admin;
+	@Inject Admin admin;
 
 	/** */
 	@SubEtha

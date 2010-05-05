@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.annotation.PostConstruct;
-import javax.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;

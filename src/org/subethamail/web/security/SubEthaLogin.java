@@ -4,7 +4,7 @@ import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.context.ApplicationScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.http.HttpServletRequest;
 
 import com.caucho.security.Authenticator;

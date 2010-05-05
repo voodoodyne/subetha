@@ -16,7 +16,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
-import com.caucho.config.Name;
+import javax.inject.Named;
 
 /**
  * Implementation of the Admin interface.
@@ -78,15 +78,15 @@ public class AdminBean extends PersonalBean implements Admin
 	protected static final int PASSWORD_GEN_LENGTH = 6;
 
 	/** */
-	@Current PostOffice postOffice;
+	@Inject PostOffice postOffice;
 
 	@SuppressWarnings("unchecked")
 //	@InjectQueue
-	@Name("inject")
+	@Named("inject")
 	BlockingQueue q;
 
 	/** Needed to get/set the fallback host */
-	@Current SMTPService smtpService;
+	@Inject SMTPService smtpService;
 
 	/**
 	 * For generating random passwords.

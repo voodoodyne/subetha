@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.security.RolesAllowed;
-import javax.context.ApplicationScoped;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -46,10 +46,10 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	private final static Logger log = LoggerFactory.getLogger(ListWizardBean.class);
 
 	/** */
-	@Current Admin admin;
-	@Current ScannerService ss;
+	@Inject Admin admin;
+	@Inject ScannerService ss;
 
-	//@Current 
+	@Inject 
 	InjectBeanHelper<Blueprint> bHelper = new InjectBeanHelper<Blueprint>();
 
 	/**
@@ -87,10 +87,14 @@ public class ListWizardBean implements ListWizard, BlueprintRegistry
 	{
 		log.debug("Creating ML from " + super.toString() + ", blueprints are: " + this.blueprints);
 		
-		Blueprint blue = bHelper.getInstance(blueprintId);
+		Blueprint blue=null;
+		try {
+			blue = bHelper.getInstance(blueprintId);
+		} catch (ClassNotFoundException e) {
+		}
 		
 		if (blue == null)
-			throw new IllegalStateException("Blueprint does not exist");
+			throw new IllegalStateException("Blueprint does not exist - " + blueprintId);
 
 		Long listId = this.admin.createMailingList(address, url, description, initialOwners);
 

@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.inject.BindingType;
+import javax.inject.Qualifier;
 
 /**
  * Binding Type (annotation) for our queues.
@@ -29,7 +29,7 @@ import javax.inject.BindingType;
  *
  */
 
-@BindingType
+@Qualifier
 @Target({FIELD,METHOD,PARAMETER})
 @Retention(RUNTIME)
 public @interface DeliveryQueue

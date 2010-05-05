@@ -15,7 +15,7 @@ import javax.annotation.security.RunAs;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.inject.Current;
+import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -66,9 +66,9 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 
 	/**
 	 */
-	@Current PostOffice postOffice;
-	@Current Encryptor encryptor;
-	@Current Admin admin;
+	@Inject PostOffice postOffice;
+	@Inject Encryptor encryptor;
+	@Inject Admin admin;
 
 	/**
 	 * @see AccountMgr#getSelf()

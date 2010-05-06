@@ -109,7 +109,6 @@ abstract public class SubEthaAction extends AbstractAction
 	 *  if an http POST was submitted.  This is what you can safely
 	 *  use <c:redirect> with.
 	 */
-	@SuppressWarnings("unchecked")
 	public String getUsefulRequestURI()
 	{
 		if ("POST".equals(this.getCtx().getRequest().getMethod().toUpperCase()))

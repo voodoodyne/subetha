@@ -171,7 +171,7 @@ public class FileUploadFilter extends AbstractFilter
 		 * @see javax.servlet.ServletRequestWrapper#getParameterMap()
 		 */
 		@Override
-		public Map<?,?> getParameterMap()
+		public Map<String, String[]> getParameterMap()
 		{
 			return this.params;
 		}
@@ -180,9 +180,9 @@ public class FileUploadFilter extends AbstractFilter
 		 * @see javax.servlet.ServletRequestWrapper#getParameterNames()
 		 */
 		@Override
-		public Enumeration<?> getParameterNames()
+		public Enumeration<String> getParameterNames()
 		{
-			return new EnumerationAdapter(this.params.keySet().iterator());
+			return new EnumerationAdapter<String>(this.params.keySet().iterator());
 		}
 
 		/* (non-Javadoc)

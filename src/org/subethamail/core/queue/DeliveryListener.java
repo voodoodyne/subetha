@@ -5,13 +5,10 @@
 
 package org.subethamail.core.queue;
 
-import java.util.concurrent.BlockingQueue;
-
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -21,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.deliv.i.Deliverator;
-
 
 /**
  * Processes delivery queue messages by creating an actual STMP message
@@ -36,11 +32,6 @@ public class DeliveryListener implements MessageListener
 
 	/** */
 	@Inject Deliverator deliverator;
-
-	@SuppressWarnings("unchecked")
-//	@DeliveryQueue 
-	@Named("delivery")
-	BlockingQueue myQueue;
 
 	/**
 	 */

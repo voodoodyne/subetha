@@ -24,8 +24,6 @@ import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.Subscription;
 
-import javax.inject.Named;
-
 /**
  * Queue which takes the individual, stored messages and turns them into
  * a series of delivery queue messages.  This could take a while; any
@@ -40,10 +38,8 @@ public class InjectListener implements MessageListener
 	private final static Logger log = LoggerFactory.getLogger(InjectListener.class);
 
 	/** */
-	@SuppressWarnings("unchecked")
-//	@DeliveryQueue 
-	@Named("delivery")
-	BlockingQueue outboundQueue;
+	@DeliveryQueue 
+	BlockingQueue<DeliveryQueueItem> outboundQueue;
 
 	/** */
 	@SubEtha
@@ -68,7 +64,6 @@ public class InjectListener implements MessageListener
 	/**
 	 * Looks up who gets that message and creates new queue entries.
 	 */
-	@SuppressWarnings("unchecked")
 	private void deliver(Long mailId)
 	{
 		if (log.isDebugEnabled())

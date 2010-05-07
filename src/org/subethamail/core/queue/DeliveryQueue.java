@@ -21,12 +21,7 @@ import javax.inject.Qualifier;
  * This binding type is attached to the configuration 
  * for the Queue, and the injection point it is used.
  * 
- * TODO: Put this back in place once the bug is fixed in 
- * resin.
- * 
- * 
  * @author Scott Hernandez
- *
  */
 
 @Qualifier

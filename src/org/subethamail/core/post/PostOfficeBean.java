@@ -53,7 +53,7 @@ public class PostOfficeBean implements PostOffice
 	private final static Logger log = LoggerFactory.getLogger(PostOfficeBean.class);
 	
 	/** */
-	@OutboundMTA Session mailSession;
+	@Inject @OutboundMTA Session mailSession;
 
 	/** */
 	@Inject Encryptor encryptor;
@@ -62,8 +62,7 @@ public class PostOfficeBean implements PostOffice
 	@Inject EegorBringMeAnotherBrain brainBringer;
 	
 	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject @SubEtha SubEthaEntityManager em;
 	
 	/** 
 	 * Builds a message from a velocity template, context, and some

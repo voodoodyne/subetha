@@ -53,7 +53,6 @@ import org.subethamail.entity.Mail;
  * @author Scott Hernandez
  */
 @Named("indexer")
-//@ApplicationScoped
 @Singleton
 @Startup
 public class IndexerBean implements Indexer
@@ -78,18 +77,14 @@ public class IndexerBean implements Indexer
 	static IndexMgr index1 = new IndexMgr(new File(BASE_DIR, "1"));
 	static IndexMgr index2 = new IndexMgr(new File(BASE_DIR, "2"));
 
-	@Inject Indexer ind;
+	/** */
+	@Inject @SubEtha DataSource ds;
 
 	/** */
-	@Named("jdbc/subetha")
-	DataSource ds = null;
+	@Inject @OutboundMTA Session mailSession;
 
 	/** */
-	@OutboundMTA Session mailSession;
-
-	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject @SubEtha SubEthaEntityManager em;
 
 	/**
 	 * @return the currently in-use index manager.

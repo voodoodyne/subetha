@@ -22,7 +22,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -44,6 +43,7 @@ import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.post.OutboundMTA;
 import org.subethamail.core.post.PostOffice;
+import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.queue.InjectedQueueItem;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.SubEtha;
@@ -106,10 +106,7 @@ public class InjectorBean implements Injector
 	public static final long MAX_SUBJECT_THREAD_PARENT_AGE_MILLIS = 1000L * 60L * 60L * 24L * 30L;
 
 	/** The "inbound queue" which processes injections */
-	@SuppressWarnings("unchecked")
-//	@InjectQueue 
-	@Named("inject")
-	BlockingQueue inboundQueue;
+	@Inject @InjectQueue BlockingQueue<InjectedQueueItem> inboundQueue;
 	
 	@Inject FilterRunner filterRunner;
 	@Inject Encryptor encryptor;
@@ -117,12 +114,10 @@ public class InjectorBean implements Injector
 	@Inject PostOffice postOffice;
 
 	/** */
-	@OutboundMTA
-	private Session mailSession;
+	@Inject @OutboundMTA Session mailSession;
 
 	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject @SubEtha SubEthaEntityManager em;
 
 	/*
 	 * (non-Javadoc)
@@ -217,7 +212,6 @@ public class InjectorBean implements Injector
 	/**
 	 * Factors out the exception catching.
 	 */
-	@SuppressWarnings("unchecked")
 	protected boolean injectImpl(String envelopeSender, String envelopeRecipient, InputStream mailData) throws MessagingException, LimitExceededException, IOException
 	{
 		if (log.isDebugEnabled())
@@ -352,10 +346,7 @@ public class InjectorBean implements Injector
 			{
 				this.inboundQueue.put(new InjectedQueueItem(mail));
 			}
-			catch (InterruptedException ex)
-			{
-				throw new RuntimeException(ex);
-			}
+			catch (InterruptedException ex) { throw new RuntimeException(ex); }
 		}
 
 		return true;

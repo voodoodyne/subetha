@@ -24,6 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJBException;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.commons.codec.binary.Base64;
@@ -46,7 +47,6 @@ import org.subethamail.entity.Config;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-//@ApplicationScoped
 @Singleton
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class EncryptorBean implements Encryptor
@@ -77,8 +77,7 @@ public class EncryptorBean implements Encryptor
 	}
 
 	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject @SubEtha SubEthaEntityManager em;
 	
 	/* */
 	@PostConstruct

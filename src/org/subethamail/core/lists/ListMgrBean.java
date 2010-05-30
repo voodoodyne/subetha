@@ -23,7 +23,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
@@ -46,6 +45,7 @@ import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.FilterRegistry;
+import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.queue.InjectedQueueItem;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
@@ -82,10 +82,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	@Inject Admin admin;
 	@Inject AccountMgr accountMgr;
 	
-	@SuppressWarnings("unchecked")
-//	@InjectQueue
-	@Inject @Named("inject")
-	BlockingQueue q;	
+	@Inject @InjectQueue BlockingQueue<InjectedQueueItem> inboundQueue;	
 	
 	/*
 	 * (non-Javadoc)
@@ -642,15 +639,20 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldMessage(java.lang.Long)
 	 */
-	@SuppressWarnings("unchecked")
-	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException, InterruptedException
+	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException
 	{
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);
 
 		mail.approve();
 
-		this.q.put(new InjectedQueueItem(mail));
-//		this.queuer.queueForDelivery(mail.getId());
+		try
+		{
+			this.inboundQueue.put(new InjectedQueueItem(mail));
+		}
+		catch (InterruptedException e)
+		{
+			throw new RuntimeException(e);
+		}
 
 		return mail.getList().getId();
 	}

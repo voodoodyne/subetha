@@ -1,13 +1,13 @@
 package org.subethamail.core.util;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.mail.Session;
 import javax.sql.DataSource;
 
 import org.subethamail.core.post.OutboundMTA;
-
-import javax.inject.Named;
 
 /**
  * Producers used for creating things with context. Yeah!
@@ -15,11 +15,11 @@ import javax.inject.Named;
  * @author Scott Hernandez
  * @author Jeff Schnitzer
  */
-@ApplicationScoped
+@Singleton
 public class Producers
 {
 	/** Our application's data source */
-	@Named("jdbc/subetha")
+	@Inject @Named("jdbc/subetha")
 	private DataSource ds;
 
 	@Produces @SubEtha
@@ -29,7 +29,7 @@ public class Producers
 	}
 
 	/** The JavaMail session that connects to the outbound mta */
-	@Named("outbound")
+	@Inject @Named("outbound")
 	private Session mailSession;
 	
 	@Produces @OutboundMTA

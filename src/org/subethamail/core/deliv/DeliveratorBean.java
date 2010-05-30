@@ -54,11 +54,10 @@ public class DeliveratorBean implements Deliverator
 	@Inject Detacher detacher;
 
 	/** */
-	@OutboundMTA Session mailSession;
+	@Inject @OutboundMTA Session mailSession;
 
 	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject @SubEtha SubEthaEntityManager em;
 
 	/**
 	 * @see Deliverator#deliverToEmail(Long, String)

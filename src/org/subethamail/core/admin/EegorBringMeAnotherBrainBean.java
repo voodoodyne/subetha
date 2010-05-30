@@ -5,10 +5,10 @@
 
 package org.subethamail.core.admin;
 
-import javax.inject.Named;
 import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.mail.Session;
 
 import org.slf4j.Logger;
@@ -29,15 +29,13 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(EegorBringMeAnotherBrainBean.class);
 
-	/** See the javadocs for Brain to see why this silly thing exists */
-	@Inject Brain brain;
-	
 	/** TODO: This should be done using a Deployment Descriptors (JSR299) so that 
 	 *  the "test" Deployment Descriptor binds to a another mail session 
 	 *  on the current test host and port. */
-	//@Named("outbound")
-	@OutboundMTA
-	Session mailSession;
+	@Inject @OutboundMTA Session mailSession;
+	
+	public String mailSmtpHost;
+	public String mailSmtpPort;
 	
 	/* (non-Javadoc)
 	 * @see Plumber#log(java.lang.String)
@@ -53,12 +51,12 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 	@RolesAllowed("siteAdmin")
 	public void enableTestMode(String mtaHost)
 	{
-		log.debug("#### Enabling with brain id " + brain.toString());
+		log.debug("#### Enabling test mode to " + mtaHost);
 		
 		if (!this.isTestModeEnabled())
 		{
-			this.brain.mailSmtpHost = this.mailSession.getProperties().getProperty("mail.smtp.host");
-			this.brain.mailSmtpPort = this.mailSession.getProperties().getProperty("mail.smtp.port");
+			this.mailSmtpHost = this.mailSession.getProperties().getProperty("mail.smtp.host");
+			this.mailSmtpPort = this.mailSession.getProperties().getProperty("mail.smtp.port");
 		}
 		
 		// If there was a port, separate the two
@@ -77,8 +75,6 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 	@RolesAllowed("siteAdmin")
 	public void disableTestMode()
 	{
-		log.debug("#### Disabling with brain id " + brain.toString());
-		
 		if (!this.isTestModeEnabled())
 		{
 			log.warn("Test mode already disabled");
@@ -87,19 +83,17 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 		{
 			log.info("Restoring base mail configuration");
 
-			this.mailSession.getProperties().setProperty("mail.smtp.host", this.brain.mailSmtpHost);
-			this.mailSession.getProperties().setProperty("mail.smtp.port", this.brain.mailSmtpPort);
+			this.mailSession.getProperties().setProperty("mail.smtp.host", this.mailSmtpHost);
+			this.mailSession.getProperties().setProperty("mail.smtp.port", this.mailSmtpPort);
 
-			this.brain.mailSmtpHost = null;
-			this.brain.mailSmtpPort = null;
+			this.mailSmtpHost = null;
+			this.mailSmtpPort = null;
 		}
 	}
 
 	/** */
 	public boolean isTestModeEnabled()
 	{
-		log.debug("##### isTestModeEnabled(), brain id is " + brain.toString());
-		
-		return this.brain.mailSmtpHost != null;
+		return this.mailSmtpHost != null;
 	}
 }

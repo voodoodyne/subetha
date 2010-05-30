@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.inject.Singleton;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 
@@ -30,6 +31,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Jon Stevens
  * @author Scott Hernandez
  */
+@Singleton
 public class ListHeaderFilter extends GenericFilter
 {	
 	/** */

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
@@ -31,6 +32,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Scott Hernandez
  * @author Jeff Schnitzer
  */
+@Singleton
 public class LeaveAttachmentsOnServerFilter extends GenericFilter
 {
 	/** */

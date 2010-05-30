@@ -5,6 +5,7 @@
 
 package org.subethamail.plugin.filter;
 
+import javax.inject.Singleton;
 import javax.mail.MessagingException;
 
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
+@Singleton
 public class HoldEverythingFilter extends GenericFilter 
 {	
 	/** */

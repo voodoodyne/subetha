@@ -5,6 +5,8 @@
 
 package org.subethamail.plugin.blueprint;
 
+import javax.inject.Singleton;
+
 import org.subethamail.core.plugin.i.Blueprint;
 
 /**
@@ -12,6 +14,7 @@ import org.subethamail.core.plugin.i.Blueprint;
  * 
  * @author Jeff Schnitzer
  */
+@Singleton
 public class BarebonesBlueprint  implements Blueprint
 {
 	/** */

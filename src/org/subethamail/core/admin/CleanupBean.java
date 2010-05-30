@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
@@ -48,8 +49,7 @@ public class CleanupBean
 	private static volatile boolean isRunning = false;
 	
 	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject @SubEtha SubEthaEntityManager em;
 
 	/**
 	 * Cleans up held {@link Subscription}s and {@link Mail}

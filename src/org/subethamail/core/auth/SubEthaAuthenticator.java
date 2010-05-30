@@ -9,6 +9,8 @@ import java.security.Principal;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,14 +31,14 @@ import com.caucho.security.PasswordCredentials;
  *
  * @author Jeff Schnitzer
  */
+@Singleton
 public class SubEthaAuthenticator implements Authenticator
 {
 	/** */
 	private static Logger log = LoggerFactory.getLogger(SubEthaAuthenticator.class);
 
 	/** */
-	@SubEtha
-	SubEthaEntityManager em;
+	@Inject @SubEtha SubEthaEntityManager em;
 	
 	/**
 	 * Authenticate the user by the password, returning null on failure.

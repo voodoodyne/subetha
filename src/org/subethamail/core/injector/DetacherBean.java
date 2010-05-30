@@ -10,9 +10,10 @@ import java.io.InputStream;
 import java.sql.Blob;
 
 import javax.activation.DataHandler;
-import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -32,15 +33,14 @@ import org.subethamail.entity.Mail;
 /**
  * @author Jeff Schnitzer
  */
-@Stateless(name="Detacher")
+@Dependent
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class DetacherBean implements Detacher
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(DetacherBean.class);
 	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject @SubEtha SubEthaEntityManager em;
 	
 	/*
 	 * (non-Javadoc)

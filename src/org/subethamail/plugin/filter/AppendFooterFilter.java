@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Singleton;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
@@ -31,6 +32,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Jon Stevens
  * @author Scott Hernandez
  */
+@Singleton
 public class AppendFooterFilter extends GenericFilter
 {
 	/** */

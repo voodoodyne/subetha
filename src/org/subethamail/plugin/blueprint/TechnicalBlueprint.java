@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.lists.i.ListMgr;
@@ -26,6 +27,7 @@ import org.subethamail.plugin.filter.ReplyToFilter;
  * @author Jon Stevens
  * @author Scott Hernandez
  */
+@Singleton
 public class TechnicalBlueprint implements Blueprint
 {
 	@Inject ListMgr listMgr;

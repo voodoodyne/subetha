@@ -5,6 +5,7 @@
 
 package org.subethamail.plugin.filter;
 
+import javax.inject.Singleton;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -25,6 +26,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Jon Stevens
  * @author Scott Hernandez
  */
+@Singleton
 public class ReplyToFilter extends GenericFilter
 {
 	/** */

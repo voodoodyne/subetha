@@ -96,8 +96,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	@Inject Indexer indexer;
 
 	/** */
-	@OutboundMTA
-	private Session mailSession;
+	@Inject @OutboundMTA Session mailSession;
 
 	/*
 	 * (non-Javadoc)

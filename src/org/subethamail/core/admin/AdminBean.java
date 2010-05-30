@@ -32,6 +32,7 @@ import org.subethamail.core.admin.i.SiteStatus;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.lists.i.ListDataPlus;
 import org.subethamail.core.post.PostOffice;
+import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.queue.InjectedQueueItem;
 import org.subethamail.core.smtp.SMTPService;
 import org.subethamail.core.util.OwnerAddress;
@@ -47,8 +48,6 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
-
-import javax.inject.Named;
 
 /**
  * Implementation of the Admin interface.
@@ -80,10 +79,8 @@ public class AdminBean extends PersonalBean implements Admin
 	/** */
 	@Inject PostOffice postOffice;
 
-	@SuppressWarnings("unchecked")
-//	@InjectQueue
-	@Named("inject")
-	BlockingQueue q;
+	/** */
+	@Inject @InjectQueue BlockingQueue<InjectedQueueItem> inboundQueue;
 
 	/** Needed to get/set the fallback host */
 	@Inject SMTPService smtpService;
@@ -138,6 +135,8 @@ public class AdminBean extends PersonalBean implements Admin
 	 */
 	public Long establishPerson(InternetAddress address, String password)
 	{
+		log.debug("SubEthaEntityManager is " + this.em);
+		
 		return this.establishEmailAddress(address, password).getPerson().getId();
 	}
 
@@ -491,7 +490,6 @@ public class AdminBean extends PersonalBean implements Admin
 	/* (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#selfModerate(java.lang.Long)
 	 */
-	@SuppressWarnings("unchecked")
 	public int selfModerate(Long personId) throws NotFoundException
 	{
 		Person who = this.em.get(Person.class, personId);
@@ -506,12 +504,10 @@ public class AdminBean extends PersonalBean implements Admin
 			{
 				held.approve();
 				try {
-					this.q.put(new InjectedQueueItem(held));
+					this.inboundQueue.put(new InjectedQueueItem(held));
 				} catch (InterruptedException e) {
-					log.error("Errror Que'n approved messageid",e);
 					throw new RuntimeException(e);
 				}
-//				this.queuer.queueForDelivery(held.getId());
 				count++;
 			}
 		}

@@ -8,6 +8,7 @@ package org.subethamail.plugin.filter;
 import java.io.IOException;
 import java.util.Enumeration;
 
+import javax.inject.Singleton;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
@@ -31,6 +32,7 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
+@Singleton
 public class StripAttachmentsFilter extends GenericFilter
 {
 	/** */

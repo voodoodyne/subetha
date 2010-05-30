@@ -82,8 +82,7 @@ public class BootstrapperBean
 	@Inject Admin admin;
 
 	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject @SubEtha SubEthaEntityManager em;
 
 	/* */
 	@PostConstruct
@@ -136,7 +135,16 @@ public class BootstrapperBean
 		}
 		catch (UnsupportedEncodingException ex) { throw new RuntimeException(ex); }
 		
-		Long id = this.admin.establishPerson(addy, DEFAULT_PASSWORD);
+		Long id = null;
+		try
+		{
+			id = this.admin.establishPerson(addy, DEFAULT_PASSWORD);
+		}
+		catch (RuntimeException ex)
+		{
+			log.error("What is up with this error?", ex);
+			throw ex;
+		}
 		
 		try
 		{

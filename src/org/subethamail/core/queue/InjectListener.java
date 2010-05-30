@@ -11,6 +11,7 @@ import java.util.concurrent.BlockingQueue;
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -38,12 +39,10 @@ public class InjectListener implements MessageListener
 	private final static Logger log = LoggerFactory.getLogger(InjectListener.class);
 
 	/** */
-	@DeliveryQueue 
-	BlockingQueue<DeliveryQueueItem> outboundQueue;
+	@Inject @DeliveryQueue BlockingQueue<DeliveryQueueItem> outboundQueue;
 
 	/** */
-	@SubEtha
-	protected SubEthaEntityManager em;
+	@Inject @SubEtha SubEthaEntityManager em;
 
 	/** */
 	public void onMessage(Message qMsg)

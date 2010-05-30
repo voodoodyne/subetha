@@ -34,7 +34,6 @@ import org.subethamail.entity.Person;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-
 @ApplicationScoped
 @RolesAllowed(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)

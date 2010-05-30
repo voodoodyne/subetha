@@ -198,9 +198,9 @@ public interface ListMgr
 	 * Approves a held message.
 	 * @return the id of the list to which the msg was sent.
 	 * Requires Permission.APPROVE_MESSAGES
-	 * @throws InterruptedException, NotFoundException, PermissionException
+	 * @throws NotFoundException, PermissionException
 	 */
-	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException, InterruptedException;
+	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException;
 
 	/**
 	 * Discards a held message.

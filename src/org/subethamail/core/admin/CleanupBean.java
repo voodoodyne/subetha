@@ -8,9 +8,10 @@ package org.subethamail.core.admin;
 import java.util.Date;
 import java.util.List;
 
-import javax.inject.Named;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +28,11 @@ import com.caucho.resources.ScheduledTask;
  * 
  * This is scheduled (by a {@link ScheduledTask}) daily.
  *
- *
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
 @Named("cleanup")
+@Singleton
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class CleanupBean
 {
@@ -50,13 +51,13 @@ public class CleanupBean
 	@SubEtha
 	protected SubEthaEntityManager em;
 
-
 	/**
 	 * Cleans up held {@link Subscription}s and {@link Mail}
 	 **/
 	public void cleanup()
 	{
-		log.debug("Starting cleanup");				
+		log.debug("Starting cleanup");
+		log.debug("em is " + this.em);
 		try
 		{
 			if(!isRunning)

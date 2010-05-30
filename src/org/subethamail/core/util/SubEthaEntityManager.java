@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.EntityManager;
@@ -50,6 +51,7 @@ import org.subethamail.entity.i.Validator;
  * @author Scott Hernandez
  */
 @SubEtha
+@Dependent
 public class SubEthaEntityManager implements EntityManager
 {
 	/** */

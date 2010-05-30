@@ -10,9 +10,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
@@ -24,6 +24,8 @@ import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Config;
+
+import com.caucho.config.Service;
 
 /**
  * This bean really is only used when run for the first time
@@ -42,10 +44,7 @@ import org.subethamail.entity.Config;
  * @author Scott Hernandez
  */
 
-// TODO: Add @Service, (remove scope?) back once bug is fixed in Resin. For now this is triggered by 
-// the Backend Servlet (started with web container): http://bugs.caucho.com/view.php?id=3429
-
-//@Service
+@Service
 @ApplicationScoped
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class BootstrapperBean
@@ -77,8 +76,7 @@ public class BootstrapperBean
 	public static final String BOOTSTRAPPED_CONFIG_ID = "bootstrapped";
 	
 	/** */
-	@Inject
-	SiteUtils siteUtils;
+	@Inject SiteUtils siteUtils;
 	
 	/** */
 	@Inject Admin admin;

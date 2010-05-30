@@ -5,18 +5,15 @@
 
 package org.subethamail.core.filter;
 
-import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.admin.ScannerService;
 import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.core.plugin.i.FilterContext;
@@ -24,7 +21,6 @@ import org.subethamail.core.plugin.i.FilterRegistry;
 import org.subethamail.core.plugin.i.HoldException;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.plugin.i.SendFilterContext;
-import org.subethamail.core.util.InjectBeanHelper;
 import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
@@ -39,46 +35,18 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(FilterRunnerBean.class);
 
-	@Inject
-	protected InjectBeanHelper<Filter> fHelper = new InjectBeanHelper<Filter>();
+	/** */
+	@Inject @Any Instance<Filter> filters;
 
-	@Inject
-	ScannerService ss;
-	
-	/**
-	 * Key is filter classname.  Make sure we have concurrent access.
-	 */
-	ConcurrentMap<String, Class<? extends Filter>> filters = new ConcurrentHashMap<String, Class<? extends Filter>>();
-
-	// TODO: try to use the above concurrent map to get rid of this; when I did I get NPEs on put
-//	Set<Class<? extends Filter>> filterClasses = new HashSet<Class<? extends Filter>>();
-	
 	/* */
-	public void register(Class<? extends Filter> c)
+	@Override
+	public Iterable<Filter> getFilters()
 	{
-		if (log.isInfoEnabled())
-			log.info("Registering " + c.getName());
-		
-		//only add new ones, don't replace old ones.
-		this.filters.putIfAbsent(c.getName(), c); 
+		return this.filters;
 	}
 
 	/* */
-	public void deregister(Class<? extends Filter> c)
-	{
-		if (log.isInfoEnabled())
-			log.info("De-registering " + c.getName());
-			
-		this.filters.remove(c.getName());
-	}
-
-	/* */
-	public Collection<Class<? extends Filter>> getFilters()
-	{
-		return this.filters.values();
-	}
-
-	/* */
+	@Override
 	public void onInject(SubEthaMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException
 	{
 		if (log.isDebugEnabled())
@@ -88,19 +56,8 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		
 		for (EnabledFilter enabled: list.getEnabledFilters().values())
 		{
-			Filter filter = null;
-			try {
-				filter = fHelper.getInstance(enabled.getClassName());
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (filter == null)
-			{
-				// Log and ignore
-				this.logUnregisteredFilterError(enabled, list);
-			}
-			else
+			Filter filter = this.getFilterFor(enabled);
+			if (filter != null)
 			{
 				FilterContext ctx = new FilterContextImpl(enabled, filter, msg);
 				
@@ -134,19 +91,8 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 
 		for (EnabledFilter enabled: list.getEnabledFilters().values())
 		{
-			Filter filter = null;
-			try {
-				filter = fHelper.getInstance(enabled.getClassName());
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if (filter == null)
-			{
-				// Log and ignore
-				this.logUnregisteredFilterError(enabled, list);
-			}
-			else
+			Filter filter = this.getFilterFor(enabled);
+			if (filter != null)
 			{
 				SendFilterContext ctx = new SendFilterContextImpl(enabled, filter, msg, mail);
 				
@@ -170,13 +116,8 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		{
 			try 
 			{					
-				Filter filter = fHelper.getInstance(enabled.getClassName());
-				if (filter == null)
-				{
-					// Log and ignore
-					this.logUnregisteredFilterError(enabled, list);
-				}
-				else
+				Filter filter = this.getFilterFor(enabled);
+				if (filter != null)
 				{
 					ArchiveRenderFilterContext ctx = new ArchiveRenderFilterContextImpl(enabled, filter, msg, mail);
 					
@@ -188,20 +129,42 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 			} 
 			catch (Exception e) 
 			{
-				log.error("Error in filter OnArchiveRender: ", e);
+				log.error("Error in filter OnArchiveRender", e);
 			}
 		}
 	}
 	
 	/**
-	 * Puts a nasty note in the logs when we find a plugin which has been
-	 * enabled on a list but is not (or no longer) registered.  It's not
-	 * a fatal error; we can just continue and ignore the plugin.
+	 * @return null if couldn't get it for some reason (logs error too)
 	 */
-	protected void logUnregisteredFilterError(EnabledFilter enPlugin, MailingList list)
+	private Filter getFilterFor(EnabledFilter enabled)
 	{
-		if (log.isErrorEnabled())
-			log.error("Unregistered filter '" + enPlugin.getClassName() + 
-				"' is enabled on list '" + list.getEmail() + "'");
+		try
+		{
+			return this.getFilter(enabled.getClassName());
+		}
+		catch (Exception ex)
+		{
+			if (log.isErrorEnabled())
+				log.error("Problem with filter '" + enabled.getClassName() + 
+					"' on list '" + enabled.getList().getEmail() + "'", ex);
+			
+			return null;
+		}
+	}
+
+	/* */
+	@Override
+	@SuppressWarnings("unchecked")
+	public Filter getFilter(String filterClassName)
+	{
+		Class<Filter> filterClass;
+		try
+		{
+			filterClass = (Class<Filter>)Class.forName(filterClassName);
+		}
+		catch (ClassNotFoundException e) { throw new RuntimeException(e); }
+		
+		return this.filters.select(filterClass).get();
 	}
 }

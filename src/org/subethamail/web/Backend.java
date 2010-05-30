@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServlet;
 
 import org.subethamail.common.SiteUtils;
 import org.subethamail.core.acct.i.AccountMgr;
-import org.subethamail.core.admin.BootstrapperBean;
-import org.subethamail.core.admin.ScannerService;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ListWizard;
@@ -36,9 +34,10 @@ import org.subethamail.web.security.SubEthaLogin;
  * Other classes in the web tier can obtain the instance
  * by calling Backend.instance().
  */
-@SuppressWarnings("serial")
 public class Backend extends HttpServlet
 {
+	private static final long serialVersionUID = 1L;
+
 	/** Application-scope key */
 	public static final String KEY = "backend";
 	
@@ -49,10 +48,10 @@ public class Backend extends HttpServlet
 	 */
 	static Backend singleton;
 	
-	// TODO: Fix when services work. 
+	// TODO: Fix when services work.  JMS:  maybe they are now?  trying @Service 
 	// For now, make sure these are first.
-	@Inject BootstrapperBean bootstrap;
-	@Inject ScannerService scanner;
+	//@Inject BootstrapperBean bootstrap;
+	//@Inject ScannerService scanner;
 	
 	/** Stateless session EJB references are all thread-safe */
 	@Inject Injector injector;

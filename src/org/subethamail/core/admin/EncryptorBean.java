@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Random;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
@@ -25,6 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.EJBException;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Singleton;
 
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -46,7 +46,8 @@ import org.subethamail.entity.Config;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@ApplicationScoped
+//@ApplicationScoped
+@Singleton
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class EncryptorBean implements Encryptor
 {
@@ -83,6 +84,9 @@ public class EncryptorBean implements Encryptor
 	@PostConstruct
 	public void start() throws Exception
 	{
+		if (log.isDebugEnabled())
+			log.debug("Starting EncryptorBean, entitymanager is " + em);
+		
 		// If we don't already have a key, generate one
 		try
 		{

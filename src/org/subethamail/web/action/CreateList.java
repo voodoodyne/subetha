@@ -7,20 +7,13 @@ package org.subethamail.web.action;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Set;
 
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 import org.hibernate.validator.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.common.SiteUtils;
 import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.entity.i.Validator;
@@ -28,8 +21,6 @@ import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
 import org.tagonist.propertize.Property;
-
-import com.caucho.config.inject.InjectManager;
 
 /**
  * Creates a mailing list.  The model starts and remains a CreateList.Model.
@@ -84,7 +75,6 @@ public class CreateList extends AuthRequired
 	}
 	
 	/** */
-	@SuppressWarnings("unchecked")
 	public void authExecute() throws Exception
 	{
 		Model model = (Model)this.getCtx().getModel();
@@ -98,14 +88,14 @@ public class CreateList extends AuthRequired
 		{
 			url = new URL(model.url);
 			
-			BeanManager mgr = InjectManager.getCurrent();
-			Set<Bean<?>> beans = mgr.getBeans(SiteUtils.class, new AnnotationLiteral<Any>(){});
-			Bean<SiteUtils> suBean = (Bean<SiteUtils>) beans.iterator().next();
-			CreationalContext<SiteUtils> cc = mgr.createCreationalContext(suBean);
-			SiteUtils siteUtils = (SiteUtils) mgr.getReference(suBean, SiteUtils.class, cc);
-			
-			if (!siteUtils.isValidListUrl(url))
-				model.setError("url", "List url must contain " + siteUtils.getListServletPath());
+//			BeanManager mgr = InjectManager.getCurrent();
+//			Set<Bean<?>> beans = mgr.getBeans(SiteUtils.class, new AnnotationLiteral<Any>(){});
+//			Bean<SiteUtils> suBean = (Bean<SiteUtils>) beans.iterator().next();
+//			CreationalContext<SiteUtils> cc = mgr.createCreationalContext(suBean);
+//			SiteUtils siteUtils = (SiteUtils) mgr.getReference(suBean, SiteUtils.class, cc);
+//			
+//			if (!siteUtils.isValidListUrl(url))
+//				model.setError("url", "List url must contain " + siteUtils.getListServletPath());
 		}
 		catch (MalformedURLException ex)
 		{

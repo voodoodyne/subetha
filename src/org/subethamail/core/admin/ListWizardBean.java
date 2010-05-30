@@ -7,13 +7,13 @@ package org.subethamail.core.admin;
 
 import java.net.URL;
 import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
@@ -25,8 +25,6 @@ import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.core.plugin.i.Blueprint;
-import org.subethamail.core.plugin.i.BlueprintRegistry;
-import org.subethamail.core.util.InjectBeanHelper;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.Person;
 
@@ -40,61 +38,40 @@ import org.subethamail.entity.Person;
 @ApplicationScoped
 @RolesAllowed(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class ListWizardBean implements ListWizard, BlueprintRegistry
+public class ListWizardBean implements ListWizard
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(ListWizardBean.class);
 
 	/** */
 	@Inject Admin admin;
-	@Inject ScannerService ss;
-
-	@Inject 
-	InjectBeanHelper<Blueprint> bHelper = new InjectBeanHelper<Blueprint>();
-
-	/**
-	 * Key is blueprint classname.  Watch out for concurrency.
-	 */
-	Map<String,BlueprintData> blueprints = new ConcurrentHashMap<String, BlueprintData>();
-	
-	/* */
-	public void register(Class<? extends Blueprint> c)
-	{
-		if (log.isInfoEnabled())
-			log.info("Registering " + c.getName());
-
-		BlueprintData bpd = Transmute.blueprint(bHelper.getInstance(c));
-		this.blueprints.put(c.getName(), bpd);
-	}
+	@Inject @Any Instance<Blueprint> blueprints;
 
 	/* */
-	public void deregister(Class<? extends Blueprint> c)
-	{
-		if (log.isInfoEnabled())
-			log.info("De-registering " + c.getName());
-
-		this.blueprints.remove(c.getName());
-	}
-
-	/* */
+	@Override
 	public Collection<BlueprintData> getBlueprints()
 	{
-		return this.blueprints.values();
+		return Transmute.blueprints(this.blueprints);
 	}
 
 	/* */
+	@Override
+	@SuppressWarnings("unchecked")
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
 		log.debug("Creating ML from " + super.toString() + ", blueprints are: " + this.blueprints);
 		
-		Blueprint blue=null;
-		try {
-			blue = bHelper.getInstance(blueprintId);
-		} catch (ClassNotFoundException e) {
+		Class<Blueprint> bpClass;
+		try
+		{
+			bpClass = (Class<Blueprint>)Class.forName(blueprintId);
+		}
+		catch (ClassNotFoundException e)
+		{
+			throw new IllegalStateException("Blueprint does not exist: " + blueprintId);
 		}
 		
-		if (blue == null)
-			throw new IllegalStateException("Blueprint does not exist - " + blueprintId);
+		Blueprint blue = this.blueprints.select(bpClass).get();
 
 		Long listId = this.admin.createMailingList(address, url, description, initialOwners);
 

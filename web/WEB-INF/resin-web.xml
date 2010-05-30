@@ -4,6 +4,7 @@
 -->
 
 <web-app xmlns="http://caucho.com/ns/resin"
+	xmlns:ee="urn:java:ee"
 	xmlns:resin="urn:java:com.caucho.resin"
 	xmlns:cfg="urn:java:com.caucho.config"
 	xmlns:jms="urn:java:com.caucho.jms"
@@ -19,7 +20,8 @@
 	
 	<!-- Every night at 4am run cleanup -->
 	<!-- ...and might as now too (in a few seconds) -->
-	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" cron="0 4 *"/>
+	<!-- <resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" cron="0 4 *"/> -->
+	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" period="15m"/>
 
 	<!-- Every 15 minutes run the indexer -->
 	<!-- ...and might as now too (in a few seconds) -->
@@ -29,12 +31,12 @@
 	<jms:JmsConnectionFactory />
 
 	<jms:FileQueue>
-		<Named>delivery</Named>
+		<ee:Named>delivery</ee:Named>
 		<queue:DeliveryQueue/>
 	</jms:FileQueue>
 
 	<jms:FileQueue>
-		<Named>inject</Named>		
+		<ee:Named>inject</ee:Named>		
 		<queue:InjectQueue/>
 	</jms:FileQueue>
 

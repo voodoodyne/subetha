@@ -5,10 +5,9 @@
 
 package org.subethamail.core.plugin.i;
 
-import java.util.Collection;
 
 /**
- * This local interface allows filters to be registered.
+ * Lets clients get a list of filters.
  *
  * @author Jeff Schnitzer
  * @author Scott Hernandez
@@ -16,19 +15,13 @@ import java.util.Collection;
 public interface FilterRegistry
 {
 	/**
-	 * Register a mail filter.  The filter will become available
-	 * immediately.
-	 */
-	public void register(Class<? extends Filter> c);
-	
-	/**
-	 * Deregister a mail filter.  The filter will no longer be processed.
-	 */
-	public void deregister(Class<? extends Filter> c);
-	
-	/**
 	 * @return all the available filters.
 	 */
-	public Collection<Class<? extends Filter>> getFilters();
-
+	public Iterable<Filter> getFilters();
+	
+	/**
+	 * Gets the filter instance for the specified class name
+	 * @throws some nasty exceptions if the filter isn't registered properly
+	 */
+	public Filter getFilter(String filterClassName);
 }

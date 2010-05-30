@@ -65,9 +65,9 @@ public class Transmute
 	private final static Logger log = LoggerFactory.getLogger(Transmute.class);
 
 	/** */
-	public static List<BlueprintData> blueprints(Collection<Blueprint> rawColl)
+	public static List<BlueprintData> blueprints(Iterable<Blueprint> rawColl)
 	{
-		List<BlueprintData> result = new ArrayList<BlueprintData>(rawColl.size());
+		List<BlueprintData> result = CollectionUtils.newArrayListSized(rawColl);
 
 		for (Blueprint raw: rawColl)
 			result.add(blueprint(raw));

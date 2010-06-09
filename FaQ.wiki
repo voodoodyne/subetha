@@ -69,3 +69,9 @@
   * Can't you just make that a config option?
 
   Come now. We went through all this trouble to write SubEtha, the least you can do is put a little effort into your mean (mean!) attempts to circumvent our beer money collection scheme.
+
+== API ==
+
+ * Is there an example of communicating with Subetha via HessianPHP?
+
+  Why, [http://wiki.itadmins.net/doku.php?id=subetha:hessianphp yes there is]!

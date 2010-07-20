@@ -6,8 +6,6 @@
 
 package org.subethamail.core.queue;
 
-import java.util.concurrent.BlockingQueue;
-
 import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -39,7 +37,7 @@ public class InjectListener implements MessageListener
 	private final static Logger log = LoggerFactory.getLogger(InjectListener.class);
 
 	/** */
-	@Inject @DeliveryQueue BlockingQueue<DeliveryQueueItem> outboundQueue;
+	@Inject /*@DeliveryQueue*/ DeliveryBlockingQueue outboundQueue;
 
 	/** */
 	@Inject @SubEtha SubEthaEntityManager em;
@@ -91,15 +89,16 @@ public class InjectListener implements MessageListener
 			if (sub.getDeliverTo() != null)
 			{
 				Long personId = sub.getPerson().getId();
-				try
-				{
-					this.outboundQueue.put(new DeliveryQueueItem(mailId, personId));
-				}
-				catch (InterruptedException e)
-				{
-					log.error("Error queuing delivery messages for mail.id=" + mailId + " person.id=" + personId, e);
-					throw new RuntimeException(e);
-				}
+				this.outboundQueue.put(new DeliveryQueueItem(mailId, personId));
+//				try
+//				{
+//					this.outboundQueue.put(new DeliveryQueueItem(mailId, personId));
+//				}
+//				catch (InterruptedException e)
+//				{
+//					log.error("Error queuing delivery messages for mail.id=" + mailId + " person.id=" + personId, e);
+//					throw new RuntimeException(e);
+//				}
 			}
 		}
 	}

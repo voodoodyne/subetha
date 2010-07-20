@@ -63,7 +63,7 @@ public class FileUploadFilter extends AbstractFilter
 		if (ex != null)
 			throw ex;
 
-		List<FileItem> files = (List)request.getAttribute(ATTR_FILES);
+		List<FileItem> files = (List<FileItem>)request.getAttribute(ATTR_FILES);
 		if (files == null)
 			throw new IllegalStateException("Missing files, perhaps filter not configured or form enctype was wrong");
 
@@ -96,7 +96,7 @@ public class FileUploadFilter extends AbstractFilter
 			List<FileItem> items = upload.parseRequest(request);
 
 			Map<String, String[]> params = new HashMap<String, String[]>();
-			List<FileItem> files = new ArrayList(items.size());
+			List<FileItem> files = new ArrayList<FileItem>(items.size());
 
 			for (FileItem item: items)
 			{

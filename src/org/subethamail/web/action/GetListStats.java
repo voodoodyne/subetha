@@ -38,9 +38,9 @@ public class GetListStats extends AuthAction
 	@Property Integer heldMessageCount;
 	
 	/** */
-	@SuppressWarnings("unchecked")
 	public void execute() throws Exception
 	{
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		Set<Permission> perms = (Set)this.getCtx().getActionParams().get("perms");
 		
 		if (perms.contains(Permission.VIEW_SUBSCRIBERS))

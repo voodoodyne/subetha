@@ -30,14 +30,17 @@
 	<!-- JMS -->
 	<jms:JmsConnectionFactory />
 
+	<!--
+	<queue:DeliveryBlockingQueue/>
+	-->
 	<jms:FileQueue>
-		<ee:Named>delivery</ee:Named>
 		<queue:DeliveryQueue/>
+		<ee:Named>delivery</ee:Named>
 	</jms:FileQueue>
-
+	
 	<jms:FileQueue>
-		<ee:Named>inject</ee:Named>		
 		<queue:InjectQueue/>
+		<ee:Named>inject</ee:Named>		
 	</jms:FileQueue>
 
 	<ejb-message-bean class="org.subethamail.core.queue.DeliveryListener">

@@ -172,7 +172,7 @@ abstract public class SubEthaAction extends AbstractAction
 	 * and modify the error map accordingly.  The public requirement is
 	 * inherent to java reflection, unfortunately.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void validate() throws IllegalAccessException
 	{
 

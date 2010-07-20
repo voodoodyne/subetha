@@ -725,7 +725,7 @@ public class SubEthaEntityManager implements EntityManager
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Query createNativeQuery(String arg0, Class arg1) {
 		return this.base.createNativeQuery(arg0, arg1);
 	}
@@ -776,7 +776,7 @@ public class SubEthaEntityManager implements EntityManager
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map getProperties() {
 		return this.base.getProperties();
 	}

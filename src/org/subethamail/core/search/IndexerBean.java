@@ -20,7 +20,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJBException;
-import javax.ejb.Startup;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -54,7 +53,7 @@ import org.subethamail.entity.Mail;
  */
 @Named("indexer")
 @Singleton
-@Startup
+//@Startup
 public class IndexerBean implements Indexer
 {
 	/** */

@@ -61,7 +61,7 @@ public class URLDeserializer extends AbstractStringValueDeserializer
 {
 	private static final Logger log = Logger.getLogger(URLDeserializer.class.getName());
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Class getType()
 	{

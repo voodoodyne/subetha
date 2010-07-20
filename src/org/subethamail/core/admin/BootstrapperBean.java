@@ -10,10 +10,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Startup;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.mail.internet.InternetAddress;
 
 import org.slf4j.Logger;
@@ -24,8 +25,6 @@ import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Config;
-
-import com.caucho.config.Service;
 
 /**
  * This bean really is only used when run for the first time
@@ -43,9 +42,8 @@ import com.caucho.config.Service;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-
-@Service
-@ApplicationScoped
+@Startup
+@Singleton
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class BootstrapperBean
 {
@@ -83,7 +81,7 @@ public class BootstrapperBean
 
 	/** */
 	@Inject @SubEtha SubEthaEntityManager em;
-
+	
 	/* */
 	@PostConstruct
 	public void start() throws Exception

@@ -48,20 +48,15 @@ public class Backend extends HttpServlet
 	 */
 	static Backend singleton;
 	
-	// TODO: Fix when services work.  JMS:  maybe they are now?  trying @Service 
-	// For now, make sure these are first.
-	//@Inject BootstrapperBean bootstrap;
-	//@Inject ScannerService scanner;
-	
 	/** Stateless session EJB references are all thread-safe */
 	@Inject Injector injector;
 	@Inject Admin admin;
 	@Inject Encryptor encryptor;
-	@Inject ListWizard listWizard;
 	@Inject ListMgr listMgr;
 	@Inject AccountMgr accountMgr;
 	@Inject Archiver archiver;
-	
+
+	@Inject ListWizard listWizard;
 	@Inject SiteUtils siteUtils;
 	
 	/**

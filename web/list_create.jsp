@@ -66,9 +66,9 @@
 					<input id="url" name="url" id="url" type="text" size="60" onkeyup="enableSubmit();" value="${siteStatus.defaultSiteUrl}list/" />
 				</c:if>
 				
-				<div>Example: http://somedomain.com<strong>${contextPath}list/</strong>announce</div>
-				<div>The URL <strong>must</strong> contain ${contextPath}list/ after the
-				domain</div>
+				<div>Example: http://example.com${contextPath}announce</div>
+				<div>The URL can be <strong>any</strong> url that actually resolves to the SubEtha
+				server.  Avoid URLs that might conflict with normal server operation (eg, "list.jsp").</div>
 	
 				<c:if test="${!empty model.errors.url}">
 					<p class="error"><c:out value="${model.errors.url}" /></p>

@@ -37,21 +37,21 @@
 		<url-pattern>/import_messages_submit.jsp</url-pattern>
 	</filter-mapping>
 
+	<filter>
+		<filter-name>ListFilter</filter-name>
+		<filter-class>org.subethamail.web.servlet.ListFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ListFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<servlet>
 		<servlet-name>Backend</servlet-name>
 		<servlet-class>org.subethamail.web.Backend</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
-	<servlet>
-		<servlet-name>ListServlet</servlet-name>
-		<servlet-class>org.subethamail.web.servlet.ListServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ListServlet</servlet-name>
-		<url-pattern>/list/*</url-pattern>
-	</servlet-mapping>
-
 	<servlet>
 		<servlet-name>ExtraSEServlet</servlet-name>
 		<servlet-class>org.subethamail.web.servlet.ExtraSEServlet</servlet-class>

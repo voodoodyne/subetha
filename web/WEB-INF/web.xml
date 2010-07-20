@@ -23,7 +23,6 @@
 		<filter-class>
 			org.subethamail.web.util.SetRequestCharsetFilter</filter-class>
 	</filter>
-	
 	<filter-mapping>
 		<filter-name>SetRequestCharsetFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -33,7 +32,6 @@
 		<filter-name>FileUploadFilter</filter-name>
 		<filter-class>org.subethamail.web.util.FileUploadFilter</filter-class>
 	</filter>
-	
 	<filter-mapping>
 		<filter-name>FileUploadFilter</filter-name>
 		<url-pattern>/import_messages_submit.jsp</url-pattern>
@@ -49,17 +47,24 @@
 		<servlet-name>ListServlet</servlet-name>
 		<servlet-class>org.subethamail.web.servlet.ListServlet</servlet-class>
 	</servlet>
-	
 	<servlet-mapping>
 		<servlet-name>ListServlet</servlet-name>
 		<url-pattern>/list/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>ExtraSEServlet</servlet-name>
+		<servlet-class>org.subethamail.web.servlet.ExtraSEServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExtraSEServlet</servlet-name>
+		<url-pattern>/se/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>InjectorServlet</servlet-name>
 		<servlet-class>org.subethamail.web.servlet.InjectorServlet</servlet-class>
 	</servlet>
-	
 	<servlet-mapping>
 		<servlet-name>InjectorServlet</servlet-name>
 		<url-pattern>/inject</url-pattern>
@@ -69,7 +74,6 @@
 		<servlet-name>ArchiveServlet</servlet-name>
 		<servlet-class>org.subethamail.web.servlet.ArchiveServlet</servlet-class>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>ArchiveServlet</servlet-name>
 		<url-pattern>/message/*</url-pattern>
@@ -79,7 +83,6 @@
 		<servlet-name>AttachmentServlet</servlet-name>
 		<servlet-class>org.subethamail.web.servlet.AttachmentServlet</servlet-class>
 	</servlet>
-	
 	<servlet-mapping>
 		<servlet-name>AttachmentServlet</servlet-name>
 		<url-pattern>/attachment/*</url-pattern>
@@ -89,7 +92,6 @@
 		<servlet-name>ExportServlet</servlet-name>
 		<servlet-class>org.subethamail.web.servlet.ExportServlet</servlet-class>
 	</servlet>
-	
 	<servlet-mapping>
 		<servlet-name>ExportServlet</servlet-name>
 		<url-pattern>/export/*</url-pattern>
@@ -99,7 +101,6 @@
 		<servlet-name>PermissionImageServlet</servlet-name>
 		<servlet-class>org.subethamail.web.servlet.PermissionImageServlet</servlet-class>
 	</servlet>
-	
 	<servlet-mapping>
 		<servlet-name>PermissionImageServlet</servlet-name>
 		<url-pattern>/perm_img</url-pattern>

@@ -39,6 +39,8 @@ import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 
+import com.caucho.remote.HessianService;
+
 /**
  * Implementation of the AccountMgr interface.
  *
@@ -48,6 +50,7 @@ import org.subethamail.entity.Subscription;
 @RolesAllowed(Person.ROLE_USER)
 @RunAs(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@HessianService(urlPattern="/api/AccountMgr")
 public class AccountMgrBean extends PersonalBean implements AccountMgr
 {
 	/** */

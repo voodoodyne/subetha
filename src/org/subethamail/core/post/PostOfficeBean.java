@@ -24,7 +24,7 @@ import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
-import org.subethamail.core.admin.i.EegorBringMeAnotherBrain;
+import org.subethamail.core.admin.i.Eegor;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
@@ -59,7 +59,7 @@ public class PostOfficeBean implements PostOffice
 	@Inject Encryptor encryptor;
 
 	/** */
-	@Inject EegorBringMeAnotherBrain brainBringer;
+	@Inject Eegor brainBringer;
 	
 	/** */
 	@Inject @SubEtha SubEthaEntityManager em;

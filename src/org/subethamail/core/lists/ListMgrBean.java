@@ -61,6 +61,8 @@ import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
+import com.caucho.remote.HessianService;
+
 /**
  * Implementation of the ListMgr interface.
  *
@@ -71,6 +73,7 @@ import org.subethamail.entity.i.PermissionException;
 @PermitAll
 @RunAs(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@HessianService(urlPattern="/api/ListMgr")
 public class ListMgrBean extends PersonalBean implements ListMgr
 {
 	/** */

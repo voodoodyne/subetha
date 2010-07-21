@@ -23,7 +23,7 @@ import javax.mail.internet.MimeMultipart;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.core.admin.i.EegorBringMeAnotherBrain;
+import org.subethamail.core.admin.i.Eegor;
 
 import com.caucho.hessian.client.HessianProxyFactory;
 
@@ -129,13 +129,13 @@ public class LoadGenerator extends Thread
 			fact.setUser("root@localhost");
 			fact.setPassword("password");
 
-			String url = "http://localhost:8080/se/api/" + EegorBringMeAnotherBrain.class.getSimpleName();
+			String url = "http://localhost:8080/se/api/" + Eegor.class.getSimpleName();
 			
-			EegorBringMeAnotherBrain eegor = null;
+			Eegor eegor = null;
 			try
 			{
 				System.out.println("Creating eegor: " + url);
-				eegor = (EegorBringMeAnotherBrain)fact.create(EegorBringMeAnotherBrain.class, url);
+				eegor = (Eegor)fact.create(Eegor.class, url);
 				
 				System.out.println("Creating wiser listener on port 2525!");
 				//this will start the listening wiser instance at port 2525

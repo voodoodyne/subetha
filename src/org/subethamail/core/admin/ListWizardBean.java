@@ -28,6 +28,8 @@ import org.subethamail.core.plugin.i.Blueprint;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.Person;
 
+import com.caucho.remote.HessianService;
+
 /**
  * Implementation of the ListWizard interface.
  *
@@ -37,6 +39,7 @@ import org.subethamail.entity.Person;
 @ApplicationScoped
 @RolesAllowed(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@HessianService(urlPattern="/api/ListWizard")
 public class ListWizardBean implements ListWizard
 {
 	/** */

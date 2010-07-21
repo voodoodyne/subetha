@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
-import org.subethamail.core.admin.i.EegorBringMeAnotherBrain;
+import org.subethamail.core.admin.i.Eegor;
 import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
@@ -111,8 +111,8 @@ public class BeanMixin
 	}
 	
 	/** */
-	public EegorBringMeAnotherBrain getEegor()
+	public Eegor getEegor()
 	{
-		return (EegorBringMeAnotherBrain)this.getInterface(EegorBringMeAnotherBrain.class);
+		return (Eegor)this.getInterface(Eegor.class);
 	}
 }

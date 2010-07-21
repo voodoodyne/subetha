@@ -13,8 +13,10 @@ import javax.mail.Session;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.core.admin.i.EegorBringMeAnotherBrain;
+import org.subethamail.core.admin.i.Eegor;
 import org.subethamail.core.post.OutboundMTA;
+
+import com.caucho.remote.HessianService;
 
 /**
  * Implements some basic plumbing methods for testing.
@@ -24,10 +26,11 @@ import org.subethamail.core.post.OutboundMTA;
  */
 @ApplicationScoped
 @Named("eegor")
-public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
+@HessianService(urlPattern="/api/Eegor")
+public class EegorBean implements Eegor
 {
 	/** */
-	private final static Logger log = LoggerFactory.getLogger(EegorBringMeAnotherBrainBean.class);
+	private final static Logger log = LoggerFactory.getLogger(EegorBean.class);
 
 	/** TODO: This should be done using a Deployment Descriptors (JSR299) so that 
 	 *  the "test" Deployment Descriptor binds to a another mail session 
@@ -38,7 +41,7 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 	String mailSmtpPort;
 	
 	/* (non-Javadoc)
-	 * @see Plumber#log(java.lang.String)
+	 * @see org.subethamail.core.admin.i.EegorBringMeAnotherBrain#log(java.lang.String)
 	 */
 	public void log(String msg)
 	{

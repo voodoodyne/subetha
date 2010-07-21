@@ -57,6 +57,8 @@ import org.subethamail.entity.Subscription;
 import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.i.Permission;
 
+import com.caucho.remote.HessianService;
+
 
 /**
  * @author Jeff Schnitzer
@@ -65,6 +67,7 @@ import org.subethamail.entity.i.Permission;
 @Stateless(name="Injector")
 @RolesAllowed(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@HessianService(urlPattern="/api/Injector")
 public class InjectorBean implements Injector
 {
 	/** */

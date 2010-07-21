@@ -71,6 +71,7 @@ import org.subethamail.entity.Person;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
+import com.caucho.remote.HessianService;
 import com.sun.mail.util.LineInputStream;
 
 /**
@@ -83,6 +84,7 @@ import com.sun.mail.util.LineInputStream;
 @PermitAll
 @RunAs(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@HessianService(urlPattern="/api/Archiver")
 public class ArchiverBean extends PersonalBean implements Archiver
 {
 	/** */

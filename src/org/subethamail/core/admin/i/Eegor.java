@@ -12,7 +12,7 @@ package org.subethamail.core.admin.i;
  * 
  * @author Jeff Schnitzer
  */
-public interface EegorBringMeAnotherBrain
+public interface Eegor
 {
 	/**
 	 * Puts a log message in the adminstrator log at level INFO.

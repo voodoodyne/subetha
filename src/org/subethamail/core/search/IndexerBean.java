@@ -41,6 +41,8 @@ import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
 
+import com.caucho.remote.HessianService;
+
 /**
  * Manages the Lucene search index and provides a
  * low-level search API.  Conceptually there are two indexes, the
@@ -54,6 +56,7 @@ import org.subethamail.entity.Mail;
 @Named("indexer")
 @Singleton
 //@Startup
+@HessianService(urlPattern="/api/Indexer")
 public class IndexerBean implements Indexer
 {
 	/** */

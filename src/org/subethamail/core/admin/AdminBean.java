@@ -49,6 +49,8 @@ import org.subethamail.entity.SubscriptionHold;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 
+import com.caucho.remote.HessianService;
+
 /**
  * Implementation of the Admin interface.
  *
@@ -57,6 +59,7 @@ import org.subethamail.entity.i.PermissionException;
 @Stateless(name="Admin")
 @RolesAllowed(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@HessianService(urlPattern="/api/Admin")
 public class AdminBean extends PersonalBean implements Admin
 {
 	/** */

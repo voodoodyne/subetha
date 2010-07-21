@@ -8,7 +8,7 @@ package org.subethamail.web.action;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.hibernate.validator.Email;
+import org.hibernate.validator.constraints.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;

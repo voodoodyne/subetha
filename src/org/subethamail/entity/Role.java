@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,8 +24,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CollectionOfElements;
-import org.hibernate.validator.Length;
+import org.hibernate.validator.constraints.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Permission;
@@ -67,7 +67,7 @@ public class Role implements Serializable, Comparable<Role>
 	boolean owner;
 
 	/** */
-	@CollectionOfElements
+	@ElementCollection
 	@JoinTable(name="RolePermission", joinColumns={@JoinColumn(name="roleId")})
 	@Enumerated(EnumType.STRING)
 	@Column(name="perm", nullable=false)

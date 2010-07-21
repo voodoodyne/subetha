@@ -782,11 +782,6 @@ public class SubEthaEntityManager implements EntityManager
 	}
 
 	@Override
-	public Set<String> getSupportedProperties() {
-		return this.base.getSupportedProperties();
-	}
-
-	@Override
 	public void refresh(Object arg0, LockModeType arg1) {
 		this.base.refresh(arg0, arg1);		
 	}
@@ -804,27 +799,9 @@ public class SubEthaEntityManager implements EntityManager
 	}
 
 	@Override
-	public <T> TypedQuery<T> createQuery(CriteriaQuery<T> arg0, Class<T> arg1)
-	{
-		return this.base.createQuery(arg0, arg1);
-	}
-
-	@Override
 	public void detach(Object arg0)
 	{
 		this.base.detach(arg0);
-	}
-
-	@Override
-	public <T> T find(Class<T> arg0, Object arg1, Map<String, Object> arg2)
-	{
-		return this.base.find(arg0, arg1, arg2);
-	}
-
-	@Override
-	public <T> T find(Class<T> arg0, Object arg1, LockModeType arg2, Map<String, Object> arg3)
-	{
-		return this.base.find(arg0, arg1, arg2);
 	}
 
 	@Override
@@ -867,5 +844,29 @@ public class SubEthaEntityManager implements EntityManager
 	public <T> T unwrap(Class<T> arg0)
 	{
 		return this.base.unwrap(arg0);
+	}
+
+	@Override
+	public <T> T find(Class<T> paramClass, Object paramObject, Map<String, Object> paramMap)
+	{
+		return this.base.find(paramClass, paramClass, paramMap);
+	}
+
+	@Override
+	public <T> T find(Class<T> paramClass, Object paramObject, LockModeType paramLockModeType, Map<String, Object> paramMap)
+	{
+		return this.base.find(paramClass, paramObject, paramLockModeType, paramMap);
+	}
+
+	@Override
+	public Set<String> getSupportedProperties()
+	{
+		return this.base.getSupportedProperties();
+	}
+
+	@Override
+	public <T> TypedQuery<T> createQuery(CriteriaQuery<T> paramCriteriaQuery, Class<T> paramClass)
+	{
+		return this.base.createQuery(paramCriteriaQuery, paramClass);
 	}
 }

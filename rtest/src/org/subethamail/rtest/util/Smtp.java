@@ -50,9 +50,9 @@ public class Smtp extends Wiser
 		try
 		{
 			AdminMixin god = new AdminMixin();
-			log.debug("Calling enableTestMode()");
-			god.getEegor().enableTestMode(host + ":" + PORT);
-			log.debug("Called enableTestMode()");
+//			log.debug("Calling enableTestMode()");
+//			god.getEegor().enableTestMode(host + ":" + PORT);
+//			log.debug("Called enableTestMode()");
 		}
 		catch (Exception ex) { throw new RuntimeException(ex); }
 	}
@@ -64,7 +64,7 @@ public class Smtp extends Wiser
 		try
 		{
 			AdminMixin god = new AdminMixin();
-			god.getEegor().disableTestMode();
+//			god.getEegor().disableTestMode();
 		}
 		catch (Exception ex) { throw new RuntimeException(ex); }
 

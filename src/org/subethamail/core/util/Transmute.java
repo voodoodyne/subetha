@@ -42,12 +42,12 @@ import org.subethamail.core.plugin.i.Filter;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.EnabledFilter;
 import org.subethamail.entity.Mail;
+import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Role;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.SubscriptionHold;
-import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.i.Permission;
 
 

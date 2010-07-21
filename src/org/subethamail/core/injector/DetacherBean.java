@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.TrivialDataSource;
+import org.subethamail.core.util.BlobImpl;
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Attachment;
@@ -92,7 +93,7 @@ public class DetacherBean implements Detacher
 				
 				InputStream input = part.getInputStream();
 				
-				Blob blobby = new org.hibernate.lob.BlobImpl(input, input.available());
+				Blob blobby = new BlobImpl(input, input.available());
 				
 				Attachment attach = new Attachment(ownerMail, blobby, contentType);
 				this.em.persist(attach);

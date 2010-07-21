@@ -8,10 +8,10 @@ package org.subethamail.web.model;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.hibernate.validator.ClassValidator;
-import org.hibernate.validator.InvalidValue;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 /**
  * Models with a simple error map.
@@ -20,8 +20,9 @@ import org.hibernate.validator.InvalidValue;
  */
 public class ErrorMapModel
 {
-	/** Keep all the validators around */
-	private static Map<Class<?>, ClassValidator<?>> validators = new ConcurrentHashMap<Class<?>, ClassValidator<?>>();
+	/** */
+	private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
 
 	/** */
 	Map<String, String> errors;
@@ -47,26 +48,19 @@ public class ErrorMapModel
 
 	/**
 	 * Reflect any public fields that have been annotated with contraints
-	 * and modify the error map accordingly.  The public requirement is
-	 * inherent to java reflection, unfortunately.
+	 * and modify the error map accordingly.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void validate() throws IllegalAccessException
 	{
-		ClassValidator val = validators.get(this.getClass());
-		if (val == null)
+		for (ConstraintViolation<?> invalid: validator.validate(this))
 		{
-			val = new ClassValidator(this.getClass());
-			validators.put(this.getClass(), val);
-		}
-
-		for (InvalidValue invalid: val.getInvalidValues(this))
-		{
-			String existingError = this.getErrors().get(invalid.getPropertyPath());
+			String simplePath = invalid.getPropertyPath().iterator().next().getName();
+			
+			Object existingError = this.getErrors().get(simplePath);
 			if (existingError == null)
-				this.setError(invalid.getPropertyPath(), invalid.getMessage());
+				this.setError(simplePath, invalid.getMessage());
 			else
-				this.setError(invalid.getPropertyPath(), existingError + "\n" + invalid.getMessage());
+				this.setError(simplePath, existingError + "\n" + invalid.getMessage());
 		}
 	}
 }

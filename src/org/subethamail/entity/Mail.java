@@ -23,6 +23,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -39,7 +40,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Index;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Sort;
@@ -246,7 +246,7 @@ public class Mail implements Serializable, Comparable<Mail>
 	 * in using as our parent than what we have currently.  The first
 	 * entry is the best possible.
 	 */
-	@CollectionOfElements
+	@ElementCollection
 	@JoinTable(name="WantedReference", joinColumns={@JoinColumn(name="mailId")})
 	@Column(name="messageId", nullable=false)
 	@IndexColumn(name="ord")

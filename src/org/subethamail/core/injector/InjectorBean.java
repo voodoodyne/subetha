@@ -51,10 +51,10 @@ import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.VERPAddress;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
+import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
-import org.subethamail.entity.Mail.HoldType;
 import org.subethamail.entity.i.Permission;
 
 import com.caucho.remote.HessianService;

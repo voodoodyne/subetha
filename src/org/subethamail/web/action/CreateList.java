@@ -11,6 +11,9 @@ import java.net.URL;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import org.hibernate.validator.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +23,6 @@ import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Creates a mailing list.  The model starts and remains a CreateList.Model.
@@ -38,36 +40,39 @@ public class CreateList extends AuthRequired
 	//SiteUtils siteUtils = InjectManager.create();
 	
 	/** */
+	@Data
+	@EqualsAndHashCode(callSuper=true)
 	public static class Model extends ErrorMapModel
 	{
 		/** Will be populated if exeuction is successful */
-		@Property Long id;
+		Long id;
 		
 		/** */
 		@Length(min=1, max=Validator.MAX_LIST_NAME)
-		@Property String name = "";
+		String name = "";
 	
 		/** */
 		@Length(max=Validator.MAX_LIST_DESCRIPTION)
-		@Property String description = "";
+		String description = "";
 	
 		/** */
 		@Length(max=Validator.MAX_LIST_EMAIL)
-		@Property String email = "";
+		String email = "";
 	
 		/** */
 		@Length(max=Validator.MAX_LIST_URL)
-		@Property String url = "";
+		String url = "";
 
 		/** */
-		@Property String owners = "";
+		String owners = "";
 		
 		/** */
-		@Property String blueprint = "";
+		String blueprint = "";
 	}
 	
 	public CreateList()
 	{}
+	
 	/** */
 	public void initialize()
 	{

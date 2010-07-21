@@ -5,6 +5,9 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +15,6 @@ import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Injects a piece of mail into the system via a web form.  One of msgId or listId
@@ -29,14 +31,14 @@ public class PostMessage extends AuthRequired
 
 	public class Model extends ErrorMapModel
 	{
-		@Property Long msgId;
-		@Property Long listId;
+		@Getter @Setter Long msgId;
+		@Getter @Setter Long listId;
 
 		@Length(min=1, max=Validator.MAX_MAIL_SUBJECT)
-		@Property String subject;
+		@Getter @Setter String subject;
 
 		@Length(min=1, max=Validator.MAX_MAIL_CONTENT)
-		@Property String message;
+		@Getter @Setter String message;
 	}
 	
 	/** */

@@ -7,13 +7,15 @@ package org.subethamail.web.action;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.SubscriberData;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.PaginateModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Gets a list of subscribers to the list
@@ -31,9 +33,9 @@ public class GetSubscribers extends AuthAction
 	public static class Model extends PaginateModel
 	{
 		/** */
-		@Property Long listId;
-		@Property String query = "";
-		@Property List<SubscriberData> subscribers;
+		@Getter @Setter Long listId;
+		@Getter @Setter String query = "";
+		@Getter @Setter List<SubscriberData> subscribers;
 	}
 
 	public void initialize()

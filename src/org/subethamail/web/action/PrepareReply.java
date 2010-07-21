@@ -5,12 +5,14 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.web.Backend;
-import org.tagonist.propertize.Property;
 
 /**
  * This action is used primarily on msg_send.jsp to initialize the data for that page.
@@ -25,7 +27,7 @@ public class PrepareReply extends PostMessage
 
 	public class Model extends PostMessage.Model
 	{
-		@Property MailData mailData;
+		@Getter @Setter MailData mailData;
 	}
 
 	/** */

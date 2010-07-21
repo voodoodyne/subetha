@@ -5,6 +5,9 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +15,6 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Adds a site admin.
@@ -27,8 +29,8 @@ public class AdminAdd extends AuthRequired
 
 	public class Model extends ErrorMapModel
 	{
-		@Email
-		@Property String email;
+		@Getter @Setter
+		@Email String email;
 	}
 
 	/** */

@@ -5,9 +5,11 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
-import org.tagonist.propertize.Property;
 
 /**
  * Resends the message in email.  The address must belong
@@ -18,8 +20,8 @@ import org.tagonist.propertize.Property;
  */
 public class ResendMessage extends AuthRequired 
 {
-	@Property Long msgId;
-	@Property String email;
+	@Getter @Setter Long msgId;
+	@Getter @Setter String email;
 	
 	/** */
 	public void authExecute() throws Exception

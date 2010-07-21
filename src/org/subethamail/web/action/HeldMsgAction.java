@@ -5,11 +5,13 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
-import org.tagonist.propertize.Property;
 
 /**
  * Performs an action on a held message.
@@ -23,11 +25,11 @@ public class HeldMsgAction extends AuthAction
 	private final static Logger log = LoggerFactory.getLogger(HeldMsgAction.class);
 
 	/** in */
-	@Property Long msgId;
-	@Property String action;
+	@Getter @Setter Long msgId;
+	@Getter @Setter String action;
 	
 	/** out */
-	@Property Long listId;
+	@Getter @Setter Long listId;
 	
 	/** */
 	public void execute() throws Exception

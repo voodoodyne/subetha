@@ -7,6 +7,9 @@ package org.subethamail.web.action;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
@@ -16,7 +19,6 @@ import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
 import org.subethamail.web.util.FileUploadFilter;
-import org.tagonist.propertize.Property;
 
 /**
  * Processes an mbox of messages and inserts them into the list.
@@ -32,11 +34,11 @@ public class UploadMBOX extends AuthAction
 	public static class Model extends ErrorMapModel
 	{
 		/** If this is not null, create a new role */
-		@Property Long listId;
+		@Getter @Setter Long listId;
 
-		@Property List<String> messageSubjects;
+		@Getter @Setter List<String> messageSubjects;
 
-		@Property int countImported;
+		@Getter @Setter int countImported;
 	}
 
 	/** */

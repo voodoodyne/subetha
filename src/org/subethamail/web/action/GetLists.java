@@ -7,13 +7,15 @@ package org.subethamail.web.action;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.ListDataPlus;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.PaginateModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Searches all lists for a query term (if provided), or
@@ -32,8 +34,8 @@ public class GetLists extends AuthRequired
 	public static class Model extends PaginateModel
 	{
 		/** */
-		@Property String query = "";
-		@Property List<ListDataPlus> lists;
+		@Getter @Setter String query = "";
+		@Getter @Setter List<ListDataPlus> lists;
 	}
 	
 	public void initialize()

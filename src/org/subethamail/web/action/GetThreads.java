@@ -7,13 +7,15 @@ package org.subethamail.web.action;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.PaginateModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Gets one page of an archive.  Model becomes a List<MessageSummary>.
@@ -34,8 +36,8 @@ public class GetThreads extends AuthAction
 		}
 		
 		/** */
-		@Property Long listId;
-		@Property List<MailSummary> messages;
+		@Getter @Setter Long listId;
+		@Getter @Setter List<MailSummary> messages;
 	}
 
 	public void initialize()

@@ -5,9 +5,11 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
-import org.tagonist.propertize.Property;
 
 /**
  * Removes a Subscriber from a list.
@@ -16,8 +18,8 @@ import org.tagonist.propertize.Property;
  */
 public class ListRemoveSubscriber extends AuthRequired 
 {
-	@Property Long personId;
-	@Property Long listId;
+	@Getter @Setter Long personId;
+	@Getter @Setter Long listId;
 	
 	/** */
 	public void authExecute() throws Exception

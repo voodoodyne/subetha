@@ -5,7 +5,7 @@
 
 package org.subethamail.web.action.auth;
 
-import org.tagonist.propertize.Property;
+import lombok.Getter;
 
 
 /**
@@ -18,7 +18,7 @@ import org.tagonist.propertize.Property;
 public class Logout extends AuthAction 
 {
 	/** */
-	@Property(set=false) boolean autoLoginEnabled;
+	@Getter boolean autoLoginEnabled;
 	
 	/** */
 	public void execute() throws Exception

@@ -9,6 +9,9 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.Converter;
@@ -17,7 +20,6 @@ import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Saves a new or existing filter.  This doesn't work like normal
@@ -47,24 +49,24 @@ public class FilterSave extends AuthAction
 	public static class Model extends ErrorMapModel
 	{
 		/** In */
-		@Property Long listId;
-		@Property String className;
+		@Getter @Setter Long listId;
+		@Getter @Setter String className;
 
 		/** Out - the filter data raw from the backend */
-		@Property EnabledFilterData filter;
+		@Getter @Setter EnabledFilterData filter;
 
 		/**
 		 * Out - any enums will have an entry here, allowing the UI to both
 		 * realize that the param is an enum and to iterate through the values.
 		 */
-		@Property Map<String, Enum<?>[]> enumValues;
+		@Getter @Setter Map<String, Enum<?>[]> enumValues;
 
 		/**
 		 * In/Out - the form fields.  Key is param name, value is string version of value.
 		 * This is a lot easier to use from JSTL than the EnabledFilterData, and allows
 		 * bean population as well.
 		 */
-		@Property Map<String, String> form = new HashMap<String, String>();
+		@Getter @Setter Map<String, String> form = new HashMap<String, String>();
 
 		/**
 		 * Initializes the enumValues from the filter.  Do this after you

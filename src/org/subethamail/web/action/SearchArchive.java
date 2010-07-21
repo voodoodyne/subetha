@@ -7,6 +7,9 @@ package org.subethamail.web.action;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SearchException;
@@ -15,7 +18,6 @@ import org.subethamail.core.lists.i.SearchResult;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.PaginateModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Gets one page of search results for an archive.  Note that the
@@ -37,11 +39,11 @@ public class SearchArchive extends AuthAction
 		}
 		
 		/** */
-		@Property Long listId;
-		@Property String query;
-		@Property List<SearchHit> hits;
+		@Getter @Setter Long listId;
+		@Getter @Setter String query;
+		@Getter @Setter List<SearchHit> hits;
 
-		@Property String error;
+		@Getter @Setter String error;
 	}
 
 	public void initialize()

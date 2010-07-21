@@ -5,11 +5,13 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
-import org.tagonist.propertize.Property;
 
 /**
  * Performs an action on a held subscription.
@@ -22,9 +24,9 @@ public class HeldSubAction extends AuthAction
 	@SuppressWarnings("unused")
 	private final static Logger log = LoggerFactory.getLogger(HeldSubAction.class);
 
-	@Property Long listId;
-	@Property Long personId;
-	@Property String action;
+	@Getter @Setter Long listId;
+	@Getter @Setter Long personId;
+	@Getter @Setter String action;
 	
 	/** */
 	public void execute() throws Exception

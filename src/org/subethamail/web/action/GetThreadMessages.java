@@ -8,12 +8,14 @@ package org.subethamail.web.action;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
-import org.tagonist.propertize.Property;
 
 /**
  * Gets detailed information about the mails in this thread.  Model becomes a Map<Long, MailData>.
@@ -27,7 +29,7 @@ public class GetThreadMessages extends AuthAction
 	private final static Logger log = LoggerFactory.getLogger(GetThreadMessages.class);
 
 	/** */
-	@Property Long msgId;
+	@Getter @Setter Long msgId;
 
 	/** */
 	public void execute() throws Exception

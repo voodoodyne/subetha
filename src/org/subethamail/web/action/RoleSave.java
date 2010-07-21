@@ -9,6 +9,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +20,6 @@ import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Adds a role to a mailing list or saves an existing role,
@@ -35,17 +37,17 @@ public class RoleSave extends AuthAction
 	public static class Model extends ErrorMapModel
 	{
 		/** If this is not null, create a new role */
-		@Property Long listId;
+		@Getter @Setter Long listId;
 		
 		/** If this is not null, save an existing role */
-		@Property Long roleId;
+		@Getter @Setter Long roleId;
 		
 		/** */
 		@Length(min=1, max=Validator.MAX_ROLE_NAME)
-		@Property String name = "";
+		@Getter @Setter String name = "";
 		
 		/** */
-		@Property String[] permissions;
+		@Getter String[] permissions;
 		
 		/**
 		 * This is mildly hackish; the presentation tier needs a Set
@@ -53,7 +55,7 @@ public class RoleSave extends AuthAction
 		 * checked.  We also need it internally, so we always keep
 		 * it synced to permissions.
 		 */
-		@Property Set<Permission> realPermissions;
+		@Getter @Setter Set<Permission> realPermissions;
 		
 		/**
 		 * Whenever permissions is set, set realPermissions too.

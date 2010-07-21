@@ -5,11 +5,13 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
-import org.tagonist.propertize.Property;
 
 /**
  * Gets the roles associated with a mailing list.  Model becomes
@@ -24,7 +26,7 @@ public class GetRoles extends AuthAction
 	private final static Logger log = LoggerFactory.getLogger(GetRoles.class);
 
 	/** */
-	@Property Long listId;
+	@Getter @Setter Long listId;
 
 	/** */
 	public void execute() throws Exception

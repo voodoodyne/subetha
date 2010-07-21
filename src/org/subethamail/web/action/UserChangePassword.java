@@ -5,6 +5,9 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +15,6 @@ import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Changes a user's password.
@@ -31,10 +33,10 @@ public class UserChangePassword extends AuthRequired
 	{
 		/** */
 		@Length(min=Validator.MIN_PERSON_PASSWORD, max=Validator.MAX_PERSON_PASSWORD)
-		@Property String password = "";
+		@Getter @Setter String password = "";
 
 		/** Don't need to explicitly validate confirm because it must match password */
-		@Property String confirm = "";
+		@Getter @Setter String confirm = "";
 	}
 
 	/** */

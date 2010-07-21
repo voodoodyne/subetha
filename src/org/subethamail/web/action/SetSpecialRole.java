@@ -5,11 +5,13 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
-import org.tagonist.propertize.Property;
 
 /**
  * Sets the defaultRole and/or the anonymousRole for a list.
@@ -23,9 +25,9 @@ public class SetSpecialRole extends AuthAction
 	private final static Logger log = LoggerFactory.getLogger(SetSpecialRole.class);
 
 	/** */
-	@Property Long listId;
-	@Property Long defaultRoleId;
-	@Property Long anonymousRoleId;
+	@Getter @Setter Long listId;
+	@Getter @Setter Long defaultRoleId;
+	@Getter @Setter Long anonymousRoleId;
 
 	/** */
 	public void execute() throws Exception

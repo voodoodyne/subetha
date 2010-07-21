@@ -5,13 +5,15 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.RoleSave.Model;
 import org.subethamail.web.action.auth.AuthAction;
-import org.tagonist.propertize.Property;
 
 /**
  * Pre-populates a model for RoleSave.
@@ -25,7 +27,7 @@ public class GetRoleForEdit extends AuthAction
 	private final static Logger log = LoggerFactory.getLogger(GetRoleForEdit.class);
 	
 	/** */
-	@Property Long roleId;
+	@Getter @Setter Long roleId;
 	
 	/** */
 	public void execute() throws Exception

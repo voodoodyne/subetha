@@ -7,13 +7,15 @@ package org.subethamail.web.action;
 
 import java.util.Collection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.PaginateModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Gets the list of held messages.
@@ -30,8 +32,8 @@ public class GetHeldMessages extends AuthAction
 	public static class Model extends PaginateModel
 	{
 		/** */
-		@Property Long listId;
-		@Property Collection<MailHold> holds;
+		@Getter @Setter Long listId;
+		@Getter @Setter Collection<MailHold> holds;
 	}
 
 	public void initialize()

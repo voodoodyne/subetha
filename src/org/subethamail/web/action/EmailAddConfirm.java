@@ -5,6 +5,9 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +16,6 @@ import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Confirms the adding of an email address to an existing account.
@@ -30,7 +32,7 @@ public class EmailAddConfirm extends AuthAction
 	{
 		/** */
 		@Length(min=1)
-		@Property String token = "";
+		@Getter @Setter String token = "";
 	}
 
 	/** */

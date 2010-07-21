@@ -11,13 +11,15 @@ import java.net.URL;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Changes the site settings.
@@ -32,8 +34,8 @@ public class SiteStatusSave extends AuthAction
 
 	public static class Model extends ErrorMapModel
 	{
-		@Property String postmasterEmail;
-		@Property String defaultSiteUrl;
+		@Getter @Setter String postmasterEmail;
+		@Getter @Setter String defaultSiteUrl;
 	}
 	
 	/** */

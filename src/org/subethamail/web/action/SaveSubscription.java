@@ -5,6 +5,9 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +16,6 @@ import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Saves changes to a subscriber.
@@ -30,19 +32,19 @@ public class SaveSubscription extends AuthAction
 	public static class Model extends ErrorMapModel
 	{
 		/** */
-		@Property Long listId;
-		@Property Long personId;
-		@Property String name;
+		@Getter @Setter Long listId;
+		@Getter @Setter Long personId;
+		@Getter @Setter String name;
 		
 		/** starts as null, will be set if it was part of the save form UI */
-		@Property String deliverTo;
-		@Property Long roleId;
+		@Getter @Setter String deliverTo;
+		@Getter @Setter Long roleId;
 		
 		@Length(max=Validator.MAX_SUBSCRIPTION_NOTE)
-		@Property String note;
+		@Getter @Setter String note;
 		
 		/** Populated initially and when validation fails */
-		@Property SubscriberData data;
+		@Getter @Setter SubscriberData data;
 	}
 
 	public void initialize()

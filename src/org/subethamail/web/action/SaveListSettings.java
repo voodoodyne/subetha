@@ -11,6 +11,9 @@ import java.net.URL;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +23,6 @@ import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Changes the settings of a mailing list.
@@ -37,30 +39,30 @@ public class SaveListSettings extends AuthAction
 	public static class Model extends ErrorMapModel
 	{
 		/** */
-		@Property Long listId;
+		@Getter @Setter Long listId;
 		
 		/** */
 		@Length(min=1, max=Validator.MAX_LIST_NAME)
-		@Property String name = "";
+		@Getter @Setter String name = "";
 		
 		/** */
 		@Length(max=Validator.MAX_LIST_DESCRIPTION)
-		@Property String description = "";
+		@Getter @Setter String description = "";
 
 		/** */
 		@Length(max=Validator.MAX_LIST_WELCOME_MESSAGE)
-		@Property String welcomeMessage = "";
+		@Getter @Setter String welcomeMessage = "";
 
 		/** */
 		@Length(max=Validator.MAX_LIST_URL)
-		@Property String url;	// start null
+		@Getter @Setter String url;	// start null
 
 		/** */
 		@Length(max=Validator.MAX_LIST_EMAIL)
-		@Property String email;	// start null
+		@Getter @Setter String email;	// start null
 
 		/** */
-		@Property boolean holdSubs;
+		@Getter @Setter boolean holdSubs;
 	}
 	
 	/** */

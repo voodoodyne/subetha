@@ -7,12 +7,14 @@ package org.subethamail.web.action;
 
 import java.util.Set;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
-import org.tagonist.propertize.Property;
 
 /**
  * Gets a number of statistics about a list, depending on user permissions.
@@ -30,12 +32,12 @@ public class GetListStats extends AuthAction
 	private final static Logger log = LoggerFactory.getLogger(GetListStats.class);
 	
 	/** */
-	@Property Long listId;
+	@Getter @Setter Long listId;
 	
-	@Property Integer subscriberCount;
-	@Property Integer archiveCount;
-	@Property Integer heldSubscriptionCount;
-	@Property Integer heldMessageCount;
+	@Getter @Setter Integer subscriberCount;
+	@Getter @Setter Integer archiveCount;
+	@Getter @Setter Integer heldSubscriptionCount;
+	@Getter @Setter Integer heldMessageCount;
 	
 	/** */
 	public void execute() throws Exception

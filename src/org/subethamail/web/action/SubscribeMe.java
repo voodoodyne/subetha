@@ -5,12 +5,14 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
-import org.tagonist.propertize.Property;
 
 /**
  * Subscribes an existing user to a mailing list, or changes the
@@ -26,9 +28,9 @@ public class SubscribeMe extends AuthRequired
 	private final static Logger log = LoggerFactory.getLogger(SubscribeMe.class);
 	
 	/** */
-	@Property Long listId;
-	@Property String deliverTo = "";
-	@Property boolean held;
+	@Getter @Setter Long listId;
+	@Getter @Setter String deliverTo = "";
+	@Getter @Setter boolean held;
 	
 	/** */
 	public void authExecute() throws Exception

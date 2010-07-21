@@ -7,6 +7,9 @@ package org.subethamail.web.action;
 
 import java.util.Set;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.MyListRelationship;
@@ -15,7 +18,6 @@ import org.subethamail.entity.i.Permission;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.util.PermissionWrapper;
-import org.tagonist.propertize.Property;
 
 /**
  * Gets data about a mailing list and the current user.
@@ -31,15 +33,15 @@ public class GetMyListRelationship extends AuthAction
 	private final static Logger log = LoggerFactory.getLogger(GetMyListRelationship.class);
 	
 	/** */
-	@Property Long listId;
-	@Property String listName;
-	@Property String listEmail;
-	@Property PermissionWrapper perms;
-	@Property boolean subscribed;
-	@Property String deliverTo;
-	@Property RoleData role;
+	@Getter @Setter Long listId;
+	@Getter @Setter String listName;
+	@Getter @Setter String listEmail;
+	@Getter @Setter PermissionWrapper perms;
+	@Getter @Setter boolean subscribed;
+	@Getter @Setter String deliverTo;
+	@Getter @Setter RoleData role;
 	
-	@Property Set<Permission> rawPerms;
+	@Getter @Setter Set<Permission> rawPerms;
 		
 	/** */
 	public void execute() throws Exception

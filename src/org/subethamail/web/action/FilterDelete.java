@@ -5,11 +5,13 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
-import org.tagonist.propertize.Property;
 
 /**
  * Remove a filter from a mailing list.
@@ -23,10 +25,10 @@ public class FilterDelete extends AuthAction
 	private final static Logger log = LoggerFactory.getLogger(FilterDelete.class);
 
 	/** */
-	@Property Long listId;
+	@Getter @Setter Long listId;
 	
 	/** */
-	@Property String className;
+	@Getter @Setter String className;
 	
 	/** */
 	public void execute() throws Exception

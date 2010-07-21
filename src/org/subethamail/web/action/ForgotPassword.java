@@ -5,6 +5,9 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +15,6 @@ import org.subethamail.common.NotFoundException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Sends a password reminder back to the email owner.
@@ -29,7 +31,7 @@ public class ForgotPassword extends AuthAction
 	public static class Model extends ErrorMapModel
 	{
 		@Email
-		@Property String email;
+		@Getter @Setter String email;
 	}
 	
 	/** */

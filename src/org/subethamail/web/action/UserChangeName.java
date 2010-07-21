@@ -5,6 +5,9 @@
 
 package org.subethamail.web.action;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import org.hibernate.validator.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +15,6 @@ import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 import org.subethamail.web.model.ErrorMapModel;
-import org.tagonist.propertize.Property;
 
 /**
  * Changes a user's name.
@@ -31,7 +33,7 @@ public class UserChangeName extends AuthRequired
 	{
 		/** */
 		@Length(max=Validator.MAX_PERSON_NAME)
-		@Property String name = "";
+		@Getter @Setter String name = "";
 	}
 
 	/** */

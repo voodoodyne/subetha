@@ -7,6 +7,7 @@ package org.subethamail.core.auth;
 
 import java.security.Principal;
 
+import javax.ejb.Startup;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -31,6 +32,7 @@ import com.caucho.security.PasswordCredentials;
  *
  * @author Jeff Schnitzer
  */
+@Startup
 @Singleton
 public class SubEthaAuthenticator implements Authenticator
 {

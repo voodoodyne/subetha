@@ -13,12 +13,12 @@
 	<classpathentry kind="lib" path="lib/lucene-core-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/build-only/resin-ant.jar" sourcepath="/RESIN_SRC/modules/ant/src"/>
 	<classpathentry kind="lib" path="lib/build-only/junit-4.6.jar"/>
-	<classpathentry kind="lib" path="lib/subethasmtp-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.5.10.jar"/>
 	<classpathentry kind="lib" path="lib/build-only/lombok-edge.jar"/>
+	<classpathentry kind="lib" path="lib/subethasmtp-3.1.4.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="loadtest/src"/>

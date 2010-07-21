@@ -6,7 +6,8 @@
 
 package org.subethamail.core.queue;
 
-import javax.ejb.MessageDriven;
+import java.util.concurrent.BlockingQueue;
+
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -29,15 +30,17 @@ import org.subethamail.entity.Subscription;
  * individual message may get turned into thousands of outboud queue
  * messages.
  */
-@MessageDriven
+//@MessageDriven	// declared in resin-web.xml
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class InjectListener implements MessageListener
 {
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(InjectListener.class);
 
-	/** */
-	@Inject /*@DeliveryQueue*/ DeliveryBlockingQueue outboundQueue;
+	/** Unfortunately the generics trip up Resin's CDI impl */
+	//@Inject @DeliveryQueue BlockingQueue<DeliveryQueueItem> outboundQueue;
+	@SuppressWarnings("rawtypes")
+	@Inject @DeliveryQueue BlockingQueue outboundQueue;
 
 	/** */
 	@Inject @SubEtha SubEthaEntityManager em;
@@ -61,6 +64,7 @@ public class InjectListener implements MessageListener
 	/**
 	 * Looks up who gets that message and creates new queue entries.
 	 */
+	@SuppressWarnings("unchecked")
 	private void deliver(Long mailId)
 	{
 		if (log.isDebugEnabled())
@@ -89,16 +93,15 @@ public class InjectListener implements MessageListener
 			if (sub.getDeliverTo() != null)
 			{
 				Long personId = sub.getPerson().getId();
-				this.outboundQueue.put(new DeliveryQueueItem(mailId, personId));
-//				try
-//				{
-//					this.outboundQueue.put(new DeliveryQueueItem(mailId, personId));
-//				}
-//				catch (InterruptedException e)
-//				{
-//					log.error("Error queuing delivery messages for mail.id=" + mailId + " person.id=" + personId, e);
-//					throw new RuntimeException(e);
-//				}
+				try
+				{
+					this.outboundQueue.put(new DeliveryQueueItem(mailId, personId));
+				}
+				catch (InterruptedException e)
+				{
+					log.error("Error queuing delivery messages for mail.id=" + mailId + " person.id=" + personId, e);
+					throw new RuntimeException(e);
+				}
 			}
 		}
 	}

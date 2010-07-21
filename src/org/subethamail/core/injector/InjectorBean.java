@@ -105,8 +105,10 @@ public class InjectorBean implements Injector
 	 */
 	public static final long MAX_SUBJECT_THREAD_PARENT_AGE_MILLIS = 1000L * 60L * 60L * 24L * 30L;
 
-	/** The "inbound queue" which processes injections */
-	@Inject @InjectQueue BlockingQueue<InjectedQueueItem> inboundQueue;
+	/** The "inbound queue" which processes injections, unfortunately Resin's CDI trips on the generic */
+	//@Inject @InjectQueue BlockingQueue<InjectedQueueItem> inboundQueue;
+	@SuppressWarnings("rawtypes")
+	@Inject @InjectQueue BlockingQueue inboundQueue;
 	
 	@Inject FilterRunner filterRunner;
 	@Inject Encryptor encryptor;
@@ -212,6 +214,7 @@ public class InjectorBean implements Injector
 	/**
 	 * Factors out the exception catching.
 	 */
+	@SuppressWarnings("unchecked")
 	protected boolean injectImpl(String envelopeSender, String envelopeRecipient, InputStream mailData) throws MessagingException, LimitExceededException, IOException
 	{
 		if (log.isDebugEnabled())

@@ -79,8 +79,10 @@ public class AdminBean extends PersonalBean implements Admin
 	/** */
 	@Inject PostOffice postOffice;
 
-	/** */
-	@Inject @InjectQueue BlockingQueue<InjectedQueueItem> inboundQueue;
+	/** Unfortunately Resin CDI trips on the generic */
+	//@Inject @InjectQueue BlockingQueue<InjectedQueueItem> inboundQueue;
+	@SuppressWarnings("rawtypes")
+	@Inject @InjectQueue BlockingQueue inboundQueue;
 
 	/** Needed to get/set the fallback host */
 	@Inject SMTPService smtpService;
@@ -490,6 +492,7 @@ public class AdminBean extends PersonalBean implements Admin
 	/* (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.Admin#selfModerate(java.lang.Long)
 	 */
+	@SuppressWarnings("unchecked")
 	public int selfModerate(Long personId) throws NotFoundException
 	{
 		Person who = this.em.get(Person.class, personId);

@@ -81,8 +81,11 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	@Inject FilterRegistry filterReg;
 	@Inject Admin admin;
 	@Inject AccountMgr accountMgr;
-	
-	@Inject @InjectQueue BlockingQueue<InjectedQueueItem> inboundQueue;	
+
+	/** Unfortunately Resin CDI trips on the generic */
+	//@Inject @InjectQueue BlockingQueue<InjectedQueueItem> inboundQueue;	
+	@SuppressWarnings("rawtypes")
+	@Inject @InjectQueue BlockingQueue inboundQueue;	
 	
 	/*
 	 * (non-Javadoc)
@@ -639,6 +642,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.lists.i.ListMgr#approveHeldMessage(java.lang.Long)
 	 */
+	@SuppressWarnings("unchecked")
 	public Long approveHeldMessage(Long msgId) throws NotFoundException, PermissionException
 	{
 		Mail mail = this.getMailFor(msgId, Permission.APPROVE_MESSAGES);

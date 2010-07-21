@@ -34,8 +34,8 @@ public class EegorBringMeAnotherBrainBean implements EegorBringMeAnotherBrain
 	 *  on the current test host and port. */
 	@Inject @OutboundMTA Session mailSession;
 	
-	public String mailSmtpHost;
-	public String mailSmtpPort;
+	String mailSmtpHost;
+	String mailSmtpPort;
 	
 	/* (non-Javadoc)
 	 * @see Plumber#log(java.lang.String)

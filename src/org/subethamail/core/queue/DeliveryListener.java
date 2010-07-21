@@ -5,7 +5,6 @@
 
 package org.subethamail.core.queue;
 
-import javax.ejb.MessageDriven;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -23,7 +22,7 @@ import org.subethamail.core.deliv.i.Deliverator;
  * Processes delivery queue messages by creating an actual STMP message
  * using JavaMail, relaying it through the {@link Deliverator}.
  */
-@MessageDriven
+//@MessageDriven	// declared in resin-web.xml
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class DeliveryListener implements MessageListener
 {

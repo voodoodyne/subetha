@@ -30,9 +30,6 @@
 	<!-- JMS -->
 	<jms:JmsConnectionFactory />
 
-	<!--
-	<queue:DeliveryBlockingQueue/>
-	-->
 	<jms:FileQueue>
 		<queue:DeliveryQueue/>
 		<ee:Named>delivery</ee:Named>

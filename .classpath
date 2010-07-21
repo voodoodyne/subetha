@@ -10,8 +10,6 @@
 	<classpathentry kind="lib" path="lib/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-annotations.jar"/>
 	<classpathentry kind="lib" path="lib/tagonist.jar"/>
-	<classpathentry kind="lib" path="lib/standard.jar"/>
-	<classpathentry kind="lib" path="lib/jstl.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-core-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/build-only/resin-ant.jar" sourcepath="/RESIN_SRC/modules/ant/src"/>
 	<classpathentry kind="lib" path="lib/build-only/junit-4.6.jar"/>

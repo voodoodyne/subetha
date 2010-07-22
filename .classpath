@@ -20,6 +20,7 @@
 	<classpathentry kind="lib" path="lib/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-validator-4.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="lib/validation-api-1.0.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-jdk14-1.5.10.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="loadtest/src"/>

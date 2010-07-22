@@ -95,7 +95,7 @@ public class PostOfficeBean implements PostOffice
 			
 			// If in dev mode, annotate the subject for unit tests
 			if (brainBringer.isTestModeEnabled())
-				mailSubject = kind.toString() + " " + mailSubject;
+				mailSubject = kind.name() + " " + mailSubject;
 
 			try
 			{

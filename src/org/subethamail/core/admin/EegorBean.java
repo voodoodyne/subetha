@@ -6,9 +6,9 @@
 package org.subethamail.core.admin;
 
 import javax.annotation.security.RolesAllowed;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.mail.Session;
 
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ import com.caucho.remote.HessianService;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@ApplicationScoped
+@Singleton
 @Named("eegor")
 @HessianService(urlPattern="/api/Eegor")
 public class EegorBean implements Eegor
@@ -32,9 +32,7 @@ public class EegorBean implements Eegor
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(EegorBean.class);
 
-	/** TODO: This should be done using a Deployment Descriptors (JSR299) so that 
-	 *  the "test" Deployment Descriptor binds to a another mail session 
-	 *  on the current test host and port. */
+	/** */
 	@Inject @OutboundMTA Session mailSession;
 	
 	String mailSmtpHost;
@@ -78,7 +76,8 @@ public class EegorBean implements Eegor
 	@RolesAllowed("siteAdmin")
 	public void disableTestMode()
 	{
-		if (!this.isTestModeEnabled())
+		//if (!this.isTestModeEnabled())
+		if (this.mailSmtpHost == null)
 		{
 			log.warn("Test mode already disabled");
 		}
@@ -98,5 +97,6 @@ public class EegorBean implements Eegor
 	public boolean isTestModeEnabled()
 	{
 		return this.mailSmtpHost != null;
+		//return true;
 	}
 }

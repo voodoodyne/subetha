@@ -25,7 +25,6 @@ import org.subethamail.rtest.util.Smtp;
 public class AAATest extends TestCase
 {
 	/** */
-	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(AAATest.class);
 
 	/** */
@@ -40,6 +39,7 @@ public class AAATest extends TestCase
 	/** */
 	public void testFirstThing() throws Exception
 	{
+		log.info("Starting first test");
 		AdminMixin admin = new AdminMixin();
 		admin.getEegor().log("############# FIRST TEST RUN SUCCESSFULLY");
 	}
@@ -47,15 +47,17 @@ public class AAATest extends TestCase
 	/** */
 	public void testSecondThing() throws Exception
 	{
+		log.info("Starting second test");
 		Smtp smtp = new Smtp();
 		smtp.start();
 		
 		AdminMixin admin = new AdminMixin();
-		//admin.getAdmin().log("############# SECOND TEST RUNNING");
+		admin.getAdmin().log("############# SECOND TEST RUNNING");
 		
 		PersonMixin pers = new PersonMixin(admin);
 		MailingListMixin ml = new MailingListMixin(admin, null);
 		
+		log.info("Executing subscribe");
 		pers.getAccountMgr().subscribeMe(ml.getId(), pers.getEmail());
 		assertEquals(1, smtp.count(MailType.YOU_SUBSCRIBED));
 		

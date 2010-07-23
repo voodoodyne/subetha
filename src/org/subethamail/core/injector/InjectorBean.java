@@ -222,7 +222,16 @@ public class InjectorBean implements Injector
 	{
 		if (log.isDebugEnabled())
 			log.debug("Injecting message sent to " + envelopeRecipient);
-
+		
+		// A quick spam check - people often try to spam the list from the list-owner
+		// address.  This is never valid.  Nuke it up front.
+		String listForSender = OwnerAddress.getList(envelopeSender);
+		if (listForSender != null && listForSender.equals(envelopeRecipient))
+		{
+			log.info("Rejecting spam from bogus sender " + envelopeSender);
+			return false;
+		}
+		
 		InternetAddress recipientAddy = new InternetAddress(envelopeRecipient);
 
 		// Must check for recipient VERP bounce
@@ -252,7 +261,7 @@ public class InjectorBean implements Injector
 
 		if (log.isDebugEnabled())
 			log.debug("Message is for list: " + toList);
-
+		
 		// Parse up the message
 		mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
 		SubEthaMessage msg = new SubEthaMessage(this.mailSession, mailData);

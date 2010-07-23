@@ -29,7 +29,6 @@
 			<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.EhCacheProvider"/>
 			<property name="net.sf.ehcache.configurationResourceName" value="/META-INF/ehcache.xml"/>
 
-			<!-- For hibernate search -->
 			<property name="hibernate.search.default.directory_provider" value="org.hibernate.search.store.FSDirectoryProvider"/> 
 			<property name="hibernate.search.default.indexBase" value="/var/tmp/subetha/indexes"/>
           

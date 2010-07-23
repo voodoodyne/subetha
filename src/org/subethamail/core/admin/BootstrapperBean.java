@@ -6,8 +6,6 @@
 package org.subethamail.core.admin;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Startup;
@@ -20,7 +18,6 @@ import javax.mail.internet.InternetAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
-import org.subethamail.common.SiteUtils;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
@@ -56,25 +53,12 @@ public class BootstrapperBean
 	private static final String DEFAULT_NAME = "Administrator";
 	private static final String DEFAULT_PASSWORD = "password";
 	
-	private static final InternetAddress DEFAULT_SITE_POSTMASTER;
-	static
-	{
-		try
-		{
-			DEFAULT_SITE_POSTMASTER = new InternetAddress("postmaster@needsconfiguration", "Needs Configuration");
-		}
-		catch (UnsupportedEncodingException ex) { throw new RuntimeException(ex); }
-	}
-	
 	private static final Integer VERSION_ID = 1;
 	
 	/**
 	 * The config id of a Boolean that lets us know if we've run or not.
 	 */
 	public static final String BOOTSTRAPPED_CONFIG_ID = "bootstrapped";
-	
-	/** */
-	@Inject SiteUtils siteUtils;
 	
 	/** */
 	@Inject Admin admin;
@@ -116,9 +100,6 @@ public class BootstrapperBean
 	{
 		log.debug("Bootstrapping - establishing default site administrator");
 		this.bootstrapRoot();
-		
-		log.debug("Bootstrapping - establishing default site settings");
-		this.bootstrapSiteSettings();
 	}
 	
 	/**
@@ -152,44 +133,6 @@ public class BootstrapperBean
 		{
 			log.error("Impossible to establish person and then not find!", ex);
 			throw new RuntimeException(ex);
-		}
-	}
-	
-	/**
-	 * Sets up the initial site settings
-	 */
-	protected void bootstrapSiteSettings()
-	{
-		try
-		{
-			Config cfg = this.em.get(Config.class, Config.ID_SITE_POSTMASTER);
-			if (cfg.getValue() == null)
-				cfg.setValue(DEFAULT_SITE_POSTMASTER);
-		}
-		catch (NotFoundException ex)
-		{
-			Config cfg = new Config(Config.ID_SITE_POSTMASTER, DEFAULT_SITE_POSTMASTER);
-			this.em.persist(cfg);
-		}
-		
-		URL defaultSiteUrl;
-		try
-		{
-			defaultSiteUrl = new URL("http://needsconfiguration/" + siteUtils.getContextPath());
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
-		}
-		
-		try
-		{
-			Config cfg = this.em.get(Config.class, Config.ID_SITE_URL);
-			if (cfg.getValue() == null)
-				cfg.setValue(defaultSiteUrl);
-		}
-		catch (NotFoundException ex)
-		{
-			Config cfg = new Config(Config.ID_SITE_URL, defaultSiteUrl);
-			this.em.persist(cfg);
 		}
 	}
 }

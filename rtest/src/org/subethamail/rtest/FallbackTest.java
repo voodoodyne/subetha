@@ -5,8 +5,8 @@
 
 package org.subethamail.rtest;
 
-import javax.mail.Transport;
 import javax.mail.Message.RecipientType;
+import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 
 import junit.framework.Test;
@@ -55,14 +55,14 @@ public class FallbackTest extends SubEthaTestCase
 		this.ml = new MailingListMixin(this.admin, null);
 		this.pers = new PersonInfoMixin();
 		
-		this.admin.getAdmin().setFallbackHost("localhost:" + FALLBACK_PORT);
+		this.admin.getEegor().setFallbackHost("localhost:" + FALLBACK_PORT);
 	}
 	
 	/** */
 	protected void tearDown() throws Exception
 	{
 		this.fallback.stop();
-		this.admin.getAdmin().setFallbackHost(null);
+		this.admin.getEegor().setFallbackHost(null);
 		
 		super.tearDown();
 	}

@@ -42,9 +42,6 @@ public class Config implements Serializable, Comparable<Config>
 	/** */
 	@Transient private final static Logger log = LoggerFactory.getLogger(Config.class);
 
-	public static final String ID_SITE_POSTMASTER = "sitePostmaster";
-	public static final String ID_SITE_URL = "siteUrl";
-
 	/** */
 	@Id
 	@Column(length=Validator.MAX_CONFIG_ID)

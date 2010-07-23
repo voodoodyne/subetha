@@ -24,6 +24,7 @@ import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
+import org.subethamail.core.admin.SiteSettings;
 import org.subethamail.core.admin.i.Eegor;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.post.i.Constant;
@@ -32,7 +33,6 @@ import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.core.util.VERPAddress;
-import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
@@ -63,6 +63,9 @@ public class PostOfficeBean implements PostOffice
 	
 	/** */
 	@Inject @SubEtha SubEthaEntityManager em;
+	
+	/** */
+	@Inject SiteSettings settings;
 	
 	/** 
 	 * Builds a message from a velocity template, context, and some
@@ -228,14 +231,12 @@ public class PostOfficeBean implements PostOffice
 		}
 		else
 		{
-			URL url = (URL)this.em.findConfigValue(Config.ID_SITE_URL);
+			URL url = this.settings.getDefaultSiteUrl();
 			vctx.put("url", url.toString());
 			
 			MessageBuilder builder = new MessageBuilder(MailType.FORGOT_PASSWORD, vctx);
 			builder.setTo(addy);
-			
-			InternetAddress postmaster = (InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER);
-			builder.setFrom(postmaster);
+			builder.setFrom(this.settings.getPostmaster());
 			
 			builder.send();
 		}
@@ -329,14 +330,12 @@ public class PostOfficeBean implements PostOffice
 		}
 		else
 		{
-			URL url = (URL)this.em.findConfigValue(Config.ID_SITE_URL);
+			URL url = this.settings.getDefaultSiteUrl();
 			vctx.put("url", url.toString());
 			
 			MessageBuilder builder = new MessageBuilder(MailType.CONFIRM_EMAIL, vctx);
 			builder.setTo(email);
-			
-			InternetAddress postmaster = (InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER);
-			builder.setFrom(postmaster);
+			builder.setFrom(this.settings.getPostmaster());
 			
 			builder.send();
 		}

@@ -5,7 +5,21 @@
 <web-app xmlns="http://caucho.com/ns/resin"
 	xmlns:resin="urn:java:com.caucho.resin"
 	xmlns:smtp="urn:java:org.subethamail.core.smtp"
+	xmlns:admin="urn:java:org.subethamail.core.admin"
 	>
+	
+	<!--
+		You must set these appropriately.
+		
+		postmaster - only used as the return address for "forgot your pw" emails
+		
+		defaultSiteUrl - used as the base url for "forgot your pw" emails; needs
+		to resolve to the root of the subetha instance. 
+	-->
+	<admin:SiteSettings>
+		<admin:postmaster>postmaster@yourdomain.com</admin:postmaster>
+		<admin:defaultSiteUrl>http://path.to.subetha/</admin:defaultSiteUrl>
+	</admin:SiteSettings>
 	
 	<!--
 		Your MTA which can send outbound mail.  SubEtha relies on
@@ -45,19 +59,9 @@
 	</database>	
 	-->
 
-	<!-- 
-		DO NOT UNCOMMENT ANYTHING BELOW THIS LINE ON RESIN 4.0.0
-		
-		IT SHOULD WORK ON RESIN 4.0.1
-		
-		Yes, this means you cannot change the port, bind address, or set
-		a fallback host on Resin 4.0.0.  There is a way, but it is a
-		temporary workaround - ask on the subetha user mailing list.
-	-->
-
 	<!--
 		This lets you override the parameters of the builtin SMTP server.  All
-		of the fields are optional.
+		of the fields are optional; defaults are shown.
 
 		A note about fallbackHost:  If specified, SubEtha will proxy
 		to another host all SMTP exchanges which are not intended
@@ -67,9 +71,9 @@
 		for more details.
 
 	<smtp:SMTPService>
-		<port>2500</port>
-		<bindAddress>yourinterface</bindAddress>
-		<fallbackHost>localhost:2525</fallbackHost>
+		<smtp:port>2500</smtp:port>
+		<smtp:bindAddress>all of your addresses</smtp:bindAddress>
+		<smtp:fallbackHost>localhost:2525</smtp:fallbackHost>
 	</smtp:SMTPService>
 	-->
 

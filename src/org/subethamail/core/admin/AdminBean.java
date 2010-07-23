@@ -19,6 +19,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
@@ -39,7 +41,6 @@ import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.core.util.VERPAddress;
-import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
 import org.subethamail.entity.Mail;
 import org.subethamail.entity.MailingList;
@@ -87,9 +88,11 @@ public class AdminBean extends PersonalBean implements Admin
 	@SuppressWarnings("rawtypes")
 	@Inject @InjectQueue BlockingQueue inboundQueue;
 
-	/** Needed to get/set the fallback host */
+	/** Needed to get the fallback host */
 	@Inject SMTPService smtpService;
 
+	@Inject SiteSettings settings;
+	
 	/**
 	 * For generating random passwords.
 	 */
@@ -676,19 +679,10 @@ public class AdminBean extends PersonalBean implements Admin
 				this.countLists(),
 				this.em.countPeople(),
 				this.em.countMail(),
-				(URL)this.em.findConfigValue(Config.ID_SITE_URL),
-				(InternetAddress)this.em.findConfigValue(Config.ID_SITE_POSTMASTER),
+				this.settings.getDefaultSiteUrl(),
+				this.settings.getPostmaster(),
 				this.smtpService.getFallbackHost()
 			);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.admin.i.Admin#setDefaultSiteUrl(java.net.URL)
-	 */
-	public void setDefaultSiteUrl(URL url)
-	{
-		this.em.setConfigValue(Config.ID_SITE_URL, url);
 	}
 
 	/*
@@ -697,16 +691,7 @@ public class AdminBean extends PersonalBean implements Admin
 	 */
 	public URL getDefaultSiteUrl()
 	{
-		return (URL)this.em.findConfigValue(Config.ID_SITE_URL);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.admin.i.Admin#setPostmaster(javax.mail.internet.InternetAddress)
-	 */
-	public void setPostmaster(InternetAddress address)
-	{
-		this.em.setConfigValue(Config.ID_SITE_POSTMASTER, address);
+		return this.settings.getDefaultSiteUrl();
 	}
 
 	/*
@@ -742,14 +727,6 @@ public class AdminBean extends PersonalBean implements Admin
 		// TODO:  rebuild the search index?
 
 		return true;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.subethamail.core.admin.i.Admin#setFallbackHost(java.lang.String)
-	 */
-	public void setFallbackHost(String host)
-	{
-		this.smtpService.setFallbackHost(host);
 	}
 
 	/* (non-Javadoc)
@@ -793,6 +770,23 @@ public class AdminBean extends PersonalBean implements Admin
 
 		// Fallthrough case is that we were not an appropriate list owner, too bad
 		throw new PermissionException(Permission.EDIT_SUBSCRIPTIONS, "You are not allowed to change this user's name");
+	}
+
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Admin#rebuildSearchIndexes()
+	 */
+	@Override
+	public void rebuildSearchIndexes()
+	{
+		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+		try
+		{
+			fullTextEntityManager.createIndexer().startAndWait();
+		}
+		catch (InterruptedException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 
 }

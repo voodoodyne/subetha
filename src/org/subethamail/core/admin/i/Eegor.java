@@ -37,4 +37,10 @@ public interface Eegor
 	 * Self-explanatory.
 	 */
 	public boolean isTestModeEnabled();
+
+	/**
+	 * Sets the fallthrough host, or null to clear it.  This doesn't create
+	 * a persistent situation; it's really only for unit testing.
+	 */
+	public void setFallbackHost(String host);
 }

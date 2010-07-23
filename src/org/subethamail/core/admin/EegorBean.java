@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.core.admin.i.Eegor;
 import org.subethamail.core.post.OutboundMTA;
+import org.subethamail.core.smtp.SMTPService;
 
 import com.caucho.remote.HessianService;
 
@@ -38,6 +39,9 @@ public class EegorBean implements Eegor
 	String mailSmtpHost;
 	String mailSmtpPort;
 	
+	/** Needed to get/set the fallback host */
+	@Inject SMTPService smtpService;
+
 	/* (non-Javadoc)
 	 * @see org.subethamail.core.admin.i.EegorBringMeAnotherBrain#log(java.lang.String)
 	 */
@@ -98,5 +102,14 @@ public class EegorBean implements Eegor
 	{
 		//return this.mailSmtpHost != null;
 		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.subethamail.core.admin.i.Eegor#setFallbackHost(java.lang.String)
+	 */
+	@Override
+	public void setFallbackHost(String host)
+	{
+		this.smtpService.setFallbackHost(host);
 	}
 }

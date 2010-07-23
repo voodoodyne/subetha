@@ -178,24 +178,9 @@ public interface Admin
 	public SiteStatus getSiteStatus();
 	
 	/**
-	 * Sets the default site url.
-	 */
-	public void setDefaultSiteUrl(URL url);
-
-	/**
 	 * Gets the default site url.
 	 */
 	public URL getDefaultSiteUrl();
-
-	/**
-	 * Sets the address of the site postmaster.
-	 */
-	public void setPostmaster(InternetAddress address);
-	
-	/**
-	 * Sets the fallthrough host, or null to clear it.
-	 */
-	public void setFallbackHost(String host);
 
 	/**
 	 * Deletes a mailing list.  Must be called by siteAdmin.
@@ -216,4 +201,10 @@ public interface Admin
 	 * @throws PermissionException if you aren't allowed to do this
 	 */
 	public void setPersonName(Long personId, String name) throws NotFoundException, PermissionException;
+	
+	/**
+	 * Rebuild the fulltext search indexes from scratch.
+	 * Probably very expensive.
+	 */
+	public void rebuildSearchIndexes();
 }

@@ -19,8 +19,14 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
-import org.hibernate.search.jpa.FullTextEntityManager;
-import org.hibernate.search.jpa.Search;
+import org.hibernate.CacheMode;
+import org.hibernate.FlushMode;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
+import org.hibernate.Transaction;
+import org.hibernate.ejb.EntityManagerImpl;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
@@ -778,15 +784,38 @@ public class AdminBean extends PersonalBean implements Admin
 	@Override
 	public void rebuildSearchIndexes()
 	{
-		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
-		try
-		{
-			fullTextEntityManager.createIndexer().startAndWait();
-		}
-		catch (InterruptedException e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
+		// For some reason this generates an exception, something about unable
+		// to synchronize transactions
+//		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+//		try
+//		{
+//			fullTextEntityManager.createIndexer().startAndWait();
+//		}
+//		catch (InterruptedException e) { throw new RuntimeException(e); }
 
+		// This alternative code (from the Hibernate Search docs) seems to work
+		// although it generates a warning message when complete.  Not going to
+		// worry about it, this code doesn't run often.
+		final int BATCH_SIZE = 128;
+		org.hibernate.Session session = ((EntityManagerImpl)this.em.getDelegate()).getSession();		
+		FullTextSession fullTextSession = Search.getFullTextSession(session);
+		fullTextSession.setFlushMode(FlushMode.MANUAL);
+		fullTextSession.setCacheMode(CacheMode.IGNORE);
+		Transaction transaction = fullTextSession.beginTransaction();
+		//Scrollable results will avoid loading too many objects in memory
+		ScrollableResults results = fullTextSession.createCriteria(Mail.class)
+		    .setFetchSize(BATCH_SIZE)
+		    .scroll(ScrollMode.FORWARD_ONLY);
+		int index = 0;
+		while (results.next())
+		{
+		    index++;
+		    fullTextSession.index(results.get(0)); //index each element
+		    if (index % BATCH_SIZE == 0) {
+		        fullTextSession.flushToIndexes(); //apply changes to indexes
+		        fullTextSession.clear(); //free memory since the queue is processed
+		    }
+		}
+		transaction.commit();	
+	}
 }

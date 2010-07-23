@@ -17,7 +17,7 @@ import java.util.List;
 public class PaginateModel 
 {
 	/** */
-	public static final int DEFAULT_COUNT = 20;
+	public static final int DEFAULT_COUNT = 100;
 	
 	/** Input */
 	int count = DEFAULT_COUNT;

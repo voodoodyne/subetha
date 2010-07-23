@@ -6,12 +6,11 @@
 package org.subethamail.core.util;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Startup;
 
 import org.apache.velocity.app.Velocity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.caucho.config.Service;
 
 /**
  * This Bean just initializes the static use of Velocity.
@@ -19,7 +18,7 @@ import com.caucho.config.Service;
  * @author Jon Stevens
  * @author Scott Hernandez
  */
-@Service
+@Startup
 public class VelocityService
 {
 	/** */

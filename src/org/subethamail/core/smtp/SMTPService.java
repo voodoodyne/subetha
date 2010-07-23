@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -34,7 +35,7 @@ import org.subethamail.smtp.server.SMTPServer;
  * @author Jon Stevens
  * @author Scott Hernandez
  */
-//@Service
+@Startup
 @ApplicationScoped
 public class SMTPService
 {

@@ -11,6 +11,7 @@ import java.nio.charset.Charset;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Startup;
 import javax.inject.Inject;
 
 import org.apache.mina.common.IdleStatus;
@@ -24,14 +25,12 @@ import org.slf4j.LoggerFactory;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.smtp.SMTPService;
 
-import com.caucho.config.Service;
-
 /**
  * @author Jon Stevens
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
-@Service
+@Startup
 public class PostfixTcpTableService implements PostfixTcpTableManagement
 {
 	@Inject Injector injector;

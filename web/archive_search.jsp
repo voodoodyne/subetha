@@ -28,7 +28,6 @@
 			<table class="sort-table" id="searchResult">
 				<thead>
 					<tr>
-						<td nowrap="nowrap">Score</td>
 						<td>Subject</td>
 						<td>Author</td>
 						<td>Date</td>
@@ -45,7 +44,6 @@
 							</c:otherwise>
 						</c:choose>
 						<tr class="${color}">
-							<td><c:forEach var="score" items="${msg.scores}"><font color="red">|</font></c:forEach></td>
 							<td>
 								<span class="subject">
 									<c:url var="msgUrl" value="/archive_msg.jsp">
@@ -75,7 +73,7 @@
 			</table>
 
 <script type="text/javascript">
-var st1 = new SortableTable(document.getElementById("searchResult"), ["String", "String", "String", "String"]);
+var st1 = new SortableTable(document.getElementById("searchResult"), ["String", "String", "String"]);
 st1.onsort = st1.tableRowColors;
 </script>
 

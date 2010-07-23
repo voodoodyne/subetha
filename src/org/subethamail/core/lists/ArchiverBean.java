@@ -38,6 +38,16 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.TermsFilter;
+import org.apache.lucene.util.Version;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.FullTextQuery;
+import org.hibernate.search.jpa.Search;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.ExportMessagesException;
@@ -59,9 +69,6 @@ import org.subethamail.core.lists.i.SearchHit;
 import org.subethamail.core.lists.i.SearchResult;
 import org.subethamail.core.plugin.i.IgnoreException;
 import org.subethamail.core.post.OutboundMTA;
-import org.subethamail.core.search.i.Indexer;
-import org.subethamail.core.search.i.SimpleHit;
-import org.subethamail.core.search.i.SimpleResult;
 import org.subethamail.core.util.PersonalBean;
 import org.subethamail.core.util.Transmute;
 import org.subethamail.entity.Attachment;
@@ -95,7 +102,6 @@ public class ArchiverBean extends PersonalBean implements Archiver
 	@Inject Detacher detacher;
 	@Inject ListMgr listManager;
 	@Inject Injector injector;
-	@Inject Indexer indexer;
 
 	/** */
 	@Inject @OutboundMTA Session mailSession;
@@ -174,40 +180,42 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		// Are we allowed to view archives?
 		MailingList list = this.getListFor(listId, Permission.VIEW_ARCHIVES, me);
 
-		SimpleResult simpleResult = this.indexer.search(listId, query, skip, count);
+		// We use Hibernate Search for this
+		FullTextEntityManager ftem = Search.getFullTextEntityManager(this.em);
+		QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_29, new String[]{"subject", "content"}, new StandardAnalyzer(Version.LUCENE_29));
 
-		List<SearchHit> hits = new ArrayList<SearchHit>(simpleResult.getHits().size());
-
-		// Since there might be deleted mail in the results, let's do a partial attempt
-		// to reduce the total number when we know about specific deleted mail.  The number
-		// is not exact, of course, because there may be more deleted mail on different
-		// pages of search results.  But at least the number isn't obviously wrong for
-		// small result sets.
-		int totalResults = simpleResult.getTotal();
-
-		for (SimpleHit simpleHit: simpleResult.getHits())
+		org.apache.lucene.search.Query luceneQuery;
+		try
 		{
-			// Note that there might be deleted mail in the hits, so be careful
-			Mail mail = this.em.find(Mail.class, simpleHit.getId());
-			if (mail != null)
-			{
-				hits.add(new SearchHit(
-						mail.getId(),
-						mail.getSubject(),
-						list.getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES)
-							? mail.getFromAddress().getAddress() : null,
-						mail.getFromAddress().getPersonal(),
-						mail.getSentDate(),
-						simpleHit.getScore()
-						));
-			}
-			else
-			{
-				totalResults--;
-			}
+			luceneQuery = parser.parse(query);
+		}
+		catch (ParseException e) { throw new SearchException(e); }
+		
+		FullTextQuery ftquery = ftem.createFullTextQuery(luceneQuery, Mail.class);
+		ftquery.setFirstResult(skip).setMaxResults(count);
+		TermsFilter filter = new TermsFilter();
+		filter.addTerm(new Term("list", listId.toString()));
+		ftquery.setFilter(filter);
+		
+		@SuppressWarnings("unchecked")
+		List<Mail> rawHits = ftquery.getResultList();  		
+
+		// Now turn these into real hits
+		List<SearchHit> hits = new ArrayList<SearchHit>(rawHits.size());
+
+		for (Mail mail: rawHits)
+		{
+			hits.add(new SearchHit(
+					mail.getId(),
+					mail.getSubject(),
+					list.getPermissionsFor(me).contains(Permission.VIEW_ADDRESSES)
+						? mail.getFromAddress().getAddress() : null,
+					mail.getFromAddress().getPersonal(),
+					mail.getSentDate()
+					));
 		}
 
-		return new SearchResult(totalResults, hits);
+		return new SearchResult(ftquery.getResultSize(), hits);
 	}
 
 	/* (non-Javadoc)

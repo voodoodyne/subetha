@@ -16,7 +16,6 @@ import org.subethamail.core.admin.i.ListWizard;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.lists.i.Archiver;
 import org.subethamail.core.lists.i.ListMgr;
-import org.subethamail.core.search.i.Indexer;
 
 import com.caucho.hessian.client.HessianProxyFactory;
 
@@ -90,12 +89,6 @@ public class BeanMixin
 	public ListWizard getListWizard()
 	{
 		return (ListWizard)this.getInterface(ListWizard.class);
-	}
-	
-	/** */
-	public Indexer getIndexer()
-	{
-		return (Indexer)this.getInterface(Indexer.class);
 	}
 	
 	/** */

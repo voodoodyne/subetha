@@ -10,7 +10,7 @@ import junit.framework.TestSuite;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.subethamail.core.search.i.SimpleResult;
+import org.subethamail.core.lists.i.SearchResult;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonInfoMixin;
@@ -55,7 +55,7 @@ public class SearchTest extends SubEthaTestCase
 	public void testNothingFound() throws Exception
 	{
 		// The email should be suitable unique
-		SimpleResult result = this.admin.getIndexer().search(this.ml.getId(), this.uniqueString, 0, 5);
+		SearchResult result = this.admin.getArchiver().search(this.ml.getId(), this.uniqueString, 0, 5);
 		assertEquals(0, result.getTotal());
 		assertEquals(0, result.getHits().size());
 	}
@@ -70,9 +70,7 @@ public class SearchTest extends SubEthaTestCase
 		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), this.ml.getEmail(), rawMsg1);
 		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), this.ml.getEmail(), rawMsg2);
 		
-		this.admin.getIndexer().update();
-		
-		SimpleResult result = this.admin.getIndexer().search(this.ml.getId(), this.uniqueString, 0, 5);
+		SearchResult result = this.admin.getArchiver().search(this.ml.getId(), this.uniqueString, 0, 5);
 		assertEquals(2, result.getTotal());
 		assertEquals(2, result.getHits().size());
 	}
@@ -89,10 +87,8 @@ public class SearchTest extends SubEthaTestCase
 		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), this.ml.getEmail(), rawMsg1);
 		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), this.ml.getEmail(), rawMsg2);
 		
-		this.admin.getIndexer().update();
-
 		// Now search the other list
-		SimpleResult result = this.admin.getIndexer().search(otherList.getId(), this.uniqueString, 0, 5);
+		SearchResult result = this.admin.getArchiver().search(otherList.getId(), this.uniqueString, 0, 5);
 		assertEquals(0, result.getTotal());
 		assertEquals(0, result.getHits().size());
 	}

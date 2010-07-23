@@ -35,7 +35,7 @@ public class SearchArchive extends AuthAction
 	{
 		public Model()
 		{
-			this.setCount(50);	// default to 50
+			this.setCount(100);	// default to 100
 		}
 		
 		/** */

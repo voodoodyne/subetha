@@ -96,7 +96,7 @@ public class EegorBean implements Eegor
 	/** */
 	public boolean isTestModeEnabled()
 	{
-		return this.mailSmtpHost != null;
-		//return true;
+		//return this.mailSmtpHost != null;
+		return true;
 	}
 }

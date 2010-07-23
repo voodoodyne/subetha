@@ -45,6 +45,10 @@ import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.annotations.Table;
+import org.hibernate.search.annotations.Boost;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Indexed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
@@ -154,6 +158,7 @@ import org.subethamail.entity.i.Validator;
 	appliesTo="Mail",
 	indexes={@Index(name="mailMessageIdIndex", columnNames={"listId", "messageId"})}
 )
+@Indexed
 public class Mail implements Serializable, Comparable<Mail>
 {
 	/** */
@@ -175,6 +180,8 @@ public class Mail implements Serializable, Comparable<Mail>
 
 	/** Nullable because content is set after object persistence */
 	@Column(nullable=true, length=Validator.MAX_MAIL_CONTENT)
+	@Field
+	@FieldBridge(impl=MessageContentBridge.class)
 	byte[] content;
 
 	/** Message id might not exist */
@@ -184,6 +191,7 @@ public class Mail implements Serializable, Comparable<Mail>
 	/** */
 	@Column(nullable=false, length=Validator.MAX_MAIL_SUBJECT)
 	@Index(name="subject")
+	@Field(boost=@Boost(5f))
 	String subject;
 
 	/**
@@ -222,6 +230,8 @@ public class Mail implements Serializable, Comparable<Mail>
 	/** */
 	@ManyToOne
 	@JoinColumn(name="listId", nullable=false)
+	@Field
+	@FieldBridge(impl=MailingListBridge.class)
 	MailingList list;
 
 	/** */

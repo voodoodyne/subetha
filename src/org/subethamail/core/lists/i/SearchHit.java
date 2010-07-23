@@ -22,7 +22,6 @@ public class SearchHit implements Serializable
 	String fromEmail;	// might be null if no permission to view
 	String fromName;
 	Date sentDate;
-	float score;
 
 	/** Needed by Hessian */
 	protected SearchHit() {}
@@ -34,15 +33,13 @@ public class SearchHit implements Serializable
 			String subject,
 			String fromEmail,
 			String fromName,
-			Date sentDate,
-			float score)
+			Date sentDate)
 	{
 		this.id = id;
 		this.subject = subject;
 		this.fromEmail = fromEmail;
 		this.fromName = fromName;
 		this.sentDate = sentDate;
-		this.score = score;
 	}
 	
 	/** */
@@ -78,26 +75,8 @@ public class SearchHit implements Serializable
 	}
 
 	/** */
-	public float getScore()
-	{
-		return this.score;
-	}
-
-	/**
-	 * This method returns an int[] from 0 to 10
-	 * based on the score. This is a hack to allow
-	 * the score to be represented in the UI in 
-	 * a semi pretty way.
-	 */
-	public int[] getScores()
-	{
-		int tmp = new Float(this.score * 10).intValue();
-		return new int[tmp];
-	}
-
-	/** */
 	public String toString()
 	{
-		return this.getClass().getName() + " {id=" + this.id + ", score=" + this.score + "}";
+		return this.getClass().getName() + " {id=" + this.id + "}";
 	}
 }

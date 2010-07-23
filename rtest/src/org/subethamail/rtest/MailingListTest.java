@@ -151,9 +151,6 @@ public class MailingListTest extends SubEthaTestCase
 		byte[] rawMsg = this.createMessage(this.pers.getAddress(), ml.getAddress(), subject, TEST_BODY);
 		this.admin.getInjector().inject(this.pers.getAddress().getAddress(), ml.getEmail(), rawMsg);
 
-		// Make sure it is indexed
-		this.admin.getIndexer().update();
-		
 		// Find the id of that message
 		MailSummary summary = this.admin.getArchiver().getThreads(ml.getId(), 0, 10).get(0);
 		

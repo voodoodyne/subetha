@@ -1,5 +1,7 @@
 package org.subethamail.core.util;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.Startup;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,8 +18,16 @@ import org.subethamail.core.post.OutboundMTA;
  * @author Jeff Schnitzer
  */
 @Singleton
+@Startup
 public class Producers
 {
+	/** 
+	 * We need this so that objects which are not CDI-friendly (ie MessageContentBridge)
+	 * can get access to injected things.
+	 */
+	public static Producers instance() { return instance; }
+	private static Producers instance;
+	
 	/** Our application's data source */
 	@Inject @Named("jdbc/subetha")
 	private DataSource ds;
@@ -36,5 +46,12 @@ public class Producers
 	public Session getMailSession()
 	{
 		return this.mailSession;
+	}
+	
+	/** Set up the static instance */
+	@PostConstruct
+	public void setup()
+	{
+		instance = this;
 	}
 }

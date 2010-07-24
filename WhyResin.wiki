@@ -28,4 +28,6 @@ Despite a ten-year history, Caucho's [http://www.caucho.com/ Resin] is the coole
 
  * Caucho fixes bugs even when you aren't paying tens of thousands of dollars for support contracts.  In fact, the small, active team of developers answers questions on the (one) mailing list.  Just try to figure out where to ask a question in JBoss's 155 forums (I'm serious, I just counted).
 
-This is not to say that Resin is perfect.  There are still bugs, especially in the new 4.x line, but they're getting fixed fast.  There are some useful features missing - like HA-JNDI - but none that we can't live without.  If you hate your current bloated appserver and are wondering "Is the grass greener somewhere else?" the answer is emphatically YES.
+This is not to say that Resin is perfect.  It's taken Caucho a long time to work out the bugs in the 4.x line, and it's clear that their regression test suite (which isn't public) is not very thorough.  There are some useful features missing - like HA-JNDI - but none that we can't live without.  But even with these downsides (admittedly exacerbated by our use of every bleeding-edge feature in the CDI spec), we do not for one minute regret the switch from JBoss.*
+
+If you hate your current bloated appserver and are wondering "Is the grass greener somewhere else?" the answer is YES.

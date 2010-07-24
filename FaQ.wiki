@@ -3,10 +3,6 @@
 
 == Help! ==
 
-  * I just sent a message to a list and it isn't showing up in the archives during a search!
-
-  This is because the thread which re-indexes the archives runs about every ten minutes or so. Just give it some time and the message will show up.
-	
   * My system is too quiet, I want more debug output in the console!
     
   Well, you asked for it and here it comes. Drink from the firehose by editing any ResinConfiguration file (ie ${RESIN_HOME}/conf/resin.xml or ${RESIN_HOME}/conf/subetha.xml)
@@ -22,15 +18,15 @@
  
   * What Resin version does SubEtha require?
 
-  Currently Resin 4.0.0.  Due to evolution of the JSR299 CanDI spec, we will need to make a new release of SubEtha for the next functioning version of Resin; 4.0.1 unfortunately contains showstopper bugs.  4.0.2 is likely.
- 
+  Because the CDI specification has been a moving target and Resin is still working out issues, the answer to this is not straightforward.  The SubEtha v2.0 release specifically requires Resin 4.0.0.  The SubEtha v2.1 release requires Resin 4.0.9, and will hopefully work with subsequent versions.
+
   * Does SubEtha run on other J2EE appservers?
 
   Not currently.  J2EE portability is a myth - it's possible to port an application, but it takes a lot of work.  We know, we migrated from JBoss to Resin in early 2009.  See WhyResin.
 
   * Which databases does SubEtha support?
 
-  Any that work with Hibernate and provide reasonable BLOB support. The developers use MySQL and Postgres.
+  Theoretically, any that work with Hibernate and provide reasonable BLOB support. The developers use MySQL and Postgres.  We're willing to offer help with other options on the mailing list, but nothing is guaranteed.
  
   * Does SubEtha work with my Mail Transport Agent (eg Postfix, Sendmail, Exim, Qmail)?
 
@@ -38,7 +34,7 @@
  
   * Does SubEtha support i18n (internationalization)?
   
-  SubEtha's text strings (ie: web interface, error messages, etc.) haven't been internationalized with different languages (yet), but SubEtha should pass messages through written in any language with any character encoding. There are two exceptions to this: Email is always rendered as UTF-8 in the web archives, and list owners may install filters which replace text in the mail message. All substituted text is encoded with the platform default character set.
+  SubEtha's text strings (ie: web interface, error messages, etc.) haven't been internationalized with different languages, but SubEtha should pass messages through written in any language with any character encoding. There are two exceptions to this: Email is always rendered as UTF-8 in the web archives, and list owners may install filters which replace text in the mail message. All substituted text is encoded with the platform default character set.
 
   We *strongly recommend* that you set your JVM's default character set to UTF-8. Please read a more thorough discussion of [I18N] issues in SubEtha.
 

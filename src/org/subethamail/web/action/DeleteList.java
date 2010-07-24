@@ -32,6 +32,6 @@ public class DeleteList extends AuthRequired
 	/** */
 	public void authExecute() throws Exception
 	{
-		this.wrongPassword = Backend.instance().getAdmin().deleteList(this.listId, this.password);
+		this.wrongPassword = !Backend.instance().getAdmin().deleteList(this.listId, this.password);
 	}
 }

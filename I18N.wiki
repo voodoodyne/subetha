@@ -9,7 +9,16 @@ If you're running all your lists in your native language, you can ignore any of 
   
   * Set the JVM platform *default character encoding* to UTF-8
      This will cause any text that SubEtha creates or modifies to be encoded in the most portable form possible.
-     HOW: In the ${resin.home}/conf/resin.xml, look for the elements <cluster><server-default>.  Inside this section, add {{{<jvm-arg>-Dfile.encoding=utf-8</jvm-arg>}}}
+     HOW: In the ${resin.home}/conf/resin.xml, add a {{{<jvm-arg>}}}:
+     {{{
+     <cluster>
+          <server-default>
+               ... a lot of stuff
+               <jvm-arg>-Dfile.encoding=utf-8</jvm-arg>
+               ... a lot of stuff
+          </server-default>
+     </cluster>
+     }}}
   
   * Make sure your *database tables* are UTF-8
     While message content is stored as-is in the database as BLOBs, the Subject is also kept in a separate column for performance reasons. You'll want this to be encoded UTF-8. Fortunately most modern databases use UTF-8 by default.

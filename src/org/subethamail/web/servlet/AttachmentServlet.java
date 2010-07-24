@@ -24,9 +24,10 @@ import org.subethamail.entity.i.PermissionException;
  * 
  * The url format is something like /id/filename. The id is converted to an attachmentId and streamed from the datasource.
  */
-@SuppressWarnings("serial")
 public class AttachmentServlet extends HttpServlet
 {
+	private static final long serialVersionUID = 1L;
+
 	@Inject Archiver archiver;
 
 	/* (non-Javadoc)

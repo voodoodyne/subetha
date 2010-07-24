@@ -38,9 +38,10 @@ import org.subethamail.entity.i.Validator;
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
-@SuppressWarnings("serial")
 public class Role implements Serializable, Comparable<Role>
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	@Transient private final static Logger log = LoggerFactory.getLogger(Role.class);
 

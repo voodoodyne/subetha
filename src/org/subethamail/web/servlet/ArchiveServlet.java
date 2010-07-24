@@ -24,15 +24,15 @@ import org.subethamail.entity.i.PermissionException;
  * 
  * The format of the url has to be /id/[mode]/filename. If mode is omitted it will default to view.
  */
-@SuppressWarnings("serial")
 public class ArchiveServlet extends HttpServlet
 {
+	private static final long serialVersionUID = 1L;
 
-	@Inject Archiver arch;
 	public final static String MODE_VIEW = "view";
-
 	public final static String MODE_DOWNLOAD = "download";
 
+	@Inject Archiver arch;
+	
 	/*
 	 * (non-Javadoc)
 	 * 

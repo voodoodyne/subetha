@@ -40,9 +40,10 @@ import org.subethamail.web.action.GetMessage;
  * 
  * perm: the permission name
  */
-@SuppressWarnings("serial")
 public class PermissionImageServlet extends HttpServlet
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	private final static Logger log = LoggerFactory.getLogger(GetMessage.class);
 

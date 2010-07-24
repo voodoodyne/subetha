@@ -17,9 +17,10 @@ import org.subethamail.core.plugin.i.FilterParameter;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class FilterParameterImpl implements FilterParameter, Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	String name;
 	String description;
 	Class<?> type;

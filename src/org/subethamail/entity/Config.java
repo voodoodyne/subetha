@@ -36,9 +36,10 @@ import org.subethamail.entity.i.Validator;
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
-@SuppressWarnings("serial")
 public class Config implements Serializable, Comparable<Config>
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	@Transient private final static Logger log = LoggerFactory.getLogger(Config.class);
 

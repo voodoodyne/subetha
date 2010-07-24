@@ -9,10 +9,11 @@ import javax.ejb.ApplicationException;
 
 /** Indicates that something happened while exporting messages.
  **/
-@SuppressWarnings("serial")
 @ApplicationException(rollback=false)
 public class ExportMessagesException extends Exception
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 */
 	public ExportMessagesException(String msg)

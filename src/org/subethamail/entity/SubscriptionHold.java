@@ -38,9 +38,10 @@ import org.slf4j.LoggerFactory;
 })
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
-@SuppressWarnings("serial")
 public class SubscriptionHold extends SubscriptionBase
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	@SuppressWarnings("unused")
 	@Transient private final static Logger log = LoggerFactory.getLogger(SubscriptionHold.class);

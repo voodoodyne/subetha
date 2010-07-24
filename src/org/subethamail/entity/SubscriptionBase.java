@@ -24,10 +24,11 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 @MappedSuperclass
 public class SubscriptionBase implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	@Transient private final static Logger log = LoggerFactory.getLogger(SubscriptionBase.class);
 	

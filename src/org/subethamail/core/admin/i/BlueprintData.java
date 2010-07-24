@@ -13,9 +13,10 @@ import java.io.Serializable;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class BlueprintData implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	String id;
 	String name;
 	String description;

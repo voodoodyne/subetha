@@ -8,9 +8,10 @@ package org.subethamail.core.plugin.i;
 /**
  * Exception indicates that a message should be silently dropped.
  */
-@SuppressWarnings("serial")
 public class IgnoreException extends Exception
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 */
 	public IgnoreException(String msg)

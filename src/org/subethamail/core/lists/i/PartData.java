@@ -12,9 +12,10 @@ import java.io.Serializable;
  * 
  * @author Scott Hernandez
  */
-@SuppressWarnings("serial")
 public abstract class PartData implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	String contentType;
 	int contentSize;
 	String name;

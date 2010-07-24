@@ -12,9 +12,10 @@ import java.io.Serializable;
  *
  * @author Jon Stevens
  */
-@SuppressWarnings("serial")
 public class ConfigData implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	String id;
 	String description;
 	Object value;

@@ -33,9 +33,10 @@ import org.subethamail.entity.i.Validator;
 @Entity
 // Disabled caching until instrumentation problem with 4.0.4.GA resolved
 //@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL, include="non-lazy")
-@SuppressWarnings("serial")
 public class Attachment implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	@Transient private final static Logger log = LoggerFactory.getLogger(Attachment.class);
 	

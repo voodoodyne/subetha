@@ -10,9 +10,10 @@ import java.security.GeneralSecurityException;
 /**
  * Thrown when decrypting a token that has expired.
  */
-@SuppressWarnings("serial")
 public class ExpiredException extends GeneralSecurityException
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 */
 	public ExpiredException(String msg)

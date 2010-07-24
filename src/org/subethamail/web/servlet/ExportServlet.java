@@ -26,9 +26,10 @@ import org.subethamail.entity.i.PermissionException;
  * 
  * The format of the url has to be /id/[format]/filename. If format is omitted it will default to rfc2822directory (maildir like).
  */
-@SuppressWarnings("serial")
 public class ExportServlet extends HttpServlet
 {
+	private static final long serialVersionUID = 1L;
+
 	@Inject Archiver archiver;
 
 	/*

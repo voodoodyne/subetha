@@ -13,9 +13,10 @@ import java.util.Date;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class MailHold implements Serializable
 {	
+	private static final long serialVersionUID = 1L;
+
 	Long id;
 	String subject;
 	String from;

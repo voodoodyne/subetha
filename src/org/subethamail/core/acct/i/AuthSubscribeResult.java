@@ -15,9 +15,10 @@ import java.util.Set;
  * 
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class AuthSubscribeResult extends AuthCredentials
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	SubscribeResult result;
 	Long listId;

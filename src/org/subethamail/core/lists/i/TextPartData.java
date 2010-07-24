@@ -10,9 +10,10 @@ package org.subethamail.core.lists.i;
  * 
  * @author Scott Hernandez
  */
-@SuppressWarnings("serial")
 public class TextPartData extends InlinePartData
 {
+	private static final long serialVersionUID = 1L;
+
 	/** Needed by Hessian */
 	protected TextPartData() {}
 	

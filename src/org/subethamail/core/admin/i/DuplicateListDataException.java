@@ -10,10 +10,11 @@ import javax.ejb.ApplicationException;
 /**
  * Thrown when a mailing list could not be created.
  */
-@SuppressWarnings("serial")
 @ApplicationException(rollback=true)
 public class DuplicateListDataException extends Exception
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	boolean addressTaken;
 	boolean urlTaken;

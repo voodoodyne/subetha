@@ -8,9 +8,10 @@ package org.subethamail.common;
 /** 
  * Generically indicates that a search couldn't be executed.
  */
-@SuppressWarnings("serial")
 public class SearchException extends Exception
 {
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 */
 	public SearchException(String msg)

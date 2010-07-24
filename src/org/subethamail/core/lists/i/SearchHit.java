@@ -14,9 +14,10 @@ import java.util.Date;
  * 
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class SearchHit implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	Long id;
 	String subject;
 	String fromEmail;	// might be null if no permission to view

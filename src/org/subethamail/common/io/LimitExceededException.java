@@ -11,9 +11,10 @@ import java.io.IOException;
  * 
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class LimitExceededException extends IOException
 {
+	private static final long serialVersionUID = 1L;
+	
 	/** */
 	int limit;
 	int read;

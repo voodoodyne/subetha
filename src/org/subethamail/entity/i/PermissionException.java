@@ -12,10 +12,11 @@ import javax.ejb.ApplicationException;
 /**
  * Thrown when a permission was needed but not available.
  */
-@SuppressWarnings("serial")
 @ApplicationException(rollback=true)
 public class PermissionException extends Exception
 {
+	private static final long serialVersionUID = 1L;
+
 	Permission needed;
 	
 	/**

@@ -16,9 +16,10 @@ import org.subethamail.core.plugin.i.FilterParameter;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class EnabledFilterData extends FilterData
 {
+	private static final long serialVersionUID = 1L;
+
 	Long listId;
 	Map<String, Object> arguments;
 

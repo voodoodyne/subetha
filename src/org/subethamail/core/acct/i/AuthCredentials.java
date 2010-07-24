@@ -15,9 +15,10 @@ import java.io.Serializable;
  * 
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class AuthCredentials implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	Long id;
 	String email;

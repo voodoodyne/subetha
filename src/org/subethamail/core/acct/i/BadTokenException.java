@@ -10,10 +10,11 @@ import javax.ejb.ApplicationException;
 /**
  * Thrown when a token could not be properly decrypted.
  */
-@SuppressWarnings("serial")
 @ApplicationException(rollback=true)
 public class BadTokenException extends Exception
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 */
 	public BadTokenException(String msg)

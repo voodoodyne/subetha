@@ -15,9 +15,10 @@ import org.subethamail.core.plugin.i.FilterParameter;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class FilterData implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** Class name identifies a filter type */
 	String className;
 	String name;

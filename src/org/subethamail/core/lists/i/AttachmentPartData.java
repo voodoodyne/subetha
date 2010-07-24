@@ -10,9 +10,10 @@ package org.subethamail.core.lists.i;
  * 
  * @author Scott Hernandez
  */
-@SuppressWarnings("serial")
 public class AttachmentPartData extends PartData
 {
+	private static final long serialVersionUID = 1L;
+
 	Long id = null;
 	
 	/** Needed by Hessian */

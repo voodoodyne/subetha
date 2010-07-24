@@ -153,7 +153,6 @@ import org.subethamail.entity.i.Validator;
 })
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
-@SuppressWarnings("serial")
 @Table(
 	appliesTo="Mail",
 	indexes={@Index(name="mailMessageIdIndex", columnNames={"listId", "messageId"})}
@@ -161,6 +160,8 @@ import org.subethamail.entity.i.Validator;
 @Indexed
 public class Mail implements Serializable, Comparable<Mail>
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	@Transient private final static Logger log = LoggerFactory.getLogger(Mail.class);
 

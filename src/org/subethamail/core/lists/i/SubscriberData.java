@@ -16,9 +16,10 @@ import org.subethamail.core.acct.i.PersonData;
  * @author Scott Hernandez
  * @author Jon Scott Stevens
  */
-@SuppressWarnings("serial")
 public class SubscriberData extends PersonData
 {	
+	private static final long serialVersionUID = 1L;
+
 	RoleData role;
 	String deliverTo;
 	Date dateSubscribed;

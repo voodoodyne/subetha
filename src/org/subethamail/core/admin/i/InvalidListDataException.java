@@ -10,10 +10,11 @@ import javax.ejb.ApplicationException;
 /**
  * Thrown when trying to create a mailing list with bad input data
  */
-@SuppressWarnings("serial")
 @ApplicationException(rollback=true)
 public class InvalidListDataException extends Exception
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	boolean ownerAddress;
 	boolean verpAddress;

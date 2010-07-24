@@ -17,9 +17,10 @@ import org.subethamail.entity.i.Permission;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class MyListRelationship implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	Long listId;
 	String listName;

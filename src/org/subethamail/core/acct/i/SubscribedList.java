@@ -12,9 +12,10 @@ import org.subethamail.core.lists.i.ListData;
  *
  * @author Jon Scott Stevens
  */
-@SuppressWarnings("serial")
 public class SubscribedList extends ListData
 {
+	private static final long serialVersionUID = 1L;
+
 	String roleName;
 	String deliverTo;
 	

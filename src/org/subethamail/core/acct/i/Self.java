@@ -14,9 +14,10 @@ import java.util.List;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class Self extends PersonData
 {
+	private static final long serialVersionUID = 1L;
+
 	protected List<SubscribedList> subscriptions;
 	
 	/** */

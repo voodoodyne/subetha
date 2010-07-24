@@ -15,9 +15,10 @@ import org.subethamail.entity.i.Permission;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class RoleData implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	Long id;
 	String name;
 	boolean owner;

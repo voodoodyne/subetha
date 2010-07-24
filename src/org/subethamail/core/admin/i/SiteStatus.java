@@ -15,9 +15,10 @@ import javax.mail.internet.InternetAddress;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class SiteStatus implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	String defaultCharset;
 	int listCount;

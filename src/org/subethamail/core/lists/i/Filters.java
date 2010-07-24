@@ -14,9 +14,10 @@ import java.util.List;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class Filters implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	List<FilterData> available;
 	List<EnabledFilterData> enabled;

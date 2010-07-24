@@ -13,9 +13,10 @@ import java.util.List;
  * 
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class MailData extends MailSummary
 {
+	private static final long serialVersionUID = 1L;
+
 	/** */
 	Long listId;
 	List<InlinePartData> inlineParts;

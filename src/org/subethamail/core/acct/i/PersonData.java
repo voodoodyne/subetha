@@ -13,9 +13,10 @@ import java.util.List;
  *
  * @author Jeff Schnitzer
  */
-@SuppressWarnings("serial")
 public class PersonData implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	protected Long id;
 	protected String name;
 	protected List<String> emailAddresses;

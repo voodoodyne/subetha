@@ -12,9 +12,10 @@ package org.subethamail.core.lists.i;
  * @author Jeff Schnitzer
  * @author Jon Stevens
  */
-@SuppressWarnings("serial")
 public class ListDataPlus extends ListData
 {
+	private static final long serialVersionUID = 1L;
+
 	int subscriberCount;
 	int messageCount;
 

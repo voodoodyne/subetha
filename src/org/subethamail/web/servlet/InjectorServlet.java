@@ -36,9 +36,10 @@ import org.subethamail.web.security.SubEthaLogin;
  * TODO:  make this a lot more efficient by using the content body
  * as the raw message bytes instead of requiring www-form-urlencoded 
  */
-@SuppressWarnings("serial")
 public class InjectorServlet extends HttpServlet
 {
+	private static final long serialVersionUID = 1L;
+
 	@Inject AccountMgr accMgr;
 	@Inject Injector inj;
 	

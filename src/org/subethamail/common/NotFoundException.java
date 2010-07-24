@@ -5,11 +5,13 @@
 
 package org.subethamail.common;
 
-/** Generically indicates that something wasn't found (ie, an entity).
- **/
-@SuppressWarnings("serial")
+/**
+ * Generically indicates that something wasn't found (ie, an entity).
+ */
 public class NotFoundException extends Exception
 {
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 */
 	public NotFoundException(String msg)

@@ -7,9 +7,9 @@ There are four general strategies, arranged here in order of increasing complexi
 
 == Take All Mail ==
 
-The simplest solution is to run SubEtha's SMTP server on port 25 and accept all mail for your domains that contain lists.  Mail for addresses that are not SubEtha lists will be rejected.
+The simplest - and *strongly recommended* - solution is to run SubEtha's SMTP server on port 25 and accept all mail for your domains that contain lists.  Mail for addresses that are not SubEtha lists will be rejected.
 
-The advantage of this approach is that you don't need to touch the configuration of Postfix Exim, etc.  Create your MX records, run SubEtha, and go.  On Unix-derived systems, you might need some help UsingPort25.
+The advantage of this approach is that you don't need to touch the configuration of Postfix Exim, etc.  Create your MX records, run SubEtha, and go.  On Unix-derived systems, you might need some help UsingPort25.  This solution is *far* easier than any other.
 
 The downside of this approach is that you cannot have mailing lists on the same domain that you have personal mailboxes; for example, you cannot have somelist@example.com and yourpersonalmailbox@example.com.  You would need to have @example.com point to your normal MTA and create one or more separate domains for lists, for example @lists.example.com.
 
@@ -32,12 +32,15 @@ Let's say you have several lists running @example.com but also have personal mai
 
 The downsides of this approach:
 
-  * This is a new feature, caveat emptor.
+  * This is a *new feature*, caveat emptor.
+  * Seriously, this is *almost completely untested*.  We don't know of anyone currently using it in production.  If you do, please let us know!
   * Since your MTA sees SubEtha as the originating IP address of the connection, it may confuse spam-fighting features like DNS blocklists and SPF enforcement.  You should turn these off.
 
 == Configure Your MTA To Relay Mail Into SubEtha ==
 
-If you aren't comfortable running SubEtha publicly on port 25, or you have special needs that require your MTA to be the initial recipient of mail, it is possible to put SubEtha behind your MTA.  This is significantly more complicated than the above approaches and requires a considerable amount of MTA-specific configuration.
+If you aren't comfortable running SubEtha publicly on port 25, or you have special needs that require your MTA to be the initial recipient of mail, it is possible to put SubEtha behind your MTA.  This is *significantly* more complicated than the above approaches and requires a considerable amount of MTA-specific configuration.
+
+Are you a guru with Postfix, Sendmail, Exim, or whatever other MTA you plan to integrate?  If the answer is "no", you should seriously consider one of the previous two approaches.  Nearly every piece of software that works with SMTP mail is ancient and archaic and feels like it was designed for the sole purpose of selling OReilly books.  This is not for the faint of heart.
 
 The general strategy is that you tell your MTA that it should relay mail into SubEtha's SMTP server running on port 2500.  Depending on the MTA you might be able to relay whole domains (ie, @lists.example.com) or specific individual mailboxes (somelist@example.com).
 
@@ -47,4 +50,8 @@ For more info, pick your MTA:  UsingPostfix, UsingSendmail, UsingExim, UsingQmai
 
 Script injection is similar to how Mailman, Majordomo, EZMLM, and other mailing list managers work. You can directly inject a piece of mail by calling a method on SubEtha's remote API or a much simpler HTTP inject interface that SubEtha provides. This works, but it's often difficult to configure in MTAs, especially preserving the out-of-band sender envelope information.
 
+This is a clumsy last resort.
+
 You can find a [http://subetha.googlecode.com/svn/trunk/bin/inject.py simple python script] that does injection in the bin directory of the distribution.  Installing it into your MTA is an excercise for the reader.
+
+Note:  You can also make Hessian calls on the {{{Injector}}} interface to inject mail.

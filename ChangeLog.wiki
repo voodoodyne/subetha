@@ -11,6 +11,7 @@ For specific instructions to upgrade between versions, see UpgradingVersions.
   * List URLs can now be any URL that points to the SubEtha HTTP server.
   * Replaced the Lucene direct-access code with Hibernate Search.
   * Updated all third-party jars to modern versions.
+  * Fixed a longstanding bug deleting lists.
   * A handful of miscellaneous bug fixes.
 
 Lots of internal changes, few external changes.  The most important change is that SubEtha now runs on the "current" version of Resin (>= 4.0.9).

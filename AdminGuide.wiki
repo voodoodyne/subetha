@@ -1,14 +1,15 @@
+#summary How to administer a SubEtha system
 #labels Featured
-= SubEtha Administration Guide =
+
 This document assumes you have read and understood the InstallGuide.
 
 <wiki:toc max_depth="2" />
 
-== Initial Administration ==
+= Initial Administration =
 
-After you have followed the InstallGuide, please make sure to up the Site Settings for your postmaster and the default URL. You can do this by logging in as a site admin and select the Edit button from the Site Status link on the left.
+Do not forget to edit subetha.xml as described in the InstallGuide.
 
-== Concepts ==
+= Concepts =
 
 If you are familiar with mailing list managers, SubEtha should be easy to master. The basic ideas are that:
 
@@ -29,7 +30,7 @@ If you are familiar with mailing list managers, SubEtha should be easy to master
 
   * The list creator decides two critical pieces of information:
     # The mailing list email address, which must be unique on the site. The entire address (including domain) is significant; thus announce@yourdomain.com and announce@otherdomain.com are different lists. Of course, DNS MX records must actually route this mail to the host that SubEtha is running on.
-    # The "official" public URL to the list's website, e.g. {{{http://www.yourdomain.com/se/list/announce}}}. This URL must contain the special context path "/se/list/" but is otherwise entirely arbitrary. Of course, any URL you use must actually resolve to SubEtha.
+    # The "official" public URL to the list's website, e.g. {{{http://www.yourdomain.com/announce}}}. This URL can be *any* URL that actually hits the SubEtha HTTP server and isn't already used by another list, including the root context (/).  You should also avoid lists that might conflict with SubEtha operation (eg, /list.jsp).  Note that like email addresses, URLs are domain-sensitive:  http://www.example1.com/ is a different list than http://www.example2.com/.
 
   * Mailing lists have an arbitrary set of Roles, each of which have permissions such as POST and EDIT_FILTERS. The list owner decides what roles exist and what permissions they have. A permission is always relative to a list.
 
@@ -48,13 +49,11 @@ If you are familiar with mailing list managers, SubEtha should be easy to master
   * The user is not logged in and the special "anonymous" role has permission VIEW_ARCHIVES.
         
      Note that users who are not permitted to view list archives will not be displayed the View Archives menu item.
-     
 
 == Moderation Holds ==
 
   * List owners can configure a mailing list to hold all subscription requests for manual approval. When a subscription request arrives, notification is sent to all users who have permission to APPROVE_SUBSCRIPTIONS.
 
-       
   * Arriving messages can be held in two ways, HARD and SOFT.
 
   * HARD holds require explicit moderator (anyone with APPROVE_MESSAGES permission) approval from the website. Only filters can trigger this type of hold, and moderators are notified via email when the message is held.
@@ -63,7 +62,7 @@ If you are familiar with mailing list managers, SubEtha should be easy to master
     # The email address is added to an account that is already subscribed, and that subscribed account has a role with POST permission. This would be the case when a subscribed user posts from a new email address, then adds the new address to their account.
     # The poster subscribes the email address with a new account and the default role for the mailing list has POST permission.
 
-       Note that moderators are not notified via email about SOFT holds. Typically SOFT holds are spam. The poster is given sufficient instruction to properly self-moderate the hold (ie, subscribe to the list). In addition, as of v0.8, no more than one "you must wait for admin approval" email per day will be sent to the poster. This will help prevent 'backscatter' related to spam.
+  Note that moderators are not notified via email about SOFT holds. Typically SOFT holds are spam. The poster is given sufficient instruction to properly self-moderate the hold (ie, subscribe to the list). In addition, no more than one "you must wait for admin approval" email per day will be sent to the poster. This will help prevent 'backscatter' related to spam.
 
   * There is no specially designated "moderator" account. You either have the APPROVE_MESSAGES/APPROVE_SUBSCRIPTIONS permissions or you do not. List owners who wish to create special moderator-only accounts can create a "Moderator" role with only that permission; in fact several of the blueprints do exactly this.
 
@@ -75,7 +74,7 @@ If you are familiar with mailing list managers, SubEtha should be easy to master
 
   * The envelope sender is VERP'd and thus bounces cause the bounceCount to increment faster than decrement.
 
-  * Things work like this.
+  * It works like this:
     # Every EmailAddress has a bounceCount.
     # When a mail is sent from a list to an EmailAddress, the bounceCount is decremented by one (at most once per 24 hrs, even if multiple mails are sent within that period).
     # When a bounce is received, the bounceCount is incremented by two (at most once per 24 hrs).
@@ -84,10 +83,10 @@ If you are familiar with mailing list managers, SubEtha should be easy to master
 == Programming ==
   Please see the ProgrammingGuide for more information.
 
-  * SubEtha is a true three-tiered application. Nearly everything you can do from the website can be automated using the remote EJB interface. This interface is fully contained in core-api.jar.
+  * SubEtha is a true three-tiered application. Nearly everything you can do from the website can be automated using the remote Hessian interface. This interface is fully contained in core-api.jar.
 
   * SubEtha offers two kinds of plugins.
     # *Filters* manipulate email either as it arrives or as it is sent (or both). Each filter defines a set of configuration parameters that list owners can set on a per-list basis.  See DevelopingFilters.
     # *Blueprints* initialize a new mailing list with a set of configuration options. This includes basic settings, enabled filters, filter arguments, roles, and permissions. No matter what blueprint a list is created with, list owners are free to reconfigure the list afterwards.
 
-  * Plugins run inside the SubEtha JVM and run with site administrator privilege. Technically this means they can do almost anything. We recommend you stick to the APIs; any other API is considered internal and highly likely to change without notice.
+  * Plugins run inside the SubEtha JVM and run with site administrator privilege. Technically this means they can do almost anything. We recommend you stick to the published APIs; any other API is considered internal and highly likely to change without notice.  On the other hand, we're not [http://www.apple.com/ dicks] and we actually like developers, so post to the [http://www.subethamail.org/dev Dev List] and we'll help you out either way.

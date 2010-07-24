@@ -23,6 +23,7 @@ import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.ejb.EntityManagerImpl;
 import org.hibernate.search.FullTextSession;
@@ -720,16 +721,15 @@ public class AdminBean extends PersonalBean implements Admin
 		// EnabledFilters and FilterArguments
 		this.em.remove(list);
 
-		// TODO: replace this with resin/amber code
-
 		// Cascading persistence is not smart enough when dealing with the 2nd
 		// level cache; for instance, Person objects have cached relationships
 		// to (now defunct) Subscription objects.  We can just hit the problem
 		// with a sledgehammer and reset the cache.
-//		SessionFactory sf = this.em.getHibernateSession().getSessionFactory();
-//		sf.evictCollection(Person.class.getName() + ".subscriptions");
-//		sf.evictQueries();
-//
+		SessionFactory sf = ((EntityManagerImpl)this.em.getDelegate()).getSession().getSessionFactory();
+		sf.getCache().evictCollectionRegions();
+		sf.getCache().evictEntityRegions();
+		sf.getCache().evictEntityRegions();
+		
 		// TODO:  rebuild the search index?
 
 		return true;

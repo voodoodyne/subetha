@@ -1,47 +1,38 @@
+#summary Setup Instructions for Development
 #labels Featured
-= Setup Instructions for Development =
 
 <wiki:toc max_depth="3" />
 
 Developer setup instructions are the same as described in the InstallGuide. Take special note of the instructions below if you wish to run the unit tests, or build.  For a quick description of SubEtha's architecture, see [http://blog.caucho.com/?p=209 this blog entry] written by Scott Ferguson (of Caucho).
 
-== Eclipse Setup ==
-The core developers use [http://eclipse.org/ Eclipse] as their IDE (some would say for lack of something better).
+= Eclipse Setup =
+The core developers use [http://www.eclipse.org/ Eclipse] as their IDE (some would say for lack of something better).
 
-=== SVN Checkout ===
+== SVN Checkout ==
 In order to setup Eclipse, you should first make sure to install the [http://subclipse.tigris.org/ Subclipse] plugin. Once you have installed that plugin. Select File->Import->Checkout projects from SVN. Select "Create a new repository location". Enter the URL for SubEtha's repository: {{{http://subetha.googlecode.com/svn/trunk}}}
 
-=== Resin Classpath Variable ===
-Once you have the project checked out you need to define the location of *SUBETHA_RESIN_HOME* in Eclipse. Select Project->Properties. Java Build Path->Add Variable. Configure Variables->New and set the name to *SUBETHA_RESIN_HOME* and the folder location where you installed RESIN. Now, Eclipse should properly find all the right libraries it needs.
+== Resin User Library ==
+SubEtha trunk does not actually include the Resin appserver jars - this would be cumbersome.  SubEtha uses an Eclipse User Library, called something like "Resin 4.0.8" (the # changes version to version).  When you first open the SubEtha project in Eclipse you will get errors because you haven't defined this User Library yourself yet.  You should be able to do this in the Preferences->Java->Build Path->User Libraries section.  Note that the naming of the user library must be exactly the same as what is (currently) configured in the project.
 
-=== Building ===
+Add all the jars in ${resin.home}/lib.
+
+== Building ==
 The next step is to build SubEtha. From the Java perspective, select Window->Show View->Ant. Right click in the Ant view and Add buildfiles. Then look for the top level SubEtha build file and add it. Once that is done, you can double click the 'deploy' target which will build SubEtha and install it in the right deployment directory location.
 
-=== Suggested Eclipse Plugins ===
-  
-  *  [http://subclipse.tigris.org/ Subclipse]
-  *  [http://eclipse-cs.sourceforge.net/ Check Style]
-
-=== Linked Resources (Optional) ===
-
-You can also setup Linked Resource support in eclipse so that you can edit the deployed files. These linked folders can also allow direct editing (in eclipse) for configuration files. To do this, please add a SUBETHA_RESIN_HOME variable to the workspace linked resources properties. These setting can be found at Window -> Preferences under the {{{General : Workspace : Linked Resources}}} section. Select New from the dialog and specify a name of RESIN_HOME to the home folder. The linked folders in the project are named "resin-X", where X points various places in the install directory.
-
-*Note*: You will need to refresh the linked folders each time you deploy. Eclipse does not monitor changes on the filesystem it does not cause.
-
-== Startup ==
+= Startup =
 
   * Start up Resin. Hint: {{{ ./bin/resin.sh }}}
     The default web interface is http://localhost:8080/se/
  
  When SubEtha runs for the first time, it creates a site administrator account named  *root@localhost*, with the password  *password*. You can login with these credentials initially.
 
-== Directory Layout ==
+= Directory Layout =
 
 The subdirectories correspond to various components:
  
   * src - The main source tree for the application. Sub-sections are broken up as described below.
  
-  * src/.../i/... - Public interface (API) layer which gets packaged into subetha-client.jar.  Can be called remotely.
+  * src/.../i/... - Public interface (API) layer which gets packaged into subetha-client.jar.  These interfaces can be called remotely via hessian.
 
   * src/.../common/... - Common utility classes, shared by all components.
 
@@ -49,9 +40,9 @@ The subdirectories correspond to various components:
 
   * src/.../plugin/... - Implementation of all the plugins distributed with SubEtha. Note that the plugin interfaces are part of core and built into the core api jar.
 
-  * src/.../entity/... - The data model. Contains EJB3 entity beans and all queries.
+  * src/.../entity/... - The data model. Contains JPA/Hibernate entity beans and all queries.
 
-  * rtest - All junit regression testing code and instructions. JUnit tests are remote clients to the core ejb interface.
+  * rtest - All junit regression testing code and instructions. JUnit tests are remote hessian clients to the core ejb interface.
 
   * loadtest - A simple load tester to create a bunch of emails for a test list. 
 
@@ -74,6 +65,8 @@ How to run the JUnit regression tests from ant:
   * If you want to run just one set of tests, edit the junit.special.tests property in your build.properties or better yet user.properties. Then run the  {{{ant junit-special}}} target.
  
   * If you want to run the special unit test(s) in the debugger, run the  {{{ant junit-debug}}} target. The JVM will pause and wait until you attach with Eclipse.
+
+  * You don't actually need ant to run the tests - just run them from Eclipse by creating a new Run Profile.  Makes debugging easy too.
 
 === Running Load Tests ===
 You can run a test to put a little stress on your server. It will send a continuous stream of messages, and then count the number of recipients whom receive them. It is a not a scientific load test, but shows that the system can handle many concurrent requests.

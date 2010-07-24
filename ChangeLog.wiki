@@ -5,6 +5,18 @@ For specific instructions to upgrade between versions, see UpgradingVersions.
 
 = Changes =
 
+== 2.1 ==
+
+  * Major refactoring to the internal code to bring it current with the released version of CDI.
+  * List URLs can now be any URL that points to the SubEtha HTTP server.
+  * Replaced the Lucene direct-access code with Hibernate Search.
+  * Updated all third-party jars to modern versions.
+  * A handful of miscellaneous bug fixes.
+
+Lots of internal changes, few external changes.  The most important change is that SubEtha now runs on the "current" version of Resin (>= 4.0.9).
+
+You will need to rebuild the fulltext index (from the Site Status page).  See UpgradingVersions.
+
 == 2.0 ==
 
  * For 2.0, SubEtha was ported to Resin 4.0 (see WhyResin).

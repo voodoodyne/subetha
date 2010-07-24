@@ -79,10 +79,12 @@ public class BlobImpl implements Blob
 	@Override
 	public byte[] getBytes(long pos, int len) throws SQLException
 	{
-		if (pos + len > this.bytes.length)
-			len = this.bytes.length - (int)pos;
+		long zeroBasedPos = pos - 1;
+		
+		if (zeroBasedPos + len > this.bytes.length)
+			len = this.bytes.length - (int)zeroBasedPos;
 			
-		return Arrays.copyOfRange(this.bytes, (int)pos, len);
+		return Arrays.copyOfRange(this.bytes, (int)zeroBasedPos, len);
 	}
 
 	/* (non-Javadoc)

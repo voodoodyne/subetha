@@ -8,134 +8,144 @@
 package org.subethamail.core.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+import java.util.Arrays;
 
 /**
- * Trivial implementation of <code>java.sql.Blob</code>.  Mostly borrowed
- * from hibernate code.
+ * Dumb implementation of <code>java.sql.Blob</code>.  In order to support the
+ * fancier methods, it turns the input stream into a byte array instead of the
+ * other way 'round.
  * 
- * @author Gavin King
  * @author Jeff Schnitzer
  */
 public class BlobImpl implements Blob
 {
-	private InputStream stream;
-	private int length;
-	private boolean needsReset = false;
-
+	private byte[] bytes;
+	
 	public BlobImpl(byte[] bytes)
 	{
-		this.stream = new ByteArrayInputStream(bytes);
-		this.length = bytes.length;
+		this.bytes = bytes;
 	}
 
 	public BlobImpl(InputStream stream, int length)
 	{
-		this.stream = stream;
-		this.length = length;
+		ByteArrayOutputStream out = new ByteArrayOutputStream(length);
+		try
+		{
+			while (stream.available() > 0)
+				out.write(stream.read());
+		}
+		catch (IOException e) { throw new RuntimeException(e); }
+		
+		this.bytes = out.toByteArray();
 	}
 
-	/**
+	/* (non-Javadoc)
 	 * @see java.sql.Blob#length()
 	 */
+	@Override
 	public long length() throws SQLException
 	{
-		return length;
+		return this.bytes.length;
 	}
 
-	/**
+	/* (non-Javadoc)
 	 * @see java.sql.Blob#getBinaryStream()
 	 */
+	@Override
 	public InputStream getBinaryStream() throws SQLException
 	{
-		// First time through we don't need reset, all other times we do
-		if (needsReset)
-		{
-			try
-			{
-				stream.reset();
-			}
-			catch (IOException ex)
-			{
-				throw new SQLException("Could not reset stream");
-			}
-		}
-		else
-			needsReset = true;
-		
-		return stream;
+		return new ByteArrayInputStream(this.bytes);
 	}
 
-	/**
+	/* (non-Javadoc)
 	 * @see java.sql.Blob#truncate(long)
 	 */
+	@Override
 	public void truncate(long pos) throws SQLException
 	{
 		throw new SQLFeatureNotSupportedException();
 	}
 
-	/**
+	/* (non-Javadoc)
 	 * @see java.sql.Blob#getBytes(long, int)
 	 */
+	@Override
 	public byte[] getBytes(long pos, int len) throws SQLException
 	{
-		throw new SQLFeatureNotSupportedException();
+		long max = pos + len;
+		int overflow = (int)(max - this.bytes.length);
+		int actualLen = (overflow > 0) ? (len-overflow) : len;
+		
+		return Arrays.copyOfRange(this.bytes, (int)pos, (int)pos+actualLen);
 	}
 
-	/**
+	/* (non-Javadoc)
 	 * @see java.sql.Blob#setBytes(long, byte[])
 	 */
+	@Override
 	public int setBytes(long pos, byte[] bytes) throws SQLException
 	{
 		throw new SQLFeatureNotSupportedException();
 	}
 
-	/**
+	/* (non-Javadoc)
 	 * @see java.sql.Blob#setBytes(long, byte[], int, int)
 	 */
+	@Override
 	public int setBytes(long pos, byte[] bytes, int i, int j) throws SQLException
 	{
 		throw new SQLFeatureNotSupportedException();
 	}
 
-	/**
+	/* (non-Javadoc)
 	 * @see java.sql.Blob#position(byte[], long)
 	 */
+	@Override
 	public long position(byte[] bytes, long pos) throws SQLException
 	{
 		throw new SQLFeatureNotSupportedException();
 	}
 
-	/**
+	/* (non-Javadoc)
 	 * @see java.sql.Blob#setBinaryStream(long)
 	 */
+	@Override
 	public OutputStream setBinaryStream(long pos) throws SQLException
 	{
 		throw new SQLFeatureNotSupportedException();
 	}
 
-	/**
-	 * @see java.sql.Blob#position(Blob, long)
+	/* (non-Javadoc)
+	 * @see java.sql.Blob#position(java.sql.Blob, long)
 	 */
+	@Override
 	public long position(Blob blob, long pos) throws SQLException
 	{
 		throw new SQLFeatureNotSupportedException();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.sql.Blob#free()
+	 */
 	@Override
 	public void free() throws SQLException
 	{
 		throw new SQLFeatureNotSupportedException();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.sql.Blob#getBinaryStream(long, long)
+	 */
 	@Override
 	public InputStream getBinaryStream(long pos, long length) throws SQLException
 	{
-		throw new SQLFeatureNotSupportedException();
+		return new ByteArrayInputStream(this.getBytes(pos, (int)length));
 	}
 }

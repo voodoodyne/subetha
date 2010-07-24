@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 
 /**
  * Trivial implementation of <code>java.sql.Blob</code>.  Mostly borrowed
@@ -75,7 +76,7 @@ public class BlobImpl implements Blob
 	 */
 	public void truncate(long pos) throws SQLException
 	{
-		throw new UnsupportedOperationException();
+		throw new SQLFeatureNotSupportedException();
 	}
 
 	/**
@@ -83,7 +84,7 @@ public class BlobImpl implements Blob
 	 */
 	public byte[] getBytes(long pos, int len) throws SQLException
 	{
-		throw new UnsupportedOperationException();
+		throw new SQLFeatureNotSupportedException();
 	}
 
 	/**
@@ -91,7 +92,7 @@ public class BlobImpl implements Blob
 	 */
 	public int setBytes(long pos, byte[] bytes) throws SQLException
 	{
-		throw new UnsupportedOperationException();
+		throw new SQLFeatureNotSupportedException();
 	}
 
 	/**
@@ -99,7 +100,7 @@ public class BlobImpl implements Blob
 	 */
 	public int setBytes(long pos, byte[] bytes, int i, int j) throws SQLException
 	{
-		throw new UnsupportedOperationException();
+		throw new SQLFeatureNotSupportedException();
 	}
 
 	/**
@@ -107,7 +108,7 @@ public class BlobImpl implements Blob
 	 */
 	public long position(byte[] bytes, long pos) throws SQLException
 	{
-		throw new UnsupportedOperationException();
+		throw new SQLFeatureNotSupportedException();
 	}
 
 	/**
@@ -115,7 +116,7 @@ public class BlobImpl implements Blob
 	 */
 	public OutputStream setBinaryStream(long pos) throws SQLException
 	{
-		throw new UnsupportedOperationException();
+		throw new SQLFeatureNotSupportedException();
 	}
 
 	/**
@@ -123,18 +124,18 @@ public class BlobImpl implements Blob
 	 */
 	public long position(Blob blob, long pos) throws SQLException
 	{
-		throw new UnsupportedOperationException();
+		throw new SQLFeatureNotSupportedException();
 	}
 
 	@Override
 	public void free() throws SQLException
 	{
-		throw new UnsupportedOperationException();
+		throw new SQLFeatureNotSupportedException();
 	}
 
 	@Override
 	public InputStream getBinaryStream(long pos, long length) throws SQLException
 	{
-		throw new UnsupportedOperationException();
+		throw new SQLFeatureNotSupportedException();
 	}
 }

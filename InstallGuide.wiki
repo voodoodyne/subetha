@@ -11,7 +11,7 @@ These instructions describe setting up a single, standalone instance of SubEtha.
   # Download and unzip the SubEtha distribution into a temporary directory.
   # Copy se.war to *${resin.dir}/webapps/ (rename to ROOT.war if you want to run on the root context)
   # Copy [http://subetha.googlecode.com/svn/trunk/example-subetha.xml example-subetha.xml] to *${resin.dir}/conf/subetha.xml* (renaming the file)
-    * Edit the configuration in this file
+    * Edit the configuration in this file - SubEtha will not run without your customization
 
 == Receiving Mail ==
 Please see ReceivingMail for specific instructions on how to integrate with your mail MTA.

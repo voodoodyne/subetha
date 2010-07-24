@@ -1,11 +1,18 @@
-= SubEtha Filters =
+#summary How to write SubEtha Filters
 
 = Understanding Filters =
-Filters in SubEtha are a powerful way to extend the functionality of the application. If you know Java, they are also fairly easy to implement. The beauty of the filters is that the web user interface is generated automatically from the declared parameters in the filter class. So, all you need to do is code the functionality of the filter and the configuration appears automatically in the web application.
+Filters in SubEtha are a powerful way to extend the functionality of the application. If you know Java, they are also fairly easy to implement.  By implementing metadata methods, your filters can be customized by list managers for their lists with parameters; SubEtha builds the web UI from your metadata.
+
+Filters are standard CDI beans that:
+  * Implement the {{{Filter}}} interface.
+  * Annotated with {{{@Singleton}}} or one of the other CDI scopes
+  * Packaged in a jar file that contains a META-INF/beans.xml with at minimum {{{<beans/>}}}
+
+Put this jar file in your SubEtha WEB-INF/lib, and restart the server.  SubEtha will automatically discover it.
 
 The filters that come with SubEtha live in the {{{org.subethamail.plugin.filter}}} package. They provide an excellent source of reference when developing your own filters. In fact, we will use the SubjectFilter as our example.
 
-In order to develop a filter, it must implement the Filter interface. Because of the automated registration process, which we suggest using, the class should have a public (no-args) constructor. Strictly speaking this is not a requirement but for the extend of this document we will be following that rule.
+Filters must implement the {{{Filter}}} interface:
 
 {{{
 package org.subethamail.core.plugin.i;
@@ -26,6 +33,7 @@ public interface Filter
 To make things easier we suggest you extend out GenericFilter. Here is the top part of the SubejectFilter class.
 
 {{{
+@Singleton
 public class SubjectFilter extends GenericFilter
 }}}
 
@@ -49,7 +57,6 @@ static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
 Another slightly more complex example of FilterParameter declarations is in the ReplyToFilter:
 
 {{{
-
 static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
         new FilterParameterImpl(
                         ARG_MAILINGLIST,
@@ -64,7 +71,6 @@ static FilterParameter[] PARAM_DEFS = new FilterParameter[] {
                         ""
                 )
 };
-
 }}}
 
 When you look at the web interface for the configuration of that filter a checkbox is generated for the first FilterParameterImpl because it uses a Boolean.class as it's type.
@@ -102,16 +108,15 @@ public void onInject(SubEthaMessage msg, FilterContext ctx)
 }
 }}}
 
-
 The second method is called before the message is sent out to the subscribers on the mailing list. The method to implement is called {{{onSend()}}}. The AppendFooterFilter class implements this method but doesn't implement {{{onInject()}}} because there is no need to store the appended filter in the archives, only to add it to outgoing messages.
 
-The third method is called before rendering the messages on the website in the archives. The method to implement is called {{{onArchiveRender()}}}. It looks very much like the first with the exception of the of the Context provided.
+The third method is called before rendering the messages on the website in the archives. The method to implement is called {{{onArchiveRender()}}}. It looks very much like {{{onSend()}}} with the exception of the of the Context provided.
 
-Once you have compiled your filter, you can place the jar file into the classpath and it will be automatically picked up by SubEtha and loaded. Note that if you want to deploy your filter you must make sure it is found by the Injection Manager (by having {{{META-INF/beans.xml}}} in your jar or by specifying that your class should be loaded by the Injection Manager, specifically.
+Once you have compiled your filter, you can place the jar file into Resin's classpath (webapps/WEB-INF/lib), restart SubEtha, and it will be automatically picked up by the server and loaded. Note that you must have {{{META-INF/beans.xml}}} in your jar for it to be picked up by the CDI injection manager:
 
 META-INF/beans.xml example
 {{{
-<Beans xmlns="urn:java:ee"/>
+<beans />
 }}}
 
-Once again, just take a look at the way we do things in SubEtha. That should be a nice basis for you. If you have questions about specific problems you might be having, feel free to ask us for help on the developer list.
+If you have any questions, feel free to ask us for help on the [http://www.subethamail.org/dev developer list].

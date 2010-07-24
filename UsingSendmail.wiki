@@ -14,7 +14,7 @@ This only allows you to relay whole domains into SubEtha.  You cannot have list 
   }}}
   #  Rehash the files:
   {{{
-  makemap hash /etc/mail/access < /etc/mail/access }}}
+  makemap hash /etc/mail/access < /etc/mail/access
   makemap hash /etc/mail/mailertable < /etc/mail/mailertable
   }}}
 

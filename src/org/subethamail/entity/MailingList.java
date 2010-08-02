@@ -6,6 +6,8 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,6 +38,7 @@ import org.hibernate.annotations.SortType;
 import org.hibernate.validator.constraints.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.subethamail.core.util.ContextAware;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 import org.subethamail.entity.i.Validator;
@@ -279,7 +282,10 @@ public class MailingList implements Serializable, Comparable<MailingList>
 	{
 		if (value == null || value.length() > Validator.MAX_LIST_URL)
 			throw new IllegalArgumentException("Invalid url");
-
+		
+		try { new URL(value); }
+		catch (MalformedURLException e) { throw new IllegalArgumentException("Invalid url"); }
+		
 		if (log.isDebugEnabled())
 			log.debug("Setting url of " + this + " to " + value);
 
@@ -428,22 +434,34 @@ public class MailingList implements Serializable, Comparable<MailingList>
 	}
 
 	/**
+	 * Uses the URL for the list and the context path to figure out the
+	 * appropriate path to the SubEtha instance.  Eg:
+	 * 
+	 * http://my.list/ctx/somelist -> http://my.list/ctx/
+	 * 
 	 * @return the context root of the SubEtha web application, determined
 	 *  from the main URL.  Includes trailing /.
-	 *  
-	 *  Takes the list url and strips the last 2 parts 
-	 *  (http://server/se/list/listname -> http://server/se/)
 	 */
 	public String getUrlBase()
 	{
-		String[] parts = this.url.split("/");
-		StringBuilder sb = new StringBuilder();
+		String contextPath = ContextAware.getContextPath();
 		
-		for (int i = 0; i < parts.length-2; i++) {
-			sb.append(parts[i]).append("/");
+		try
+		{
+			URL u = new URL(this.url);
+			
+			return u.getProtocol() 
+				+ "://" 
+				+ u.getHost() 
+				+ ((u.getPort() < 0) ? "" : u.getPort())
+				+ contextPath
+				+ "/";
 		}
-		
-		return sb.toString();
+		catch (MalformedURLException e)
+		{
+			// Should be impossible
+			throw new IllegalStateException("Stored an illegal url " + this.url);
+		}
 	}
 
 	/**

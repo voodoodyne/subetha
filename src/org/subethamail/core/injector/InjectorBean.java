@@ -134,6 +134,8 @@ public class InjectorBean implements Injector
 		if (log.isDebugEnabled())
 			log.debug("Checking if we want address " + toAddress);
 
+		toAddress = EmailUtils.normalizeEmail(toAddress);
+		
 		try
 		{
 			InternetAddress addy = new InternetAddress(toAddress);

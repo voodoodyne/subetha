@@ -7,6 +7,8 @@ From 2.0 on, the general upgrade is to follow the InstallGuide (please note the 
 
 == 2.0 -> 2.1 ==
 
+Examine the new example-subetha.xml file.  There are some new configuration options which you MUST provide.
+
 There were no schema changes to the database.
 
 The fulltext indexing system completely changed.  It now uses Hibernate Search instead of working with Lucene directly.  Because the storage format has changed, you will need to visit the Site Status page and click the "rebuild indexes from scratch" button.  You can delete the old index in {{{/var/tmp/subetha/indexer}}} (the new index is stored in {{{/var/tmp/subetha/indexes}}}).

@@ -62,14 +62,7 @@
 	</path>
 
 	<path id="javadoc.classpath">		
-		<fileset dir="${lib.dir}">
-			<include name="**/*.jar" />
-			<exclude name="build-only/**"/>
-		</fileset>
-
-		<fileset dir="${resin.dir}/lib">
-			<include name="**/*.jar"/>
-		</fileset>
+		<path refid="master.classpath" />
 	</path>
 	
 	<path id="rtest.build.classpath">

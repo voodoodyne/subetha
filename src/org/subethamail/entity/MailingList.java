@@ -42,6 +42,7 @@ import org.subethamail.core.util.ContextAware;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
 import org.subethamail.entity.i.Validator;
+import org.subethamail.smtp.util.EmailUtils;
 
 /**
  * Entity for a single mailing list
@@ -255,6 +256,8 @@ public class MailingList implements Serializable, Comparable<MailingList>
 		if (log.isDebugEnabled())
 			log.debug("Setting email of " + this + " to " + value);
 
+		value = EmailUtils.normalizeEmail(value);
+		
 		this.email = value;
 	}
 

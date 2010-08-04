@@ -420,4 +420,8 @@
 			<hbm2ddl export="false" format="true" outputfilename="mysql5.sql" />
 		</hibernatetool>
 	</target>
+
+	<target name="update-smtp" depends="">
+		<copy file="../SubethaSMTP/target/subethasmtp-UNVERSIONED.jar" todir="${lib.dir}" />
+	</target>
 </project>

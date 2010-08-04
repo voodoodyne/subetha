@@ -45,7 +45,6 @@ import org.subethamail.core.post.OutboundMTA;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.queue.InjectedQueueItem;
-import org.subethamail.core.util.EmailUtils;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
@@ -57,6 +56,7 @@ import org.subethamail.entity.MailingList;
 import org.subethamail.entity.Person;
 import org.subethamail.entity.Subscription;
 import org.subethamail.entity.i.Permission;
+import org.subethamail.smtp.util.EmailUtils;
 
 import com.caucho.remote.HessianService;
 

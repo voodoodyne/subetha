@@ -45,6 +45,7 @@ import org.subethamail.core.post.OutboundMTA;
 import org.subethamail.core.post.PostOffice;
 import org.subethamail.core.queue.InjectQueue;
 import org.subethamail.core.queue.InjectedQueueItem;
+import org.subethamail.core.util.EmailUtils;
 import org.subethamail.core.util.OwnerAddress;
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
@@ -222,6 +223,9 @@ public class InjectorBean implements Injector
 	{
 		if (log.isDebugEnabled())
 			log.debug("Injecting message sent to " + envelopeRecipient);
+		
+		envelopeSender = EmailUtils.normalizeEmail(envelopeSender);
+		envelopeRecipient = EmailUtils.normalizeEmail(envelopeRecipient);
 		
 		// A quick spam check - people often try to spam the list from the list-owner
 		// address.  This is never valid.  Nuke it up front.

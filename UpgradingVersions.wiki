@@ -3,7 +3,7 @@
 
 = Upgrading =
 
-From 2.0 on, the general upgrade is to follow the InstallGuide (please note the change to resin from jboss), skipping the database creation. The notes below describe the schema changes for the upgrade if you already have the database, and existing data. The app-server install, and setup has completely changes between the 1.X -> XXX distributions. 
+From 2.0 on, the general upgrade is to follow the InstallGuide (please note the change to resin from jboss), skipping the database creation. The notes below describe the schema changes for the upgrade if you already have the database, and existing data. The app-server install, and setup has completely changed between the 1.X -> 2.X distributions. 
 
 == 2.0 -> 2.1 ==
 

@@ -80,6 +80,7 @@ public class SMTPService
 		log.info("Starting SMTP service: " + (this.bindAddress==null ? "*" : this.bindAddress) + ":" + this.port);
 		
 		this.smtpServer = new SMTPServer(new SMTPHandler(this));
+		this.smtpServer.setHideTLS(true);
 
 		InetAddress binding = this.getBinding();
 		if (binding != null)

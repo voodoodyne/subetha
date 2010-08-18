@@ -42,6 +42,75 @@
 
   JavaMail will parse messages in 8BITMIME just fine.  Historically, JavaMail has had [http://osdir.com/ml/java.sun.javamail.general/2006-05/msg00030.html problems] sending mail with 8BITMIME.  Since it seems to work now, we have enabled this by default (see example-subetha.xml).  If you think you are having problems, please post to the SubEtha Users mailing list.
 
+ * Can list managers see readable bounces information? i.e. to which addresses it actually failed
+
+  This information isn't currently exposed in any meaningful way. Internally there is a number associated with each email address (and remember, there is a 1:N relationship of user to email address) which is something like a bounce count; it is decremented by 1 for each msg sent and incremented by 2 for each bounce received.
+
+ * Is it possible to mass remove subscribers by uploading/pasting a file?
+ * the preferred way would be just for a new file to substitute the old list
+ * Is it possible to download a list of subscribers?
+ * Is it possible to do similar operations with different roles?
+ * Are there any built-in capabilities for managing several lists at once?
+ * Can lists be copied?
+ * Can a blueprint/some mechanism be used to create more than one list at once?
+
+  The answer to all thees questions is "use the developer API".  SubEtha exposes nearly every possible bit of functionality as a Hessian web service.  In fact the web UI is built on top of the exact same API (with direct calls rather than RPC, of course).  Anything you can do in the web UI, you can automate.
+
+  Look at the unit tests for an example - they all run against the hessian layer.
+
+  The API files are all in .i packages in the source tree.  You don't need to use Java to call hessian, but the javadocs will help out.
+
+ * Is it possible/easy to see a log of who unsubscribed whom?
+
+  This information is not currently tracked.
+
+ * Does the list manager have the choice whether to send a welcome message?
+
+  If you mean for mass subscribe, then yes you have three options:
+   # Send invite
+   # Send welcome message
+   # Subscribe silently
+
+  If you mean when the user explicitly subscribes themselves, then I believe the answer is no.  They get an email notification of their subscription. The API method Admin.subscribeEmail() has a silent flag, so you can always build whatever interface you want.
+
+ * Can lists be nested in multiple levels (i.e. lists subscribed to other lists)?
+
+  I don't know.  It's been a long time since I've thought about this issue, but I suspect it will work.  You'd have to try it, and if it doesn't work, we should be able to make a simple patch that takes care of any issues.
+
+ * Is there a setting whether to trust the envelope or require self-moderation?
+
+  Yes.  By default the envelope is trusted, but you can add the "Hold All Mail" filter.  All messages will be given a HARD hold and a moderator will need to explicitly approve them.
+
+ * Could the sender see when his message bounces to a recipient?
+
+  No.
+
+ * Can the list be renamed?
+
+  Yes, both from the UI and the API.  A list owner can rename the list, but only a site admin can change the email address or URL for the list.
+
+ * Are any other SSO systems supported (Shibboleth)?
+
+  I don't know anything about Shibboleth.  There is currently no support for any sort of external authorization system.
+
+ * Does subetha deal OK if a part of it or a system it depends on fails?
+
+  Yes.  SubEtha is fully transactional, including the queueing systems that send mail out to an MTA.  As long as there is no data loss, you can yank the plug on any part of a SubEtha system, plug it back in, and SubEtha will continue where it left off.
+
+ * Where can I find precise information on how data are stored?
+
+  For precise information you can look at the code.  The hibernate entities which define the data model are in the package org.subethamail.entity.  A bit of overview information will probably help though:
+
+  When an email arrives, it goes through (very roughly) this process:
+     # It is checked to make sure it goes to a list
+     # Attachments are detached
+     # The email and attachments are saved in the database
+     # A "send out this email" msg is enqueued on a JMS queue.  At this point the SMTP client is given OK and the synchronous part is complete.
+     # The "send out this email" msg is dequeued and turned into (possibly zillions) of "send this email to this person" JMS messages.
+     # Each "send this email to this person" is dequeued and turned into an actual JavaMail msg sent to your MTA for final delivery.
+
+  Of course this glosses over a lot (including filters) but that's the general gist.  Steps 1-4 are a single transaction, step 5 is a single transaction, and each iteration of step 6 is a single transaction.  By the standards of most SMTP-related software, SubEtha should be extraordinarily resilient to failures.
+
 == Design Questions ==
 
   * Why does SubEtha store attachments in a separate table?

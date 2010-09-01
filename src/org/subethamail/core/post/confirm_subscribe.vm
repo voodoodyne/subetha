@@ -6,8 +6,8 @@
 ## Expects a String value "subject" to be set in the context
 ##
 #set($subject = "Confirm subscription to $list.name")
-Someone (hopefully you) requested to subscribe to the mailing list '$list.name'
-located at $list.url
+Someone (hopefully you) requested to subscribe $email to the mailing list
+'$list.name' located at $list.url
 
 To confirm, you must either click on the following link:
 

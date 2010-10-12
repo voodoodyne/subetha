@@ -223,9 +223,9 @@ public class InjectorBean implements Injector
 	@SuppressWarnings("unchecked")
 	protected boolean injectImpl(String envelopeSender, String envelopeRecipient, InputStream mailData) throws MessagingException, LimitExceededException, IOException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Injecting message sent to " + envelopeRecipient);
-		
+		if (log.isInfoEnabled())
+			log.info("Injecting mail from '" + envelopeSender + "' to '" + envelopeRecipient + "'");
+			
 		envelopeSender = EmailUtils.normalizeEmail(envelopeSender);
 		envelopeRecipient = EmailUtils.normalizeEmail(envelopeRecipient);
 		

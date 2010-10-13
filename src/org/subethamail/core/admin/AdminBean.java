@@ -150,8 +150,6 @@ public class AdminBean extends PersonalBean implements Admin
 	 */
 	public Long establishPerson(InternetAddress address, String password)
 	{
-		log.debug("SubEthaEntityManager is " + this.em);
-		
 		return this.establishEmailAddress(address, password).getPerson().getId();
 	}
 

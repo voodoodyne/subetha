@@ -6,8 +6,8 @@
 		a confirmation code which will allow you to subscribe.
 	</p>
 	
-	<p>
-		<strong>You might need to check your spam folder.</strong>
+	<p style="color: red; font-weight: bold">
+		You might need to check your spam folder.
 	</p>
 	
 	<p>

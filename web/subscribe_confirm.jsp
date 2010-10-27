@@ -7,6 +7,10 @@
 	</p>
 	
 	<p>
+		<strong>You might need to check your spam folder.</strong>
+	</p>
+	
+	<p>
 		You may either:
 	</p>
 	

@@ -39,7 +39,17 @@ public class SubscribeAnon extends AuthAction
 		
 		/** */
 		@Length(max=Validator.MAX_PERSON_NAME)
-		@Getter @Setter String name = "";
+		@Getter @Setter
+		String name = "";
+
+		/** */
+		@Override
+		public void validate() throws IllegalAccessException
+		{
+			super.validate();
+			if (!Validator.validEmail(deliverTo))
+				this.setError("deliverTo", "That is not a valid email address");
+		}
 	}
 	
 	/** */

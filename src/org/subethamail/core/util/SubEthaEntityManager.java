@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -859,14 +858,8 @@ public class SubEthaEntityManager implements EntityManager
 	}
 
 	@Override
-	public Set<String> getSupportedProperties()
+	public <T> TypedQuery<T> createQuery(String paramString, Class<T> paramClass)
 	{
-		return this.base.getSupportedProperties();
-	}
-
-	@Override
-	public <T> TypedQuery<T> createQuery(CriteriaQuery<T> paramCriteriaQuery, Class<T> paramClass)
-	{
-		return this.base.createQuery(paramCriteriaQuery, paramClass);
+		return this.base.createQuery(paramString, paramClass);
 	}
 }

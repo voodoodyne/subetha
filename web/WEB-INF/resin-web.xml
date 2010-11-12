@@ -23,10 +23,6 @@
 	<!-- <resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" cron="0 4 *"/> -->
 	<resin:ScheduledTask method="#{cleanup.cleanup}" delay="10s" period="15m"/>
 
-	<!-- Every 15 minutes run the indexer -->
-	<!-- ...and might as now too (in a few seconds) -->
-	<resin:ScheduledTask method="#{indexer.update}" delay="30s" period="15m"/>
-
 	<!-- JMS -->
 	<jms:JmsConnectionFactory />
 

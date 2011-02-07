@@ -42,7 +42,13 @@ abstract public class SubEthaAction extends AbstractAction
 	 */
 	protected Cookie getCookie(String name)
 	{
-		Cookie[] cookies = this.getCtx().getRequest().getCookies();
+		Cookie[] cookies;
+		try {
+			cookies = this.getCtx().getRequest().getCookies();
+		} catch (NullPointerException ex) {
+			log.error("Weird error from within Resin", ex);
+			return null;
+		}
 
 		if (cookies != null)
 		{

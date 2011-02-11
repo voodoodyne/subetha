@@ -38,8 +38,9 @@ public class BlobImpl implements Blob
 		ByteArrayOutputStream out = new ByteArrayOutputStream(length);
 		try
 		{
-			while (stream.available() > 0)
-				out.write(stream.read());
+			int ch;
+			while ((ch = stream.read()) >= 0)
+				out.write(ch);
 		}
 		catch (IOException e) { throw new RuntimeException(e); }
 		

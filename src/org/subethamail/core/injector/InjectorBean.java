@@ -133,7 +133,7 @@ public class InjectorBean implements Injector
 	{
 		if (log.isDebugEnabled())
 			log.debug("Checking if we want address " + toAddress);
-
+		
 		toAddress = EmailUtils.normalizeEmail(toAddress);
 		
 		try
@@ -216,7 +216,7 @@ public class InjectorBean implements Injector
 				throw new RuntimeException(ex);
 		}
 	}
-
+	
 	/**
 	 * Factors out the exception catching.
 	 */
@@ -225,7 +225,7 @@ public class InjectorBean implements Injector
 	{
 		if (log.isInfoEnabled())
 			log.info("Injecting mail from '" + envelopeSender + "' to '" + envelopeRecipient + "'");
-			
+		
 		envelopeSender = EmailUtils.normalizeEmail(envelopeSender);
 		envelopeRecipient = EmailUtils.normalizeEmail(envelopeRecipient);
 		

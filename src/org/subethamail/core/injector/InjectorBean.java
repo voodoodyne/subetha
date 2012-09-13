@@ -587,6 +587,11 @@ public class InjectorBean implements Injector
 	{
 		if (log.isDebugEnabled())
 			log.debug("Handling bounce from list " + verp.getEmail());
+		
+		// Disable bounce processing for now.  Something is broken and it keeps disabling delivery.  Possibly
+		// it is spammers hitting old addresses.
+		if (true)
+			return;
 
 		try
 		{

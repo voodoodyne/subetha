@@ -12,7 +12,6 @@
 	<classpathentry kind="lib" path="lib/velocity-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.5.10.jar"/>
-	<classpathentry kind="lib" path="lib/build-only/lombok-edge.jar"/>
 	<classpathentry kind="lib" path="lib/javassist-3.9.0.GA.jar"/>
 	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate3.jar"/>
@@ -24,6 +23,7 @@
 	<classpathentry kind="lib" path="lib/lucene-queries-2.9.3.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-search-3.2.1.Final.jar"/>
 	<classpathentry kind="lib" path="lib/subethasmtp-UNVERSIONED.jar" sourcepath="/SubethaSMTP/src"/>
+	<classpathentry kind="lib" path="lib/build-only/lombok.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="loadtest/src"/>

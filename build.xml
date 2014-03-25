@@ -94,6 +94,7 @@
 				destdir="${build.classes.dir}"
 				debug="${build.debug}"
 				deprecation="${build.deprecation}"
+				includeantruntime="false"
 			>
 			<classpath refid="master.classpath" />
 		</javac>

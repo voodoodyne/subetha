@@ -5,8 +5,9 @@
 
 package org.subethamail.core.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+
+import lombok.extern.java.Log;
 
 
 /**
@@ -27,11 +28,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class VERPAddress
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(VERPAddress.class);
-	
 	/** This is the suffix of all VERP'd addresses, plus the '@' */
 	public static final String SUFFIX = "-b@";
 	
@@ -94,8 +93,8 @@ public class VERPAddress
 		String email = addy.substring(0, leadIndex) + '@' + addy.substring(suffixIndex+SUFFIX.length());
 		String tokenBase62 = addy.substring(leadIndex+LEAD.length(), suffixIndex);
 		
-		if (log.isDebugEnabled())
-			log.debug(addy + " becomes " + email + "/" + tokenBase62);
+		if (log.isLoggable(Level.FINE))
+			log.log(Level.FINE,"{0} becomes {1}/{2}", new Object[]{addy,email,tokenBase62});
 		
 		return new VERPAddress(email, tokenBase62);
 	}

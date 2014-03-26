@@ -12,13 +12,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 
 import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.acct.i.MyListRelationship;
@@ -59,11 +60,9 @@ import org.subethamail.entity.i.Permission;
  * @author Jeff Schnitzer
  * @author Jon Stevens
  */
+@Log
 public class Transmute
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(Transmute.class);
-
 	/** */
 	public static List<BlueprintData> blueprints(Iterable<Blueprint> rawColl)
 	{
@@ -78,8 +77,8 @@ public class Transmute
 	/** */
 	public static BlueprintData blueprint(Blueprint raw)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+			log.log(Level.FINE,"{0}",raw);
 
 		return new BlueprintData(
 				raw.getClass().getName(),
@@ -101,8 +100,8 @@ public class Transmute
 	/** */
 	public static ListData mailingList(MailingList raw)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+			log.log(Level.FINE,"{0}",raw);
 
 		return new ListData(
 				raw.getId(),
@@ -119,8 +118,8 @@ public class Transmute
 	/** */
 	public static ListDataPlus mailingListPlus(MailingList raw, int subscriberCount, int messageCount)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"{0}",raw);
 
 		return new ListDataPlus(
 				raw.getId(),
@@ -150,8 +149,8 @@ public class Transmute
 	/** */
 	public static SubscriberData subscriber(Subscription raw, boolean showNote)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"{0}",raw);
 
 		return new SubscriberData(
 				raw.getPerson().getId(),
@@ -219,8 +218,8 @@ public class Transmute
 	 */
 	public static SubscribedList subscription(Subscription raw)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"{0}",raw);
 
 		return new SubscribedList(
 				raw.getList().getId(),
@@ -255,8 +254,8 @@ public class Transmute
 	 */
 	public static MailSummary mailSummary(Mail raw, boolean showEmail, MailSummary replacement)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"{0}",raw);
 
 		if (replacement != null && replacement.getId().equals(raw.getId()))
 			return replacement;
@@ -361,8 +360,8 @@ public class Transmute
 	 */
 	public static MailData[] mailThread(Mail raw, boolean showEmail)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"{0}",raw);
 
 		Mail root = raw;
 		while (root.getParent() != null) { root = root.getParent(); }
@@ -394,8 +393,8 @@ public class Transmute
 	 */
 	public static RoleData role(Role raw)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"{0}",raw);
 
 		// Might be a proxy, must initialize
 		raw.getPermissions().size();
@@ -424,8 +423,8 @@ public class Transmute
 	 */
 	public static FilterData filter(Filter raw)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"{0}",raw);
 
 		return new FilterData(
 				raw.getClass().getName(),
@@ -438,8 +437,8 @@ public class Transmute
 	 */
 	public static EnabledFilterData enabledFilter(Filter filter, EnabledFilter enabled)
 	{
-		if (log.isDebugEnabled())
-			log.debug(enabled.toString());
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"{0}",enabled);
 
 		return new EnabledFilterData(
 				filter.getClass().getName(),
@@ -466,8 +465,8 @@ public class Transmute
 	 */
 	public static SubscriberData heldSubscription(SubscriptionHold raw)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"{0}",raw);
 
 		return new SubscriberData(
 				raw.getPerson().getId(),
@@ -495,8 +494,8 @@ public class Transmute
 	 */
 	public static MailHold heldMail(Mail raw)
 	{
-		if (log.isDebugEnabled())
-			log.debug(raw.toString());
+	    if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"{0}",raw);
 
 		return new MailHold(
 				raw.getId(),

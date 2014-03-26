@@ -50,17 +50,18 @@ package org.subethamail.core.util;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Logger;
+import java.util.logging.Level;
+
+import lombok.extern.java.Log;
 
 import com.caucho.hessian.io.AbstractStringValueDeserializer;
 
 /**
  * Deserializing a File
  */
+@Log
 public class URLDeserializer extends AbstractStringValueDeserializer
 {
-	private static final Logger log = Logger.getLogger(URLDeserializer.class.getName());
-
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Class getType()
@@ -73,7 +74,7 @@ public class URLDeserializer extends AbstractStringValueDeserializer
 	{
 		try
 		{
-			log.fine("Deserializing:  " + value);
+			log.log(Level.FINER,"Deserializing:  {0}", value);
 			return new URL(value);
 		}
 		catch (MalformedURLException ex) { throw new IllegalArgumentException(ex); }

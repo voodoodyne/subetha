@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.entity.i.Permission;
 
 
@@ -25,12 +25,9 @@ import org.subethamail.entity.i.Permission;
  *  
  * @author Jeff Schnitzer
  */
+@Log
 public class PermissionWrapper implements Map<String, Boolean>
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(PermissionWrapper.class);
-	
 	/** */
 	Set<Permission> perms;
 	

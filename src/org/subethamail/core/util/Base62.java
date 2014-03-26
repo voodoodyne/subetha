@@ -5,9 +5,11 @@
 
 package org.subethamail.core.util;
 
+import java.util.logging.Level;
+
+import lombok.extern.java.Log;
+
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -19,11 +21,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class Base62
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(Base62.class);
-
 	/** default constructor prevents util class from being created. */
 	private Base62() {}
 	
@@ -89,8 +89,8 @@ public class Base62
 			}
 		}
 		
-		if (log.isDebugEnabled())
-			log.debug("encodeBase62 from " + base64 + " to " + buf.toString());
+		if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"encodeBase62 from {0} to {1}", new Object[]{base64, buf});
 		
 		return buf.toString();
 	}
@@ -142,8 +142,8 @@ public class Base62
 			i++;
 		}
 		
-		if (log.isDebugEnabled())
-			log.debug("decodeBase62 from " + base62 + " to " + buf.toString());
+		if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"decodeBase62 from {0} to {1}", new Object[]{base62,buf});
 		
 		return buf.toString();
 	}

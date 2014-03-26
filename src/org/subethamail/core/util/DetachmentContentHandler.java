@@ -14,8 +14,7 @@ import java.io.OutputStream;
 import javax.activation.DataContentHandler;
 import javax.activation.DataSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
 
 /**
  * This content handler stores an attachment id as ascii text.
@@ -28,12 +27,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class DetachmentContentHandler implements DataContentHandler
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(DetachmentContentHandler.class);
-
 	/*
 	 * (non-Javadoc)
 	 * @see javax.activation.DataContentHandler#getContent(javax.activation.DataSource)

@@ -8,8 +8,7 @@ package org.subethamail.web.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
 
 
 /**
@@ -17,12 +16,9 @@ import org.slf4j.LoggerFactory;
  *  
  * @author Jeff Schnitzer
  */
+@Log
 public class TextTool 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(TextTool.class);
-	
 	/** What we want to delete from exception messages */
 	private static final String EXCEPTION_MSG = "Exception: ";
 	

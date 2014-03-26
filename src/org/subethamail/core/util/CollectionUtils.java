@@ -8,8 +8,7 @@ package org.subethamail.core.util;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
 
 
 /**
@@ -17,12 +16,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class CollectionUtils
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(CollectionUtils.class);
-
 	/** default constructor prevents util class from being created. */
 	private CollectionUtils() {}
 	

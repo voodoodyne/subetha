@@ -5,12 +5,14 @@
 
 package org.subethamail.core.util;
 
+import java.util.logging.Level;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Startup;
 
+import lombok.extern.java.Log;
+
 import org.apache.velocity.app.Velocity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This Bean just initializes the static use of Velocity.
@@ -19,11 +21,9 @@ import org.slf4j.LoggerFactory;
  * @author Scott Hernandez
  */
 @Startup
+@Log
 public class VelocityService
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(VelocityService.class);
-	
 	/**
 	 * Simply initialize the Velocity engine
 	 */
@@ -41,11 +41,11 @@ public class VelocityService
 			// Very busy servers should increase this value. Default: 20
 			// Velocity.setProperty("velocity.pool.size", "20");
 			Velocity.init();
-			log.debug("Velocity initialized!");
+			log.log(Level.FINE,"Velocity initialized!");
 		}
 		catch (Exception ex)
 		{
-			log.error("Unable to initialize Velocity", ex);
+			log.log(Level.SEVERE,"Unable to initialize Velocity", ex);
 			throw new RuntimeException(ex);
 		}
 	}

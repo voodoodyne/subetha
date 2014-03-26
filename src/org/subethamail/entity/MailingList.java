@@ -456,7 +456,7 @@ public class MailingList implements Serializable, Comparable<MailingList>
 			return u.getProtocol() 
 				+ "://" 
 				+ u.getHost() 
-				+ ((u.getPort() < 0) ? "" : u.getPort())
+				+ ((u.getPort() < 0) ? "" : (":"+u.getPort()))
 				+ contextPath
 				+ "/";
 		}

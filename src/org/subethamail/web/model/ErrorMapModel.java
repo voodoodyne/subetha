@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  * Models with a simple error map.
@@ -21,7 +22,12 @@ import javax.validation.Validator;
 public class ErrorMapModel
 {
 	/** */
-	private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+	private static Validator validator;
+	static 
+	{
+	    ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
+	    validator=vf.getValidator();   
+	}
 
 
 	/** */

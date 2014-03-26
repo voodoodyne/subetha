@@ -3,14 +3,15 @@
 
 package org.subethamail.core.util;
 
+import java.util.logging.Level;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.ServletContext;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
 
 /**
  * This is a cheesey singleton that makes the context path of our application
@@ -22,11 +23,9 @@ import org.slf4j.LoggerFactory;
  */
 @Singleton
 @Startup
+@Log
 public class ContextAware
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(ContextAware.class);
-
 	/** */
 	private static String contextPath;
 	
@@ -42,6 +41,6 @@ public class ContextAware
 	{
 		contextPath = this.ctx.getContextPath();
 		
-		log.debug("Application context path is: " + contextPath);
+		log.log(Level.FINE,"Application context path is: {0}", contextPath);
 	}
 }

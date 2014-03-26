@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -25,8 +26,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.Metamodel;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.entity.Config;
 import org.subethamail.entity.EmailAddress;
@@ -51,11 +52,9 @@ import org.subethamail.entity.i.Validator;
  */
 @SubEtha
 @Dependent
+@Log
 public class SubEthaEntityManager implements EntityManager
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(SubEthaEntityManager.class);
-	
 	/** The entity manager to use under the covers */
 	@Inject private EntityManager base;
 
@@ -147,8 +146,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public Mail getMailByMessageId(Long listId, String messageId) throws NotFoundException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding Mail with Message-ID " + messageId);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding Mail with Message-ID {0}", messageId);
 		
 		Query q = this.createNamedQuery("MailByMessageId");
 		q.setParameter("listId", listId);
@@ -174,8 +173,8 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<Mail> findMailWantingParent(Long listId, String messageId)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding mail wanting ancestor with Message-ID " + messageId);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding mail wanting ancestor with Message-ID {0}", messageId);
 		
 		Query q = this.createNamedQuery("WantsReferenceToMessageId");
 		q.setParameter("listId", listId);
@@ -191,8 +190,8 @@ public class SubEthaEntityManager implements EntityManager
 	{
 		String email = Validator.normalizeEmail(address.getAddress());
 		
-		if (log.isDebugEnabled())
-			log.debug("Finding MailingList with email " + email);
+		if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"Finding MailingList with email {0}", email);
 		
 		Query q = this.createNamedQuery("MailingListByEmail");
 		q.setParameter("email", email);
@@ -203,7 +202,7 @@ public class SubEthaEntityManager implements EntityManager
 		}
 		catch (NoResultException ex)
 		{
-			log.debug("Not found");
+		    log.log(Level.FINE,"Not found");
 			throw new NotFoundException(ex);
 		}
 	}
@@ -213,8 +212,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public MailingList getMailingList(URL url) throws NotFoundException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding MailingList with url " + url);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding MailingList with url {0}", url);
 		
 		Query q = this.createNamedQuery("MailingListByUrl");
 		q.setParameter("url", url.toString());
@@ -225,7 +224,7 @@ public class SubEthaEntityManager implements EntityManager
 		}
 		catch (NoResultException ex)
 		{
-			log.debug("Not found");
+		    log.log(Level.FINE,"Not found");
 			throw new NotFoundException(ex);
 		}
 	}
@@ -258,8 +257,8 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<MailingList> findMailingLists(String query, int skip, int count)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding MailingLists with query: " + query);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding MailingLists with query: {0}", query);
 
 		Query q = this.createNamedQuery("SearchMailingLists");
 		q.setParameter("name", like(query));
@@ -281,8 +280,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public int countLists()
 	{
-		if (log.isDebugEnabled())
-			log.debug("Counting all mailing lists");
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Counting all mailing lists");
 
 		Query q = this.createNamedQuery("CountMailingLists");
 		Number n = (Number) q.getSingleResult();
@@ -294,8 +293,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public int countLists(String query)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Counting mailing lists with query: " + query);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Counting mailing lists with query: {0}", query);
 
 		Query q = this.createNamedQuery("CountMailingListsQuery");
 		q.setParameter("name", like(query));
@@ -312,8 +311,8 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<Mail> findMailByList(Long listId, int skip, int count)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding all mail for list " + listId);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding all mail for list {0}", listId);
 		
 		Query q = this.createNamedQuery("MailByList");
 		q.setParameter("listId", listId);
@@ -332,8 +331,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public int countMailByList(Long listId)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Counting all mail for list " + listId);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Counting all mail for list {0}", listId);
 		
 		Query q = this.createNamedQuery("CountMailByList");
 		q.setParameter("listId", listId);
@@ -348,8 +347,8 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<Subscription> findSubscriptionsByRole(Long roleId)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding Subscriptions with role " + roleId);
+	    if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"Finding Subscriptions with role {0}", roleId);
 		
 		Query q = this.createNamedQuery("SubscriptionsByRoleId");
 		q.setParameter("roleId", roleId);
@@ -363,8 +362,8 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<Mail> findMailHeld(Long listId, int skip, int count)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding held mail for list " + listId);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding held mail for list {0}", listId);
 
 		Query q = this.createNamedQuery("HeldMail");
 		q.setParameter("listId", listId);
@@ -382,8 +381,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public int countHeldMessages(Long listId)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Counting held mail for list " + listId);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Counting held mail for list {0}", listId);
 
 		Query q = this.createNamedQuery("HeldMailCount");
 		q.setParameter("listId", listId);		
@@ -397,8 +396,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public int countHeldSubscriptions(Long listId)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Counting held subscriptions for list " + listId);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Counting held subscriptions for list {0}", listId);
 
 		Query q = this.createNamedQuery("HeldSubscriptionCount");
 		q.setParameter("listId", listId);		
@@ -413,7 +412,7 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<Person> findSiteAdmins()
 	{
-		log.debug("Finding all site admins");
+	    log.log(Level.FINE,"Finding all site admins");
 
 		Query q = this.createNamedQuery("SiteAdmin");
 		return q.getResultList();
@@ -424,8 +423,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public int countSubscribers(Long listId)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Counting subscribers of list: " + listId);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Counting subscribers of list: {0}", listId);
 
 		Query q = this.createNamedQuery("CountSubscribersOnList");
 		q.setParameter("listId", listId);
@@ -438,8 +437,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public int countMail()
 	{
-		if (log.isDebugEnabled())
-			log.debug("Counting all mail");
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Counting all mail");
 
 		Query q = this.createNamedQuery("CountMail");
 		Number n = (Number) q.getSingleResult();
@@ -451,8 +450,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public int countPeople()
 	{
-		if (log.isDebugEnabled())
-			log.debug("Counting all people");
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Counting all people");
 
 		Query q = this.createNamedQuery("CountPerson");
 		Number n = (Number) q.getSingleResult();
@@ -464,8 +463,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public int countSubscribers(Long listId, String query)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Counting subscribers on list: " + listId + " with query: " + query);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Counting subscribers on list: {0} with query: {1}", new Object[]{listId,query});
 
 		Query q = this.createNamedQuery("CountSubscribersOnListQuery");
 		q.setParameter("listId", listId);
@@ -528,8 +527,8 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<Mail> findSoftHoldsForPerson(Long personId)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding soft mail holds for person " + personId);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding soft mail holds for person {0}", personId);
 		
 		Query q = this.createNamedQuery("SoftHoldsByPerson");
 		q.setParameter("personId", personId);
@@ -549,8 +548,8 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<Mail> findMailSince(Date when)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding mail since " + when);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding mail since {0}", when);
 		
 		Query q = this.createNamedQuery("MailSince");
 		q.setParameter("since", when);
@@ -564,8 +563,8 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<SubscriptionHold> findHeldSubscriptionsOlderThan(Date cutoff)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding held subs older than " + cutoff);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding held subs older than {0}", cutoff);
 		
 		Query q = this.createNamedQuery("HeldSubscriptionsOlderThan");
 		q.setParameter("cutoff", cutoff);
@@ -579,8 +578,8 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<Mail> findHeldMailOlderThan(Date cutoff)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding held mail older than " + cutoff);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding held mail older than {0}", cutoff);
 		
 		Query q = this.createNamedQuery("HeldMailOlderThan");
 		q.setParameter("cutoff", cutoff);
@@ -595,8 +594,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public Mail findLastMailHeldFrom(String senderEmail, Long excludeMailId)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding the last held mail from " + senderEmail);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding the last held mail from {0}", senderEmail);
 		
 		senderEmail = Validator.normalizeEmail(senderEmail);
 		
@@ -613,8 +612,8 @@ public class SubEthaEntityManager implements EntityManager
 	 */
 	public int countRecentHeldMail(String senderEmail, Date since)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Counting recent held mail from " + senderEmail);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Counting recent held mail from {0}", senderEmail);
 		
 		senderEmail = Validator.normalizeEmail(senderEmail);
 		
@@ -636,8 +635,8 @@ public class SubEthaEntityManager implements EntityManager
 	@SuppressWarnings("unchecked")
 	public List<Mail> findRecentMailBySubject(Long listId, String subj, Date cutoff, int count)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Finding mail with subject " + subj + " younger than " + cutoff);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Finding mail with subject {0} younger than {1}", new Object[]{subj,cutoff});
 		
 		Query q = this.createNamedQuery("RecentMailBySubject");
 		q.setParameter("listId", listId);

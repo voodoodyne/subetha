@@ -8,8 +8,7 @@ package org.subethamail.web.util;
 import javax.servlet.ServletException;
 import javax.servlet.jsp.JspException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
 
 
 
@@ -18,12 +17,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class ExceptionUtils
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(ExceptionUtils.class);
-	
 	/**
 	 * @return true if the throwable or any of its causes are
 	 *  subclasses of causeClass.

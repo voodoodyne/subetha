@@ -8,11 +8,13 @@ package org.subethamail.core.admin;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Schedule;
+import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,7 @@ import com.caucho.resources.ScheduledTask;
 @Named("cleanup")
 @Singleton
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@Stateless
 public class CleanupBean
 {
 	/** */
@@ -54,6 +57,7 @@ public class CleanupBean
 	/**
 	 * Cleans up held {@link Subscription}s and {@link Mail}
 	 **/
+	@Schedule(minute="*/15", hour="*")
 	public void cleanup()
 	{
 		log.debug("Starting cleanup");

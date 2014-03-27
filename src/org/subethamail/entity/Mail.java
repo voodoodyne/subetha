@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
+import java.util.logging.Level;
 
 import javax.ejb.EJBException;
 import javax.mail.MessagingException;
@@ -36,7 +37,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.QueryHint;
-import javax.persistence.Transient;
+
+import lombok.extern.java.Log;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -49,8 +51,6 @@ import org.hibernate.search.annotations.Boost;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Indexed;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.TimeUtils;
 import org.subethamail.entity.i.Validator;
@@ -158,12 +158,10 @@ import org.subethamail.entity.i.Validator;
 	indexes={@Index(name="mailMessageIdIndex", columnNames={"listId", "messageId"})}
 )
 @Indexed
+@Log
 public class Mail implements Serializable, Comparable<Mail>
 {
 	private static final long serialVersionUID = 1L;
-
-	/** */
-	@Transient private final static Logger log = LoggerFactory.getLogger(Mail.class);
 
 	/**
 	 * Possible moderation states
@@ -298,8 +296,7 @@ public class Mail implements Serializable, Comparable<Mail>
 	 */
 	public Mail(String envelopeSender, SubEthaMessage msg, MailingList list, HoldType holdFor, Date sentDate) throws MessagingException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Creating new mail");
+	    log.log(Level.FINE,"Creating new mail");
 
 		this.arrivalDate = new Timestamp(System.currentTimeMillis());
 
@@ -377,8 +374,7 @@ public class Mail implements Serializable, Comparable<Mail>
 
 	public void setSubject(String value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting subject of " + this + " to " + value);
+	    log.log(Level.FINE,"Setting subject of {0} to {1}", new Object[]{this, value});
 
 		this.subject = value;
 	}
@@ -427,8 +423,7 @@ public class Mail implements Serializable, Comparable<Mail>
 	 */
 	public void setSender(String value) throws AddressException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting sender of " + this + " to " + value);
+	    log.log(Level.FINE,"Setting sender of {0} to {1}", new Object[]{this, value});
 
 		this.sender = value;
 		

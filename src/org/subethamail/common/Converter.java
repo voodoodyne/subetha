@@ -8,9 +8,6 @@ package org.subethamail.common;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 
 /**
@@ -20,10 +17,6 @@ import org.slf4j.LoggerFactory;
  */
 public class Converter
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(Converter.class);
-
 	/** default constructor keeps util class from being created. */
 	private Converter() {}
 

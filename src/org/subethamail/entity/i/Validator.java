@@ -5,8 +5,9 @@
 
 package org.subethamail.entity.i;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+
+import lombok.extern.java.Log;
 
 /**
  * For validating data at all tiers.  These constants also define
@@ -14,11 +15,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jeff Schnitzer
  */
+@Log
 public class Validator
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(Validator.class);
-
 	// Config
 	public static final int MAX_CONFIG_ID = 80;
 	public static final int MAX_CONFIG_VALUE = 4096;
@@ -96,7 +95,7 @@ public class Validator
 		
 		if (email.length() > MAX_EMAIL_ADDRESS)
 		{
-			if (log.isDebugEnabled()) log.debug("Email too long: " + email);
+		    log.log(Level.FINE,"Email too long: {0}", email);
 			return false;
 		}
 		
@@ -105,7 +104,7 @@ public class Validator
 		if (indexOfAt < 1)
 		{ 
 			// must have @ and must not be 1st char
-			if (log.isDebugEnabled()) log.debug("@ is first char: " + email);
+		    log.log(Level.FINE,"@ is first char: {0}", email);
 			return false;
 		}
 
@@ -113,20 +112,20 @@ public class Validator
 
 		if (site.indexOf('@') >= 0)
 		{
-			if (log.isDebugEnabled()) log.debug("@ missing: " + email);
+		    log.log(Level.FINE,"@ missing: {0}", email);
 			return false;
 		}
 
 		if (site.startsWith(".") || site.endsWith("."))
 		{
-			if (log.isDebugEnabled()) log.debug("cannot start or end with '.': " + email);
+		    log.log(Level.FINE,"cannot start or end with ''.'': {0}", email);
 			return false;
 		}
 
 		// Make sure we don't have a one-letter TLD
 		if (site.length() - 2 > 0 && site.charAt(site.length() - 2) == '.')
 		{
-			if (log.isDebugEnabled()) log.debug("TLD too short:" + email);
+		    log.log(Level.FINE,"TLD too short:{0}", email);
 			return false;
 		}
 		

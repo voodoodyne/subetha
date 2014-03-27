@@ -8,11 +8,12 @@ package org.subethamail.web.action;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.servlet.http.Cookie;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.tagonist.AbstractAction;
 
 /**
@@ -20,11 +21,9 @@ import org.tagonist.AbstractAction;
  *
  * @author Jeff Schnitzer
  */
+@Log
 abstract public class SubEthaAction extends AbstractAction
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(SubEthaAction.class);
-
 	/**
 	 * @return the action param specified by the key, as a String
 	 */
@@ -46,7 +45,7 @@ abstract public class SubEthaAction extends AbstractAction
 		try {
 			cookies = this.getCtx().getRequest().getCookies();
 		} catch (NullPointerException ex) {
-			log.error("Weird error from within Resin", ex);
+			log.log(Level.SEVERE,"Weird error from within Resin", ex);
 			return null;
 		}
 
@@ -98,8 +97,8 @@ abstract public class SubEthaAction extends AbstractAction
 		if (requestURI == null)
 			requestURI = this.getCtx().getRequest().getRequestURI();
 
-		if (log.isDebugEnabled())
-			log.debug("Getting contextless request URI.  contextPath is " + contextPath + ", requestURI is " + requestURI);
+		if (log.isLoggable(Level.FINE))
+			log.log(Level.FINE,"Getting contextless request URI.  contextPath is {0}, requestURI is {1}", new Object[]{contextPath,requestURI});
 
 		return requestURI.substring(contextPath.length());
 	}

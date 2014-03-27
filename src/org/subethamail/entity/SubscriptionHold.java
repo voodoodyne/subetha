@@ -9,12 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.QueryHint;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A request to join a mailing list. 
@@ -42,10 +39,6 @@ public class SubscriptionHold extends SubscriptionBase
 {
 	private static final long serialVersionUID = 1L;
 
-	/** */
-	@SuppressWarnings("unused")
-	@Transient private final static Logger log = LoggerFactory.getLogger(SubscriptionHold.class);
-	
 	/**
 	 */
 	public SubscriptionHold() {}

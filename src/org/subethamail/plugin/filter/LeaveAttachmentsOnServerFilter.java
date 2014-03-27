@@ -7,6 +7,7 @@ package org.subethamail.plugin.filter;
 
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.logging.Level;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -14,8 +15,8 @@ import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.Archiver;
@@ -33,11 +34,9 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Jeff Schnitzer
  */
 @Singleton
+@Log
 public class LeaveAttachmentsOnServerFilter extends GenericFilter
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(LeaveAttachmentsOnServerFilter.class);
-
 	@Inject Archiver archiver;
 
 	/*
@@ -98,8 +97,7 @@ public class LeaveAttachmentsOnServerFilter extends GenericFilter
 		}
 		catch (IOException ioex)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Error getting message parts", ioex);
+		    log.log(Level.FINE,"Error getting message parts", ioex);
 		}
 	}
 }

@@ -8,8 +8,6 @@ package org.subethamail.plugin.filter;
 import javax.inject.Singleton;
 import javax.mail.MessagingException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.HoldException;
@@ -29,10 +27,6 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
 @Singleton
 public class HoldEverythingFilter extends GenericFilter 
 {	
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(HoldEverythingFilter.class);
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.plugin.i.Filter#getName()

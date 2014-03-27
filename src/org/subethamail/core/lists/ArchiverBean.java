@@ -21,6 +21,8 @@ import java.util.Properties;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.zip.Adler32;
 import java.util.zip.CheckedOutputStream;
 import java.util.zip.ZipEntry;
@@ -38,6 +40,8 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 
+import lombok.extern.java.Log;
+
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -48,8 +52,6 @@ import org.apache.lucene.util.Version;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.ExportMessagesException;
 import org.subethamail.common.ImportMessagesException;
 import org.subethamail.common.MailUtils;
@@ -92,11 +94,9 @@ import com.sun.mail.util.LineInputStream;
 @RunAs(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @HessianService(urlPattern="/api/Archiver")
+@Log
 public class ArchiverBean extends PersonalBean implements Archiver
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(ArchiverBean.class);
-
 	@Inject Deliverator deliverator;
 	@Inject FilterRunner filterRunner;
 	@Inject Detacher detacher;
@@ -240,7 +240,10 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		}
 		catch (Exception e)
 		{
-			if (log.isDebugEnabled()) log.debug("exception getting mail#" + mailId + "\n" + e.toString());
+		    LogRecord logRecord=new LogRecord(Level.FINE,"exception getting mail#{0}");
+		    logRecord.setParameters(new Object[]{mailId});
+		    logRecord.setThrown(e);
+            log.log(logRecord);
 		}
 	}
 	/**
@@ -259,8 +262,10 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		}
 		catch (IgnoreException e)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Ignoring mail " + mail, e);
+		    LogRecord logRecord=new LogRecord(Level.FINE,"Ignoring mail {0}");
+		    logRecord.setParameters(new Object[]{mail});
+		    logRecord.setThrown(e);
+            log.log(logRecord);
 			return;
 		}
 		this.detacher.attach(msg);
@@ -562,7 +567,7 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		}
 		catch (Exception e)
 		{
-			log.error("Error Exporting! ",e);
+		    log.log(Level.SEVERE,"Error Exporting! ",e);
 			throw new ExportMessagesException("Error:" + e.getMessage());
 		}
 	}

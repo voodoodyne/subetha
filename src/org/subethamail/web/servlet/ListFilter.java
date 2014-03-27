@@ -7,6 +7,7 @@ package org.subethamail.web.servlet;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
 
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
@@ -17,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.lists.i.ListMgr;
 import org.subethamail.web.util.AbstractFilter;
@@ -30,10 +31,10 @@ import org.subethamail.web.util.AbstractFilter;
  * a mailing list URL.  If it finds one, it forwards to the list page.  Finally
  * as a last resort if it can do nothing else it will return 404.
  */
+@Log
 public class ListFilter extends AbstractFilter
 {
 	private static final long serialVersionUID = 1L;
-	private final static Logger log = LoggerFactory.getLogger(ListFilter.class);
 	
 	/** */
 	public static final String LIST_PAGE = "/list.jsp";
@@ -74,7 +75,7 @@ public class ListFilter extends AbstractFilter
 		{
 			if (errorCode == HttpServletResponse.SC_NOT_FOUND)
 			{
-				log.debug("Got 404, trapping error");
+			    log.log(Level.FINE,"Got 404, trapping error");
 				this.trapped = true;
 			}
 			else
@@ -87,7 +88,7 @@ public class ListFilter extends AbstractFilter
 		{
 			if (errorCode == HttpServletResponse.SC_NOT_FOUND)
 			{
-				log.debug("Got 404, trapping error");
+			    log.log(Level.FINE,"Got 404, trapping error");
 				this.trapped = true;
 			}
 			else
@@ -98,8 +99,8 @@ public class ListFilter extends AbstractFilter
 		@Override
 		public ServletOutputStream getOutputStream() throws IOException
 		{
-			if (log.isDebugEnabled())
-				log.debug("Getting a " + ((this.trapped)?"NOOP":"real")  + " OutputStream");
+		    if (log.isLoggable(Level.FINE))
+			    log.log(Level.FINE,"Getting a " + ((this.trapped)?"NOOP":"real")  + " OutputStream");
 			
 			if (this.trapped)
 				return NOOP_OUTPUTSTREAM;

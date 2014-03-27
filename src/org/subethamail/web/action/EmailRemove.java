@@ -8,8 +8,6 @@ package org.subethamail.web.action;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 
@@ -21,10 +19,6 @@ import org.subethamail.web.action.auth.AuthRequired;
  */
 public class EmailRemove extends AuthRequired 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(EmailRemove.class);
-	
 	@Getter @Setter String email = "";
 
 	/** */

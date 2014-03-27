@@ -5,11 +5,12 @@
 
 package org.subethamail.web.action;
 
+import java.util.logging.Level;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.core.lists.i.MailData;
 import org.subethamail.web.Backend;
@@ -20,11 +21,9 @@ import org.subethamail.web.Backend;
  * @author Jon Stevens
  * @author Jeff Schnitzer
  */
+@Log
 public class PrepareReply extends PostMessage
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(PrepareReply.class);
-
 	public class Model extends PostMessage.Model
 	{
 		@Getter @Setter MailData mailData;
@@ -43,7 +42,7 @@ public class PrepareReply extends PostMessage
 	{
 		Model model = (Model)this.getCtx().getModel();
 
-		log.debug("msgId: " + model.msgId);
+		log.log(Level.FINE,"msgId: {0}", model.msgId);
 
 		if (model.msgId != null && model.msgId.longValue() > 0)
 		{

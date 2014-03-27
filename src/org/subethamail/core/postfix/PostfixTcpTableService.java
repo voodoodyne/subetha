@@ -8,11 +8,14 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
+import java.util.logging.Level;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+
+import lombok.extern.java.Log;
 
 import org.apache.mina.common.IdleStatus;
 import org.apache.mina.common.IoHandlerAdapter;
@@ -20,8 +23,6 @@ import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.textline.TextLineCodecFactory;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.core.smtp.SMTPService;
 
@@ -31,14 +32,12 @@ import org.subethamail.core.smtp.SMTPService;
  * @author Scott Hernandez
  */
 @Startup
+@Log
 public class PostfixTcpTableService implements PostfixTcpTableManagement
 {
 	@Inject Injector injector;
 	@Inject SMTPService smtpService;
 
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(PostfixTcpTableService.class);
-	
 	/** */
 	public static final int DEFAULT_PORT = 2502;	
 	private int port = DEFAULT_PORT;
@@ -56,7 +55,7 @@ public class PostfixTcpTableService implements PostfixTcpTableManagement
 		@Override
 		public void sessionOpened(IoSession session) throws Exception
 		{
-			log.debug("session opened!");
+		    log.log(Level.FINE,"session opened!");
 			
 			session.setIdleTime(IdleStatus.BOTH_IDLE, 60);
 		}
@@ -67,8 +66,7 @@ public class PostfixTcpTableService implements PostfixTcpTableManagement
 		@Override
 		public void messageReceived(IoSession session, Object msg) throws Exception
 		{
-			if (log.isDebugEnabled())
-				log.debug("Message received:  " + msg);
+		    log.log(Level.FINE,"Message received:  {0}", msg);
 			
 			String line = (String)msg;
 			
@@ -114,8 +112,7 @@ public class PostfixTcpTableService implements PostfixTcpTableManagement
 		@Override
 		public void exceptionCaught(IoSession session, Throwable cause) throws Exception
 		{
-			if (log.isInfoEnabled())
-				log.info("Closing due to exception", cause);
+		    log.log(Level.INFO,"Closing due to exception", cause);
 			
 			session.close();
 		}
@@ -126,8 +123,7 @@ public class PostfixTcpTableService implements PostfixTcpTableManagement
 		@Override
 		public void sessionIdle(IoSession session, IdleStatus status) throws Exception
 		{
-			if (log.isDebugEnabled())
-				log.debug("Closing idle connection with status " + status);
+		    log.log(Level.FINE,"Closing idle connection with status {0}", status);
 			
 			session.close();
 		}
@@ -146,7 +142,7 @@ public class PostfixTcpTableService implements PostfixTcpTableManagement
 		if (bindAddress != null && !"0.0.0.0".equals(bindAddress))
 			binding = InetAddress.getByName(bindAddress);
 
-		log.info("Starting TcpTableService: " + (binding==null ? "*" : binding) + ":" + port);
+		log.log(Level.INFO,"Starting TcpTableService: {0}:{1}", new Object[]{(binding==null ? "*" : binding),port});
 		
 		this.acceptor = new SocketAcceptor();
 		this.acceptor.getFilterChain().addLast(

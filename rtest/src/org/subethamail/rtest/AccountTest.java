@@ -8,8 +8,6 @@ package org.subethamail.rtest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.Self;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.PersonMixin;
@@ -22,10 +20,6 @@ import org.subethamail.rtest.util.SubEthaTestCase;
  */
 public class AccountTest extends SubEthaTestCase
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(AccountTest.class);
-
 	/** */
 	AdminMixin admin;
 	PersonMixin pers;

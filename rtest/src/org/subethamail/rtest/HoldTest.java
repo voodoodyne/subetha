@@ -10,8 +10,6 @@ import javax.mail.internet.MimeMessage;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
 import org.subethamail.rtest.util.PersonInfoMixin;
@@ -23,10 +21,6 @@ import org.subethamail.rtest.util.SubEthaTestCase;
  */
 public class HoldTest extends SubEthaTestCase
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(HoldTest.class);
-	
 	/** */
 	AdminMixin admin;
 	MailingListMixin ml;

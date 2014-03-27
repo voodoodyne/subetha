@@ -9,18 +9,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author Jeff Schnitzer
  */
 public class Samples
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(Samples.class);
-
 	/**
 	 * Gets a message.
 	 * 

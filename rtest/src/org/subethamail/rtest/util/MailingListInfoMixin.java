@@ -9,8 +9,6 @@ import java.net.URL;
 
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.Utils;
 
 /**
@@ -18,10 +16,6 @@ import org.subethamail.common.Utils;
  */
 public class MailingListInfoMixin
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(MailingListInfoMixin.class);
-
 	String email;
 	String name;
 	InternetAddress address;

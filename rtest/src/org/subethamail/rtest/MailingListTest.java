@@ -12,8 +12,6 @@ import javax.mail.internet.InternetAddress;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.Utils;
@@ -36,10 +34,6 @@ import org.subethamail.rtest.util.SubEthaTestCase;
  */
 public class MailingListTest extends SubEthaTestCase
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(MailingListTest.class);
-
 	/** */
 	AdminMixin admin;
 	PersonMixin pers;

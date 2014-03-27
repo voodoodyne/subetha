@@ -7,17 +7,15 @@ package org.subethamail.rtest;
 
 import java.util.Properties;
 
+import javax.mail.Message.RecipientType;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.SubEthaTestCase;
 import org.subethamail.wiser.Wiser;
@@ -31,10 +29,6 @@ import org.subethamail.wiser.Wiser;
  */
 public class FallthroughByHand extends SubEthaTestCase
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(FallthroughByHand.class);
-	
 	/** */
 	public static final int FALLTHROUGH_PORT = 2526;
 

@@ -5,8 +5,6 @@
 
 package org.subethamail.rtest.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Actually creates the person.
@@ -15,10 +13,6 @@ import org.slf4j.LoggerFactory;
  */
 public class PersonMixin extends PersonInfoMixin
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(PersonMixin.class);
-
 	Long id;
 	
 	/** */

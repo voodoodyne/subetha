@@ -8,8 +8,6 @@ package org.subethamail.rtest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
@@ -22,10 +20,6 @@ import org.subethamail.wiser.WiserMessage;
  */
 public class InjectorTest extends SubEthaTestCase
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(InjectorTest.class);
-	
 	/** */
 	AdminMixin admin;
 	MailingListMixin ml;

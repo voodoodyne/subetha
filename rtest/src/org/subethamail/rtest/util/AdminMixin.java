@@ -5,8 +5,6 @@
 
 package org.subethamail.rtest.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Using this mixin allows accessing ejbs from the siteAdmin
@@ -17,10 +15,6 @@ import org.slf4j.LoggerFactory;
  */
 public class AdminMixin extends BeanMixin
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(AdminMixin.class);
-	
 	/** */
 	public static final String EMAIL = "root@localhost";
 	public static final String PASSWORD = "password";

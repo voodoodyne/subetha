@@ -10,8 +10,6 @@ import java.util.Collection;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
@@ -26,10 +24,6 @@ import org.subethamail.rtest.util.SubEthaTestCase;
  */
 public class ModerationTest extends SubEthaTestCase
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(ModerationTest.class);
-	
 	/** */
 	AdminMixin admin;
 	MailingListMixin ml;

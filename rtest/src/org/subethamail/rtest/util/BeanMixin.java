@@ -7,8 +7,6 @@ package org.subethamail.rtest.util;
 
 import java.net.MalformedURLException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.Eegor;
@@ -30,10 +28,6 @@ import com.caucho.hessian.client.HessianProxyFactory;
  */
 public class BeanMixin
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(BeanMixin.class);
-
 	/** */
 	public BeanMixin() throws Exception
 	{

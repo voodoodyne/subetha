@@ -20,21 +20,16 @@ import javax.mail.internet.MimeMessage;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
 
 /**
  * All SubEtha tests require a running smtp server.
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class SubEthaTestCase extends TestCase
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(SubEthaTestCase.class);
-
 	/** */
 	public static final String TEST_SUBJECT = "test subject";
 	public static final String TEST_BODY = "test body";

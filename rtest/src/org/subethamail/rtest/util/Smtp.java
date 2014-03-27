@@ -7,11 +7,12 @@ package org.subethamail.rtest.util;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.logging.Level;
 
 import javax.mail.MessagingException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.core.post.i.Constant;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.wiser.Wiser;
@@ -23,11 +24,9 @@ import org.subethamail.wiser.WiserMessage;
  *
  * @author Jeff Schnitzer
  */
+@Log
 public class Smtp extends Wiser
 {
-	/** */
-	private static Logger log = LoggerFactory.getLogger(Smtp.class);
-
 	/** The port we use for wiser */
 	public static final int PORT = 2525;
 
@@ -50,9 +49,9 @@ public class Smtp extends Wiser
 		try
 		{
 			AdminMixin god = new AdminMixin();
-			log.debug("Calling enableTestMode()");
+			log.log(Level.FINE,"Calling enableTestMode()");
 			god.getEegor().enableTestMode(host + ":" + PORT);
-			log.debug("Called enableTestMode()");
+			log.log(Level.FINE,"Called enableTestMode()");
 		}
 		catch (Exception ex) { throw new RuntimeException(ex); }
 	}
@@ -210,11 +209,11 @@ public class Smtp extends Wiser
 	 */
 	public void debugPrintSubjects() throws MessagingException
 	{
-		if (log.isDebugEnabled())
+	    if (log.isLoggable(Level.FINE))
 		{
-			log.debug("Messages we have received:");
+	        log.log(Level.FINE,"Messages we have received:");
 			for (WiserMessage msg: this.getMessages())
-				log.debug("   Subject: " + msg.getMimeMessage().getSubject());
+			    log.log(Level.FINE,"   Subject: " + msg.getMimeMessage().getSubject());
 		}
 
 	}

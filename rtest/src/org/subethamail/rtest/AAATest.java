@@ -8,9 +8,8 @@ package org.subethamail.rtest;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import lombok.extern.java.Log;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.post.i.MailType;
 import org.subethamail.rtest.util.AdminMixin;
 import org.subethamail.rtest.util.MailingListMixin;
@@ -22,11 +21,9 @@ import org.subethamail.rtest.util.Smtp;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class AAATest extends TestCase
 {
-	/** */
-	private static Logger log = LoggerFactory.getLogger(AAATest.class);
-
 	/** */
 	public AAATest(String name) { super(name); }
 	

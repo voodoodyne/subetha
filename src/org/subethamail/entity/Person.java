@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,13 +25,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.QueryHint;
-import javax.persistence.Transient;
+
+import lombok.extern.java.Log;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Length;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.Validator;
 
@@ -59,13 +59,11 @@ import org.subethamail.entity.i.Validator;
 })
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Log
 public class Person implements Serializable, Comparable<Person>
 {
 	private static final long serialVersionUID = 1L;
 
-	/** */
-	@Transient private final static Logger log = LoggerFactory.getLogger(Person.class);
-	
 	/** */
 	public static final String ROLE_USER = "user";
 	public static final String ROLE_ADMIN = "siteAdmin";
@@ -120,8 +118,7 @@ public class Person implements Serializable, Comparable<Person>
 	 */
 	public Person(String password, String name)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Creating new person");
+	    log.log(Level.FINE,"Creating new person");
 
 		// These are validated normally.
 		this.setPassword(password);
@@ -153,8 +150,7 @@ public class Person implements Serializable, Comparable<Person>
 	 */
 	public void setPassword(String value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting password of " + this);
+	    log.log(Level.FINE,"Setting password of {0}", this);
 
 		this.password = value;
 	}
@@ -177,8 +173,7 @@ public class Person implements Serializable, Comparable<Person>
 	 */
 	public void setName(String value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting name of " + this + " to " + value);
+	    log.log(Level.FINE,"Setting name of {0} to {1}", new Object[]{this, value});
 
 		this.name = value;
 	}
@@ -192,8 +187,7 @@ public class Person implements Serializable, Comparable<Person>
 	/** */
 	public void setSiteAdmin(boolean value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting admin flag of " + this + " to " + value);
+	    log.log(Level.FINE,"Setting admin flag of {0} to {1}", new Object[]{this, value});
 
 		this.siteAdmin = value;
 	}

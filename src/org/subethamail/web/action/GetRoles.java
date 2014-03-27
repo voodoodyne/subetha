@@ -7,9 +7,8 @@ package org.subethamail.web.action;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 
@@ -19,12 +18,9 @@ import org.subethamail.web.action.auth.AuthAction;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class GetRoles extends AuthAction 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(GetRoles.class);
-
 	/** */
 	@Getter @Setter Long listId;
 

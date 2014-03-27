@@ -5,11 +5,13 @@
 
 package org.subethamail.plugin.filter;
 
+import java.util.logging.Level;
+
 import javax.inject.Singleton;
 import javax.mail.MessagingException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.FilterContext;
@@ -26,11 +28,9 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Scott Hernandez
  */
 @Singleton
+@Log
 public class SubjectFilter extends GenericFilter
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(SubjectFilter.class);
-
 	public static final String ARG_SUBJECTPREFIX = "Subject";
 	
 	/** */
@@ -78,8 +78,7 @@ public class SubjectFilter extends GenericFilter
 	public void onInject(SubEthaMessage msg, FilterContext ctx) 
 		throws IgnoreException, HoldException, MessagingException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Subject Filter: onInject()");
+	    log.log(Level.FINE,"Subject Filter: onInject()");
 		
 		// get the parameter arguments
 		String subjectArg = (String) ctx.getArgument(ARG_SUBJECTPREFIX);

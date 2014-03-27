@@ -8,6 +8,8 @@ package org.subethamail.core.post;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
@@ -19,10 +21,10 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import lombok.extern.java.Log;
+
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.SiteSettings;
 import org.subethamail.core.admin.i.Eegor;
@@ -47,11 +49,9 @@ import org.subethamail.entity.SubscriptionHold;
  * @author Scott Hernandez
  */
 @Stateless(name="PostOffice")
+@Log
 public class PostOfficeBean implements PostOffice
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(PostOfficeBean.class);
-	
 	/** */
 	@Inject @OutboundMTA Session mailSession;
 
@@ -89,7 +89,10 @@ public class PostOfficeBean implements PostOffice
 			}
 			catch (Exception ex)
 			{
-				log.error("Error merging " + kind.getTemplate(), ex);
+			    LogRecord logRecord=new LogRecord(Level.SEVERE,"Error merging {0}");;
+			    logRecord.setParameters(new Object[]{kind.getTemplate()});
+			    logRecord.setThrown(ex);
+                log.log(logRecord);			    
 				throw new EJBException(ex);
 			}
 
@@ -212,8 +215,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	public void sendPassword(EmailAddress addy)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Sending password for " + addy.getId());
+	    log.log(Level.FINE,"Sending password for {0}", addy.getId());
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("addy", addy);
@@ -247,8 +249,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	public void sendConfirmSubscribeToken(MailingList list, String email, String token)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Sending subscribe token to " + email);
+	    log.log(Level.FINE,"Sending subscribe token to {0}", email);
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("token", this.token(token));
@@ -266,8 +267,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	public void sendSubscribed(MailingList relevantList, Person who, EmailAddress deliverTo)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Sending welcome to list msg to " + who);
+	    log.log(Level.FINE,"Sending welcome to list msg to {0}", who);
 
 		String email;
 		if (deliverTo != null)
@@ -291,8 +291,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	public void sendOwnerNewMailingList(MailingList relevantList, EmailAddress address)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Sending notification of new mailing list " + relevantList + " to owner " + address);
+	    log.log(Level.FINE,"Sending notification of new mailing list {0} to owner {1}", new Object[]{relevantList, address});
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("addy", address);
@@ -309,8 +308,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	public void sendAddEmailToken(Person me, String email, String token)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Sending add email token to " + email);
+	    log.log(Level.FINE,"Sending add email token to {0}", email);
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("token", this.token(token));
@@ -347,8 +345,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	public void sendModeratorSubscriptionHeldNotice(EmailAddress moderator, SubscriptionHold hold)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Sending sub held notice for " + hold + " to " + moderator);
+	    log.log(Level.FINE,"Sending sub held notice for {0} to {1}", new Object[]{hold, moderator});
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("hold", hold);
@@ -367,8 +364,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	public void sendPosterMailHoldNotice(MailingList relevantList, String posterEmail, Mail mail, String holdMsg)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Sending mail held notice to " + posterEmail);
+	    log.log(Level.FINE,"Sending mail held notice to {0}", posterEmail);
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("list", relevantList);
@@ -388,8 +384,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	public void sendModeratorMailHoldNotice(EmailAddress moderator, MailingList relevantList, Mail mail, SubEthaMessage msg, String holdMsg)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Sending mail held notice to moderator " + moderator);
+	    log.log(Level.FINE,"Sending mail held notice to moderator {0}", moderator);
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("list", relevantList);
@@ -410,8 +405,7 @@ public class PostOfficeBean implements PostOffice
 	 */
 	public void sendModeratorSubscriptionNotice(EmailAddress moderator, Subscription sub, boolean unsub)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Sending " + (unsub ? "unsub" : "sub") + " notice for " + sub + " to " + moderator);
+	    log.log(Level.FINE,"Sending {0} notice for {1} to {2}", new Object[]{(unsub ? "unsub" : "sub"), sub, moderator});
 		
 		VelocityContext vctx = new VelocityContext();
 		vctx.put("sub", sub);

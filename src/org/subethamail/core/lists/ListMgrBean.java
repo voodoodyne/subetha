@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RunAs;
@@ -26,8 +27,8 @@ import javax.inject.Inject;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.admin.i.Admin;
@@ -74,11 +75,9 @@ import com.caucho.remote.HessianService;
 @RunAs(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @HessianService(urlPattern="/api/ListMgr")
+@Log
 public class ListMgrBean extends PersonalBean implements ListMgr
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(ListMgrBean.class);
-
 	/** */
 	@Inject FilterRunner filterRunner;
 	@Inject FilterRegistry filterReg;
@@ -483,8 +482,7 @@ public class ListMgrBean extends PersonalBean implements ListMgr
 		EnabledFilter filt = list.getEnabledFilters().get(className);
 		if (filt == null)
 		{
-			if (log.isWarnEnabled())
-				log.warn("Attempt to remove filter " + className + " which was not enabled on list " + list.getName());
+		    log.log(Level.WARNING,"Attempt to remove filter {0} which was not enabled on list {1}", new Object[]{className, list.getName()});
 		}
 		else
 		{

@@ -8,6 +8,7 @@ package org.subethamail.core.acct;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -18,8 +19,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.acct.i.AuthCredentials;
@@ -51,11 +52,9 @@ import com.caucho.remote.HessianService;
 @RunAs(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @HessianService(urlPattern="/api/AccountMgr")
+@Log
 public class AccountMgrBean extends PersonalBean implements AccountMgr
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(AccountMgrBean.class);
-
 	/**
 	 * A known prefix so we know if decryption worked properly
 	 */
@@ -78,7 +77,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	 */
 	public Self getSelf()
 	{
-		log.debug("Getting self");
+	    log.log(Level.FINE,"Getting self");
 
 		Person me = this.getMe();
 
@@ -96,7 +95,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	 */
 	public void setName(String newName)
 	{
-		log.debug("Setting name");
+	    log.log(Level.FINE,"Setting name");
 		Person me = this.getMe();
 		me.setName(newName);
 	}
@@ -106,7 +105,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	 */
 	public void setPassword(String newPassword)
 	{
-		log.debug("Setting password");
+	    log.log(Level.FINE,"Setting password");
 
 		Person me = this.getMe();
 		me.setPassword(newPassword);
@@ -118,8 +117,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	public void addEmailRequest(String newEmail)
 	{
 		// Send a token to the person's account
-		if (log.isDebugEnabled())
-			log.debug("Requesting to add email " + newEmail);
+	    log.log(Level.FINE,"Requesting to add email {0}", newEmail);
 
 		Person me = this.getMe();
 
@@ -206,8 +204,7 @@ public class AccountMgrBean extends PersonalBean implements AccountMgr
 	public void subscribeAnonymousRequest(Long listId, String email, String name) throws NotFoundException
 	{
 		// Send a token to the person's account
-		if (log.isDebugEnabled())
-			log.debug("Requesting to subscribe " + email + " to list " + listId);
+	    log.log(Level.FINE,"Requesting to subscribe {0} to list {1}", new Object[]{email, listId});
 
 		// A null name is not allowed, but empty is ok
 		if (name == null)

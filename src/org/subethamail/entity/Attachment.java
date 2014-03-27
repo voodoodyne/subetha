@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -19,10 +20,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.entity.i.Validator;
 
 /**
@@ -33,12 +33,10 @@ import org.subethamail.entity.i.Validator;
 @Entity
 // Disabled caching until instrumentation problem with 4.0.4.GA resolved
 //@Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL, include="non-lazy")
+@Log
 public class Attachment implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-
-	/** */
-	@Transient private final static Logger log = LoggerFactory.getLogger(Attachment.class);
 	
 	/** */
 	@Id
@@ -69,8 +67,7 @@ public class Attachment implements Serializable
 	 */
 	public Attachment(Mail mail, Blob content, String contentType)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Creating new attachment");
+	    log.log(Level.FINE,"Creating new attachment");
 
 		this.mail = mail;
 		this.content = content;

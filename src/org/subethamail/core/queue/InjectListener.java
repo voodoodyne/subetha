@@ -7,6 +7,8 @@
 package org.subethamail.core.queue;
 
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -16,8 +18,8 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
@@ -32,11 +34,9 @@ import org.subethamail.entity.Subscription;
  */
 //@MessageDriven	// declared in resin-web.xml
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@Log
 public class InjectListener implements MessageListener
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(InjectListener.class);
-
 	/** Unfortunately the generics trip up Resin's CDI impl */
 	//@Inject @DeliveryQueue BlockingQueue<DeliveryQueueItem> outboundQueue;
 	@SuppressWarnings("rawtypes")
@@ -56,7 +56,7 @@ public class InjectListener implements MessageListener
 		}
 		catch (JMSException e)
 		{
-			log.error("Error getting object outa message (from queue)", e);
+			log.log(Level.SEVERE,"Error getting object outa message (from queue)", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -67,8 +67,7 @@ public class InjectListener implements MessageListener
 	@SuppressWarnings("unchecked")
 	private void deliver(Long mailId)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Distributing mailId " + mailId);
+	    log.log(Level.FINE,"Distributing mailId {0}", mailId);
 
 		Mail mail;
 		try
@@ -81,8 +80,7 @@ public class InjectListener implements MessageListener
 			// Not a problem, just log an error and return, accepting the
 			// queue message.
 
-			if (log.isWarnEnabled())
-				log.warn("Wanted to distribute nonexistant mailId " + mailId);
+		    log.log(Level.WARNING,"Wanted to distribute nonexistant mailId {0}", mailId);
 
 			return;
 		}
@@ -99,7 +97,10 @@ public class InjectListener implements MessageListener
 				}
 				catch (InterruptedException e)
 				{
-					log.error("Error queuing delivery messages for mail.id=" + mailId + " person.id=" + personId, e);
+				    LogRecord logRecord=new LogRecord(Level.SEVERE,"Error queuing delivery messages for mail.id={0} person.id={1}");
+				    logRecord.setParameters(new Object[]{mailId, personId});
+				    logRecord.setThrown(e);
+                    log.log(logRecord);
 					throw new RuntimeException(e);
 				}
 			}

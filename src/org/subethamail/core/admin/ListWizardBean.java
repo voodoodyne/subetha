@@ -7,6 +7,7 @@ package org.subethamail.core.admin;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.logging.Level;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.TransactionAttribute;
@@ -17,8 +18,8 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.admin.i.BlueprintData;
 import org.subethamail.core.admin.i.DuplicateListDataException;
@@ -40,11 +41,9 @@ import com.caucho.remote.HessianService;
 @RolesAllowed(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @HessianService(urlPattern="/api/ListWizard")
+@Log
 public class ListWizardBean implements ListWizard
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(ListWizardBean.class);
-
 	/** */
 	@Inject Admin admin;
 	@Inject @Any Instance<Blueprint> blueprints;
@@ -61,7 +60,7 @@ public class ListWizardBean implements ListWizard
 	@SuppressWarnings("unchecked")
 	public Long createMailingList(InternetAddress address, URL url, String description, InternetAddress[] initialOwners, String blueprintId) throws DuplicateListDataException, InvalidListDataException
 	{
-		log.debug("Creating ML from " + super.toString() + ", blueprints are: " + this.blueprints);
+	    if (log.isLoggable(Level.FINE)) log.log(Level.FINE,"Creating ML from {0}, blueprints are: {1}", new Object[]{super.toString(), this.blueprints});
 		
 		Class<Blueprint> bpClass;
 		try

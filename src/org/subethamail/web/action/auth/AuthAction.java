@@ -9,14 +9,15 @@ package org.subethamail.web.action.auth;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.Cookie;
 
+import lombok.extern.java.Log;
+
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.auth.SubEthaPrincipal;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
@@ -40,11 +41,9 @@ import org.subethamail.web.security.SubEthaLogin;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 abstract public class AuthAction extends SubEthaAction 
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(AuthAction.class);
-	
 	/** Name of autologin cookie */
 	protected static final String AUTO_LOGIN_COOKIE_KEY = "subetha.auth";
 	
@@ -62,8 +61,7 @@ abstract public class AuthAction extends SubEthaAction
 		
 		rl.logout(this.getCtx().getRequest());
 		
-		if (log.isDebugEnabled())
-			log.debug("Successful authentication for:  " + who);
+		log.log(Level.FINE,"Successful authentication for:  {0}", who);
 		
 		if (!rl.login(who, password, this.getCtx().getRequest()))
 			throw new FailedLoginException("Bad username or password");
@@ -176,8 +174,7 @@ abstract public class AuthAction extends SubEthaAction
 		}
 		catch (Exception ex)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Error decrypting autologin cookie:  " + ex);
+		    log.log(Level.FINE,"Error decrypting autologin cookie:  ", ex);
 
 			// Delete the damn thing
 			this.stopAutoLogin();

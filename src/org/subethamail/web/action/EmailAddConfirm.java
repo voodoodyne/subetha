@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.hibernate.validator.constraints.Length;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.AuthCredentials;
 import org.subethamail.core.acct.i.BadTokenException;
 import org.subethamail.web.Backend;
@@ -24,10 +22,6 @@ import org.subethamail.web.model.ErrorMapModel;
  */
 public class EmailAddConfirm extends AuthAction 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(EmailAddConfirm.class);
-	
 	public static class Model extends ErrorMapModel
 	{
 		/** */

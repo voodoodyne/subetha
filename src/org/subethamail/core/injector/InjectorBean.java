@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -28,8 +29,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
@@ -69,11 +70,9 @@ import com.caucho.remote.HessianService;
 @RolesAllowed(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @HessianService(urlPattern="/api/Injector")
+@Log
 public class InjectorBean implements Injector
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(InjectorBean.class);
-
 	/**
 	 * We bounce injected messages larger than this amount, in bytes.
 	 * Must be hardcoded because JavaMail creates a byte[] representation,
@@ -131,8 +130,7 @@ public class InjectorBean implements Injector
 	 */
 	public boolean accept(String toAddress)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Checking if we want address " + toAddress);
+	    log.log(Level.FINE,"Checking if we want address {0}", toAddress);
 		
 		toAddress = EmailUtils.normalizeEmail(toAddress);
 		
@@ -180,7 +178,7 @@ public class InjectorBean implements Injector
 	 */
 	public boolean inject(String envelopeSender, String envelopeRecipient, InputStream mailData) throws LimitExceededException
 	{
-		if (log.isDebugEnabled())
+		if (log.isLoggable(Level.FINE))
 		{
 			if (!mailData.markSupported())
 				mailData = new BufferedInputStream(mailData);
@@ -195,7 +193,7 @@ public class InjectorBean implements Injector
 		catch (LimitExceededException ex) { throw ex; }
 		catch (Exception ex)
 		{
-			if (log.isDebugEnabled())
+		    if (log.isLoggable(Level.FINE))
 			{
 				try
 				{
@@ -205,7 +203,7 @@ public class InjectorBean implements Injector
 					while (reader.ready())
 						builder.append((char)reader.read());
 
-					log.debug("Mail body was: " + builder);
+					log.log(Level.FINE,"Mail body was: {0}", builder);
 				}
 				catch (IOException e) {}
 			}
@@ -223,8 +221,7 @@ public class InjectorBean implements Injector
 	@SuppressWarnings("unchecked")
 	protected boolean injectImpl(String envelopeSender, String envelopeRecipient, InputStream mailData) throws MessagingException, LimitExceededException, IOException
 	{
-		if (log.isInfoEnabled())
-			log.info("Injecting mail from '" + envelopeSender + "' to '" + envelopeRecipient + "'");
+	    log.log(Level.INFO,"Injecting mail from ''{0}'' to ''{1}''", new Object[]{envelopeSender, envelopeRecipient});
 		
 		envelopeSender = EmailUtils.normalizeEmail(envelopeSender);
 		envelopeRecipient = EmailUtils.normalizeEmail(envelopeRecipient);
@@ -234,7 +231,7 @@ public class InjectorBean implements Injector
 		String listForSender = OwnerAddress.getList(envelopeSender);
 		if (listForSender != null && listForSender.equals(envelopeRecipient))
 		{
-			log.info("Rejecting spam from bogus sender " + envelopeSender);
+		    log.log(Level.INFO,"Rejecting spam from bogus sender {0}", envelopeSender);
 			return false;
 		}
 		
@@ -261,12 +258,11 @@ public class InjectorBean implements Injector
 		}
 		catch (NotFoundException ex)
 		{
-			log.error("Unknown destination: " + recipientAddy);
+		    log.log(Level.SEVERE,"Unknown destination: {0}", recipientAddy);
 			return false;
 		}
 
-		if (log.isDebugEnabled())
-			log.debug("Message is for list: " + toList);
+		log.log(Level.FINE,"Message is for list: {0}", toList);
 		
 		// Parse up the message
 		mailData = new LimitingInputStream(mailData, MAX_MESSAGE_BYTES);
@@ -300,16 +296,14 @@ public class InjectorBean implements Injector
 		}
 		catch (IgnoreException ex)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Plugin ignoring message", ex);
+		    log.log(Level.FINE,"Plugin ignoring message", ex);
 
 			// Maybe we should return false instead?
 			return true;
 		}
 		catch (HoldException ex)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Plugin holding message", ex);
+		    log.log(Level.FINE,"Plugin holding message", ex);
 
 			hold = HoldType.HARD;
 			holdMsg = ex.getMessage();
@@ -319,8 +313,7 @@ public class InjectorBean implements Injector
 		if (hold == null)
 			hold = this.holdOrNot(msg, envelopeSender, toList);
 
-		if (log.isDebugEnabled())
-			log.debug("Hold?  " + hold);
+		log.log(Level.FINE,"Hold?  {0}", hold);
 
 		Mail mail = new Mail(envelopeSender, msg, toList, hold);
 		this.em.persist(mail);
@@ -440,8 +433,7 @@ public class InjectorBean implements Injector
 				author = addy.getPerson();
 		}
 
-		if (log.isDebugEnabled())
-			log.debug("Checking hold status for " + author + " to list " + toList.getName());
+		log.log(Level.FINE,"Checking hold status for {0} to list {1}", new Object[]{author, toList.getName()});
 
 		if (toList.getPermissionsFor(author).contains(Permission.POST))
 		{
@@ -465,8 +457,7 @@ public class InjectorBean implements Injector
 	 */
 	public Date importMessage(Long listId, String envelopeSender, InputStream mailData, boolean ignoreDuplicate, Date fallbackDate) throws NotFoundException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Importing message from " + envelopeSender + " into list " + listId);
+	    log.log(Level.FINE,"Importing message from {0} into list {1}", new Object[]{envelopeSender, listId});
 
 		try
 		{
@@ -497,15 +488,13 @@ public class InjectorBean implements Injector
 			}
 			catch (IgnoreException ex)
 			{
-				if (log.isDebugEnabled())
-					log.debug("Plugin ignoring message", ex);
+			    log.log(Level.FINE,"Plugin ignoring message", ex);
 
 				return msg.getSentDate();
 			}
 			catch (HoldException ex)
 			{
-				if (log.isDebugEnabled())
-					log.debug("Plugin holding message", ex);
+			    log.log(Level.FINE,"Plugin holding message", ex);
 
 				hold = HoldType.HARD;
 			}
@@ -585,8 +574,7 @@ public class InjectorBean implements Injector
 	 */
 	protected void handleBounce(VERPAddress verp)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Handling bounce from list " + verp.getEmail());
+	    log.log(Level.FINE,"Handling bounce from list {0}", verp.getEmail());
 		
 		// Disable bounce processing for now.  Something is broken and it keeps disabling delivery.  Possibly
 		// it is spammers hitting old addresses.
@@ -597,8 +585,7 @@ public class InjectorBean implements Injector
 		{
 			String originalEmail = this.encryptor.decryptString(verp.getToken(), MAX_BOUNCE_AGE_MILLIS);
 
-			if (log.isDebugEnabled())
-				log.debug("Bounced from " + originalEmail);
+			log.log(Level.FINE,"Bounced from {0}", originalEmail);
 
 			EmailAddress found = this.em.getEmailAddress(originalEmail);
 
@@ -613,8 +600,8 @@ public class InjectorBean implements Injector
 					{
 						sub.setDeliverTo(null);
 
-						if (log.isWarnEnabled())
-							log.warn("Stopping delivery of " + sub.getList().getName() + " to " + found.getId() + " due to excessive bounces");
+						if (log.isLoggable(Level.WARNING))
+						    log.log(Level.WARNING,"Stopping delivery of {0} to {1} due to excessive bounces", new Object[]{sub.getList().getName(), found.getId()});
 					}
 				}
 
@@ -625,17 +612,17 @@ public class InjectorBean implements Injector
 		catch (NotFoundException ex)
 		{
 			// User already unsubscribed the address, great
-			log.debug("Address already removed");
+		    log.log(Level.FINE,"Address already removed");
 		}
 		catch (ExpiredException ex)
 		{
 			// Token is too old, ignore it
-			log.debug("Token is too old");
+		    log.log(Level.FINE,"Token is too old");
 		}
 		catch (GeneralSecurityException ex)
 		{
 			// Problem decoding the token?  Someone's messing with us.
-			log.debug("Token is invalid");
+		    log.log(Level.FINE,"Token is invalid");
 		}
 	}
 
@@ -647,8 +634,7 @@ public class InjectorBean implements Injector
 	 */
 	protected void threadMail(Mail mail, SubEthaMessage msg) throws MessagingException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Threading mail " + mail);
+	    log.log(Level.FINE,"Threading mail {0}", mail);
 
 		//
 		// STEP ONE:  Figure who we want to be our parent.
@@ -673,8 +659,7 @@ public class InjectorBean implements Injector
 			}
 		}
 
-		if (log.isDebugEnabled())
-			log.debug("Wanted references is " + wantedReference);
+		log.log(Level.FINE,"Wanted references is {0}", wantedReference);
 
 		//
 		// STEP TWO:  Find an acceptable candidate to be our thread parent,
@@ -690,8 +675,8 @@ public class InjectorBean implements Injector
 			{
 				parent = this.em.getMailByMessageId(mail.getList().getId(), candidate);
 
-				if (log.isDebugEnabled())
-					log.debug("Found parent at choice " + i + ", max " + (wantedReference.size()-1));
+				if (log.isLoggable(Level.FINE))
+				    log.log(Level.FINE,"Found parent at choice " + i + ", max " + (wantedReference.size()-1));
 
 				// Got one, eliminate anything from wantedReference that is at this
 				// level or later.  Do it from the end to make ArrayList happy.
@@ -721,15 +706,13 @@ public class InjectorBean implements Injector
 
 				parent = foundMail;
 
-				if (log.isDebugEnabled())
-					log.debug("Found parent using subject match");
+				log.log(Level.FINE,"Found parent using subject match");
 
 				break;
 			}
 		}
 
-		if (log.isDebugEnabled())
-			log.debug("Best thread ancestor found is " + parent);
+		log.log(Level.FINE,"Best thread ancestor found is {0}", parent);
 
 		// Intermission - we can now set the mail's parent and wantedReference
 		if (parent != null)
@@ -747,8 +730,7 @@ public class InjectorBean implements Injector
 		List<Mail> descendants = this.em.findMailWantingParent(mail.getList().getId(), mail.getMessageId());
 		outer: for (Mail descendant: descendants)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Replacing parent of " + descendant);
+		    log.log(Level.FINE,"Replacing parent of {0}", descendant);
 
 			// Check for a loop
 			Mail checkForLoop = descendant;
@@ -756,8 +738,7 @@ public class InjectorBean implements Injector
 			{
 				if (checkForLoop == mail)
 				{
-					if (log.isWarnEnabled())
-						log.warn("Found a mail loop, parent=" + mail + ", child=" + descendant);
+				    log.log(Level.WARNING,"Found a mail loop, parent={0}, child={1}", new Object[]{mail, descendant});
 
 					// Ignore this link and remove the wanted rerference
 					descendant.getWantedReference().remove(mail.getMessageId());

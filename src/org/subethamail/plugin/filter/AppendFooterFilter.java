@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.inject.Singleton;
 import javax.mail.MessagingException;
@@ -16,8 +17,8 @@ import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.IgnoreException;
@@ -33,11 +34,9 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Scott Hernandez
  */
 @Singleton
+@Log
 public class AppendFooterFilter extends GenericFilter
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(AppendFooterFilter.class);
-	
 	private static final String ARG_FOOTER = "Footer";
 	
 	private static final String ARCHIVE_MESSAGE_URL = "archiveUrl";
@@ -99,8 +98,7 @@ public class AppendFooterFilter extends GenericFilter
 	@Override
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException
 	{
-		if (log.isDebugEnabled())
-			log.debug("AppendFooterFilter: onSend()");
+	    log.log(Level.FINE,"AppendFooterFilter: onSend()");
 		
 		try
 		{
@@ -151,8 +149,7 @@ public class AppendFooterFilter extends GenericFilter
 			}
 			else
 			{
-				if (log.isDebugEnabled())
-					log.debug("Can't append a footer for type " + contentType);
+			    log.log(Level.FINE,"Can''t append a footer for type {0}", contentType);
 			}
 		}
 		catch (IOException ex)

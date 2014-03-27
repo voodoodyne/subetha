@@ -15,8 +15,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import org.hibernate.validator.constraints.Length;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.admin.i.DuplicateListDataException;
 import org.subethamail.core.admin.i.InvalidListDataException;
 import org.subethamail.entity.i.Validator;
@@ -31,10 +29,6 @@ import org.subethamail.web.model.ErrorMapModel;
  */
 public class CreateList extends AuthRequired 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(CreateList.class);
-
 	//disabled till tagonist is inject aware, and all our actions work (not ambiguous) .
 	//@Inject
 	//SiteUtils siteUtils = InjectManager.create();

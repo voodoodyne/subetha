@@ -7,6 +7,7 @@ package org.subethamail.core.smtp;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -14,8 +15,8 @@ import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.core.injector.i.Injector;
 import org.subethamail.smtp.server.SMTPServer;
 
@@ -37,11 +38,9 @@ import org.subethamail.smtp.server.SMTPServer;
  */
 @Startup
 @ApplicationScoped
+@Log
 public class SMTPService
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(SMTPService.class);
-	
 	/** */
 	public static final int DEFAULT_PORT = 2500;
 
@@ -77,7 +76,7 @@ public class SMTPService
 		if (this.smtpServer != null)
 			throw new IllegalStateException("SMTPServer already running");
 		
-		log.info("Starting SMTP service: " + (this.bindAddress==null ? "*" : this.bindAddress) + ":" + this.port);
+		log.log(Level.INFO,"Starting SMTP service: {0}:{1}", new Object[]{(this.bindAddress==null ? "*" : this.bindAddress), this.port});
 		
 		this.smtpServer = new SMTPServer(new SMTPHandler(this));
 		this.smtpServer.setHideTLS(true);

@@ -7,6 +7,7 @@ package org.subethamail.entity;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.logging.Level;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,11 +23,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import lombok.extern.java.Log;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Length;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.Validator;
 
@@ -38,12 +39,10 @@ import org.subethamail.entity.i.Validator;
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Log
 public class Role implements Serializable, Comparable<Role>
 {
 	private static final long serialVersionUID = 1L;
-
-	/** */
-	@Transient private final static Logger log = LoggerFactory.getLogger(Role.class);
 
 	/** */
 	@Transient public static final String OWNER_NAME = "Owner";
@@ -94,8 +93,7 @@ public class Role implements Serializable, Comparable<Role>
 	 */
 	public Role(MailingList list)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Creating new owner Role");
+	    log.log(Level.FINE,"Creating new owner Role");
 
 		this.list = list;
 		this.setName(OWNER_NAME);
@@ -106,8 +104,7 @@ public class Role implements Serializable, Comparable<Role>
 	 */
 	public Role(MailingList list, String name, Set<Permission> permissions)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Creating new Role");
+	    log.log(Level.FINE,"Creating new Role");
 
 		this.list = list;
 		this.setName(name);
@@ -128,8 +125,7 @@ public class Role implements Serializable, Comparable<Role>
 	 */
 	public void setName(String value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting name of " + this + " to " + value);
+	    log.log(Level.FINE,"Setting name of {0} to {1}", new Object[]{this, value});
 
 		this.name = value;
 	}

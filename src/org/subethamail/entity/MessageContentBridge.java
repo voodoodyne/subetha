@@ -4,12 +4,13 @@
 package org.subethamail.entity;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.mail.MessagingException;
 
+import lombok.extern.java.Log;
+
 import org.hibernate.search.bridge.StringBridge;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.util.Producers;
 
@@ -19,11 +20,9 @@ import org.subethamail.core.util.Producers;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class MessageContentBridge implements StringBridge
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(MessageContentBridge.class);
-
 	@Override
 	public String objectToString(Object arg0)
 	{
@@ -36,11 +35,11 @@ public class MessageContentBridge implements StringBridge
 		}
 		catch (MessagingException ex)
 		{
-			log.error("Exception indexing content", ex);
+		    log.log(Level.SEVERE,"Exception indexing content", ex);
 		}
 		catch (IOException ex)
 		{
-			log.error("Exception indexing content", ex);
+		    log.log(Level.SEVERE,"Exception indexing content", ex);
 		}
 		
 		return null;

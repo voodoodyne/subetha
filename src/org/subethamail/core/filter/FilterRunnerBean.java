@@ -5,14 +5,17 @@
 
 package org.subethamail.core.filter;
 
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.ArchiveRenderFilterContext;
 import org.subethamail.core.plugin.i.Filter;
@@ -30,11 +33,9 @@ import org.subethamail.entity.MailingList;
  * @author Scott Hernandez
  */
 @ApplicationScoped
+@Log
 public class FilterRunnerBean implements FilterRunner, FilterRegistry
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(FilterRunnerBean.class);
-
 	/** */
 	@Inject @Any Instance<Filter> filters;
 
@@ -49,8 +50,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	@Override
 	public void onInject(SubEthaMessage msg, MailingList list) throws IgnoreException, HoldException, MessagingException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Running onInject filters for list '" + list.getName() + "' on message: " + msg.getSubject());
+	    log.log(Level.FINE,"Running onInject filters for list ''{0}'' on message: {1}", new Object[]{list.getName(), msg.getSubject()});
 
 		HoldException holdException = null;
 		
@@ -63,8 +63,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 				
 				try
 				{
-					if (log.isDebugEnabled())
-						log.debug("Running filter " + filter);
+				    log.log(Level.FINE,"Running filter {0}");
 					
 					filter.onInject(msg, ctx);
 				}
@@ -86,8 +85,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	{
 		MailingList list = mail.getList();
 		
-		if (log.isDebugEnabled())
-			log.debug("Running onSend filters for list '" + list.getName() + "' on message: " + msg.getSubject());
+		log.log(Level.FINE,"Running onSend filters for list ''{0}'' on message: {1}", new Object[]{list.getName(), msg.getSubject()});
 
 		for (EnabledFilter enabled: list.getEnabledFilters().values())
 		{
@@ -96,8 +94,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 			{
 				SendFilterContext ctx = new SendFilterContextImpl(enabled, filter, msg, mail);
 				
-				if (log.isDebugEnabled())
-					log.debug("Running filter " + filter);
+				log.log(Level.FINE,"Running filter {0}", filter);
 				
 				filter.onSend(msg, ctx);
 			}
@@ -109,8 +106,7 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 	{
 		MailingList list = mail.getList();
 		
-		if (log.isDebugEnabled())
-			log.debug("Running onArchiveRender filters for list '" + list.getName() + "' on message: " + msg.getSubject());
+		log.log(Level.FINE,"Running onArchiveRender filters for list ''{0}'' on message: {1}", new Object[]{list.getName(), msg.getSubject()});
 
 		for (EnabledFilter enabled: list.getEnabledFilters().values())
 		{
@@ -121,15 +117,14 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 				{
 					ArchiveRenderFilterContext ctx = new ArchiveRenderFilterContextImpl(enabled, filter, msg, mail);
 					
-					if (log.isDebugEnabled())
-						log.debug("Running filter " + filter);
+					log.log(Level.FINE,"Running filter {0}", filter);
 					
 					filter.onArchiveRender(msg, ctx);
 				}
 			} 
 			catch (Exception e) 
 			{
-				log.error("Error in filter OnArchiveRender", e);
+			    log.log(Level.SEVERE,"Error in filter OnArchiveRender", e);
 			}
 		}
 	}
@@ -145,9 +140,10 @@ public class FilterRunnerBean implements FilterRunner, FilterRegistry
 		}
 		catch (Exception ex)
 		{
-			if (log.isErrorEnabled())
-				log.error("Problem with filter '" + enabled.getClassName() + 
-					"' on list '" + enabled.getList().getEmail() + "'", ex);
+			LogRecord logRecord=new LogRecord(Level.SEVERE, "Problem with filter ''{0}'' on list ''{1}''");
+			logRecord.setParameters(new Object[]{enabled.getClassName(), enabled.getList().getEmail()});
+			logRecord.setThrown(ex);
+			log.log(logRecord);
 			
 			return null;
 		}

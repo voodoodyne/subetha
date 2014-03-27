@@ -5,12 +5,13 @@
 
 package org.subethamail.web.action;
 
+import java.util.logging.Level;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
 import org.hibernate.validator.constraints.Email;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
@@ -22,11 +23,9 @@ import org.subethamail.web.model.ErrorMapModel;
  * @author Jon Stevens
  * @author Jeff Schnitzer
  */
+@Log
 public class AdminAdd extends AuthRequired
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(AdminAdd.class);
-
 	public class Model extends ErrorMapModel
 	{
 		@Getter @Setter
@@ -46,8 +45,8 @@ public class AdminAdd extends AuthRequired
 	{
 		Model model = (Model)this.getCtx().getModel();
 
-		if (log.isDebugEnabled())
-			log.debug("Adding site admin: " + model.email);
+		if (log.isLoggable(Level.FINE))
+		    log.log(Level.FINE,"Adding site admin: {0}", model.email);
 
 		model.validate();
 

@@ -40,6 +40,7 @@ public class VelocityService
 			Velocity.setProperty("output.encoding", "UTF-8");
 			// Very busy servers should increase this value. Default: 20
 			// Velocity.setProperty("velocity.pool.size", "20");
+			Velocity.setProperty("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.JdkLogChute");
 			Velocity.init();
 			log.log(Level.FINE,"Velocity initialized!");
 		}

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
@@ -18,6 +19,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.mail.internet.InternetAddress;
+
+import lombok.extern.java.Log;
 
 import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
@@ -28,8 +31,6 @@ import org.hibernate.Transaction;
 import org.hibernate.ejb.EntityManagerImpl;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.acct.i.AuthSubscribeResult;
 import org.subethamail.core.acct.i.PersonData;
@@ -68,11 +69,9 @@ import com.caucho.remote.HessianService;
 @RolesAllowed(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @HessianService(urlPattern="/api/Admin")
+@Log
 public class AdminBean extends PersonalBean implements Admin
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(AdminBean.class);
-
 	/**
 	 * The set of characters from which randomly generated
 	 * passwords will be obtained.
@@ -110,8 +109,7 @@ public class AdminBean extends PersonalBean implements Admin
 	 */
 	public void log(String msg)
 	{
-		if (log.isInfoEnabled())
-			log.info("CLIENT:  " + msg);
+	    log.log(Level.INFO,"CLIENT:  {0}", msg);
 	}
 
 	/* (non-Javadoc)
@@ -411,8 +409,7 @@ public class AdminBean extends PersonalBean implements Admin
 		Person from = this.em.get(Person.class, fromPersonId);
 		Person to = this.em.get(Person.class, toPersonId);
 
-		if (log.isDebugEnabled())
-			log.debug("Merging " + from + " into " + to);
+		log.log(Level.FINE,"Merging {0} into {1}", new Object[]{from, to});
 
 		// First of all watch out for permission upgrade
 		if (from.isSiteAdmin())
@@ -421,8 +418,7 @@ public class AdminBean extends PersonalBean implements Admin
 		// Move email addresses
 		for (EmailAddress addy: from.getEmailAddresses().values())
 		{
-			if (log.isDebugEnabled())
-				log.debug(" merging " + addy);
+		    log.log(Level.FINE," merging {0}", addy);
 
 			addy.setPerson(to);
 			to.addEmailAddress(addy);
@@ -437,8 +433,7 @@ public class AdminBean extends PersonalBean implements Admin
 			Subscription toSub = to.getSubscriptions().get(sub.getList().getId());
 			if (toSub != null)
 			{
-				if (log.isDebugEnabled())
-					log.debug(" abandoning duplicate " + sub);
+			    log.log(Level.FINE," abandoning duplicate {0}", sub);
 
 				// Special case - if the other was an owner role, upgrade this one too
 				if (sub.getRole().isOwner())
@@ -448,8 +443,7 @@ public class AdminBean extends PersonalBean implements Admin
 			}
 			else
 			{
-				if (log.isDebugEnabled())
-					log.debug(" merging " + sub);
+			    log.log(Level.FINE," merging {0}", sub);
 
 				sub.setPerson(to);
 				to.addSubscription(sub);
@@ -464,15 +458,13 @@ public class AdminBean extends PersonalBean implements Admin
 			Long listId = hold.getList().getId();
 			if (to.getSubscriptions().containsKey(listId) || to.getHeldSubscriptions().containsKey(listId))
 			{
-				if (log.isDebugEnabled())
-					log.debug(" abandoning obsolete or duplicate " + hold);
+			    log.log(Level.FINE," abandoning obsolete or duplicate {0}", hold);
 
 				this.em.remove(hold);
 			}
 			else
 			{
-				if (log.isDebugEnabled())
-					log.debug(" merging " + hold);
+			    log.log(Level.FINE," merging {0}", hold);
 
 				hold.setPerson(to);
 				to.addHeldSubscription(hold);
@@ -494,8 +486,7 @@ public class AdminBean extends PersonalBean implements Admin
 		}
 
 		// Nuke the old person object
-		if (log.isDebugEnabled())
-			log.debug(" deleting person " + from);
+		log.log(Level.FINE," deleting person {0}", from);
 
 		this.em.remove(from);
 	}

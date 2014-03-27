@@ -7,6 +7,7 @@ package org.subethamail.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.logging.Level;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -14,10 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
 
 /**
  * Base class for Subscription and SubscriptionHold 
@@ -25,13 +24,11 @@ import org.slf4j.LoggerFactory;
  * @author Jeff Schnitzer
  */
 @MappedSuperclass
+@Log
 public class SubscriptionBase implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	/** */
-	@Transient private final static Logger log = LoggerFactory.getLogger(SubscriptionBase.class);
-	
 	/** */
 	@Id
 	@GeneratedValue
@@ -97,8 +94,7 @@ public class SubscriptionBase implements Serializable
 	
 	public void setDeliverTo(EmailAddress value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting deliverTo to " + value);
+	    log.log(Level.FINE,"Setting deliverTo to {0}", value);
 		
 		if (value != null && !this.person.getEmailAddresses().containsKey(value.getId()))
 			throw new IllegalArgumentException("Email address does not belong to the correct user");

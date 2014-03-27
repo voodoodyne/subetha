@@ -7,14 +7,15 @@ package org.subethamail.plugin.filter;
 
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.logging.Level;
 
 import javax.inject.Singleton;
 import javax.mail.Header;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.FilterContext;
 import org.subethamail.core.plugin.i.FilterParameter;
@@ -33,11 +34,9 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Scott Hernandez
  */
 @Singleton
+@Log
 public class StripAttachmentsFilter extends GenericFilter
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(StripAttachmentsFilter.class);
-	
 	public static final String ARG_MAXSIZEINKB = "Threshold in KB";
 
 	public static final String ARG_MSG = "Replace Message";
@@ -117,8 +116,8 @@ public class StripAttachmentsFilter extends GenericFilter
 				// Hopefully this means it is some sort of binary time
 				if (p.getSize() > (maxKB * 1024)) 
 				{
-					if (log.isDebugEnabled())
-						log.debug("Stripping attachement of type: " + p.getContentType());		
+				    if (log.isLoggable(Level.FINE))
+				        log.log(Level.FINE,"Stripping attachement of type: {0}", p.getContentType());		
 
 					//remove all headers
 					for (Enumeration<Header> e = p.getAllHeaders(); e.hasMoreElements();)

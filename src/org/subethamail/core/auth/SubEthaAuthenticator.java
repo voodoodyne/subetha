@@ -6,6 +6,7 @@
 package org.subethamail.core.auth;
 
 import java.security.Principal;
+import java.util.logging.Level;
 
 import javax.ejb.Startup;
 import javax.ejb.TransactionAttribute;
@@ -13,8 +14,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.EmailAddress;
@@ -34,11 +35,9 @@ import com.caucho.security.PasswordCredentials;
  */
 @Startup
 @Singleton
+@Log
 public class SubEthaAuthenticator implements Authenticator
 {
-	/** */
-	private static Logger log = LoggerFactory.getLogger(SubEthaAuthenticator.class);
-
 	/** */
 	@Inject @SubEtha SubEthaEntityManager em;
 	
@@ -48,15 +47,14 @@ public class SubEthaAuthenticator implements Authenticator
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Principal authenticate(Principal prince, Credentials credentials, Object detail)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Authenticating " + prince);
+	    log.log(Level.FINE,"Authenticating {0}", prince);
 			
 		String email = prince.getName();
 
 		EmailAddress ea = this.em.findEmailAddress(email);
 		if (ea == null)
 		{
-			log.debug("Email address not found: " + email);
+		    log.log(Level.FINE,"Email address not found: {0}", email);
 			return null;
 		}
 
@@ -66,8 +64,7 @@ public class SubEthaAuthenticator implements Authenticator
 		Person p = ea.getPerson();
 		if (!p.checkPassword(credPassword.toString()))
 		{
-			if (log.isDebugEnabled())
-				log.debug("Wrong password: " + credPassword);
+		    log.log(Level.FINE,"Wrong password: {0}", credPassword);
 			
 			return null;
 		}
@@ -85,8 +82,7 @@ public class SubEthaAuthenticator implements Authenticator
 		
 		boolean hasRole = p.getRoles().contains(role);
 		
-		if (log.isTraceEnabled())
-			log.trace("Checking " + p.getEmail() + " for role " + role + (hasRole ? " (yes)" : " (no)"));
+		log.log(Level.FINER,"Checking {0} for role {1} {2}", new Object[]{p.getEmail(),role,(hasRole ? "(yes)" : "(no)")});
 		
 		return hasRole;
 	}

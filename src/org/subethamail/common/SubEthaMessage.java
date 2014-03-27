@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
 
 import javax.mail.Address;
 import javax.mail.MessagingException;
@@ -19,8 +20,7 @@ import javax.mail.Part;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
 
 import com.sun.mail.smtp.SMTPMessage;
 
@@ -35,11 +35,9 @@ import com.sun.mail.smtp.SMTPMessage;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class SubEthaMessage extends SMTPMessage
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(SubEthaMessage.class);
-	
 	/** */
 	public static final String HDR_MESSAGE_ID = "Message-ID";
 	public static final String HDR_IN_REPLY_TO = "In-Reply-To";
@@ -119,7 +117,7 @@ public class SubEthaMessage extends SMTPMessage
 			return null;
 		
 		if (values.length > 1)
-			log.error("Found a message with " + values.length + " In-Reply-To fields");
+		    log.log(Level.SEVERE,"Found a message with {0} In-Reply-To fields", values.length);
 
 		for (String field: values)
 		{
@@ -148,7 +146,7 @@ public class SubEthaMessage extends SMTPMessage
 			return null;
 		
 		if (values.length > 1)
-			log.error("Found a message with " + values.length + " References fields");
+		    log.log(Level.SEVERE,"Found a message with {0} References fields", values.length);
 
 		StringTokenizer tokenizer = new StringTokenizer(values[0]);
 		

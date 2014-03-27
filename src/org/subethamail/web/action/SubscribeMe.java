@@ -7,9 +7,8 @@ package org.subethamail.web.action;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.SubscribeResult;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
@@ -21,12 +20,9 @@ import org.subethamail.web.action.auth.AuthRequired;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class SubscribeMe extends AuthRequired 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(SubscribeMe.class);
-	
 	/** */
 	@Getter @Setter Long listId;
 	@Getter @Setter String deliverTo = "";

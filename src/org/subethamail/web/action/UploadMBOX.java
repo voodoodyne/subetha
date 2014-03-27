@@ -6,15 +6,15 @@
 package org.subethamail.web.action;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
 import org.subethamail.web.model.ErrorMapModel;
@@ -25,11 +25,9 @@ import org.subethamail.web.util.FileUploadFilter;
  *
  * @author Scott Hernandez
  */
+@Log
 public class UploadMBOX extends AuthAction
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(UploadMBOX.class);
-
 	/** */
 	public static class Model extends ErrorMapModel
 	{
@@ -73,7 +71,7 @@ public class UploadMBOX extends AuthAction
 
 		if (files.isEmpty())
 		{
-			log.error("Upload succeeded but no files found.  Weird.");
+			log.log(Level.SEVERE,"Upload succeeded but no files found.  Weird.");
 			model.setError("files", "Upload failed");
 			return;
 		}

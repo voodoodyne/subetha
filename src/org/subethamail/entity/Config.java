@@ -6,18 +6,18 @@
 package org.subethamail.entity;
 
 import java.io.Serializable;
+import java.util.logging.Level;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Transient;
+
+import lombok.extern.java.Log;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Columns;
 import org.hibernate.annotations.Type;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Validator;
 
 // Moved this here from package-info.java to fix JDK5/6 incompatibility problem
@@ -36,12 +36,10 @@ import org.subethamail.entity.i.Validator;
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Log
 public class Config implements Serializable, Comparable<Config>
 {
 	private static final long serialVersionUID = 1L;
-
-	/** */
-	@Transient private final static Logger log = LoggerFactory.getLogger(Config.class);
 
 	/** */
 	@Id
@@ -64,8 +62,7 @@ public class Config implements Serializable, Comparable<Config>
 	 */
 	public Config(String id, Object value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Creating new Config: " + id);
+	    log.log(Level.FINE,"Creating new Config: {0}", id);
 
 		this.id = id;
 		this.value = value;

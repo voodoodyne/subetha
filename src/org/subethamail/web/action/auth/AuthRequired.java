@@ -5,8 +5,10 @@
 
 package org.subethamail.web.action.auth;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+
+import lombok.extern.java.Log;
+
 import org.tagonist.ForwardException;
 
 /**
@@ -20,11 +22,9 @@ import org.tagonist.ForwardException;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class AuthRequired extends AutoLogin 
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(AuthRequired.class);
-	
 	/** */
 	public static final String LOGIN_REQUIRED_PAGE = "/login_required.jsp";
 	public static final String LOGIN_REQUIRED_MODEL_ATTR = "loginModel";
@@ -52,8 +52,8 @@ public class AuthRequired extends AutoLogin
 			
 			model.dest = this.getUsefulRequestURI();
 			
-			if (log.isDebugEnabled())
-				log.debug("Destination will be: " + model.dest);
+			if (log.isLoggable(Level.FINE))
+			    log.log(Level.FINE,"Destination will be: {0}", model.dest);
 			
 			this.getCtx().getRequest().setAttribute(LOGIN_REQUIRED_MODEL_ATTR, model);
 			

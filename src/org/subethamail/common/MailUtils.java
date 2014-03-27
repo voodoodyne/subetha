@@ -16,9 +16,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 
 /**
@@ -29,10 +26,6 @@ import org.slf4j.LoggerFactory;
  */
 public class MailUtils
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(MailUtils.class);
-
 	/** Matches stuff like (without the quotes):  "Re[1][3]: Aw: Sv[3]:  " */
 	public static final Pattern SUBJECT_PATTERN = Pattern.compile("((RE|AW|SV)(\\[\\d+\\])*:\\s*)+", Pattern.CASE_INSENSITIVE);
 	

@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.smtp.MessageContext;
 import org.subethamail.smtp.MessageHandler;
 import org.subethamail.smtp.MessageHandlerFactory;
@@ -41,11 +43,9 @@ import org.subethamail.smtp.io.DeferredFileOutputStream;
  *
  * @author Jeff Schnitzer
  */
+@Log
 public class SMTPHandler implements MessageHandlerFactory
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(SMTPHandler.class);
-
 	/** Beyond this, we buffer to disk instead of memory.  10MB */
 	static final int DATA_DEFERRED_SIZE = 1024 * 1024 * 10;
 
@@ -160,7 +160,10 @@ public class SMTPHandler implements MessageHandlerFactory
 						}
 						catch (Exception ex)
 						{
-							log.error("Error delivering to " + deliv.toString(), ex);
+						    LogRecord logRecord=new LogRecord(Level.SEVERE, "Error delivering to {0}");
+						    logRecord.setThrown(ex);;
+						    logRecord.setParameters(new Object[]{deliv.toString()});
+                            log.log(logRecord);
 							lastProblem = ex;
 						}
 					}

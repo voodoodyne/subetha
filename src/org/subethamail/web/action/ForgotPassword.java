@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.hibernate.validator.constraints.Email;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -23,10 +21,6 @@ import org.subethamail.web.model.ErrorMapModel;
  */
 public class ForgotPassword extends AuthAction 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(ForgotPassword.class);
-	
 	/** */
 	public static class Model extends ErrorMapModel
 	{

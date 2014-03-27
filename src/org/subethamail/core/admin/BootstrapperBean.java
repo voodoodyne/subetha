@@ -6,6 +6,7 @@
 package org.subethamail.core.admin;
 
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Startup;
@@ -15,8 +16,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Admin;
 import org.subethamail.core.util.SubEtha;
@@ -42,11 +43,9 @@ import org.subethamail.entity.Config;
 @Startup
 @Singleton
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@Log
 public class BootstrapperBean
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(BootstrapperBean.class);
-	
 	/**
 	 */
 	private static final String DEFAULT_EMAIL = "root@localhost";
@@ -98,7 +97,7 @@ public class BootstrapperBean
 	 */
 	public void bootstrap()
 	{
-		log.debug("Bootstrapping - establishing default site administrator");
+	    log.log(Level.FINE,"Bootstrapping - establishing default site administrator");
 		this.bootstrapRoot();
 	}
 	
@@ -121,7 +120,7 @@ public class BootstrapperBean
 		}
 		catch (RuntimeException ex)
 		{
-			log.error("What is up with this error?", ex);
+		    log.log(Level.SEVERE,"What is up with this error?", ex);
 			throw ex;
 		}
 		
@@ -131,7 +130,7 @@ public class BootstrapperBean
 		}
 		catch (NotFoundException ex)
 		{
-			log.error("Impossible to establish person and then not find!", ex);
+		    log.log(Level.SEVERE,"Impossible to establish person and then not find!", ex);
 			throw new RuntimeException(ex);
 		}
 	}

@@ -5,8 +5,6 @@
 
 package org.subethamail.web.action.auth;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * If you instantiate an action of this type (or one derived from it) in a page,
@@ -20,10 +18,6 @@ import org.slf4j.LoggerFactory;
  */
 public class AutoLogin extends AuthAction 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(AutoLogin.class);
-	
 	/**
 	 * Derived actions should override this method to implement behavior.
 	 */

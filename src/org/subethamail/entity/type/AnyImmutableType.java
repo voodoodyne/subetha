@@ -18,8 +18,6 @@ import javax.mail.internet.InternetAddress;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.usertype.UserType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>Custom hibernate type that will store any java type that follows
@@ -53,10 +51,6 @@ import org.slf4j.LoggerFactory;
  */
 public class AnyImmutableType implements UserType
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(AnyImmutableType.class);
-
 	private static final int[] SQL_TYPES = new int[] {
 		Hibernate.STRING.sqlType(),
 		Hibernate.STRING.sqlType()

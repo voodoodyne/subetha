@@ -9,9 +9,6 @@ import javax.security.auth.login.LoginException;
 
 import lombok.Data;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Performs a login.  The model starts as (and remains)
  * a Login.Model.
@@ -20,10 +17,6 @@ import org.slf4j.LoggerFactory;
  */
 public class Login extends AuthAction 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(Login.class);
-	
 	/** */
 	@Data
 	public static class Model

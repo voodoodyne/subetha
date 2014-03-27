@@ -5,14 +5,16 @@
 
 package org.subethamail.core.admin;
 
+import java.util.logging.Level;
+
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.mail.Session;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.core.admin.i.Eegor;
 import org.subethamail.core.post.OutboundMTA;
 import org.subethamail.core.smtp.SMTPService;
@@ -28,11 +30,9 @@ import com.caucho.remote.HessianService;
 @Singleton
 @Named("eegor")
 @HessianService(urlPattern="/api/Eegor")
+@Log
 public class EegorBean implements Eegor
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(EegorBean.class);
-
 	/** */
 	@Inject @OutboundMTA Session mailSession;
 	
@@ -56,7 +56,7 @@ public class EegorBean implements Eegor
 	@RolesAllowed("siteAdmin")
 	public void enableTestMode(String mtaHost)
 	{
-		log.debug("#### Enabling test mode to " + mtaHost);
+	    log.log(Level.FINE,"#### Enabling test mode to {0}", mtaHost);
 		
 		if (!this.isTestModeEnabled())
 		{
@@ -83,7 +83,7 @@ public class EegorBean implements Eegor
 		//if (!this.isTestModeEnabled())
 		if (this.mailSmtpHost == null)
 		{
-			log.warn("Test mode already disabled");
+			log.warning("Test mode already disabled");
 		}
 		else
 		{

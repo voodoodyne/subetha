@@ -5,6 +5,9 @@
 
 package org.subethamail.core.queue;
 
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
@@ -13,8 +16,8 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.deliv.i.Deliverator;
 
@@ -24,11 +27,9 @@ import org.subethamail.core.deliv.i.Deliverator;
  */
 //@MessageDriven	// declared in resin-web.xml
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@Log
 public class DeliveryListener implements MessageListener
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(DeliveryListener.class);
-
 	/** */
 	@Inject Deliverator deliverator;
 
@@ -43,8 +44,7 @@ public class DeliveryListener implements MessageListener
 			Long mailId = item.getMailId();
 			Long personId = item.getPersonId();
 
-			if (log.isDebugEnabled())
-				log.debug("Delivering mailId:" + mailId + " to personId:" + personId);
+			log.log(Level.FINE,"Delivering mailId:{0} to personId:{1}", new Object[]{mailId, personId});
 			
 			try
 			{
@@ -52,16 +52,17 @@ public class DeliveryListener implements MessageListener
 			}
 			catch (NotFoundException ex)
 			{
-				// Just log a warning and accept the JMS message
+                // Just log a warning and accept the JMS message
 				// It possible the message/subscription has been deleted since we queued the orig request.
-				if (log.isWarnEnabled())
-					log.warn("Unknown mailId(" + mailId + ") or personId(" + personId + ")", ex);
+                LogRecord logRecord=new LogRecord(Level.WARNING, "Unknown mailId({0}) or personId({1})");
+                logRecord.setParameters(new Object[]{mailId, personId});
+                logRecord.setThrown(ex);
+				log.log(logRecord);
 			}
 		}
 		catch (JMSException ex)
 		{
-			if (log.isErrorEnabled())
-				log.error("Error getting data out of message.", ex);
+				log.log(Level.SEVERE,"Error getting data out of message.", ex);
 			
 			throw new RuntimeException(ex);
 		}

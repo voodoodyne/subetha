@@ -7,6 +7,7 @@ package org.subethamail.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.logging.Level;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,10 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import lombok.extern.java.Log;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Validator;
 
 /**
@@ -40,12 +41,10 @@ import org.subethamail.entity.i.Validator;
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Log
 public class EmailAddress implements Serializable, Comparable<EmailAddress>
 {
 	private static final long serialVersionUID = 1L;
-
-	/** */
-	@Transient private final static Logger log = LoggerFactory.getLogger(EmailAddress.class);
 
 	/**
 	 * We only increment or decrement once for this period, in millis.
@@ -84,8 +83,7 @@ public class EmailAddress implements Serializable, Comparable<EmailAddress>
 	 */
 	public EmailAddress(Person person, String email)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Creating new EmailAddress");
+	    log.log(Level.FINE,"Creating new EmailAddress");
 
 		this.setId(email);
 		this.setPerson(person);
@@ -102,8 +100,7 @@ public class EmailAddress implements Serializable, Comparable<EmailAddress>
 	{
 		value = Validator.normalizeEmail(value);
 
-		if (log.isDebugEnabled())
-			log.debug("Setting address to " + value);
+		log.log(Level.FINE,"Setting address to {0}", value);
 
 		this.id = value;
 	}

@@ -8,6 +8,7 @@ package org.subethamail.core.injector;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.util.logging.Level;
 
 import javax.activation.DataHandler;
 import javax.ejb.TransactionAttribute;
@@ -20,8 +21,8 @@ import javax.mail.Part;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimePart;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.TrivialDataSource;
@@ -36,10 +37,9 @@ import org.subethamail.entity.Mail;
  */
 @Dependent
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@Log
 public class DetacherBean implements Detacher
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(DetacherBean.class);
 	/** */
 	@Inject @SubEtha SubEthaEntityManager em;
 	
@@ -49,15 +49,13 @@ public class DetacherBean implements Detacher
 	 */
 	public void detach(MimePart part, Mail ownerMail) throws MessagingException, IOException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Attempting to detach " + part + " of type " + part.getContentType());
+	    log.log(Level.FINE,"Attempting to detach {0} of type {1}", new Object[]{part, part.getContentType()});
 
 		String contentType = part.getContentType().toLowerCase();
 		
 		if (contentType.startsWith("multipart/"))
 		{
-			if (log.isDebugEnabled())
-				log.debug("Content is multipart");
+		    log.log(Level.FINE,"Content is multipart");
 			
 			Multipart multi = (Multipart)part.getContent();
 			
@@ -69,8 +67,7 @@ public class DetacherBean implements Detacher
 		}
 		else if (contentType.startsWith("text/") && !Part.ATTACHMENT.equals(part.getDisposition()))
 		{
-			if (log.isDebugEnabled())
-				log.debug("Leaving text alone");
+		    log.log(Level.FINE,"Leaving text alone");
 		}
 		else
 		{
@@ -80,16 +77,14 @@ public class DetacherBean implements Detacher
 			
 			if (content instanceof MimePart)
 			{
-				if (log.isDebugEnabled())
-					log.debug("Content " + contentType + " is part, probably a message");
+			    log.log(Level.FINE,"Content {0} is part, probably a message", contentType);
 				
 				this.detach((MimePart)content, ownerMail);
 			}
 			else
 			{
 				// Actually detach the sucka
-				if (log.isDebugEnabled())
-					log.debug("Detaching an attachment of type " + contentType);
+			    log.log(Level.FINE,"Detaching an attachment of type {0}", contentType);
 				
 				InputStream input = part.getInputStream();
 				
@@ -112,15 +107,13 @@ public class DetacherBean implements Detacher
 	 */
 	public void attach(MimePart part) throws MessagingException, IOException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Attempting reattachment for " + part + " of type " + part.getContentType());
+	    log.log(Level.FINE,"Attempting reattachment for {0} of type {1}" + new Object[]{part, part.getContentType()});
 
 		String contentType = part.getContentType().toLowerCase();
 		
 		if (contentType.startsWith("multipart/"))
 		{
-			if (log.isDebugEnabled())
-				log.debug("Content is multipart");
+		    log.log(Level.FINE,"Content is multipart");
 			
 			Multipart multi = (Multipart)part.getContent();
 			
@@ -134,8 +127,7 @@ public class DetacherBean implements Detacher
 		{
 			Long attachmentId = (Long)part.getContent();
 
-			if (log.isDebugEnabled())
-				log.debug("Reattaching attachment " + attachmentId + " for type " + contentType);
+			log.log(Level.FINE,"Reattaching attachment {0} for type {1}", new Object[]{attachmentId, contentType});
 
 			try
 			{
@@ -152,8 +144,7 @@ public class DetacherBean implements Detacher
 			catch (NotFoundException ex)
 			{
 				// Log an error and otherwise leave the mime part as-is.
-				if (log.isErrorEnabled())
-					log.error("Missing referenced attachment " + attachmentId);
+			    log.log(Level.SEVERE,"Missing referenced attachment {0}", attachmentId);
 			}
 		}
 		else
@@ -162,15 +153,13 @@ public class DetacherBean implements Detacher
 			
 			if (content instanceof MimePart)
 			{
-				if (log.isDebugEnabled())
-					log.debug("Content " + contentType + " is part, probably a message");
+			    log.log(Level.FINE,"Content {0} is part, probably a message", contentType );
 				
 				this.attach((MimePart)content);
 			}
 			else
 			{
-				if (log.isDebugEnabled())
-					log.debug("Ignoring part of type " + contentType);
+			    log.log(Level.FINE,"Ignoring part of type {0}", contentType);
 			}
 		}
 	}

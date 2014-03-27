@@ -15,6 +15,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
@@ -27,9 +28,9 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import lombok.extern.java.Log;
+
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.core.admin.i.Encryptor;
 import org.subethamail.core.admin.i.ExpiredException;
@@ -49,11 +50,9 @@ import org.subethamail.entity.Config;
  */
 @Singleton
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@Log
 public class EncryptorBean implements Encryptor
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(EncryptorBean.class);
-	
 	/**
 	 * The name of the config value that holds the current encryption key.
 	 * The actual config value will be a base64-encoded string. 
@@ -83,8 +82,7 @@ public class EncryptorBean implements Encryptor
 	@PostConstruct
 	public void start() throws Exception
 	{
-		if (log.isDebugEnabled())
-			log.debug("Starting EncryptorBean, entitymanager is " + em);
+	    log.log(Level.FINE,"Starting EncryptorBean, entitymanager is {0}", em);
 		
 		// If we don't already have a key, generate one
 		try
@@ -99,7 +97,7 @@ public class EncryptorBean implements Encryptor
 		}
 		catch (NotFoundException ex)
 		{
-			if (log.isInfoEnabled()) log.info("Creating new cypher key for Encryptor, and storing it in the database");
+		    log.log(Level.INFO,"Creating new cypher key for Encryptor, and storing it in the database");
 			Config cfg = new Config(KEY_CONFIG_ID, this.generateKey());
 			this.em.persist(cfg);
 		}
@@ -131,8 +129,7 @@ public class EncryptorBean implements Encryptor
 	/* */
 	public byte[] encrypt(byte[] plainText)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Encrypting " + plainText.length + " bytes");
+	    log.log(Level.FINE,"Encrypting {0} bytes", plainText.length);
 		
 		try
 		{
@@ -158,8 +155,7 @@ public class EncryptorBean implements Encryptor
 			
 			byte[] plainText = aes.doFinal(cipherText);
 			
-			if (log.isDebugEnabled())
-				log.debug("Decrypted to: " + plainText.length + " bytes");
+			log.log(Level.FINE,"Decrypted to: {0} bytes", plainText.length);
 			
 			return plainText;
 		}
@@ -169,8 +165,7 @@ public class EncryptorBean implements Encryptor
 	/* */
 	public byte[] encryptString(String plainText)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Encrypting: " + plainText);
+	    log.log(Level.FINE,"Encrypting: {0}", plainText);
 		
 		ByteArrayOutputStream buf = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(buf);
@@ -218,8 +213,7 @@ public class EncryptorBean implements Encryptor
 	
 			String result = in.readUTF();
 			
-			if (log.isDebugEnabled())
-				log.debug("Decrypted to: " + result);
+			log.log(Level.FINE,"Decrypted to: {0}", result);
 			
 			return result;
 		}

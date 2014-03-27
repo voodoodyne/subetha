@@ -7,10 +7,9 @@ package org.subethamail.web.action;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
 import org.hibernate.validator.constraints.Length;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Validator;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -21,12 +20,9 @@ import org.subethamail.web.model.ErrorMapModel;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class SubscribeAnon extends AuthAction 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(SubscribeAnon.class);
-	
 	/** */
 	public static class Model extends ErrorMapModel
 	{

@@ -5,11 +5,12 @@
 
 package org.subethamail.web.action;
 
+import java.util.logging.Level;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthRequired;
 
@@ -19,19 +20,17 @@ import org.subethamail.web.action.auth.AuthRequired;
  * @author Jon Stevens
  * @author Jeff Schnitzer
  */
+@Log
 public class AdminRemove extends AuthRequired
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(AdminRemove.class);
-
 	@Getter @Setter Long id;
 
 	/** */
 	@Override
 	public void authExecute() throws Exception
 	{
-		if (log.isDebugEnabled())
-			log.debug("Removing site admin person id: " + this.id);
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Removing site admin person id: {0}", this.id);
 
 		Backend.instance().getAdmin().setSiteAdmin(this.id, false);
 	}

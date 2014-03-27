@@ -9,9 +9,8 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.MailSummary;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -22,12 +21,9 @@ import org.subethamail.web.model.PaginateModel;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class GetThreads extends AuthAction 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(GetThreads.class);
-
 	public static class Model extends PaginateModel
 	{
 		public Model()

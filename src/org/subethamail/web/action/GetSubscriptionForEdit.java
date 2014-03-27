@@ -5,8 +5,8 @@
 
 package org.subethamail.web.action;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -17,12 +17,9 @@ import org.subethamail.web.action.auth.AuthAction;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class GetSubscriptionForEdit extends AuthAction 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(GetMyListRelationship.class);
-
 	public void initialize()
 	{
 		this.getCtx().setModel(new SaveSubscription.Model());

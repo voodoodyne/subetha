@@ -8,6 +8,7 @@ package org.subethamail.entity;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,12 +19,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+
+import lombok.extern.java.Log;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.entity.i.Validator;
 
 /**
@@ -34,12 +34,10 @@ import org.subethamail.entity.i.Validator;
  */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Log
 public class EnabledFilter implements Serializable, Comparable<EnabledFilter>
 {
 	private static final long serialVersionUID = 1L;
-
-	/** */
-	@Transient private final static Logger log = LoggerFactory.getLogger(EnabledFilter.class);
 
 	/** */
 	@Id
@@ -69,8 +67,7 @@ public class EnabledFilter implements Serializable, Comparable<EnabledFilter>
 	 */
 	public EnabledFilter(MailingList list, String className)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Creating new EnabledFilter");
+	    log.log(Level.FINE,"Creating new EnabledFilter");
 
 		this.list = list;
 		this.className = className;

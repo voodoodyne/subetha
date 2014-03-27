@@ -5,13 +5,15 @@
 
 package org.subethamail.plugin.filter;
 
+import java.util.logging.Level;
+
 import javax.inject.Singleton;
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.plugin.i.FilterParameter;
 import org.subethamail.core.plugin.i.IgnoreException;
@@ -27,11 +29,9 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Scott Hernandez
  */
 @Singleton
+@Log
 public class ReplyToFilter extends GenericFilter
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(ReplyToFilter.class);
-	
 	public static final String ARG_MAILINGLIST = "MailingList";
 	public static final String ARG_EMAILADDRESS = "EmailAddress";
 	
@@ -83,7 +83,7 @@ public class ReplyToFilter extends GenericFilter
 	@Override
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException
 	{
-		log.debug("ReplyToFilter: onSend()");
+	    log.log(Level.FINE,"ReplyToFilter: onSend()");
 
 		InternetAddress addr = new InternetAddress();
 

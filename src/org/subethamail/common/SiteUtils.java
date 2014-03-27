@@ -10,9 +10,6 @@ import java.net.URL;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Provides Subetha Site related helper methods
  * 
@@ -21,11 +18,6 @@ import org.slf4j.LoggerFactory;
 @ApplicationScoped
 public class SiteUtils
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(SiteUtils.class);
-	
-
 	/** The context path */
 	private String contextPath;
 

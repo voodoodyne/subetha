@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Level;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,15 +30,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.QueryHint;
-import javax.persistence.Transient;
+
+import lombok.extern.java.Log;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.hibernate.validator.constraints.Email;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.util.ContextAware;
 import org.subethamail.entity.i.Permission;
 import org.subethamail.entity.i.PermissionException;
@@ -107,12 +107,10 @@ import org.subethamail.smtp.util.EmailUtils;
 })
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.TRANSACTIONAL)
+@Log
 public class MailingList implements Serializable, Comparable<MailingList>
 {
 	private static final long serialVersionUID = 1L;
-
-	/** */
-	@Transient private final static Logger log = LoggerFactory.getLogger(MailingList.class);
 
 	/**
 	 * TreeSet requires a weird comparator because it uses the comparator
@@ -214,8 +212,7 @@ public class MailingList implements Serializable, Comparable<MailingList>
 	 */
 	public MailingList(String email, String name, String url, String description)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Creating new mailing list");
+	    log.log(Level.FINE,"Creating new mailing list");
 
 		// These are validated normally.
 		this.setEmail(email);
@@ -253,8 +250,7 @@ public class MailingList implements Serializable, Comparable<MailingList>
 	 */
 	public void setEmail(String value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting email of " + this + " to " + value);
+	    log.log(Level.FINE,"Setting email of {0} to {1}", new Object[]{this, value});
 
 		value = EmailUtils.normalizeEmail(value);
 		
@@ -269,8 +265,7 @@ public class MailingList implements Serializable, Comparable<MailingList>
 	 */
 	public void setName(String value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting name of " + this + " to " + value);
+	    log.log(Level.FINE,"Setting name of {0} to {1}", new Object[]{this,value});
 
 		this.name = value;
 	}
@@ -289,8 +284,7 @@ public class MailingList implements Serializable, Comparable<MailingList>
 		try { new URL(value); }
 		catch (MalformedURLException e) { throw new IllegalArgumentException("Invalid url"); }
 		
-		if (log.isDebugEnabled())
-			log.debug("Setting url of " + this + " to " + value);
+		log.log(Level.FINE,"Setting url of {0} to {1}", new Object[]{this, value});
 
 		this.url = value;
 	}
@@ -303,8 +297,7 @@ public class MailingList implements Serializable, Comparable<MailingList>
 	 */
 	public void setDescription(String value)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting description of " + this + " to " + value);
+	    log.log(Level.FINE,"Setting description of {0} to {1}", new Object[]{this, value});
 
 		this.description = value;
 	}
@@ -316,8 +309,7 @@ public class MailingList implements Serializable, Comparable<MailingList>
 
 	public void setWelcomeMessage(String welcomeMessage)
 	{
-		if (log.isDebugEnabled())
-			log.debug("Setting welcomeMessage of " + this + " to " + welcomeMessage);
+	    log.log(Level.FINE,"Setting welcomeMessage of {0} to {1}", new Object[]{this,welcomeMessage});
 
 		this.welcomeMessage = welcomeMessage;
 	}

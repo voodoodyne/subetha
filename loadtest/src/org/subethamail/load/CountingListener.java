@@ -9,8 +9,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.smtp.TooMuchDataException;
 import org.subethamail.smtp.helper.SimpleMessageListener;
 
@@ -21,10 +19,6 @@ import org.subethamail.smtp.helper.SimpleMessageListener;
  */
 public class CountingListener implements SimpleMessageListener
 {
-	/** */
-	@SuppressWarnings("unused")
-	private static Logger log = LoggerFactory.getLogger(CountingListener.class);
-	
 	/** Number of messages received total */
 	int totalCount;
 	

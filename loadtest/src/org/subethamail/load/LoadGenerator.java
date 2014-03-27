@@ -7,22 +7,23 @@ package org.subethamail.load;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.core.admin.i.Eegor;
 
 import com.caucho.hessian.client.HessianProxyFactory;
@@ -32,11 +33,9 @@ import com.caucho.hessian.client.HessianProxyFactory;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class LoadGenerator extends Thread
 {
-	/** */
-	private static Logger log = LoggerFactory.getLogger(LoadGenerator.class);
-	
 	/** */
 	InternetAddress recipient;
 	Session mailSession;
@@ -101,7 +100,7 @@ public class LoadGenerator extends Thread
 			//catch (InterruptedException ex) { throw new RuntimeException(ex); }
 			catch (MessagingException ex)
 			{
-				log.debug("Exception sending mail", ex);
+			    log.log(Level.FINE,"Exception sending mail", ex);
 			}
 		}
 	}

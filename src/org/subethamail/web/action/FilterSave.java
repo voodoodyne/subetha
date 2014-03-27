@@ -12,8 +12,6 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.common.Converter;
 import org.subethamail.core.lists.i.EnabledFilterData;
 import org.subethamail.core.plugin.i.FilterParameter;
@@ -38,10 +36,6 @@ import org.subethamail.web.model.ErrorMapModel;
  */
 public class FilterSave extends AuthAction
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(FilterSave.class);
-
 	/** All the dynamic form data field names start with this */
 	public static final String FORM_FIELD_NAME_PREFIX = "form:";
 

@@ -14,7 +14,7 @@
 	<classpathentry kind="lib" path="lib/slf4j-api-1.5.10.jar"/>
 	<classpathentry kind="lib" path="lib/javassist-3.9.0.GA.jar"/>
 	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate3.5.3-Final.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-validator-4.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="lib/validation-api-1.0.0.GA.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-jdk14-1.5.10.jar"/>

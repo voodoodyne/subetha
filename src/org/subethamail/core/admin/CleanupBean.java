@@ -7,6 +7,7 @@ package org.subethamail.core.admin;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -16,8 +17,8 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.core.util.SubEtha;
 import org.subethamail.core.util.SubEthaEntityManager;
 import org.subethamail.entity.Mail;
@@ -38,11 +39,9 @@ import com.caucho.resources.ScheduledTask;
 @Singleton
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 @Stateless
+@Log
 public class CleanupBean
 {
-	/** */
-	private static Logger log = LoggerFactory.getLogger(CleanupBean.class);
-
 	/** Keep held subscriptions around for 30 days */
 	public static final long MAX_HELD_SUB_AGE_MILLIS = 1000L * 60L * 60L * 24L * 30L;
 
@@ -60,8 +59,8 @@ public class CleanupBean
 	@Schedule(minute="*/15", hour="*")
 	public void cleanup()
 	{
-		log.debug("Starting cleanup");
-		log.debug("em is " + this.em);
+	    log.log(Level.FINE,"Starting cleanup");
+	    log.log(Level.FINE,"em is {0}", this.em);
 		try
 		{
 			if(!isRunning)
@@ -72,7 +71,7 @@ public class CleanupBean
 			}
 			else
 			{
-				log.warn("Attempted to start cleanup while one is already running; skipping cleanup.");				
+				log.warning("Attempted to start cleanup while one is already running; skipping cleanup.");				
 			}
 		}
 		finally 
@@ -88,24 +87,21 @@ public class CleanupBean
 	{
 		Date cutoff = new Date(System.currentTimeMillis() - MAX_HELD_SUB_AGE_MILLIS);
 
-		if (log.isDebugEnabled())
-			log.debug("Purging held subscriptions older than " + cutoff);
+		log.log(Level.FINE,"Purging held subscriptions older than {0}", cutoff);
 
 		int count = 0;
 
 		List<SubscriptionHold> holds = this.em.findHeldSubscriptionsOlderThan(cutoff);
 		for (SubscriptionHold hold: holds)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Deleting obsolete hold: " + hold);
+		    log.log(Level.FINE,"Deleting obsolete hold: {0}", hold);
 
 			this.em.remove(hold);
 			count++;
 		}
 
 		if (count > 0)
-			if (log.isInfoEnabled())
-				log.info(count + " obsolete subscription holds removed with cutoff: " + cutoff);
+		    log.log(Level.INFO,"{0} obsolete subscription holds removed with cutoff: {1}", new Object[]{count, cutoff});
 	}
 
 	/**
@@ -115,16 +111,14 @@ public class CleanupBean
 	{
 		Date cutoff = new Date(System.currentTimeMillis() - MAX_HELD_MSG_AGE_MILLIS);
 
-		if (log.isDebugEnabled())
-			log.debug("Purging held mail older than " + cutoff);
+		log.log(Level.FINE,"Purging held mail older than {0}", cutoff);
 
 		int count = 0;
 
 		List<Mail> holds = this.em.findHeldMailOlderThan(cutoff);
 		for (Mail hold: holds)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Deleting obsolete hold: " + hold);
+		    log.log(Level.FINE,"Deleting obsolete hold: {0}", hold);
 
 			this.em.remove(hold);
 
@@ -132,7 +126,6 @@ public class CleanupBean
 		}
 
 		if (count > 0)
-			if (log.isInfoEnabled())
-				log.info(count + " obsolete message holds removed");
+		    log.log(Level.INFO,"{0} obsolete message holds removed", count);
 	}
 }

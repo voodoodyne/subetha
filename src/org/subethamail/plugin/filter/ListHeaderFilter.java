@@ -9,13 +9,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
 
 import javax.inject.Singleton;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeUtility;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.lists.i.ListData;
 import org.subethamail.core.plugin.i.Filter;
@@ -32,11 +33,9 @@ import org.subethamail.core.plugin.i.helper.GenericFilter;
  * @author Scott Hernandez
  */
 @Singleton
+@Log
 public class ListHeaderFilter extends GenericFilter
 {	
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(ListHeaderFilter.class);
-
 	public enum ListHeader
 	{
 		LIST_ID ("List-Id"),
@@ -96,7 +95,7 @@ public class ListHeaderFilter extends GenericFilter
 	@Override
 	public void onSend(SubEthaMessage msg, SendFilterContext ctx) throws IgnoreException, MessagingException
 	{
-		log.debug(this.getName() + " onSend()");
+	    log.log(Level.FINE,"{0} onSend()",this.getName());
 
 // 		Remove all RFC defined List-* headers then add our own...
 //		The RFC defines some logic for this, but for now

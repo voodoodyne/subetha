@@ -10,8 +10,6 @@ import java.util.Collection;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.lists.i.MailHold;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.auth.AuthAction;
@@ -25,10 +23,6 @@ import org.subethamail.web.model.PaginateModel;
  */
 public class GetHeldMessages extends AuthAction 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(GetMyListRelationship.class);
-
 	public static class Model extends PaginateModel
 	{
 		/** */

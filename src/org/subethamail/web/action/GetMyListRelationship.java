@@ -10,8 +10,6 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.subethamail.core.acct.i.MyListRelationship;
 import org.subethamail.core.lists.i.RoleData;
 import org.subethamail.entity.i.Permission;
@@ -28,10 +26,6 @@ import org.subethamail.web.util.PermissionWrapper;
  */
 public class GetMyListRelationship extends AuthAction 
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(GetMyListRelationship.class);
-	
 	/** */
 	@Getter @Setter Long listId;
 	@Getter @Setter String listName;

@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -22,10 +23,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.entity.i.Permission;
-import org.subethamail.web.action.GetMessage;
 
 /**
  * Servlet generates and returns a reasonably nice PNG image
@@ -40,12 +40,10 @@ import org.subethamail.web.action.GetMessage;
  * 
  * perm: the permission name
  */
+@Log
 public class PermissionImageServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(GetMessage.class);
 
 	/** */
 	public static final String PERMISSION_PARAM = "perm";
@@ -68,8 +66,8 @@ public class PermissionImageServlet extends HttpServlet
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Servicing " + request.getRequestURI());
+	    if (log.isLoggable(Level.FINE))
+	        log.log(Level.FINE,"Servicing {0}", request.getRequestURI());
 
 		String permString = request.getParameter(PERMISSION_PARAM);
 		Permission perm = Permission.valueOf(permString);
@@ -77,8 +75,8 @@ public class PermissionImageServlet extends HttpServlet
 		ByteArrayOutputStream cachedStream = this.imageCache.get(perm);
 		if (cachedStream == null)
 		{
-			if (log.isInfoEnabled())
-				log.info("Cache miss; building image for " + perm);
+		    if (log.isLoggable(Level.INFO))
+		        log.log(Level.INFO,"Cache miss; building image for {0}", perm);
 			
 			Image img = this.buildImage(perm);
 

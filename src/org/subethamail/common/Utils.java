@@ -5,8 +5,6 @@
 
 package org.subethamail.common;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Some random utility methods.
@@ -15,10 +13,6 @@ import org.slf4j.LoggerFactory;
  */
 public final class Utils
 {
-	/** */
-	@SuppressWarnings("unused")
-	private final static Logger log = LoggerFactory.getLogger(Utils.class);
-
 	/** default constructor prevents util class from being created. */
 	private Utils() {}
 

@@ -6,6 +6,8 @@
 package org.subethamail.core.deliv;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -18,8 +20,8 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.java.Log;
+
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.core.admin.i.Encryptor;
@@ -43,11 +45,9 @@ import org.subethamail.entity.Subscription;
 @Stateless
 @RolesAllowed(Person.ROLE_ADMIN)
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
+@Log
 public class DeliveratorBean implements Deliverator
 {
-	/** */
-	private final static Logger log = LoggerFactory.getLogger(DeliveratorBean.class);
-
 	/** */
 	@Inject FilterRunner filterRunner;
 	@Inject Encryptor encryptor;
@@ -101,8 +101,7 @@ public class DeliveratorBean implements Deliverator
 	 */
 	protected void deliverTo(Mail mail, EmailAddress emailAddress) throws NotFoundException
 	{
-		if (log.isDebugEnabled())
-			log.debug("Delivering mailId " + mail.getId() + " to email " + emailAddress.getId());
+	    log.log(Level.FINE,"Delivering mailId {0} to email {1}", new Object[]{mail.getId(), emailAddress.getId()});
 
 		try
 		{
@@ -111,8 +110,7 @@ public class DeliveratorBean implements Deliverator
 
 			String listEmail = mail.getList().getEmail();
 			
-			if (log.isDebugEnabled())
-				log.debug("Delivering msg of contentType " + msg.getContentType());
+			log.log(Level.FINE,"Delivering msg of contentType {0}", msg.getContentType());
 
 			// Add an X-Loop header to prevent mail loops, the other
 			// end is tested on injection.
@@ -140,17 +138,25 @@ public class DeliveratorBean implements Deliverator
 		}
 		catch (IgnoreException ex)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Ignoring mail " + mail, ex);
+		    LogRecord logRecord=new LogRecord(Level.FINE, "Ignoring mail {0}");
+		    logRecord.setParameters(new Object[]{mail});
+		    logRecord.setThrown(ex);
+			log.log(logRecord);
 		}
 		catch (MessagingException ex)
 		{
-			log.error("Error delivering mailId " + mail.getId() + " to address " + emailAddress.getId(), ex);
+            LogRecord logRecord=new LogRecord(Level.SEVERE, "Error delivering mailId {0} to address {1}");
+            logRecord.setParameters(new Object[]{mail.getId(), emailAddress.getId()});
+            logRecord.setThrown(ex);
+            log.log(logRecord);
 			throw new RuntimeException(ex);
 		}
 		catch (IOException ex)
 		{
-			log.error("Error delivering mailId " + mail.getId() + " to address " + emailAddress.getId(), ex);
+            LogRecord logRecord=new LogRecord(Level.SEVERE, "Error delivering mailId {0} to address {1}");
+            logRecord.setParameters(new Object[]{mail.getId(), emailAddress.getId()});
+            logRecord.setThrown(ex);
+            log.log(logRecord);
 			throw new RuntimeException(ex);
 		}
 	}

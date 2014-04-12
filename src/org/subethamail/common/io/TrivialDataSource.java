@@ -19,6 +19,7 @@ import org.subethamail.common.MailUtils;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
+@Deprecated
 public class TrivialDataSource implements DataSource
 {
 	/** */

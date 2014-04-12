@@ -209,8 +209,18 @@ public class SubEthaMessage extends SMTPMessage
 	
 	/** */
 	protected static void getParts(Part part, List<Part> parts) throws MessagingException, IOException
-	{
-		Object content = part.getContent();
+	{   
+		Object content;
+		try
+		{
+		    content=part.getContent();
+		}
+		catch (Throwable t)
+		{
+		    log.warn("Part decoding error", t);
+		    return;
+		}
+		
 
 		if (content instanceof Part)
 		{

@@ -279,7 +279,9 @@ public class Transmute
 		{
 			InternetAddress addy = raw.getFromAddress();
 
-			SubEthaMessage msg = new SubEthaMessage(null, raw.getContent());
+			byte[] rawContent = raw.getContent();
+			
+			SubEthaMessage msg = rawContent!=null?new SubEthaMessage(null, rawContent):new SubEthaMessage(null);
 
 			List<InlinePartData> inlineParts = new ArrayList<InlinePartData>();
 			List<AttachmentPartData> attachmentParts = new ArrayList<AttachmentPartData>();

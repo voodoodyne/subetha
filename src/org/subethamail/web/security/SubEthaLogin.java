@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.java.Log;
+
 import com.caucho.security.Authenticator;
 import com.caucho.security.BasicLogin;
 import com.caucho.security.BasicPrincipal;
@@ -22,12 +24,10 @@ import com.caucho.security.PasswordCredentials;
  * @author Jeff Schnitzer
  * @author Scott Hernandez
  */
+@Log
 @ApplicationScoped
 public class SubEthaLogin extends BasicLogin
 {
-	/** Logger */
-	private static final Logger log = Logger.getLogger(SubEthaLogin.class.getName());
-
 	/** Need to use this because of problems with the default {@link ClusterSingleSignon} **/
 	public SubEthaLogin()
 	{
@@ -55,8 +55,7 @@ public class SubEthaLogin extends BasicLogin
 	    
 	    Principal principal = auth.authenticate(user, credentials, null);
 
-	    if (log.isLoggable(Level.FINE))
-	      log.fine("authenticated: " + user + " -> " + principal);
+	    log.log(Level.FINE,"authenticated: {0} -> {1}", new Object[]{user, principal});
 	    
 	    if (principal == null)
 	    {
@@ -64,6 +63,7 @@ public class SubEthaLogin extends BasicLogin
 	    }
 	    else
 	    {
+	        log.log(Level.FINE,"saving user with request: {0}",request);
 	    	this.saveUser(request, principal);
 	    	return true;
 	    }

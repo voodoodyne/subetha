@@ -114,7 +114,7 @@ public class DetacherBean implements Detacher
     @SuppressWarnings("deprecation")
 	public void attach(MimePart part) throws MessagingException, IOException
 	{
-	    log.log(Level.FINE,"Attempting reattachment for {0} of type {1}" + new Object[]{part, part.getContentType()});
+	    log.log(Level.FINE,"Attempting reattachment for {0} of type {1}", new Object[]{part, part.getContentType()});
 
 		String contentType = part.getContentType().toLowerCase();
 		

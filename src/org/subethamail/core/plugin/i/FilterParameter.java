@@ -1,8 +1,3 @@
-/*
- * $Id: FilterParameter.java 979 2008-10-08 01:14:25Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/plugin/i/FilterParameter.java $
- */
-
 package org.subethamail.core.plugin.i;
 
 import java.util.Map;

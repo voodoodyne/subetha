@@ -1,8 +1,3 @@
-/*
- * $Id: SubscribedList.java 673 2006-07-10 03:38:01Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/acct/i/SubscribedList.java $
- */
-
 package org.subethamail.core.acct.i;
 
 import org.subethamail.core.lists.i.ListData;

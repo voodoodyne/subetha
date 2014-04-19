@@ -1,8 +1,3 @@
-/*
- * $Id: AuthSubscribeResult.java 963 2007-07-04 01:05:05Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/acct/i/AuthSubscribeResult.java $
- */
-
 package org.subethamail.core.acct.i;
 
 import java.util.Set;

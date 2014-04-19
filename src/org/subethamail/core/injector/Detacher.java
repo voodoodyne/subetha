@@ -1,8 +1,3 @@
-/*
- * $Id: Detacher.java 485 2006-05-22 10:27:21Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/injector/Detacher.java $
- */
-
 package org.subethamail.core.injector;
 
 import java.io.IOException;

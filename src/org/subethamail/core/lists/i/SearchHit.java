@@ -1,8 +1,3 @@
-/*
- * $Id: SearchHit.java 749 2006-08-21 21:59:29Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/lists/i/SearchHit.java $
- */
-
 package org.subethamail.core.lists.i;
 
 import java.io.Serializable;

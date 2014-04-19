@@ -1,8 +1,3 @@
-/*
- * $Id: PersonalBean.java 735 2006-08-20 04:21:14Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/util/PersonalBean.java $
- */
-
 package org.subethamail.core.util;
 
 import javax.inject.Inject;

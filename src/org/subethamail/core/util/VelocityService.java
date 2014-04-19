@@ -1,8 +1,3 @@
-/*
- * $Id: VelocityService.java 988 2008-12-30 08:51:13Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/admin/VelocityService.java $
- */
-
 package org.subethamail.core.util;
 
 import java.util.logging.Level;

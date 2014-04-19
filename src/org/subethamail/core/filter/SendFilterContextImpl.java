@@ -1,8 +1,3 @@
-/*
- * $Id: SendFilterContextImpl.java 902 2007-01-15 03:00:15Z skot $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/filter/SendFilterContextImpl.java $
- */
-
 package org.subethamail.core.filter;
 
 import org.subethamail.common.SubEthaMessage;

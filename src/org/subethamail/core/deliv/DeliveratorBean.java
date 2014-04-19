@@ -1,8 +1,3 @@
-/*
- * $Id: DeliveratorBean.java 988 2008-12-30 08:51:13Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/deliv/DeliveratorBean.java $
- */
-
 package org.subethamail.core.deliv;
 
 import java.io.IOException;

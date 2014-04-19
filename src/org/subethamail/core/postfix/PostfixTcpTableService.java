@@ -1,7 +1,3 @@
-/*
- * $Id: TcpTableService.java 988 2008-12-30 08:51:13Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/postfix/TcpTableService.java $
- */
 package org.subethamail.core.postfix;
 
 import java.io.IOException;

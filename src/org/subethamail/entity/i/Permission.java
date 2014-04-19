@@ -1,8 +1,3 @@
-/*
- * $Id: Permission.java 766 2006-09-11 16:52:18Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/entity/i/Permission.java $
- */
-
 package org.subethamail.entity.i;
 
 import java.util.Collections;

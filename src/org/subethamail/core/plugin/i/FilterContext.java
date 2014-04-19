@@ -1,8 +1,3 @@
-/*
- * $Id: FilterContext.java 465 2006-05-22 01:30:41Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/plugin/i/FilterContext.java $
- */
-
 package org.subethamail.core.plugin.i;
 
 import java.util.Map;

@@ -1,8 +1,3 @@
-/*
- * $Id: FilterContextImpl.java 562 2006-05-29 21:38:29Z skot $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/filter/FilterContextImpl.java $
- */
-
 package org.subethamail.core.filter;
 
 import java.io.StringWriter;

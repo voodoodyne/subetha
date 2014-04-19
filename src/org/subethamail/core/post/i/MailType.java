@@ -1,8 +1,3 @@
-/*
- * $Id: MailType.java 653 2006-06-19 07:50:48Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/post/i/MailType.java $
- */
-
 package org.subethamail.core.post.i;
 
 

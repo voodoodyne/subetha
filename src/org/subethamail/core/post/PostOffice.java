@@ -1,8 +1,3 @@
-/*
- * $Id: PostOffice.java 653 2006-06-19 07:50:48Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/post/PostOffice.java $
- */
-
 package org.subethamail.core.post;
 
 import org.subethamail.common.SubEthaMessage;

@@ -1,8 +1,3 @@
-/*
- * $Id: SubscribeResult.java 263 2006-05-04 20:58:25Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/acct/i/SubscribeResult.java $
- */
-
 package org.subethamail.core.acct.i;
 
 

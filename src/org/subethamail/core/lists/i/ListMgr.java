@@ -1,8 +1,3 @@
-/*
- * $Id: ListMgr.java 847 2006-10-30 05:09:29Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/lists/i/ListMgr.java $
- */
-
 package org.subethamail.core.lists.i;
 
 import java.net.URL;

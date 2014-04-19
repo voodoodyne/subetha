@@ -1,8 +1,3 @@
-/*
- * $Id: MassSubscribeType.java 593 2006-06-05 01:50:20Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/lists/i/MassSubscribeType.java $
- */
-
 package org.subethamail.core.lists.i;
 
 /**

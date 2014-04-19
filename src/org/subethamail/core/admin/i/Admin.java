@@ -1,8 +1,3 @@
-/*
- * $Id: Admin.java 920 2007-02-13 17:45:04Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/admin/i/Admin.java $
- */
-
 package org.subethamail.core.admin.i;
 
 import java.net.URL;

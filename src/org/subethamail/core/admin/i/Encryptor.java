@@ -1,8 +1,3 @@
-/*
- * $Id: Encryptor.java 641 2006-06-15 23:59:17Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/admin/i/Encryptor.java $
- */
-
 package org.subethamail.core.admin.i;
 
 import java.security.GeneralSecurityException;

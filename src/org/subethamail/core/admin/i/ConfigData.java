@@ -1,8 +1,3 @@
-/*
- * $Id: ConfigData.java 979 2008-10-08 01:14:25Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/admin/i/ConfigData.java $
- */
-
 package org.subethamail.core.admin.i;
 
 import java.io.Serializable;

@@ -1,8 +1,3 @@
-/*
- * $Id: AccountMgr.java 778 2006-10-01 19:41:43Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/acct/i/AccountMgr.java $
- */
-
 package org.subethamail.core.acct.i;
 
 import org.subethamail.common.NotFoundException;

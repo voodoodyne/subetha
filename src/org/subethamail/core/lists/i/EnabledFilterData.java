@@ -1,8 +1,3 @@
-/*
- * $Id: EnabledFilterData.java 963 2007-07-04 01:05:05Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/lists/i/EnabledFilterData.java $
- */
-
 package org.subethamail.core.lists.i;
 
 import java.util.Map;

@@ -1,8 +1,3 @@
-/*
- * $Id: OwnerAddress.java 562 2006-05-29 21:38:29Z skot $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/util/OwnerAddress.java $
- */
-
 package org.subethamail.core.util;
 
 import java.util.logging.Level;

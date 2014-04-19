@@ -1,8 +1,3 @@
-/*
- * $Id: Mail.java 1002 2009-03-20 01:18:14Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/entity/Mail.java $
- */
-
 package org.subethamail.entity;
 
 import java.io.ByteArrayOutputStream;

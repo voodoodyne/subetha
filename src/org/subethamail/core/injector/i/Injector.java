@@ -1,8 +1,3 @@
-/*
- * $Id: Injector.java 810 2006-10-18 08:46:21Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/injector/i/Injector.java $
- */
-
 package org.subethamail.core.injector.i;
 
 import java.io.InputStream;

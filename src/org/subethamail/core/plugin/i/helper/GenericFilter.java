@@ -1,8 +1,3 @@
-/*
- * $Id: GenericFilter.java 902 2007-01-15 03:00:15Z skot $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/plugin/i/helper/GenericFilter.java $
- */
-
 package org.subethamail.core.plugin.i.helper;
 
 import javax.mail.MessagingException;

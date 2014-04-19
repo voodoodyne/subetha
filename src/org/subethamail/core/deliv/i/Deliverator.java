@@ -1,8 +1,3 @@
-/*
- * $Id: Deliverator.java 778 2006-10-01 19:41:43Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/deliv/i/Deliverator.java $
- */
-
 package org.subethamail.core.deliv.i;
 
 import org.subethamail.common.NotFoundException;

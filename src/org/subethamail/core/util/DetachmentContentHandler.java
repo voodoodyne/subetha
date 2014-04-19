@@ -1,8 +1,3 @@
-/*
- * $Id: DetachmentContentHandler.java 489 2006-05-22 16:39:47Z skot $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/util/DetachmentContentHandler.java $
- */
-
 package org.subethamail.core.util;
 
 import java.awt.datatransfer.DataFlavor;

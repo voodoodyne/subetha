@@ -1,8 +1,3 @@
-/*
- * $Id: Plumber.java 948 2007-04-26 06:27:45Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/admin/i/Plumber.java $
- */
-
 package org.subethamail.core.admin.i;
 
 

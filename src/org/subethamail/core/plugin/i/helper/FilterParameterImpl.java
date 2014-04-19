@@ -1,8 +1,3 @@
-/*
- * $Id: FilterParameterImpl.java 979 2008-10-08 01:14:25Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/plugin/i/helper/FilterParameterImpl.java $
- */
-
 package org.subethamail.core.plugin.i.helper;
 
 import java.io.Serializable;

@@ -1,7 +1,3 @@
-/*
- * $Id: SMTPService.java 273 2006-05-07 04:00:41Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/smtp/SMTPService.java $
- */
 package org.subethamail.core.smtp;
 
 import java.io.IOException;

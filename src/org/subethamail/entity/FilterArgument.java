@@ -1,8 +1,3 @@
-/*
- * $Id: FilterArgument.java 991 2009-01-15 02:46:02Z lhoriman $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/entity/FilterArgument.java $
- */
-
 package org.subethamail.entity;
 
 import java.io.Serializable;

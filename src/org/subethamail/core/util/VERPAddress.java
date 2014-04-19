@@ -1,8 +1,3 @@
-/*
- * $Id: VERPAddress.java 907 2007-02-07 09:06:00Z jon $
- * $URL: http://subetha.tigris.org/svn/subetha/branches/resin/core/src/org/subethamail/core/util/VERPAddress.java $
- */
-
 package org.subethamail.core.util;
 
 import java.util.logging.Level;

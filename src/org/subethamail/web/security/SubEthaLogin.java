@@ -28,13 +28,6 @@ import com.caucho.security.PasswordCredentials;
 @ApplicationScoped
 public class SubEthaLogin extends BasicLogin
 {
-	/** Need to use this because of problems with the default {@link ClusterSingleSignon} **/
-	public SubEthaLogin()
-	{
-		MemorySingleSignon mss =  new MemorySingleSignon(); // do it manually. :(
-		mss.init(); // call init since we aren't allowing the injection system to create the object.
-		this._singleSignon = mss;
-	}
 	
 	/**
 	 * 

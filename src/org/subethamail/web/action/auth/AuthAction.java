@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import lombok.extern.java.Log;
 
@@ -22,6 +23,7 @@ import org.subethamail.core.auth.SubEthaPrincipal;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
 import org.subethamail.web.security.SubEthaLogin;
+import org.tagonist.ActionContext;
 
 /**
  * Provides basic authentication services to action subclasses.
@@ -72,7 +74,10 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	public boolean isLoggedIn()
 	{
-		return this.getPrincipal() != null;
+	    SubEthaPrincipal prin = this.getPrincipal();
+        log.log(Level.FINE,"isLoggedIn={0}!=null",prin);
+	    boolean res = prin != null;
+		return res;
 	}
 
 	/**
@@ -188,7 +193,15 @@ abstract public class AuthAction extends SubEthaAction
 	 */
 	protected SubEthaPrincipal getPrincipal()
 	{
-		SubEthaPrincipal p = (SubEthaPrincipal)this.getCtx().getRequest().getUserPrincipal();
-		return p;
+	    ActionContext ctx = this.getCtx();
+	    log.log(Level.FINE,"ActionContext={0}",ctx);
+	    if (ctx==null) return null;
+	    HttpServletRequest request = ctx.getRequest();
+        log.log(Level.FINE,"HttpServletRequest={0}",request);
+        if (request==null) return null;
+        Principal p = request.getUserPrincipal();
+		log.log(Level.FINE,"Principal={0}",p);
+		if (p!=null && p instanceof SubEthaPrincipal) return (SubEthaPrincipal)p;
+		return null;
 	}
 }

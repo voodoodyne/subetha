@@ -5,6 +5,10 @@
 
 package org.subethamail.web.action.auth;
 
+import java.util.logging.Level;
+
+import lombok.extern.java.Log;
+
 import org.tagonist.RedirectException;
 
 /**
@@ -16,6 +20,7 @@ import org.tagonist.RedirectException;
  * 
  * @author Jeff Schnitzer
  */
+@Log
 public class AuthRedirect extends AutoLogin 
 {
 	/**
@@ -26,11 +31,21 @@ public class AuthRedirect extends AutoLogin
 		{
 			String redir = this.getActionParam("dest");
 			if (redir != null)
+			{
+			    log.log(Level.FINE,"redirect to: {0}",redir);
 				throw new RedirectException(redir);
+			}
 			else
+			{
+                log.log(Level.FINE,"redirecting to home page");
 				throw new RedirectException(
 						this.getCtx().getResponse().encodeRedirectURL(
 								this.getCtx().getRequest().getContextPath() + "/home.jsp"));
+			}
+		}
+		else
+		{
+		    log.log(Level.INFO,"not isLoggedIn");
 		}
 	}
 }

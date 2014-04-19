@@ -91,5 +91,10 @@ public class SubEthaAuthenticator implements Authenticator
 	public void logout(Principal user)
 	{
 		// Nothing special needed
-	}	
+	}
+
+	public String getAlgorithm(Principal uid)
+    {
+         return "plain";
+    }	
 }

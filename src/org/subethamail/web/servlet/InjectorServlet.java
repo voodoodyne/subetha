@@ -7,12 +7,15 @@ package org.subethamail.web.servlet;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import lombok.extern.java.Log;
 
 import org.subethamail.core.acct.i.AccountMgr;
 import org.subethamail.core.injector.i.Injector;
@@ -36,6 +39,7 @@ import org.subethamail.web.security.SubEthaLogin;
  * TODO:  make this a lot more efficient by using the content body
  * as the raw message bytes instead of requiring www-form-urlencoded 
  */
+@Log
 public class InjectorServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
@@ -68,6 +72,8 @@ public class InjectorServlet extends HttpServlet
 		String from = request.getParameter(FROM_PARAM);
 		String recipient = request.getParameter(RECIPIENT_PARAM);
 		String message = request.getParameter(MESSAGE_PARAM);
+		
+		log.log(Level.FINE,"service authEmail={0}, authPass={1}, from={2}, recipient={3}, message={4}", new Object[]{authEmail, authPass, from, recipient, message});
 		
 		if (authEmail == null || authPass == null || from == null || recipient == null || message == null)
 			throw new ServletException("Missing parameter");

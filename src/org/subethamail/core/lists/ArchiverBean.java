@@ -331,8 +331,10 @@ public class ArchiverBean extends PersonalBean implements Archiver
 		while (root.getParent() != null)
 			root = root.getParent();
 
+		MailSummary mailSummary = Transmute.mailSummary(root, showEmail, data);
+		
 		// This trick inserts us into the thread hierarchy we create.
-		data.setThreadRoot(Transmute.mailSummary(root, showEmail, data));
+		data.setThreadRoot(mailSummary);
 
 		return data;
 	}

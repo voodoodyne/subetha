@@ -20,9 +20,11 @@ import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimePart;
+import javax.mail.util.ByteArrayDataSource;
 
 import lombok.extern.java.Log;
 
+import org.subethamail.common.MailUtils;
 import org.subethamail.common.NotFoundException;
 import org.subethamail.common.SubEthaMessage;
 import org.subethamail.common.io.TrivialDataSource;
@@ -40,6 +42,10 @@ import org.subethamail.entity.Mail;
 @Log
 public class DetacherBean implements Detacher
 {
+	/**
+	 * The was an stream.reset() on the getInputStream method, was this the cause of Issue 44? Is it still needed for a specific reason?
+	 */
+    private static final boolean INPUTSTREAM_RESET_NOT_NEEDED_OR_ISSUE_44 = true;
 	/** */
 	@Inject @SubEtha SubEthaEntityManager em;
 	
@@ -105,6 +111,7 @@ public class DetacherBean implements Detacher
 	 * (non-Javadoc)
 	 * @see org.subethamail.core.injector.Detacher#attach(javax.mail.internet.MimePart)
 	 */
+    @SuppressWarnings("deprecation")
 	public void attach(MimePart part) throws MessagingException, IOException
 	{
 	    log.log(Level.FINE,"Attempting reattachment for {0} of type {1}" + new Object[]{part, part.getContentType()});
@@ -132,13 +139,24 @@ public class DetacherBean implements Detacher
 			try
 			{
 				Attachment att = this.em.get(Attachment.class, attachmentId);
-				
-				part.setDataHandler(
-						new DataHandler(
-								new TrivialDataSource(
-										att.getContentStream(),
-										att.getContentType())));
-				
+                if (INPUTSTREAM_RESET_NOT_NEEDED_OR_ISSUE_44)
+                {
+                    String ct = att.getContentType();
+                    ByteArrayDataSource bads = new ByteArrayDataSource(att.getContentStream(), ct);
+                    //this was lazy, now it always runs. What is the performance impact (~6 string searches/operations)?
+                    if (ct!=null) bads.setName(MailUtils.getNameFromContentType(ct));
+                    DataHandler dh = new DataHandler(bads);
+                    
+                    part.setDataHandler(dh);
+                }
+                else
+                {
+    				part.setDataHandler(
+    						new DataHandler(
+    								new TrivialDataSource(
+    										att.getContentStream(),
+    										att.getContentType())));
+                }
 				part.removeHeader(SubEthaMessage.HDR_ORIGINAL_CONTENT_TYPE);
 			}
 			catch (NotFoundException ex)

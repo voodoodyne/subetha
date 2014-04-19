@@ -3,6 +3,7 @@ package org.subethamail.core.util;
 import java.util.logging.Level;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import lombok.extern.java.Log;
@@ -16,6 +17,7 @@ import org.apache.velocity.app.Velocity;
  * @author Scott Hernandez
  */
 @Startup
+@Singleton
 @Log
 public class VelocityService
 {

@@ -338,10 +338,7 @@ public class AdminBean extends PersonalBean implements Admin
 		return gen.toString();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.subethamail.core.admin.i.Admin#setSiteAdmin(java.lang.Long, boolean)
-	 */
+	@Override
 	public void setSiteAdmin(Long personId, boolean value) throws NotFoundException
 	{
 		Person p = this.em.get(Person.class, personId);

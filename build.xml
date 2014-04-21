@@ -35,7 +35,7 @@
 
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="src/main/java" />
-	<property name="web.dir" location="web" />
+	<property name="web.dir" location="src/main/web" />
 	<property name="lib.dir" location="lib" />
 	<property name="lib.build.dir" location="lib/build-only" />
 	<property name="lib.dist.dir" location="lib/dist" />
@@ -213,7 +213,7 @@
             </classpath>
         </taskdef>
 
-        <resin-jspc rootDirectory="web"/>
+        <resin-jspc rootDirectory="src/main/web"/>
 	</target>
 
  	<target name="rtest-jar" depends="client">
@@ -382,7 +382,6 @@
 				<include name="src/**" />
 				<include name="rtest/**" />
 				<include name="loadtest/**" />
-				<include name="web/**" />
 
 				<exclude name="etc/local/**"/>
 			</fileset>

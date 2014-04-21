@@ -29,7 +29,7 @@
 
 	<property name="docs.dir" value="${build.dir}/docs" />
 
-	<property name="resin.dir" location="/java/resin-4.0.14/" />
+	<property name="resin.dir" location="/java/resin-4.0.25/" />
 	<property name="deploy.dir" location="${resin.dir}/webapps" />
 	<property name="expandedWar.dir" location="${deploy.dir}/se" />
 

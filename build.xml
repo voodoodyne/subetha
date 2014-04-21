@@ -15,6 +15,11 @@
 	<property file="${user.home}/build.properties" />
 	<property file="etc/build.properties" />
 
+	<property name="appserver.resin.port" value="8080" />
+	<property name="appserver.resin.host" value="127.0.0.1" />
+	<property name="appserver.resin.user" value="admin" />
+	<property name="appserver.resin.pass" value="admin" />
+
 	<property name="build.debug" value="on" />
 	<property name="build.deprecation" value="on" />
 
@@ -196,8 +201,8 @@
 	        </classpath>
 	    </taskdef>
 		
-		<resin-deploy warfile="${build.war.file}" server="127.0.0.1" 
-			 port="8080" user="admin" password="admin" 
+		<resin-deploy warfile="${build.war.file}" server="${appserver.resin.host}" 
+			 port="${appserver.resin.port}" user="${appserver.resin.user}" password="${appserver.resin.pass}" 
 			 virtualhost="default" version="0.1" commitmessage="trying"/>
 	</target>
 	
@@ -242,7 +247,9 @@
 		<junit printsummary="yes" showoutput="yes" fork="yes" forkmode="once">
 			<jvmarg value="-Djava.util.logging.config.file=rtest/logging.properties"/>
 			<classpath refid="rtest.run.classpath"/>
-			
+		
+			<sysproperty key="appserver.url" value="http://${appserver.resin.host}:${appserver.resin.port}"/>
+	
 			<syspropertyset>
 				<propertyref prefix="java.naming" />
 			</syspropertyset>

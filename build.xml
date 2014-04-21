@@ -22,7 +22,7 @@
 	<property name="ant.build.javac.source" value="1.6" />
 	<property name="ant.build.javac.encoding" value="UTF-8" />
 
-	<property name="build.dir" location="build" />
+	<property name="build.dir" location="out/ant" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.war.file" location="${build.dir}/se.war" />
 	<property name="build.client.file" location="${build.dir}/${name}-client.jar" />

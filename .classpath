@@ -26,5 +26,5 @@
 	<classpathentry kind="src" path="rtest/src"/>
 	<classpathentry kind="src" path="loadtest/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Resin 4.0.14"/>
-	<classpathentry kind="output" path="_eclipse"/>
+	<classpathentry kind="output" path="out/eclipse"/>
 </classpath>

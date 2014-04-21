@@ -11,9 +11,9 @@
 
 	<property name="name" value="${ant.project.name}" />
 	
-	<property file="user.properties" />
+	<property file="etc/local/user.properties" />
 	<property file="${user.home}/build.properties" />
-	<property file="build.properties" />
+	<property file="etc/build.properties" />
 
 	<property name="build.debug" value="on" />
 	<property name="build.deprecation" value="on" />
@@ -370,7 +370,7 @@
 				<include name="LICENSE.txt" />
 				<include name="example-subetha.xml" />
 				<include name="build.xml" />
-				<include name="build.properties" />
+				<include name="etc/build.properties" />
 				<include name=".project" />
 				<include name=".classpath" />
 				

@@ -10,10 +10,10 @@
 
 <project name="loadtest" default="" basedir=".">
 	
-	<property file="user.properties" />
-	<property file="../user.properties" />
+	<property file="etc/local/user.properties" />
+	<property file="../etc/local/user.properties" />
 	<property file="${user.home}/build.properties" />
-	<property file="../build.properties" />
+	<property file="../etc/build.properties" />
 
 	<property name="build.dir" value="build"/>
 	<property name="build.loadtest.classes.dir" location="${build.dir}/loadtest-classes" />

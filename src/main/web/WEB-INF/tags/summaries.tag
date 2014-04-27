@@ -9,8 +9,9 @@
 		<c:when test="${flat}">
 			<c:forEach var="msg" items="${msgs}">
 				<li>
-					<se:summaryNode msg="${msg}" highlight="${highlight}" flat="${flat}"/>
+					<se:summary msg="${msg}" highlight="${highlight}" />
 				</li>
+				<se:summaryNodeFlat msg="${msg}" highlight="${highlight}" />
 			</c:forEach>
 		</c:when>
 		<c:otherwise>

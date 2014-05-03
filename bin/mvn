@@ -1,0 +1,2 @@
+#!/bin/bash
+"$(dirname "$0")/../var/opt/apache-maven-3.0.4-SNAPSHOT/bin/mvn" "$@"

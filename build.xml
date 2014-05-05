@@ -40,7 +40,7 @@
 
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="src/main/java" />
-	<property name="web.dir" location="src/main/web" />
+	<property name="web.dir" location="src/main/webapp" />
 	<property name="lib.dir" location="lib" />
 	<property name="lib.build.dir" location="lib/build-only" />
 	<property name="lib.dist.dir" location="lib/dist" />
@@ -218,7 +218,7 @@
             </classpath>
         </taskdef>
 
-        <resin-jspc rootDirectory="src/main/web"/>
+        <resin-jspc rootDirectory="src/main/webapp"/><!-- why is this not using the web.dir var? -->
 	</target>
 
  	<target name="rtest-jar" depends="client">

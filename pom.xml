@@ -7,7 +7,37 @@
 	<artifactId>webapplication</artifactId>
 	<version>2.2</version>
 	<packaging>war</packaging>
+	
+	<name>SubEtha</name>
+	<description>SubEtha is a modern, sophisticated mailing list manager.</description>
+	<url>https://code.google.com/p/subetha/</url>
+	
+	<licenses>
+		<license>
+			<name>BSD 3-Clause</name>
+			<url>http://opensource.org/licenses/BSD-3-Clause</url>
+		</license>
+	</licenses>
+	
+	<scm>
+		<connection>https://code.google.com/p/subetha/</connection>
+		<developerConnection>https://code.google.com/p/subetha/</developerConnection>
+		<url>https://code.google.com/p/subetha/source/browse/</url>
+	</scm>
 
+	<developers>
+		<developer>
+			<id>jpyeron</id>
+			<name>Jason Pyeron</name>
+			<email>jpyeron@pdinc.us</email>
+		</developer>
+		<developer>
+			<id>jeff</id>
+			<name>Jeff Schnitzer</name>
+			<email>jeff@infohazard.org</email>
+		</developer>
+	</developers>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>

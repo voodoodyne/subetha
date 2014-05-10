@@ -8,6 +8,10 @@
 	<version>2.2</version>
 	<packaging>war</packaging>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<build>
 		<directory>out/mvn</directory>
 		<!-- <resources>

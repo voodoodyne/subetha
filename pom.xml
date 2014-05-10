@@ -58,6 +58,18 @@
 		</pluginManagement>
 
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.17</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>2.17</version>
+					</dependency>
+				</dependencies>
+			</plugin>				
 		</plugins>
 	</build>
 
@@ -69,12 +81,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>6.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.1.0.Final</version>
@@ -82,6 +88,12 @@
 		<dependency>
 			<groupId>com.caucho</groupId>
 			<artifactId>resin</artifactId>
+			<version>4.0.25</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.caucho</groupId>
+			<artifactId>javaee-16</artifactId>
 			<version>4.0.25</version>
 			<scope>provided</scope>
 		</dependency>
@@ -143,7 +155,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.6</version>
+			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

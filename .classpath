@@ -23,7 +23,8 @@
 	<classpathentry kind="lib" path="lib/mvn/com/voodoodyne/tagonist/tagonist/1.4.1/tagonist-1.4.1.jar"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="src" path="rtest/src"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
 	<classpathentry kind="src" path="loadtest/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Resin-4.0.25"/>
 	<classpathentry kind="output" path="out/eclipse"/>

@@ -20,7 +20,7 @@
 	<classpathentry kind="lib" path="lib/dist/hibernate-search-3.2.1.Final.jar"/>
 	<classpathentry kind="lib" path="lib/dist/subethasmtp-UNVERSIONED.jar" sourcepath="/SubethaSMTP/src"/>
 	<classpathentry kind="lib" path="lib/build-only/lombok.jar"/>
-	<classpathentry kind="lib" path="lib/mvn/com/voodoodyne/tagonist/tagonist/1.4/tagonist-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/mvn/com/voodoodyne/tagonist/tagonist/1.4.1/tagonist-1.4.1.jar"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" path="rtest/src"/>

@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>com.voodoodyne.tagonist</groupId>
 			<artifactId>tagonist</artifactId>
-			<version>1.4</version>
+			<version>1.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

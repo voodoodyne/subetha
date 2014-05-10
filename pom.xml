@@ -126,9 +126,9 @@
 			<version>1.4.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.tagonist</groupId>
-			<artifactId>tagonist-taglib</artifactId>
-			<version>1.2.1</version>
+			<groupId>com.voodoodyne.tagonist</groupId>
+			<artifactId>tagonist</artifactId>
+			<version>1.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>

@@ -14,7 +14,7 @@ import javax.servlet.http.Cookie;
 
 import lombok.extern.java.Log;
 
-import org.tagonist.AbstractAction;
+import com.voodoodyne.tagonist.AbstractAction;
 
 /**
  * Adds some handy methods.

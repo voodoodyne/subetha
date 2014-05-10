@@ -9,7 +9,7 @@ import java.util.logging.Level;
 
 import lombok.extern.java.Log;
 
-import org.tagonist.ForwardException;
+import com.voodoodyne.tagonist.ForwardException;
 
 /**
  * Requires authorization and provides information about the player.

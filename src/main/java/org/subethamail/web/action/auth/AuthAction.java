@@ -23,7 +23,8 @@ import org.subethamail.core.auth.SubEthaPrincipal;
 import org.subethamail.web.Backend;
 import org.subethamail.web.action.SubEthaAction;
 import org.subethamail.web.security.SubEthaLogin;
-import org.tagonist.ActionContext;
+
+import com.voodoodyne.tagonist.ActionContext;
 
 /**
  * Provides basic authentication services to action subclasses.

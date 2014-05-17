@@ -1,0 +1,4 @@
+_maven.repositories
+*.lastUpdated
+resolver-status.properties
+maven-metadata-*

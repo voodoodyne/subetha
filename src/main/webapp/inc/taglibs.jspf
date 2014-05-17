@@ -1,0 +1,10 @@
+<%@ taglib prefix="se" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="trim" tagdir="/WEB-INF/tags/trim" %>
+
+<%@ taglib prefix="f" uri="http://www.subethamail.org/frontend" %>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<%@ taglib prefix="t" uri="http://github.com/stickfigure/tagonist" %>

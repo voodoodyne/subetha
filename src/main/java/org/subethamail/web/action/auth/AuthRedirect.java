@@ -9,7 +9,7 @@ import java.util.logging.Level;
 
 import lombok.extern.java.Log;
 
-import org.tagonist.RedirectException;
+import com.voodoodyne.tagonist.RedirectException;
 
 /**
  * If the user is logged in, issue a redirect to the

@@ -3,10 +3,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/dist/commons-fileupload-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/dist/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/dist/commons-beanutils.jar"/>
 	<classpathentry kind="lib" path="lib/dist/jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/dist/mina-core-1.1.7.jar"/>
-	<classpathentry kind="lib" path="lib/dist/tagonist.jar"/>
 	<classpathentry kind="lib" path="lib/build-only/resin-ant.jar" sourcepath="/RESIN_SRC/modules/ant/src"/>
 	<classpathentry kind="lib" path="lib/build-only/junit-4.6.jar"/>
 	<classpathentry kind="lib" path="lib/dist/velocity-1.6.2.jar"/>
@@ -22,8 +20,11 @@
 	<classpathentry kind="lib" path="lib/dist/hibernate-search-3.2.1.Final.jar"/>
 	<classpathentry kind="lib" path="lib/dist/subethasmtp-UNVERSIONED.jar" sourcepath="/SubethaSMTP/src"/>
 	<classpathentry kind="lib" path="lib/build-only/lombok.jar"/>
+	<classpathentry kind="lib" path="lib/mvn/com/voodoodyne/tagonist/tagonist/1.4.1/tagonist-1.4.1.jar"/>
 	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="rtest/src"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
 	<classpathentry kind="src" path="loadtest/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Resin-4.0.25"/>
 	<classpathentry kind="output" path="out/eclipse"/>

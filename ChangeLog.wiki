@@ -1,0 +1,146 @@
+#summary Changes between releases
+#labels Featured
+
+For specific instructions to upgrade between versions, see UpgradingVersions.
+
+= Changes =
+
+== 2.1 ==
+
+  * Major refactoring to the internal code to bring it current with the released version of CDI.
+  * List URLs can now be any URL that points to the SubEtha HTTP server.
+  * Replaced the Lucene direct-access code with Hibernate Search.
+  * Updated all third-party jars to modern versions.
+  * Fixed a longstanding bug deleting lists.
+  * A handful of miscellaneous bug fixes.
+
+Lots of internal changes, few external changes.  The most important change is that SubEtha now runs on the "current" version of Resin (>= 4.0.9).
+
+You will need to rebuild the fulltext index (from the Site Status page).  See UpgradingVersions.
+
+== 2.0 ==
+
+ * For 2.0, SubEtha was ported to Resin 4.0 (see WhyResin).
+ * Many architectural changes were made but very few features were added.
+ * We've moved to a new home at google code.
+
+ * Here are some of the changes to note:
+   * Added fallback smtp host for a new integration option
+   * Site admins can change user's names
+   * List owners can change subscribed user's names but only if the names are empty
+   * Updated libraries (Hibernate, Logging, SubethaSMTP)
+   * Updated packaging and docs
+   * Developed and tested on MySQL and PostgresSQL
+   * Allow "sent on behalf of" emails (ie. Sender: and From: are different)
+   * Denser encoding for shorter VERP envelope sender length
+   * Minor HTML changes on various pages.
+   * Added Hessian remote protocol support (removed "WS" remoting)
+   * Indexing and Cleanup start shortly after deployment, and periodically as before
+   * Much smaller memory footprint, and much quicker startup (20s on dev machines vs minutes for JBoss)
+
+If you are upgrading from a previous version, these changes *must* be
+made to the database (these are for MySQL, your database data types may be
+different):
+
+{{{
+  ALTER TABLE Mail CHANGE fromField sender TEXT;
+  ALTER TABLE Mail CHANGE envelopeSender senderNormal TEXT NOT NULL;
+}}}
+
+== 1.0.2 ==
+
+ * Workaround problem with building ear on JDK6 and deploying on JDK5.
+ * Updated Velocity from 1.4 to 1.5.
+ * Added integration documentation for Sendmail and Qmail.
+ * Include PlumberBean in order to allow mail-service.xml overrides for unit testing.
+ * Reverted URL redirection changes for proxied subetha installations.
+
+== 1.0.1 ==
+
+ * Fixed problem with the AppendFooterFilter not properly encapsulating the footer in multipart mime messages.
+ * Updated to JBoss 4.0.5.GA from the JEMS 1.2.0 GA installer.
+ * Ant build system has been rewritten from scratch.
+ * The ready-to-run (RTR) release is now based off a copy of JBoss that we maintain in our <a href="http://guest@subetha.tigris.org/svn/subetha/jboss/trunk/">svn repo
+ * Added a new filter mode for archive rendering (mail web view).
+ * Filter exceptions no longer stop processing of the message.
+ * Messages without subjects were throwing exceptions if the SubjectFilter was enabled.
+ * Added ability to download/export messages.
+ * UI tweaks and improvements.
+
+== 1.0 ==
+
+ * Fixed a bug rendering the permission error page.
+ * Fixed a problem unsubscribing from lists.
+
+== 0.9.6 ==
+
+ * Workaround for a major Hibernate bug introduced in JBoss 4.0.5.GA.
+
+== 0.9.5 ==
+
+ * Now expects JBoss 4.0.5.GA.
+ * The list of lists page should show # of subscribers and # of archived messages.
+ * Added the ability to post a new or reply to a message on a list via the web UI.
+ * Show confirmation screen when mass subscribing.
+ * Allow linefeed termination of emails when mass subscribing.
+
+== 0.9 ==
+
+ * Preliminary SOAP web service API exposed.
+ * Many minor UI improvements.
+ * Now works with the "new" JBoss 4.0.4.GA that has API change.
+ * Added small google adsense.
+ * The search indexer wasn't running properly.  It is now.
+ * The cleanup thread was not running properly.  It is now.
+ * Empty archive searches send a stack trace.
+ * UI for search results have been cleaned up. In addition, we now display the search score as a value from 1 to 10.
+ * Site admins can delete mailing lists.
+ * List admins can now delete messages from list archives.
+
+== 0.8 ==
+
+ * List administrators can now edit subscriber options.
+ * Administrator removal now works.
+ * Stabilized the order of many lists (subscriptions, email addresses, etc).
+ * "Your mail held" notifications now set at most once per day per sender address.
+ * Old held mail and held subscriptions are now periodically purged.
+ * Fixed a problem changing the postmaster address.
+ * Added $archiveUrl context variable to the AppendFooterFilter.
+ * You can now remove any email address as long as you have more than one.
+ * Various minor UI improvements.
+
+<strong>NOTE:</strong>  The names of some of the roles have changed.  You must update your database before SubEtha will function.  Shut down the JBoss instance running SubEtha and run the following queries:
+
+{{{	
+update RolePermission set perm='EDIT_SUBSCRIPTIONS' where perm='UNSUBSCRIBE_OTHERS'
+update RolePermission set perm='VIEW_ARCHIVES' where perm='READ_ARCHIVES'
+update RolePermission set perm='VIEW_NOTES' where perm='READ_NOTES'
+}}}
+	
+
+== 0.7 ==
+
+ * Implemented fulltext searching for archives.
+ * Improved integration documentation.
+ * More UI cleanup.
+ * Several bugs fixed.
+
+<strong>NOTE:</strong>  The database schema changed slightly.  To upgrade from 0.6 or before, follow these instructions <strong>before deploying the new code</strong>.
+
+ * Shut down SubEtha.
+ * Rename column Mail.dateCreated to Mail.sentDate.
+ * Add column Mail.arrivalDate of same type as Mail.sentDate.
+ * update Mail set arrivalDate = sentDate
+ * Set Mail.arrivalDate to NOT NULL.
+
+== 0.6 ==
+ * Much internal refactoring.
+ * More useful information on list overview page.
+ * Archive threading cleaned up.
+ * User interface cleaned up.
+ * SMTP port now overridable with system property.
+ * Several bugs fixed.
+
+== 0.5 ==
+
+ * Initial release

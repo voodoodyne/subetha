@@ -1,0 +1,45 @@
+#summary Integrating SubEtha with Exim
+
+= Exim =
+
+These notes apply to version v4.61.
+
+This config will create a domain (or subdomain) filter to relay all messages to smtp://localhost:2500. To do this we create a fake email (sub)domain (@lists.localhost) while still allowing local delivery for @localhost addresses.
+
+Make the following changes to etc/*exim.config*.
+
+==== Transports Section: ====
+  {{{
+  local_smtp_port_2500:
+    driver = smtp
+    port = 2500
+    allow_localhost = true
+    gethostbyname = true
+    hosts=localhost
+  }}}
+
+Notes:
+  * *gethostbyname*: This resolves hosts using alternate sources like etc/hosts instead of just through dns mx records.
+  * *allow_localhost*: This is usually not allowed to help keep mail-loops under control. :) Since we are running a totally different mail server on localhost:2500 we have no worries that the message will loop back into the same system.
+
+==== Routers Section: ====
+  {{{
+  subetha:
+    driver=accept
+    domains=lists.localhost
+    self=send
+    transport=local_smtp_port_2500
+    no_more
+  }}}
+
+*Note* - I found while working with Cygwin that every time I changed etc/exim.config file the permissions were changed to my current windows account:
+  {{{
+  -rwx------+ 1 *skot* None 31250 May  8 20:48 /etc/exim.conf
+  }}}
+
+This was problematic as exim was setup to run as a service and should have had the following permissions:
+  {{{
+  -rw-rw-r--+ 1 SYSTEM *root* 31250 May  8 20:48 /etc/exim.conf
+  }}}
+
+To fix this problem I had to continuously re-run {{{exim-config}}}, or change the permissions manually.

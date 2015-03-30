@@ -1,0 +1,30 @@
+#labels Featured
+= How to Install SubEtha =
+
+These instructions describe setting up a single, standalone instance of SubEtha.  You should have have installed JDK 1.6+ and whatever database you intend to use (MySQL and PostgreSQL are tested by the application developers, but any DB supported by Hibernate - with blob object support - should work).
+
+= Install Steps =
+
+  # Create an *empty database* called 'subetha' in your database server (UTF-8 is a good choice -> [I18N]). Note that SubEtha will create the database tables for you when it runs for the first time.
+  # [http://www.caucho.com/download/resin-4.0.8.zip Download] and *install [http://caucho.com/resin/ Resin] 4.0.9* (or later) open source edition as per the Resin instructions.  The resin install directory is in this document as ${resin.dir}.
+  # Download and copy the appropriate *JDBC driver* jar for your database into ${resin.dir}/lib. [http://dev.mysql.com/downloads/connector/j/ MySQL] [http://jdbc.postgresql.org/download.html Postgres]
+  # Download and unzip the SubEtha distribution into a temporary directory.
+  # Copy se.war to *${resin.dir}/webapps/ (rename to ROOT.war if you want to run on the root context)
+  # Copy [http://subetha.googlecode.com/svn/trunk/example-subetha.xml example-subetha.xml] to *${resin.dir}/conf/subetha.xml* (renaming the file)
+    * Edit the configuration in this file - SubEtha will not run without your customization
+
+== Receiving Mail ==
+Please see ReceivingMail for specific instructions on how to integrate with your mail MTA.
+
+== Startup ==
+Start up Resin by running ${resin.dir}/bin/resin.sh or ${resin.dir}/resin.exe. 
+
+http://subetha.googlecode.com/svn/wiki/img/resin_start_windows.png
+
+The default web interface is http://localhost:8080/se/ (or drop the /se/ if you renamed to ROOT.war). When SubEtha runs for the first time, it creates a site administrator account named "*root@localhost*", with the password "*password*".
+
+http://subetha.googlecode.com/svn/wiki/img/subetha_admin_login.png
+
+*Change the administrator password immediately*. This can be done from the web interface. In addition, change the site properties as described in the AdminGuide.
+
+You are now ready to continue with the AdminGuide.

@@ -1,0 +1,63 @@
+#summary Integrating SubEtha with Postfix
+
+= Postfix =
+
+There are two recommended ways to integrate Postfix with SubEtha, the hard way and the easy way.  We'll start with the easy way.
+
+== Automatic Postfix Mapping ==
+
+SubEtha provides correct values for the Postfix transport table through an implementation of the [http://www.postfix.org/tcp_table.5.html Postfix tcp: map provider]. This will automatically work for all addresses that SubEtha wants to claim, such as mailing list addresses, mailing list owner addresses, and VERPed bounce messages.
+
+Simply add these lines to main.cf:
+    
+  {{{
+  mydestination = ... example.com  # add any relevant domains that might have lists here.  Just the domains, no @.
+
+  transport_maps = tcp:[127.0.0.1]:2502
+
+  local_recipient_maps = proxy:unix:passwd.byname $alias_maps tcp:[127.0.0.1]:2502
+  }}}
+
+  Note that local_recipient_maps must be defined after alias_maps.
+
+With this approach, /etc/postfix/transport is unnecessary. Also, the Postfix extension delimiter is irrelevant - SubEtha will correctly claim any appropriate messages, causing them to be relayed into SubEtha.
+
+Note that on some systems (OSX), the tcp_table is not compiled in to Postfix by default. In order to enable it, download the latest source, compile and then install postfix over your existing installation. Use the command: 'make makefiles CCARGS=-DSNAPSHOT; make; make install' and just answer the defaults during install.
+
+== Manual Postfix Mapping ==
+
+You can manually specify which addresses Postfix will relay into SubEtha. There are two types of addresses you can specify:
+
+  *  Whole domains, such that all addresses for that domain will be delivered to SubEtha. For example, all addresses at the domain  *lists.example.com*.
+  *  Full addresses of mailing lists. You can cherrypick specific email addresses, such as  *announce@example.com*
+
+The steps to configure Postfix.
+
+  *  Edit /etc/postfix/main.cf. Change or add these lines:
+  {{{
+  mydestination = ... example.com  # add example.com to existing line
+
+  transport_maps = hash:/etc/postfix/subetha_transport
+
+  local_recipient_maps = proxy:unix:passwd.byname $alias_maps hash:/etc/postfix/subetha_transport
+
+  recipient_delimiter = -  # see note below to determine if you need to change this
+  }}}
+
+  Note that local_recipient_maps must be defined after alias_maps.
+  
+  * Edit /etc/postfix/subetha_transport. Add these lines:
+  {{{
+  lists.example.com          smtp:[127.0.0.1]:2500
+  announce@example.com       smtp:[127.0.0.1]:2500
+  }}}
+
+  This example forwards mail destined for any address @lists.example.com and mail to the specific address announce@example.com along to SubEtha. You can have as many domains, subdomains, and addresses as you wish. Don't forget to set up the appropriate MX records in DNS.
+
+  Note that the destination (in this case 127.0.0.1) must be resolvable via DNS (not just /etc/hosts!) or as an IP address. Placing the address in brackets skips MX record resolution, which is highly recommended.
+    
+  *  Run "postmap /etc/postfix/subetha_transport".
+
+  *   *NOTE:* To specify full addresses like  *announce@example.com*, Postfix  *must* be configured to use  *-* as the user extension separator. This is not the postfix default. This configuration is unnecessary if whole subdomains (ie lists.example.com) are specified. It is also unnecessary if Automatic Postfix Mapping is used.
+
+  *   *ALSO NOTE:* You must put all domains on which you expect to run mailing lists in the  *mydestination* list.

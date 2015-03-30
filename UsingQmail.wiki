@@ -1,0 +1,15 @@
+#summary Integrating SubEtha with Qmail
+
+= Qmail =
+
+Create a file /var/qmail/control/*smtproutes* and with the content:
+  {{{
+  domain.com:[IP MACHINE]:PORT
+  }}}
+
+In my setup, the file looks like:
+  {{{
+  domain.com:[127.0.0.1]:2500
+  }}}
+
+Restart Qmail.

@@ -1,0 +1,25 @@
+= Resin Deployment Options =
+
+There are quite a few ways to deploy the subetha webapp in resin. These options are covered in more detail by the [http://caucho.com/resin/doc/webapp-deploy.xtp resin-docs].
+== war file in webapps ==
+This options results in the next option happening automatically, but only requires that you copy a single file into the webapps.
+
+== exploded webapp deployment ==
+This option requires you to deploy the war file as a directory in the same place.
+
+== versioned webapp ==
+This option allows multiple version to be deployed with the latest one in use. This could cause problems if the versions use a different database schema.
+
+[http://caucho.com/resin/doc/webapp-deploy.xtp#web-app%20versioning resin-docs]
+
+== hot-deployed webapp ==
+This option allows the application to be deployed across a cluster easily. In this case, special attention must be made to also deploy the configuration across the cluster (or at least each node in the cluster manually, if there are differences).
+
+This can be done with a resin ant-tasks, or via the resin-admin webapp, requires an administrator setup in resin, and the {{{<DeployService ...>}}} enabled in resin.xml.
+
+[http://caucho.com/resin/doc/webapp-deploy.xtp#Deploying%20to%20a%20live%20server%20without%20interruption resin-docs]
+
+== isolated webapp ==
+This options requires creating a new {{{<web-app-deployment ...>}}} in ${resin.dir}/conf/resin.xml.
+
+[http://caucho.com/resin/doc/webapp-deploy.xtp#Custom%20web-app%20with%20.war%20file resin-docs]

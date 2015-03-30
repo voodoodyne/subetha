@@ -1,0 +1,46 @@
+#summary Integrating SubEtha with Apache James
+
+= Apache James =
+
+Let the mailet {{{RemoteDelivery}}} to relay the mail to SubEtha server, just follow these steps.
+
+ 
+1. Setup James normally by editing {{{ ${james_home}\apps\james\SAR-INF\config.xml }}}
+  {{{
+  <postmaster>Postmaster@hosteddomain</postmaster>
+  <servernames autodetect="true" autodetectIP="true">
+    <servername>MyJamesMailServer</servername>
+  </servernames>
+  <!-- comment out lines below
+  <mailet match="RemoteAddrNotInNetwork=127.0.0.1" class="ToProcessor">
+    <processor> relay-denied </processor>
+    <notice>550 - Requested action not taken: relaying denied</notice>
+  </mailet>
+  -->
+  }}}
+		 
+2. Create a *account* in James Server for the mail list address *mail_list*@hosteddomain
+  {{{
+  telnet localhost 4555
+  adduser mail_list 123
+  }}}
+		
+3. config a "RemoteDelivery" Mailet to relay the mail to SubEtha
+  {{{
+  <processor name="root">
+
+    <mailet match="RecipientIs=mail_list@hosteddomain" class="RemoteDelivery">
+      <!-- Other standard settings here. -->
+
+      <!-- this gateway is our SubEtha server -->
+      <gateway>127.0.0.1</gateway>
+      <gatewayPort>2500</gatewayPort>
+    </mailet>
+
+    <!-- One mailet per address, or just create one regex if you can. -->
+  </processor>
+  }}} 
+	
+4. Create a mail list via SubEtha matching the name specfied above. eg. {{{mail_list@hosteddomain}}}
+ 
+5. Send a mail to the list and check subetha to make sure the message is in the archives for the correct list.

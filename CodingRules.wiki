@@ -1,0 +1,26 @@
+== SubEtha Coding Rules ==
+
+  * 4-space HARD tabs
+ Most editors do this by default.  Trust the defaults.
+  
+  * Pascal-like {} positions
+ Braces go on a line by themselves, outdented from their contents.
+
+{{{
+for (Object thing: collection)
+{
+	this.doSomething();
+}
+}}} 
+
+  * Use explicit references to  *this*
+ Refer to member variables and member methods:  this.doSomething(); This doesn't work when inner classes refer to member variables in outer classes, but it's a rare enough case that you can ignore this rule.
+			 
+  * No member variable prefix
+ Do not prefix member variables with a letter (ie, do not use mFoo). Just refer to it as this.foo in your code.
+			
+  * There is a space between if and (
+ For if, while, for, etc... there is a space between the statment and the (. ie: "if (", "while (", "for (".
+
+  * Code-as-literature
+ Code should read like English, and when it doesn't read like English, it should have comments that are written in English.  Be liberal with punctuation and grammar.  Somebody has to read this stuff.

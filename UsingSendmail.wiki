@@ -1,0 +1,21 @@
+#summary Integrating SubEtha with Sendmail
+
+= Sendmail =
+
+This only allows you to relay whole domains into SubEtha.  You cannot have list addresses that share the same domain as personal mailboxes (ie, list@example.com and yourpersonalmailbox@example.com).
+
+  # Add your domain to *access* file:
+  {{{
+  DOMAIN.COM RELAY
+  }}}
+  # Add a mailertable in *mailertable* file:
+  {{{
+  DOMAIN.COM smtp:[IP]:PORT
+  }}}
+  #  Rehash the files:
+  {{{
+  makemap hash /etc/mail/access < /etc/mail/access
+  makemap hash /etc/mail/mailertable < /etc/mail/mailertable
+  }}}
+
+This may not work if you are running SubEtha and Sendmail on the same machine.  See [http://www.subethamail.org/se/archive_msg.jsp?msgId=33658 this user's experience].

@@ -1,0 +1,29 @@
+#summary Instructions for version upgrades
+#labels Featured
+
+= Upgrading =
+
+From 2.0 on, the general upgrade is to follow the InstallGuide (please note the change to resin from jboss), skipping the database creation. The notes below describe the schema changes for the upgrade if you already have the database, and existing data. The app-server install, and setup has completely changed between the 1.X -> 2.X distributions. 
+
+== 2.0 -> 2.1 ==
+
+Examine the new example-subetha.xml file.  There are some new configuration options which you MUST provide.
+
+There were no schema changes to the database.
+
+The fulltext indexing system completely changed.  It now uses Hibernate Search instead of working with Lucene directly.  Because the storage format has changed, you will need to visit the Site Status page and click the "rebuild indexes from scratch" button.  You can delete the old index in {{{/var/tmp/subetha/indexer}}} (the new index is stored in {{{/var/tmp/subetha/indexes}}}).
+
+== 1.x -> 2.0 ==
+
+Please follow the InstallGuide and then make the changes noted below for the database schema.
+
+Two columns were renamed in the database schema but no other changes were made from the.
+ * Mail.fromField -> Mail.sender
+ * Mail.envelopeSender -> Mail.senderNormal
+
+Script for MySQL:
+
+{{{
+  ALTER TABLE Mail CHANGE fromField sender TEXT;
+  ALTER TABLE Mail CHANGE envelopeSender senderNormal TEXT NOT NULL;
+}}}

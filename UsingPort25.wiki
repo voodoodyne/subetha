@@ -1,0 +1,19 @@
+#summary Issues surrounding the use of port 25
+
+= The SMTP Port =
+
+By default, SubEtha listens for SMTP on port 2500.  If you intend to run SubEtha facing the world, it must accept mail on port 25 instead.
+
+You could change the port number to 25 in ${RESIN_HOME}/conf/subetha.xml, and this will work on Windows.  However, Unix-derived systems (including Linux and Mac OSX) treat ports less than 1000 as privileged and only allow processes running as root to bind there.  While there is no reason to believe there are any security holes in SubEtha (and being a Java process, it is effectively immune to buffer overflow attacks), running large, complex systems as root is generally frowned upon by people that Take Security Seriously.
+
+The solution to this is to continue running SubEtha on port 2500, but use the kernel's firewall builtin firewall to internally remap port 25 to 2500.  On Linux, this is done with iptables.  On Mac OSX and BSD, this is done with ipfw.
+
+== Linux iptables ==
+
+This is the magic command that should send all port 25 traffic to 2500.  Note that your network interface, eth0, may be different.  Also note that you will need to save your iptables state so that it is restored on startup.  This varies with Linux flavors, but the [https://help.ubuntu.com/community/IptablesHowTo Ubuntu instructions] are helpful.
+
+iptables -t nat -A PREROUTING -i eth0 -p tcp -m tcp --dport 25 -j REDIRECT --to-ports 2500
+
+== OSX/BSD ipfw ==
+
+ipfw add 0088 fwd 127.0.01,2500 tcp from any to any 25

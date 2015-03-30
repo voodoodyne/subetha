@@ -1,0 +1,33 @@
+#summary Why we switched from JBoss to Resin
+
+= "What's Resin?" =
+
+SubEtha was originally written on JBoss4, but we are longtime users - dating all the way back to the days of JBoss2.  It was with some great dismay that we watched successive versions of JBoss take longer to start up, get increasingly more complicated to configure, and replace countless old bugs with new ones.  After RedHat bought JBoss, free public support virtually dried up, while the degenerating state of the documentation and near-untraceability of AOP code left the average opensource developer with few recourses.  The eternally-delayed (and botched) release of JBoss5 sent us scurrying for a new platform - and it wasn't going to be Ruby.
+
+Despite a ten-year history, Caucho's [http://www.caucho.com/ Resin] is the coolest little appserver that you've probably never heard of.  While other J2EE products either died or grew fat and bloated, Resin remains svelte, fast, and developer-friendly.
+
+  * Resin goes from cold start to "ready to serve" in less than 3 seconds.  THREE FUCKING SECONDS!  JBoss5 takes nearly a minute on the same machine, even after a few starts to warm up the buffer cache.  The JBoss team has been putting a lot of engineering effort into complex Eclipse tooling and hot swappable code tricks - none of which works half as well as restarting the apperserver in three seconds.  Incidentally, hot swapping classes seems to actually work on Resin, if that's your bag.
+
+ * Resin 4.x is designed around JSR299 "Contexts and Dependency Injection".  CanDI is the coolest thing to come out of a J2EE spec committee since EJB3.  It cuts out tons of boilerplate code and wiring in your applications.
+
+ * Resin has easy, coherent configuration files designed for human consumption and maintenance.  No more hunting around dozens of directories to find the wacky XML file containing mbean definitions that make sense to nobody but the guy who wrote it and some jerk with too many PhDs at Sun Microsystems.  Furthermore, the configuration system is [http://caucho.com/resin/doc/resin-ioc.xtp tied into CanDI] in an elegant way that is easily accessible to application programmers - SubEtha is configured this way.  Here is a gentle introduction to ResinConfiguration.
+
+ * Resin is written with fairly straightforward, conventional Java.  This makes it very easy to debug through; you can even walk through the clean, generated stubs of Java code that handle transaction, security, etc aspects.  In contrast, debugging through the bytecode-enhanced AOP monstrosity that JBoss wraps your code in is nearly impossible.
+
+ * Resin supports virtual hosts, url rewriting, and most of the other basic features that  makes Apache cool and Tomcat lame.
+
+ * Resin's Apache plugin is smart and requires nearly no configuration.  It gets all of its configuration by asking the Resin servers themselves, so virtual hosts, paths, etc stay in the Resin config.
+
+ * No more "find the jar" games as you try to guess which of 500 jars in 20 directories now contains org.jboss.essentialservice.YourMother in this week's appserver release.  Just add resin.jar to Eclipse and you're done.
+
+ * Setting up a JMS queue in Resin is trivial.
+
+ * Programmatic authentication in Resin is fairly simple and straightforward.  JBossSX is very complicated and very poorly documented.  It's also nearly impossible to trace through the code.
+
+ * Caucho's documentation is clearly tied to major versions.  When you do find a bit of documentation in the morass that is www.jboss.org, it's often for a version that works completely differently than the one you have - and often it's impossible to tell which.
+
+ * Caucho fixes bugs even when you aren't paying tens of thousands of dollars for support contracts.  In fact, the small, active team of developers answers questions on the (one) mailing list.  Just try to figure out where to ask a question in JBoss's 155 forums (I'm serious, I just counted).
+
+This is not to say that Resin is perfect.  It's taken Caucho a long time to work out the bugs in the 4.x line, and it's clear that their regression test suite (which isn't public) is not very thorough.  There are some useful features missing - like HA-JNDI - but none that we can't live without.  But even with these downsides (admittedly exacerbated by our use of every bleeding-edge feature in the CDI spec), we do not for one minute regret the switch from JBoss.*
+
+If you hate your current bloated appserver and are wondering "Is the grass greener somewhere else?" the answer is YES.

@@ -22,4 +22,4 @@ SubEtha is a modern, sophisticated mailing list manager.
  * Easy integration with any mail transport agent (see ReceivingMail).
  * International characters in emails are properly passed through the system and rendered in the web interface (see [I18N])
  * Bookmarkable URLs
- * A modular SMTP library that can be used outside SubEtha - see [http://code.google.com/p/subethasmtp/ SubEthaSMTP]
+ * A modular SMTP library that can be used outside SubEtha - see [https://github.com/voodoodyne/subethasmtp SubEthaSMTP]
